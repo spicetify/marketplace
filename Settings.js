@@ -3,7 +3,7 @@ let configContainer;
 function openConfig() {
     if (configContainer) {
         Spicetify.PopupModal.display({
-            title: "Reddit",
+            title: "Spicetify Marketplace",
             content: configContainer,
         });
         return;
