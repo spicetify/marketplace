@@ -50,8 +50,8 @@ const TopBarContent = ({ links, activeLink, switchCallback }) => {
         activeLink,
         windowSize,
         switchCallback,
-    }))
-}
+    }));
+};
 
 const TabBarContext = ({ children }) => {
     return reactDOM.createPortal(
@@ -60,7 +60,7 @@ const TabBarContext = ({ children }) => {
         }, children),
         document.querySelector(".main-topBar-topbarContentWrapper")
     );
-}
+};
 
 const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Infinity }) => {
     const tabBarRef = react.useRef(null);
@@ -120,20 +120,20 @@ const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Inf
     }, [availableSpace, childrenSizes]);
 
     return react.createElement("nav", {
-            className: "reddit-tabBar reddit-tabBar-nav",
-        }, react.createElement("ul", {
-            className: "reddit-tabBar-header",
-            ref: tabBarRef,
-        }, options
-            .filter((_, id) => !droplistItem.includes(id))
-            .map(item => react.createElement(TabBarItem, {
-                item,
-                switchTo: switchCallback,
-            })),
-            (droplistItem.length || childrenSizes.length === 0) ?
-                react.createElement(TabBarMore, {
-                    items: droplistItem.map(i => options[i]).filter(i => i),
-                    switchTo: switchCallback,
-                }) : null)
-        );
+        className: "reddit-tabBar reddit-tabBar-nav",
+    }, react.createElement("ul", {
+        className: "reddit-tabBar-header",
+        ref: tabBarRef,
+    }, options
+        .filter((_, id) => !droplistItem.includes(id))
+        .map(item => react.createElement(TabBarItem, {
+            item,
+            switchTo: switchCallback,
+        })),
+    (droplistItem.length || childrenSizes.length === 0) ?
+        react.createElement(TabBarMore, {
+            items: droplistItem.map(i => options[i]).filter(i => i),
+            switchTo: switchCallback,
+        }) : null)
+    );
 });

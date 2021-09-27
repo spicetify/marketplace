@@ -32,5 +32,5 @@ class LoadMoreIcon extends react.Component {
                 fontSize: 20,
             }
         }, "Load more"));
-    };
+    }
 }

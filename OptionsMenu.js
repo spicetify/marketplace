@@ -35,14 +35,14 @@ const OptionsMenu = react.memo(({
     return react.createElement(Spicetify.ReactComponent.ContextMenu, {
         menu: react.createElement(Spicetify.ReactComponent.Menu, {
         }, options.map(({ key, value }) => react.createElement(OptionsMenuItem, {
-                value,
-                onSelect: () => {
-                    onSelect(key);
-                    // Close menu on item click
-                    menuRef.current?.click();
-                },
-                isSelected: selected?.key === key,
-            }))
+            value,
+            onSelect: () => {
+                onSelect(key);
+                // Close menu on item click
+                menuRef.current?.click();
+            },
+            isSelected: selected?.key === key,
+        }))
         ),
         trigger: "click",
         action: "toggle",

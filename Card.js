@@ -2,8 +2,8 @@ class Card extends react.Component {
     constructor(props) {
         super(props);
         Object.assign(this, props);
-       console.log(this.manifest)
-        
+        // console.log(this.manifest);
+
     }
 
     render() {
@@ -18,16 +18,13 @@ class Card extends react.Component {
             onClick: (event) => {
                 if (localStorage.getItem("marketplace:installed:" + this.manifest.main) == null){
 
-                    localStorage.setItem("marketplace:installed:" + this.manifest.main, JSON.stringify(this.manifest))
-                    console.log(JSON.parse(localStorage.getItem("marketplace:installed")))
+                    localStorage.setItem("marketplace:installed:" + this.manifest.main, JSON.stringify(this.manifest));
+                    console.log(JSON.parse(localStorage.getItem("marketplace:installed")));
 
-                }else{
-                    console.log("Already added.")
+                } else {
+                    console.log("Already added.");
                 }
-                    
-                    
-                
-                
+
             },
         }, react.createElement("div", {
             className: "main-card-draggable",
@@ -49,7 +46,6 @@ class Card extends react.Component {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": Spicetify.Locale.get("play"),
             style: { "--size": "40px" },
-            
         }, react.createElement("svg", {
             height: "16",
             role: "img",

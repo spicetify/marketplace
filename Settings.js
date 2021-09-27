@@ -12,7 +12,7 @@ function openConfig() {
     CONFIG.servicesElement = {};
 
     configContainer = document.createElement("div");
-    configContainer.id = "reddit-config-container"
+    configContainer.id = "reddit-config-container";
 
     const optionHeader = document.createElement("h2");
     optionHeader.innerText = "Options";
@@ -56,7 +56,7 @@ function openConfig() {
             CONFIG.services[newPos] = CONFIG.services[curPos];
             CONFIG.services[curPos] = temp;
         }
-        
+
         localStorage.setItem(
             "reddit:services",
             JSON.stringify(CONFIG.services)

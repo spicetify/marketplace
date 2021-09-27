@@ -69,7 +69,7 @@ class Grid extends react.Component {
             tabs: CONFIG.services,
             rest: true,
             endOfList: endOfList,
-        }
+        };
     }
 
     newRequest(amount) {
@@ -135,13 +135,13 @@ class Grid extends react.Component {
         this.newRequest(30);
     }
 
-    
+
 
     async loadPage(queue) {
         // let subMeta = await getSubreddit(requestAfter);
 
         let allExtensions = await getAllExtensions();
-        
+
         console.log("All extensions" + allExtensions);
         // foo.items.forEach(async item => {
         //     // const repo = await getRepo(item.contents_url);
@@ -272,7 +272,7 @@ class Grid extends react.Component {
             className: "contentSpacing"
         }, react.createElement("div", {
             className: "reddit-header"
-        }, react.createElement("h1", null, this.props.title), 
+        }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
             onServicesChange: this.updateTabs.bind(this),
@@ -306,8 +306,8 @@ class Grid extends react.Component {
  */
 async function getAllExtensions() {
     // www is needed or it will block with "cross-origin" error.
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent('topic:spicetify-extensions')}`
-    
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
+
     // TODO: idk what this is, so don't delete yet
     // if (after) {
     //     url += `&after=${after}`
@@ -321,26 +321,25 @@ async function getAllExtensions() {
 
 function initializeExtension(manifest,user, repo) {
 
-    const script = document.createElement('script');
-    script.defer = true
+    const script = document.createElement("script");
+    script.defer = true;
 
-    script.onload = function () {
-
-    };
+    // script.onload = function () {
+    // };
 
     script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@master/${manifest.main}`;
     document.body.appendChild(script);
-    eval(script)
+    eval(script);
 
 }
 
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
 async function getRepoContents(contents_url) {
-    const url = contents_url.replace('{+path}', '');
+    const url = contents_url.replace("{+path}", "");
     return await Spicetify.CosmosAsync.get(url);
 }
 
-// TODO: add try/catch here? 
+// TODO: add try/catch here?
 // TODO: can we add a return type here?
 /**
  * Get the manifest object for a repo
@@ -354,14 +353,14 @@ async function getRepoManifest(user, repo, branch) {
     return await Spicetify.CosmosAsync.get(url);
 }
 
-async function getSubreddit(after = '') {
+async function getSubreddit(after = "") {
     // www is needed or it will block with "cross-origin" error.
-    var url = `https://www.reddit.com/r/${CONFIG.lastService}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`
+    var url = `https://www.reddit.com/r/${CONFIG.lastService}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`;
     if (after) {
-        url += `&after=${after}`
+        url += `&after=${after}`;
     }
     if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
-        url += `&t=${sortConfig.time}`
+        url += `&t=${sortConfig.time}`;
     }
 
     return await Spicetify.CosmosAsync.get(url);
@@ -380,19 +379,16 @@ async function fetchExtension(contents_url) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-        
-        // TODO: how do i get the default branch name?
-        const manifest = await getRepoManifest(user, repo, 'main');
-        console.log(`${user}/${repo}`, manifest);
-        
-        const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
-        console.log(installedExt)
-        if (installedExt) { initializeExtension(manifest,user, repo)}
 
-   
-       
+        // TODO: how do i get the default branch name?
+        const manifest = await getRepoManifest(user, repo, "main");
+        console.log(`${user}/${repo}`, manifest);
+
+        const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
+        console.log(installedExt);
+        if (installedExt) { initializeExtension(manifest,user, repo);}
+
         return ({
-            
             //  type: typesLocale.playlist,
             //  uri: 'spotify:user:therealpadster:playlist:4L4WIps1CJ8WU089ii38Cq',
             //  upvotes: 0,
@@ -404,7 +400,6 @@ async function fetchExtension(contents_url) {
             subtitle: manifest.description,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.preview}`,
             extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`
-         
         });
     } catch (err) {
         console.warn(contents_url, err);
@@ -424,7 +419,7 @@ async function fetchPlaylist(post) {
                     followers: true,
                 }
             }
-        )
+        );
 
         const { metadata } = res;
         return ({
@@ -444,7 +439,7 @@ async function fetchPlaylist(post) {
 async function fetchAlbum(post) {
     const arg = post.uri.split(":")[2];
     try {
-        const metadata = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`)
+        const metadata = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`);
         return ({
             type: typesLocale.album,
             uri: post.uri,
@@ -461,7 +456,7 @@ async function fetchAlbum(post) {
 async function fetchTrack(post) {
     const arg = post.uri.split(":")[2];
     try {
-        const metadata = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/tracks/${arg}`)
+        const metadata = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/tracks/${arg}`);
         return ({
             type: typesLocale.song,
             uri: post.uri,
@@ -490,7 +485,7 @@ function postMapper(posts) {
                 type: uri.type,
                 title: post.data.title,
                 upvotes: post.data.ups
-            })
+            });
         }
     });
     return mappedPosts;
