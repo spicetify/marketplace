@@ -1,6 +1,16 @@
 class Card extends react.Component {
     constructor(props) {
         super(props);
+        /** @type { { type: string; upvotes: string; } } */
+        this.visual;
+        /** @type { string } */
+        this.imageURL;
+        // this.menuType = Spicetify.ReactComponent.Menu | "div";
+        this.menuType = Spicetify.ReactComponent.Menu;
+        /** @type { { name: string; description: string; main: string; preview: string; } } */
+        this.manifest;
+        /** @type { string } */
+        this.title;
         Object.assign(this, props);
         // console.log(this.manifest);
 
@@ -8,11 +18,11 @@ class Card extends react.Component {
 
     render() {
         let detail = [];
-        this.visual.type && detail.push(this.type);
-        this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
+        // this.visual.type && detail.push(this.type);
+        // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
 
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
-            menu: react.createElement(this.menuType, { uri: this.uri, }),
+            menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
             className: "main-card-card",
             onClick: (event) => {
@@ -62,7 +72,7 @@ class Card extends react.Component {
             title: this.title,
             className: "main-cardHeader-link",
             dir: "auto",
-            href: this.href
+            href: 'TODO: add some href here?'
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div"

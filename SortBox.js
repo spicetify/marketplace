@@ -1,3 +1,5 @@
+/// <reference path="OptionsMenu.js" />
+
 class SortBox extends react.Component {
     constructor(props) {
         super(props);

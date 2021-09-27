@@ -1,6 +1,13 @@
 // Run "npm i @type/react" to have this type package available in workspace
 /// <reference types="react" />
 /// <reference types="react-dom" />
+/// <reference path="../spicetify-cli/globals.d.ts" />
+/// <reference path="../spicetify-cli/jsHelper/spicetifyWrapper.js" />
+/// <reference path="Card.js" />
+/// <reference path="Icons.js" />
+/// <reference path="Settings.js" />
+/// <reference path="SortBox.js" />
+/// <reference path="TabBar.js" />
 
 /** @type {React} */
 const react = Spicetify.React;
@@ -18,6 +25,18 @@ function render() {
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
+let servicesString = localStorage.getItem("reddit:services") || `["spotify","makemeaplaylist","SpotifyPlaylists","music","edm","popheads"]`;
+let services = [];
+try {
+    services = JSON.parse(servicesString);
+    if (!Array.isArray(services)) {
+        throw new Error("");
+    }
+} catch {
+    services = ["spotify", "makemeaplaylist", "SpotifyPlaylists", "music", "edm", "popheads"];
+    localStorage.setItem("reddit:services", JSON.stringify(services));
+}
+
 const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
@@ -25,19 +44,9 @@ const CONFIG = {
         followers: localStorage.getItem("reddit:followers") === "true",
         longDescription: localStorage.getItem("reddit:longDescription") === "true",
     },
-    services: localStorage.getItem("reddit:services") || `["spotify","makemeaplaylist","SpotifyPlaylists","music","edm","popheads"]`,
+    services,
     lastService: localStorage.getItem("reddit:last-service"),
 };
-
-try {
-    CONFIG.services = JSON.parse(CONFIG.services);
-    if (!Array.isArray(CONFIG.services)) {
-        throw "";
-    }
-} catch {
-    CONFIG.services = ["spotify", "makemeaplaylist", "SpotifyPlaylists", "music", "edm", "popheads"];
-    localStorage.setItem("reddit:services", JSON.stringify(CONFIG.services));
-}
 
 if (!CONFIG.lastService || !CONFIG.services.includes(CONFIG.lastService)) {
     CONFIG.lastService = CONFIG.services[0];
@@ -329,7 +338,7 @@ function initializeExtension(manifest,user, repo) {
 
     script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@master/${manifest.main}`;
     document.body.appendChild(script);
-    eval(script);
+    // eval(script);
 
 }
 
