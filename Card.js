@@ -2,72 +2,8 @@ class Card extends react.Component {
     constructor(props) {
         super(props);
         Object.assign(this, props);
-        const uriObj = URI.fromString(this.uri);
-        this.href = uriObj.toURLPath(true);
-
-        this.uriType = uriObj.type;
-        switch (this.uriType) {
-            case URI.Type.ALBUM:
-            case URI.Type.TRACK:
-                this.menuType = Spicetify.ReactComponent.AlbumMenu;
-                break;
-            case URI.Type.ARTIST:
-                this.menuType = Spicetify.ReactComponent.ArtistMenu;
-                break;
-            case URI.Type.PLAYLIST:
-            case URI.Type.PLAYLIST_V2:
-                this.menuType = Spicetify.ReactComponent.PlaylistMenu;
-                break;
-            case URI.Type.SHOW:
-                this.menuType = Spicetify.ReactComponent.PodcastShowMenu;
-                break;
-        }
-        this.menuType = this.menuType || "div";
-    }
-
-    play(event) {
-        const api = Spicetify.Player.origin2 || Spicetify.PlaybackControl.playUri;
-        api.playUri(this.uri);
-        event.stopPropagation();
-    }
-
-    getSubtitle() {
-        let subtitle;
-        if (this.uriType === URI.Type.ALBUM || this.uriType === URI.Type.TRACK) {
-            subtitle = this.subtitle.map((artist) => {
-                const artistHref = URI.from(artist.uri).toURLPath(true);
-                return react.createElement("a", {
-                    href: artistHref,
-                    onClick: (event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        History.push(artistHref);
-                    },
-                }, react.createElement("span", null, artist.name));
-            });
-            // Insert commas between elements
-            subtitle = subtitle.flatMap((el, i, arr) => (arr.length - 1) !== i ? [el, ", "] : el);
-        } else {
-            subtitle = react.createElement("div", {
-                className: `${this.visual.longDescription ? "reddit-longDescription " : ""}main-cardSubHeader-root main-type-mesto reddit-cardSubHeader`,
-                as: "div",
-            }, react.createElement("span", null, this.subtitle))
-        }
-        return react.createElement("div", {
-            className: "reddit-cardSubHeader main-type-mesto",
-        }, subtitle);
-    }
-
-    getFollowers() {
-        if (
-            this.visual.followers &&
-            (this.uriType === URI.Type.PLAYLIST || this.uriType === URI.Type.PLAYLIST_V2)
-        ) {
-            return react.createElement("div", {
-                className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
-                as: "div",
-            }, react.createElement("span", null, Spicetify.Locale.get("user.followers", this.followersCount)))
-        }
+       console.log(this.manifest)
+        
     }
 
     render() {
@@ -80,8 +16,18 @@ class Card extends react.Component {
         }, react.createElement("div", {
             className: "main-card-card",
             onClick: (event) => {
-                History.push(this.href);
-                event.preventDefault();
+                if (localStorage.getItem("marketplace:installed:" + this.manifest.main) == null){
+
+                    localStorage.setItem("marketplace:installed:" + this.manifest.main, JSON.stringify(this.manifest))
+                    console.log(JSON.parse(localStorage.getItem("marketplace:installed")))
+
+                }else{
+                    console.log("Already added.")
+                }
+                    
+                    
+                
+                
             },
         }, react.createElement("div", {
             className: "main-card-draggable",
@@ -103,7 +49,7 @@ class Card extends react.Component {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": Spicetify.Locale.get("play"),
             style: { "--size": "40px" },
-            onClick: this.play.bind(this),
+            
         }, react.createElement("svg", {
             height: "16",
             role: "img",
@@ -128,7 +74,7 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
-        ), this.getFollowers(), this.getSubtitle(),
+        ), //this.getFollowers(), this.getSubtitle(),
         ))));
     }
 }

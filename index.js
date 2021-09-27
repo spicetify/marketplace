@@ -141,7 +141,8 @@ class Grid extends react.Component {
         // let subMeta = await getSubreddit(requestAfter);
 
         let allExtensions = await getAllExtensions();
-        console.log(allExtensions);
+        
+        console.log("All extensions" + allExtensions);
         // foo.items.forEach(async item => {
         //     // const repo = await getRepo(item.contents_url);
         //     let manifest = null;
@@ -233,7 +234,7 @@ class Grid extends react.Component {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-        this.configButton = new Spicetify.Menu.Item("Reddit config", false, openConfig);
+        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig);
         this.configButton.register();
 
         const viewPort = document.querySelector("main .os-viewport");
@@ -318,6 +319,21 @@ async function getAllExtensions() {
     return await Spicetify.CosmosAsync.get(url);
 }
 
+function initializeExtension(manifest,user, repo) {
+
+    const script = document.createElement('script');
+    script.defer = true
+
+    script.onload = function () {
+
+    };
+
+    script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@master/${manifest.main}`;
+    document.body.appendChild(script);
+    eval(script)
+
+}
+
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
 async function getRepoContents(contents_url) {
     const url = contents_url.replace('{+path}', '');
@@ -368,18 +384,27 @@ async function fetchExtension(contents_url) {
         // TODO: how do i get the default branch name?
         const manifest = await getRepoManifest(user, repo, 'main');
         console.log(`${user}/${repo}`, manifest);
+        
+        const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
+        console.log(installedExt)
+        if (installedExt) { initializeExtension(manifest,user, repo)}
 
+   
+       
         return ({
-            // These are required for the reddit extension. We'll remove what we don't need once we understand how it works better
-            type: typesLocale.playlist,
-            uri: 'spotify:user:therealpadster:playlist:4L4WIps1CJ8WU089ii38Cq',
-            upvotes: 0,
-            followersCount: 0,
+            
+            //  type: typesLocale.playlist,
+            //  uri: 'spotify:user:therealpadster:playlist:4L4WIps1CJ8WU089ii38Cq',
+            //  upvotes: 0,
+            //  followersCount: 0,
 
             // This is the actual stuff we want
+            manifest: manifest,
             title: manifest.name,
             subtitle: manifest.description,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.preview}`,
+            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`
+         
         });
     } catch (err) {
         console.warn(contents_url, err);
