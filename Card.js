@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Card extends react.Component {
     constructor(props) {
         super(props);
@@ -26,6 +27,9 @@ class Card extends react.Component {
         }, react.createElement("div", {
             className: "main-card-card",
             onClick: (event) => {
+                // We might want to add some href for a page for the extension
+                // History.push(this.href);
+                event.preventDefault();
                 if (localStorage.getItem("marketplace:installed:" + this.manifest.main) == null){
 
                     localStorage.setItem("marketplace:installed:" + this.manifest.main, JSON.stringify(this.manifest));
@@ -72,7 +76,7 @@ class Card extends react.Component {
             title: this.title,
             className: "main-cardHeader-link",
             dir: "auto",
-            href: 'TODO: add some href here?'
+            href: "TODO: add some href here?"
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div"

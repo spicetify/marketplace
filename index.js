@@ -21,6 +21,7 @@ const {
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function render() {
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
@@ -395,7 +396,7 @@ async function fetchExtension(contents_url) {
 
         const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
         console.log(installedExt);
-        if (installedExt) { initializeExtension(manifest,user, repo);}
+        if (installedExt) initializeExtension(manifest, user, repo);
 
         return ({
             //  type: typesLocale.playlist,
