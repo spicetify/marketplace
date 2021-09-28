@@ -17,11 +17,21 @@ class Card extends react.Component {
 
     }
 
+    
+removeInstalledExt(extKey){
+    const extValue = localStorage.getItem(extKey)
+    console.log(JSON.stringify(extValue))
+if(extValue != null){
+    localStorage.removeItem(extKey)
+    console.log("Removed")
+}
+}
+    
     render() {
         let detail = [];
         // this.visual.type && detail.push(this.type);
         // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
-
+        const localStoragePath = "marketplace:installed:" + this.manifest.main
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
@@ -30,13 +40,13 @@ class Card extends react.Component {
                 // We might want to add some href for a page for the extension
                 // History.push(this.href);
                 event.preventDefault();
-                if (localStorage.getItem("marketplace:installed:" + this.manifest.main) == null){
+                if (localStorage.getItem(localStoragePath) == null){
 
-                    localStorage.setItem("marketplace:installed:" + this.manifest.main, JSON.stringify(this.manifest));
-                    console.log(JSON.parse(localStorage.getItem("marketplace:installed")));
+                    localStorage.setItem(localStoragePath, JSON.stringify(this.manifest));
+                    console.log(JSON.parse(localStorage.getItem(localStoragePath)));
 
                 } else {
-                    console.log("Already added.");
+                    console.log("Extension already installed")
                 }
 
             },
@@ -60,7 +70,10 @@ class Card extends react.Component {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": Spicetify.Locale.get("play"),
             style: { "--size": "40px" },
-        }, react.createElement("svg", {
+            onClick: this.removeInstalledExt(localStoragePath),
+           
+        },
+            react.createElement("svg", {
             height: "16",
             role: "img",
             width: "16",
