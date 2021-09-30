@@ -386,7 +386,7 @@ async function fetchExtension(contents_url, branch) {
             }
 
         } else if (!Array.isArray(manifest) && installedExtSing){
-            initializeExtension(manifest, user, repo, branch);
+            initializeExtension(manifest, user, repo,manifest.main, branch);
         }
 
         return ({
