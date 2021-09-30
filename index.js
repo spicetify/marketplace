@@ -446,40 +446,6 @@ async function fetchExtension(contents_url) {
 //     }
 // }
 
-// async function fetchAlbum(post) {
-//     const arg = post.uri.split(":")[2];
-//     try {
-//         const metadata = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`);
-//         return ({
-//             type: typesLocale.album,
-//             uri: post.uri,
-//             title: metadata.name,
-//             subtitle: metadata.artists,
-//             imageURL: metadata.cover.uri,
-//             upvotes: post.upvotes,
-//         });
-//     } catch {
-//         return null;
-//     }
-// }
-
-// async function fetchTrack(post) {
-//     const arg = post.uri.split(":")[2];
-//     try {
-//         const metadata = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/tracks/${arg}`);
-//         return ({
-//             type: typesLocale.song,
-//             uri: post.uri,
-//             title: metadata.name,
-//             subtitle: metadata.artists,
-//             imageURL: metadata.album.images[0].url,
-//             upvotes: post.upvotes,
-//         });
-//     } catch {
-//         return null;
-//     }
-// }
-
 // function postMapper(posts) {
 //     let mappedPosts = [];
 //     posts.forEach(post => {
