@@ -15,7 +15,7 @@ const react = Spicetify.React;
 /** @type {ReactDOM} */
 const reactDOM = Spicetify.ReactDOM;
 const {
-    URI, // eslint-disable-line no-unused-vars
+    URI,
     React: { useState, useEffect, useCallback },
     Platform: { History },
 } = Spicetify;
@@ -64,9 +64,9 @@ let lastScroll = 0;
 let requestQueue = [];
 let requestAfter = null;
 
-let gridUpdateTabs, gridUpdatePostsVisual;
+let gridUpdateTabs, gridUpdatePostsVisual; // eslint-disable-line
 
-const typesLocale = {
+const typesLocale = { // eslint-disable-line
     album: Spicetify.Locale.get("album"),
     song: Spicetify.Locale.get("song"),
     playlist: Spicetify.Locale.get("playlist"),
