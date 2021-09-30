@@ -1,6 +1,5 @@
 
-// eslint-disable-next-line no-redeclare
-// eslint-disable-next-line
+// eslint-disable-next-line no-redeclare, no-unused-vars
 class Card extends react.Component {
     constructor(props) {
         super(props);

@@ -51,6 +51,7 @@
         "useState": "readonly",
         "TopBarContent": "readonly",
         "LoadingIcon": "readonly",
-        "LoadMoreIcon": "readonly"
+        "LoadMoreIcon": "readonly",
+        "CONFIG": "writable"
     }
 }
