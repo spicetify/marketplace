@@ -10,18 +10,19 @@
 /// <reference path="TabBar.js" />
 
 /** @type {React} */
-const react = Spicetify.React;
+const react = Spicetify.React; // eslint-disable-line
 /** @type {ReactDOM} */
-const reactDOM = Spicetify.ReactDOM;
+const reactDOM = Spicetify.ReactDOM;// eslint-disable-line
 const {
-    URI,
-    React: { useState, useEffect, useCallback },
-    Platform: { History },
+    URI,// eslint-disable-line
+    React: { useState, useEffect, useCallback },// eslint-disable-line
+    // @ts-ignore
+    Platform: { History },// eslint-disable-line
 } = Spicetify;
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line
 function render() {
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
@@ -37,7 +38,7 @@ try {
     services = ["spotify", "makemeaplaylist", "SpotifyPlaylists", "music", "edm", "popheads"];
     localStorage.setItem("reddit:services", JSON.stringify(services));
 }
-
+// eslint-disable-next-line
 const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
@@ -62,9 +63,9 @@ let lastScroll = 0;
 let requestQueue = [];
 let requestAfter = null;
 
-let gridUpdateTabs, gridUpdatePostsVisual;
+let gridUpdateTabs, gridUpdatePostsVisual; // eslint-disable-line
 
-const typesLocale = {
+const typesLocale = { // eslint-disable-line
     album: Spicetify.Locale.get("album"),
     song: Spicetify.Locale.get("song"),
     playlist: Spicetify.Locale.get("playlist"),
@@ -220,6 +221,7 @@ class Grid extends react.Component {
             requestAfter &&
             requestAfter !== -1 &&
             cardList.length < quantity &&
+            // @ts-ignore
             !this.endOfList  
         ) {
             requestAfter = await this.loadPage(queue);
@@ -280,9 +282,9 @@ class Grid extends react.Component {
 
     render() {
         return react.createElement("section", {
-            className: "contentSpacing"
+            className: "contentSpacing",
         }, react.createElement("div", {
-            className: "reddit-header"
+            className: "reddit-header",
         }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
@@ -291,14 +293,14 @@ class Grid extends react.Component {
             id: "reddit-grid",
             className: "main-gridContainer-gridContainer",
             style: {
-                "--minimumColumnWidth": "180px"
+                "--minimumColumnWidth": "180px",
             },
         }, [...cardList]), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",
-            }
-        }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon))
+            },
+        }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon)),
         ), react.createElement(TopBarContent, {
             switchCallback: this.switchTo.bind(this),
             links: CONFIG.services,
@@ -407,7 +409,7 @@ async function fetchExtension(contents_url) {
             title: manifest.name,
             subtitle: manifest.description,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.preview}`,
-            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`
+            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`,
         });
     } catch (err) {
         console.warn(contents_url, err);
