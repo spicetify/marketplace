@@ -215,11 +215,12 @@ class Grid extends react.Component {
         quantity += cardList.length;
 
         requestAfter = await this.loadPage(queue);
+       
         while (
             requestAfter &&
             requestAfter !== -1 &&
             cardList.length < quantity &&
-            !this.endOfList
+            !this.endOfList  
         ) {
             requestAfter = await this.loadPage(queue);
         }
@@ -244,7 +245,7 @@ class Grid extends react.Component {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig);
+        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig); //eslint-disable-line
         this.configButton.register();
 
         const viewPort = document.querySelector("main .os-viewport");
@@ -344,10 +345,10 @@ function initializeExtension(manifest,user, repo) {
 }
 
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
-async function getRepoContents(contents_url) {
-    const url = contents_url.replace("{+path}", "");
-    return await Spicetify.CosmosAsync.get(url);
-}
+// async function getRepoContents(contents_url) {
+//     const url = contents_url.replace("{+path}", "");
+//     return await Spicetify.CosmosAsync.get(url);
+// }
 
 // TODO: add try/catch here?
 // TODO: can we add a return type here?
@@ -364,18 +365,18 @@ async function getRepoManifest(user, repo, branch) {
     return await Spicetify.CosmosAsync.get(url);
 }
 
-async function getSubreddit(after = "") {
-    // www is needed or it will block with "cross-origin" error.
-    var url = `https://www.reddit.com/r/${CONFIG.lastService}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`;
-    if (after) {
-        url += `&after=${after}`;
-    }
-    if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
-        url += `&t=${sortConfig.time}`;
-    }
+// async function getSubreddit(after = "") {
+//     // www is needed or it will block with "cross-origin" error.
+//     let url = `https://www.reddit.com/r/${CONFIG.lastService}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`;
+//     if (after) {
+//         url += `&after=${after}`;
+//     }
+//     if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
+//         url += `&t=${sortConfig.time}`;
+//     }
 
-    return await Spicetify.CosmosAsync.get(url);
-}
+//     return await Spicetify.CosmosAsync.get(url);
+// }
 
 // TODO: can we add a return type here?
 /**
@@ -390,9 +391,9 @@ async function fetchExtension(contents_url) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-        var repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`)
-        var response = repoJSON.default_branch
-       const defaultBranch =  response
+        const repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`);
+        const response = repoJSON.default_branch;
+        const defaultBranch =  response;
         
         const manifest = await getRepoManifest(user, repo, defaultBranch);
         console.log(`${user}/${repo}`, manifest);
@@ -402,12 +403,6 @@ async function fetchExtension(contents_url) {
         if (installedExt) initializeExtension(manifest, user, repo);
 
         return ({
-            //  type: typesLocale.playlist,
-            //  uri: 'spotify:user:therealpadster:playlist:4L4WIps1CJ8WU089ii38Cq',
-            //  upvotes: 0,
-            //  followersCount: 0,
-
-            // This is the actual stuff we want
             manifest: manifest,
             title: manifest.name,
             subtitle: manifest.description,
@@ -421,85 +416,85 @@ async function fetchExtension(contents_url) {
     }
 }
 
-async function fetchPlaylist(post) {
-    try {
-        const res = await Spicetify.CosmosAsync.get(
-            `sp://core-playlist/v1/playlist/${post.uri}/metadata`,
-            {
-                policy: {
-                    name: true,
-                    picture: true,
-                    followers: true,
-                }
-            }
-        );
+// async function fetchPlaylist(post) {
+//     try {
+//         const res = await Spicetify.CosmosAsync.get(
+//             `sp://core-playlist/v1/playlist/${post.uri}/metadata`,
+//             {
+//                 policy: {
+//                     name: true,
+//                     picture: true,
+//                     followers: true,
+//                 }
+//             }
+//         );
 
-        const { metadata } = res;
-        return ({
-            type: typesLocale.playlist,
-            uri: post.uri,
-            title: metadata.name,
-            subtitle: post.title,
-            imageURL: "https://i.scdn.co/image/" + metadata.picture.split(":")[2],
-            upvotes: post.upvotes,
-            followersCount: metadata.followers,
-        });
-    } catch {
-        return null;
-    }
-}
+//         const { metadata } = res;
+//         return ({
+//             type: typesLocale.playlist,
+//             uri: post.uri,
+//             title: metadata.name,
+//             subtitle: post.title,
+//             imageURL: "https://i.scdn.co/image/" + metadata.picture.split(":")[2],
+//             upvotes: post.upvotes,
+//             followersCount: metadata.followers,
+//         });
+//     } catch {
+//         return null;
+//     }
+// }
 
-async function fetchAlbum(post) {
-    const arg = post.uri.split(":")[2];
-    try {
-        const metadata = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`);
-        return ({
-            type: typesLocale.album,
-            uri: post.uri,
-            title: metadata.name,
-            subtitle: metadata.artists,
-            imageURL: metadata.cover.uri,
-            upvotes: post.upvotes,
-        });
-    } catch {
-        return null;
-    }
-}
+// async function fetchAlbum(post) {
+//     const arg = post.uri.split(":")[2];
+//     try {
+//         const metadata = await Spicetify.CosmosAsync.get(`hm://album/v1/album-app/album/${arg}/desktop`);
+//         return ({
+//             type: typesLocale.album,
+//             uri: post.uri,
+//             title: metadata.name,
+//             subtitle: metadata.artists,
+//             imageURL: metadata.cover.uri,
+//             upvotes: post.upvotes,
+//         });
+//     } catch {
+//         return null;
+//     }
+// }
 
-async function fetchTrack(post) {
-    const arg = post.uri.split(":")[2];
-    try {
-        const metadata = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/tracks/${arg}`);
-        return ({
-            type: typesLocale.song,
-            uri: post.uri,
-            title: metadata.name,
-            subtitle: metadata.artists,
-            imageURL: metadata.album.images[0].url,
-            upvotes: post.upvotes,
-        });
-    } catch {
-        return null;
-    }
-}
+// async function fetchTrack(post) {
+//     const arg = post.uri.split(":")[2];
+//     try {
+//         const metadata = await Spicetify.CosmosAsync.get(`https://api.spotify.com/v1/tracks/${arg}`);
+//         return ({
+//             type: typesLocale.song,
+//             uri: post.uri,
+//             title: metadata.name,
+//             subtitle: metadata.artists,
+//             imageURL: metadata.album.images[0].url,
+//             upvotes: post.upvotes,
+//         });
+//     } catch {
+//         return null;
+//     }
+// }
 
-function postMapper(posts) {
-    var mappedPosts = [];
-    posts.forEach(post => {
-        var uri = URI.from(post.data.url);
-        if (uri && (
-            uri.type == "playlist" ||
-            uri.type == "playlist-v2" ||
-            uri.type == "track" ||
-            uri.type == "album"
-        )) {
-            mappedPosts.push({
-                uri: uri.toURI(),
-                type: uri.type,
-                title: post.data.title,
-                upvotes: post.data.ups
-            });
-        }
-    });
-    return mappedPosts;
-}
+// function postMapper(posts) {
+//     let mappedPosts = [];
+//     posts.forEach(post => {
+//         let uri = URI.from(post.data.url);
+//         if (uri && (
+//             uri.type == "playlist" ||
+//             uri.type == "playlist-v2" ||
+//             uri.type == "track" ||
+//             uri.type == "album"
+//         )) {
+//             mappedPosts.push({
+//                 uri: uri.toURI(),
+//                 type: uri.type,
+//                 title: post.data.title,
+//                 upvotes: post.data.ups
+//             });
+//         }
+//     });
+//     return mappedPosts;
+// }

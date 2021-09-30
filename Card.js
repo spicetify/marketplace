@@ -1,5 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-class Card extends react.Component {
+
+class Card extends react.Component { // eslint-disable-line 
     constructor(props) {
         super(props);
         /** @type { { type: string; upvotes: string; } } */
@@ -25,13 +25,13 @@ class Card extends react.Component {
             localStorage.removeItem(extKey);
             console.log("Removed");
         }
-}
+    }
     
     render() {
         let detail = [];
         // this.visual.type && detail.push(this.type);
         // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
-        const localStoragePath = "marketplace:installed:" + this.manifest.main
+        const localStoragePath = "marketplace:installed:" + this.manifest.main;
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
@@ -46,7 +46,7 @@ class Card extends react.Component {
                     console.log(JSON.parse(localStorage.getItem(localStoragePath)));
 
                 } else {
-                    console.log("Extension already installed")
+                    console.log("Extension already installed");
                 }
 
             },
@@ -73,7 +73,7 @@ class Card extends react.Component {
             //onClick: ,
            
         },
-            react.createElement("svg", {
+        react.createElement("svg", {
             height: "16",
             role: "img",
             width: "16",
