@@ -192,7 +192,7 @@ class Grid extends react.Component {
 
         for (const extension of allExtensions.items) {
             let item;
-            item = await fetchExtension(extension.contents_url);
+            item = await fetchExtension(extension.contents_url, extension.default_branch);
             console.log(extension.name, item);
             if (requestQueue.length > 1 && queue !== requestQueue[0]) {
                 // Stop this queue from continuing to fetch and append to cards list
@@ -384,36 +384,33 @@ async function getRepoManifest(user, repo, branch) {
 /**
  * Fetch an extension and format data for generating a card
  * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param {string} branch The repo's default branch (e.g. main or master)
  * @returns Extension info for card (or null)
  */
-async function fetchExtension(contents_url) {
+async function fetchExtension(contents_url, branch) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-        const repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`);
-        const response = repoJSON.default_branch;
-        const defaultBranch =  response;
 
-        const manifest = await getRepoManifest(user, repo, defaultBranch);
+        const manifest = await getRepoManifest(user, repo, branch);
         console.log(`${user}/${repo}`, manifest);
 
         const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
         console.log(installedExt);
         if (installedExt) initializeExtension(manifest, user, repo);
 
-        return ({
+        return {
             manifest: manifest,
             title: manifest.name,
             subtitle: manifest.description,
-            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.preview}`,
-            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`,
-        });
+            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+        };
     } catch (err) {
         console.warn(contents_url, err);
-        // console.error(contents_url, 'no manifest');
         return null;
     }
 }
