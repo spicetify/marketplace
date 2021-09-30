@@ -375,7 +375,7 @@ async function fetchExtension(contents_url) {
         console.log(`${user}/${repo}`, manifest);
         console.log("Is array:" + Array.isArray(manifest));
         if (Array.isArray(manifest)){
-            let installedExtsArr = installedExtMult(manifest)
+            let installedExtsArr = installedExtMult(manifest);
             for (let i = 0; i < installedExtsArr.length; i++) { 
                 if(installedExtsArr[i] != null){
                     let multManifest = manifest[i];
@@ -384,7 +384,7 @@ async function fetchExtension(contents_url) {
             }
             
         } else if (!Array.isArray(manifest) && installedExtSing){
-            initializeExtension(manifest, user, repo, branch);
+            initializeExtension(manifest, user, repo,manifest.main, branch);
         }
 
         return ({
