@@ -84,7 +84,7 @@ class Card extends react.Component {
             className: "main-card-cardMetadata",
         }, react.createElement("a", {
             draggable: "false",
-            title: this.title,
+            title: this.manifest.name,
             className: "main-cardHeader-link",
             dir: "auto",
             href: "TODO: add some href here?",
@@ -95,7 +95,7 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
-        ), //this.getFollowers(), this.getSubtitle(),
+        ), this.manifest.description,
         ))));
     }
 }

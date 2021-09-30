@@ -8,22 +8,22 @@
 /// <reference path="Settings.js" />
 /// <reference path="SortBox.js" />
 /// <reference path="TabBar.js" />
-
 /* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
-const react = Spicetify.React;
+const react = Spicetify.React; // eslint-disable-line
 /** @type {ReactDOM} */
-const reactDOM = Spicetify.ReactDOM;
+const reactDOM = Spicetify.ReactDOM;// eslint-disable-line
 const {
-    URI,
-    React: { useState, useEffect, useCallback },
-    Platform: { History },
+    URI,// eslint-disable-line
+    React: { useState, useEffect, useCallback },// eslint-disable-line
+    // @ts-ignore
+    Platform: { History },// eslint-disable-line
 } = Spicetify;
-/* eslint-enable no-redeclare, no-unused-vars */
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
-function render() { // eslint-disable-line no-unused-vars
+// eslint-disable-next-line
+function render() {
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
@@ -38,8 +38,7 @@ try {
     services = ["spotify", "makemeaplaylist", "SpotifyPlaylists", "music", "edm", "popheads"];
     localStorage.setItem("reddit:services", JSON.stringify(services));
 }
-
-// eslint-disable-next-line no-redeclare
+// eslint-disable-next-line
 const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
@@ -155,41 +154,7 @@ class Grid extends react.Component {
         let allExtensions = await getAllExtensions();
 
         console.log("All extensions" + allExtensions);
-        // foo.items.forEach(async item => {
-        //     // const repo = await getRepo(item.contents_url);
-        //     let manifest = null;
-        //     try {
-        //         manifest = await getRepoManifest(item.contents_url);
-        //         console.log(item.name, manifest);
-        //     } catch (err) {
-        //         console.error(item.name, 'no manifest');
-        //     }
-        // })
-
-        // let posts = postMapper(subMeta.data.children);
-        // for (const post of posts) {
-        //     let item;
-        //     switch (post.type) {
-        //         case "playlist":
-        //         case "playlist-v2":
-        //             // item = await fetchPlaylist(post);
-        //             item = await fetchExtension()
-        //             break;
-        //         case "track":
-        //             item = await fetchTrack(post);
-        //             break;
-        //         case "album":
-        //             item = await fetchAlbum(post);
-        //             break;
-        //     }
-        //     if (requestQueue.length > 1 && queue !== requestQueue[0]) {
-        //         // Stop this queue from continuing to fetch and append to cards list
-        //         return -1;
-        //     }
-
-        //     item && this.appendCard(item);
-        // }
-
+       
         for (const extension of allExtensions.items) {
             let item;
             item = await fetchExtension(extension.contents_url, extension.default_branch);
@@ -217,7 +182,7 @@ class Grid extends react.Component {
         quantity += cardList.length;
 
         requestAfter = await this.loadPage(queue);
-
+       
         while (
             requestAfter &&
             requestAfter !== -1 &&
@@ -332,7 +297,7 @@ async function getAllExtensions() {
     return await Spicetify.CosmosAsync.get(url);
 }
 
-function initializeExtension(manifest,user, repo) {
+function initializeExtension(manifest,user, repo, main, branch) {
 
     const script = document.createElement("script");
     script.defer = true;
@@ -340,10 +305,19 @@ function initializeExtension(manifest,user, repo) {
     // script.onload = function () {
     // };
 
-    script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@master/${manifest.main}`;
+    script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
     document.body.appendChild(script);
     // eval(script);
 
+}
+//Creating two different methods for checking if extensions are installed unless a better solution is found
+function installedExtSing(manifest){
+    localStorage.getItem("marketplace:installed:" + manifest.main);
+} 
+function installedExtMult(manifest){
+    let extArr = [];
+    manifest.forEach((ext) => extArr.push(localStorage.getItem("marketplace:installed" + ext.main)));
+    return extArr;
 }
 
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
@@ -384,64 +358,50 @@ async function getRepoManifest(user, repo, branch) {
 /**
  * Fetch an extension and format data for generating a card
  * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
- * @param {string} branch The repo's default branch (e.g. main or master)
  * @returns Extension info for card (or null)
  */
-async function fetchExtension(contents_url, branch) {
+async function fetchExtension(contents_url) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-
+        const repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`);
+        const response = repoJSON.default_branch;
+        const branch =  response;
+        
         const manifest = await getRepoManifest(user, repo, branch);
         console.log(`${user}/${repo}`, manifest);
+        console.log("Is array:" + Array.isArray(manifest));
+        if (Array.isArray(manifest)){
+            let installedExtsArr = installedExtMult(manifest)
+            for (let i = 0; i < installedExtsArr.length; i++) { 
+                if(installedExtsArr[i] != null){
+                    let multManifest = manifest[i];
+                    initializeExtension(multManifest,multManifest.user,multManifest.repo, multManifest.main,branch);
+                }
+            }
+            
+        } else if (!Array.isArray(manifest) && installedExtSing){
+            initializeExtension(manifest, user, repo, branch);
+        }
 
-        const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
-        console.log(installedExt);
-        if (installedExt) initializeExtension(manifest, user, repo);
-
-        return {
+        return ({
             manifest: manifest,
             title: manifest.name,
             subtitle: manifest.description,
+            branch: branch,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
             extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
-        };
+        });
     } catch (err) {
         console.warn(contents_url, err);
+        // console.error(contents_url, 'no manifest');
         return null;
     }
 }
 
-// async function fetchPlaylist(post) {
-//     try {
-//         const res = await Spicetify.CosmosAsync.get(
-//             `sp://core-playlist/v1/playlist/${post.uri}/metadata`,
-//             {
-//                 policy: {
-//                     name: true,
-//                     picture: true,
-//                     followers: true,
-//                 }
-//             }
-//         );
-
-//         const { metadata } = res;
-//         return ({
-//             type: typesLocale.playlist,
-//             uri: post.uri,
-//             title: metadata.name,
-//             subtitle: post.title,
-//             imageURL: "https://i.scdn.co/image/" + metadata.picture.split(":")[2],
-//             upvotes: post.upvotes,
-//             followersCount: metadata.followers,
-//         });
-//     } catch {
-//         return null;
-//     }
-// }
 
 // function postMapper(posts) {
 //     let mappedPosts = [];
