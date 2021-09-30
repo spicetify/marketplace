@@ -18,13 +18,13 @@ class Card extends react.Component {
     }
 
     
-removeInstalledExt(extKey){
-    const extValue = localStorage.getItem(extKey)
-    console.log(JSON.stringify(extValue))
-if(extValue != null){
-    localStorage.removeItem(extKey)
-    console.log("Removed")
-}
+    removeInstalledExt(extKey) {
+        const extValue = localStorage.getItem(extKey);
+        console.log(JSON.stringify(extValue));
+        if (extValue != null) {
+            localStorage.removeItem(extKey);
+            console.log("Removed");
+        }
 }
     
     render() {
@@ -70,7 +70,7 @@ if(extValue != null){
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": Spicetify.Locale.get("play"),
             style: { "--size": "40px" },
-            onClick: this.removeInstalledExt(localStoragePath),
+            //onClick: ,
            
         },
             react.createElement("svg", {

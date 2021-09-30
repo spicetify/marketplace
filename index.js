@@ -360,6 +360,7 @@ async function getRepoContents(contents_url) {
  */
 async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+
     return await Spicetify.CosmosAsync.get(url);
 }
 
@@ -389,9 +390,11 @@ async function fetchExtension(contents_url) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-
-        // TODO: how do i get the default branch name?
-        const manifest = await getRepoManifest(user, repo, "main");
+        var repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`)
+        var response = repoJSON.default_branch
+       const defaultBranch =  response
+        
+        const manifest = await getRepoManifest(user, repo, defaultBranch);
         console.log(`${user}/${repo}`, manifest);
 
         const installedExt = localStorage.getItem("marketplace:installed:" + manifest.main);
