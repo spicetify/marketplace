@@ -8,17 +8,19 @@
 /// <reference path="Settings.js" />
 /// <reference path="SortBox.js" />
 /// <reference path="TabBar.js" />
+
 /* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
-const react = Spicetify.React; // eslint-disable-line
+const react = Spicetify.React;
 /** @type {ReactDOM} */
-const reactDOM = Spicetify.ReactDOM;// eslint-disable-line
+const reactDOM = Spicetify.ReactDOM;
 const {
-    URI,// eslint-disable-line
-    React: { useState, useEffect, useCallback },// eslint-disable-line
+    URI,
+    React: { useState, useEffect, useCallback },
     // @ts-ignore
-    Platform: { History },// eslint-disable-line
+    Platform: { History },
 } = Spicetify;
+/* eslint-enable no-redeclare, no-unused-vars */
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
@@ -38,7 +40,7 @@ try {
     services = ["spotify", "makemeaplaylist", "SpotifyPlaylists", "music", "edm", "popheads"];
     localStorage.setItem("reddit:services", JSON.stringify(services));
 }
-// eslint-disable-next-line
+// eslint-disable-next-line no-redeclare
 const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
@@ -63,9 +65,11 @@ let lastScroll = 0;
 let requestQueue = [];
 let requestAfter = null;
 
-let gridUpdateTabs, gridUpdatePostsVisual; // eslint-disable-line
+// eslint-disable-next-line no-unused-vars
+let gridUpdateTabs, gridUpdatePostsVisual;
 
-const typesLocale = { // eslint-disable-line
+// eslint-disable-next-line no-unused-vars
+const typesLocale = {
     album: Spicetify.Locale.get("album"),
     song: Spicetify.Locale.get("song"),
     playlist: Spicetify.Locale.get("playlist"),
@@ -154,7 +158,7 @@ class Grid extends react.Component {
         let allExtensions = await getAllExtensions();
 
         console.log("All extensions" + allExtensions);
-       
+
         for (const extension of allExtensions.items) {
             let item;
             item = await fetchExtension(extension.contents_url, extension.default_branch);
@@ -182,7 +186,7 @@ class Grid extends react.Component {
         quantity += cardList.length;
 
         requestAfter = await this.loadPage(queue);
-       
+
         while (
             requestAfter &&
             requestAfter !== -1 &&
@@ -313,7 +317,7 @@ function initializeExtension(manifest,user, repo, main, branch) {
 //Creating two different methods for checking if extensions are installed unless a better solution is found
 function installedExtSing(manifest){
     localStorage.getItem("marketplace:installed:" + manifest.main);
-} 
+}
 function installedExtMult(manifest){
     let extArr = [];
     manifest.forEach((ext) => extArr.push(localStorage.getItem("marketplace:installed" + ext.main)));
@@ -358,31 +362,29 @@ async function getRepoManifest(user, repo, branch) {
 /**
  * Fetch an extension and format data for generating a card
  * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param {string} branch The repo's default branch (e.g. main or master)
  * @returns Extension info for card (or null)
  */
-async function fetchExtension(contents_url) {
+async function fetchExtension(contents_url, branch) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-        const repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`);
-        const response = repoJSON.default_branch;
-        const branch =  response;
-        
+
         const manifest = await getRepoManifest(user, repo, branch);
         console.log(`${user}/${repo}`, manifest);
         console.log("Is array:" + Array.isArray(manifest));
         if (Array.isArray(manifest)){
-            let installedExtsArr = installedExtMult(manifest)
-            for (let i = 0; i < installedExtsArr.length; i++) { 
+            let installedExtsArr = installedExtMult(manifest);
+            for (let i = 0; i < installedExtsArr.length; i++) {
                 if(installedExtsArr[i] != null){
                     let multManifest = manifest[i];
                     initializeExtension(multManifest,multManifest.user,multManifest.repo, multManifest.main,branch);
                 }
             }
-            
+
         } else if (!Array.isArray(manifest) && installedExtSing){
             initializeExtension(manifest, user, repo, branch);
         }
@@ -397,11 +399,9 @@ async function fetchExtension(contents_url) {
         });
     } catch (err) {
         console.warn(contents_url, err);
-        // console.error(contents_url, 'no manifest');
         return null;
     }
 }
-
 
 // function postMapper(posts) {
 //     let mappedPosts = [];
