@@ -381,11 +381,15 @@ async function fetchExtension(contents_url, branch) {
             for (let i = 0; i < installedExtsArr.length; i++) {
                 if(installedExtsArr[i] != null){
                     let multManifest = manifest[i];
-                    initializeExtension(multManifest,multManifest.user,multManifest.repo, multManifest.main,branch);
+                    initializeExtension(multManifest[i],multManifest.user,multManifest.repo, multManifest.main,branch);
+                    return ({
+                        manifest: manifest,
+                       
+                    });
                 }
             }
 
-        } else if (!Array.isArray(manifest) && installedExtSing){
+        } else if (!Array.isArray(manifest) && installedExtSing(manifest) != null){
             initializeExtension(manifest, user, repo,manifest.main, branch);
         }
 
