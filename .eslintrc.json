@@ -5,10 +5,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:react/recommended"
     ],
-    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -16,8 +14,7 @@
         "ecmaVersion": 12
     },
     "plugins": [
-        "react",
-        "@typescript-eslint"
+        "react"
     ],
     "rules": {
         "indent": [
@@ -36,7 +33,8 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-var": "error"
     },
     "globals": {
         "react": "readonly",
