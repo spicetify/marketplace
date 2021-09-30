@@ -1,4 +1,3 @@
-
 // eslint-disable-next-line no-redeclare, no-unused-vars
 class Card extends react.Component {
     constructor(props) {
@@ -25,7 +24,7 @@ class Card extends react.Component {
             console.log("Removed");
         }
     }
-    
+
     render() {
         let detail = [];
         // this.visual.type && detail.push(this.type);

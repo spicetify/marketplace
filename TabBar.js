@@ -32,6 +32,7 @@ const TabBarMore = react.memo(({ items, switchTo }) => {
     }));
 });
 
+// eslint-disable-next-line no-redeclare, no-unused-vars
 const TopBarContent = ({ links, activeLink, switchCallback }) => {
     const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
     const [windowSize, setWindowSize] = useState(resizeHost.clientWidth);

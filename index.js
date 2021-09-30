@@ -9,20 +9,21 @@
 /// <reference path="SortBox.js" />
 /// <reference path="TabBar.js" />
 
+/* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
 const react = Spicetify.React;
 /** @type {ReactDOM} */
 const reactDOM = Spicetify.ReactDOM;
 const {
-    URI,
+    URI, // eslint-disable-line no-unused-vars
     React: { useState, useEffect, useCallback },
     Platform: { History },
 } = Spicetify;
+/* eslint-enable no-redeclare, no-unused-vars */
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function render() {
+function render() { // eslint-disable-line no-unused-vars
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
@@ -38,6 +39,7 @@ try {
     localStorage.setItem("reddit:services", JSON.stringify(services));
 }
 
+// eslint-disable-next-line no-redeclare
 const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
@@ -215,12 +217,12 @@ class Grid extends react.Component {
         quantity += cardList.length;
 
         requestAfter = await this.loadPage(queue);
-       
+
         while (
             requestAfter &&
             requestAfter !== -1 &&
             cardList.length < quantity &&
-            !this.endOfList  
+            !this.endOfList
         ) {
             requestAfter = await this.loadPage(queue);
         }
@@ -245,7 +247,7 @@ class Grid extends react.Component {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig); //eslint-disable-line
+        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig);
         this.configButton.register();
 
         const viewPort = document.querySelector("main .os-viewport");
@@ -280,9 +282,9 @@ class Grid extends react.Component {
 
     render() {
         return react.createElement("section", {
-            className: "contentSpacing"
+            className: "contentSpacing",
         }, react.createElement("div", {
-            className: "reddit-header"
+            className: "reddit-header",
         }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
@@ -291,14 +293,14 @@ class Grid extends react.Component {
             id: "reddit-grid",
             className: "main-gridContainer-gridContainer",
             style: {
-                "--minimumColumnWidth": "180px"
+                "--minimumColumnWidth": "180px",
             },
         }, [...cardList]), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",
-            }
-        }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon))
+            },
+        }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon)),
         ), react.createElement(TopBarContent, {
             switchCallback: this.switchTo.bind(this),
             links: CONFIG.services,
@@ -394,7 +396,7 @@ async function fetchExtension(contents_url) {
         const repoJSON = await Spicetify.CosmosAsync.get(`https://api.github.com/repos/${user}/${repo}`);
         const response = repoJSON.default_branch;
         const defaultBranch =  response;
-        
+
         const manifest = await getRepoManifest(user, repo, defaultBranch);
         console.log(`${user}/${repo}`, manifest);
 
@@ -407,7 +409,7 @@ async function fetchExtension(contents_url) {
             title: manifest.name,
             subtitle: manifest.description,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.preview}`,
-            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`
+            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/main/${manifest.main}`,
         });
     } catch (err) {
         console.warn(contents_url, err);
