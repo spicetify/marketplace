@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-redeclare, no-unused-vars
 class TabBarItem extends react.Component {
     render() {
         return react.createElement("li", {
@@ -12,7 +13,7 @@ class TabBarItem extends react.Component {
             draggable: "false",
             href: "",
         }, react.createElement("span", {
-            className: "main-type-mestoBold"
+            className: "main-type-mestoBold",
         }, this.props.item.value)));
     }
 }
@@ -56,9 +57,9 @@ const TopBarContent = ({ links, activeLink, switchCallback }) => {
 const TabBarContext = ({ children }) => {
     return reactDOM.createPortal(
         react.createElement("div", {
-            className: "main-topBar-topbarContent"
+            className: "main-topBar-topbarContent",
         }, children),
-        document.querySelector(".main-topBar-topbarContentWrapper")
+        document.querySelector(".main-topBar-topbarContentWrapper"),
     );
 };
 
@@ -134,6 +135,6 @@ const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Inf
         react.createElement(TabBarMore, {
             items: droplistItem.map(i => options[i]).filter(i => i),
             switchTo: switchCallback,
-        }) : null)
+        }) : null),
     );
 });

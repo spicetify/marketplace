@@ -34,6 +34,10 @@
             "error",
             "always"
         ],
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
         "no-var": "error"
     },
     "globals": {
@@ -47,6 +51,7 @@
         "useState": "readonly",
         "TopBarContent": "readonly",
         "LoadingIcon": "readonly",
-        "LoadMoreIcon": "readonly"
+        "LoadMoreIcon": "readonly",
+        "CONFIG": "writable"
     }
 }

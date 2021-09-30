@@ -59,7 +59,7 @@ function openConfig() {
 
         localStorage.setItem(
             "reddit:services",
-            JSON.stringify(CONFIG.services)
+            JSON.stringify(CONFIG.services),
         );
 
         stackServiceElements();

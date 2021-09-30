@@ -1,5 +1,5 @@
 /// <reference path="OptionsMenu.js" />
-
+// eslint-disable-next-line no-redeclare, no-unused-vars
 class SortBox extends react.Component {
     constructor(props) {
         super(props);
