@@ -1,4 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+// eslint-disable-next-line no-redeclare
+// eslint-disable-next-line
 class Card extends react.Component {
     constructor(props) {
         super(props);
@@ -14,10 +16,8 @@ class Card extends react.Component {
         this.title;
         Object.assign(this, props);
         // console.log(this.manifest);
-
     }
 
-    
     removeInstalledExt(extKey) {
         const extValue = localStorage.getItem(extKey);
         console.log(JSON.stringify(extValue));
@@ -25,13 +25,13 @@ class Card extends react.Component {
             localStorage.removeItem(extKey);
             console.log("Removed");
         }
-}
-    
+    }
+
     render() {
         let detail = [];
         // this.visual.type && detail.push(this.type);
         // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
-        const localStoragePath = "marketplace:installed:" + this.manifest.main
+        const localStoragePath = "marketplace:installed:" + this.manifest.main;
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
@@ -46,53 +46,53 @@ class Card extends react.Component {
                     console.log(JSON.parse(localStorage.getItem(localStoragePath)));
 
                 } else {
-                    console.log("Extension already installed")
+                    console.log("Extension already installed");
                 }
 
             },
         }, react.createElement("div", {
             className: "main-card-draggable",
-            draggable: "true"
+            draggable: "true",
         }, react.createElement("div", {
-            className: "main-card-imageContainer"
+            className: "main-card-imageContainer",
         }, react.createElement("div", {
-            className: "main-cardImage-imageWrapper"
+            className: "main-cardImage-imageWrapper",
         }, react.createElement("div", {
         }, react.createElement("img", {
             "aria-hidden": "false",
             draggable: "false",
             loading: "lazy",
             src: this.imageURL,
-            className: "main-image-image main-cardImage-image"
+            className: "main-image-image main-cardImage-image",
         }))), react.createElement("div", {
-            className: "main-card-PlayButtonContainer"
+            className: "main-card-PlayButtonContainer",
         }, react.createElement("button", {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": Spicetify.Locale.get("play"),
             style: { "--size": "40px" },
             //onClick: ,
-           
+
         },
-            react.createElement("svg", {
+        react.createElement("svg", {
             height: "16",
             role: "img",
             width: "16",
             viewBox: "0 0 24 24",
-            "aria-hidden": "true"
+            "aria-hidden": "true",
         }, react.createElement("polygon", {
             points: "21.57 12 5.98 3 5.98 21 21.57 12",
-            fill: "currentColor"
+            fill: "currentColor",
         }))))), react.createElement("div", {
-            className: "main-card-cardMetadata"
+            className: "main-card-cardMetadata",
         }, react.createElement("a", {
             draggable: "false",
             title: this.title,
             className: "main-cardHeader-link",
             dir: "auto",
-            href: "TODO: add some href here?"
+            href: "TODO: add some href here?",
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
-            as: "div"
+            as: "div",
         }, this.title)), detail.length > 0 && react.createElement("div", {
             className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
             as: "div",
