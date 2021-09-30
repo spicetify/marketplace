@@ -301,8 +301,7 @@ async function getAllExtensions() {
     return await Spicetify.CosmosAsync.get(url);
 }
 
-function initializeExtension(manifest,user, repo, main, branch) {
-
+function initializeExtension(manifest, user, repo, main, branch) {
     const script = document.createElement("script");
     script.defer = true;
 
@@ -312,7 +311,6 @@ function initializeExtension(manifest,user, repo, main, branch) {
     script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
     document.body.appendChild(script);
     // eval(script);
-
 }
 //Creating two different methods for checking if extensions are installed unless a better solution is found
 function installedExtSing(manifest){
@@ -381,11 +379,8 @@ async function fetchExtension(contents_url, branch) {
             for (let i = 0; i < installedExtsArr.length; i++) {
                 if(installedExtsArr[i] != null){
                     let multManifest = manifest[i];
-                    initializeExtension(multManifest[i],multManifest.user,multManifest.repo, multManifest.main,branch);
-                    return ({
-                        manifest: manifest,
-                       
-                    });
+                    initializeExtension(multManifest, multManifest.user, multManifest.repo, multManifest.main, branch);
+                    return ({ manifest });
                 }
             }
 
