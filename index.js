@@ -222,7 +222,7 @@ class Grid extends react.Component {
             requestAfter &&
             requestAfter !== -1 &&
             cardList.length < quantity &&
-            !this.endOfList
+            !this.state.endOfList
         ) {
             requestAfter = await this.loadPage(queue);
         }
