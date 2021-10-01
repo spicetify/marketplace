@@ -306,13 +306,19 @@ async function getAllRepos() {
     return await Spicetify.CosmosAsync.get(url);
 }
 
+
 function initializeExtension(manifest, user, repo, main, branch) {
     const script = document.createElement("script");
     script.defer = true;
-
+    
     // script.onload = function () {
     // };
-
+    if(main.indexOf('/') > -1){
+        let mainstr = main.split('')
+        mainstr.splice(main.indexOf('/'), 1, '');
+        mainstr = mainstr.join('')
+        main = mainstr
+    }
     script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
     document.body.appendChild(script);
     // eval(script);
@@ -320,7 +326,7 @@ function initializeExtension(manifest, user, repo, main, branch) {
 
 function installedExt(manifest) {
     let extArr = [];
-    manifest.forEach((ext) => extArr.push(localStorage.getItem("marketplace:installed" + ext.main)));
+    manifest.forEach((ext) => extArr.push(localStorage.getItem("marketplace:installed:" + ext.main)));
     return extArr;
 }
 
@@ -379,10 +385,12 @@ async function getRepoManifest(user, repo, branch) {
         if (!Array.isArray(manifests)) manifests = [manifests];
 
         let installedExtsArr = installedExt(manifests);
+        console.log(installedExtsArr)
         for (let i = 0; i < installedExtsArr.length; i++) {
             if (installedExtsArr[i] != null) {
                 let multManifest = manifests[i];
-                initializeExtension(multManifest, multManifest.user, multManifest.repo, multManifest.main, branch);
+                console.log(multManifest)
+                initializeExtension(multManifest, user, repo, multManifest.main, branch);
             }
         }
 

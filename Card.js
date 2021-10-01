@@ -39,12 +39,13 @@ class Card extends react.Component {
                 // History.push(this.href);
                 event.preventDefault();
                 if (localStorage.getItem(localStoragePath) == null){
-
+                    console.log("Installing")
                     localStorage.setItem(localStoragePath, JSON.stringify(this.manifest));
                     console.log(JSON.parse(localStorage.getItem(localStoragePath)));
 
                 } else {
-                    console.log("Extension already installed");
+                    console.log("Extension already installed, removing");
+                    localStorage.removeItem(localStoragePath);
                 }
 
             },
@@ -95,7 +96,7 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
-        ), this.manifest.description,
+        ),react.createElement("br"), this.manifest.description,
         ))));
     }
 }
