@@ -26,6 +26,7 @@ const {
 // This function will be used to mount app to main view.
 // eslint-disable-next-line
 function render() {
+    // console.log('outer render');
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
@@ -85,6 +86,8 @@ class Grid extends react.Component {
             rest: true,
             endOfList: endOfList,
         };
+
+        // console.log('grid constructor');
     }
 
     newRequest(amount) {
@@ -155,20 +158,21 @@ class Grid extends react.Component {
     async loadPage(queue) {
         // let subMeta = await getSubreddit(requestAfter);
 
-        let allExtensions = await getAllExtensions();
+        let allRepos = await getAllRepos();
 
-        console.log("All extensions" + allExtensions);
+        console.log("All repos" + allRepos);
 
-        for (const extension of allExtensions.items) {
-            let item;
-            item = await fetchExtension(extension.contents_url, extension.default_branch);
-            console.log(extension.name, item);
+        for (const repo of allRepos.items) {
+            let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch);
+            console.log(repo.name, extensions);
             if (requestQueue.length > 1 && queue !== requestQueue[0]) {
                 // Stop this queue from continuing to fetch and append to cards list
                 return -1;
             }
 
-            item && this.appendCard(item);
+            if (extensions && extensions.length) {
+                extensions.forEach((extension) => this.appendCard(extension));
+            }
         }
 
         // TODO: idk what this does, so don't delete yet
@@ -213,6 +217,7 @@ class Grid extends react.Component {
     }
 
     async componentDidMount() {
+        // console.log('componentDidMount');
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
@@ -286,7 +291,7 @@ class Grid extends react.Component {
  * Query GitHub for all repos with the "spicetify-extensions" topic
  * @returns Array of search results
  */
-async function getAllExtensions() {
+async function getAllRepos() {
     // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
 
@@ -312,11 +317,8 @@ function initializeExtension(manifest, user, repo, main, branch) {
     document.body.appendChild(script);
     // eval(script);
 }
-//Creating two different methods for checking if extensions are installed unless a better solution is found
-function installedExtSing(manifest){
-    localStorage.getItem("marketplace:installed:" + manifest.main);
-}
-function installedExtMult(manifest){
+
+function installedExt(manifest) {
     let extArr = [];
     manifest.forEach((ext) => extArr.push(localStorage.getItem("marketplace:installed" + ext.main)));
     return extArr;
@@ -363,7 +365,7 @@ async function getRepoManifest(user, repo, branch) {
  * @param {string} branch The repo's default branch (e.g. main or master)
  * @returns Extension info for card (or null)
  */
-async function fetchExtension(contents_url, branch) {
+ async function fetchRepoExtensions(contents_url, branch) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -371,36 +373,36 @@ async function fetchExtension(contents_url, branch) {
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
 
-        const manifest = await getRepoManifest(user, repo, branch);
-        console.log(`${user}/${repo}`, manifest);
-        console.log("Is array:" + Array.isArray(manifest));
-        if (Array.isArray(manifest)){
-            let installedExtsArr = installedExtMult(manifest);
-            for (let i = 0; i < installedExtsArr.length; i++) {
-                if(installedExtsArr[i] != null){
-                    let multManifest = manifest[i];
-                    initializeExtension(multManifest, multManifest.user, multManifest.repo, multManifest.main, branch);
-                    return ({ manifest });
-                }
-            }
+        let manifests = await getRepoManifest(user, repo, branch);
+        console.log(`${user}/${repo}`, manifests);
 
-        } else if (!Array.isArray(manifest) && installedExtSing(manifest) != null){
-            initializeExtension(manifest, user, repo,manifest.main, branch);
+        if (!Array.isArray(manifests)) manifests = [manifests];
+
+        let installedExtsArr = installedExt(manifests);
+        for (let i = 0; i < installedExtsArr.length; i++) {
+            if (installedExtsArr[i] != null) {
+                let multManifest = manifests[i];
+                initializeExtension(multManifest, multManifest.user, multManifest.repo, multManifest.main, branch);
+            }
         }
 
-        return ({
-            manifest: manifest,
+        const parsedManifests = manifests.map((manifest) => ({
+            manifest,
             title: manifest.name,
             subtitle: manifest.description,
-            branch: branch,
+            branch,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
             extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
-        });
-    } catch (err) {
+        }));
+
+        return parsedManifests;
+    }
+     catch (err) {
         console.warn(contents_url, err);
         return null;
     }
 }
+
 
 // function postMapper(posts) {
 //     let mappedPosts = [];
