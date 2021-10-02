@@ -38,8 +38,8 @@ class Card extends react.Component {
                 // We might want to add some href for a page for the extension
                 // History.push(this.href);
                 event.preventDefault();
-                if (localStorage.getItem(localStoragePath) == null){
-                    console.log("Installing")
+                if (localStorage.getItem(localStoragePath) == null) {
+                    console.log("Installing");
                     localStorage.setItem(localStoragePath, JSON.stringify(this.manifest));
                     console.log(JSON.parse(localStorage.getItem(localStoragePath)));
 

@@ -38,7 +38,8 @@
             "error",
             "always-multiline"
         ],
-        "no-var": "error"
+        "no-var": "error",
+        "space-before-blocks": "error"
     },
     "globals": {
         "react": "readonly",
