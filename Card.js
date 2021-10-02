@@ -17,12 +17,17 @@ class Card extends react.Component {
         // TODO: add state for installed status
 
         Object.assign(this, props);
+
+        this.state = {
+            installed: localStorage.getItem(this.localStorageKey) !== null,
+        };
     }
 
     installExtension() {
         console.log(`Installing extension ${this.localStorageKey}`);
         localStorage.setItem(this.localStorageKey, JSON.stringify(this.manifest));
         console.log("Installed");
+        this.setState({ installed: true });
         // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
     }
 
@@ -33,6 +38,8 @@ class Card extends react.Component {
             console.log(`Removing extension ${this.localStorageKey}`);
             localStorage.removeItem(this.localStorageKey);
             console.log("Removed");
+            // TODO: probably don't need to since it will reload
+            this.setState({ installed: true });
             location.reload();
         } else {
             console.log(`Extension ${this.localStorageKey} not found`);
@@ -40,13 +47,17 @@ class Card extends react.Component {
     }
 
     render() {
+        const cardClasses = ["main-card-card"];
+        if (this.state.installed) cardClasses.push("marketplace-card--installed");
+
         let detail = [];
+        // if (this.state.installed) detail.push("✓ installed");
         // this.visual.type && detail.push(this.type);
         // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
-            className: "main-card-card",
+            className: cardClasses.join(" "),
             onClick: (event) => {
                 // We might want to add some href for a page for the extension
                 // History.push(this.href);
@@ -104,7 +115,12 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
-        ),react.createElement("br"), this.manifest.description,
+        ),react.createElement("br"),
+        this.manifest.description,
+        this.state.installed && react.createElement("div", {
+            className: "marketplace-card__bottom-meta main-type-mestoBold",
+            as: "div",
+        }, "✓ installed"),
         ))));
     }
 }

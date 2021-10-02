@@ -141,19 +141,30 @@ div.reddit-tabBar-headerItemLink {
     padding: 0;
 }
 
-.reddit-cardSubHeader {
+.reddit-cardSubHeader,
+.marketplace-card__bottom-meta {
     margin-top: 4px;
     white-space: normal;
     color: var(--spice-subtext);
+}
+
+.marketplace-card__bottom-meta {
+    margin-top: 8px;
 }
 
 .reddit-longDescription {
     display: flex;
 }
 
-/* 
-TODO: can we get this added to the default Spicetify stylesheet? 
-It should fix broken extension modals 
+/* Card for installed items
+.marketplace-card--installed {
+    background-color: red;
+}
+*/
+
+/*
+TODO: can we get this added to the default Spicetify stylesheet?
+It should fix broken extension modals
 */
 
 .GenericModal {
