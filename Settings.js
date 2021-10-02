@@ -12,7 +12,7 @@ function openConfig() {
     CONFIG.servicesElement = {};
 
     configContainer = document.createElement("div");
-    configContainer.id = "reddit-config-container";
+    configContainer.id = "marketplace-config-container";
 
     const optionHeader = document.createElement("h2");
     optionHeader.innerText = "Options";

@@ -258,7 +258,7 @@ class Grid extends react.Component {
         return react.createElement("section", {
             className: "contentSpacing",
         }, react.createElement("div", {
-            className: "reddit-header",
+            className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),

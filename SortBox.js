@@ -25,9 +25,9 @@ class SortBox extends react.Component {
         const sortTimeSelected = this.sortTimeOptions.filter(a => a.key === sortConfig.time)[0];
 
         return react.createElement("div", {
-            className: "reddit-sort-bar",
+            className: "marketplace-sort-bar",
         }, react.createElement("div", {
-            className: "reddit-sort-container",
+            className: "marketplace-sort-container",
         }, react.createElement(OptionsMenu, {
             options: this.sortByOptions,
             onSelect: (by) => this.props.onChange(by, null),

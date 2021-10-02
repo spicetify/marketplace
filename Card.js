@@ -112,7 +112,7 @@ class Card extends react.Component {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div",
         }, this.title)), detail.length > 0 && react.createElement("div", {
-            className: "main-cardSubHeader-root main-type-mestoBold reddit-cardSubHeader",
+            className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
         ),react.createElement("br"),

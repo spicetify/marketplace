@@ -2,14 +2,14 @@
 class TabBarItem extends react.Component {
     render() {
         return react.createElement("li", {
-            className: "reddit-tabBar-headerItem",
+            className: "marketplace-tabBar-headerItem",
             onClick: (event) => {
                 event.preventDefault();
                 this.props.switchTo(this.props.item.key);
             },
         }, react.createElement("a", {
             "aria-current": "page",
-            className: `reddit-tabBar-headerItemLink ${this.props.item.active ? "reddit-tabBar-active" : ""}`,
+            className: `marketplace-tabBar-headerItemLink ${this.props.item.active ? "marketplace-tabBar-active" : ""}`,
             draggable: "false",
             href: "",
         }, react.createElement("span", {
@@ -22,7 +22,7 @@ const TabBarMore = react.memo(({ items, switchTo }) => {
     const activeItem = items.find((item) => item.active);
 
     return react.createElement("li", {
-        className: `reddit-tabBar-headerItem ${activeItem ? "reddit-tabBar-active" : ""}`,
+        className: `marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`,
     }, react.createElement(OptionsMenu, {
         options: items,
         onSelect: switchTo,
@@ -122,9 +122,9 @@ const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Inf
     }, [availableSpace, childrenSizes]);
 
     return react.createElement("nav", {
-        className: "reddit-tabBar reddit-tabBar-nav",
+        className: "marketplace-tabBar marketplace-tabBar-nav",
     }, react.createElement("ul", {
-        className: "reddit-tabBar-header",
+        className: "marketplace-tabBar-header",
         ref: tabBarRef,
     }, options
         .filter((_, id) => !droplistItem.includes(id))

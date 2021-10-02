@@ -37,7 +37,7 @@ button.switch.small {
     height: 22px;
     padding: 6px;
 }
-.reddit-sort-container .optionsMenu-dropBox {
+.marketplace-sort-container .optionsMenu-dropBox {
     grid-gap: 8px;
     align-items: center;
     background-color: transparent;
@@ -50,10 +50,10 @@ button.switch.small {
     margin-left: 8px;
     padding: 0 8px 0 12px;
 }
-.reddit-sort-container .optionsMenu-dropBox:hover {
+.marketplace-sort-container .optionsMenu-dropBox:hover {
     color: var(--spice-text);
 }
-#reddit-config-container input {
+#marketplace-config-container input {
     width: 100%;
     margin-top: 10px;
     padding: 0 5px;
@@ -68,7 +68,7 @@ option {
     background-color: var(--spice-button);
 }
 
-.reddit-header {
+.marketplace-header {
     -webkit-box-pack: justify;
     -webkit-box-align: center;
     align-content: space-between;
@@ -79,32 +79,32 @@ option {
     margin: 16px 0;
 }
 
-.reddit-sort-bar {
+.marketplace-sort-bar {
     align-items: center;
     display: flex;
 }
 
-.reddit-sort-container {
+.marketplace-sort-container {
     position: relative;
     display: flex;
 }
 
-.reddit-tabBar-headerItem {
+.marketplace-tabBar-headerItem {
     -webkit-app-region: no-drag;
     display: inline-block;
     pointer-events: auto;
 }
 
-.reddit-tabBar-headerItemLink {
+.marketplace-tabBar-headerItemLink {
     margin: 0 8px 0 0;
 }
 
-.reddit-tabBar-active {
+.marketplace-tabBar-active {
     background-color: var(--spice-tab-active);
     border-radius: 4px;
 }
 
-.reddit-tabBar-headerItemLink {
+.marketplace-tabBar-headerItemLink {
     border-radius: 4px;
     color: var(--spice-text);
     display: inline-block;
@@ -115,13 +115,13 @@ option {
     cursor: pointer;
 }
 
-.reddit-tabBar-nav {
+.marketplace-tabBar-nav {
     -webkit-app-region: drag;
     pointer-events: none;
     width: 100%;
 }
 
-.reddit-tabBar-headerItem .optionsMenu-dropBox {
+.marketplace-tabBar-headerItem .optionsMenu-dropBox {
     color: var(--spice-text);
     border: 0;
     max-width: 150px;
@@ -132,16 +132,16 @@ option {
     appearance: none;
 }
 
-.reddit-tabBar-headerItem .optionsMenu-dropBox svg {
+.marketplace-tabBar-headerItem .optionsMenu-dropBox svg {
     position: absolute;
     margin-left: 8px;
 }
 
-div.reddit-tabBar-headerItemLink {
+div.marketplace-tabBar-headerItemLink {
     padding: 0;
 }
 
-.reddit-cardSubHeader,
+.marketplace-cardSubHeader,
 .marketplace-card__bottom-meta {
     margin-top: 4px;
     white-space: normal;
@@ -152,7 +152,7 @@ div.reddit-tabBar-headerItemLink {
     margin-top: 8px;
 }
 
-.reddit-longDescription {
+.marketplace-longDescription {
     display: flex;
 }
 
