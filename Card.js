@@ -12,16 +12,30 @@ class Card extends react.Component {
         this.manifest;
         /** @type { string } */
         this.title;
+        this.localStorageKey = "marketplace:installed:" + props.manifest.main;
+
+        // TODO: add state for installed status
+
         Object.assign(this, props);
-        // console.log(this.manifest);
     }
 
-    removeInstalledExt(extKey) {
-        const extValue = localStorage.getItem(extKey);
-        console.log(JSON.stringify(extValue));
-        if (extValue != null) {
-            localStorage.removeItem(extKey);
+    installExtension() {
+        console.log(`Installing extension ${this.localStorageKey}`);
+        localStorage.setItem(this.localStorageKey, JSON.stringify(this.manifest));
+        console.log("Installed");
+        // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
+    }
+
+    removeExtension() {
+        const extValue = localStorage.getItem(this.localStorageKey);
+        // console.log(JSON.parse(extValue));
+        if (extValue) {
+            console.log(`Removing extension ${this.localStorageKey}`);
+            localStorage.removeItem(this.localStorageKey);
             console.log("Removed");
+            location.reload();
+        } else {
+            console.log(`Extension ${this.localStorageKey} not found`);
         }
     }
 
@@ -29,7 +43,6 @@ class Card extends react.Component {
         let detail = [];
         // this.visual.type && detail.push(this.type);
         // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
-        const localStoragePath = "marketplace:installed:" + this.manifest.main;
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
@@ -38,17 +51,12 @@ class Card extends react.Component {
                 // We might want to add some href for a page for the extension
                 // History.push(this.href);
                 event.preventDefault();
-                if (localStorage.getItem(localStoragePath) == null) {
-                    console.log("Installing");
-                    localStorage.setItem(localStoragePath, JSON.stringify(this.manifest));
-                    console.log(JSON.parse(localStorage.getItem(localStoragePath)));
-
+                if (localStorage.getItem(this.localStorageKey) == null) {
+                    this.installExtension();
                 } else {
                     console.log("Extension already installed, removing");
-                    localStorage.removeItem(localStoragePath);
-                    location.reload();
+                    this.removeExtension();
                 }
-
             },
         }, react.createElement("div", {
             className: "main-card-draggable",
@@ -71,7 +79,6 @@ class Card extends react.Component {
             "aria-label": Spicetify.Locale.get("play"),
             style: { "--size": "40px" },
             //onClick: ,
-
         },
         react.createElement("svg", {
             height: "16",
