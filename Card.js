@@ -2,7 +2,7 @@
 class Card extends react.Component {
     constructor(props) {
         super(props);
-        /** @type { { type: string; upvotes: string; } } */
+        /** @type { { type: string; stars: string; } } */
         this.visual;
         /** @type { string } */
         this.imageURL;
@@ -12,6 +12,8 @@ class Card extends react.Component {
         this.manifest;
         /** @type { string } */
         this.title;
+        /** @type { number } */
+        this.stars;
         this.localStorageKey = "marketplace:installed:" + props.manifest.main;
 
         // TODO: add state for installed status
@@ -51,9 +53,8 @@ class Card extends react.Component {
         if (this.state.installed) cardClasses.push("marketplace-card--installed");
 
         let detail = [];
-        // if (this.state.installed) detail.push("✓ installed");
         // this.visual.type && detail.push(this.type);
-        // this.visual.upvotes && detail.push(`▲ ${this.upvotes}`);
+        this.visual.stars && detail.push(`★ ${this.stars}`);
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {

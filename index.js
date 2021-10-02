@@ -45,7 +45,7 @@ try {
 const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
-        upvotes: localStorage.getItem("reddit:upvotes") === "true",
+        stars: localStorage.getItem("marketplace:stars") === "true",
         followers: localStorage.getItem("reddit:followers") === "true",
         longDescription: localStorage.getItem("reddit:longDescription") === "true",
     },
@@ -160,10 +160,10 @@ class Grid extends react.Component {
 
         let allRepos = await getAllRepos();
 
-        console.log("All repos" + allRepos);
+        console.log("All repos", allRepos);
 
         for (const repo of allRepos.items) {
-            let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch);
+            let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
             console.log(repo.name, extensions);
             if (requestQueue.length > 1 && queue !== requestQueue[0]) {
                 // Stop this queue from continuing to fetch and append to cards list
@@ -315,7 +315,6 @@ function initializeExtension(manifest, user, repo, main, branch) {
 
     script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
     document.body.appendChild(script);
-    // eval(script);
 }
 
 function installedExt(manifest) {
@@ -363,9 +362,10 @@ async function getRepoManifest(user, repo, branch) {
  * Fetch an extension and format data for generating a card
  * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
  * @param {string} branch The repo's default branch (e.g. main or master)
+ * @param {number} stars The number of stars the repo has
  * @returns Extension info for card (or null)
  */
-async function fetchRepoExtensions(contents_url, branch) {
+async function fetchRepoExtensions(contents_url, branch, stars) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -395,6 +395,7 @@ async function fetchRepoExtensions(contents_url, branch) {
             branch,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
             extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+            stars,
         }));
 
         return parsedManifests;

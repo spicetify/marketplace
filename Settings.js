@@ -111,7 +111,7 @@ function openConfig() {
 
     configContainer.append(
         optionHeader,
-        createSlider("Upvotes count", "upvotes"),
+        createSlider("Stars count", "stars"),
         createSlider("Followers count", "followers"),
         createSlider("Post type", "type"),
         createSlider("Long description", "longDescription"),
