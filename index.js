@@ -310,15 +310,9 @@ async function getAllRepos() {
 function initializeExtension(manifest, user, repo, main, branch) {
     const script = document.createElement("script");
     script.defer = true;
-    
-    // script.onload = function () {
-    // };
-    if(main.indexOf('/') > -1){
-        let mainstr = main.split('')
-        mainstr.splice(main.indexOf('/'), 1, '');
-        mainstr = mainstr.join('')
-        main = mainstr
-    }
+
+    if (main[0]  === "/") main = main.slice(1);
+
     script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
     document.body.appendChild(script);
     // eval(script);
@@ -371,7 +365,7 @@ async function getRepoManifest(user, repo, branch) {
  * @param {string} branch The repo's default branch (e.g. main or master)
  * @returns Extension info for card (or null)
  */
- async function fetchRepoExtensions(contents_url, branch) {
+async function fetchRepoExtensions(contents_url, branch) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -385,11 +379,11 @@ async function getRepoManifest(user, repo, branch) {
         if (!Array.isArray(manifests)) manifests = [manifests];
 
         let installedExtsArr = installedExt(manifests);
-        console.log(installedExtsArr)
+        console.log(installedExtsArr);
         for (let i = 0; i < installedExtsArr.length; i++) {
             if (installedExtsArr[i] != null) {
                 let multManifest = manifests[i];
-                console.log(multManifest)
+                console.log(multManifest);
                 initializeExtension(multManifest, user, repo, multManifest.main, branch);
             }
         }
@@ -405,7 +399,7 @@ async function getRepoManifest(user, repo, branch) {
 
         return parsedManifests;
     }
-     catch (err) {
+    catch (err) {
         console.warn(contents_url, err);
         return null;
     }
