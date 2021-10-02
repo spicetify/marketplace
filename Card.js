@@ -46,6 +46,7 @@ class Card extends react.Component {
                 } else {
                     console.log("Extension already installed, removing");
                     localStorage.removeItem(localStoragePath);
+                    location.reload();
                 }
 
             },
