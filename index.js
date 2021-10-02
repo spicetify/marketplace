@@ -46,6 +46,9 @@ const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
         stars: localStorage.getItem("marketplace:stars") === "true",
+        // I was considering adding watchers as "followers" but it looks like the value is a duplicate
+        // of stargazers, and the subscribers_count isn't returned in the main API call we make
+        // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
         followers: localStorage.getItem("reddit:followers") === "true",
         longDescription: localStorage.getItem("reddit:longDescription") === "true",
     },
