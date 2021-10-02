@@ -264,7 +264,7 @@ class Grid extends react.Component {
             onChange: this.updateSort.bind(this),
             onServicesChange: this.updateTabs.bind(this),
         })), react.createElement("div", {
-            id: "reddit-grid",
+            id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
             style: {
                 "--minimumColumnWidth": "180px",

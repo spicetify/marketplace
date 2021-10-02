@@ -121,7 +121,7 @@ function openConfig() {
     );
 
     Spicetify.PopupModal.display({
-        title: "Reddit",
+        title: "Marketplace",
         content: configContainer,
     });
 }
