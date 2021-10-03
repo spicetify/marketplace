@@ -78,17 +78,12 @@ class Card extends react.Component {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
             className: cardClasses.join(" "),
-            onClick: (event) => {
-                // We might want to add some href for a page for the extension
-                // History.push(this.href);
-                event.preventDefault();
-                if (localStorage.getItem(this.localStorageKey) == null) {
-                    this.installExtension();
-                } else {
-                    console.log("Extension already installed, removing");
-                    this.removeExtension();
-                }
-            },
+            // onClick: (event) => {
+            //     // TODO: Navigate to a page for the extension info on card click.
+            //     // We might want to add some href for a page for the extension
+            //     // History.push(this.href);
+            //     // event.preventDefault();
+            // },
         }, react.createElement("div", {
             className: "main-card-draggable",
             draggable: "true",
@@ -109,7 +104,15 @@ class Card extends react.Component {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
             style: { "--size": "40px" },
-            //onClick: ,
+            onClick: (event) => {
+                event.preventDefault();
+                if (localStorage.getItem(this.localStorageKey) == null) {
+                    this.installExtension();
+                } else {
+                    console.log("Extension already installed, removing");
+                    this.removeExtension();
+                }
+            },
         },
         this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
         ))), react.createElement("div", {
