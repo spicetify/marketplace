@@ -40,9 +40,8 @@ class Card extends react.Component {
             console.log(`Removing extension ${this.localStorageKey}`);
             localStorage.removeItem(this.localStorageKey);
             console.log("Removed");
-            // TODO: probably don't need to since it will reload
-            this.setState({ installed: true });
-            location.reload();
+            this.setState({ installed: false });
+            openReloadModal();
         } else {
             console.log(`Extension ${this.localStorageKey} not found`);
         }
@@ -116,7 +115,7 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
-        ),react.createElement("br"),
+        ), react.createElement("br"),
         this.manifest.description,
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",

@@ -1,5 +1,6 @@
 let configContainer;
 
+// eslint-disable-next-line no-unused-vars, no-redeclare
 function openConfig() {
     if (configContainer) {
         Spicetify.PopupModal.display({

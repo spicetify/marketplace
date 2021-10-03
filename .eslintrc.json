@@ -39,7 +39,10 @@
             "always-multiline"
         ],
         "no-var": "error",
-        "space-before-blocks": "error"
+        "space-before-blocks": "error",
+        "comma-spacing": [
+            "error", { "before": false, "after": true }
+        ]
     },
     "globals": {
         "react": "readonly",
@@ -53,6 +56,11 @@
         "TopBarContent": "readonly",
         "LoadingIcon": "readonly",
         "LoadMoreIcon": "readonly",
-        "CONFIG": "writable"
+        "CONFIG": "writable",
+        "openConfig": "writable",
+        "openReloadModal": "writable",
+        "sortConfig": "writable",
+        "gridUpdateTabs": "writable",
+        "gridUpdatePostsVisual": "writable"
     }
 }

@@ -56,9 +56,9 @@ const OptionsMenu = react.memo(({
         className: bold ? "main-type-mestoBold" : "main-type-mesto",
     }, selected?.value || defaultValue),
     react.createElement("svg", {
-        height: "16" ,
-        width: "16" ,
-        fill: "currentColor" ,
+        height: "16",
+        width: "16",
+        fill: "currentColor",
         viewBox: "0 0 16 16",
     }, react.createElement("path", {
         d: "M3 6l5 5.794L13 6z",

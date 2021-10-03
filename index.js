@@ -24,7 +24,7 @@ const {
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
-// eslint-disable-next-line
+// eslint-disable-next-line no-unused-vars
 function render() {
     // console.log('outer render');
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
@@ -59,6 +59,8 @@ const CONFIG = {
 if (!CONFIG.lastService || !CONFIG.services.includes(CONFIG.lastService)) {
     CONFIG.lastService = CONFIG.services[0];
 }
+
+// eslint-disable-next-line no-redeclare
 let sortConfig = {
     by: localStorage.getItem("reddit:sort-by") || "top",
     time: localStorage.getItem("reddit:sort-time") || "month",
@@ -69,7 +71,7 @@ let lastScroll = 0;
 let requestQueue = [];
 let requestAfter = null;
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
 
 // eslint-disable-next-line no-unused-vars
