@@ -30,7 +30,7 @@ function render() {
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
-let servicesString = localStorage.getItem("reddit:services") || `["spotify","makemeaplaylist","SpotifyPlaylists","music","edm","popheads"]`;
+let servicesString = localStorage.getItem("marketplace:tabs") || `["Marketplace","Installed"]`;
 let services = [];
 try {
     services = JSON.parse(servicesString);
@@ -38,8 +38,8 @@ try {
         throw new Error("");
     }
 } catch {
-    services = ["spotify", "makemeaplaylist", "SpotifyPlaylists", "music", "edm", "popheads"];
-    localStorage.setItem("reddit:services", JSON.stringify(services));
+    services = ["Marketplace", "Installed"];
+    localStorage.setItem("marketplace:tabs", JSON.stringify(services));
 }
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
@@ -53,7 +53,7 @@ const CONFIG = {
         longDescription: localStorage.getItem("reddit:longDescription") === "true",
     },
     services,
-    lastService: localStorage.getItem("reddit:last-service"),
+    lastService: localStorage.getItem("marketplace:last-service"),
 };
 
 if (!CONFIG.lastService || !CONFIG.services.includes(CONFIG.lastService)) {
@@ -145,7 +145,7 @@ class Grid extends react.Component {
 
     switchTo(value) {
         CONFIG.lastService = value;
-        localStorage.setItem("reddit:last-service", value);
+        localStorage.setItem("marketplace:last-service", value);
         cardList = [];
         requestAfter = null;
         this.setState({
@@ -166,7 +166,7 @@ class Grid extends react.Component {
         let allRepos = await getAllRepos();
 
         console.log("All repos", allRepos);
-
+        if (CONFIG.lastService == "Marketplace"){
         for (const repo of allRepos.items) {
             let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
             console.log(repo.name, extensions);
@@ -177,6 +177,20 @@ class Grid extends react.Component {
 
             if (extensions && extensions.length) {
                 extensions.forEach((extension) => this.appendCard(extension));
+            }
+        }
+        } else if (CONFIG.lastService == "Installed"){
+            for (const repo of allRepos.items) {
+                let extensions = await fetchInstalledExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
+                console.log(repo.name, extensions);
+                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                    // Stop this queue from continuing to fetch and append to cards list
+                    return -1;
+                }
+
+                if (extensions && extensions.length) {
+                    extensions.forEach((extension) => this.appendCard(extension));
+                }
             }
         }
 
@@ -410,7 +424,53 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         return null;
     }
 }
+async function fetchInstalledExtensions(contents_url, branch, stars){
+    try {
+        
+        // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        const { user, repo } = regex_result.groups;
 
+        let manifests = await getRepoManifest(user, repo, branch);
+        console.log(`${user}/${repo}`, manifests);
+
+        if (!Array.isArray(manifests)) manifests = [manifests];
+
+        let installedExtsArr = installedExt(manifests);
+        console.log(installedExtsArr);
+        console.log(manifests)
+        for (let i = 0; i < installedExtsArr.length; i++) {
+            if (installedExtsArr[i] != null) {
+                let multManifest = manifests[i];
+                initializeExtension(multManifest, user, repo, multManifest.main, branch);
+            }else{
+                manifests.splice(i,i)
+                installedExtsArr.splice(i,i)
+                /*try{
+               i--
+                }catch{
+                  break;  
+                }
+                */
+            }
+        }
+
+        const parsedManifests = manifests.map((manifest) => ({
+            manifest,
+            title: manifest.name,
+            subtitle: manifest.description,
+            branch,
+            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+            stars,
+        }));
+        return parsedManifests;
+}catch(error){
+    console.log(error)
+}
+}
 
 // function postMapper(posts) {
 //     let mappedPosts = [];
