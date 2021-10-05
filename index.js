@@ -166,20 +166,20 @@ class Grid extends react.Component {
         let allRepos = await getAllRepos();
 
         console.log("All repos", allRepos);
-        if (CONFIG.lastService == "Marketplace"){
-        for (const repo of allRepos.items) {
-            let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
-            console.log(repo.name, extensions);
-            if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+        if (CONFIG.lastService == "Marketplace") {
+            for (const repo of allRepos.items) {
+                let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
+                console.log(repo.name, extensions);
+                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
                 // Stop this queue from continuing to fetch and append to cards list
-                return -1;
-            }
+                    return -1;
+                }
 
-            if (extensions && extensions.length) {
-                extensions.forEach((extension) => this.appendCard(extension));
+                if (extensions && extensions.length) {
+                    extensions.forEach((extension) => this.appendCard(extension));
+                }
             }
-        }
-        } else if (CONFIG.lastService == "Installed"){
+        } else if (CONFIG.lastService == "Installed") {
             for (const repo of allRepos.items) {
                 let extensions = await fetchInstalledExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 console.log(repo.name, extensions);
@@ -424,9 +424,9 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         return null;
     }
 }
-async function fetchInstalledExtensions(contents_url, branch, stars){
+async function fetchInstalledExtensions(contents_url, branch, stars) {
     try {
-        
+
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
@@ -440,18 +440,18 @@ async function fetchInstalledExtensions(contents_url, branch, stars){
 
         let installedExtsArr = installedExt(manifests);
         console.log(installedExtsArr);
-        console.log(manifests)
+        console.log(manifests);
         for (let i = 0; i < installedExtsArr.length; i++) {
             if (installedExtsArr[i] != null) {
                 let multManifest = manifests[i];
                 initializeExtension(multManifest, user, repo, multManifest.main, branch);
             }else{
-                manifests.splice(i,i)
-                installedExtsArr.splice(i,i)
+                manifests.splice(i, i);
+                installedExtsArr.splice(i, i);
                 /*try{
                i--
                 }catch{
-                  break;  
+                  break;
                 }
                 */
             }
@@ -467,9 +467,9 @@ async function fetchInstalledExtensions(contents_url, branch, stars){
             stars,
         }));
         return parsedManifests;
-}catch(error){
-    console.log(error)
-}
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // function postMapper(posts) {
