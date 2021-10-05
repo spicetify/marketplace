@@ -61,6 +61,8 @@
         "openReloadModal": "writable",
         "sortConfig": "writable",
         "gridUpdateTabs": "writable",
-        "gridUpdatePostsVisual": "writable"
+        "gridUpdatePostsVisual": "writable",
+        "getInstalledExtensions": "writable",
+        "LOCALSTORAGE_KEYS": "writable"
     }
 }

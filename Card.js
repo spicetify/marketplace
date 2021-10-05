@@ -28,6 +28,8 @@ class Card extends react.Component {
         this.visual;
         /** @type { string } */
         this.imageURL;
+        /** @type { string } */
+        this.extensionURL;
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
         /** @type { { name: string; description: string; main: string; preview: string; } } */
@@ -47,7 +49,20 @@ class Card extends react.Component {
 
     installExtension() {
         console.log(`Installing extension ${this.localStorageKey}`);
-        localStorage.setItem(this.localStorageKey, JSON.stringify(this.manifest));
+        // Add to localstorage
+        // TODO: refactor/clean this up
+        localStorage.setItem(this.localStorageKey, JSON.stringify({
+            ...this.manifest,
+            manifest: this.manifest,
+            imageURL: this.imageURL,
+            extensionURL: this.extensionURL,
+        }));
+
+        // Add to installed list
+        const installedExtensions = getInstalledExtensions();
+        installedExtensions.push(this.localStorageKey);
+        localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+
         console.log("Installed");
         this.setState({ installed: true });
         // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
@@ -58,7 +73,14 @@ class Card extends react.Component {
         // console.log(JSON.parse(extValue));
         if (extValue) {
             console.log(`Removing extension ${this.localStorageKey}`);
+            // Remove from localstorage
             localStorage.removeItem(this.localStorageKey);
+
+            // Remove from installed list
+            const installedExtensions = getInstalledExtensions();
+            const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+
             console.log("Removed");
             this.setState({ installed: false });
             openReloadModal();
