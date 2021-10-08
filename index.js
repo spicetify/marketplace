@@ -26,26 +26,26 @@ const {
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
     "activeTab": "marketplace:active-tab",
+    "tabs": "marketplace:tabs",
 };
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
 // eslint-disable-next-line no-unused-vars
 function render() {
-    // console.log('outer render');
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
-let servicesString = localStorage.getItem("marketplace:tabs") || `["Marketplace", "Installed"]`;
-let services = [];
+let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs) || `["Marketplace", "Installed"]`;
+let tabs = [];
 try {
-    services = JSON.parse(servicesString);
-    if (!Array.isArray(services)) {
+    tabs = JSON.parse(tabsString);
+    if (!Array.isArray(tabs)) {
         throw new Error("");
     }
 } catch {
-    services = ["Marketplace", "Installed"];
-    localStorage.setItem("marketplace:tabs", JSON.stringify(services));
+    tabs = ["Marketplace", "Installed"];
+    localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
 }
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
@@ -58,12 +58,12 @@ const CONFIG = {
         followers: localStorage.getItem("reddit:followers") === "true",
         longDescription: localStorage.getItem("reddit:longDescription") === "true",
     },
-    services,
+    tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
 };
 
-if (!CONFIG.activeTab || !CONFIG.services.includes(CONFIG.activeTab)) {
-    CONFIG.activeTab = CONFIG.services[0];
+if (!CONFIG.activeTab || !CONFIG.tabs.includes(CONFIG.activeTab)) {
+    CONFIG.activeTab = CONFIG.tabs[0];
 }
 
 // eslint-disable-next-line no-redeclare
@@ -100,7 +100,7 @@ class Grid extends react.Component {
         Object.assign(this, props);
         this.state = {
             cards: [],
-            tabs: CONFIG.services,
+            tabs: CONFIG.tabs,
             rest: true,
             endOfList: endOfList,
         };
@@ -147,7 +147,7 @@ class Grid extends react.Component {
 
     updateTabs() {
         this.setState({
-            tabs: [...CONFIG.services],
+            tabs: [...CONFIG.tabs],
         });
     }
 
@@ -258,7 +258,6 @@ class Grid extends react.Component {
     }
 
     async componentDidMount() {
-        // console.log('componentDidMount');
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
@@ -303,7 +302,7 @@ class Grid extends react.Component {
         }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
-            onServicesChange: this.updateTabs.bind(this),
+            onTabsChange: this.updateTabs.bind(this),
         })), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
@@ -318,7 +317,7 @@ class Grid extends react.Component {
         }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon)),
         ), react.createElement(TopBarContent, {
             switchCallback: this.switchTo.bind(this),
-            links: CONFIG.services,
+            links: CONFIG.tabs,
             activeLink: CONFIG.activeTab,
         }));
     }

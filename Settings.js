@@ -10,7 +10,7 @@ function openConfig() {
         return;
     }
 
-    CONFIG.servicesElement = {};
+    CONFIG.tabsElement = {};
 
     configContainer = document.createElement("div");
     configContainer.id = "marketplace-config-container";
@@ -24,17 +24,17 @@ function openConfig() {
     const serviceContainer = document.createElement("div");
 
     function stackServiceElements() {
-        CONFIG.services.forEach((name, index) => {
-            const el = CONFIG.servicesElement[name];
+        CONFIG.tabs.forEach((name, index) => {
+            const el = CONFIG.tabsElement[name];
 
             const [ up, down ] = el.querySelectorAll("button");
-            if (CONFIG.services.length === 1) {
+            if (CONFIG.tabs.length === 1) {
                 up.disabled = true;
                 down.disabled = true;
             } else if (index === 0) {
                 up.disabled = true;
                 down.disabled = false;
-            } else if (index === (CONFIG.services.length - 1)) {
+            } else if (index === (CONFIG.tabs.length - 1)) {
                 up.disabled = false;
                 down.disabled = true;
             } else {
@@ -49,18 +49,18 @@ function openConfig() {
 
     function posCallback(el, dir) {
         const id = el.dataset.id;
-        const curPos = CONFIG.services.findIndex((val) => val === id);
+        const curPos = CONFIG.tabs.findIndex((val) => val === id);
         const newPos = curPos + dir;
 
-        if (CONFIG.services.length > 1) {
-            const temp = CONFIG.services[newPos];
-            CONFIG.services[newPos] = CONFIG.services[curPos];
-            CONFIG.services[curPos] = temp;
+        if (CONFIG.tabs.length > 1) {
+            const temp = CONFIG.tabs[newPos];
+            CONFIG.tabs[newPos] = CONFIG.tabs[curPos];
+            CONFIG.tabs[curPos] = temp;
         }
 
         localStorage.setItem(
-            "marketplace:tabs",
-            JSON.stringify(CONFIG.services),
+            LOCALSTORAGE_KEYS.tabs,
+            JSON.stringify(CONFIG.tabs),
         );
 
         stackServiceElements();
@@ -68,16 +68,16 @@ function openConfig() {
 
     function removeCallback(el) {
         const id = el.dataset.id;
-        CONFIG.services = CONFIG.services.filter(s => s != id);
-        CONFIG.servicesElement[id].remove();
+        CONFIG.tabs = CONFIG.tabs.filter(s => s != id);
+        CONFIG.tabsElement[id].remove();
 
-        localStorage.setItem("marketplace:tabs", JSON.stringify(CONFIG.services));
+        localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
 
         stackServiceElements();
     }
 
-    CONFIG.services.forEach(name => {
-        CONFIG.servicesElement[name] = createServiceOption(
+    CONFIG.tabs.forEach(name => {
+        CONFIG.tabsElement[name] = createServiceOption(
             name,
             posCallback,
             removeCallback,
@@ -94,14 +94,14 @@ function openConfig() {
         event.preventDefault();
         const name = serviceInput.value;
 
-        if (!CONFIG.services.includes(name)) {
-            CONFIG.services.push(name);
-            CONFIG.servicesElement[name] = createServiceOption(
+        if (!CONFIG.tabs.includes(name)) {
+            CONFIG.tabs.push(name);
+            CONFIG.tabsElement[name] = createServiceOption(
                 name,
                 posCallback,
                 removeCallback,
             );
-            localStorage.setItem("marketplace:tabs", JSON.stringify(CONFIG.services));
+            localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
         }
 
         stackServiceElements();
