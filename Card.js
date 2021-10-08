@@ -90,6 +90,13 @@ class Card extends react.Component {
     }
 
     render() {
+        // Kill the card if it has been uninstalled on the "Installed" tab
+        // TODO: is this kosher, or is there a better way to handle?
+        if (CONFIG.activeTab === "Installed" && !this.state.installed) {
+            console.log("extension not installed");
+            return null;
+        }
+
         const cardClasses = ["main-card-card"];
         if (this.state.installed) cardClasses.push("marketplace-card--installed");
 
