@@ -59,7 +59,7 @@ function openConfig() {
         }
 
         localStorage.setItem(
-            "reddit:services",
+            "marketplace:tabs",
             JSON.stringify(CONFIG.services),
         );
 
@@ -71,7 +71,7 @@ function openConfig() {
         CONFIG.services = CONFIG.services.filter(s => s != id);
         CONFIG.servicesElement[id].remove();
 
-        localStorage.setItem("reddit:services", JSON.stringify(CONFIG.services));
+        localStorage.setItem("marketplace:tabs", JSON.stringify(CONFIG.services));
 
         stackServiceElements();
     }
@@ -101,7 +101,7 @@ function openConfig() {
                 posCallback,
                 removeCallback,
             );
-            localStorage.setItem("reddit:services", JSON.stringify(CONFIG.services));
+            localStorage.setItem("marketplace:tabs", JSON.stringify(CONFIG.services));
         }
 
         stackServiceElements();
