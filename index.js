@@ -116,6 +116,8 @@ class Grid extends react.Component {
 
     appendCard(item) {
         item.visual = CONFIG.visual;
+        // Set key prop so items don't get stuck when switching tabs
+        item.key = `${CONFIG.lastService}:${item.title}`;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
