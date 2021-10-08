@@ -25,6 +25,7 @@ const {
 // eslint-disable-next-line no-unused-vars, no-redeclare
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
+    "activeTab": "marketplace:active-tab",
 };
 
 // Define a function called "render" to specify app entry point
@@ -35,7 +36,7 @@ function render() {
     return react.createElement(Grid, { title: "Spicetify Marketplace" });
 }
 
-let servicesString = localStorage.getItem("marketplace:tabs") || `["Marketplace","Installed"]`;
+let servicesString = localStorage.getItem("marketplace:tabs") || `["Marketplace", "Installed"]`;
 let services = [];
 try {
     services = JSON.parse(servicesString);
@@ -58,11 +59,11 @@ const CONFIG = {
         longDescription: localStorage.getItem("reddit:longDescription") === "true",
     },
     services,
-    lastService: localStorage.getItem("marketplace:last-service"),
+    activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
 };
 
-if (!CONFIG.lastService || !CONFIG.services.includes(CONFIG.lastService)) {
-    CONFIG.lastService = CONFIG.services[0];
+if (!CONFIG.activeTab || !CONFIG.services.includes(CONFIG.activeTab)) {
+    CONFIG.activeTab = CONFIG.services[0];
 }
 
 // eslint-disable-next-line no-redeclare
@@ -117,7 +118,7 @@ class Grid extends react.Component {
     appendCard(item) {
         item.visual = CONFIG.visual;
         // Set key prop so items don't get stuck when switching tabs
-        item.key = `${CONFIG.lastService}:${item.title}`;
+        item.key = `${CONFIG.activeTab}:${item.title}`;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
@@ -158,8 +159,8 @@ class Grid extends react.Component {
     }
 
     switchTo(value) {
-        CONFIG.lastService = value;
-        localStorage.setItem("marketplace:last-service", value);
+        CONFIG.activeTab = value;
+        localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
         cardList = [];
         requestAfter = null;
         this.setState({
@@ -177,7 +178,7 @@ class Grid extends react.Component {
     async loadPage(queue) {
         // let subMeta = await getSubreddit(requestAfter);
 
-        if (CONFIG.lastService === "Marketplace") {
+        if (CONFIG.activeTab === "Marketplace") {
             let allRepos = await getAllRepos();
             console.log("All repos", allRepos);
             for (const repo of allRepos.items) {
@@ -192,7 +193,7 @@ class Grid extends react.Component {
                     extensions.forEach((extension) => this.appendCard(extension));
                 }
             }
-        } else if (CONFIG.lastService === "Installed") {
+        } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
             console.log(installedExtensions);
             installedExtensions.forEach((extensionKey) => {
@@ -318,7 +319,7 @@ class Grid extends react.Component {
         ), react.createElement(TopBarContent, {
             switchCallback: this.switchTo.bind(this),
             links: CONFIG.services,
-            activeLink: CONFIG.lastService,
+            activeLink: CONFIG.activeTab,
         }));
     }
 }
@@ -386,7 +387,7 @@ async function getRepoManifest(user, repo, branch) {
 
 // async function getSubreddit(after = "") {
 //     // www is needed or it will block with "cross-origin" error.
-//     let url = `https://www.reddit.com/r/${CONFIG.lastService}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`;
+//     let url = `https://www.reddit.com/r/${CONFIG.activeTab}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`;
 //     if (after) {
 //         url += `&after=${after}`;
 //     }
