@@ -24,20 +24,30 @@ const DOWNLOAD_ICON = react.createElement("svg", {
 class Card extends react.Component {
     constructor(props) {
         super(props);
+
+        // From `appendCard()`
         /** @type { { type: string; stars: string; } } */
         this.visual;
-        /** @type { string } */
-        this.imageURL;
-        /** @type { string } */
-        this.extensionURL;
-        // this.menuType = Spicetify.ReactComponent.Menu | "div";
-        this.menuType = Spicetify.ReactComponent.Menu;
+
+        // From `fetchRepoExtensions()`
         /** @type { { name: string; description: string; main: string; preview: string; } } */
         this.manifest;
         /** @type { string } */
         this.title;
+        /** @type { string } */
+        this.subtitle;
+        /** @type { string } */
+        this.branch;
+        /** @type { string } */
+        this.imageURL;
+        /** @type { string } */
+        this.extensionURL;
         /** @type { number } */
         this.stars;
+
+        // Added locally
+        // this.menuType = Spicetify.ReactComponent.Menu | "div";
+        this.menuType = Spicetify.ReactComponent.Menu;
         this.localStorageKey = "marketplace:installed:" + props.manifest.main;
 
         Object.assign(this, props);
@@ -49,13 +59,16 @@ class Card extends react.Component {
 
     installExtension() {
         console.log(`Installing extension ${this.localStorageKey}`);
-        // Add to localstorage
+        // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
         localStorage.setItem(this.localStorageKey, JSON.stringify({
-            ...this.manifest,
             manifest: this.manifest,
+            title: this.title,
+            subtitle: this.subtitle,
+            branch: this.branch,
             imageURL: this.imageURL,
             extensionURL: this.extensionURL,
+            stars: this.stars,
         }));
 
         // Add to installed list

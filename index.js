@@ -199,20 +199,7 @@ class Grid extends react.Component {
             installedExtensions.forEach((extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
-
-                // TODO: add back in a "postMapper" to fill in the missing items?
-                // or just save a more complete version of the manifest to the localstorage key?
-                const expandedExtension = {
-                    manifest: extension,
-                    title: extension.name,
-                    subtitle: extension.description,
-                    // branch,
-                    imageURL: extension.imageURL,
-                    extensionURL: extension.extensionURL,
-                    // stars,
-                };
-
-                this.appendCard(expandedExtension);
+                this.appendCard(extension);
             });
         }
 
@@ -428,6 +415,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
             }
         }
 
+        // Manifest is initially parsed
         const parsedManifests = manifests.map((manifest) => ({
             manifest,
             title: manifest.name,
