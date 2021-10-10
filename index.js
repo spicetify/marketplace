@@ -420,14 +420,13 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         let installedExtsArr = installedExt(manifests);
         for (let i = 0; i < installedExtsArr.length; i++) {
             if (installedExtsArr[i] != null) {
-                let multManifest = manifests[i];
-                initializeExtension(multManifest, user, repo, multManifest.main, branch);
-                if(localStorage.getItem("marketplace:showInstalled") != "true") {
-                    manifests.splice(1, 1, null);
+                let singleManifest = manifests[i];
+                initializeExtension(singleManifest, user, repo, singleManifest.main, branch);
+                if(localStorage.getItem("marketplace:showInstalled") !== "true") {
+                    manifests.splice(i, 1);
                 }
             }
         }
-
 
         const parsedManifests = manifests.map((manifest) => ({
             manifest,
