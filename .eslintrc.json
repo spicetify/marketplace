@@ -42,6 +42,11 @@
         "space-before-blocks": "error",
         "comma-spacing": [
             "error", { "before": false, "after": true }
+        ],
+        "no-trailing-spaces": "error",
+        "keyword-spacing": "error",
+        "no-multiple-empty-lines": [
+            "error", { "max": 1 }
         ]
     },
     "globals": {

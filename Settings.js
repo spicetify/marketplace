@@ -113,7 +113,7 @@ function openConfig() {
     configContainer.append(
         optionHeader,
         createSlider("Stars count", "stars"),
-        createSlider("Show Installed in Marketplace", "showInstalled"),
+        createSlider("Hide installed in Marketplace", "hideInstalled"),
         createSlider("Followers count", "followers"),
         createSlider("Post type", "type"),
         createSlider("Long description", "longDescription"),
@@ -131,17 +131,16 @@ function openConfig() {
 }
 
 function createSlider(name, key) {
-    
     const container = document.createElement("div");
     container.innerHTML = `
-<div class="setting-row">
-    <label class="col description">${name}</label>
-    <div class="col action"><button class="switch">
-        <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-            ${Spicetify.SVGIcons.check}
-        </svg>
-    </button></div>
-</div>`;
+    <div class="setting-row">
+        <label class="col description">${name}</label>
+        <div class="col action"><button class="switch">
+            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+                ${Spicetify.SVGIcons.check}
+            </svg>
+        </button></div>
+    </div>`;
 
     const slider = container.querySelector("button");
     slider.classList.toggle("disabled", !CONFIG.visual[key]);
