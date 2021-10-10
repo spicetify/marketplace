@@ -113,6 +113,7 @@ function openConfig() {
     configContainer.append(
         optionHeader,
         createSlider("Stars count", "stars"),
+        createSlider("Show Installed in Marketplace", "showInstalled"),
         createSlider("Followers count", "followers"),
         createSlider("Post type", "type"),
         createSlider("Long description", "longDescription"),
@@ -125,9 +126,12 @@ function openConfig() {
         title: "Marketplace",
         content: configContainer,
     });
+    const closeButton = document.querySelector("body > generic-modal > div > div > div > div.main-trackCreditsModal-header > button");
+    closeButton.setAttribute("onclick", "location.reload()");
 }
 
 function createSlider(name, key) {
+    
     const container = document.createElement("div");
     container.innerHTML = `
 <div class="setting-row">
@@ -141,11 +145,10 @@ function createSlider(name, key) {
 
     const slider = container.querySelector("button");
     slider.classList.toggle("disabled", !CONFIG.visual[key]);
-
     slider.onclick = () => {
         const state = !slider.classList.toggle("disabled");
         CONFIG.visual[key] = state;
-        localStorage.setItem(`reddit:${key}`, String(state));
+        localStorage.setItem(`marketplace:${key}`, String(state));
         gridUpdatePostsVisual && gridUpdatePostsVisual();
     };
 

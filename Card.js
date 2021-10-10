@@ -1,3 +1,4 @@
+/// <reference path="ReloadModal.js" />
 const TRASH_ICON = react.createElement("svg", {
     height: "16",
     role: "img",
