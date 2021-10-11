@@ -203,6 +203,7 @@ div.marketplace-tabBar-headerItemLink {
     /*
     TODO: Make this look nice.
     */
+    font: -webkit-small-control;
     height: 70px;
     overflow-x: auto;
 }
