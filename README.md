@@ -29,19 +29,20 @@ If you have multiple extensions in the same repo (subfolder e.g.):
 ```json
 [
   {
-    "name": "Toggle Friend Activity Panel",
-    "description": "Spicetify extension to hide/show friend activity panel",
-    "preview": "toggleFriendActivity/toggleFriendActivity.png",
-    "main": "toggleFriendActivity/toggleFriendActivity.js"
+    "name": "extensionName(No .js included)",
+    "description": "Spicetify extension to show how to make a manifest.",
+    "preview": "filepathFromGitRepo/myExt.png",
+    "main": "filepathFromGitRepo/myExt.js"
   },
   {
-    "name": "Toggle Lyrics Plus Fullscreen",
-    "description": "Spicetify extension to toggle Lyrics Plus in fullscreen",
-    "preview": "toggleLyricsPlusFullscreen/toggleLyricsPlusFullscreen.png",
-    "main": "toggleLyricsPlusFullscreen/toggleLyricsPlusFullscreen.js"
-  }
+   "name": "extensionNameTwo(No .js included)",
+   "description": "Another Spicetify extension to show how to make a manifest.",
+   "preview": "filepathFromGitRepoTwo/myExtTwo.png",
+   "main": "filepathFromGitRepoTwo/myExtTwo.js"
+  },
 ]
 ```
+_Please note that if all your extensions are in the root folder, you don't need to include a filepath._
 
 ## Notes: 
 This is all still very hacky, injecting stuff into the reddit custom app, so there are a lot of leftovers that aren't needed. These will be adjusted/removed later. 
