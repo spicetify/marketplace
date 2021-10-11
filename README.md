@@ -9,8 +9,8 @@ Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/C
 
 ## manifest.json
 In order to show up in the custom app, your repo needs to follow these requirements:
-* Have the matching GitHub tag ("spicetify-extension" currently, will likely change)
-* Have a `manifest.json` in the root folder
+* Have the matching **GitHub topic tag** ("**spicetify-extension**" currently, will likely change)
+* Have a **`manifest.json`** in the root folder
     * `name`: Your extension name
     * `description`: Description for your extension
     * `preview`: A path to your preview image. Must be relative to your project root
@@ -25,6 +25,24 @@ e.g.
     "main": "hidePodcasts.js"
 }
 ```
+If you have multiple extensions in the same repo (subfolder e.g.):
+```json
+[
+  {
+    "name": "extensionName(No .js included)",
+    "description": "Spicetify extension to show how to make a manifest.",
+    "preview": "filepathFromGitRepo/myExt.png",
+    "main": "filepathFromGitRepo/myExt.js"
+  },
+  {
+   "name": "extensionNameTwo(No .js included)",
+   "description": "Another Spicetify extension to show how to make a manifest.",
+   "preview": "filepathFromGitRepoTwo/myExtTwo.png",
+   "main": "filepathFromGitRepoTwo/myExtTwo.js"
+  },
+]
+```
+_Please note that if all your extensions are in the root folder, you don't need to include a filepath._
 
 ## Notes: 
 This is all still very hacky, injecting stuff into the reddit custom app, so there are a lot of leftovers that aren't needed. These will be adjusted/removed later. 
