@@ -9,8 +9,8 @@ Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/C
 
 ## manifest.json
 In order to show up in the custom app, your repo needs to follow these requirements:
-* Have the matching GitHub tag ("spicetify-extension" currently, will likely change)
-* Have a `manifest.json` in the root folder
+* Have the matching **GitHub topic tag** ("**spicetify-extension**" currently, will likely change)
+* Have a **`manifest.json`** in the root folder
     * `name`: Your extension name
     * `description`: Description for your extension
     * `preview`: A path to your preview image. Must be relative to your project root
@@ -24,6 +24,23 @@ e.g.
     "preview": "screenshot.png",
     "main": "hidePodcasts.js"
 }
+```
+If you have multiple extensions in the same repo (subfolder e.g.):
+```json
+[
+  {
+    "name": "Toggle Friend Activity Panel",
+    "description": "Spicetify extension to hide/show friend activity panel",
+    "preview": "toggleFriendActivity/toggleFriendActivity.png",
+    "main": "toggleFriendActivity/toggleFriendActivity.js"
+  },
+  {
+    "name": "Toggle Lyrics Plus Fullscreen",
+    "description": "Spicetify extension to toggle Lyrics Plus in fullscreen",
+    "preview": "toggleLyricsPlusFullscreen/toggleLyricsPlusFullscreen.png",
+    "main": "toggleLyricsPlusFullscreen/toggleLyricsPlusFullscreen.js"
+  }
+]
 ```
 
 ## Notes: 
