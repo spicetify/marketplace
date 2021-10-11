@@ -193,11 +193,19 @@ div.marketplace-tabBar-headerItemLink {
     display: flex;
 }
 
-/* Card for installed items
+
 .marketplace-card--installed {
-    background-color: red;
+    flex: 0 !important;
+    -webkit-box-flex: 0 !important;
+    height:350px
 }
-*/
+.marketplace-card-desc{
+    /*
+    TODO: Make this look nice.
+    */
+    height: 70px;
+    overflow-x: auto;
+}
 
 /*
 TODO: can we get this added to the default Spicetify stylesheet?

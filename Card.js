@@ -169,7 +169,9 @@ class Card extends react.Component {
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("br"),
-        this.manifest.description,
+        react.createElement("p", {
+            className: "marketplace-card-desc",
+        }, this.manifest.description),
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
