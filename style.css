@@ -222,3 +222,15 @@ It should fix broken extension modals
     margin: 18px;
     padding: 8px 24px;
 }
+.searchbar-bar{
+    border: unset;
+    position: relative;
+    background-color: var(--spice-sidebar) !important;
+    top: 50px;
+    border-radius: 5px !important;
+    right: -565px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: var(--spice-text) !important;
+    z-index: 1000;
+}
