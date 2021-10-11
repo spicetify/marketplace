@@ -128,6 +128,14 @@ class Card extends react.Component {
             loading: "lazy",
             src: this.imageURL,
             className: "main-image-image main-cardImage-image",
+            onError: (e) => {
+                // Set to transparent PNG to remove the placeholder icon
+                // https://png-pixel.com
+                e.target.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
+
+                // Add class for styling
+                e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
+            },
         }))), react.createElement("div", {
             className: "main-card-PlayButtonContainer",
         }, react.createElement("button", {
