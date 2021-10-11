@@ -186,7 +186,10 @@ div.marketplace-tabBar-headerItemLink {
 }
 
 .marketplace-card__bottom-meta {
-    margin-top: 8px;
+    margin-top: 25px;
+    position: relative;
+    border-top: var(--spice-button) 2px solid;
+    top: -20px;
 }
 
 .marketplace-longDescription {
@@ -203,9 +206,12 @@ div.marketplace-tabBar-headerItemLink {
     /*
     TODO: Make this look nice.
     */
-    font: -webkit-small-control;
-    height: 70px;
-    overflow-x: auto;
+      font: -webkit-small-control;
+    height: 45px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
 }
 
 /*
