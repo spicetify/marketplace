@@ -1,3 +1,9 @@
+/*
+    TODOs:
+    - We might want to customize/scope the css classes etc
+        so we don't interfere with other extension like reddit
+*/
+
 .setting-row::after {
     content: "";
     display: table;
@@ -166,6 +172,10 @@ div.marketplace-tabBar-headerItemLink {
 
 .main-cardImage-imageWrapper--error {
     box-shadow: none;
+}
+
+.main-card-card:hover .main-cardImage-imageWrapper--error::before {
+    filter: brightness(100%);
 }
 
 .marketplace-cardSubHeader,
