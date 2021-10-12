@@ -295,15 +295,17 @@ class Grid extends react.Component {
         return react.createElement("section", {
             className: "contentSpacing",
         },
-        react.createElement("input", {
+        react.createElement("div", {
+            className: "marketplace-header",
+        }, react.createElement("h1", null, this.props.title),
+        react.createElement("div", {
+            className: "searchbar--bar__wrapper",
+        }, react.createElement("input", {
             className: "searchbar-bar",
             type: "text",
             placeholder: "Search for Extensions?",
 
-        }),
-        react.createElement("div", {
-            className: "marketplace-header",
-        }, react.createElement("h1", null, this.props.title),
+        })),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
             onTabsChange: this.updateTabs.bind(this),

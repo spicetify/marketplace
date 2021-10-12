@@ -186,16 +186,12 @@ div.marketplace-tabBar-headerItemLink {
 }
 
 .marketplace-card__bottom-meta {
-    margin-top: 25px;
-    position: relative;
-    border-top: var(--spice-button) 2px solid;
-    top: -20px;
+    margin-top: 10px;
 }
 
 .marketplace-longDescription {
     display: flex;
 }
-
 
 .marketplace-card--installed {
     flex: 0 !important;
@@ -237,13 +233,17 @@ It should fix broken extension modals
     margin: 18px;
     padding: 8px 24px;
 }
+
+.searchbar--bar__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-grow: 1;
+}
 .searchbar-bar{
     border: unset;
-    position: relative;
     background-color: var(--spice-sidebar) !important;
-    top: 50px;
     border-radius: 5px !important;
-    right: -565px;
     padding-left: 10px;
     padding-right: 10px;
     color: var(--spice-text) !important;
