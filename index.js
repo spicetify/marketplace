@@ -8,6 +8,7 @@
 /// <reference path="Settings.js" />
 /// <reference path="SortBox.js" />
 /// <reference path="TabBar.js" />
+/// <reference path="ReadmePage.js" />
 
 /* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
@@ -33,7 +34,19 @@ const LOCALSTORAGE_KEYS = {
 // This function will be used to mount app to main view.
 // eslint-disable-next-line no-unused-vars
 function render() {
-    return react.createElement(Grid, { title: "Spicetify Marketplace" });
+    const { location } = Spicetify.Platform.History;
+
+    // If page state set to display readme, render it
+    // (This location state data comes from Card.openReadme())
+    if (location.state.page === "readme") {
+        return react.createElement(ReadmePage, {
+            title: "Spicetify Marketplace - Readme",
+            data: location.state.data,
+        });
+    } // Otherwise, render the main Grid
+    else {
+        return react.createElement(Grid, { title: "Spicetify Marketplace" });
+    }
 }
 
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs) || `["Marketplace", "Installed"]`;
@@ -429,6 +442,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
             branch,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
             extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+            readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
             stars,
         }));
 

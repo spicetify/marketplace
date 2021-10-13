@@ -31,7 +31,7 @@ class Card extends react.Component {
         this.visual;
 
         // From `fetchRepoExtensions()`
-        /** @type { { name: string; description: string; main: string; preview: string; } } */
+        /** @type { { name: string; description: string; main: string; preview: string; readme: string } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -43,6 +43,8 @@ class Card extends react.Component {
         this.imageURL;
         /** @type { string } */
         this.extensionURL;
+        /** @type { string } */
+        this.readmeURL;
         /** @type { number } */
         this.stars;
 
@@ -69,6 +71,7 @@ class Card extends react.Component {
             branch: this.branch,
             imageURL: this.imageURL,
             extensionURL: this.extensionURL,
+            readmeURL: this.readmeURL,
             stars: this.stars,
         }));
 
@@ -103,6 +106,19 @@ class Card extends react.Component {
         }
     }
 
+    openReadme() {
+        Spicetify.Platform.History.push({
+            pathname: "/spicetify-marketplace",
+            state: {
+                page: "readme",
+                data: {
+                    title: this.title,
+                    readmeURL: this.readmeURL,
+                },
+            },
+        });
+    }
+
     render() {
         // Kill the card if it has been uninstalled on the "Installed" tab
         // TODO: is this kosher, or is there a better way to handle?
@@ -121,12 +137,7 @@ class Card extends react.Component {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
             className: cardClasses.join(" "),
-            // onClick: (event) => {
-            //     // TODO: Navigate to a page for the extension info on card click.
-            //     // We might want to add some href for a page for the extension
-            //     // History.push(this.href);
-            //     // event.preventDefault();
-            // },
+            onClick: this.openReadme,
         }, react.createElement("div", {
             className: "main-card-draggable",
             draggable: "true",
@@ -155,8 +166,8 @@ class Card extends react.Component {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
             style: { "--size": "40px" },
-            onClick: (event) => {
-                event.preventDefault();
+            onClick: (e) => {
+                e.stopPropagation();
                 if (localStorage.getItem(this.localStorageKey) == null) {
                     this.installExtension();
                 } else {
