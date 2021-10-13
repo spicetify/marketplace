@@ -52,6 +52,7 @@ const CONFIG = {
     visual: {
         type: localStorage.getItem("reddit:type") === "true",
         stars: localStorage.getItem("marketplace:stars") === "true",
+        hideInstalled: localStorage.getItem("marketplace:hideInstalled") === "true",
         // I was considering adding watchers as "followers" but it looks like the value is a duplicate
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
@@ -173,14 +174,11 @@ class Grid extends react.Component {
         this.newRequest(30);
     }
 
-
-
     async loadPage(queue) {
         // let subMeta = await getSubreddit(requestAfter);
 
         if (CONFIG.activeTab === "Marketplace") {
             let allRepos = await getAllRepos();
-            console.log("All repos", allRepos);
             for (const repo of allRepos.items) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 console.log(repo.name, extensions);
@@ -195,7 +193,6 @@ class Grid extends react.Component {
             }
         } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
-            console.log(installedExtensions);
             installedExtensions.forEach((extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
@@ -284,9 +281,18 @@ class Grid extends react.Component {
     render() {
         return react.createElement("section", {
             className: "contentSpacing",
-        }, react.createElement("div", {
+        },
+        react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
+        react.createElement("div", {
+            className: "searchbar--bar__wrapper",
+        }, react.createElement("input", {
+            className: "searchbar-bar",
+            type: "text",
+            placeholder: "Search for Extensions?",
+
+        })),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
             onTabsChange: this.updateTabs.bind(this),
@@ -332,7 +338,6 @@ async function getAllRepos() {
 
     return await Spicetify.CosmosAsync.get(url);
 }
-
 
 function initializeExtension(manifest, user, repo, main, branch) {
     const script = document.createElement("script");
@@ -406,12 +411,13 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         if (!Array.isArray(manifests)) manifests = [manifests];
 
         let installedExtsArr = installedExt(manifests);
-        console.log(installedExtsArr);
         for (let i = 0; i < installedExtsArr.length; i++) {
             if (installedExtsArr[i] != null) {
-                let multManifest = manifests[i];
-                console.log(multManifest);
-                initializeExtension(multManifest, user, repo, multManifest.main, branch);
+                let singleManifest = manifests[i];
+                initializeExtension(singleManifest, user, repo, singleManifest.main, branch);
+                if (CONFIG.visual.hideInstalled) {
+                    manifests.splice(i, 1);
+                }
             }
         }
 

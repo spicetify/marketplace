@@ -113,6 +113,7 @@ function openConfig() {
     configContainer.append(
         optionHeader,
         createSlider("Stars count", "stars"),
+        createSlider("Hide installed in Marketplace", "hideInstalled"),
         createSlider("Followers count", "followers"),
         createSlider("Post type", "type"),
         createSlider("Long description", "longDescription"),
@@ -125,27 +126,28 @@ function openConfig() {
         title: "Marketplace",
         content: configContainer,
     });
+    const closeButton = document.querySelector("body > generic-modal > div > div > div > div.main-trackCreditsModal-header > button");
+    closeButton.setAttribute("onclick", "location.reload()");
 }
 
 function createSlider(name, key) {
     const container = document.createElement("div");
     container.innerHTML = `
-<div class="setting-row">
-    <label class="col description">${name}</label>
-    <div class="col action"><button class="switch">
-        <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-            ${Spicetify.SVGIcons.check}
-        </svg>
-    </button></div>
-</div>`;
+    <div class="setting-row">
+        <label class="col description">${name}</label>
+        <div class="col action"><button class="switch">
+            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+                ${Spicetify.SVGIcons.check}
+            </svg>
+        </button></div>
+    </div>`;
 
     const slider = container.querySelector("button");
     slider.classList.toggle("disabled", !CONFIG.visual[key]);
-
     slider.onclick = () => {
         const state = !slider.classList.toggle("disabled");
         CONFIG.visual[key] = state;
-        localStorage.setItem(`reddit:${key}`, String(state));
+        localStorage.setItem(`marketplace:${key}`, String(state));
         gridUpdatePostsVisual && gridUpdatePostsVisual();
     };
 

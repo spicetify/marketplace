@@ -1,3 +1,4 @@
+/// <reference path="ReloadModal.js" />
 const TRASH_ICON = react.createElement("svg", {
     height: "16",
     role: "img",
@@ -140,6 +141,14 @@ class Card extends react.Component {
             loading: "lazy",
             src: this.imageURL,
             className: "main-image-image main-cardImage-image",
+            onError: (e) => {
+                // Set to transparent PNG to remove the placeholder icon
+                // https://png-pixel.com
+                e.target.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
+
+                // Add class for styling
+                e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
+            },
         }))), react.createElement("div", {
             className: "main-card-PlayButtonContainer",
         }, react.createElement("button", {
@@ -173,7 +182,9 @@ class Card extends react.Component {
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("br"),
-        this.manifest.description,
+        react.createElement("p", {
+            className: "marketplace-card-desc",
+        }, this.manifest.description),
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
