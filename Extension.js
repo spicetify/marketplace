@@ -1,5 +1,3 @@
-// TODO: this will be the extension in which we run the init code
-
 // @ts-check
 
 // NAME: Spicetify Marketplace Extension
@@ -42,15 +40,24 @@
         if (!extensionManifest) return;
 
         console.log("Initializing extension: ", extensionManifest);
-        console.log("TODO: not implemented (need to get user, repo, and branch - or init differently)");
 
-        // const script = document.createElement("script");
-        // script.defer = true;
+        // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
+        // eslint-disable-next-line no-useless-escape
+        const regex_result = extensionManifest.extensionURL.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\//);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return;
 
-        // if (main[0]  === "/") main = main.slice(1);
+        const { user, repo, branch } = regex_result.groups;
+        if (!user || !repo || !branch) return;
 
-        // script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
-        // document.body.appendChild(script);
+        const main = extensionManifest.manifest.main[0]  === "/"
+            ? extensionManifest.manifest.main.slice(1)
+            : extensionManifest.manifest.main;
+
+        const script = document.createElement("script");
+        script.defer = true;
+        script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
+        document.body.appendChild(script);
     };
 
     console.log("Loaded Marketplace extension");

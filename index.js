@@ -339,22 +339,6 @@ async function getAllRepos() {
     return await Spicetify.CosmosAsync.get(url);
 }
 
-function initializeExtension(manifest, user, repo, main, branch) {
-    const script = document.createElement("script");
-    script.defer = true;
-
-    if (main[0]  === "/") main = main.slice(1);
-
-    script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
-    document.body.appendChild(script);
-}
-
-function installedExt(manifest) {
-    let extArr = [];
-    manifest.forEach((ext) => extArr.push(localStorage.getItem("marketplace:installed:" + ext.main)));
-    return extArr;
-}
-
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
 // async function getRepoContents(contents_url) {
 //     const url = contents_url.replace("{+path}", "");
@@ -410,15 +394,9 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
 
         if (!Array.isArray(manifests)) manifests = [manifests];
 
-        let installedExtsArr = installedExt(manifests);
-        for (let i = 0; i < installedExtsArr.length; i++) {
-            if (installedExtsArr[i] != null) {
-                let singleManifest = manifests[i];
-                initializeExtension(singleManifest, user, repo, singleManifest.main, branch);
-                if (CONFIG.visual.hideInstalled) {
-                    manifests.splice(i, 1);
-                }
-            }
+        // Remove installed extensions from manifests list if we don't want to show them
+        if (CONFIG.visual.hideInstalled) {
+            manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + manifest.main));
         }
 
         // Manifest is initially parsed
