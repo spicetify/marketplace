@@ -10,5 +10,8 @@
         "TabBar.js",
         "Settings.js",
         "ReloadModal.js"
+    ],
+    "subfiles_extension": [
+        "Extension.js"
     ]
 }
