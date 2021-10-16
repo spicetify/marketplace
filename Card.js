@@ -124,6 +124,7 @@ class Card extends react.Component {
                     title: this.title,
                     user: this.user,
                     repo: this.repo,
+                    branch: this.branch,
                     readmeURL: this.readmeURL,
                 },
             },

@@ -6,15 +6,32 @@ class ReadmePage extends react.Component {
 
         // TODO: decide what data we want to pass in and how we want to store it
         // (this currently comes from Card.openReadme)
-        /** @type { { title: string; user: string; repo: string; readmeURL: string; readmeDir: string; } } */
+        /** @type { { title: string; user: string; repo: string; branch: string; readmeURL: string; readmeDir: string; } } */
         this.data;
 
         this.state = { html: "<p>Loading...</p>" };
     }
 
     componentDidMount() {
+        // Get and set readme html once loaded
         this.getReadmeHTML()
             .then((html) => this.setState({ html }));
+    }
+
+    componentDidUpdate() {
+        // Add error handler in attempt to fix broken image urls
+        // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
+        // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
+        // This works for urls relative to the repo root
+        document.querySelectorAll("#marketplace-readme img").forEach((img) => {
+            img.addEventListener("error", (e) => {
+                // @ts-ignore
+                const originalSrc = e.target.getAttribute("src");
+                const fixedSrc = `https://raw.githubusercontent.com/${this.data.user}/${this.data.repo}/${this.data.branch}/${originalSrc}`;
+                // @ts-ignore
+                e.target.setAttribute("src", fixedSrc);
+            }, { once: true });
+        });
     }
 
     render() {
@@ -32,87 +49,33 @@ class ReadmePage extends react.Component {
                 __html: this.state.html,
             },
         }));
-
-        // this.injectMarkdownLibs();
-        // const mdContainer = document.createElement("zero-md");
-        // mdContainer.setAttribute("src", readme);
-        // const styleTemplate = document.createElement("template");
-        // const styleTag = document.createElement("style");
-        // styleTag.innerHTML = `
-        // #marketplace-readme-container p { color: red !important; }
-        // `;
-        // styleTemplate.append(styleTag);
-        // mdContainer.append(styleTemplate);
-
-        // readmeModalContainer.append(
-        //     mdContainer,
-        // );
-
-        // TODO: any relative images in the readme don't work (e.g. it resolves to https://xpui.app.spotify.com/screenshot.png)
-        // return react.createElement("section", {
-        //     className: "contentSpacing",
-        // },
-        // react.createElement("div", {
-        //     className: "marketplace-header",
-        // }, react.createElement("h1", null, this.props.title),
-        // ),
-        // react.createElement("div", {
-        //     id: "marketplace-readme",
-        //     className: "marketplace-readme__container",
-        // }, /*react.createElement("h2", {}, this.data.title),*/
-        // react.createElement("zero-md", {
-        //     src: this.data.readmeURL,
-        //     // TODO: this doesn't work?
-        // }, react.createElement("template", {},
-        //     react.createElement("style", {}, `
-        //         #marketplace-readme-container p { color: red !important; }
-        //     `))),
-        // ),
-        // );
     }
 
     async getReadmeHTML() {
-        // TODO: it might not be the default readme - the endpoint also supports adding `/dir` to the end, to get a readme for a directory.
-        // We should add support for that
-
-        const url = `https://api.github.com/repos/${this.data.user}/${this.data.repo}/readme`;
-        console.log("url", url);
-
         try {
-            const body = await fetch(url, {
-                method: "GET",
-                headers: {
-                    Accept: "application/vnd.github.html",
-                },
+            const readmeTextRes = await fetch(this.data.readmeURL);
+            if (!readmeTextRes.ok) throw new Error(`Error loading README (HTTP ${readmeTextRes.status})`);
+
+            const readmeText = await readmeTextRes.text();
+
+            const postBody = {
+                text: readmeText,
+                context: `${this.data.user}/${this.data.repo}`,
+                mode: "gfm",
+            };
+
+            const readmeHtmlRes = await fetch("https://api.github.com/markdown", {
+                method: "POST",
+                body: JSON.stringify(postBody),
             });
+            if (!readmeHtmlRes.ok) throw new Error(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
 
-            if (!body.ok) throw new Error(`Error loading README (HTTP ${body.status})`);
+            const readmeHtml = await readmeHtmlRes.text();
 
-            const html = await body.text();
-            return html;
+            return readmeHtml;
         } catch (err) {
             return `<p>${err.message}</p>`;
         }
-    }
-
-    injectMarkdownLibs() {
-        // @ts-ignore
-        const alreadyInjected = !!window.ZeroMd;
-
-        if (alreadyInjected) return;
-
-        // Lightweight client-side loader that feature-detects and load polyfills only when necessary
-        const wcScript = document.createElement("script");
-        wcScript.defer = true;
-        wcScript.src = "https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js";
-        document.body.appendChild(wcScript);
-
-        // Load the element definition
-        const zmdScript = document.createElement("script");
-        zmdScript.defer = true;
-        zmdScript.type = "module";
-        zmdScript.src = "https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js";
-        document.body.appendChild(zmdScript);
     }
 }
 
