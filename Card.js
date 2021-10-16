@@ -31,12 +31,16 @@ class Card extends react.Component {
         this.visual;
 
         // From `fetchRepoExtensions()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string } } */
+        /** @type { { name: string; description: string; main: string; preview: string; readme: string; } } */
         this.manifest;
         /** @type { string } */
         this.title;
         /** @type { string } */
         this.subtitle;
+        /** @type { string } */
+        this.repo;
+        /** @type { string } */
+        this.user;
         /** @type { string } */
         this.branch;
         /** @type { string } */
@@ -68,6 +72,8 @@ class Card extends react.Component {
             manifest: this.manifest,
             title: this.title,
             subtitle: this.subtitle,
+            user: this.user,
+            repo: this.repo,
             branch: this.branch,
             imageURL: this.imageURL,
             extensionURL: this.extensionURL,
@@ -116,6 +122,8 @@ class Card extends react.Component {
                 page: "readme",
                 data: {
                     title: this.title,
+                    user: this.user,
+                    repo: this.repo,
                     readmeURL: this.readmeURL,
                 },
             },

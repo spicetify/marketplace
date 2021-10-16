@@ -6,15 +6,34 @@ class ReadmePage extends react.Component {
 
         // TODO: decide what data we want to pass in and how we want to store it
         // (this currently comes from Card.openReadme)
-        /** @type { { title: string; readmeURL: string } } */
+        /** @type { { title: string; user: string; repo: string; readmeURL: string; readmeDir: string; } } */
         this.data;
 
-        // this.state = {};
+        this.state = { html: "<p>Loading...</p>" };
+    }
+
+    componentDidMount() {
+        this.getReadmeHTML()
+            .then((html) => this.setState({ html }));
     }
 
     render() {
-        this.injectMarkdownLibs();
+        return react.createElement("section", {
+            className: "contentSpacing",
+        },
+        react.createElement("div", {
+            className: "marketplace-header",
+        }, react.createElement("h1", null, this.props.title),
+        ),
+        react.createElement("div", {
+            id: "marketplace-readme",
+            className: "marketplace-readme__container",
+            dangerouslySetInnerHTML: {
+                __html: this.state.html,
+            },
+        }));
 
+        // this.injectMarkdownLibs();
         // const mdContainer = document.createElement("zero-md");
         // mdContainer.setAttribute("src", readme);
         // const styleTemplate = document.createElement("template");
@@ -30,38 +49,53 @@ class ReadmePage extends react.Component {
         // );
 
         // TODO: any relative images in the readme don't work (e.g. it resolves to https://xpui.app.spotify.com/screenshot.png)
-        return react.createElement("section", {
-            className: "contentSpacing",
-        },
-        react.createElement("div", {
-            className: "marketplace-header",
-        }, react.createElement("h1", null, this.props.title),
-        ),
-        react.createElement("div", {
-            id: "marketplace-readme",
-            className: "marketplace-readme__container",
-        }, /*react.createElement("h2", {}, this.data.title),*/
-        react.createElement("zero-md", {
-            src: this.data.readmeURL,
-            // TODO: this doesn't work?
-        }, react.createElement("template", {},
-            react.createElement("style", {}, `
-                #marketplace-readme-container p { color: red !important; }
-            `))),
-        ),
-        );
+        // return react.createElement("section", {
+        //     className: "contentSpacing",
+        // },
+        // react.createElement("div", {
+        //     className: "marketplace-header",
+        // }, react.createElement("h1", null, this.props.title),
+        // ),
+        // react.createElement("div", {
+        //     id: "marketplace-readme",
+        //     className: "marketplace-readme__container",
+        // }, /*react.createElement("h2", {}, this.data.title),*/
+        // react.createElement("zero-md", {
+        //     src: this.data.readmeURL,
+        //     // TODO: this doesn't work?
+        // }, react.createElement("template", {},
+        //     react.createElement("style", {}, `
+        //         #marketplace-readme-container p { color: red !important; }
+        //     `))),
+        // ),
+        // );
+    }
+
+    async getReadmeHTML() {
+        // TODO: it might not be the default readme - the endpoint also supports adding `/dir` to the end, to get a readme for a directory.
+        // We should add support for that
+
+        const url = `https://api.github.com/repos/${this.data.user}/${this.data.repo}/readme`;
+        console.log("url", url);
+
+        try {
+            const body = await fetch(url, {
+                method: "GET",
+                headers: {
+                    Accept: "application/vnd.github.html",
+                },
+            });
+
+            if (!body.ok) throw new Error(`Error loading README (HTTP ${body.status})`);
+
+            const html = await body.text();
+            return html;
+        } catch (err) {
+            return `<p>${err.message}</p>`;
+        }
     }
 
     injectMarkdownLibs() {
-        // <!-- Lightweight client-side loader that feature-detects and load polyfills only when necessary -->
-        // <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
-
-        // <!-- Load the element definition -->
-        // <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
-
-        // <!-- Simply set the `src` attribute to your MD file and win -->
-        // <zero-md src="README.md"></zero-md>
-
         // @ts-ignore
         const alreadyInjected = !!window.ZeroMd;
 

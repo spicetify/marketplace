@@ -417,6 +417,8 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
             manifest,
             title: manifest.name,
             subtitle: manifest.description,
+            user,
+            repo,
             branch,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
             extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
