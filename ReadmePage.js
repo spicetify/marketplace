@@ -29,6 +29,7 @@ class ReadmePage extends react.Component {
         //     mdContainer,
         // );
 
+        // TODO: any relative images in the readme don't work (e.g. it resolves to https://xpui.app.spotify.com/screenshot.png)
         return react.createElement("section", {
             className: "contentSpacing",
         },
