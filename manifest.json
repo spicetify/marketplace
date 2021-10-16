@@ -11,5 +11,8 @@
         "Settings.js",
         "ReadmePage.js",
         "ReloadModal.js"
+    ],
+    "subfiles_extension": [
+        "Extension.js"
     ]
 }
