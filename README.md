@@ -44,5 +44,11 @@ If you have multiple extensions in the same repo (subfolder e.g.):
 ```
 _Please note that if all your extensions are in the root folder, you don't need to include a filepath._
 
+## Styling + Build Process
+- The stylesheet is built using Sass (scss) with the [Parcel](https://parceljs.org/) bundler
+- The stylesheet is contained in style.scss, and builds style.css
+- For development, you can run `npm run watch` to live update the files as you save them
+- For building, you can run `npm run build` to just build the style.css file once
+
 ## Notes: 
 This is all still very hacky, injecting stuff into the reddit custom app, so there are a lot of leftovers that aren't needed. These will be adjusted/removed later. 

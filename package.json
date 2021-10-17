@@ -1,8 +1,22 @@
 {
+  "scripts": {
+    "type-check": "tsc",
+    "watch": "parcel watch",
+    "build": "parcel build"
+  },
+  "source": "style.scss",
+  "targets": {
+    "default": {
+      "distDir": ".",
+      "optimize": false
+    }
+  },
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "eslint": "^7.32.0",
-    "eslint-plugin-react": "^7.26.0"
+    "eslint-plugin-react": "^7.26.0",
+    "parcel": "^2.0.0"
   }
 }

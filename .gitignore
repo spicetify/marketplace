@@ -1,3 +1,4 @@
 node_modules/
 dump.rdb
 .DS_Store
+.parcel-cache/
