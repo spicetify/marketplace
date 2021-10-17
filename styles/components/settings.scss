@@ -1,0 +1,39 @@
+.setting-row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.setting-row .col {
+  display: flex;
+  padding: 10px 0;
+  align-items: center;
+}
+.setting-row .col.description {
+  float: left;
+  padding-right: 15px;
+  cursor: default;
+}
+.setting-row .col.action {
+  float: right;
+  text-align: right;
+}
+button.switch {
+  align-items: center;
+  border: 0px;
+  border-radius: 50%;
+  background-color: rgba(var(--spice-rgb-shadow), .7);
+  color: var(--spice-text);
+  cursor: pointer;
+  display: flex;
+  margin-inline-start: 12px;
+  padding: 8px;
+}
+button.switch.disabled,
+button.switch[disabled] {
+  color: rgba(var(--spice-rgb-text), .3);
+}
+button.switch.small {
+  width: 22px;
+  height: 22px;
+  padding: 6px;
+}
