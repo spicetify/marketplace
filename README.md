@@ -46,7 +46,7 @@ _Please note that if all your extensions are in the root folder, you don't need 
 
 ## Styling + Build Process
 - The stylesheet is built using Sass (scss) with the [Parcel](https://parceljs.org/) bundler
-- The stylesheet is contained in style.scss, and builds style.css
+- The main stylesheet is style/style.scss, which builds all the components, and compiles into style.css
 - For development, you can run `npm run watch` to live update the files as you save them
 - For building, you can run `npm run build` to just build the style.css file once
 
