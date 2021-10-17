@@ -1,0 +1,14 @@
+/* Need to hijack height because .GenericModal has it set to 90% via style attr... */
+.GenericModal[aria-label="Reload required"] {
+  height: 240px !important;
+}
+
+.marketplace-reload-modal__button-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 18px;
+}
+.marketplace-reload-modal__button-container button {
+  margin: 18px;
+  padding: 8px 24px;
+}

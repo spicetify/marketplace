@@ -4,7 +4,7 @@
     "watch": "parcel watch",
     "build": "parcel build"
   },
-  "source": "style.scss",
+  "source": "styles/style.scss",
   "targets": {
     "default": {
       "distDir": ".",
