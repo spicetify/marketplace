@@ -89,7 +89,9 @@ let cardList = [];
 let endOfList = false;
 let lastScroll = 0;
 let requestQueue = [];
-let requestAfter = null;
+let requestPage = null;
+// Default GitHub API items per page
+const ITEMS_PER_REQUEST = 30;
 
 // eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
@@ -147,7 +149,7 @@ class Grid extends react.Component {
             localStorage.setItem("reddit:sort-time", sortTimeValue);
         }
 
-        requestAfter = null;
+        requestPage = null;
         cardList = [];
         this.setState({
             cards: [],
@@ -176,7 +178,7 @@ class Grid extends react.Component {
         CONFIG.activeTab = value;
         localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
         cardList = [];
-        requestAfter = null;
+        requestPage = null;
         this.setState({
             cards: [],
             rest: false,
@@ -187,16 +189,21 @@ class Grid extends react.Component {
         this.newRequest(30);
     }
 
+    // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
+    // Returns the next page number to fetch, or null if at end
+    // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
     async loadPage(queue) {
-        // let subMeta = await getSubreddit(requestAfter);
+        // let subMeta = await getSubreddit(requestPage);
 
         if (CONFIG.activeTab === "Marketplace") {
-            let allRepos = await getAllRepos();
-            for (const repo of allRepos.items) {
+            let pageOfRepos = await getRepos(requestPage);
+            for (const repo of pageOfRepos.items) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 console.log(repo.name, extensions);
+
+                // I believe this stops the requests when switching tabs?
                 if (requestQueue.length > 1 && queue !== requestQueue[0]) {
-                // Stop this queue from continuing to fetch and append to cards list
+                    // Stop this queue from continuing to fetch and append to cards list
                     return -1;
                 }
 
@@ -204,19 +211,33 @@ class Grid extends react.Component {
                     extensions.forEach((extension) => this.appendCard(extension));
                 }
             }
+
+            // First request is null, so coerces to 1
+            const currentPage = requestPage || 1;
+            // -1 because the page number is 1-indexed
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.items.length;
+            const remainingResults = pageOfRepos.total_count - soFarResults;
+
+            // If still have more results, return next page number to fetch
+            if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
             installedExtensions.forEach((extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
+
+                // I believe this stops the requests when switching tabs?
+                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                    // Stop this queue from continuing to fetch and append to cards list
+                    return -1;
+                }
+
                 this.appendCard(extension);
             });
-        }
 
-        // TODO: idk what this does, so don't delete yet
-        // if (subMeta.data.after) {
-        //     return subMeta.data.after;
-        // }
+            // Don't need to return a page number because
+            // installed extension do them all in one go, since it's local
+        }
 
         this.setState({ rest: true, endOfList: true });
         endOfList = true;
@@ -227,18 +248,18 @@ class Grid extends react.Component {
         this.setState({ rest: false });
         quantity += cardList.length;
 
-        requestAfter = await this.loadPage(queue);
+        requestPage = await this.loadPage(queue);
 
         while (
-            requestAfter &&
-            requestAfter !== -1 &&
+            requestPage &&
+            requestPage !== -1 &&
             cardList.length < quantity &&
             !this.state.endOfList
         ) {
-            requestAfter = await this.loadPage(queue);
+            requestPage = await this.loadPage(queue);
         }
 
-        if (requestAfter === -1) {
+        if (requestPage === -1) {
             requestQueue = requestQueue.filter(a => a !== queue);
             return;
         }
@@ -335,16 +356,17 @@ class Grid extends react.Component {
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
  * Query GitHub for all repos with the "spicetify-extensions" topic
+ * @param {number} page The query page number
  * @returns Array of search results
  */
-async function getAllRepos() {
+async function getRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
+    // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
+    if (page) url += `&page=${page}`;
 
-    // TODO: idk what this is, so don't delete yet
-    // if (after) {
-    //     url += `&after=${after}`
-    // }
+    // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     // }
@@ -372,19 +394,6 @@ async function getRepoManifest(user, repo, branch) {
 
     return await Spicetify.CosmosAsync.get(url);
 }
-
-// async function getSubreddit(after = "") {
-//     // www is needed or it will block with "cross-origin" error.
-//     let url = `https://www.reddit.com/r/${CONFIG.activeTab}/${sortConfig.by}.json?limit=100&count=10&raw_json=1`;
-//     if (after) {
-//         url += `&after=${after}`;
-//     }
-//     if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
-//         url += `&t=${sortConfig.time}`;
-//     }
-
-//     return await Spicetify.CosmosAsync.get(url);
-// }
 
 // TODO: can we add a return type here?
 /**
