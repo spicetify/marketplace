@@ -174,16 +174,20 @@ class Grid extends react.Component {
         this.newRequest(30);
     }
 
+    // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
+    // Returns the next page number to fetch, or null if at end
     async loadPage(queue) {
         // let subMeta = await getSubreddit(requestAfter);
 
         if (CONFIG.activeTab === "Marketplace") {
-            let allRepos = await getAllRepos();
+            let allRepos = await getAllRepos(requestAfter);
             for (const repo of allRepos.items) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 console.log(repo.name, extensions);
+
+                // I believe this stops the requests when switching tabs?
                 if (requestQueue.length > 1 && queue !== requestQueue[0]) {
-                // Stop this queue from continuing to fetch and append to cards list
+                    // Stop this queue from continuing to fetch and append to cards list
                     return -1;
                 }
 
@@ -191,19 +195,33 @@ class Grid extends react.Component {
                     extensions.forEach((extension) => this.appendCard(extension));
                 }
             }
+
+            const currentPage = requestAfter || 1;
+
+            // -1 because the page number is 1-indexed
+            const soFarResults = 30 * (currentPage - 1) + allRepos.items.length;
+            const remainingResults = allRepos.total_count - soFarResults;
+
+            // If still have more results, return next page number to fetch
+            if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
             installedExtensions.forEach((extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
+
+                // I believe this stops the requests when switching tabs?
+                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                    // Stop this queue from continuing to fetch and append to cards list
+                    return -1;
+                }
+
                 this.appendCard(extension);
             });
-        }
 
-        // TODO: idk what this does, so don't delete yet
-        // if (subMeta.data.after) {
-        //     return subMeta.data.after;
-        // }
+            // Don't need to return a page number because
+            // installed extension do them all in one go, since it's local
+        }
 
         this.setState({ rest: true, endOfList: true });
         endOfList = true;
@@ -322,16 +340,19 @@ class Grid extends react.Component {
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
  * Query GitHub for all repos with the "spicetify-extensions" topic
+ * @param {number} after The page number
  * @returns Array of search results
  */
-async function getAllRepos() {
+async function getAllRepos(after = 1) {
     // www is needed or it will block with "cross-origin" error.
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
 
-    // TODO: idk what this is, so don't delete yet
-    // if (after) {
-    //     url += `&after=${after}`
-    // }
+    if (after) {
+        url += `&page=${after}`;
+    }
+
+    // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     // }
