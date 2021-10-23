@@ -149,7 +149,7 @@ class Card extends react.Component {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
             className: cardClasses.join(" "),
-            onClick: () => this.openReadme(),
+            // onClick: () => this.openReadme(),
         }, react.createElement("div", {
             className: "main-card-draggable",
             draggable: "true",
