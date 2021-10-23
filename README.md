@@ -15,6 +15,7 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `description`: Description for your extension
     * `preview`: A path to your preview image. Must be relative to your project root
     * `main`: The filename for your extension's main js file. Must be relative to your project root
+    * `readme`: The filename for your extension's README file. Must be relative to your project root
     
 e.g. 
 ```json
@@ -22,7 +23,8 @@ e.g.
     "name": "Spicetify-Hide-Podcasts",
     "description": "Spicetify extension to hide podcasts.",
     "preview": "screenshot.png",
-    "main": "hidePodcasts.js"
+    "main": "hidePodcasts.js",
+    "readme": "README.md"
 }
 ```
 If you have multiple extensions in the same repo (subfolder e.g.):
@@ -32,13 +34,15 @@ If you have multiple extensions in the same repo (subfolder e.g.):
     "name": "extensionName(No .js included)",
     "description": "Spicetify extension to show how to make a manifest.",
     "preview": "filepathFromGitRepo/myExt.png",
-    "main": "filepathFromGitRepo/myExt.js"
+    "main": "filepathFromGitRepo/myExt.js",
+    "readme": "filepathFromGitRepo/README.md",
   },
   {
    "name": "extensionNameTwo(No .js included)",
    "description": "Another Spicetify extension to show how to make a manifest.",
    "preview": "filepathFromGitRepoTwo/myExtTwo.png",
-   "main": "filepathFromGitRepoTwo/myExtTwo.js"
+   "main": "filepathFromGitRepoTwo/myExtTwo.js",
+   "readme": "filepathFromGitRepoTwo/THIS_IS_MY_README.md",
   },
 ]
 ```
@@ -51,4 +55,4 @@ _Please note that if all your extensions are in the root folder, you don't need 
 - For building, you can run `npm run build` to just build the style.css file once
 
 ## Notes: 
-This is all still very hacky, injecting stuff into the reddit custom app, so there are a lot of leftovers that aren't needed. These will be adjusted/removed later. 
+This project is a work-in-progress and is not finished, polished, or guaranteed to work. Use at your own risk. 
