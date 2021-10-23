@@ -18,12 +18,12 @@ function openConfig() {
     const optionHeader = document.createElement("h2");
     optionHeader.innerText = "Options";
 
-    const serviceHeader = document.createElement("h2");
-    serviceHeader.innerText = "Subreddits";
+    const tabsHeader = document.createElement("h2");
+    tabsHeader.innerText = "Tabs";
 
-    const serviceContainer = document.createElement("div");
+    const tabsContainer = document.createElement("div");
 
-    function stackServiceElements() {
+    function stackTabElements() {
         CONFIG.tabs.forEach((name, index) => {
             const el = CONFIG.tabsElement[name];
 
@@ -42,7 +42,7 @@ function openConfig() {
                 down.disabled = false;
             }
 
-            serviceContainer.append(el);
+            tabsContainer.append(el);
         });
         gridUpdateTabs && gridUpdateTabs();
     }
@@ -63,7 +63,7 @@ function openConfig() {
             JSON.stringify(CONFIG.tabs),
         );
 
-        stackServiceElements();
+        stackTabElements();
     }
 
     function removeCallback(el) {
@@ -73,7 +73,7 @@ function openConfig() {
 
         localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
 
-        stackServiceElements();
+        stackTabElements();
     }
 
     CONFIG.tabs.forEach(name => {
@@ -83,32 +83,7 @@ function openConfig() {
             removeCallback,
         );
     });
-    stackServiceElements();
-
-    const serviceInput = document.createElement("input");
-    serviceInput.placeholder = "Add new subreddit";
-    serviceInput.onkeydown = (event) => {
-        if (event.key != "Enter") {
-            return;
-        }
-        event.preventDefault();
-        const name = serviceInput.value;
-
-        if (!CONFIG.tabs.includes(name)) {
-            CONFIG.tabs.push(name);
-            CONFIG.tabsElement[name] = createServiceOption(
-                name,
-                posCallback,
-                removeCallback,
-            );
-            localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
-        }
-
-        stackServiceElements();
-        serviceInput.value = "";
-        const parent = configContainer.parentElement.parentElement;
-        parent.scrollTo(0, parent.scrollHeight);
-    };
+    stackTabElements();
 
     configContainer.append(
         optionHeader,
@@ -117,9 +92,8 @@ function openConfig() {
         createSlider("Followers count", "followers"),
         createSlider("Post type", "type"),
         createSlider("Long description", "longDescription"),
-        serviceHeader,
-        serviceContainer,
-        serviceInput,
+        tabsHeader,
+        tabsContainer,
     );
 
     Spicetify.PopupModal.display({
