@@ -61,7 +61,28 @@ class Card extends react.Component {
 
         this.state = {
             installed: localStorage.getItem(this.localStorageKey) !== null,
+            // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
+            stars: this.stars,
         };
+    }
+
+    async componentDidMount() {
+        // Refresh stars if on "Installed" tab with stars enabled
+        if (CONFIG.activeTab === "Installed" && CONFIG.visual.stars) {
+            // https://docs.github.com/en/rest/reference/repos#get-a-repository
+            const url = `https://api.github.com/repos/${this.user}/${this.repo}`;
+            // TODO: This implementation could probably be improved.
+            // It might have issues when quickly switching between tabs.
+            const repoData = await Spicetify.CosmosAsync.get(url);
+            console.log(repoData);
+
+            if (this.state.stars !== repoData.stargazers_count) {
+                this.setState({ stars: repoData.stargazers_count }, () => {
+                    console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
+                    this.installExtension();
+                });
+            }
+        }
     }
 
     installExtension() {
@@ -78,13 +99,15 @@ class Card extends react.Component {
             imageURL: this.imageURL,
             extensionURL: this.extensionURL,
             readmeURL: this.readmeURL,
-            stars: this.stars,
+            stars: this.state.stars,
         }));
 
-        // Add to installed list
+        // Add to installed list if not there already
         const installedExtensions = getInstalledExtensions();
-        installedExtensions.push(this.localStorageKey);
-        localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+        if (installedExtensions.indexOf(this.localStorageKey) === -1) {
+            installedExtensions.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+        }
 
         console.log("Installed");
         this.setState({ installed: true });
@@ -144,7 +167,7 @@ class Card extends react.Component {
 
         let detail = [];
         // this.visual.type && detail.push(this.type);
-        this.visual.stars && detail.push(`★ ${this.stars}`);
+        this.visual.stars && detail.push(`★ ${this.state.stars}`);
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
