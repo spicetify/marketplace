@@ -28,6 +28,8 @@ const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
+    "sortBy": "marketplace:sort-by",
+    "sortTime": "marketplace:sort-time",
 };
 
 // Define a function called "render" to specify app entry point
@@ -82,8 +84,8 @@ if (!CONFIG.activeTab || !CONFIG.tabs.includes(CONFIG.activeTab)) {
 
 // eslint-disable-next-line no-redeclare
 let sortConfig = {
-    by: localStorage.getItem("reddit:sort-by") || "top",
-    time: localStorage.getItem("reddit:sort-time") || "month",
+    by: localStorage.getItem(LOCALSTORAGE_KEYS.sortBy) || "top",
+    time: localStorage.getItem(LOCALSTORAGE_KEYS.sortTime) || "month",
 };
 let cardList = [];
 let endOfList = false;
@@ -142,11 +144,11 @@ class Grid extends react.Component {
     updateSort(sortByValue, sortTimeValue) {
         if (sortByValue) {
             sortConfig.by = sortByValue;
-            localStorage.setItem("reddit:sort-by", sortByValue);
+            localStorage.setItem(LOCALSTORAGE_KEYS.sortBy, sortByValue);
         }
         if (sortTimeValue) {
             sortConfig.time = sortTimeValue;
-            localStorage.setItem("reddit:sort-time", sortTimeValue);
+            localStorage.setItem(LOCALSTORAGE_KEYS.sortTime, sortTimeValue);
         }
 
         requestPage = null;
@@ -193,8 +195,6 @@ class Grid extends react.Component {
     // Returns the next page number to fetch, or null if at end
     // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
     async loadPage(queue) {
-        // let subMeta = await getSubreddit(requestPage);
-
         if (CONFIG.activeTab === "Marketplace") {
             let pageOfRepos = await getRepos(requestPage);
             for (const repo of pageOfRepos.items) {
