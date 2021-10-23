@@ -55,7 +55,7 @@ class Card extends react.Component {
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-        this.localStorageKey = "marketplace:installed:" + props.manifest.main;
+        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.manifest.main}`;
 
         Object.assign(this, props);
 

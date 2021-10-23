@@ -418,7 +418,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
 
         // Remove installed extensions from manifests list if we don't want to show them
         if (CONFIG.visual.hideInstalled) {
-            manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + manifest.main));
+            manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
         }
 
         // Manifest is initially parsed
