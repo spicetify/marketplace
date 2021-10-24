@@ -122,8 +122,6 @@ class Grid extends react.Component {
             rest: true,
             endOfList: endOfList,
         };
-
-        // console.log('grid constructor');
     }
 
     newRequest(amount) {
@@ -319,18 +317,19 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
-        react.createElement("div", {
-            className: "searchbar--bar__wrapper",
-        }, react.createElement("input", {
-            className: "searchbar-bar",
-            type: "text",
-            placeholder: "Search for Extensions?",
-
-        })),
-        react.createElement(SortBox, {
-            onChange: this.updateSort.bind(this),
-            onTabsChange: this.updateTabs.bind(this),
-        })), react.createElement("div", {
+        // TODO: Add search bar and sort functionality
+        // react.createElement("div", {
+        //     className: "searchbar--bar__wrapper",
+        // }, react.createElement("input", {
+        //     className: "searchbar-bar",
+        //     type: "text",
+        //     placeholder: "Search for Extensions?",
+        // })),
+        // react.createElement(SortBox, {
+        //     onChange: this.updateSort.bind(this),
+        //     onTabsChange: this.updateTabs.bind(this),
+        // })
+        ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
             style: {
