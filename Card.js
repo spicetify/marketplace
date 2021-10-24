@@ -233,7 +233,7 @@ class Card extends react.Component {
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, "✓ installed"),
+        }, "✓ Installed"),
         ))));
     }
 }
