@@ -246,7 +246,7 @@ class Grid extends react.Component {
     }
     /**
      * Load a new set of extensions
-     * @param {string} queue An array of the extensions to be loaded
+     * @param {any} queue An array of the extensions to be loaded
      * @param {number} quantity Amount of extensions to be loaded per page.
      */
     async loadAmount(queue, quantity = 50) {
