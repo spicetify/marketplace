@@ -50,7 +50,8 @@ function render() {
         return react.createElement(Grid, { title: "Spicetify Marketplace" });
     }
 }
-
+// Initalize topbar tabs
+// Data initalized in TabBar.js
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs) || `["Marketplace", "Installed"]`;
 let tabs = [];
 try {
@@ -65,6 +66,7 @@ try {
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
     visual: {
+        //Fetch the settings, defined in Settings.js
         type: localStorage.getItem("marketplace:type") === "true",
         stars: localStorage.getItem("marketplace:stars") === "true",
         hideInstalled: localStorage.getItem("marketplace:hideInstalled") === "true",
@@ -81,6 +83,7 @@ if (!CONFIG.activeTab || !CONFIG.tabs.includes(CONFIG.activeTab)) {
     CONFIG.activeTab = CONFIG.tabs[0];
 }
 
+// Fetches the sorting options, fetched from SortBox.js
 // eslint-disable-next-line no-redeclare
 let sortConfig = {
     by: localStorage.getItem(LOCALSTORAGE_KEYS.sortBy) || "top",
@@ -99,6 +102,7 @@ let gridUpdateTabs, gridUpdatePostsVisual;
 
 // eslint-disable-next-line no-unused-vars
 const typesLocale = {
+    // TODO: Remove these, unsure of their purpose.
     album: Spicetify.Locale.get("album"),
     song: Spicetify.Locale.get("song"),
     playlist: Spicetify.Locale.get("playlist"),
@@ -240,7 +244,11 @@ class Grid extends react.Component {
         endOfList = true;
         return null;
     }
-
+    /**
+     * Load a new set of extensions
+     * @param {string} queue An array of the extensions to be loaded
+     * @param {number} quantity Amount of extensions to be loaded per page.
+     */
     async loadAmount(queue, quantity = 50) {
         this.setState({ rest: false });
         quantity += cardList.length;
@@ -409,12 +417,10 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-
         let manifests = await getRepoManifest(user, repo, branch);
         console.log(`${user}/${repo}`, manifests);
-
+        // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-
         // Remove installed extensions from manifests list if we don't want to show them
         if (CONFIG.visual.hideInstalled) {
             manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
