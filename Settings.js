@@ -77,7 +77,7 @@ function openConfig() {
     }
 
     CONFIG.tabs.forEach(name => {
-        CONFIG.tabsElement[name] = createServiceOption(
+        CONFIG.tabsElement[name] = createTabOption(
             name,
             posCallback,
             removeCallback,
@@ -128,7 +128,7 @@ function createSlider(name, key) {
     return container;
 }
 
-function createServiceOption(id, posCallback, removeCallback) {
+function createTabOption(id, posCallback, removeCallback) {
     const container = document.createElement("div");
     container.dataset.id = id;
     container.innerHTML = `
