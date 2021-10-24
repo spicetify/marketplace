@@ -6,6 +6,37 @@ Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/C
 ## Notes: 
 This project is a work-in-progress and is not finished, polished, or guaranteed to work. Use at your own risk. 
 
+## Install
+Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/khanhas/spicetify-cli) custom apps directory:
+| **Platform** | **Path**                                                                              |
+|------------|-----------------------------------------------------------------------------------------|
+| **Linux**      | `~/.config/spicetify/CustomApps` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
+| **MacOS**      | `~/.config/spicetify/CustomApps` or `$SPICETIFY_CONFIG/CustomApps`                  |
+| **Windows**    | `%userprofile%/.spicetify/CustomApps/`                                              |
+
+After putting the extension file into the correct folder, run the following command to install the extension:
+```
+spicetify config custom_apps spicetify-marketplace
+spicetify apply
+```
+Note: Using the `config` command to add the custom app will always append the file name to the existing custom apps list. It does not replace the whole key's value.
+
+Or you can manually edit your `config-xpui.ini` file. Add your desired custom apps folder names in the `custom_apps` key, separated them by the | character.
+Example:
+
+```ini
+[AdditionalOptions]
+...
+custom_apps = reddit | spicetify-marketplace
+```
+
+Then run:
+
+```
+spicetify apply
+```
+
+
 ## Basic card loading functionality: 
 1. `componentDidMount` triggers `newRequest`, which triggers `loadAmount(30)`
 2. `loadAmount` calls `loadPage` in a loop until it has the requested amount of cards or runs out of results
