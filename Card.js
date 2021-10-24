@@ -227,14 +227,13 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
-        ), react.createElement("br"),
-        react.createElement("p", {
+        ), react.createElement("p", {
             className: "marketplace-card-desc",
         }, this.manifest.description),
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, "✓ installed"),
+        }, "✓ Installed"),
         ))));
     }
 }

@@ -72,7 +72,6 @@ const CONFIG = {
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
         followers: localStorage.getItem("marketplace:followers") === "true",
-        longDescription: localStorage.getItem("marketplace:longDescription") === "true",
     },
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
@@ -122,8 +121,6 @@ class Grid extends react.Component {
             rest: true,
             endOfList: endOfList,
         };
-
-        // console.log('grid constructor');
     }
 
     newRequest(amount) {
@@ -319,20 +316,22 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
-        react.createElement("div", {
-            className: "searchbar--bar__wrapper",
-        }, react.createElement("input", {
-            className: "searchbar-bar",
-            type: "text",
-            placeholder: "Search for Extensions?",
-
-        })),
-        react.createElement(SortBox, {
-            onChange: this.updateSort.bind(this),
-            onTabsChange: this.updateTabs.bind(this),
-        })), react.createElement("div", {
+        // TODO: Add search bar and sort functionality
+        // react.createElement("div", {
+        //     className: "searchbar--bar__wrapper",
+        // }, react.createElement("input", {
+        //     className: "searchbar-bar",
+        //     type: "text",
+        //     placeholder: "Search for Extensions?",
+        // })),
+        // react.createElement(SortBox, {
+        //     onChange: this.updateSort.bind(this),
+        //     onTabsChange: this.updateTabs.bind(this),
+        // })
+        ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
+            "data-tab": CONFIG.activeTab,
             style: {
                 "--minimumColumnWidth": "180px",
             },

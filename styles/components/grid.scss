@@ -109,38 +109,54 @@ div.marketplace-tabBar-headerItemLink {
   color: var(--spice-subtext);
 }
 
-.marketplace-card__bottom-meta {
-  margin-top: 10px;
-}
+// Cards
+#marketplace-grid {
+  .main-card-draggable {
+    display: flex;
+    flex-direction: column;
 
-.marketplace-longDescription {
-  display: flex;
+    .main-card-cardMetadata {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+      .marketplace-card-desc {
+        font: -webkit-small-control;
+        margin: 12px 0;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
+
+      .marketplace-card__bottom-meta {
+        margin-top: auto;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &[data-tab='Installed'] {
+    &:empty::after {
+      content: 'No installed extensions';
+      display: block;
+    }
+  }
 }
 
 .marketplace-card--installed {
   flex: 0 !important;
   -webkit-box-flex: 0 !important;
-  height:350px
-}
-.marketplace-card-desc{
-  /*
-  TODO: Make this look nice.
-  */
-    font: -webkit-small-control;
-  height: 45px;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 
+// Search bar
 .searchbar--bar__wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   flex-grow: 1;
 }
-.searchbar-bar{
+.searchbar-bar {
   border: unset;
   background-color: var(--spice-sidebar) !important;
   border-radius: 5px !important;
