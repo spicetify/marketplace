@@ -85,6 +85,33 @@ function openConfig() {
     });
     stackTabElements();
 
+    // Reset Marketplace section
+    const resetHeader = document.createElement("h2");
+    resetHeader.innerText = "Reset Marketplace";
+    const resetContainer = document.createElement("div");
+    resetContainer.innerHTML = `
+    <div class="setting-row">
+        <label class="col description">Uninstall all extensions and reset preferences</label>
+        <div class="col action">
+            <button class="main-buttons-button main-button-secondary">Reset</button>
+        </div>
+    </div>`;
+    const resetBtn = resetContainer.querySelector("button");
+    resetBtn.onclick = () => {
+        console.log("Resetting Marketplace");
+
+        // Loop through and reset marketplace keys
+        Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith("marketplace:")) {
+                localStorage.removeItem(key);
+                console.log(`Removed ${key}`);
+            }
+        });
+
+        console.log("Marketplace has been reset");
+        location.reload();
+    };
+
     configContainer.append(
         optionHeader,
         createSlider("Stars count", "stars"),
@@ -94,6 +121,8 @@ function openConfig() {
         // createSlider("Post type", "type"),
         // tabsHeader,
         // tabsContainer,
+        resetHeader,
+        resetContainer,
     );
 
     Spicetify.PopupModal.display({
