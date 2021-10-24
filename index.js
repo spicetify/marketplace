@@ -331,6 +331,7 @@ class Grid extends react.Component {
         ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
+            "data-tab": CONFIG.activeTab,
             style: {
                 "--minimumColumnWidth": "180px",
             },

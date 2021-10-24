@@ -135,6 +135,13 @@ div.marketplace-tabBar-headerItemLink {
       }
     }
   }
+
+  &[data-tab='Installed'] {
+    &:empty::after {
+      content: 'No installed extensions';
+      display: block;
+    }
+  }
 }
 
 .marketplace-card--installed {

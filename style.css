@@ -128,6 +128,10 @@ div.marketplace-tabBar-headerItemLink {
   margin-top: auto;
   margin-bottom: 0;
 }
+#marketplace-grid[data-tab=Installed]:empty::after {
+  content: "No installed extensions";
+  display: block;
+}
 
 .marketplace-card--installed {
   flex: 0 !important;
