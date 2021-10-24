@@ -89,9 +89,9 @@ function openConfig() {
         optionHeader,
         createSlider("Stars count", "stars"),
         createSlider("Hide installed in Marketplace", "hideInstalled"),
-        createSlider("Followers count", "followers"),
-        createSlider("Post type", "type"),
-        createSlider("Long description", "longDescription"),
+        // TODO: add these features maybe?
+        // createSlider("Followers count", "followers"),
+        // createSlider("Post type", "type"),
         // tabsHeader,
         // tabsContainer,
     );

@@ -72,7 +72,6 @@ const CONFIG = {
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
         followers: localStorage.getItem("marketplace:followers") === "true",
-        longDescription: localStorage.getItem("marketplace:longDescription") === "true",
     },
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
