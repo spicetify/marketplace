@@ -92,8 +92,8 @@ function openConfig() {
         createSlider("Followers count", "followers"),
         createSlider("Post type", "type"),
         createSlider("Long description", "longDescription"),
-        tabsHeader,
-        tabsContainer,
+        // tabsHeader,
+        // tabsContainer,
     );
 
     Spicetify.PopupModal.display({
