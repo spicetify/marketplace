@@ -66,18 +66,31 @@ function openConfig() {
         stackTabElements();
     }
 
-    function removeCallback(el) {
-        const id = el.dataset.id;
-        CONFIG.tabs = CONFIG.tabs.filter(s => s != id);
-        CONFIG.tabsElement[id].remove();
+    // TODO: change this to just be a toggle switch for showing the tab or not
+    function removeCallback(removeBtn) {
 
-        localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
+        // This is from before:
 
-        stackTabElements();
+        // const id = el.dataset.id;
+        // CONFIG.tabs = CONFIG.tabs.filter(s => s != id);
+        // CONFIG.tabsElement[id].remove();
+
+        // localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
+
+        // stackTabElements();
+
+        // --------------------------------------------------
+
+        // This is from `createSlider`:
+
+        // const state = !slider.classList.toggle("disabled");
+        // CONFIG.visual[key] = state;
+        // localStorage.setItem(`marketplace:${key}`, String(state));
+        // gridUpdatePostsVisual && gridUpdatePostsVisual();
     }
 
     CONFIG.tabs.forEach(name => {
-        CONFIG.tabsElement[name] = createServiceOption(
+        CONFIG.tabsElement[name] = createTabOption(
             name,
             posCallback,
             removeCallback,
@@ -128,7 +141,7 @@ function createSlider(name, key) {
     return container;
 }
 
-function createServiceOption(id, posCallback, removeCallback) {
+function createTabOption(id, posCallback, removeCallback) {
     const container = document.createElement("div");
     container.dataset.id = id;
     container.innerHTML = `
@@ -157,7 +170,7 @@ function createServiceOption(id, posCallback, removeCallback) {
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);
-    remove.onclick = () => removeCallback(container);
+    remove.onclick = () => removeCallback(remove);
 
     return container;
 }
