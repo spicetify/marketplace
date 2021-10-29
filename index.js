@@ -94,8 +94,9 @@ let endOfList = false;
 let lastScroll = 0;
 let requestQueue = [];
 let requestPage = null;
-// Default GitHub API items per page
-const ITEMS_PER_REQUEST = 30;
+// Max GitHub API items per page
+// https://docs.github.com/en/rest/reference/search#search-repositories
+const ITEMS_PER_REQUEST = 100;
 
 // eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
@@ -358,7 +359,7 @@ class Grid extends react.Component {
 }
 
 // TODO: add license filter or anything?
-// TODO: add sort type, order, paging, etc?
+// TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
@@ -368,7 +369,7 @@ class Grid extends react.Component {
  */
 async function getRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
     // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
     if (page) url += `&page=${page}`;
