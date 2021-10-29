@@ -248,9 +248,9 @@ class Grid extends react.Component {
     /**
      * Load a new set of extensions
      * @param {any} queue An array of the extensions to be loaded
-     * @param {number} quantity Amount of extensions to be loaded per page.
+     * @param {number} [quantity] Amount of extensions to be loaded per page. (Defaults to ITEMS_PER_REQUEST constant)
      */
-    async loadAmount(queue, quantity = 50) {
+    async loadAmount(queue, quantity = ITEMS_PER_REQUEST) {
         this.setState({ rest: false });
         quantity += cardList.length;
 
@@ -277,7 +277,7 @@ class Grid extends react.Component {
 
     loadMore() {
         if (this.state.rest && !endOfList) {
-            this.loadAmount(requestQueue[0], 50);
+            this.loadAmount(requestQueue[0], ITEMS_PER_REQUEST);
         }
     }
 
