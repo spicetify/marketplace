@@ -1,8 +1,28 @@
 // eslint-disable-next-line no-redeclare, no-unused-vars
 class TabBarItem extends react.Component {
+    /**
+     * @param {object} props
+     * @param {object} props.item
+     * @param {string} props.item.key
+     * @param {string} props.item.value
+     * @param {boolean} props.item.active
+     * @param {boolean} props.item.hidden
+     * @param {function} props.switchTo
+     */
+    constructor(props) {
+        super(props);
+        // this.state = {
+        //     enabled: true,
+        // };
+    }
+
     render() {
+        // if (!this.state.enabled) return null;
+        if (this.props.hidden) return null;
+
         return react.createElement("li", {
             className: "marketplace-tabBar-headerItem",
+            "data-tab": this.props.item.value,
             onClick: (event) => {
                 event.preventDefault();
                 this.props.switchTo(this.props.item.key);
@@ -33,7 +53,7 @@ const TabBarMore = react.memo(({ items, switchTo }) => {
 });
 
 // eslint-disable-next-line no-redeclare, no-unused-vars
-const TopBarContent = ({ links, activeLink, switchCallback }) => {
+const TopBarContent = ({ allLinks, enabledLinks, activeLink, switchCallback }) => {
     const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
     const [windowSize, setWindowSize] = useState(resizeHost.clientWidth);
     const resizeHandler = () => setWindowSize(resizeHost.clientWidth);
@@ -48,7 +68,8 @@ const TopBarContent = ({ links, activeLink, switchCallback }) => {
 
     return react.createElement(TabBarContext, null, react.createElement(TabBar, {
         className: "queue-queueHistoryTopBar-tabBar",
-        links,
+        allLinks,
+        enabledLinks,
         activeLink,
         windowSize,
         switchCallback,
@@ -64,15 +85,17 @@ const TabBarContext = ({ children }) => {
     );
 };
 
-const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Infinity }) => {
+const TabBar = react.memo(({ allLinks, enabledLinks, activeLink, switchCallback, windowSize = Infinity }) => {
     const tabBarRef = react.useRef(null);
     const [childrenSizes, setChildrenSizes] = useState([]);
     const [availableSpace, setAvailableSpace] = useState(0);
     const [droplistItem, setDroplistItems] = useState([]);
 
-    const options = links.map((key) => {
+    // Key is the tab name, value is also the tab name, active is if it's active
+    const options = allLinks.map((key) => {
         const active = key === activeLink;
-        return ({ key, value: key, active });
+        const hidden = !enabledLinks.includes(key);
+        return ({ key, value: key, active, hidden });
     });
 
     useEffect(() => {
@@ -87,7 +110,7 @@ const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Inf
         const tabbarItemSizes = children.map(child => child.clientWidth);
 
         setChildrenSizes(tabbarItemSizes);
-    }, [links]);
+    }, [enabledLinks]);
 
     useEffect(() => {
         if (!tabBarRef.current) return;

@@ -24,17 +24,18 @@ function openConfig() {
     const tabsContainer = document.createElement("div");
 
     function stackTabElements() {
-        CONFIG.tabs.forEach((name, index) => {
+        ALL_TABS.forEach((name, index) => {
+        // CONFIG.enabledTabs.forEach((name, index) => {
             const el = CONFIG.tabsElement[name];
 
             const [ up, down ] = el.querySelectorAll("button");
-            if (CONFIG.tabs.length === 1) {
+            if (CONFIG.enabledTabs.length === 1) {
                 up.disabled = true;
                 down.disabled = true;
             } else if (index === 0) {
                 up.disabled = true;
                 down.disabled = false;
-            } else if (index === (CONFIG.tabs.length - 1)) {
+            } else if (index === (CONFIG.enabledTabs.length - 1)) {
                 up.disabled = false;
                 down.disabled = true;
             } else {
@@ -49,35 +50,35 @@ function openConfig() {
 
     function posCallback(el, dir) {
         const id = el.dataset.id;
-        const curPos = CONFIG.tabs.findIndex((val) => val === id);
+        const curPos = CONFIG.enabledTabs.findIndex((val) => val === id);
         const newPos = curPos + dir;
 
-        if (CONFIG.tabs.length > 1) {
-            const temp = CONFIG.tabs[newPos];
-            CONFIG.tabs[newPos] = CONFIG.tabs[curPos];
-            CONFIG.tabs[curPos] = temp;
+        if (CONFIG.enabledTabs.length > 1) {
+            const temp = CONFIG.enabledTabs[newPos];
+            CONFIG.enabledTabs[newPos] = CONFIG.enabledTabs[curPos];
+            CONFIG.enabledTabs[curPos] = temp;
         }
 
         localStorage.setItem(
             LOCALSTORAGE_KEYS.tabs,
-            JSON.stringify(CONFIG.tabs),
+            JSON.stringify(CONFIG.enabledTabs),
         );
 
         stackTabElements();
     }
 
     // TODO: change this to just be a toggle switch for showing the tab or not
-    function removeCallback(removeBtn) {
+    function removeCallback(el) {
 
         // This is from before:
 
-        // const id = el.dataset.id;
-        // CONFIG.tabs = CONFIG.tabs.filter(s => s != id);
-        // CONFIG.tabsElement[id].remove();
+        const id = el.dataset.id;
+        CONFIG.enabledTabs = CONFIG.enabledTabs.filter(s => s != id);
+        CONFIG.tabsElement[id].remove();
 
-        // localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
+        localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.enabledTabs));
 
-        // stackTabElements();
+        stackTabElements();
 
         // --------------------------------------------------
 
@@ -87,9 +88,16 @@ function openConfig() {
         // CONFIG.visual[key] = state;
         // localStorage.setItem(`marketplace:${key}`, String(state));
         // gridUpdatePostsVisual && gridUpdatePostsVisual();
+
+        // --------------------------------------------------
+
+        // const id = el.dataset.id;
+        // console.log(id, CONFIG.tabsElement[id]);
+        // document.querySelector(`.marketplace-tabBar-headerItem[data-tab="${id}"]`).classList.add("hidden");
+        // CONFIG.tabsElement[id].classList.toggle("hidden");
     }
 
-    CONFIG.tabs.forEach(name => {
+    CONFIG.enabledTabs.forEach(name => {
         CONFIG.tabsElement[name] = createTabOption(
             name,
             posCallback,
@@ -132,8 +140,8 @@ function openConfig() {
         // TODO: add these features maybe?
         // createSlider("Followers count", "followers"),
         // createSlider("Post type", "type"),
-        // tabsHeader,
-        // tabsContainer,
+        tabsHeader,
+        tabsContainer,
         resetHeader,
         resetContainer,
     );
@@ -199,7 +207,7 @@ function createTabOption(id, posCallback, removeCallback) {
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);
-    remove.onclick = () => removeCallback(remove);
+    remove.onclick = () => removeCallback(container);
 
     return container;
 }

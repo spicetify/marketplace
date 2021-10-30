@@ -51,6 +51,7 @@ function render() {
     }
 }
 
+const ALL_TABS = ["Marketplace", "Installed"];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs) || `["Marketplace", "Installed"]`;
 let tabs = [];
 try {
@@ -59,7 +60,7 @@ try {
         throw new Error("");
     }
 } catch {
-    tabs = ["Marketplace", "Installed"];
+    tabs = ALL_TABS;
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
 }
 // eslint-disable-next-line no-redeclare
@@ -73,12 +74,12 @@ const CONFIG = {
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
         followers: localStorage.getItem("marketplace:followers") === "true",
     },
-    tabs,
+    enabledTabs: tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
 };
 
-if (!CONFIG.activeTab || !CONFIG.tabs.includes(CONFIG.activeTab)) {
-    CONFIG.activeTab = CONFIG.tabs[0];
+if (!CONFIG.activeTab || !CONFIG.enabledTabs.includes(CONFIG.activeTab)) {
+    CONFIG.activeTab = CONFIG.enabledTabs[0];
 }
 
 // eslint-disable-next-line no-redeclare
@@ -117,7 +118,7 @@ class Grid extends react.Component {
         Object.assign(this, props);
         this.state = {
             cards: [],
-            tabs: CONFIG.tabs,
+            tabs: CONFIG.enabledTabs,
             rest: true,
             endOfList: endOfList,
         };
@@ -162,7 +163,7 @@ class Grid extends react.Component {
 
     updateTabs() {
         this.setState({
-            tabs: [...CONFIG.tabs],
+            tabs: [...CONFIG.enabledTabs],
         });
     }
 
@@ -342,8 +343,10 @@ class Grid extends react.Component {
             },
         }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon)),
         ), react.createElement(TopBarContent, {
+            // TODO: this is the spot
             switchCallback: this.switchTo.bind(this),
-            links: CONFIG.tabs,
+            allLinks: ALL_TABS,
+            enabledLinks: CONFIG.enabledTabs,
             activeLink: CONFIG.activeTab,
         }));
     }
