@@ -67,15 +67,13 @@ function openConfig() {
         stackTabElements();
     }
 
-    // TODO: change this to just be a toggle switch for showing the tab or not
     function toggleCallback(el) {
 
         const id = el.dataset.id;
+        const slider = el.querySelector("button:last-child");
 
         // If we're removing the tab, it's not in the enabled tabs list
-        const toRemove = CONFIG.enabledTabs.includes(id);
-
-        // This is from before:
+        const toRemove = slider.classList.toggle("disabled");
 
         if (toRemove) {
             // Remove tab
@@ -84,11 +82,6 @@ function openConfig() {
         } else {
             // Add tab
             CONFIG.enabledTabs.push(id);
-            CONFIG.tabsElement[id] = createTabOption(
-                id,
-                posCallback,
-                toggleCallback,
-            );
         }
 
         // Persist the new enabled tabs
@@ -96,22 +89,6 @@ function openConfig() {
 
         // Refresh
         stackTabElements();
-
-        // --------------------------------------------------
-
-        // This is from `createSlider`:
-
-        // const state = !slider.classList.toggle("disabled");
-        // CONFIG.visual[key] = state;
-        // localStorage.setItem(`marketplace:${key}`, String(state));
-        // gridUpdatePostsVisual && gridUpdatePostsVisual();
-
-        // --------------------------------------------------
-
-        // const id = el.dataset.id;
-        // console.log(id, CONFIG.tabsElement[id]);
-        // document.querySelector(`.marketplace-tabBar-headerItem[data-tab="${id}"]`).classList.add("hidden");
-        // CONFIG.tabsElement[id].classList.toggle("hidden");
     }
 
     ALL_TABS.forEach(name => {
@@ -212,8 +189,8 @@ function createTabOption(id, posCallback, toggleCallback) {
                     ${Spicetify.SVGIcons["chart-down"]}
                 </svg>
             </button>
-            <button class="switch small">
-                <svg height="10" width="10" viewBox="0 0 16 16" fill="currentColor">
+            <button class="switch">
+                <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                     ${Spicetify.SVGIcons["x"]}
                 </svg>
             </button>
@@ -221,6 +198,8 @@ function createTabOption(id, posCallback, toggleCallback) {
     </div>`;
 
     const [ up, down, remove ] = container.querySelectorAll("button");
+
+    remove.classList.toggle("disabled", !CONFIG.enabledTabs.includes(id));
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);

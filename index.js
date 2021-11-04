@@ -51,14 +51,18 @@ function render() {
     }
 }
 
+// eslint-disable-next-line no-redeclare
 const ALL_TABS = ["Marketplace", "Installed"];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
-if (!tabsString || tabsString === "[]") tabsString = JSON.stringify(ALL_TABS);
 let tabs = [];
 try {
     tabs = JSON.parse(tabsString);
     if (!Array.isArray(tabs)) {
-        throw new Error("");
+        throw new Error("Could not parse enabledTabs key");
+    } else if (tabs.length === 0) {
+        throw new Error("Empty enabledTabs key");
+    } else if (tabs.filter(tab => !tab).length > 0) {
+        throw new Error("Falsey enabledTabs key");
     }
 } catch {
     tabs = ALL_TABS;
