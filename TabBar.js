@@ -18,7 +18,7 @@ class TabBarItem extends react.Component {
 
     render() {
         // if (!this.state.enabled) return null;
-        if (this.props.hidden) return null;
+        if (this.props.item.hidden) return null;
 
         return react.createElement("li", {
             className: "marketplace-tabBar-headerItem",

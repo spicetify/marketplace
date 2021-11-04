@@ -68,16 +68,33 @@ function openConfig() {
     }
 
     // TODO: change this to just be a toggle switch for showing the tab or not
-    function removeCallback(el) {
+    function toggleCallback(el) {
+
+        const id = el.dataset.id;
+
+        // If we're removing the tab, it's not in the enabled tabs list
+        const toRemove = CONFIG.enabledTabs.includes(id);
 
         // This is from before:
 
-        const id = el.dataset.id;
-        CONFIG.enabledTabs = CONFIG.enabledTabs.filter(s => s != id);
-        CONFIG.tabsElement[id].remove();
+        if (toRemove) {
+            // Remove tab
+            CONFIG.enabledTabs = CONFIG.enabledTabs.filter(s => s != id);
+            CONFIG.tabsElement[id].remove();
+        } else {
+            // Add tab
+            CONFIG.enabledTabs.push(id);
+            CONFIG.tabsElement[id] = createTabOption(
+                id,
+                posCallback,
+                toggleCallback,
+            );
+        }
 
+        // Persist the new enabled tabs
         localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.enabledTabs));
 
+        // Refresh
         stackTabElements();
 
         // --------------------------------------------------
@@ -97,11 +114,11 @@ function openConfig() {
         // CONFIG.tabsElement[id].classList.toggle("hidden");
     }
 
-    CONFIG.enabledTabs.forEach(name => {
+    ALL_TABS.forEach(name => {
         CONFIG.tabsElement[name] = createTabOption(
             name,
             posCallback,
-            removeCallback,
+            toggleCallback,
         );
     });
     stackTabElements();
@@ -178,7 +195,7 @@ function createSlider(name, key) {
     return container;
 }
 
-function createTabOption(id, posCallback, removeCallback) {
+function createTabOption(id, posCallback, toggleCallback) {
     const container = document.createElement("div");
     container.dataset.id = id;
     container.innerHTML = `
@@ -207,7 +224,7 @@ function createTabOption(id, posCallback, removeCallback) {
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);
-    remove.onclick = () => removeCallback(container);
+    remove.onclick = () => toggleCallback(container);
 
     return container;
 }

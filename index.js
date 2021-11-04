@@ -52,7 +52,8 @@ function render() {
 }
 
 const ALL_TABS = ["Marketplace", "Installed"];
-let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs) || `["Marketplace", "Installed"]`;
+let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
+if (!tabsString || tabsString === "[]") tabsString = JSON.stringify(ALL_TABS);
 let tabs = [];
 try {
     tabs = JSON.parse(tabsString);
