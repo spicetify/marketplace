@@ -208,7 +208,7 @@ class Grid extends react.Component {
     async loadPage(queue) {
         if (CONFIG.activeTab === "Marketplace") {
             let pageOfRepos = await getRepos(requestPage);
-            for (const repo of pageOfRepos.items) {
+            for (const repo of pageOfRepos) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 console.log(repo.name, extensions);
 
@@ -226,8 +226,8 @@ class Grid extends react.Component {
             // First request is null, so coerces to 1
             const currentPage = requestPage || 1;
             // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.items.length;
-            const remainingResults = pageOfRepos.total_count - soFarResults;
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
+            const remainingResults = pageOfRepos.length - soFarResults;
 
             // If still have more results, return next page number to fetch
             if (remainingResults) return currentPage + 1;
@@ -379,16 +379,28 @@ class Grid extends react.Component {
 async function getRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
+
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
     // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
     if (page) url += `&page=${page}`;
-
     // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
-    // }
+    const allRepos = await Spicetify.CosmosAsync.get(url);
+    const blacklist = await getBlacklist();
+    const arrToReturn = [];
+    console.log(allRepos.items);
+    for (let i = 0; i<allRepos.items.length;i++) {
+        console.log(allRepos.items[i].html_url);
+        if (blacklist.includes(allRepos.items[i].html_url)) {
+            delete allRepos.items[i];
+        } else {
+            arrToReturn.push(allRepos.items[i]);
+        }
 
-    return await Spicetify.CosmosAsync.get(url);
+    }
+console.log(arrToReturn);
+    return arrToReturn;
 }
 
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
@@ -428,12 +440,12 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
         let manifests = await getRepoManifest(user, repo, branch);
-        console.log(`${user}/${repo}`, manifests);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
         // Remove installed extensions from manifests list if we don't want to show them
         if (CONFIG.visual.hideInstalled) {
             manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
+
         }
 
         // Manifest is initially parsed
@@ -456,6 +468,20 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         console.warn(contents_url, err);
         return null;
     }
+}
+
+async function getBlacklist() {
+    const url = "https://firestore.googleapis.com/v1/projects/spicetify-marketplace/databases/%28default%29/documents/blacklist?pageSize=300";
+    const jsonReturned = await Spicetify.CosmosAsync.get(url);
+    const asArr = [];
+
+    for (let i = 0; i < jsonReturned.documents.length; i++ ) {
+        console.log(i);
+        console.log("test");
+        console.log(jsonReturned.documents[i].fields.link.stringValue);
+        asArr.push(jsonReturned.documents[i].fields.link.stringValue);
+    }
+    return asArr;
 }
 
 // function postMapper(posts) {
