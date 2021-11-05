@@ -66,7 +66,7 @@ function openConfig() {
     function toggleCallback(el) {
 
         const id = el.dataset.id;
-        const slider = el.querySelector("button:last-child");
+        const slider = el.querySelector(".switch--tab-toggle");
 
         // If we're removing the tab, it's not in the enabled tabs list
         const toRemove = slider.classList.toggle("disabled");
