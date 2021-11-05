@@ -1,22 +1,27 @@
-.setting-row::after {
-  content: "";
-  display: table;
-  clear: both;
+.setting-row {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .col {
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+
+    &.description {
+      float: left;
+      padding-right: 15px;
+      cursor: default;
+    }
+    &.action {
+      float: right;
+      text-align: right;
+    }
+  }
 }
-.setting-row .col {
-  display: flex;
-  padding: 10px 0;
-  align-items: center;
-}
-.setting-row .col.description {
-  float: left;
-  padding-right: 15px;
-  cursor: default;
-}
-.setting-row .col.action {
-  float: right;
-  text-align: right;
-}
+
 button.switch {
   align-items: center;
   border: 0px;
@@ -27,13 +32,20 @@ button.switch {
   display: flex;
   margin-inline-start: 12px;
   padding: 8px;
-}
-button.switch.disabled,
-button.switch[disabled] {
-  color: rgba(var(--spice-rgb-text), .3);
-}
-button.switch.small {
-  width: 22px;
-  height: 22px;
-  padding: 6px;
+
+  &.small {
+    width: 22px;
+    height: 22px;
+    padding: 6px;
+  }
+
+  &.disabled,
+  &[disabled] {
+    color: rgba(var(--spice-rgb-text), .3);
+  }
+
+  &--tab-toggle[disabled] {
+    opacity: 0;
+    pointer-events: none;
+  }
 }

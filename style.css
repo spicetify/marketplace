@@ -192,19 +192,16 @@ option {
   display: table;
   clear: both;
 }
-
 .setting-row .col {
   display: flex;
   padding: 10px 0;
   align-items: center;
 }
-
 .setting-row .col.description {
   float: left;
   padding-right: 15px;
   cursor: default;
 }
-
 .setting-row .col.action {
   float: right;
   text-align: right;
@@ -221,16 +218,17 @@ button.switch {
   margin-inline-start: 12px;
   padding: 8px;
 }
-
-button.switch.disabled,
-button.switch[disabled] {
-  color: rgba(var(--spice-rgb-text), 0.3);
-}
-
 button.switch.small {
   width: 22px;
   height: 22px;
   padding: 6px;
+}
+button.switch.disabled, button.switch[disabled] {
+  color: rgba(var(--spice-rgb-text), 0.3);
+}
+button.switch--tab-toggle[disabled] {
+  opacity: 0;
+  pointer-events: none;
 }
 /* Need to hijack height because .GenericModal has it set to 90% via style attr... */
 .GenericModal[aria-label="Reload required"] {

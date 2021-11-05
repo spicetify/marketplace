@@ -92,10 +92,18 @@ const TabBar = react.memo(({ allLinks, enabledLinks, activeLink, switchCallback,
     const [droplistItem, setDroplistItems] = useState([]);
 
     // Key is the tab name, value is also the tab name, active is if it's active
-    const options = allLinks.map((key) => {
+    let options = allLinks.map((key) => {
         const active = key === activeLink;
         const hidden = !enabledLinks.includes(key);
         return ({ key, value: key, active, hidden });
+    });
+
+    // Sort the tabs into the desired order
+    // TODO: optimize
+    options = options.sort((a, b) => {
+        const indexA = enabledLinks.indexOf(a.key);
+        const indexB = enabledLinks.indexOf(b.key);
+        return indexA - indexB;
     });
 
     useEffect(() => {
