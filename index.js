@@ -210,7 +210,7 @@ class Grid extends react.Component {
             let pageOfRepos = await getRepos(requestPage);
             for (const repo of pageOfRepos) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
-                console.log(repo.name, extensions);
+
 
                 // I believe this stops the requests when switching tabs?
                 if (requestQueue.length > 1 && queue !== requestQueue[0]) {
@@ -389,9 +389,9 @@ async function getRepos(page = 1) {
     const allRepos = await Spicetify.CosmosAsync.get(url);
     const blacklist = await getBlacklist();
     const arrToReturn = [];
-    console.log(allRepos.items);
+
     for (let i = 0; i<allRepos.items.length;i++) {
-        console.log(allRepos.items[i].html_url);
+
         if (blacklist.includes(allRepos.items[i].html_url)) {
             delete allRepos.items[i];
         } else {
@@ -399,7 +399,7 @@ async function getRepos(page = 1) {
         }
 
     }
-console.log(arrToReturn);
+
     return arrToReturn;
 }
 
@@ -476,9 +476,6 @@ async function getBlacklist() {
     const asArr = [];
 
     for (let i = 0; i < jsonReturned.documents.length; i++ ) {
-        console.log(i);
-        console.log("test");
-        console.log(jsonReturned.documents[i].fields.link.stringValue);
         asArr.push(jsonReturned.documents[i].fields.link.stringValue);
     }
     return asArr;
