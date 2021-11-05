@@ -87,7 +87,7 @@ const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Inf
     const [droplistItem, setDroplistItems] = useState([]);
 
     // Key is the tab name, value is also the tab name, active is if it's active
-    let options = links.map(({ name, enabled }) => {
+    const options = links.map(({ name, enabled }) => {
         const active = name === activeLink;
         return ({ key: name, value: name, active, enabled });
     });
