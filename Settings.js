@@ -24,14 +24,12 @@ function openConfig() {
     const tabsContainer = document.createElement("div");
 
     function stackTabElements() {
-        CONFIG.tabs.forEach((name, index) => {
+
+        CONFIG.tabs.forEach(({ name }, index) => {
             const el = CONFIG.tabsElement[name];
 
             const [ up, down ] = el.querySelectorAll("button");
-            if (CONFIG.tabs.length === 1) {
-                up.disabled = true;
-                down.disabled = true;
-            } else if (index === 0) {
+            if (index === 0) {
                 up.disabled = true;
                 down.disabled = false;
             } else if (index === (CONFIG.tabs.length - 1)) {
@@ -44,19 +42,18 @@ function openConfig() {
 
             tabsContainer.append(el);
         });
+
         gridUpdateTabs && gridUpdateTabs();
     }
 
     function posCallback(el, dir) {
         const id = el.dataset.id;
-        const curPos = CONFIG.tabs.findIndex((val) => val === id);
+        const curPos = CONFIG.tabs.findIndex(({ name }) => name === id);
         const newPos = curPos + dir;
 
-        if (CONFIG.tabs.length > 1) {
-            const temp = CONFIG.tabs[newPos];
-            CONFIG.tabs[newPos] = CONFIG.tabs[curPos];
-            CONFIG.tabs[curPos] = temp;
-        }
+        const temp = CONFIG.tabs[newPos];
+        CONFIG.tabs[newPos] = CONFIG.tabs[curPos];
+        CONFIG.tabs[curPos] = temp;
 
         localStorage.setItem(
             LOCALSTORAGE_KEYS.tabs,
@@ -66,21 +63,34 @@ function openConfig() {
         stackTabElements();
     }
 
-    function removeCallback(el) {
+    function toggleCallback(el) {
+
         const id = el.dataset.id;
-        CONFIG.tabs = CONFIG.tabs.filter(s => s != id);
+        const slider = el.querySelector(".switch--tab-toggle");
+
+        // If we're removing the tab, it's not in the enabled tabs list
+        const toRemove = slider.classList.toggle("disabled");
+        const tabItem = CONFIG.tabs.filter(({ name }) => name === id)[0];
+
+        // Enable/disable tab
+        tabItem.enabled = !toRemove;
+
+        // Always "remove" because it re-adds it with the right settings/order in stackTabElements()
         CONFIG.tabsElement[id].remove();
 
+        // Persist the new enabled tabs
         localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
 
+        // Refresh
         stackTabElements();
     }
 
-    CONFIG.tabs.forEach(name => {
+    // Create the tabs settings DOM elements
+    CONFIG.tabs.forEach(({ name }) => {
         CONFIG.tabsElement[name] = createTabOption(
             name,
             posCallback,
-            removeCallback,
+            toggleCallback,
         );
     });
     stackTabElements();
@@ -119,8 +129,8 @@ function openConfig() {
         // TODO: add these features maybe?
         // createSlider("Followers count", "followers"),
         // createSlider("Post type", "type"),
-        // tabsHeader,
-        // tabsContainer,
+        tabsHeader,
+        tabsContainer,
         resetHeader,
         resetContainer,
     );
@@ -157,7 +167,7 @@ function createSlider(name, key) {
     return container;
 }
 
-function createTabOption(id, posCallback, removeCallback) {
+function createTabOption(id, posCallback, toggleCallback) {
     const container = document.createElement("div");
     container.dataset.id = id;
     container.innerHTML = `
@@ -174,8 +184,8 @@ function createTabOption(id, posCallback, removeCallback) {
                     ${Spicetify.SVGIcons["chart-down"]}
                 </svg>
             </button>
-            <button class="switch small">
-                <svg height="10" width="10" viewBox="0 0 16 16" fill="currentColor">
+            <button class="switch switch--tab-toggle" ${id === "Marketplace" ? "disabled" : ""}>
+                <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                     ${Spicetify.SVGIcons["x"]}
                 </svg>
             </button>
@@ -186,7 +196,9 @@ function createTabOption(id, posCallback, removeCallback) {
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);
-    remove.onclick = () => removeCallback(container);
+    const tabItem = CONFIG.tabs.filter(({ name }) => name === id)[0];
+    remove.classList.toggle("disabled", !tabItem.enabled);
+    remove.onclick = () => toggleCallback(container);
 
     return container;
 }

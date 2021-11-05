@@ -69,6 +69,7 @@
         "gridUpdateTabs": "writable",
         "gridUpdatePostsVisual": "writable",
         "getInstalledExtensions": "writable",
-        "LOCALSTORAGE_KEYS": "writable"
+        "LOCALSTORAGE_KEYS": "writable",
+        "ALL_TABS": "readonly"
     }
 }

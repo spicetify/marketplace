@@ -1,4 +1,3 @@
-// Run "npm i @type/react" to have this type package available in workspace
 /// <reference types="react" />
 /// <reference types="react-dom" />
 /// <reference path="../spicetify-cli/globals.d.ts" />
@@ -50,17 +49,27 @@ function render() {
         return react.createElement(Grid, { title: "Spicetify Marketplace" });
     }
 }
+
 // Initalize topbar tabs
 // Data initalized in TabBar.js
-let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs) || `["Marketplace", "Installed"]`;
+// eslint-disable-next-line no-redeclare
+const ALL_TABS = [
+    { name: "Marketplace", enabled: true },
+    { name: "Installed", enabled: true },
+];
+let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
 let tabs = [];
 try {
     tabs = JSON.parse(tabsString);
     if (!Array.isArray(tabs)) {
-        throw new Error("");
+        throw new Error("Could not parse marketplace tabs key");
+    } else if (tabs.length === 0) {
+        throw new Error("Empty marketplace tabs key");
+    } else if (tabs.filter(tab => !tab).length > 0) {
+        throw new Error("Falsey marketplace tabs key");
     }
 } catch {
-    tabs = ["Marketplace", "Installed"];
+    tabs = ALL_TABS;
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
 }
 // eslint-disable-next-line no-redeclare
@@ -79,8 +88,8 @@ const CONFIG = {
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
 };
 
-if (!CONFIG.activeTab || !CONFIG.tabs.includes(CONFIG.activeTab)) {
-    CONFIG.activeTab = CONFIG.tabs[0];
+if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTab).length) {
+    CONFIG.activeTab = CONFIG.tabs[0].name;
 }
 
 // Fetches the sorting options, fetched from SortBox.js

@@ -1,8 +1,24 @@
 // eslint-disable-next-line no-redeclare, no-unused-vars
 class TabBarItem extends react.Component {
+    /**
+     * @param {object} props
+     * @param {object} props.item
+     * @param {string} props.item.key
+     * @param {string} props.item.value
+     * @param {boolean} props.item.active
+     * @param {boolean} props.item.enabled
+     * @param {function} props.switchTo
+     */
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+        if (!this.props.item.enabled) return null;
+
         return react.createElement("li", {
             className: "marketplace-tabBar-headerItem",
+            "data-tab": this.props.item.value,
             onClick: (event) => {
                 event.preventDefault();
                 this.props.switchTo(this.props.item.key);
@@ -70,9 +86,10 @@ const TabBar = react.memo(({ links, activeLink, switchCallback, windowSize = Inf
     const [availableSpace, setAvailableSpace] = useState(0);
     const [droplistItem, setDroplistItems] = useState([]);
 
-    const options = links.map((key) => {
-        const active = key === activeLink;
-        return ({ key, value: key, active });
+    // Key is the tab name, value is also the tab name, active is if it's active
+    const options = links.map(({ name, enabled }) => {
+        const active = name === activeLink;
+        return ({ key: name, value: name, active, enabled });
     });
 
     useEffect(() => {
