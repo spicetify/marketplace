@@ -107,6 +107,8 @@ let requestPage = null;
 // https://docs.github.com/en/rest/reference/search#search-repositories
 const ITEMS_PER_REQUEST = 100;
 
+let BLACKLIST = [];
+
 // eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
 
@@ -211,7 +213,6 @@ class Grid extends react.Component {
             for (const repo of pageOfRepos) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
-
                 // I believe this stops the requests when switching tabs?
                 if (requestQueue.length > 1 && queue !== requestQueue[0]) {
                     // Stop this queue from continuing to fetch and append to cards list
@@ -308,6 +309,9 @@ class Grid extends react.Component {
             return;
         }
 
+        // Load blacklist
+        BLACKLIST = await getBlacklist();
+
         this.newRequest(30);
     }
 
@@ -387,20 +391,9 @@ async function getRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allRepos = await Spicetify.CosmosAsync.get(url);
-    const blacklist = await getBlacklist();
-    const arrToReturn = [];
+    const filteredArray = allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url));
 
-    for (let i = 0; i<allRepos.items.length;i++) {
-
-        if (blacklist.includes(allRepos.items[i].html_url)) {
-            delete allRepos.items[i];
-        } else {
-            arrToReturn.push(allRepos.items[i]);
-        }
-
-    }
-
-    return arrToReturn;
+    return filteredArray;
 }
 
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
