@@ -1,4 +1,3 @@
-// Run "npm i @type/react" to have this type package available in workspace
 /// <reference types="react" />
 /// <reference types="react-dom" />
 /// <reference path="../spicetify-cli/globals.d.ts" />
@@ -52,17 +51,20 @@ function render() {
 }
 
 // eslint-disable-next-line no-redeclare
-const ALL_TABS = ["Marketplace", "Installed"];
+const ALL_TABS = [
+    { name: "Marketplace", enabled: true },
+    { name: "Installed", enabled: true },
+];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
 let tabs = [];
 try {
     tabs = JSON.parse(tabsString);
     if (!Array.isArray(tabs)) {
-        throw new Error("Could not parse enabledTabs key");
+        throw new Error("Could not parse marketplace tabs key");
     } else if (tabs.length === 0) {
-        throw new Error("Empty enabledTabs key");
+        throw new Error("Empty marketplace tabs key");
     } else if (tabs.filter(tab => !tab).length > 0) {
-        throw new Error("Falsey enabledTabs key");
+        throw new Error("Falsey marketplace tabs key");
     }
 } catch {
     tabs = ALL_TABS;
@@ -79,12 +81,12 @@ const CONFIG = {
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
         followers: localStorage.getItem("marketplace:followers") === "true",
     },
-    enabledTabs: tabs,
+    tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
 };
 
-if (!CONFIG.activeTab || !CONFIG.enabledTabs.includes(CONFIG.activeTab)) {
-    CONFIG.activeTab = CONFIG.enabledTabs[0];
+if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTab).length) {
+    CONFIG.activeTab = CONFIG.tabs[0].name;
 }
 
 // eslint-disable-next-line no-redeclare
@@ -123,7 +125,7 @@ class Grid extends react.Component {
         Object.assign(this, props);
         this.state = {
             cards: [],
-            tabs: CONFIG.enabledTabs,
+            tabs: CONFIG.tabs,
             rest: true,
             endOfList: endOfList,
         };
@@ -168,7 +170,7 @@ class Grid extends react.Component {
 
     updateTabs() {
         this.setState({
-            tabs: [...CONFIG.enabledTabs],
+            tabs: [...CONFIG.tabs],
         });
     }
 
@@ -350,8 +352,7 @@ class Grid extends react.Component {
         ), react.createElement(TopBarContent, {
             // TODO: this is the spot
             switchCallback: this.switchTo.bind(this),
-            allLinks: ALL_TABS,
-            enabledLinks: CONFIG.enabledTabs,
+            links: CONFIG.tabs,
             activeLink: CONFIG.activeTab,
         }));
     }

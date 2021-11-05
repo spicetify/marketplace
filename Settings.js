@@ -25,21 +25,14 @@ function openConfig() {
 
     function stackTabElements() {
 
-        const allEls = [];
-        ALL_TABS.forEach((name) => {
+        CONFIG.tabs.forEach(({ name }, index) => {
             const el = CONFIG.tabsElement[name];
 
-            // Get order in enabled tabs, not order in all tabs
-            const orderInEnabledTabs = CONFIG.enabledTabs.indexOf(name);
-
             const [ up, down ] = el.querySelectorAll("button");
-            if (CONFIG.enabledTabs.length === 1) {
-                up.disabled = true;
-                down.disabled = true;
-            } else if (orderInEnabledTabs === 0) {
+            if (index === 0) {
                 up.disabled = true;
                 down.disabled = false;
-            } else if (orderInEnabledTabs === (CONFIG.enabledTabs.length - 1)) {
+            } else if (index === (CONFIG.tabs.length - 1)) {
                 up.disabled = false;
                 down.disabled = true;
             } else {
@@ -47,35 +40,24 @@ function openConfig() {
                 down.disabled = false;
             }
 
-            allEls.push(el);
+            tabsContainer.append(el);
         });
-
-        // Get the order right
-        let sortedEls = allEls.sort((a, b) => {
-            const indexA = CONFIG.enabledTabs.indexOf(a.dataset.id);
-            const indexB = CONFIG.enabledTabs.indexOf(b.dataset.id);
-            return indexA - indexB;
-        });
-
-        tabsContainer.append(...sortedEls);
 
         gridUpdateTabs && gridUpdateTabs();
     }
 
     function posCallback(el, dir) {
         const id = el.dataset.id;
-        const curPos = CONFIG.enabledTabs.findIndex((val) => val === id);
+        const curPos = CONFIG.tabs.findIndex(({ name }) => name === id);
         const newPos = curPos + dir;
 
-        if (CONFIG.enabledTabs.length > 1) {
-            const temp = CONFIG.enabledTabs[newPos];
-            CONFIG.enabledTabs[newPos] = CONFIG.enabledTabs[curPos];
-            CONFIG.enabledTabs[curPos] = temp;
-        }
+        const temp = CONFIG.tabs[newPos];
+        CONFIG.tabs[newPos] = CONFIG.tabs[curPos];
+        CONFIG.tabs[curPos] = temp;
 
         localStorage.setItem(
             LOCALSTORAGE_KEYS.tabs,
-            JSON.stringify(CONFIG.enabledTabs),
+            JSON.stringify(CONFIG.tabs),
         );
 
         stackTabElements();
@@ -88,28 +70,23 @@ function openConfig() {
 
         // If we're removing the tab, it's not in the enabled tabs list
         const toRemove = slider.classList.toggle("disabled");
+        const tabItem = CONFIG.tabs.filter(({ name }) => name === id)[0];
 
-        if (toRemove) {
-            // Remove tab
-            CONFIG.enabledTabs = CONFIG.enabledTabs.filter(s => s != id);
-        } else {
-            // Add tab
-            // TODO: this shouldn't push to the end, it should go where the DOM order is...
-            CONFIG.enabledTabs.push(id);
-        }
+        // Enable/disable tab
+        tabItem.enabled = !toRemove;
 
         // Always "remove" because it re-adds it with the right settings/order in stackTabElements()
         CONFIG.tabsElement[id].remove();
 
         // Persist the new enabled tabs
-        localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.enabledTabs));
+        localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
 
         // Refresh
         stackTabElements();
     }
 
     // Create the tabs settings DOM elements
-    ALL_TABS.forEach(name => {
+    CONFIG.tabs.forEach(({ name }) => {
         CONFIG.tabsElement[name] = createTabOption(
             name,
             posCallback,
@@ -219,7 +196,8 @@ function createTabOption(id, posCallback, toggleCallback) {
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);
-    remove.classList.toggle("disabled", !CONFIG.enabledTabs.includes(id));
+    const tabItem = CONFIG.tabs.filter(({ name }) => name === id)[0];
+    remove.classList.toggle("disabled", !tabItem.enabled);
     remove.onclick = () => toggleCallback(container);
 
     return container;
