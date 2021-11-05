@@ -50,6 +50,8 @@ function render() {
     }
 }
 
+// Initalize topbar tabs
+// Data initalized in TabBar.js
 // eslint-disable-next-line no-redeclare
 const ALL_TABS = [
     { name: "Marketplace", enabled: true },
@@ -73,6 +75,7 @@ try {
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
     visual: {
+        //Fetch the settings, defined in Settings.js
         type: localStorage.getItem("marketplace:type") === "true",
         stars: localStorage.getItem("marketplace:stars") === "true",
         hideInstalled: localStorage.getItem("marketplace:hideInstalled") === "true",
@@ -89,6 +92,7 @@ if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTa
     CONFIG.activeTab = CONFIG.tabs[0].name;
 }
 
+// Fetches the sorting options, fetched from SortBox.js
 // eslint-disable-next-line no-redeclare
 let sortConfig = {
     by: localStorage.getItem(LOCALSTORAGE_KEYS.sortBy) || "top",
@@ -99,14 +103,16 @@ let endOfList = false;
 let lastScroll = 0;
 let requestQueue = [];
 let requestPage = null;
-// Default GitHub API items per page
-const ITEMS_PER_REQUEST = 30;
+// Max GitHub API items per page
+// https://docs.github.com/en/rest/reference/search#search-repositories
+const ITEMS_PER_REQUEST = 100;
 
 // eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
 
 // eslint-disable-next-line no-unused-vars
 const typesLocale = {
+    // TODO: Remove these, unsure of their purpose.
     album: Spicetify.Locale.get("album"),
     song: Spicetify.Locale.get("song"),
     playlist: Spicetify.Locale.get("playlist"),
@@ -248,8 +254,12 @@ class Grid extends react.Component {
         endOfList = true;
         return null;
     }
-
-    async loadAmount(queue, quantity = 50) {
+    /**
+     * Load a new set of extensions
+     * @param {any} queue An array of the extensions to be loaded
+     * @param {number} [quantity] Amount of extensions to be loaded per page. (Defaults to ITEMS_PER_REQUEST constant)
+     */
+    async loadAmount(queue, quantity = ITEMS_PER_REQUEST) {
         this.setState({ rest: false });
         quantity += cardList.length;
 
@@ -276,7 +286,7 @@ class Grid extends react.Component {
 
     loadMore() {
         if (this.state.rest && !endOfList) {
-            this.loadAmount(requestQueue[0], 50);
+            this.loadAmount(requestQueue[0], ITEMS_PER_REQUEST);
         }
     }
 
@@ -358,7 +368,7 @@ class Grid extends react.Component {
 }
 
 // TODO: add license filter or anything?
-// TODO: add sort type, order, paging, etc?
+// TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
@@ -368,7 +378,7 @@ class Grid extends react.Component {
  */
 async function getRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
     // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
     if (page) url += `&page=${page}`;
@@ -417,12 +427,10 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-
         let manifests = await getRepoManifest(user, repo, branch);
         console.log(`${user}/${repo}`, manifests);
-
+        // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-
         // Remove installed extensions from manifests list if we don't want to show them
         if (CONFIG.visual.hideInstalled) {
             manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
