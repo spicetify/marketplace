@@ -24,8 +24,9 @@ function openConfig() {
     const tabsContainer = document.createElement("div");
 
     function stackTabElements() {
+
+        const allEls = [];
         ALL_TABS.forEach((name) => {
-        // CONFIG.enabledTabs.forEach((name, index) => {
             const el = CONFIG.tabsElement[name];
 
             // Get order in enabled tabs, not order in all tabs
@@ -46,8 +47,18 @@ function openConfig() {
                 down.disabled = false;
             }
 
-            tabsContainer.append(el);
+            allEls.push(el);
         });
+
+        // Get the order right
+        let sortedEls = allEls.sort((a, b) => {
+            const indexA = CONFIG.enabledTabs.indexOf(a.dataset.id);
+            const indexB = CONFIG.enabledTabs.indexOf(b.dataset.id);
+            return indexA - indexB;
+        });
+
+        tabsContainer.append(...sortedEls);
+
         gridUpdateTabs && gridUpdateTabs();
     }
 
@@ -81,11 +92,14 @@ function openConfig() {
         if (toRemove) {
             // Remove tab
             CONFIG.enabledTabs = CONFIG.enabledTabs.filter(s => s != id);
-            // CONFIG.tabsElement[id].remove();
         } else {
             // Add tab
+            // TODO: this shouldn't push to the end, it should go where the DOM order is...
             CONFIG.enabledTabs.push(id);
         }
+
+        // Always "remove" because it re-adds it with the right settings/order in stackTabElements()
+        CONFIG.tabsElement[id].remove();
 
         // Persist the new enabled tabs
         localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.enabledTabs));
