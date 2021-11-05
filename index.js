@@ -350,7 +350,6 @@ class Grid extends react.Component {
             },
         }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon)),
         ), react.createElement(TopBarContent, {
-            // TODO: this is the spot
             switchCallback: this.switchTo.bind(this),
             links: CONFIG.tabs,
             activeLink: CONFIG.activeTab,
