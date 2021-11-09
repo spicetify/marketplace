@@ -29,6 +29,7 @@ const LOCALSTORAGE_KEYS = {
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
     "sortTime": "marketplace:sort-time",
+    "themeInstalled:": "marketplace:theme-installed",
 };
 
 // Define a function called "render" to specify app entry point
@@ -210,7 +211,6 @@ class Grid extends react.Component {
             let pageOfRepos = await getRepos(requestPage);
             for (const repo of pageOfRepos) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
-
 
                 // I believe this stops the requests when switching tabs?
                 if (requestQueue.length > 1 && queue !== requestQueue[0]) {

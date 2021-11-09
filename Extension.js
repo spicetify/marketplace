@@ -19,8 +19,22 @@
         "installedExtensions": "marketplace:installed-extensions",
         "activeTab": "marketplace:active-tab",
         "tabs": "marketplace:tabs",
+        "themeInstalled": "marketplace:theme-installed",
     };
 
+    if (LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled) != null) {
+        let all = document.getElementsByTagName("*");
+        console.log(all);
+        for (let i = 0, max = all.length; i < max; i++) {
+            // Error annoys me but don't feel like figuring out casting in JS + It works.
+            if (all[i].href == "https://xpui.app.spotify.com/user.css") {
+                all[i].remove();
+                const usercss = document.createElement("link");
+                usercss.href = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
+                document.body.appendChild(usercss);
+            }
+        }
+    }
     const getInstalledExtensions = () => {
         const installedExtensionsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
         const installedExtensions = JSON.parse(installedExtensionsStr);
