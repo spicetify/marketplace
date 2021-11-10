@@ -29,6 +29,7 @@ const LOCALSTORAGE_KEYS = {
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
     "sortTime": "marketplace:sort-time",
+    //TODO: Implement themeInstalled, referenced in Extension.js(line 25)
     "themeInstalled:": "marketplace:theme-installed",
 };
 
@@ -55,7 +56,8 @@ function render() {
 // Data initalized in TabBar.js
 // eslint-disable-next-line no-redeclare
 const ALL_TABS = [
-    { name: "Marketplace", enabled: true },
+    { name: "Extensions", enabled: true },
+    { name: "Themes", enabled: true },
     { name: "Installed", enabled: true },
 ];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
@@ -207,7 +209,7 @@ class Grid extends react.Component {
     // Returns the next page number to fetch, or null if at end
     // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
     async loadPage(queue) {
-        if (CONFIG.activeTab === "Marketplace") {
+        if (CONFIG.activeTab === "Extensions") {
             let pageOfRepos = await getRepos(requestPage);
             for (const repo of pageOfRepos) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -248,6 +250,29 @@ class Grid extends react.Component {
 
             // Don't need to return a page number because
             // installed extension do them all in one go, since it's local
+        } else if (CONFIG.activeTab == "Themes") {
+            let pageOfRepos = await getThemeRepos(requestPage);
+            console.log(pageOfRepos);
+            for (const repo of pageOfRepos.items) {
+                
+                let themes = await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count);
+                // I believe this stops the requests when switching tabs?
+                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                    // Stop this queue from continuing to fetch and append to cards list
+                    return -1;
+                }
+
+                if (themes && themes.length) {
+                    themes.forEach((theme) => this.appendCard(theme));
+                }
+            }
+
+            // First request is null, so coerces to 1
+            const currentPage = requestPage || 1;
+            // -1 because the page number is 1-indexed
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
+            const remainingResults = pageOfRepos.length - soFarResults;
+            if (remainingResults) return currentPage + 1;
         }
 
         this.setState({ rest: true, endOfList: true });
@@ -447,7 +472,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
             manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
 
         }
-
+        //TODO: Add logic to prevent invalid repos from being displayed
         // Manifest is initially parsed
         const parsedManifests = manifests.map((manifest) => ({
             manifest,
@@ -470,6 +495,54 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
     }
 }
 
+async function fetchThemes(contents_url, branch, stars) {
+    try {
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        const { user, repo } = regex_result.groups;
+        let manifests= await getRepoManifest(user, repo, branch);
+
+        console.log(manifests);
+        // If the manifest returned is not an array, initialize it as one
+        if (!Array.isArray(manifests)) manifests = [manifests];
+        // Manifest is initially parsed
+        //TODO: Add logic to prevent invalid repos from being displayed
+        const parsedManifests = manifests.map((manifest) => ({
+            manifest,
+            title: manifest.name,
+            subtitle: manifest.description,
+            user,
+            repo,
+            branch,
+            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+            cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
+            colorURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
+            readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+            stars,
+        }));
+        console.log(parsedManifests);
+        return parsedManifests;
+    }
+    catch (err) {
+        console.warn(contents_url, err);
+        return null;
+    }
+}
+
+async function getThemeRepos(page = 1) {
+    // www is needed or it will block with "cross-origin" error.
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
+
+    // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
+    // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
+    if (page) url += `&page=${page}`;
+    // Sorting params (not implemented for Marketplace yet)
+    // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
+    //     url += `&t=${sortConfig.time}`
+    const allThemes = await Spicetify.CosmosAsync.get(url);
+    return allThemes;
+}
 async function getBlacklist() {
     const url = "https://firestore.googleapis.com/v1/projects/spicetify-marketplace/databases/%28default%29/documents/blacklist?pageSize=300";
     const jsonReturned = await Spicetify.CosmosAsync.get(url);
@@ -481,23 +554,3 @@ async function getBlacklist() {
     return asArr;
 }
 
-// function postMapper(posts) {
-//     let mappedPosts = [];
-//     posts.forEach(post => {
-//         let uri = URI.from(post.data.url);
-//         if (uri && (
-//             uri.type == "playlist" ||
-//             uri.type == "playlist-v2" ||
-//             uri.type == "track" ||
-//             uri.type == "album"
-//         )) {
-//             mappedPosts.push({
-//                 uri: uri.toURI(),
-//                 type: uri.type,
-//                 title: post.data.title,
-//                 upvotes: post.data.ups
-//             });
-//         }
-//     });
-//     return mappedPosts;
-// }
