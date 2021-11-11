@@ -235,7 +235,21 @@ class Grid extends react.Component {
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
-            installedExtensions.forEach((extensionKey) => {
+            if (Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) != null) {
+                const thememani = await Spicetify.CosmosAsync.get(Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) + "/manifest.json");
+                const schemeOptions = await parseColorIni(thememani);
+                console.log(schemeOptions);
+                react.createElement("div", {
+                    className: "marketplace-sort-bar",
+                }, react.createElement("div", {
+                    className: "marketplace-sort-container",
+                }, react.createElement(OptionsMenu, {
+                    options: schemeOptions.schemeNameArr,
+                    onSelect: (by) => this.props.onChange(by, null),
+                    selected: schemeOptions.schemeNameArr,
+                })));
+            }
+            installedExtensions.forEach(async (extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
 
@@ -252,9 +266,8 @@ class Grid extends react.Component {
             // installed extension do them all in one go, since it's local
         } else if (CONFIG.activeTab == "Themes") {
             let pageOfRepos = await getThemeRepos(requestPage);
-            console.log(pageOfRepos);
             for (const repo of pageOfRepos.items) {
-                
+
                 let themes = await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 // I believe this stops the requests when switching tabs?
                 if (requestQueue.length > 1 && queue !== requestQueue[0]) {
@@ -359,18 +372,15 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
-        // TODO: Add search bar and sort functionality
-        // react.createElement("div", {
-        //     className: "searchbar--bar__wrapper",
-        // }, react.createElement("input", {
-        //     className: "searchbar-bar",
-        //     type: "text",
-        //     placeholder: "Search for Extensions?",
-        // })),
-        // react.createElement(SortBox, {
-        //     onChange: this.updateSort.bind(this),
-        //     onTabsChange: this.updateTabs.bind(this),
-        // })
+            // TODO: Add search bar and sort functionality
+            // react.createElement("div", {
+            //     className: "searchbar--bar__wrapper",
+            // }, react.createElement("input", {
+            //     className: "searchbar-bar",
+            //     type: "text",
+            //     placeholder: "Search for Extensions?",
+            // })),
+
         ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
@@ -503,7 +513,6 @@ async function fetchThemes(contents_url, branch, stars) {
         const { user, repo } = regex_result.groups;
         let manifests= await getRepoManifest(user, repo, branch);
 
-        console.log(manifests);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
         // Manifest is initially parsed
@@ -521,7 +530,6 @@ async function fetchThemes(contents_url, branch, stars) {
             readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
             stars,
         }));
-        console.log(parsedManifests);
         return parsedManifests;
     }
     catch (err) {
@@ -553,4 +561,29 @@ async function getBlacklist() {
     }
     return asArr;
 }
-
+/**
+* @param {string} repo The manifest of the theme
+*/
+async function parseColorIni(repo) {
+    const url = Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) + repo.schemes;
+    const response = await fetch(url);
+    //Data is the entire raw color.ini text
+    const data = await response.text();
+    //Data split is the first step in splitting each theme
+    let dataSplit = data.split("[");
+    const schemeNameArr = [];
+    const schemeArr = [];
+    const colorsArr = [];
+    // Every theme is seperated here
+    dataSplit.forEach(i =>  schemeArr.push(i.split("]")));
+    //Remove the first value of the schemeArr array as it is blank
+    schemeArr.shift();
+    //Fetch the name of every scheme
+    schemeArr.forEach(i => schemeNameArr.push(i[0]));
+    // Get rid of everything following a ";", as well as all the new lines, leaving us with the raw formatted colors (which correspond to the index of the theme name.)
+    schemeArr.forEach(i => colorsArr.push(i[1].replace(/^;.*\n?/m, "")));
+    return {
+        schemeNameArr,
+        colorsArr,
+    };
+}

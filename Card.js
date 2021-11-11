@@ -74,7 +74,6 @@ class Card extends react.Component {
             // TODO: This implementation could probably be improved.
             // It might have issues when quickly switching between tabs.
             const repoData = await Spicetify.CosmosAsync.get(url);
-            console.log(repoData);
 
             if (this.state.stars !== repoData.stargazers_count) {
                 this.setState({ stars: repoData.stargazers_count }, () => {
@@ -130,8 +129,6 @@ class Card extends react.Component {
             console.log("Removed");
             this.setState({ installed: false });
             openReloadModal();
-        } else {
-            console.log(`Extension ${this.localStorageKey} not found`);
         }
     }
 
