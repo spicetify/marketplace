@@ -438,7 +438,6 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // Remove installed extensions from manifests list if we don't want to show them
         if (CONFIG.visual.hideInstalled) {
             manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
-
         }
 
         // Manifest is initially parsed
@@ -464,14 +463,15 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
 }
 
 async function getBlacklist() {
-    const url = "https://firestore.googleapis.com/v1/projects/spicetify-marketplace/databases/%28default%29/documents/blacklist?pageSize=300";
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await Spicetify.CosmosAsync.get(url);
-    const asArr = [];
+    // const jsonReturned = {
+    //     "repos": [
+    //         "https://github.com/theRealPadster/spicetify-hide-podcasts",
+    //     ],
+    // };
 
-    for (let i = 0; i < jsonReturned.documents.length; i++ ) {
-        asArr.push(jsonReturned.documents[i].fields.link.stringValue);
-    }
-    return asArr;
+    return jsonReturned.repos;
 }
 
 // function postMapper(posts) {
