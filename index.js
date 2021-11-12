@@ -39,7 +39,7 @@ function render() {
 
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
-    if (location.state.page === "readme") {
+    if (location.pathname === "/spicetify-marketplace/readme") {
         return react.createElement(ReadmePage, {
             title: "Spicetify Marketplace - Readme",
             data: location.state.data,
