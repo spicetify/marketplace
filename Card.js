@@ -137,9 +137,8 @@ class Card extends react.Component {
         // It still runs but nothing happens.
         // Something with the location object (hash or something)?
         Spicetify.Platform.History.push({
-            pathname: "/spicetify-marketplace",
+            pathname: "/spicetify-marketplace/readme",
             state: {
-                page: "readme",
                 data: {
                     title: this.title,
                     user: this.user,
@@ -169,7 +168,7 @@ class Card extends react.Component {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
             className: cardClasses.join(" "),
-            // onClick: () => this.openReadme(),
+            onClick: () => this.openReadme(),
         }, react.createElement("div", {
             className: "main-card-draggable",
             draggable: "true",

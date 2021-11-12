@@ -41,7 +41,7 @@ function render() {
 
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
-    if (location.state.page === "readme") {
+    if (location.pathname === "/spicetify-marketplace/readme") {
         return react.createElement(ReadmePage, {
             title: "Spicetify Marketplace - Readme",
             data: location.state.data,
@@ -109,6 +109,8 @@ let requestPage = null;
 // Max GitHub API items per page
 // https://docs.github.com/en/rest/reference/search#search-repositories
 const ITEMS_PER_REQUEST = 100;
+
+let BLACKLIST = [];
 
 // eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
@@ -346,6 +348,9 @@ class Grid extends react.Component {
             return;
         }
 
+        // Load blacklist
+        BLACKLIST = await getBlacklist();
+
         this.newRequest(30);
     }
 
@@ -422,20 +427,9 @@ async function getRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allRepos = await Spicetify.CosmosAsync.get(url);
-    const blacklist = await getBlacklist();
-    const arrToReturn = [];
+    const filteredArray = allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url));
 
-    for (let i = 0; i<allRepos.items.length;i++) {
-
-        if (blacklist.includes(allRepos.items[i].html_url)) {
-            delete allRepos.items[i];
-        } else {
-            arrToReturn.push(allRepos.items[i]);
-        }
-
-    }
-
-    return arrToReturn;
+    return filteredArray;
 }
 
 // e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
@@ -480,7 +474,6 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // Remove installed extensions from manifests list if we don't want to show them
         if (CONFIG.visual.hideInstalled) {
             manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
-
         }
         //TODO: Add logic to prevent invalid repos from being displayed
         // Manifest is initially parsed
@@ -552,14 +545,15 @@ async function getThemeRepos(page = 1) {
     return allThemes;
 }
 async function getBlacklist() {
-    const url = "https://firestore.googleapis.com/v1/projects/spicetify-marketplace/databases/%28default%29/documents/blacklist?pageSize=300";
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await Spicetify.CosmosAsync.get(url);
-    const asArr = [];
+    // const jsonReturned = {
+    //     "repos": [
+    //         "https://github.com/theRealPadster/spicetify-hide-podcasts",
+    //     ],
+    // };
 
-    for (let i = 0; i < jsonReturned.documents.length; i++ ) {
-        asArr.push(jsonReturned.documents[i].fields.link.stringValue);
-    }
-    return asArr;
+    return jsonReturned.repos;
 }
 /**
 * @param {string} repo The manifest of the theme
