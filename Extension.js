@@ -6,7 +6,51 @@
 
 /// <reference path="../spicetify-cli/globals.d.ts" />
 
-(function MarketplaceExtension() {
+const parseIni = (data) => {
+    const regex = {
+        section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
+        param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
+        comment: /^\s*;.*$/,
+    };
+    let value = {};
+    let lines = data.split(/[\r\n]+/);
+    let section = null;
+    lines.forEach(function(line) {
+        if (regex.comment.test(line)) {
+            return;
+        } else if (regex.param.test(line)) {
+            let match = line.match(regex.param);
+            if (section) {
+                value[section][match[1]] = match[2];
+            } else {
+                value[match[1]] = match[2];
+            }
+        } else if (regex.section.test(line)) {
+            let match = line.match(regex.section);
+            value[match[1]] = {};
+            section = match[1];
+        } else if (line.length == 0 && section) {
+            section = null;
+        }
+    });
+    return value;
+};
+
+const hexToRGB = (hex) => {
+    if (hex.length != 6) {
+        throw "Only six-digit hex colors are allowed.";
+    }
+
+    const aRgbHex = hex.match(/.{1,2}/g);
+    const aRgb = [
+        parseInt(aRgbHex[0], 16),
+        parseInt(aRgbHex[1], 16),
+        parseInt(aRgbHex[2], 16),
+    ];
+    return aRgb;
+};
+
+(async function MarketplaceExtension() {
     const { LocalStorage } = Spicetify;
     if (!(LocalStorage)) {
         // console.log('Not ready, waiting...');
@@ -22,19 +66,61 @@
         //Theme installed needs to store a link similar to this ("https://raw.githubusercontent.com/CharlieS1103/Dreary/main/")
         "themeInstalled": "marketplace:theme-installed",
     };
-    console.log(LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled));
-    if (LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled) != null) {
-        let all = document.getElementsByTagName("*");
-        for (let i = 0, max = all.length; i < max; i++) {
-            // Error annoys me but don't feel like figuring out casting in JS + It works.
-            if (all[i].href == "https://xpui.app.spotify.com/user.css") {
-                all[i].remove();
-                const usercss = document.createElement("link");
-                usercss.href = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled) + "/user.css";
-                document.body.appendChild(usercss);
-            }
+
+    // console.log(LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled));
+
+    const fetchSchemes = async (url) => {
+        const response = await fetch(url);
+        const text = await response.json();
+        return text;
+    };
+
+    const injectColourScheme = (scheme) => {
+        const themeTag = document.createElement("style");
+        themeTag.classList.add("marketplaceCSS");
+        // const theme = document.querySelector('#theme');
+        let injectStr = ":root {";
+        const themeIniKeys = Object.keys(scheme);
+        themeIniKeys.forEach((key) => {
+            injectStr += `--spice-${key}: #${scheme[key]};`;
+            injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+        });
+        injectStr += "}";
+        themeTag.innerHTML = injectStr;
+        document.head.appendChild(themeTag);
+    };
+
+    const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
+    console.log(installedThemeKey);
+
+    // TODO: tidy this up
+    if (installedThemeKey) {
+        const installedThemeDataStr = LocalStorage.get(installedThemeKey);
+
+        if (installedThemeDataStr) {
+            const installedThemeData = JSON.parse(installedThemeDataStr);
+            // https://api.github.com/repos/CharlieS1103/Dreary/contents/Dreary/color.ini
+            const iniUrl = `https://api.github.com/repos/${installedThemeData.user}/${installedThemeData.repo}/contents/${installedThemeData.manifest.schemes}`;
+            // console.log(iniUrl);
+
+            const colourSchemesResult = await fetchSchemes(iniUrl);
+            const colourSchemes = atob(colourSchemesResult.content);
+            const parsedSchemes = parseIni(colourSchemes);
+            console.log(parsedSchemes);
+            const firstScheme = Object.values(parsedSchemes)[0];
+            injectColourScheme(firstScheme);
         }
+
+        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+        existingUserThemeCSS.remove();
+        const newUserThemeCSS = document.createElement("link");
+        newUserThemeCSS.href = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled); // + "/user.css";
+        // TODO: adding the rel="stylesheet" attribute makes it not load since github raw doesn't provide mimetypes
+        // newUserThemeCSS.rel = "stylesheet";
+        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
+        document.body.appendChild(newUserThemeCSS);
     }
+
     const getInstalledExtensions = () => {
         const installedExtensionsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
         const installedExtensions = JSON.parse(installedExtensionsStr);
@@ -51,7 +137,8 @@
 
     const initializeExtension = (extensionKey) => {
         const extensionManifest = getExtensionFromKey(extensionKey);
-        if (!extensionManifest) return;
+        // Abort if no manifest found or no extension URL (i.e. a theme)
+        if (!extensionManifest || !extensionManifest.extensionURL) return;
 
         console.log("Initializing extension: ", extensionManifest);
 

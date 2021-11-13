@@ -30,7 +30,7 @@ const LOCALSTORAGE_KEYS = {
     "sortBy": "marketplace:sort-by",
     "sortTime": "marketplace:sort-time",
     //TODO: Implement themeInstalled, referenced in Extension.js(line 25)
-    "themeInstalled:": "marketplace:theme-installed",
+    "themeInstalled": "marketplace:theme-installed",
 };
 
 // Define a function called "render" to specify app entry point
@@ -149,10 +149,15 @@ class Grid extends react.Component {
         this.loadAmount(queue, amount);
     }
 
-    appendCard(item) {
+    /**
+     * @param {Object} item
+     * @param {"extension" | "theme"} type The type of card
+     */
+    appendCard(item, type) {
         item.visual = CONFIG.visual;
         // Set key prop so items don't get stuck when switching tabs
         item.key = `${CONFIG.activeTab}:${item.title}`;
+        item.type = type;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
@@ -223,7 +228,7 @@ class Grid extends react.Component {
                 }
 
                 if (extensions && extensions.length) {
-                    extensions.forEach((extension) => this.appendCard(extension));
+                    extensions.forEach((extension) => this.appendCard(extension, "extension"));
                 }
             }
 
@@ -261,7 +266,8 @@ class Grid extends react.Component {
                     return -1;
                 }
 
-                this.appendCard(extension);
+                // TODO: this needs to know which is a theme vs extension
+                this.appendCard(extension, "extension");
             });
 
             // Don't need to return a page number because
@@ -278,7 +284,7 @@ class Grid extends react.Component {
                 }
 
                 if (themes && themes.length) {
-                    themes.forEach((theme) => this.appendCard(theme));
+                    themes.forEach((theme) => this.appendCard(theme, "theme"));
                 }
             }
 

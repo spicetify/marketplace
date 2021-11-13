@@ -29,9 +29,11 @@ class Card extends react.Component {
         // From `appendCard()`
         /** @type { { type: string; stars: string; } } */
         this.visual;
+        /** @type { "extension" | "theme" } */
+        this.type;
 
         // From `fetchRepoExtensions()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string; } } */
+        /** @type { { name: string; description: string; main: string; preview: string; readme: string; usercss?: string; schemes?: string; } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -55,7 +57,7 @@ class Card extends react.Component {
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.manifest.main}`;
+        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.type === "theme" ? props.manifest.usercss : props.manifest.main}`;
 
         Object.assign(this, props);
 
@@ -84,12 +86,35 @@ class Card extends react.Component {
         }
     }
 
+    buttonClicked() {
+        if (this.type === "extension") {
+            if (this.state.installed) {
+                console.log("Extension already installed, removing");
+                this.removeExtension();
+            } else {
+                this.installExtension();
+            }
+        } else if (this.type === "theme") {
+            if (this.state.installed) {
+                console.log("Theme already installed, removing");
+                this.removeTheme(this.localStorageKey);
+            } else {
+                // Remove theme if already installed, then install the new theme
+                this.removeTheme();
+                this.installTheme();
+            }
+        } else {
+            console.error("Unknown card type");
+        }
+    }
+
     installExtension() {
         console.log(`Installing extension ${this.localStorageKey}`);
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
         localStorage.setItem(this.localStorageKey, JSON.stringify({
             manifest: this.manifest,
+            type: this.type,
             title: this.title,
             subtitle: this.subtitle,
             user: this.user,
@@ -129,6 +154,83 @@ class Card extends react.Component {
             console.log("Removed");
             this.setState({ installed: false });
             openReloadModal();
+        }
+    }
+
+    installTheme() {
+        console.log(`Installing theme ${this.localStorageKey}`);
+
+        // Add to localstorage (this stores a copy of all the card props in the localstorage)
+        // TODO: refactor/clean this up
+        localStorage.setItem(this.localStorageKey, JSON.stringify({
+            manifest: this.manifest,
+            type: this.type,
+            title: this.title,
+            subtitle: this.subtitle,
+            user: this.user,
+            repo: this.repo,
+            branch: this.branch,
+            imageURL: this.imageURL,
+            extensionURL: this.extensionURL,
+            readmeURL: this.readmeURL,
+            stars: this.state.stars,
+        }));
+
+        // TODO: handle this differently?
+
+        // Add to installed list if not there already
+        const installedExtensions = getInstalledExtensions();
+        if (installedExtensions.indexOf(this.localStorageKey) === -1) {
+            installedExtensions.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+
+            // const usercssURL = `https://raw.github.com/${this.user}/${this.repo}/${this.branch}/${this.manifest.usercss}`;
+            localStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+        }
+
+        console.log("Installed");
+        this.setState({ installed: true });
+        // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
+    }
+
+    removeTheme(themeKey = null) {
+        const themeValue = themeKey && localStorage.getItem(themeKey);
+        // console.log(JSON.parse(themeValue));
+        if (themeValue) {
+            console.log(`Removing theme ${this.localStorageKey}`);
+            // Remove from localstorage
+            localStorage.removeItem(this.localStorageKey);
+
+            // Remove from installed list
+            const installedExtensions = getInstalledExtensions();
+            const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+
+            localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
+
+            console.log("Removed");
+            this.setState({ installed: false });
+            openReloadModal();
+        } else {
+            // TODO: consolidate these two code paths
+            const installedTheme = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+            if (installedTheme) {
+                console.log(`No theme to remove specified, removing installed theme ${installedTheme}`);
+
+                // Remove from localstorage
+                localStorage.removeItem(installedTheme);
+
+                // Remove record of installed theme
+                localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
+
+                // Remove from installed list
+                const installedExtensions = getInstalledExtensions();
+                const remainingInstalledExtensions = installedExtensions.filter((key) => key !== installedTheme);
+                localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+
+                console.log("Removed");
+                // openReloadModal();
+            }
         }
     }
 
@@ -199,12 +301,7 @@ class Card extends react.Component {
             style: { "--size": "40px" },
             onClick: (e) => {
                 e.stopPropagation();
-                if (localStorage.getItem(this.localStorageKey) == null) {
-                    this.installExtension();
-                } else {
-                    console.log("Extension already installed, removing");
-                    this.removeExtension();
-                }
+                this.buttonClicked();
             },
         },
         this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
