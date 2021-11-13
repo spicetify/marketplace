@@ -6,14 +6,15 @@ class SortBox extends react.Component {
     }
 
     render() {
-        const sortBySelected = props.sortByOptionsfilter(a => a.key === sortConfig.by)[0];
+        // TODO: what does this sortConfig filter do?
+        const sortBySelected = this.props.sortByOptions.filter(a => a.key === sortConfig.by)[0];
 
         return react.createElement("div", {
             className: "marketplace-sort-bar",
         }, react.createElement("div", {
             className: "marketplace-sort-container",
         }, react.createElement(OptionsMenu, {
-            options: props.sortByOptions,
+            options: this.props.sortByOptions,
             onSelect: (by) => this.props.onChange(by, null),
             selected: sortBySelected,
         })));

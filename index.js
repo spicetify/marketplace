@@ -376,7 +376,14 @@ class Grid extends react.Component {
         }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
             onChange: this.updateSort.bind(this),
-            onServicesChange: this.updateTabs.bind(this),
+            // TODO: add the colour scheme options
+            sortByOptions:  [
+                { key: "hot", value: "Hot" },
+                { key: "new", value: "New" },
+                { key: "top", value: "Top" },
+                { key: "rising", value: "Rising" },
+                { key: "controversial", value: "Controversial" },
+            ],
         }),
 
             // TODO: Add search bar and sort functionality
@@ -546,6 +553,7 @@ async function getThemeRepos(page = 1) {
     const allThemes = await Spicetify.CosmosAsync.get(url);
     return allThemes;
 }
+
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await Spicetify.CosmosAsync.get(url);
@@ -557,6 +565,7 @@ async function getBlacklist() {
 
     return jsonReturned.repos;
 }
+
 /**
 * @param {string} repo The manifest of the theme
 */
