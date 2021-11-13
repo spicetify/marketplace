@@ -116,10 +116,10 @@ const hexToRGB = (hex) => {
 
             // Add theme css
             const newUserThemeCSS = document.createElement("link");
-            const cssUrl = `https://raw.githubusercontent.com/${installedThemeData.user}/${installedThemeData.repo}/${installedThemeData.branch}/${installedThemeData.manifest.usercss}`;
+            // Using jsdelivr since github raw doesn't provide mimetypes
+            const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}/${installedThemeData.manifest.usercss}`;
             newUserThemeCSS.href = cssUrl;
-            // TODO: adding the rel="stylesheet" attribute makes it not load since github raw doesn't provide mimetypes
-            // newUserThemeCSS.rel = "stylesheet";
+            newUserThemeCSS.rel = "stylesheet";
             newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
             document.body.appendChild(newUserThemeCSS);
         }
