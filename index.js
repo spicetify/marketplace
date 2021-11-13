@@ -246,15 +246,6 @@ class Grid extends react.Component {
                 const thememani = await Spicetify.CosmosAsync.get(Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) + "/manifest.json");
                 const schemeOptions = await parseColorIni(thememani);
                 console.log(schemeOptions);
-                react.createElement("div", {
-                    className: "marketplace-sort-bar",
-                }, react.createElement("div", {
-                    className: "marketplace-sort-container",
-                }, react.createElement(OptionsMenu, {
-                    options: schemeOptions.schemeNameArr,
-                    onSelect: (by) => this.props.onChange(by, null),
-                    selected: schemeOptions.schemeNameArr,
-                })));
             }
             installedExtensions.forEach(async (extensionKey) => {
                 // TODO: err handling
@@ -383,6 +374,11 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
+        react.createElement(SortBox, {
+            onChange: this.updateSort.bind(this),
+            onServicesChange: this.updateTabs.bind(this),
+        }),
+
             // TODO: Add search bar and sort functionality
             // react.createElement("div", {
             //     className: "searchbar--bar__wrapper",
