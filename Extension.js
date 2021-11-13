@@ -99,26 +99,30 @@ const hexToRGB = (hex) => {
 
         if (installedThemeDataStr) {
             const installedThemeData = JSON.parse(installedThemeDataStr);
-            // https://api.github.com/repos/CharlieS1103/Dreary/contents/Dreary/color.ini
-            const iniUrl = `https://api.github.com/repos/${installedThemeData.user}/${installedThemeData.repo}/contents/${installedThemeData.manifest.schemes}`;
-            // console.log(iniUrl);
 
+            // Inject colour scheme
+            // e.g. https://api.github.com/repos/CharlieS1103/Dreary/contents/Dreary/color.ini
+            const iniUrl = `https://api.github.com/repos/${installedThemeData.user}/${installedThemeData.repo}/contents/${installedThemeData.manifest.schemes}`;
             const colourSchemesResult = await fetchSchemes(iniUrl);
             const colourSchemes = atob(colourSchemesResult.content);
             const parsedSchemes = parseIni(colourSchemes);
             console.log(parsedSchemes);
             const firstScheme = Object.values(parsedSchemes)[0];
             injectColourScheme(firstScheme);
-        }
 
-        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
-        existingUserThemeCSS.remove();
-        const newUserThemeCSS = document.createElement("link");
-        newUserThemeCSS.href = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled); // + "/user.css";
-        // TODO: adding the rel="stylesheet" attribute makes it not load since github raw doesn't provide mimetypes
-        // newUserThemeCSS.rel = "stylesheet";
-        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
-        document.body.appendChild(newUserThemeCSS);
+            // Remove default css
+            const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+            existingUserThemeCSS.remove();
+
+            // Add theme css
+            const newUserThemeCSS = document.createElement("link");
+            const cssUrl = `https://raw.githubusercontent.com/${installedThemeData.user}/${installedThemeData.repo}/${installedThemeData.branch}/${installedThemeData.manifest.usercss}`;
+            newUserThemeCSS.href = cssUrl;
+            // TODO: adding the rel="stylesheet" attribute makes it not load since github raw doesn't provide mimetypes
+            // newUserThemeCSS.rel = "stylesheet";
+            newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
+            document.body.appendChild(newUserThemeCSS);
+        }
     }
 
     const getInstalledExtensions = () => {
