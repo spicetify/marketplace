@@ -6,7 +6,7 @@ class SortBox extends react.Component {
     }
 
     render() {
-        // TODO: what does this sortConfig filter do?
+        // TODO: need to make sure this works for the main card sorting as well for the colour schemes
         const sortBySelected = this.props.sortByOptions.filter(a => a.key === sortConfig.by)[0];
 
         return react.createElement("div", {
@@ -15,7 +15,7 @@ class SortBox extends react.Component {
             className: "marketplace-sort-container",
         }, react.createElement(OptionsMenu, {
             options: this.props.sortByOptions,
-            onSelect: (by) => this.props.onChange(by, null),
+            onSelect: (value) => this.props.onChange(value),
             selected: sortBySelected,
         })));
     }

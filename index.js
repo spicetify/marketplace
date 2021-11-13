@@ -28,7 +28,6 @@ const LOCALSTORAGE_KEYS = {
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
-    "sortTime": "marketplace:sort-time",
     //TODO: Implement themeInstalled, referenced in Extension.js(line 25)
     "themeInstalled": "marketplace:theme-installed",
 };
@@ -99,7 +98,6 @@ if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTa
 // eslint-disable-next-line no-redeclare
 let sortConfig = {
     by: localStorage.getItem(LOCALSTORAGE_KEYS.sortBy) || "top",
-    time: localStorage.getItem(LOCALSTORAGE_KEYS.sortTime) || "month",
 };
 let cardList = [];
 let endOfList = false;
@@ -162,14 +160,11 @@ class Grid extends react.Component {
         this.setState({ cards: cardList });
     }
 
-    updateSort(sortByValue, sortTimeValue) {
+    // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
+    updateSort(sortByValue) {
         if (sortByValue) {
             sortConfig.by = sortByValue;
             localStorage.setItem(LOCALSTORAGE_KEYS.sortBy, sortByValue);
-        }
-        if (sortTimeValue) {
-            sortConfig.time = sortTimeValue;
-            localStorage.setItem(LOCALSTORAGE_KEYS.sortTime, sortTimeValue);
         }
 
         requestPage = null;
@@ -327,6 +322,10 @@ class Grid extends react.Component {
         }
     }
 
+    updateColourScheme(scheme) {
+        console.log("TODO: Update colour scheme", scheme);
+    }
+
     async componentDidMount() {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
@@ -375,7 +374,7 @@ class Grid extends react.Component {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
         react.createElement(SortBox, {
-            onChange: this.updateSort.bind(this),
+            onChange: this.updateColourScheme.bind(this),
             // TODO: add the colour scheme options
             sortByOptions:  [
                 { key: "hot", value: "Hot" },
