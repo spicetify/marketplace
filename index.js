@@ -565,9 +565,6 @@ async function getBlacklist() {
     return jsonReturned.repos;
 }
 
-/**
-* @param {string} repo The manifest of the theme
-*/
 async function parseColorIni(repo) {
     const url = Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) + repo.schemes;
     const response = await fetch(url);
