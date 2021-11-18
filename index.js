@@ -2,11 +2,11 @@
 /// <reference types="react-dom" />
 /// <reference path="../spicetify-cli/globals.d.ts" />
 /// <reference path="../spicetify-cli/jsHelper/spicetifyWrapper.js" />
-/// <reference path="Card.js" />
-/// <reference path="Icons.js" />
-/// <reference path="Settings.js" />
-/// <reference path="SortBox.js" />
-/// <reference path="TabBar.js" />
+/// <reference path="src/Card.js" />
+/// <reference path="src/Icons.js" />
+/// <reference path="src/Settings.js" />
+/// <reference path="src/SortBox.js" />
+/// <reference path="src/TabBar.js" />
 /// <reference path="ReadmePage.js" />
 
 /* eslint-disable no-redeclare, no-unused-vars */
