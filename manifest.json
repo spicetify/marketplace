@@ -10,7 +10,8 @@
         "src/TabBar.js",
         "src/Settings.js",
         "src/ReadmePage.js",
-        "src/ReloadModal.js"
+        "src/ReloadModal.js",
+        "src/Utils.js"
     ],
     "subfiles_extension": [
         "src/Extension.js"

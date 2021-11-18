@@ -70,6 +70,10 @@
         "gridUpdatePostsVisual": "writable",
         "getInstalledExtensions": "writable",
         "LOCALSTORAGE_KEYS": "writable",
-        "ALL_TABS": "readonly"
+        "ALL_TABS": "readonly",
+        "hexToRGB": "readonly",
+        "parseIni": "readonly",
+        "DOWNLOAD_ICON": "readonly",
+        "TRASH_ICON": "readonly"
     }
 }

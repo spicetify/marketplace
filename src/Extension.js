@@ -6,9 +6,14 @@
 
 /// <reference path="../../spicetify-cli/globals.d.ts" />
 
+// eslint-disable-next-line no-redeclare
 const hexToRGB = (hex) => {
-    if (hex.length != 6) {
-        throw "Only six-digit hex colors are allowed.";
+    if (hex.length === 3) {
+        hex = hex.split("").map((char) => char + char).join("");
+    } else if (hex.length != 6) {
+        throw "Only 3- or 6-digit hex colours are allowed.";
+    } else if (hex.match(/[^0-9a-f]/i)) {
+        throw "Only hex colours are allowed.";
     }
 
     const aRgbHex = hex.match(/.{1,2}/g);
