@@ -28,8 +28,26 @@ const LOCALSTORAGE_KEYS = {
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
-    //TODO: Implement themeInstalled, referenced in Extension.js(line 25)
     "themeInstalled": "marketplace:theme-installed",
+};
+
+// TODO: move this
+const hexToRGB = (hex) => {
+    if (hex.length === 3) {
+        hex = hex.split("").map((char) => char + char).join("");
+    } else if (hex.length != 6) {
+        throw "Only 3- or 6-digit hex colours are allowed.";
+    } else if (hex.match(/[^0-9a-f]/i)) {
+        throw "Only hex colours are allowed.";
+    }
+
+    const aRgbHex = hex.match(/.{1,2}/g);
+    const aRgb = [
+        parseInt(aRgbHex[0], 16),
+        parseInt(aRgbHex[1], 16),
+        parseInt(aRgbHex[2], 16),
+    ];
+    return aRgb;
 };
 
 // Define a function called "render" to specify app entry point
@@ -74,6 +92,26 @@ try {
     tabs = ALL_TABS;
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
 }
+
+// Get active theme
+let schemes = [];
+let activeScheme = null;
+try {
+    const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    if (installedThemeKey) {
+        const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+        if (!installedThemeDataStr) throw new Error("No installed theme data");
+
+        const installedTheme = JSON.parse(installedThemeDataStr);
+        schemes = installedTheme.schemes;
+        activeScheme = installedTheme.activeScheme;
+    } else {
+        console.log("No theme set as installed");
+    }
+} catch (err) {
+    console.error(err);
+}
+
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
     visual: {
@@ -88,6 +126,11 @@ const CONFIG = {
     },
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
+    // TODO: move theme stuff to here
+    theme: {
+        schemes,
+        activeScheme,
+    },
 };
 
 if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTab).length) {
@@ -137,7 +180,20 @@ class Grid extends react.Component {
             tabs: CONFIG.tabs,
             rest: true,
             endOfList: endOfList,
+            // activeScheme: CONFIG.theme.activeScheme,
         };
+    }
+
+    // TODO: should I put this in Grid state?
+    getInstalledTheme() {
+        const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+        if (!installedThemeKey) return null;
+
+        const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+        if (!installedThemeDataStr) return null;
+
+        const installedTheme = JSON.parse(installedThemeDataStr);
+        return installedTheme;
     }
 
     newRequest(amount) {
@@ -324,6 +380,64 @@ class Grid extends react.Component {
 
     updateColourScheme(scheme) {
         console.log("TODO: Update colour scheme", scheme);
+        CONFIG.theme.activeScheme = scheme;
+        this.injectColourScheme(CONFIG.theme.schemes[scheme]);
+
+        // Save to localstorage
+        const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+        const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+        const installedThemeData = JSON.parse(installedThemeDataStr);
+        installedThemeData.activeScheme = scheme;
+        localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
+
+        // TODO: can I put in a hook for when the activeScheme changes? or why do I have it in state??
+        // this.setState({
+        //     activeScheme: CONFIG.theme.activeScheme,
+        // });
+        // TODO: clean this up. The SortBox doesn't re-render (and update the selectedOption in the dropdown unless I set state...)
+        this.setState({});
+    }
+
+    injectColourScheme (scheme) {
+        // Remove any existing marketplace scheme
+        const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
+        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+        // Add new marketplace scheme
+        const themeTag = document.createElement("style");
+        themeTag.classList.add("marketplaceCSS");
+        // const theme = document.querySelector('#theme');
+        let injectStr = ":root {";
+        const themeIniKeys = Object.keys(scheme);
+        themeIniKeys.forEach((key) => {
+            injectStr += `--spice-${key}: #${scheme[key]};`;
+            injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+        });
+        injectStr += "}";
+        themeTag.innerHTML = injectStr;
+        document.head.appendChild(themeTag);
+    }
+
+    // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
+    applyTheme(theme) {
+        // Remove default css
+        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+        // TODO: what about if we remove the theme? Should we re-add the user.css?
+        if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
+        // Remove any existing marketplace theme
+        const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
+        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+        // Add theme css
+        const newUserThemeCSS = document.createElement("link");
+        // Using jsdelivr since github raw doesn't provide mimetypes
+        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+        const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}/${theme.manifest.usercss}`;
+        newUserThemeCSS.href = cssUrl;
+        newUserThemeCSS.rel = "stylesheet";
+        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
+        document.body.appendChild(newUserThemeCSS);
     }
 
     async componentDidMount() {
@@ -366,6 +480,11 @@ class Grid extends react.Component {
         }
     }
 
+    // TODO: clean this up. It worked when I was using state, but state seems like pointless overhead.
+    getActiveScheme() {
+        return CONFIG.theme.activeScheme;
+    }
+
     render() {
         return react.createElement("section", {
             className: "contentSpacing",
@@ -373,16 +492,14 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
+        // TODO: don't show on all tabs
+        // TODO: don't show if no theme installed
         react.createElement(SortBox, {
             onChange: this.updateColourScheme.bind(this),
-            // TODO: add the colour scheme options
-            sortByOptions:  [
-                { key: "hot", value: "Hot" },
-                { key: "new", value: "New" },
-                { key: "top", value: "Top" },
-                { key: "rising", value: "Rising" },
-                { key: "controversial", value: "Controversial" },
-            ],
+            sortBoxOptions: generateSchemesOptions(CONFIG.theme.schemes),
+            // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
+            // because it hardcodes the value into the fn
+            sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
         }),
 
             // TODO: Add search bar and sort functionality
@@ -526,10 +643,11 @@ async function fetchThemes(contents_url, branch, stars) {
             repo,
             branch,
             imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-            cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
-            colorURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
             readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
             stars,
+            // theme stuff
+            cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
+            schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
         }));
         return parsedManifests;
     }
@@ -565,26 +683,14 @@ async function getBlacklist() {
     return jsonReturned.repos;
 }
 
-async function parseColorIni(repo) {
-    const url = Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) + repo.schemes;
-    const response = await fetch(url);
-    //Data is the entire raw color.ini text
-    const data = await response.text();
-    //Data split is the first step in splitting each theme
-    let dataSplit = data.split("[");
-    const schemeNameArr = [];
-    const schemeArr = [];
-    const colorsArr = [];
-    // Every theme is seperated here
-    dataSplit.forEach(i =>  schemeArr.push(i.split("]")));
-    //Remove the first value of the schemeArr array as it is blank
-    schemeArr.shift();
-    //Fetch the name of every scheme
-    schemeArr.forEach(i => schemeNameArr.push(i[0]));
-    // Get rid of everything following a ";", as well as all the new lines, leaving us with the raw formatted colors (which correspond to the index of the theme name.)
-    schemeArr.forEach(i => colorsArr.push(i[1].replace(/^;.*\n?/m, "")));
-    return {
-        schemeNameArr,
-        colorsArr,
-    };
+function generateSchemesOptions(schemes) {
+    if (!schemes) return [];
+    // [
+    //     { key: "hot", value: "Hot" },
+    //     { key: "new", value: "New" },
+    //     { key: "top", value: "Top" },
+    //     { key: "rising", value: "Rising" },
+    //     { key: "controversial", value: "Controversial" },
+    // ]
+    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
 }

@@ -6,36 +6,6 @@
 
 /// <reference path="../spicetify-cli/globals.d.ts" />
 
-const parseIni = (data) => {
-    const regex = {
-        section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
-        param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
-        comment: /^\s*;.*$/,
-    };
-    let value = {};
-    let lines = data.split(/[\r\n]+/);
-    let section = null;
-    lines.forEach(function(line) {
-        if (regex.comment.test(line)) {
-            return;
-        } else if (regex.param.test(line)) {
-            let match = line.match(regex.param);
-            if (section) {
-                value[section][match[1]] = match[2];
-            } else {
-                value[match[1]] = match[2];
-            }
-        } else if (regex.section.test(line)) {
-            let match = line.match(regex.section);
-            value[match[1]] = {};
-            section = match[1];
-        } else if (line.length == 0 && section) {
-            section = null;
-        }
-    });
-    return value;
-};
-
 const hexToRGB = (hex) => {
     if (hex.length != 6) {
         throw "Only six-digit hex colors are allowed.";
@@ -67,15 +37,12 @@ const hexToRGB = (hex) => {
         "themeInstalled": "marketplace:theme-installed",
     };
 
-    // console.log(LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled));
-
-    const fetchSchemes = async (url) => {
-        const response = await fetch(url);
-        const text = await response.json();
-        return text;
-    };
-
     const injectColourScheme = (scheme) => {
+        // Remove any existing marketplace scheme
+        const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
+        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+        // Add new marketplace scheme
         const themeTag = document.createElement("style");
         themeTag.classList.add("marketplaceCSS");
         // const theme = document.querySelector('#theme');
@@ -91,7 +58,6 @@ const hexToRGB = (hex) => {
     };
 
     const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
-    console.log(installedThemeKey);
 
     // TODO: tidy this up
     if (installedThemeKey) {
@@ -101,22 +67,24 @@ const hexToRGB = (hex) => {
             const installedThemeData = JSON.parse(installedThemeDataStr);
 
             // Inject colour scheme
-            // e.g. https://api.github.com/repos/CharlieS1103/Dreary/contents/Dreary/color.ini
-            const iniUrl = `https://api.github.com/repos/${installedThemeData.user}/${installedThemeData.repo}/contents/${installedThemeData.manifest.schemes}`;
-            const colourSchemesResult = await fetchSchemes(iniUrl);
-            const colourSchemes = atob(colourSchemesResult.content);
-            const parsedSchemes = parseIni(colourSchemes);
+            const parsedSchemes = installedThemeData.schemes;
             console.log(parsedSchemes);
-            const firstScheme = Object.values(parsedSchemes)[0];
-            injectColourScheme(firstScheme);
+            const activeScheme = installedThemeData.schemes[installedThemeData.activeScheme];
+            injectColourScheme(activeScheme);
 
             // Remove default css
             const existingUserThemeCSS = document.querySelector("link[href='user.css']");
-            existingUserThemeCSS.remove();
+            // TODO: what about if we remove the theme? Should we re-add the user.css?
+            if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
+            // Remove any existing marketplace theme
+            const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
+            if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
             // Add theme css
             const newUserThemeCSS = document.createElement("link");
             // Using jsdelivr since github raw doesn't provide mimetypes
+            // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
             const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}/${installedThemeData.manifest.usercss}`;
             newUserThemeCSS.href = cssUrl;
             newUserThemeCSS.rel = "stylesheet";

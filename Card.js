@@ -21,6 +21,36 @@ const DOWNLOAD_ICON = react.createElement("svg", {
     fill: "currentColor",
 }));
 
+const parseIni = (data) => {
+    const regex = {
+        section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
+        param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
+        comment: /^\s*;.*$/,
+    };
+    let value = {};
+    let lines = data.split(/[\r\n]+/);
+    let section = null;
+    lines.forEach(function(line) {
+        if (regex.comment.test(line)) {
+            return;
+        } else if (regex.param.test(line)) {
+            let match = line.match(regex.param);
+            if (section) {
+                value[section][match[1]] = match[2];
+            } else {
+                value[match[1]] = match[2];
+            }
+        } else if (regex.section.test(line)) {
+            let match = line.match(regex.section);
+            value[match[1]] = {};
+            section = match[1];
+        } else if (line.length == 0 && section) {
+            section = null;
+        }
+    });
+    return value;
+};
+
 // eslint-disable-next-line no-redeclare, no-unused-vars
 class Card extends react.Component {
     constructor(props) {
@@ -53,6 +83,11 @@ class Card extends react.Component {
         this.readmeURL;
         /** @type { number } */
         this.stars;
+        // Theme stuff
+        /** @type { string? } */
+        this.cssURL;
+        /** @type { string? } */
+        this.schemesURL;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -94,6 +129,7 @@ class Card extends react.Component {
             } else {
                 this.installExtension();
             }
+            openReloadModal();
         } else if (this.type === "theme") {
             if (this.state.installed) {
                 console.log("Theme already installed, removing");
@@ -103,6 +139,7 @@ class Card extends react.Component {
                 this.removeTheme();
                 this.installTheme();
             }
+            openReloadModal();
         } else {
             console.error("Unknown card type");
         }
@@ -153,12 +190,16 @@ class Card extends react.Component {
 
             console.log("Removed");
             this.setState({ installed: false });
-            openReloadModal();
         }
     }
 
-    installTheme() {
+    async installTheme() {
         console.log(`Installing theme ${this.localStorageKey}`);
+
+        const schemesResponse = await fetch(this.schemesURL);
+        const colourSchemes = await schemesResponse.text();
+        const parsedSchemes = parseIni(colourSchemes);
+        // console.log(parsedSchemes);
 
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
@@ -174,6 +215,12 @@ class Card extends react.Component {
             extensionURL: this.extensionURL,
             readmeURL: this.readmeURL,
             stars: this.state.stars,
+            // Theme stuff
+            cssURL: this.cssURL,
+            schemesURL: this.schemesURL,
+            // Installed theme localstorage item has schemes, nothing else does
+            schemes: parsedSchemes,
+            activeScheme: Object.keys(parsedSchemes)[0],
         }));
 
         // TODO: handle this differently?
