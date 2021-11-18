@@ -13,6 +13,6 @@
         "src/ReloadModal.js"
     ],
     "subfiles_extension": [
-        "src/extension.js"
+        "src/Extension.js"
     ]
 }
