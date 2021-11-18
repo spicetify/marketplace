@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const hexToRGB = (hex) => {
     if (hex.length === 3) {
         hex = hex.split("").map((char) => char + char).join("");

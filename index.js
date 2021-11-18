@@ -388,6 +388,7 @@ class Grid extends react.Component {
         const themeIniKeys = Object.keys(scheme);
         themeIniKeys.forEach((key) => {
             injectStr += `--spice-${key}: #${scheme[key]};`;
+            // eslint-disable-next-line
             injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
         });
         injectStr += "}";
