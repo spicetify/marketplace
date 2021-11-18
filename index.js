@@ -293,11 +293,6 @@ class Grid extends react.Component {
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
-            if (Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) != null) {
-                const thememani = await Spicetify.CosmosAsync.get(Spicetify.LocalStorage.get(LOCALSTORAGE_KEYS["themeInstalled:"]) + "/manifest.json");
-                const schemeOptions = await parseColorIni(thememani);
-                console.log(schemeOptions);
-            }
             installedExtensions.forEach(async (extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
@@ -316,7 +311,7 @@ class Grid extends react.Component {
             // installed extension do them all in one go, since it's local
         } else if (CONFIG.activeTab == "Themes") {
             let pageOfRepos = await getThemeRepos(requestPage);
-            for (const repo of pageOfRepos.items) {
+            for (const repo of pageOfRepos) {
 
                 let themes = await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 // I believe this stops the requests when switching tabs?
@@ -460,7 +455,6 @@ class Grid extends react.Component {
 
         // Load blacklist
         BLACKLIST = await getBlacklist();
-
         this.newRequest(30);
     }
 
@@ -668,12 +662,15 @@ async function getThemeRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allThemes = await Spicetify.CosmosAsync.get(url);
-    return allThemes;
+
+    const filteredArray = allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url));
+    return filteredArray;
 }
 
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await Spicetify.CosmosAsync.get(url);
+
     // const jsonReturned = {
     //     "repos": [
     //         "https://github.com/theRealPadster/spicetify-hide-podcasts",
