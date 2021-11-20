@@ -217,9 +217,6 @@ class Card extends react.Component {
     }
 
     openReadme() {
-        // TODO: this seems to not work when I go back and click on it again.
-        // It still runs but nothing happens.
-        // Something with the location object (hash or something)?
         Spicetify.Platform.History.push({
             pathname: "/spicetify-marketplace/readme",
             state: {
