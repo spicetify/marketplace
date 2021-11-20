@@ -108,7 +108,6 @@ const CONFIG = {
     },
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
-    // TODO: move theme stuff to here
     theme: {
         schemes,
         activeScheme,
@@ -356,7 +355,7 @@ class Grid extends react.Component {
     }
 
     updateColourScheme(scheme) {
-        console.log("TODO: Update colour scheme", scheme);
+        console.log("Injecting colour scheme", scheme);
         CONFIG.theme.activeScheme = scheme;
         this.injectColourScheme(CONFIG.theme.schemes[scheme]);
 
