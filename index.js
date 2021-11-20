@@ -398,7 +398,7 @@ class Grid extends react.Component {
     // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
     applyTheme(theme) {
         // Remove default css
-        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+        const existingUserThemeCSS = document.querySelector("link[href='colors.css']");
         // TODO: what about if we remove the theme? Should we re-add the user.css?
         if (existingUserThemeCSS) existingUserThemeCSS.remove();
 
