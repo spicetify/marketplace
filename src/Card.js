@@ -190,43 +190,29 @@ class Card extends react.Component {
     }
 
     removeTheme(themeKey = null) {
+        // If don't specify theme, remove the currently installed theme
+        themeKey = themeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+
         const themeValue = themeKey && localStorage.getItem(themeKey);
-        // console.log(JSON.parse(themeValue));
+
         if (themeValue) {
-            console.log(`Removing theme ${this.localStorageKey}`);
+            console.log(`Removing theme ${themeKey}`);
+
             // Remove from localstorage
-            localStorage.removeItem(this.localStorageKey);
+            localStorage.removeItem(themeKey);
+
+            // Remove record of installed theme
+            localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
 
             // Remove from installed list
             const installedExtensions = getInstalledExtensions();
-            const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
+            const remainingInstalledExtensions = installedExtensions.filter((key) => key !== themeKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
-            localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
-
             console.log("Removed");
+            // TODO: this doesn't remove the "installed" state on the installed card
+            // if you just install a new theme to replace the existing one
             this.setState({ installed: false });
-            openReloadModal();
-        } else {
-            // TODO: consolidate these two code paths
-            const installedTheme = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
-            if (installedTheme) {
-                console.log(`No theme to remove specified, removing installed theme ${installedTheme}`);
-
-                // Remove from localstorage
-                localStorage.removeItem(installedTheme);
-
-                // Remove record of installed theme
-                localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
-
-                // Remove from installed list
-                const installedExtensions = getInstalledExtensions();
-                const remainingInstalledExtensions = installedExtensions.filter((key) => key !== installedTheme);
-                localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
-
-                console.log("Removed");
-                // openReloadModal();
-            }
         }
     }
 
