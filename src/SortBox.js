@@ -14,7 +14,7 @@ const SortBox = (props) => {
     // const sortBySelected = this.props.sortBoxOptions.filter(a => a.key === sortConfig.by)[0];
     // const [sortBySelected, setSortBySelected] = useState(props.sortBoxOptions.find(props.sortBySelectedFn));
     const sortBySelected = props.sortBoxOptions.find(props.sortBySelectedFn);
-    console.log(sortBySelected);
+    // console.log(sortBySelected);
 
     return react.createElement("div", {
         className: "marketplace-sort-bar",

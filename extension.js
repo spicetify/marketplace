@@ -4,7 +4,7 @@
 // AUTHOR: theRealPadster, CharlieS1103
 // DESCRIPTION: Companion extension for Spicetify Marketplace
 
-/// <reference path="../../spicetify-cli/globals.d.ts" />
+/// <reference path="../spicetify-cli/globals.d.ts" />
 
 // eslint-disable-next-line no-redeclare
 const hexToRGB = (hex) => {
