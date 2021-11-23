@@ -210,7 +210,7 @@ function createTabOption(id, posCallback, toggleCallback) {
                 </svg>
             </button>
             <button class="switch switch--tab-toggle ${!tabEnabled ? "disabled" : ""}"
-                ${id === "Marketplace" ? "disabled" : ""}>
+                ${id === "Extensions" ? "disabled" : ""}>
                 <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                     ${tabEnabled ? Spicetify.SVGIcons["check"] : Spicetify.SVGIcons["x"]}
                 </svg>
