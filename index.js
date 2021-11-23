@@ -395,6 +395,7 @@ class Grid extends react.Component {
     }
 
     // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
+    // eslint-disable-next-line
     applyTheme(theme) {
         // Remove default css
         // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
@@ -411,7 +412,7 @@ class Grid extends react.Component {
         const newUserThemeCSS = document.createElement("link");
         // Using jsdelivr since github raw doesn't provide mimetypes
         // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-        const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}@${installedThemeData.branch}/${installedThemeData.manifest.usercss}`;
+        const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}@${theme.branch}/${theme.manifest.usercss}`;
         newUserThemeCSS.href = cssUrl;
         newUserThemeCSS.rel = "stylesheet";
         newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
