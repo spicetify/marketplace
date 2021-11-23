@@ -411,7 +411,7 @@ class Grid extends react.Component {
         const newUserThemeCSS = document.createElement("link");
         // Using jsdelivr since github raw doesn't provide mimetypes
         // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-        const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}/${theme.manifest.usercss}`;
+        const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}@${installedThemeData.branch}/${installedThemeData.manifest.usercss}`;
         newUserThemeCSS.href = cssUrl;
         newUserThemeCSS.rel = "stylesheet";
         newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
@@ -623,29 +623,31 @@ async function fetchThemes(contents_url, branch, stars) {
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
         let manifests= await getRepoManifest(user, repo, branch);
-
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
         // Manifest is initially parsed
         //TODO: Add logic to prevent invalid repos from being displayed
+
         const parsedManifests = manifests.reduce((accum, manifest) => {
+            const selectedBranch = getSelectedBranch(branch, manifest);
             const item = {
                 manifest,
                 title: manifest.name,
                 subtitle: manifest.description,
                 user,
                 repo,
-                branch,
-                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-                readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+                branch: selectedBranch,
+                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
                 // theme stuff
-                cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
-                schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
+                cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+                schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`,
             };
             if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
                 accum.push(item);
             }
+            console.log(repo);
             return accum;
         }, []);
         return parsedManifests;
@@ -655,7 +657,14 @@ async function fetchThemes(contents_url, branch, stars) {
         return null;
     }
 }
-
+function getSelectedBranch(branch, manifest) {
+    console.log(manifest);
+    if (manifest.branch) {
+        console.log(manifest.branch);
+        return manifest.branch.replace("%22", "");
+    }
+    return branch;
+}
 async function getThemeRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;

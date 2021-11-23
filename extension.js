@@ -44,24 +44,28 @@ const hexToRGB = (hex) => {
 
     const injectColourScheme = (scheme) => {
         // Remove any existing marketplace scheme
-        const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
-        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+        try {
+            const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
+            if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
-        // Add new marketplace scheme
-        const themeTag = document.createElement("style");
-        themeTag.classList.add("marketplaceCSS");
-        // const theme = document.querySelector('#theme');
-        let injectStr = ":root {";
-        const themeIniKeys = Object.keys(scheme);
-        themeIniKeys.forEach((key) => {
-            injectStr += `--spice-${key}: #${scheme[key]};`;
-            injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
-        });
-        injectStr += "}";
-        themeTag.innerHTML = injectStr;
-        document.head.appendChild(themeTag);
+            // Add new marketplace scheme
+            const themeTag = document.createElement("style");
+            themeTag.classList.add("marketplaceCSS");
+            // const theme = document.querySelector('#theme');
+            let injectStr = ":root {";
+
+            const themeIniKeys = Object.keys(scheme);
+            themeIniKeys.forEach((key) => {
+                injectStr += `--spice-${key}: #${scheme[key]};`;
+                injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+            });
+            injectStr += "}";
+            themeTag.innerHTML = injectStr;
+            document.head.appendChild(themeTag);
+        } catch (error) {
+            console.warn(error);
+        }
     };
-
     const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
 
     // TODO: tidy this up
@@ -92,7 +96,8 @@ const hexToRGB = (hex) => {
             const newUserThemeCSS = document.createElement("link");
             // Using jsdelivr since github raw doesn't provide mimetypes
             // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-            const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}/${installedThemeData.manifest.usercss}`;
+            console.log(installedThemeData);
+            const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}@${installedThemeData.branch}/${installedThemeData.manifest.usercss}`;
             newUserThemeCSS.href = cssUrl;
             newUserThemeCSS.rel = "stylesheet";
             newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
