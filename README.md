@@ -56,8 +56,14 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `preview`: A path to your preview image. Must be relative to your project root
     * `main`: The filename for your extension's main js file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root
-    
-e.g. 
+Or for Themes:
+    * `name`: Your theme name
+    * `description`: Description for your theme
+    * `preview`: A path to your preview image. Must be relative to your project root
+    * `usercss`: A path to your user.css file. Must be relative to your project root
+    * `schemes`: A path to your color.ini file. Must be relative to your project root
+    * `readme`: The filename for your extension's README file. Must be relative to your project root 
+(Extension e.g.): 
 ```json
 {
     "name": "Spicetify-Hide-Podcasts",
@@ -85,6 +91,17 @@ If you have multiple extensions in the same repo (subfolder e.g.):
    "readme": "filepathFromGitRepoTwo/THIS_IS_MY_README.md",
   },
 ]
+```
+For themes:
+```json
+{
+    "name": "themeName",
+    "description": "theme description",
+    "preview": "filepathFromGitRepo/theme.png",
+    "readme": "README.md",
+    "usercss": "filepathFromGitRepo/user.css",
+    "schemes": "filepathFromGitRepo/color.ini"
+}
 ```
 _Please note that if all your extensions are in the root folder, you don't need to include a filepath._
 
