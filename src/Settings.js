@@ -112,7 +112,7 @@ function openConfig() {
     const resetContainer = document.createElement("div");
     resetContainer.innerHTML = `
     <div class="setting-row">
-        <label class="col description">Uninstall all extensions and reset preferences</label>
+        <label class="col description">Uninstall all extensions and themes, and reset preferences</label>
         <div class="col action">
             <button class="main-buttons-button main-button-secondary">Reset</button>
         </div>
