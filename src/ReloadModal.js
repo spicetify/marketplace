@@ -20,7 +20,7 @@ function openReloadModal() {
     // optionHeader.innerText = MODAL_SUBTITLE;
 
     const paragraph = document.createElement("p");
-    paragraph.innerText = "A page reload is required to complete uninstall.";
+    paragraph.innerText = "A page reload is required to complete this operation.";
 
     const buttonContainer = document.createElement("div");
     buttonContainer.classList.add("marketplace-reload-modal__button-container");

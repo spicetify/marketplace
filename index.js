@@ -2,12 +2,13 @@
 /// <reference types="react-dom" />
 /// <reference path="../spicetify-cli/globals.d.ts" />
 /// <reference path="../spicetify-cli/jsHelper/spicetifyWrapper.js" />
-/// <reference path="Card.js" />
-/// <reference path="Icons.js" />
-/// <reference path="Settings.js" />
-/// <reference path="SortBox.js" />
-/// <reference path="TabBar.js" />
-/// <reference path="ReadmePage.js" />
+/// <reference path="src/Card.js" />
+/// <reference path="src/Icons.js" />
+/// <reference path="src/Settings.js" />
+/// <reference path="src/SortBox.js" />
+/// <reference path="src/TabBar.js" />
+/// <reference path="src/ReadmePage.js" />
+/// <reference path="src/Utils.js" />
 
 /* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
@@ -28,7 +29,7 @@ const LOCALSTORAGE_KEYS = {
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
-    "sortTime": "marketplace:sort-time",
+    "themeInstalled": "marketplace:theme-installed",
 };
 
 // Define a function called "render" to specify app entry point
@@ -54,7 +55,8 @@ function render() {
 // Data initalized in TabBar.js
 // eslint-disable-next-line no-redeclare
 const ALL_TABS = [
-    { name: "Marketplace", enabled: true },
+    { name: "Extensions", enabled: true },
+    { name: "Themes", enabled: true },
     { name: "Installed", enabled: true },
 ];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
@@ -72,6 +74,26 @@ try {
     tabs = ALL_TABS;
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
 }
+
+// Get active theme
+let schemes = [];
+let activeScheme = null;
+try {
+    const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    if (installedThemeKey) {
+        const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+        if (!installedThemeDataStr) throw new Error("No installed theme data");
+
+        const installedTheme = JSON.parse(installedThemeDataStr);
+        schemes = installedTheme.schemes;
+        activeScheme = installedTheme.activeScheme;
+    } else {
+        console.log("No theme set as installed");
+    }
+} catch (err) {
+    console.error(err);
+}
+
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
     visual: {
@@ -86,6 +108,10 @@ const CONFIG = {
     },
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
+    theme: {
+        schemes,
+        activeScheme,
+    },
 };
 
 if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTab).length) {
@@ -96,7 +122,6 @@ if (!CONFIG.activeTab || !CONFIG.tabs.filter(tab => tab.name === CONFIG.activeTa
 // eslint-disable-next-line no-redeclare
 let sortConfig = {
     by: localStorage.getItem(LOCALSTORAGE_KEYS.sortBy) || "top",
-    time: localStorage.getItem(LOCALSTORAGE_KEYS.sortTime) || "month",
 };
 let cardList = [];
 let endOfList = false;
@@ -136,7 +161,20 @@ class Grid extends react.Component {
             tabs: CONFIG.tabs,
             rest: true,
             endOfList: endOfList,
+            // activeScheme: CONFIG.theme.activeScheme,
         };
+    }
+
+    // TODO: should I put this in Grid state?
+    getInstalledTheme() {
+        const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+        if (!installedThemeKey) return null;
+
+        const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+        if (!installedThemeDataStr) return null;
+
+        const installedTheme = JSON.parse(installedThemeDataStr);
+        return installedTheme;
     }
 
     newRequest(amount) {
@@ -146,22 +184,24 @@ class Grid extends react.Component {
         this.loadAmount(queue, amount);
     }
 
-    appendCard(item) {
+    /**
+     * @param {Object} item
+     * @param {"extension" | "theme"} type The type of card
+     */
+    appendCard(item, type) {
         item.visual = CONFIG.visual;
         // Set key prop so items don't get stuck when switching tabs
         item.key = `${CONFIG.activeTab}:${item.title}`;
+        item.type = type;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
 
-    updateSort(sortByValue, sortTimeValue) {
+    // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
+    updateSort(sortByValue) {
         if (sortByValue) {
             sortConfig.by = sortByValue;
             localStorage.setItem(LOCALSTORAGE_KEYS.sortBy, sortByValue);
-        }
-        if (sortTimeValue) {
-            sortConfig.time = sortTimeValue;
-            localStorage.setItem(LOCALSTORAGE_KEYS.sortTime, sortTimeValue);
         }
 
         requestPage = null;
@@ -208,7 +248,7 @@ class Grid extends react.Component {
     // Returns the next page number to fetch, or null if at end
     // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
     async loadPage(queue) {
-        if (CONFIG.activeTab === "Marketplace") {
+        if (CONFIG.activeTab === "Extensions") {
             let pageOfRepos = await getRepos(requestPage);
             for (const repo of pageOfRepos) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -220,7 +260,7 @@ class Grid extends react.Component {
                 }
 
                 if (extensions && extensions.length) {
-                    extensions.forEach((extension) => this.appendCard(extension));
+                    extensions.forEach((extension) => this.appendCard(extension, "extension"));
                 }
             }
 
@@ -234,7 +274,7 @@ class Grid extends react.Component {
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
             const installedExtensions = getInstalledExtensions();
-            installedExtensions.forEach((extensionKey) => {
+            installedExtensions.forEach(async (extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
 
@@ -244,11 +284,34 @@ class Grid extends react.Component {
                     return -1;
                 }
 
-                this.appendCard(extension);
+                // TODO: this needs to know which is a theme vs extension
+                this.appendCard(extension, "extension");
             });
 
             // Don't need to return a page number because
             // installed extension do them all in one go, since it's local
+        } else if (CONFIG.activeTab == "Themes") {
+            let pageOfRepos = await getThemeRepos(requestPage);
+            for (const repo of pageOfRepos) {
+
+                let themes = await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count);
+                // I believe this stops the requests when switching tabs?
+                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                    // Stop this queue from continuing to fetch and append to cards list
+                    return -1;
+                }
+
+                if (themes && themes.length) {
+                    themes.forEach((theme) => this.appendCard(theme, "theme"));
+                }
+            }
+
+            // First request is null, so coerces to 1
+            const currentPage = requestPage || 1;
+            // -1 because the page number is 1-indexed
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
+            const remainingResults = pageOfRepos.length - soFarResults;
+            if (remainingResults) return currentPage + 1;
         }
 
         this.setState({ rest: true, endOfList: true });
@@ -291,6 +354,70 @@ class Grid extends react.Component {
         }
     }
 
+    updateColourScheme(scheme) {
+        console.log("Injecting colour scheme", scheme);
+        CONFIG.theme.activeScheme = scheme;
+        this.injectColourScheme(CONFIG.theme.schemes[scheme]);
+
+        // Save to localstorage
+        const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+        const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+        const installedThemeData = JSON.parse(installedThemeDataStr);
+        installedThemeData.activeScheme = scheme;
+        localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
+
+        // TODO: can I put in a hook for when the activeScheme changes? or why do I have it in state??
+        // this.setState({
+        //     activeScheme: CONFIG.theme.activeScheme,
+        // });
+        // TODO: clean this up. The SortBox doesn't re-render (and update the selectedOption in the dropdown unless I set state...)
+        this.setState({});
+    }
+
+    injectColourScheme (scheme) {
+        // Remove any existing marketplace scheme
+        const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
+        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+        // Add new marketplace scheme
+        const themeTag = document.createElement("style");
+        themeTag.classList.add("marketplaceCSS");
+        // const theme = document.querySelector('#theme');
+        let injectStr = ":root {";
+        const themeIniKeys = Object.keys(scheme);
+        themeIniKeys.forEach((key) => {
+            injectStr += `--spice-${key}: #${scheme[key]};`;
+            injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+        });
+        injectStr += "}";
+        themeTag.innerHTML = injectStr;
+        document.head.appendChild(themeTag);
+    }
+
+    // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
+    applyTheme(theme) {
+        // Remove default css
+        // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
+        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+        if (existingUserThemeCSS) existingUserThemeCSS.remove();
+        const existingColorsCSS = document.querySelector("link[href='colors.css']");
+        if (existingColorsCSS) existingColorsCSS.remove();
+
+        // Remove any existing marketplace theme
+        const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
+        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+        // Add theme css
+        const newUserThemeCSS = document.createElement("link");
+        // Using jsdelivr since github raw doesn't provide mimetypes
+        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+        const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}/${theme.manifest.usercss}`;
+        newUserThemeCSS.href = cssUrl;
+        newUserThemeCSS.rel = "stylesheet";
+        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
+        document.body.appendChild(newUserThemeCSS);
+    }
+
     async componentDidMount() {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
@@ -311,7 +438,6 @@ class Grid extends react.Component {
 
         // Load blacklist
         BLACKLIST = await getBlacklist();
-
         this.newRequest(30);
     }
 
@@ -331,6 +457,11 @@ class Grid extends react.Component {
         }
     }
 
+    // TODO: clean this up. It worked when I was using state, but state seems like pointless overhead.
+    getActiveScheme() {
+        return CONFIG.theme.activeScheme;
+    }
+
     render() {
         return react.createElement("section", {
             className: "contentSpacing",
@@ -338,18 +469,25 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
-        // TODO: Add search bar and sort functionality
-        // react.createElement("div", {
-        //     className: "searchbar--bar__wrapper",
-        // }, react.createElement("input", {
-        //     className: "searchbar-bar",
-        //     type: "text",
-        //     placeholder: "Search for Extensions?",
-        // })),
-        // react.createElement(SortBox, {
-        //     onChange: this.updateSort.bind(this),
-        //     onTabsChange: this.updateTabs.bind(this),
-        // })
+        // TODO: don't show on all tabs
+        // TODO: don't show if no theme installed
+        react.createElement(SortBox, {
+            onChange: this.updateColourScheme.bind(this),
+            sortBoxOptions: generateSchemesOptions(CONFIG.theme.schemes),
+            // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
+            // because it hardcodes the value into the fn
+            sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
+        }),
+
+            // TODO: Add search bar and sort functionality
+            // react.createElement("div", {
+            //     className: "searchbar--bar__wrapper",
+            // }, react.createElement("input", {
+            //     className: "searchbar-bar",
+            //     type: "text",
+            //     placeholder: "Search for Extensions?",
+            // })),
+
         ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
@@ -435,24 +573,40 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-        // Remove installed extensions from manifests list if we don't want to show them
-        if (CONFIG.visual.hideInstalled) {
-            manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
-        }
 
         // Manifest is initially parsed
-        const parsedManifests = manifests.map((manifest) => ({
-            manifest,
-            title: manifest.name,
-            subtitle: manifest.description,
-            user,
-            repo,
-            branch,
-            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
-            readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
-            stars,
-        }));
+        const parsedManifests = manifests.reduce((accum, manifest) => {
+            const item = {
+                manifest,
+                title: manifest.name,
+                subtitle: manifest.description,
+                user,
+                repo,
+                branch,
+                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+                extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+                readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+                stars,
+            };
+
+            // If manifest is valid, add it to the list
+            if (manifest && manifest.name && manifest.description && manifest.main
+            // TODO: Do we want to require a preview image or readme?
+            // && manifest.preview && manifest.readme
+            ) {
+                // Add to list unless we're hiding installed items and it's installed
+                if (!(CONFIG.visual.hideInstalled
+                    && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
+                ) {
+                    accum.push(item);
+                }
+            }
+            // else {
+            //     console.error("Invalid manifest:", manifest);
+            // }
+
+            return accum;
+        }, []);
 
         return parsedManifests;
     }
@@ -462,9 +616,66 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
     }
 }
 
+async function fetchThemes(contents_url, branch, stars) {
+    try {
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        const { user, repo } = regex_result.groups;
+        let manifests= await getRepoManifest(user, repo, branch);
+
+        // If the manifest returned is not an array, initialize it as one
+        if (!Array.isArray(manifests)) manifests = [manifests];
+        // Manifest is initially parsed
+        //TODO: Add logic to prevent invalid repos from being displayed
+        const parsedManifests = manifests.reduce((accum, manifest) => {
+            const item = {
+                manifest,
+                title: manifest.name,
+                subtitle: manifest.description,
+                user,
+                repo,
+                branch,
+                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+                readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+                stars,
+                // theme stuff
+                cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
+                schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
+            };
+            if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
+                accum.push(item);
+            }
+            return accum;
+        }, []);
+        return parsedManifests;
+    }
+    catch (err) {
+        console.warn(contents_url, err);
+        return null;
+    }
+}
+
+async function getThemeRepos(page = 1) {
+    // www is needed or it will block with "cross-origin" error.
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
+
+    // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
+    // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
+    if (page) url += `&page=${page}`;
+    // Sorting params (not implemented for Marketplace yet)
+    // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
+    //     url += `&t=${sortConfig.time}`
+    const allThemes = await Spicetify.CosmosAsync.get(url);
+
+    const filteredArray = allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url));
+    return filteredArray;
+}
+
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await Spicetify.CosmosAsync.get(url);
+
     // const jsonReturned = {
     //     "repos": [
     //         "https://github.com/theRealPadster/spicetify-hide-podcasts",
@@ -474,23 +685,14 @@ async function getBlacklist() {
     return jsonReturned.repos;
 }
 
-// function postMapper(posts) {
-//     let mappedPosts = [];
-//     posts.forEach(post => {
-//         let uri = URI.from(post.data.url);
-//         if (uri && (
-//             uri.type == "playlist" ||
-//             uri.type == "playlist-v2" ||
-//             uri.type == "track" ||
-//             uri.type == "album"
-//         )) {
-//             mappedPosts.push({
-//                 uri: uri.toURI(),
-//                 type: uri.type,
-//                 title: post.data.title,
-//                 upvotes: post.data.ups
-//             });
-//         }
-//     });
-//     return mappedPosts;
-// }
+function generateSchemesOptions(schemes) {
+    if (!schemes) return [];
+    // [
+    //     { key: "hot", value: "Hot" },
+    //     { key: "new", value: "New" },
+    //     { key: "top", value: "Top" },
+    //     { key: "rising", value: "Rising" },
+    //     { key: "controversial", value: "Controversial" },
+    // ]
+    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
+}

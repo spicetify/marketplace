@@ -1,25 +1,4 @@
 /// <reference path="ReloadModal.js" />
-const TRASH_ICON = react.createElement("svg", {
-    height: "16",
-    role: "img",
-    width: "16",
-    viewBox: "0 0 448 512",
-    "aria-hidden": "true",
-}, react.createElement("path", {
-    d: "M53.21 467c1.562 24.84 23.02 45 47.9 45h245.8c24.88 0 46.33-20.16 47.9-45L416 128H32L53.21 467zM432 32H320l-11.58-23.16c-2.709-5.42-8.25-8.844-14.31-8.844H153.9c-6.061 0-11.6 3.424-14.31 8.844L128 32H16c-8.836 0-16 7.162-16 16V80c0 8.836 7.164 16 16 16h416c8.838 0 16-7.164 16-16V48C448 39.16 440.8 32 432 32z",
-    fill: "currentColor",
-}));
-
-const DOWNLOAD_ICON = react.createElement("svg", {
-    height: "16",
-    role: "img",
-    width: "16",
-    viewBox: "0 0 512 512",
-    "aria-hidden": "true",
-}, react.createElement("path", {
-    d: "M480 352h-133.5l-45.25 45.25C289.2 409.3 273.1 416 256 416s-33.16-6.656-45.25-18.75L165.5 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96C512 366.3 497.7 352 480 352zM432 456c-13.2 0-24-10.8-24-24c0-13.2 10.8-24 24-24s24 10.8 24 24C456 445.2 445.2 456 432 456zM233.4 374.6C239.6 380.9 247.8 384 256 384s16.38-3.125 22.62-9.375l128-128c12.49-12.5 12.49-32.75 0-45.25c-12.5-12.5-32.76-12.5-45.25 0L288 274.8V32c0-17.67-14.33-32-32-32C238.3 0 224 14.33 224 32v242.8L150.6 201.4c-12.49-12.5-32.75-12.5-45.25 0c-12.49 12.5-12.49 32.75 0 45.25L233.4 374.6z",
-    fill: "currentColor",
-}));
 
 // eslint-disable-next-line no-redeclare, no-unused-vars
 class Card extends react.Component {
@@ -29,9 +8,11 @@ class Card extends react.Component {
         // From `appendCard()`
         /** @type { { type: string; stars: string; } } */
         this.visual;
+        /** @type { "extension" | "theme" } */
+        this.type;
 
         // From `fetchRepoExtensions()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string; } } */
+        /** @type { { name: string; description: string; main: string; preview: string; readme: string; usercss?: string; schemes?: string; } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -51,11 +32,16 @@ class Card extends react.Component {
         this.readmeURL;
         /** @type { number } */
         this.stars;
+        // Theme stuff
+        /** @type { string? } */
+        this.cssURL;
+        /** @type { string? } */
+        this.schemesURL;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.manifest.main}`;
+        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.type === "theme" ? props.manifest.usercss : props.manifest.main}`;
 
         Object.assign(this, props);
 
@@ -74,7 +60,6 @@ class Card extends react.Component {
             // TODO: This implementation could probably be improved.
             // It might have issues when quickly switching between tabs.
             const repoData = await Spicetify.CosmosAsync.get(url);
-            console.log(repoData);
 
             if (this.state.stars !== repoData.stargazers_count) {
                 this.setState({ stars: repoData.stargazers_count }, () => {
@@ -85,12 +70,37 @@ class Card extends react.Component {
         }
     }
 
+    buttonClicked() {
+        if (this.type === "extension") {
+            if (this.state.installed) {
+                console.log("Extension already installed, removing");
+                this.removeExtension();
+            } else {
+                this.installExtension();
+            }
+            openReloadModal();
+        } else if (this.type === "theme") {
+            if (this.state.installed) {
+                console.log("Theme already installed, removing");
+                this.removeTheme(this.localStorageKey);
+            } else {
+                // Remove theme if already installed, then install the new theme
+                this.removeTheme();
+                this.installTheme();
+            }
+            openReloadModal();
+        } else {
+            console.error("Unknown card type");
+        }
+    }
+
     installExtension() {
         console.log(`Installing extension ${this.localStorageKey}`);
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
         localStorage.setItem(this.localStorageKey, JSON.stringify({
             manifest: this.manifest,
+            type: this.type,
             title: this.title,
             subtitle: this.subtitle,
             user: this.user,
@@ -129,9 +139,80 @@ class Card extends react.Component {
 
             console.log("Removed");
             this.setState({ installed: false });
-            openReloadModal();
-        } else {
-            console.log(`Extension ${this.localStorageKey} not found`);
+        }
+    }
+
+    async installTheme() {
+        console.log(`Installing theme ${this.localStorageKey}`);
+
+        const schemesResponse = await fetch(this.schemesURL);
+        const colourSchemes = await schemesResponse.text();
+        const parsedSchemes = parseIni(colourSchemes);
+        // console.log(parsedSchemes);
+
+        // Add to localstorage (this stores a copy of all the card props in the localstorage)
+        // TODO: refactor/clean this up
+        localStorage.setItem(this.localStorageKey, JSON.stringify({
+            manifest: this.manifest,
+            type: this.type,
+            title: this.title,
+            subtitle: this.subtitle,
+            user: this.user,
+            repo: this.repo,
+            branch: this.branch,
+            imageURL: this.imageURL,
+            extensionURL: this.extensionURL,
+            readmeURL: this.readmeURL,
+            stars: this.state.stars,
+            // Theme stuff
+            cssURL: this.cssURL,
+            schemesURL: this.schemesURL,
+            // Installed theme localstorage item has schemes, nothing else does
+            schemes: parsedSchemes,
+            activeScheme: Object.keys(parsedSchemes)[0],
+        }));
+
+        // TODO: handle this differently?
+
+        // Add to installed list if not there already
+        const installedExtensions = getInstalledExtensions();
+        if (installedExtensions.indexOf(this.localStorageKey) === -1) {
+            installedExtensions.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+
+            // const usercssURL = `https://raw.github.com/${this.user}/${this.repo}/${this.branch}/${this.manifest.usercss}`;
+            localStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+        }
+
+        console.log("Installed");
+        this.setState({ installed: true });
+        // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
+    }
+
+    removeTheme(themeKey = null) {
+        // If don't specify theme, remove the currently installed theme
+        themeKey = themeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+
+        const themeValue = themeKey && localStorage.getItem(themeKey);
+
+        if (themeValue) {
+            console.log(`Removing theme ${themeKey}`);
+
+            // Remove from localstorage
+            localStorage.removeItem(themeKey);
+
+            // Remove record of installed theme
+            localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
+
+            // Remove from installed list
+            const installedExtensions = getInstalledExtensions();
+            const remainingInstalledExtensions = installedExtensions.filter((key) => key !== themeKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+
+            console.log("Removed");
+            // TODO: this doesn't remove the "installed" state on the installed card
+            // if you just install a new theme to replace the existing one
+            this.setState({ installed: false });
         }
     }
 
@@ -203,12 +284,7 @@ class Card extends react.Component {
             style: { "--size": "40px" },
             onClick: (e) => {
                 e.stopPropagation();
-                if (localStorage.getItem(this.localStorageKey) == null) {
-                    this.installExtension();
-                } else {
-                    console.log("Extension already installed, removing");
-                    this.removeExtension();
-                }
+                this.buttonClicked();
             },
         },
         this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
