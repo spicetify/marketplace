@@ -56,7 +56,7 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `preview`: A path to your preview image. Must be relative to your project root
     * `main`: The filename for your extension's main js file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root
-Or for Themes:
+* Or for Themes:
     * `name`: Your theme name
     * `description`: Description for your theme
     * `preview`: A path to your preview image. Must be relative to your project root
