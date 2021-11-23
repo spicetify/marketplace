@@ -139,10 +139,19 @@ function openConfig() {
         title: "Marketplace",
         content: configContainer,
     });
-    const closeButton = document.querySelector("body > generic-modal > div > div > div > div.main-trackCreditsModal-header > button");
-    closeButton.setAttribute("onclick", "location.reload()");
+
+    const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn");
     const modalOverlay = document.querySelector("body > generic-modal > div");
-    modalOverlay.setAttribute("onclick", "location.reload()");
+    if (closeButton instanceof HTMLElement
+    && modalOverlay instanceof HTMLElement) {
+        closeButton.onclick = () => location.reload();
+        modalOverlay.onclick = (e) => {
+            // If clicked on overlay, also reload
+            if (e.target === modalOverlay) {
+                location.reload();
+            }
+        };
+    }
 }
 
 function createSlider(name, key) {
