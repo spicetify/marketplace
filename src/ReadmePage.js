@@ -54,7 +54,7 @@ class ReadmePage extends react.Component {
     async getReadmeHTML() {
         try {
             const readmeTextRes = await fetch(this.data.readmeURL);
-            if (!readmeTextRes.ok) throw new Error(`Error loading README (HTTP ${readmeTextRes.status})`);
+            if (!readmeTextRes.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${readmeTextRes.status})`);
 
             const readmeText = await readmeTextRes.text();
 
@@ -68,13 +68,18 @@ class ReadmePage extends react.Component {
                 method: "POST",
                 body: JSON.stringify(postBody),
             });
-            if (!readmeHtmlRes.ok) throw new Error(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
+            if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
 
             const readmeHtml = await readmeHtmlRes.text();
-
+            console.log(readmeHtml);
+            console.log(readmeHtmlRes);
+            if (readmeHtml == null) {
+                Spicetify.Platform.History.goBack();
+            }
             return readmeHtml;
         } catch (err) {
-            return `<p>${err.message}</p>`;
+            Spicetify.Platform.History.goBack();
+            return null;
         }
     }
 }
