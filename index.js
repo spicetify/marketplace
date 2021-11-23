@@ -573,24 +573,40 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-        // Remove installed extensions from manifests list if we don't want to show them
-        if (CONFIG.visual.hideInstalled) {
-            manifests = manifests.filter((manifest) => !localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`));
-        }
-        //TODO: Add logic to prevent invalid repos from being displayed
+
         // Manifest is initially parsed
-        const parsedManifests = manifests.map((manifest) => ({
-            manifest,
-            title: manifest.name,
-            subtitle: manifest.description,
-            user,
-            repo,
-            branch,
-            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-            extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
-            readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
-            stars,
-        }));
+        const parsedManifests = manifests.reduce((accum, manifest) => {
+            const item = {
+                manifest,
+                title: manifest.name,
+                subtitle: manifest.description,
+                user,
+                repo,
+                branch,
+                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+                extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+                readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+                stars,
+            };
+
+            // If manifest is valid, add it to the list
+            if (manifest && manifest.name && manifest.description && manifest.main
+            // TODO: Do we want to require a preview image or readme?
+            // && manifest.preview && manifest.readme
+            ) {
+                // Add to list unless we're hiding installed items and it's installed
+                if (!(CONFIG.visual.hideInstalled
+                    && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
+                ) {
+                    accum.push(item);
+                }
+            }
+            // else {
+            //     console.error("Invalid manifest:", manifest);
+            // }
+
+            return accum;
+        }, []);
 
         return parsedManifests;
     }
