@@ -74,6 +74,7 @@
         "hexToRGB": "readonly",
         "parseIni": "readonly",
         "DOWNLOAD_ICON": "readonly",
-        "TRASH_ICON": "readonly"
+        "TRASH_ICON": "readonly",
+        "SpicetifySVGIconPaths": "readonly"
     }
 }
