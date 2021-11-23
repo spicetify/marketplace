@@ -141,6 +141,8 @@ function openConfig() {
     });
     const closeButton = document.querySelector("body > generic-modal > div > div > div > div.main-trackCreditsModal-header > button");
     closeButton.setAttribute("onclick", "location.reload()");
+    const modalOverlay = document.querySelector("body > generic-modal > div");
+    modalOverlay.setAttribute("onclick", "location.reload()");
 }
 
 function createSlider(name, key) {
