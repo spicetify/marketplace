@@ -628,20 +628,26 @@ async function fetchThemes(contents_url, branch, stars) {
         if (!Array.isArray(manifests)) manifests = [manifests];
         // Manifest is initially parsed
         //TODO: Add logic to prevent invalid repos from being displayed
-        const parsedManifests = manifests.map((manifest) => ({
-            manifest,
-            title: manifest.name,
-            subtitle: manifest.description,
-            user,
-            repo,
-            branch,
-            imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-            readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
-            stars,
-            // theme stuff
-            cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
-            schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
-        }));
+        const parsedManifests = manifests.reduce((accum, manifest) => {
+            const item = {
+                manifest,
+                title: manifest.name,
+                subtitle: manifest.description,
+                user,
+                repo,
+                branch,
+                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+                readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+                stars,
+                // theme stuff
+                cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
+                schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`,
+            };
+            if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
+                accum.push(item);
+            }
+            return accum;
+        }, []);
         return parsedManifests;
     }
     catch (err) {
