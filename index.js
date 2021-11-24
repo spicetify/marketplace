@@ -626,9 +626,8 @@ async function fetchThemes(contents_url, branch, stars) {
         let manifests= await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-        // Manifest is initially parsed
-        //TODO: Add logic to prevent invalid repos from being displayed
 
+        // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = getSelectedBranch(branch, manifest);
             const item = {
@@ -645,6 +644,7 @@ async function fetchThemes(contents_url, branch, stars) {
                 cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
                 schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`,
             };
+            // If manifest is valid, add it to the list
             if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
                 accum.push(item);
             }
@@ -658,14 +658,12 @@ async function fetchThemes(contents_url, branch, stars) {
         return null;
     }
 }
+
 function getSelectedBranch(branch, manifest) {
-    console.log(manifest);
-    if (manifest.branch) {
-        console.log(manifest.branch);
-        return manifest.branch.replace("%22", "");
-    }
-    return branch;
+    const selectedBranch = manifest.branch ? manifest.branch.replace("%22", "") : branch;
+    return selectedBranch;
 }
+
 async function getThemeRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
