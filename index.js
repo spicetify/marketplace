@@ -577,16 +577,17 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
 
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
+            const selectedBranch = manifest.branch || branch;
             const item = {
                 manifest,
                 title: manifest.name,
                 subtitle: manifest.description,
                 user,
                 repo,
-                branch,
-                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-                extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
-                readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+                branch: selectedBranch,
+                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+                readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
             };
 
@@ -612,7 +613,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         return parsedManifests;
     }
     catch (err) {
-        console.warn(contents_url, err);
+        // console.warn(contents_url, err);
         return null;
     }
 }
@@ -623,13 +624,13 @@ async function fetchThemes(contents_url, branch, stars) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-        let manifests= await getRepoManifest(user, repo, branch);
+        let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
 
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
-            const selectedBranch = getSelectedBranch(branch, manifest);
+            const selectedBranch = manifest.branch || branch;
             const item = {
                 manifest,
                 title: manifest.name,
@@ -654,14 +655,9 @@ async function fetchThemes(contents_url, branch, stars) {
         return parsedManifests;
     }
     catch (err) {
-        console.warn(contents_url, err);
+        // console.warn(contents_url, err);
         return null;
     }
-}
-
-function getSelectedBranch(branch, manifest) {
-    const selectedBranch = manifest.branch ? manifest.branch.replace("%22", "") : branch;
-    return selectedBranch;
 }
 
 async function getThemeRepos(page = 1) {
