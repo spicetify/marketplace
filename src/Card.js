@@ -59,7 +59,7 @@ class Card extends react.Component {
             const url = `https://api.github.com/repos/${this.user}/${this.repo}`;
             // TODO: This implementation could probably be improved.
             // It might have issues when quickly switching between tabs.
-            const repoData = await Spicetify.CosmosAsync.get(url);
+            const repoData = await fetch(url).then(res => res.json());
 
             if (this.state.stars !== repoData.stargazers_count) {
                 this.setState({ stars: repoData.stargazers_count }, () => {

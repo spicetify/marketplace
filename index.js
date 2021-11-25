@@ -529,17 +529,11 @@ async function getRepos(page = 1) {
     // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
-    const allRepos = await Spicetify.CosmosAsync.get(url);
+    const allRepos = await fetch(url).then(res => res.json());
     const filteredArray = allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url));
 
     return filteredArray;
 }
-
-// e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}"
-// async function getRepoContents(contents_url) {
-//     const url = contents_url.replace("{+path}", "");
-//     return await Spicetify.CosmosAsync.get(url);
-// }
 
 // TODO: add try/catch here?
 // TODO: can we add a return type here?
@@ -553,7 +547,7 @@ async function getRepos(page = 1) {
 async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
-    return await Spicetify.CosmosAsync.get(url);
+    return await fetch(url).then(res => res.json());
 }
 
 // TODO: can we add a return type here?
@@ -670,7 +664,7 @@ async function getThemeRepos(page = 1) {
     // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
-    const allThemes = await Spicetify.CosmosAsync.get(url);
+    const allThemes = await fetch(url).then(res => res.json());
 
     const filteredArray = allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url));
     return filteredArray;
@@ -678,7 +672,7 @@ async function getThemeRepos(page = 1) {
 
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
-    const jsonReturned = await Spicetify.CosmosAsync.get(url);
+    const jsonReturned = await fetch(url).then(res => res.json());
 
     // const jsonReturned = {
     //     "repos": [
