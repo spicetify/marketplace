@@ -145,10 +145,13 @@ class Card extends react.Component {
     async installTheme() {
         console.log(`Installing theme ${this.localStorageKey}`);
 
-        const schemesResponse = await fetch(this.schemesURL);
-        const colourSchemes = await schemesResponse.text();
-        const parsedSchemes = parseIni(colourSchemes);
-        // console.log(parsedSchemes);
+        let parsedSchemes = null;
+        if (this.schemesURL) {
+            const schemesResponse = await fetch(this.schemesURL);
+            const colourSchemes = await schemesResponse.text();
+            parsedSchemes = parseIni(colourSchemes);
+        }
+        console.log(parsedSchemes);
 
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
@@ -169,7 +172,7 @@ class Card extends react.Component {
             schemesURL: this.schemesURL,
             // Installed theme localstorage item has schemes, nothing else does
             schemes: parsedSchemes,
-            activeScheme: Object.keys(parsedSchemes)[0],
+            activeScheme: parsedSchemes ? Object.keys(parsedSchemes)[0] : null,
         }));
 
         // TODO: handle this differently?

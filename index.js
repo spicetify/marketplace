@@ -637,7 +637,7 @@ async function fetchThemes(contents_url, branch, stars) {
                 stars,
                 // theme stuff
                 cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-                schemesURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`,
+                schemesURL: manifest.schemes ? `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}` : null,
             };
             // If manifest is valid, add it to the list
             if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
@@ -673,13 +673,6 @@ async function getThemeRepos(page = 1) {
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await fetch(url).then(res => res.json());
-
-    // const jsonReturned = {
-    //     "repos": [
-    //         "https://github.com/theRealPadster/spicetify-hide-podcasts",
-    //     ],
-    // };
-
     return jsonReturned.repos;
 }
 

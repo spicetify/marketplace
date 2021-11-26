@@ -75,11 +75,15 @@ const hexToRGB = (hex) => {
         if (installedThemeDataStr) {
             const installedThemeData = JSON.parse(installedThemeDataStr);
 
-            // Inject colour scheme
+            // Inject colour scheme if found
             const parsedSchemes = installedThemeData.schemes;
             console.log(parsedSchemes);
-            const activeScheme = installedThemeData.schemes[installedThemeData.activeScheme];
-            injectColourScheme(activeScheme);
+            if (installedThemeData.schemes) {
+                const activeScheme = installedThemeData.schemes[installedThemeData.activeScheme];
+                injectColourScheme(activeScheme);
+            } else {
+                console.warn("No schemes found for theme");
+            }
 
             // Remove default css
             // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
