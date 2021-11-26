@@ -640,7 +640,7 @@ async function fetchThemes(contents_url, branch, stars) {
                 schemesURL: manifest.schemes ? `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}` : null,
             };
             // If manifest is valid, add it to the list
-            if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
+            if (manifest && manifest.name && manifest.usercss && manifest.description) {
                 accum.push(item);
             }
             return accum;
