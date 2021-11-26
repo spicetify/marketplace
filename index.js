@@ -471,14 +471,14 @@ class Grid extends react.Component {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
         // TODO: don't show on all tabs
-        // TODO: don't show if no theme installed
-        react.createElement(SortBox, {
+        // Show colour scheme dropdown if there is a theme with schemes installed
+        CONFIG.theme.activeScheme ? react.createElement(SortBox, {
             onChange: this.updateColourScheme.bind(this),
             sortBoxOptions: generateSchemesOptions(CONFIG.theme.schemes),
             // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
             // because it hardcodes the value into the fn
             sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
-        }),
+        }) : null,
 
             // TODO: Add search bar and sort functionality
             // react.createElement("div", {
