@@ -11,8 +11,8 @@ class Card extends react.Component {
         /** @type { "extension" | "theme" } */
         this.type;
 
-        // From `fetchRepoExtensions()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string; usercss?: string; schemes?: string; } } */
+        // From `fetchRepoExtensions()` and `fetchThemes()`
+        /** @type { { name: string; description: string; main: string; preview: string; readme: string; usercss?: string; schemes?: string; include?: string[] } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -37,6 +37,8 @@ class Card extends react.Component {
         this.cssURL;
         /** @type { string? } */
         this.schemesURL;
+        /** @type { string[]? } */
+        this.include;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -170,6 +172,7 @@ class Card extends react.Component {
             // Theme stuff
             cssURL: this.cssURL,
             schemesURL: this.schemesURL,
+            include: this.include,
             // Installed theme localstorage item has schemes, nothing else does
             schemes: parsedSchemes,
             activeScheme: parsedSchemes ? Object.keys(parsedSchemes)[0] : null,
@@ -309,6 +312,10 @@ class Card extends react.Component {
         ), react.createElement("p", {
             className: "marketplace-card-desc",
         }, this.manifest.description),
+        this.include && react.createElement("div", {
+            className: "marketplace-card__bottom-meta main-type-mestoBold",
+            as: "div",
+        }, "Includes external JS"),
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",

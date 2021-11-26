@@ -132,6 +132,11 @@ div.marketplace-tabBar-headerItemLink {
       .marketplace-card__bottom-meta {
         margin-top: auto;
         margin-bottom: 0;
+
+        // Add space between multiple blurbs
+        & + .marketplace-card__bottom-meta {
+          margin-top: 8px;
+        }
       }
     }
   }

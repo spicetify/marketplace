@@ -25,6 +25,25 @@ const hexToRGB = (hex) => {
     return aRgb;
 };
 
+/**
+ * Get user, repo, and branch from a GitHub raw URL
+ * @param {string} url Github Raw URL
+ * @returns { { user: string, repo: string, branch: string } }
+ */
+const getParamsFromGithubRaw = (url) => {
+    // eslint-disable-next-line no-useless-escape
+    const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\//);
+
+    // TODO: err handling?
+    const obj = {
+        user: regex_result ? regex_result.groups.user : null,
+        repo: regex_result ? regex_result.groups.repo : null,
+        branch: regex_result ? regex_result.groups.branch : null,
+    };
+
+    return obj;
+};
+
 (async function MarketplaceExtension() {
     const { LocalStorage } = Spicetify;
     if (!(LocalStorage)) {
@@ -108,6 +127,25 @@ const hexToRGB = (hex) => {
             newUserThemeCSS.rel = "stylesheet";
             newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
             document.body.appendChild(newUserThemeCSS);
+
+            // Inject any included js
+            if (installedThemeData.include && installedThemeData.include.length) {
+                // console.log("Including js", installedThemeData.include);
+
+                installedThemeData.include.forEach((script) => {
+                    const newScript = document.createElement("script");
+                    let src = script;
+                    // If it's a github raw script, use jsdelivr
+                    if (script.indexOf("raw.githubusercontent.com") > -1) {
+                        const { user, repo, branch } = getParamsFromGithubRaw(script);
+                        src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${script.split("/").pop()}`;
+                    }
+                    // console.log({src});
+                    newScript.src = src;
+                    newScript.classList.add("marketplaceScript");
+                    document.body.appendChild(newScript);
+                });
+            }
         }
     }
 
@@ -133,12 +171,7 @@ const hexToRGB = (hex) => {
         console.log("Initializing extension: ", extensionManifest);
 
         // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
-        // eslint-disable-next-line no-useless-escape
-        const regex_result = extensionManifest.extensionURL.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\//);
-        // TODO: err handling?
-        if (!regex_result || !regex_result.groups) return;
-
-        const { user, repo, branch } = regex_result.groups;
+        const { user, repo, branch } = getParamsFromGithubRaw(extensionManifest.extensionURL);
         if (!user || !repo || !branch) return;
 
         const main = extensionManifest.manifest.main[0]  === "/"
