@@ -643,7 +643,6 @@ async function fetchThemes(contents_url, branch, stars) {
             if (manifest && manifest.name && manifest.usercss && manifest.schemes && manifest.description) {
                 accum.push(item);
             }
-            console.log(repo);
             return accum;
         }, []);
         return parsedManifests;
