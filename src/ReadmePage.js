@@ -71,8 +71,7 @@ class ReadmePage extends react.Component {
             if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
 
             const readmeHtml = await readmeHtmlRes.text();
-            console.log(readmeHtml);
-            console.log(readmeHtmlRes);
+
             if (readmeHtml == null) {
                 Spicetify.Platform.History.goBack();
             }
