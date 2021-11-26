@@ -43,8 +43,12 @@ const hexToRGB = (hex) => {
     };
 
     const injectColourScheme = (scheme) => {
-        // Remove any existing marketplace scheme
         try {
+            // Remove default scheme
+            const existingColorsCSS = document.querySelector("link[href='colors.css']");
+            if (existingColorsCSS) existingColorsCSS.remove();
+
+            // Remove any existing marketplace scheme
             const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
             if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
@@ -89,8 +93,6 @@ const hexToRGB = (hex) => {
             // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
             const existingUserThemeCSS = document.querySelector("link[href='user.css']");
             if (existingUserThemeCSS) existingUserThemeCSS.remove();
-            const existingColorsCSS = document.querySelector("link[href='colors.css']");
-            if (existingColorsCSS) existingColorsCSS.remove();
 
             // Remove any existing marketplace theme
             const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
