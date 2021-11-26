@@ -529,7 +529,7 @@ async function getRepos(page = 1) {
     // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
-    const allRepos = await fetch(url).then(res => res.json());
+    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     const filteredArray = allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url));
 
     return filteredArray;
@@ -547,7 +547,7 @@ async function getRepos(page = 1) {
 async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
-    return await fetch(url).then(res => res.json());
+    return await fetch(url).then(res => res.json()).catch(() => null);
 }
 
 // TODO: can we add a return type here?
@@ -663,7 +663,7 @@ async function getThemeRepos(page = 1) {
     // Sorting params (not implemented for Marketplace yet)
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
-    const allThemes = await fetch(url).then(res => res.json());
+    const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
 
     const filteredArray = allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url));
     return filteredArray;
@@ -671,7 +671,7 @@ async function getThemeRepos(page = 1) {
 
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
-    const jsonReturned = await fetch(url).then(res => res.json());
+    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
     return jsonReturned.repos;
 }
 
