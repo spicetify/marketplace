@@ -135,6 +135,17 @@ const getParamsFromGithubRaw = (url) => {
         if (themeManifest.schemes) {
             const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
             injectColourScheme(activeScheme);
+            let i = 0;
+            if (localStorage.getItem("marketplace:colorShift") == "true") {
+                setInterval(function () {
+                    if (i > Object.keys(themeManifest.schemes).length) {
+                        i=0;
+                    }
+                    injectColourScheme(Object.values(themeManifest.schemes)[i]);
+
+                    i++;
+                }, 10 * 1000);
+            }
         } else {
             console.warn("No schemes found for theme");
         }
