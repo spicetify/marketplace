@@ -33,8 +33,8 @@ const hexToRGB = (hex) => {
 const getParamsFromGithubRaw = (url) => {
     // eslint-disable-next-line no-useless-escape
     const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\/(?<filePath>.+$)/);
+    // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
-    // TODO: err handling?
     const obj = {
         user: regex_result ? regex_result.groups.user : null,
         repo: regex_result ? regex_result.groups.repo : null,
@@ -171,17 +171,12 @@ const getParamsFromGithubRaw = (url) => {
 
         console.log("Initializing extension: ", extensionManifest);
 
-        // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
-        const { user, repo, branch } = getParamsFromGithubRaw(extensionManifest.extensionURL);
-        if (!user || !repo || !branch) return;
-
-        const main = extensionManifest.manifest.main[0]  === "/"
-            ? extensionManifest.manifest.main.slice(1)
-            : extensionManifest.manifest.main;
+        const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
+        if (!user || !repo || !branch || !filePath) return;
 
         const script = document.createElement("script");
         script.defer = true;
-        script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${main}`;
+        script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
         document.body.appendChild(script);
     };
 
