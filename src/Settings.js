@@ -6,6 +6,7 @@ function openConfig() {
         Spicetify.PopupModal.display({
             title: "Spicetify Marketplace",
             content: configContainer,
+            // isLarge: true,
         });
         return;
     }
@@ -170,17 +171,21 @@ function createSlider(name, key) {
     container.innerHTML = `
     <div class="setting-row">
         <label class="col description">${name}</label>
-        <div class="col action"><button class="switch">
-            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-                ${Spicetify.SVGIcons.check}
-            </svg>
-        </button></div>
+        <div class="col action">
+            <label class="x-toggle-wrapper">
+                <input class="x-toggle-input" type="checkbox">
+                <span class="x-toggle-indicatorWrapper">
+                    <span class="x-toggle-indicator"></span>
+                </span>
+            </label>
+        </div>
     </div>`;
 
-    const slider = container.querySelector("button");
-    slider.classList.toggle("disabled", !CONFIG.visual[key]);
-    slider.onclick = () => {
-        const state = !slider.classList.toggle("disabled");
+    const slider = container.querySelector("input");
+    slider.checked = !!CONFIG.visual[key];
+
+    slider.onchange = () => {
+        const state = slider.checked;
         CONFIG.visual[key] = state;
         localStorage.setItem(`marketplace:${key}`, String(state));
         gridUpdatePostsVisual && gridUpdatePostsVisual();
