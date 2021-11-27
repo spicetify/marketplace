@@ -261,6 +261,7 @@ class Grid extends react.Component {
                 }
 
                 if (extensions && extensions.length) {
+                    // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
                     extensions.forEach((extension) => this.appendCard(extension, "extension"));
                 }
             }
@@ -580,13 +581,13 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: manifest.preview.startsWith("http")
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
                     ? manifest.preview
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
                 extensionURL: manifest.main.startsWith("http")
                     ? manifest.main
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-                readmeURL: manifest.readme.startsWith("http")
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
                     ? manifest.readme
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
@@ -639,10 +640,10 @@ async function fetchThemes(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: manifest.preview.startsWith("http")
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
                     ? manifest.preview
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-                readmeURL: manifest.readme.startsWith("http")
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
                     ? manifest.readme
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
