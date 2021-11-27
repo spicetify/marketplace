@@ -28,17 +28,18 @@ const hexToRGB = (hex) => {
 /**
  * Get user, repo, and branch from a GitHub raw URL
  * @param {string} url Github Raw URL
- * @returns { { user: string, repo: string, branch: string } }
+ * @returns { { user: string, repo: string, branch: string, filePath: string } }
  */
 const getParamsFromGithubRaw = (url) => {
     // eslint-disable-next-line no-useless-escape
-    const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\//);
+    const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\/(?<filePath>.+$)/);
 
     // TODO: err handling?
     const obj = {
         user: regex_result ? regex_result.groups.user : null,
         repo: regex_result ? regex_result.groups.repo : null,
         branch: regex_result ? regex_result.groups.branch : null,
+        filePath: regex_result ? regex_result.groups.filePath : null,
     };
 
     return obj;
@@ -137,8 +138,8 @@ const getParamsFromGithubRaw = (url) => {
                     let src = script;
                     // If it's a github raw script, use jsdelivr
                     if (script.indexOf("raw.githubusercontent.com") > -1) {
-                        const { user, repo, branch } = getParamsFromGithubRaw(script);
-                        src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${script.split("/").pop()}`;
+                        const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
+                        src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
                     }
                     // console.log({src});
                     newScript.src = src;
