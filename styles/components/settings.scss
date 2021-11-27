@@ -22,6 +22,20 @@
   }
 }
 
+.GenericModal[aria-label="Marketplace"] {
+  // Toggle switches
+  .x-toggle-wrapper {
+    cursor: pointer;
+    margin-inline-start: 12px;
+    // Hide disabled toggle rows (i.e. the "Extensions" one)
+    &.disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+// The up/down arrows
 button.switch {
   align-items: center;
   border: 0px;
