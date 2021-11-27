@@ -576,9 +576,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
             let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
             if (manifest.preview.split(":")[0] == "https") {
                 const splitManifest = manifest.preview.split("/");
-                manifest.preview = splitManifest.slice(6, splitManifest.length);
-                manifest.preview = manifest.preview.toString();
-                manifest.preview = manifest.preview.replace(",", "/");
+                manifest.preview = splitManifest.slice(6, splitManifest.length).toString().replace(",", "/");
                 imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
             }
             const item = {
@@ -637,9 +635,7 @@ async function fetchThemes(contents_url, branch, stars) {
             let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
             if (manifest.preview.split(":")[0] == "https") {
                 const splitManifest = manifest.preview.split("/");
-                manifest.preview =  splitManifest.slice(6, splitManifest.length);
-                manifest.preview = manifest.preview.toString();
-                manifest.preview = manifest.preview.replace(",", "/");
+                manifest.preview = splitManifest.slice(6, splitManifest.length).toString().replace(",", "/");
                 imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
             }
             const item = {
