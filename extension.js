@@ -58,8 +58,38 @@ const getParamsFromGithubRaw = (url) => {
         "installedExtensions": "marketplace:installed-extensions",
         "activeTab": "marketplace:active-tab",
         "tabs": "marketplace:tabs",
-        //Theme installed needs to store a link similar to this ("https://raw.githubusercontent.com/CharlieS1103/Dreary/main/")
+        // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
         "themeInstalled": "marketplace:theme-installed",
+    };
+
+    const getInstalledExtensions = () => {
+        const installedExtensionsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
+        const installedExtensions = JSON.parse(installedExtensionsStr);
+        return installedExtensions;
+    };
+
+    const getLocalStorageDataFromKey = (key) => {
+        const manifestStr = LocalStorage.get(key);
+        if (!manifestStr) return null;
+
+        const manifest = JSON.parse(manifestStr);
+        return manifest;
+    };
+
+    const initializeExtension = (extensionKey) => {
+        const extensionManifest = getLocalStorageDataFromKey(extensionKey);
+        // Abort if no manifest found or no extension URL (i.e. a theme)
+        if (!extensionManifest || !extensionManifest.extensionURL) return;
+
+        console.log("Initializing extension: ", extensionManifest);
+
+        const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
+        if (!user || !repo || !branch || !filePath) return;
+
+        const script = document.createElement("script");
+        script.defer = true;
+        script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+        document.body.appendChild(script);
     };
 
     const injectColourScheme = (scheme) => {
@@ -90,99 +120,69 @@ const getParamsFromGithubRaw = (url) => {
             console.warn(error);
         }
     };
-    const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
 
-    // TODO: tidy this up
-    if (installedThemeKey) {
-        const installedThemeDataStr = LocalStorage.get(installedThemeKey);
-
-        if (installedThemeDataStr) {
-            const installedThemeData = JSON.parse(installedThemeDataStr);
-
-            // Inject colour scheme if found
-            const parsedSchemes = installedThemeData.schemes;
-            console.log(parsedSchemes);
-            if (installedThemeData.schemes) {
-                const activeScheme = installedThemeData.schemes[installedThemeData.activeScheme];
-                injectColourScheme(activeScheme);
-            } else {
-                console.warn("No schemes found for theme");
-            }
-
-            // Remove default css
-            // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
-            const existingUserThemeCSS = document.querySelector("link[href='user.css']");
-            if (existingUserThemeCSS) existingUserThemeCSS.remove();
-
-            // Remove any existing marketplace theme
-            const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
-            if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
-
-            // Add theme css
-            const newUserThemeCSS = document.createElement("link");
-            // Using jsdelivr since github raw doesn't provide mimetypes
-            // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-            console.log(installedThemeData);
-            const cssUrl = `https://cdn.jsdelivr.net/gh/${installedThemeData.user}/${installedThemeData.repo}@${installedThemeData.branch}/${installedThemeData.manifest.usercss}`;
-            newUserThemeCSS.href = cssUrl;
-            newUserThemeCSS.rel = "stylesheet";
-            newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
-            document.body.appendChild(newUserThemeCSS);
-
-            // Inject any included js
-            if (installedThemeData.include && installedThemeData.include.length) {
-                // console.log("Including js", installedThemeData.include);
-
-                installedThemeData.include.forEach((script) => {
-                    const newScript = document.createElement("script");
-                    let src = script;
-                    // If it's a github raw script, use jsdelivr
-                    if (script.indexOf("raw.githubusercontent.com") > -1) {
-                        const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
-                        src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
-                    }
-                    // console.log({src});
-                    newScript.src = src;
-                    newScript.classList.add("marketplaceScript");
-                    document.body.appendChild(newScript);
-                });
-            }
+    const initializeTheme = (themeKey) => {
+        const themeManifest = getLocalStorageDataFromKey(themeKey);
+        // Abort if no manifest found
+        if (!themeManifest) {
+            console.log("No theme manifest found");
+            return;
         }
-    }
 
-    const getInstalledExtensions = () => {
-        const installedExtensionsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
-        const installedExtensions = JSON.parse(installedExtensionsStr);
-        return installedExtensions;
-    };
+        console.log("Initializing theme: ", themeManifest);
 
-    const getExtensionFromKey = (key) => {
-        const manifestStr = LocalStorage.get(key);
-        if (!manifestStr) return null;
+        // Inject colour scheme if found
+        if (themeManifest.schemes) {
+            const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
+            injectColourScheme(activeScheme);
+        } else {
+            console.warn("No schemes found for theme");
+        }
 
-        const manifest = JSON.parse(manifestStr);
-        return manifest;
-    };
+        // Remove default css
+        // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
+        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+        if (existingUserThemeCSS) existingUserThemeCSS.remove();
 
-    const initializeExtension = (extensionKey) => {
-        const extensionManifest = getExtensionFromKey(extensionKey);
-        // Abort if no manifest found or no extension URL (i.e. a theme)
-        if (!extensionManifest || !extensionManifest.extensionURL) return;
+        // Remove any existing marketplace theme
+        const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
+        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
-        console.log("Initializing extension: ", extensionManifest);
+        // Add theme css
+        const newUserThemeCSS = document.createElement("link");
+        // Using jsdelivr since github raw doesn't provide mimetypes
+        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+        const cssUrl = `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`;
+        newUserThemeCSS.href = cssUrl;
+        newUserThemeCSS.rel = "stylesheet";
+        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
+        document.body.appendChild(newUserThemeCSS);
 
-        const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
-        if (!user || !repo || !branch || !filePath) return;
+        // Inject any included js
+        if (themeManifest.include && themeManifest.include.length) {
+            // console.log("Including js", installedThemeData.include);
 
-        const script = document.createElement("script");
-        script.defer = true;
-        script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
-        document.body.appendChild(script);
+            themeManifest.include.forEach((script) => {
+                const newScript = document.createElement("script");
+                let src = script;
+                // If it's a github raw script, use jsdelivr
+                if (script.indexOf("raw.githubusercontent.com") > -1) {
+                    const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
+                    src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+                }
+                // console.log({src});
+                newScript.src = src;
+                newScript.classList.add("marketplaceScript");
+                document.body.appendChild(newScript);
+            });
+        }
     };
 
     console.log("Loaded Marketplace extension");
 
-    const installedExtensions = getInstalledExtensions();
+    const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
+    if (installedThemeKey) initializeTheme(installedThemeKey);
 
+    const installedExtensions = getInstalledExtensions();
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
