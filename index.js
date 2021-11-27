@@ -573,6 +573,14 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
+            let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
+            if (manifest.preview.split(":")[0] == "https") {
+                const splitManifest = manifest.preview.split("/");
+                manifest.preview = splitManifest.slice(6, splitManifest.length);
+                manifest.preview = manifest.preview.toString();
+                manifest.preview = manifest.preview.replace(",", "/");
+                imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
+            }
             const item = {
                 manifest,
                 title: manifest.name,
@@ -580,7 +588,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                imageURL: imageLink,
                 extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
                 readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
@@ -618,7 +626,7 @@ async function fetchThemes(contents_url, branch, stars) {
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
-        const { user, repo } = regex_result.groups;
+        let { user, repo } = regex_result.groups;
         let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
@@ -626,6 +634,14 @@ async function fetchThemes(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
+            let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
+            if (manifest.preview.split(":")[0] == "https") {
+                const splitManifest = manifest.preview.split("/");
+                manifest.preview =  splitManifest.slice(6, splitManifest.length);
+                manifest.preview = manifest.preview.toString();
+                manifest.preview = manifest.preview.replace(",", "/");
+                imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
+            }
             const item = {
                 manifest,
                 title: manifest.name,
@@ -633,7 +649,7 @@ async function fetchThemes(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                imageURL: imageLink,
                 readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
                 // theme stuff
