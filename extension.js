@@ -137,14 +137,18 @@ const getParamsFromGithubRaw = (url) => {
             injectColourScheme(activeScheme);
             let i = 0;
             if (localStorage.getItem("marketplace:colorShift") == "true") {
+                const style = document.createElement("style");
+                style.innerHTML = `*{
+                    transition-duration: 400ms;
+                }`;
+                document.head.appendChild(style);
                 setInterval(function () {
                     if (i > Object.keys(themeManifest.schemes).length) {
                         i=0;
                     }
                     injectColourScheme(Object.values(themeManifest.schemes)[i]);
-
                     i++;
-                }, 10 * 1000);
+                }, 60 * 1000);
             }
         } else {
             console.warn("No schemes found for theme");
