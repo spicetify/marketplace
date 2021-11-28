@@ -102,6 +102,7 @@ const CONFIG = {
         type: localStorage.getItem("marketplace:type") === "true",
         stars: localStorage.getItem("marketplace:stars") === "true",
         hideInstalled: localStorage.getItem("marketplace:hideInstalled") === "true",
+        colorShift: localStorage.getItem("marketplace:colorShift") === "true",
         // I was considering adding watchers as "followers" but it looks like the value is a duplicate
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
@@ -483,6 +484,7 @@ class Grid extends react.Component {
         react.createElement("button", {
             className: "marketplace-settings-button",
             id: "marketplace-settings-button",
+
             onClick: openConfig,
         }, SETTINGS_ICON),
         // End of marketplace-header__right
