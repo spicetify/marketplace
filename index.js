@@ -425,9 +425,6 @@ class Grid extends react.Component {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig);
-        this.configButton.register();
-
         const viewPort = document.querySelector("main .os-viewport");
         this.checkScroll = this.isScrolledBottom.bind(this);
         viewPort.addEventListener("scroll", this.checkScroll);
@@ -449,7 +446,6 @@ class Grid extends react.Component {
         const viewPort = document.querySelector("main .os-viewport");
         lastScroll = viewPort.scrollTop;
         viewPort.removeEventListener("scroll", this.checkScroll);
-        this.configButton.deregister();
     }
 
     isScrolledBottom(event) {
@@ -472,7 +468,10 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
-        // TODO: don't show on all tabs
+        // Start of marketplace-header__right
+        react.createElement("div", {
+            className: "marketplace-header__right",
+        },
         // Show colour scheme dropdown if there is a theme with schemes installed
         CONFIG.theme.activeScheme ? react.createElement(SortBox, {
             onChange: this.updateColourScheme.bind(this),
@@ -481,7 +480,13 @@ class Grid extends react.Component {
             // because it hardcodes the value into the fn
             sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
         }) : null,
-
+        react.createElement("button", {
+            className: "marketplace-settings-button",
+            id: "marketplace-settings-button",
+            onClick: openConfig,
+        }, SETTINGS_ICON),
+        // End of marketplace-header__right
+        ),
             // TODO: Add search bar and sort functionality
             // react.createElement("div", {
             //     className: "searchbar--bar__wrapper",
@@ -490,7 +495,6 @@ class Grid extends react.Component {
             //     type: "text",
             //     placeholder: "Search for Extensions?",
             // })),
-
         ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
