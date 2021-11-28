@@ -6,6 +6,7 @@ function openConfig() {
         Spicetify.PopupModal.display({
             title: "Spicetify Marketplace",
             content: configContainer,
+            isLarge: true,
         });
     };
 

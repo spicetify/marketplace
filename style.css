@@ -190,6 +190,10 @@ div.marketplace-tabBar-headerItemLink {
 option {
   background-color: var(--spice-button);
 }
+.GenericModal[aria-label="Spicetify Marketplace"] .main-embedWidgetGenerator-container {
+  background-color: var(--spice-tab-active);
+}
+
 .setting-row::after {
   content: "";
   display: table;
