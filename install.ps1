@@ -73,22 +73,24 @@ if ($PSVersionTable.PSVersion.Major -gt $PSMinVersion) {
   # Remove .zip file.
   Write-Part "REMOVING       "; Write-Emphasized $zip_file
   Remove-Item -Path $zip_file
+  Remove-Item -Path  "${sp_dir}\spicetify-marketplace\spicetify-marketplace-main" -Force -Recurse
   Write-Done
 
   # Check ~\.spicetify.\Themes directory already exists
   $spicePath = spicetify -c | Split-Path
-  $sp_dot_dir = "$spicePath\CustomApps\spicetify-marketplace"
+  $sp_dot_dir = "$spicePath\"
   if (-not (Test-Path $sp_dot_dir)) {
     Write-Part "MAKING FOLDER  "; Write-Emphasized $sp_dot_dir
     New-Item -Path $sp_dot_dir -ItemType Directory | Out-Null
     Write-Done
   }
 
+
   # Copy to .spicetify.
   Write-Part "COPYING        "; Write-Emphasized $sp_dot_dir
-  Copy-Item -Path "${sp_dir}\spicetify-marketplace\*" -Destination $sp_dot_dir -Recurse -Force
+  Copy-Item -Path "${sp_dir}\" -Destination $sp_dot_dir -Recurse -Force
   Write-Done
-
+ 
   # Installing.
   Write-Part "INSTALLING";
   cd $sp_dot_dir
