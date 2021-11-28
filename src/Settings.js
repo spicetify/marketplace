@@ -4,7 +4,7 @@ let configContainer;
 function openConfig() {
     const triggerModal = () => {
         Spicetify.PopupModal.display({
-            title: "Spicetify Marketplace",
+            title: "Marketplace",
             content: configContainer,
             isLarge: true,
         });

@@ -1,8 +1,19 @@
 // Make settings modal use same background colour as the reload modal
 // (The large style modal uses --spice-player as the background colour by default)
-.GenericModal[aria-label="Spicetify Marketplace"] {
+.GenericModal[aria-label="Marketplace"] {
   .main-embedWidgetGenerator-container {
     background-color: var(--spice-tab-active);
+  }
+
+  // Toggle switches
+  .x-toggle-wrapper {
+    cursor: pointer;
+    margin-inline-start: 12px;
+    // Hide disabled toggle rows (i.e. the "Extensions" one)
+    &.disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 }
 
@@ -26,19 +37,6 @@
     &.action {
       float: right;
       text-align: right;
-    }
-  }
-}
-
-.GenericModal[aria-label="Marketplace"] {
-  // Toggle switches
-  .x-toggle-wrapper {
-    cursor: pointer;
-    margin-inline-start: 12px;
-    // Hide disabled toggle rows (i.e. the "Extensions" one)
-    &.disabled {
-      opacity: 0;
-      pointer-events: none;
     }
   }
 }

@@ -190,8 +190,16 @@ div.marketplace-tabBar-headerItemLink {
 option {
   background-color: var(--spice-button);
 }
-.GenericModal[aria-label="Spicetify Marketplace"] .main-embedWidgetGenerator-container {
+.GenericModal[aria-label=Marketplace] .main-embedWidgetGenerator-container {
   background-color: var(--spice-tab-active);
+}
+.GenericModal[aria-label=Marketplace] .x-toggle-wrapper {
+  cursor: pointer;
+  margin-inline-start: 12px;
+}
+.GenericModal[aria-label=Marketplace] .x-toggle-wrapper.disabled {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .setting-row::after {
@@ -212,15 +220,6 @@ option {
 .setting-row .col.action {
   float: right;
   text-align: right;
-}
-
-.GenericModal[aria-label=Marketplace] .x-toggle-wrapper {
-  cursor: pointer;
-  margin-inline-start: 12px;
-}
-.GenericModal[aria-label=Marketplace] .x-toggle-wrapper.disabled {
-  opacity: 0;
-  pointer-events: none;
 }
 
 button.switch {
