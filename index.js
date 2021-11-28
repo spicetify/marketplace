@@ -581,6 +581,7 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
+
                 imageURL: manifest.preview && manifest.preview.startsWith("http")
                     ? manifest.preview
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
@@ -625,7 +626,7 @@ async function fetchThemes(contents_url, branch, stars) {
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
-        const { user, repo } = regex_result.groups;
+        let { user, repo } = regex_result.groups;
         let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];

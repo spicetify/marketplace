@@ -1,3 +1,11 @@
+// Make settings modal use same background colour as the reload modal
+// (The large style modal uses --spice-player as the background colour by default)
+.GenericModal[aria-label="Spicetify Marketplace"] {
+  .main-embedWidgetGenerator-container {
+    background-color: var(--spice-tab-active);
+  }
+}
+
 .setting-row {
   &::after {
     content: "";

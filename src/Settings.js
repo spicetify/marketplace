@@ -2,12 +2,16 @@ let configContainer;
 
 // eslint-disable-next-line no-unused-vars, no-redeclare
 function openConfig() {
-    if (configContainer) {
+    const triggerModal = () => {
         Spicetify.PopupModal.display({
             title: "Spicetify Marketplace",
             content: configContainer,
-            // isLarge: true,
+            isLarge: true,
         });
+    };
+
+    if (configContainer) {
+        triggerModal();
         return;
     }
 
@@ -136,10 +140,7 @@ function openConfig() {
         resetContainer,
     );
 
-    Spicetify.PopupModal.display({
-        title: "Marketplace",
-        content: configContainer,
-    });
+    triggerModal();
 
     const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn");
     const modalOverlay = document.querySelector("body > generic-modal > div");
