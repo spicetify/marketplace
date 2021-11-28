@@ -5,11 +5,15 @@ const MODAL_TITLE = "Reload required";
 
 // eslint-disable-next-line no-unused-vars, no-redeclare
 function openReloadModal() {
-    if (reloadContainer) {
+    const triggerModal = () => {
         Spicetify.PopupModal.display({
             title: MODAL_TITLE,
             content: reloadContainer,
         });
+    };
+
+    if (reloadContainer) {
+        triggerModal();
         return;
     }
 
@@ -50,8 +54,5 @@ function openReloadModal() {
         buttonContainer,
     );
 
-    Spicetify.PopupModal.display({
-        title: MODAL_TITLE,
-        content: reloadContainer,
-    });
+    triggerModal();
 }

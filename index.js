@@ -261,6 +261,7 @@ class Grid extends react.Component {
                 }
 
                 if (extensions && extensions.length) {
+                    // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
                     extensions.forEach((extension) => this.appendCard(extension, "extension"));
                 }
             }
@@ -573,12 +574,6 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
-            let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
-            if (manifest.preview.split(":")[0] == "https") {
-                const splitManifest = manifest.preview.split("/");
-                manifest.preview = splitManifest.slice(6, splitManifest.length).toString().replace(",", "/");
-                imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
-            }
             const item = {
                 manifest,
                 title: manifest.name,
@@ -586,9 +581,16 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: imageLink,
-                extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-                readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
+                    ? manifest.preview
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                extensionURL: manifest.main.startsWith("http")
+                    ? manifest.main
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
+                    ? manifest.readme
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
             };
 
@@ -632,12 +634,6 @@ async function fetchThemes(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
-            let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
-            if (manifest.preview.split(":")[0] == "https") {
-                const splitManifest = manifest.preview.split("/");
-                manifest.preview = splitManifest.slice(6, splitManifest.length).toString().replace(",", "/");
-                imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
-            }
             const item = {
                 manifest,
                 title: manifest.name,
@@ -645,12 +641,23 @@ async function fetchThemes(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: imageLink,
-                readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
+                    ? manifest.preview
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
+                    ? manifest.readme
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
                 // theme stuff
-                cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-                schemesURL: manifest.schemes ? `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}` : null,
+                cssURL: manifest.usercss.startsWith("http")
+                    ? manifest.usercss
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+                // TODO: clean up indentation etc
+                schemesURL: manifest.schemes
+                    ? (
+                        manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+                    )
+                    : null,
                 include: manifest.include,
             };
             // If manifest is valid, add it to the list
