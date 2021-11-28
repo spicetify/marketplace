@@ -83,12 +83,17 @@ const getParamsFromGithubRaw = (url) => {
 
         console.log("Initializing extension: ", extensionManifest);
 
-        const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
-        if (!user || !repo || !branch || !filePath) return;
-
         const script = document.createElement("script");
         script.defer = true;
-        script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+        script.src = extensionManifest.extensionURL;
+
+        // If it's a github raw script, use jsdelivr
+        if (script.src.indexOf("raw.githubusercontent.com") > -1) {
+            const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
+            if (!user || !repo || !branch || !filePath) return;
+            script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+        }
+
         document.body.appendChild(script);
     };
 
@@ -170,11 +175,14 @@ const getParamsFromGithubRaw = (url) => {
 
         // Add theme css
         const newUserThemeCSS = document.createElement("link");
-        // Using jsdelivr since github raw doesn't provide mimetypes
-        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-        const cssUrl = `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`;
-        newUserThemeCSS.href = cssUrl;
         newUserThemeCSS.rel = "stylesheet";
+
+        // If it's a github raw link, use jsdelivr
+        newUserThemeCSS.href = themeManifest.cssURL.indexOf("raw.githubusercontent.com") > -1
+            // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+            ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
+            : themeManifest.cssURL;
+
         newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
         document.body.appendChild(newUserThemeCSS);
 

@@ -9,6 +9,10 @@
   margin: 16px 0;
 }
 
+.marketplace-header__right {
+  display: flex;
+}
+
 .marketplace-sort-bar {
   align-items: center;
   display: flex;
@@ -69,6 +73,23 @@
 
 div.marketplace-tabBar-headerItemLink {
   padding: 0;
+}
+
+.marketplace-settings-button {
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  padding: 10px 14px 6px;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  background-color: var(--spice-sidebar);
+}
+.marketplace-settings-button:hover {
+  background-color: var(--spice-tab-active);
 }
 
 /* Card preview image error placeholder */
@@ -190,6 +211,10 @@ div.marketplace-tabBar-headerItemLink {
 option {
   background-color: var(--spice-button);
 }
+.GenericModal[aria-label="Spicetify Marketplace"] .main-embedWidgetGenerator-container {
+  background-color: var(--spice-tab-active);
+}
+
 .setting-row::after {
   content: "";
   display: table;

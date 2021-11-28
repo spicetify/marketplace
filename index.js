@@ -262,6 +262,7 @@ class Grid extends react.Component {
                 }
 
                 if (extensions && extensions.length) {
+                    // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
                     extensions.forEach((extension) => this.appendCard(extension, "extension"));
                 }
             }
@@ -425,9 +426,6 @@ class Grid extends react.Component {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-        this.configButton = new Spicetify.Menu.Item("Marketplace config", false, openConfig);
-        this.configButton.register();
-
         const viewPort = document.querySelector("main .os-viewport");
         this.checkScroll = this.isScrolledBottom.bind(this);
         viewPort.addEventListener("scroll", this.checkScroll);
@@ -449,7 +447,6 @@ class Grid extends react.Component {
         const viewPort = document.querySelector("main .os-viewport");
         lastScroll = viewPort.scrollTop;
         viewPort.removeEventListener("scroll", this.checkScroll);
-        this.configButton.deregister();
     }
 
     isScrolledBottom(event) {
@@ -472,7 +469,10 @@ class Grid extends react.Component {
         react.createElement("div", {
             className: "marketplace-header",
         }, react.createElement("h1", null, this.props.title),
-        // TODO: don't show on all tabs
+        // Start of marketplace-header__right
+        react.createElement("div", {
+            className: "marketplace-header__right",
+        },
         // Show colour scheme dropdown if there is a theme with schemes installed
         CONFIG.theme.activeScheme ? react.createElement(SortBox, {
             onChange: this.updateColourScheme.bind(this),
@@ -484,8 +484,11 @@ class Grid extends react.Component {
         react.createElement("button", {
             className: "marketplace-settings-button",
             id: "marketplace-settings-button",
-        }, SETTINGS_ICON),
 
+            onClick: openConfig,
+        }, SETTINGS_ICON),
+        // End of marketplace-header__right
+        ),
             // TODO: Add search bar and sort functionality
             // react.createElement("div", {
             //     className: "searchbar--bar__wrapper",
@@ -494,7 +497,6 @@ class Grid extends react.Component {
             //     type: "text",
             //     placeholder: "Search for Extensions?",
             // })),
-
         ), react.createElement("div", {
             id: "marketplace-grid",
             className: "main-gridContainer-gridContainer",
@@ -578,12 +580,6 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
-            let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
-            if (manifest.preview.split(":")[0] == "https") {
-                const splitManifest = manifest.preview.split("/");
-                manifest.preview = splitManifest.slice(6, splitManifest.length).toString().replace(",", "/");
-                imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
-            }
             const item = {
                 manifest,
                 title: manifest.name,
@@ -591,9 +587,16 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: imageLink,
-                extensionURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-                readmeURL:  `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
+                    ? manifest.preview
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                extensionURL: manifest.main.startsWith("http")
+                    ? manifest.main
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
+                    ? manifest.readme
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
             };
 
@@ -637,12 +640,6 @@ async function fetchThemes(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
-            let imageLink = `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`;
-            if (manifest.preview.split(":")[0] == "https") {
-                const splitManifest = manifest.preview.split("/");
-                manifest.preview = splitManifest.slice(6, splitManifest.length).toString().replace(",", "/");
-                imageLink = `https://raw.githubusercontent.com/${splitManifest[3]}/${splitManifest[4]}/${splitManifest[5]}/${manifest.preview}`;
-            }
             const item = {
                 manifest,
                 title: manifest.name,
@@ -650,12 +647,23 @@ async function fetchThemes(contents_url, branch, stars) {
                 user,
                 repo,
                 branch: selectedBranch,
-                imageURL: imageLink,
-                readmeURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
+                    ? manifest.preview
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
+                    ? manifest.readme
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
                 // theme stuff
-                cssURL: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-                schemesURL: manifest.schemes ? `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}` : null,
+                cssURL: manifest.usercss.startsWith("http")
+                    ? manifest.usercss
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+                // TODO: clean up indentation etc
+                schemesURL: manifest.schemes
+                    ? (
+                        manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+                    )
+                    : null,
                 include: manifest.include,
             };
             // If manifest is valid, add it to the list

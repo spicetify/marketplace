@@ -75,6 +75,7 @@
         "parseIni": "readonly",
         "DOWNLOAD_ICON": "readonly",
         "TRASH_ICON": "readonly",
+        "SETTINGS_ICON": "readonly",
         "SpicetifySVGIconPaths": "readonly"
     }
 }

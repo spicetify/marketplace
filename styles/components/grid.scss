@@ -9,6 +9,10 @@
   margin: 16px 0;
 }
 
+.marketplace-header__right {
+  display: flex;
+}
+
 .marketplace-sort-bar {
   align-items: center;
   display: flex;
@@ -69,6 +73,24 @@
 
 div.marketplace-tabBar-headerItemLink {
   padding: 0;
+}
+
+.marketplace-settings-button {
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  padding: 10px 14px 6px;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  background-color: var(--spice-sidebar);
+
+  &:hover {
+    background-color: var(--spice-tab-active);
+  }
 }
 
 /* Card preview image error placeholder */
