@@ -147,17 +147,21 @@ const getParamsFromGithubRaw = (url) => {
                     if (i > Object.keys(themeManifest.schemes).length - 1) {
                         i = 0;
                     }
-                    injectColourScheme(Object.values(themeManifest.schemes)[i]);
-                    i++;
-                }, 60 * 1000);
-                const style = document.createElement("style");
-                style.innerHTML = `*{
+                    const style = document.createElement("style");
+                    style.className = "colorShift-style";
+                    style.innerHTML = `*{
                     transition-duration: 400ms;
                 }
                 main-type-bass{
                     transition-duration: unset !important;
                 }`;
-                document.body.appendChild(style);
+
+                    document.body.appendChild(style);
+                    injectColourScheme(Object.values(themeManifest.schemes)[i]);
+                    i++;
+                    style.remove();
+                }, 60 * 1000);
+
             }
         } else {
 
