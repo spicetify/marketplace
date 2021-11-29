@@ -1,4 +1,5 @@
 # spicetify-marketplace
+
 Download Extensions and Themes Directly from within [Spicetify](https://github.com/khanhas/spicetify-cli). 
 
 Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/Custom-Apps#reddit)
@@ -10,6 +11,16 @@ All extensions are from community. They might contain unwanted code. Be careful 
 This project is a work-in-progress and is not finished, polished, or guaranteed to work. Use at your own risk. 
 
 ## Install
+
+### Auto Install (Windows)
+Open Powershell and paste the following:
+
+```powershell
+Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/master/install.ps1" | Invoke-Expression
+```
+
+### Manual Install (recommended)
+
 Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/khanhas/spicetify-cli) custom apps directory:
 | **Platform** | **Path**                                                                              |
 |------------|-----------------------------------------------------------------------------------------|
