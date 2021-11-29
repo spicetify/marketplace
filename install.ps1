@@ -8,15 +8,13 @@ if ($null -eq $checkSpice) {
 }
 
 Invoke-WebRequest -Uri "https://github.com/CharlieS1103/spicetify-marketplace/archive/refs/heads/main.zip" -UseBasicParsing -OutFile "${HOME}/.spicetify/CustomApps/spicetify-marketplace.zip"
-Write-Done
 
 Write-Host "Unzipping and installing..." -ForegroundColor "Green"
 Expand-Archive -Path "${HOME}/.spicetify/CustomApps/spicetify-marketplace.zip" -DestinationPath "${HOME}/.spicetify/CustomApps/" -Force
-Remove-Item -Path "${HOME}/.spicetify/CustomApps/spicetify-marketplace.zip"
-Rename-Item -Path "${HOME}/.spicetify/CustomApps/spicetify-marketplace-main" -NewName "spicetify-marketplace"
+Remove-Item -Path "${HOME}/.spicetify/CustomApps/spicetify-marketplace.zip" -Force
+Rename-Item -Path "${HOME}/.spicetify/CustomApps/spicetify-marketplace-main" -NewName "spicetify-marketplace" 
 Set-Location ${HOME}/.spicetify/CustomApps/
 spicetify config custom_apps spicetify-marketplace
 spicetify apply
-Write-Done
 
 Write-Host "Done! You may have to do spicetify backup apply if nothing has happened." -ForegroundColor "Green"
