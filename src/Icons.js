@@ -71,11 +71,4 @@ const SETTINGS_ICON = react.createElement("svg", {
     fill: "currentColor",
 }));
 
-// Pull the d value from the paths for the items I need in Settings.js
-const d_regex = /d="(.+)"\/>/;
-const SpicetifySVGIconPaths = {
-    x: d_regex.exec(Spicetify.SVGIcons["x"])[1],
-    check: d_regex.exec(Spicetify.SVGIcons["check"])[1],
-};
-
 /* eslint-enable no-redeclare, no-unused-vars */

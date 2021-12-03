@@ -4,7 +4,7 @@ let configContainer;
 function openConfig() {
     const triggerModal = () => {
         Spicetify.PopupModal.display({
-            title: "Spicetify Marketplace",
+            title: "Marketplace",
             content: configContainer,
             isLarge: true,
         });
@@ -30,10 +30,10 @@ function openConfig() {
 
     function stackTabElements() {
 
-        CONFIG.tabs.forEach(({ name, enabled }, index) => {
+        CONFIG.tabs.forEach(({ name }, index) => {
             const el = CONFIG.tabsElement[name];
 
-            const [ up, down, remove ] = el.querySelectorAll("button");
+            const [ up, down ] = el.querySelectorAll("button");
             if (index === 0) {
                 up.disabled = true;
                 down.disabled = false;
@@ -44,17 +44,6 @@ function openConfig() {
                 up.disabled = false;
                 down.disabled = false;
             }
-
-            // Set the icon (can't use innerHTML because of SVG)
-            remove.querySelector("svg path").setAttribute("d", enabled ?
-                SpicetifySVGIconPaths["x"]
-                : SpicetifySVGIconPaths["check"]);
-
-            // TODO: do something with the icon here
-            // remove.innerHTML = `
-            //     <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-            //         ${enabled ? Spicetify.SVGIcons["check"] : Spicetify.SVGIcons["x"]}
-            //     </svg>`;
 
             tabsContainer.append(el);
         });
@@ -82,10 +71,10 @@ function openConfig() {
     function toggleCallback(el) {
 
         const id = el.dataset.id;
-        const slider = el.querySelector(".switch--tab-toggle");
+        const slider = el.querySelector("input[type='checkbox']");
 
         // If we're removing the tab, it's not in the enabled tabs list
-        const toRemove = slider.classList.toggle("disabled");
+        const toRemove = !slider.checked;
         const tabItem = CONFIG.tabs.filter(({ name }) => name === id)[0];
 
         // Enable/disable tab
@@ -140,9 +129,9 @@ function openConfig() {
 
     configContainer.append(
         optionHeader,
-        createSlider("Stars count", "stars"),
-        createSlider("Hide installed in Marketplace", "hideInstalled"),
-        createSlider("Shift Colors Every Minute", "colorShift"),
+        createToggle("Stars count", "stars"),
+        createToggle("Hide installed in Marketplace", "hideInstalled"),
+        createToggle("Shift Colors Every Minute", "colorShift"),
         // TODO: add these features maybe?
         // createSlider("Followers count", "followers"),
         // createSlider("Post type", "type"),
@@ -168,22 +157,32 @@ function openConfig() {
     }
 }
 
-function createSlider(name, key) {
+// Generate the DOM markup for a toggle switch
+function renderToggle(enabled, classes) {
+    return `
+    <label class="x-toggle-wrapper ${classes ? classes.join(" "): ""}">
+        <input class="x-toggle-input" type="checkbox" ${enabled ? "checked" : ""}>
+        <span class="x-toggle-indicatorWrapper">
+            <span class="x-toggle-indicator"></span>
+        </span>
+    </label>
+    `;
+}
+
+function createToggle(name, key) {
     const container = document.createElement("div");
     container.innerHTML = `
     <div class="setting-row">
         <label class="col description">${name}</label>
-        <div class="col action"><button class="switch">
-            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-                ${Spicetify.SVGIcons.check}
-            </svg>
-        </button></div>
+        <div class="col action">
+            ${renderToggle(!!CONFIG.visual[key])}
+        </div>
     </div>`;
 
-    const slider = container.querySelector("button");
-    slider.classList.toggle("disabled", !CONFIG.visual[key]);
-    slider.onclick = () => {
-        const state = !slider.classList.toggle("disabled");
+    const slider = container.querySelector("input");
+
+    slider.onchange = () => {
+        const state = slider.checked;
         CONFIG.visual[key] = state;
         localStorage.setItem(`marketplace:${key}`, String(state));
         gridUpdatePostsVisual && gridUpdatePostsVisual();
@@ -212,20 +211,16 @@ function createTabOption(id, posCallback, toggleCallback) {
                     ${Spicetify.SVGIcons["chart-down"]}
                 </svg>
             </button>
-            <button class="switch switch--tab-toggle ${!tabEnabled ? "disabled" : ""}"
-                ${id === "Extensions" ? "disabled" : ""}>
-                <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-                    ${tabEnabled ? Spicetify.SVGIcons["check"] : Spicetify.SVGIcons["x"]}
-                </svg>
-            </button>
+            ${renderToggle(tabEnabled, id === "Extensions" ? ["disabled"] : [])}
         </div>
     </div>`;
 
-    const [ up, down, remove ] = container.querySelectorAll("button");
+    const [ up, down ] = container.querySelectorAll("button");
+    const toggle = container.querySelector("input");
 
     up.onclick = () => posCallback(container, -1);
     down.onclick = () => posCallback(container, 1);
-    remove.onclick = () => toggleCallback(container);
+    toggle.onchange = () => toggleCallback(container);
 
     return container;
 }

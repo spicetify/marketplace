@@ -7,6 +7,9 @@
     "noEmit": true,
     // "typeRoots": ["@types", "../spicetify-cli"],
     // "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    // "strict": true,
+    "importHelpers": true,
   },
   "include": ["index.js"],
   "exclude": ["node_modules"]
