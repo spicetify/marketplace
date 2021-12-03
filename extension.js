@@ -141,13 +141,13 @@ const getParamsFromGithubRaw = (url) => {
         if (themeManifest.schemes) {
             const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
             injectColourScheme(activeScheme);
-            let i = 0;
-            const NUM_SCHEMES = Object.keys(themeManifest.schemes).length;
 
             // I guess this is okay to not have an end condition on the interval
             // because if they turn the setting on or off,
             // closing the settings modal will reload the page
             if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
+                let i = 0;
+                const NUM_SCHEMES = Object.keys(themeManifest.schemes).length;
                 setInterval(() => {
                     // Resets to zero when passes the last scheme
                     i = i % NUM_SCHEMES;
@@ -165,10 +165,8 @@ const getParamsFromGithubRaw = (url) => {
                     i++;
                     style.remove();
                 }, 60 * 1000);
-
             }
         } else {
-
             console.warn("No schemes found for theme");
         }
 
