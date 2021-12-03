@@ -142,12 +142,12 @@ const getParamsFromGithubRaw = (url) => {
             const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
             injectColourScheme(activeScheme);
             let i = 0;
+            const NUM_SCHEMES = Object.keys(themeManifest.schemes).length;
 
             if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
-                setInterval(function () {
-                    if (i > Object.keys(themeManifest.schemes).length - 1) {
-                        i = 0;
-                    }
+                setInterval(() => {
+                    // Resets to zero when passes the last scheme
+                    i = i % NUM_SCHEMES;
                     const style = document.createElement("style");
                     style.className = "colorShift-style";
                     style.innerHTML = `* {
