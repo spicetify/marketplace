@@ -60,6 +60,7 @@ const getParamsFromGithubRaw = (url) => {
         "tabs": "marketplace:tabs",
         // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
         "themeInstalled": "marketplace:theme-installed",
+        "colorShift": "marketplace:colorShift",
     };
 
     const getInstalledExtensions = () => {
@@ -142,19 +143,19 @@ const getParamsFromGithubRaw = (url) => {
             injectColourScheme(activeScheme);
             let i = 0;
 
-            if (localStorage.getItem("marketplace:colorShift") == "true") {
+            if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
                 setInterval(function () {
                     if (i > Object.keys(themeManifest.schemes).length - 1) {
                         i = 0;
                     }
                     const style = document.createElement("style");
                     style.className = "colorShift-style";
-                    style.innerHTML = `*{
-                    transition-duration: 400ms;
-                }
-                main-type-bass{
-                    transition-duration: unset !important;
-                }`;
+                    style.innerHTML = `* {
+                        transition-duration: 400ms;
+                    }
+                    main-type-bass {
+                        transition-duration: unset !important;
+                    }`;
 
                     document.body.appendChild(style);
                     injectColourScheme(Object.values(themeManifest.schemes)[i]);
