@@ -201,13 +201,13 @@ function createTabOption(id, posCallback, toggleCallback) {
     <div class="setting-row">
         <h3 class="col description">${id}</h3>
         <div class="col action">
-            <button class="switch small">
-                <svg height="10" width="10" viewBox="0 0 16 16" fill="currentColor">
+            <button class="arrow-btn">
+                <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                     ${Spicetify.SVGIcons["chart-up"]}
                 </svg>
             </button>
-            <button class="switch small">
-                <svg height="10" width="10" viewBox="0 0 16 16" fill="currentColor">
+            <button class="arrow-btn">
+                <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                     ${Spicetify.SVGIcons["chart-down"]}
                 </svg>
             </button>

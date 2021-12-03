@@ -42,7 +42,7 @@
 }
 
 // The up/down arrows
-button.switch {
+button.arrow-btn {
   align-items: center;
   border: 0px;
   border-radius: 50%;
@@ -54,18 +54,13 @@ button.switch {
   padding: 8px;
 
   &.small {
-    width: 22px;
-    height: 22px;
-    padding: 6px;
+    width: 24px;
+    height: 24px;
+    padding: 5px;
   }
 
   &.disabled,
   &[disabled] {
     color: rgba(var(--spice-rgb-text), .3);
-  }
-
-  &--tab-toggle[disabled] {
-    opacity: 0;
-    pointer-events: none;
   }
 }
