@@ -105,12 +105,13 @@ const getParamsFromGithubRaw = (url) => {
             if (existingColorsCSS) existingColorsCSS.remove();
 
             // Remove any existing marketplace scheme
-            const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
+            const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
             if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
             // Add new marketplace scheme
-            const themeTag = document.createElement("style");
-            themeTag.classList.add("marketplaceCSS");
+            const schemeTag = document.createElement("style");
+            schemeTag.classList.add("marketplaceCSS");
+            schemeTag.classList.add("marketplaceScheme");
             // const theme = document.querySelector('#theme');
             let injectStr = ":root {";
 
@@ -120,8 +121,25 @@ const getParamsFromGithubRaw = (url) => {
                 injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
             });
             injectStr += "}";
-            themeTag.innerHTML = injectStr;
-            document.head.appendChild(themeTag);
+            schemeTag.innerHTML = injectStr;
+            document.head.appendChild(schemeTag);
+        } catch (error) {
+            console.warn(error);
+        }
+    };
+
+    const injectUserCSS = (userCSS) => {
+        try {
+            // Remove any existing marketplace scheme
+            const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
+            if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
+
+            // Add new marketplace scheme
+            const userCssTag = document.createElement("style");
+            userCssTag.classList.add("marketplaceCSS");
+            userCssTag.classList.add("marketplaceUserCSS");
+            userCssTag.innerHTML = userCSS;
+            document.head.appendChild(userCssTag);
         } catch (error) {
             console.warn(error);
         }
@@ -152,7 +170,33 @@ const getParamsFromGithubRaw = (url) => {
         }, 60 * 1000);
     };
 
-    const initializeTheme = (themeKey) => {
+    const parseCSS = async (themeManifest) => {
+
+        const userCssUrl = themeManifest.cssURL.indexOf("raw.githubusercontent.com") > -1
+        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+            ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
+            : themeManifest.cssURL;
+        // TODO: Make this more versatile
+        const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
+
+        console.log("Parsing CSS: ", userCssUrl);
+        let css = await fetch(userCssUrl).then(res => res.text());
+        // console.log("Parsed CSS: ", css);
+
+        const dotSlashUrls = css.match(/['|"]\.\/.+['|"]/gm);
+        console.log("DotSlashUrls: ", dotSlashUrls);
+
+        dotSlashUrls.forEach((url) => {
+            const newUrl = url.replace(/\.\//g, assetsUrl);
+            css = css.replace(url, newUrl);
+        });
+
+        console.log("New CSS: ", css);
+
+        return css;
+    };
+
+    const initializeTheme = async (themeKey) => {
         const themeManifest = getLocalStorageDataFromKey(themeKey);
         // Abort if no manifest found
         if (!themeManifest) {
@@ -184,17 +228,22 @@ const getParamsFromGithubRaw = (url) => {
         if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
         // Add theme css
+        /*
         const newUserThemeCSS = document.createElement("link");
         newUserThemeCSS.rel = "stylesheet";
 
         // If it's a github raw link, use jsdelivr
         newUserThemeCSS.href = themeManifest.cssURL.indexOf("raw.githubusercontent.com") > -1
-            // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-            ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
-            : themeManifest.cssURL;
+        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+        ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
+        : themeManifest.cssURL;
 
         newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
         document.body.appendChild(newUserThemeCSS);
+        */
+
+        const userCSS = await parseCSS(themeManifest);
+        injectUserCSS(userCSS);
 
         // Inject any included js
         if (themeManifest.include && themeManifest.include.length) {
