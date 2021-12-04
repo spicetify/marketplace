@@ -67,6 +67,7 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `preview`: A path to your preview image. Must be relative to your project root
     * `main`: The filename for your extension's main js file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root
+    * `branch`: Optional branch to specify. Will use default branch if none
 * Or for Themes:
     * `name`: Your theme name
     * `description`: Description for your theme
@@ -74,6 +75,7 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `usercss`: A path to your user.css file. Must be relative to your project root
     * `schemes`: A path to your color.ini file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root 
+    * `branch`: Optional branch to specify. Will use default branch if none
 (Extension e.g.): 
 ```json
 {
@@ -92,14 +94,15 @@ If you have multiple extensions in the same repo (subfolder e.g.):
     "description": "Spicetify extension to show how to make a manifest.",
     "preview": "filepathFromGitRepo/myExt.png",
     "main": "filepathFromGitRepo/myExt.js",
-    "readme": "filepathFromGitRepo/README.md",
+    "readme": "filepathFromGitRepo/README.md"
   },
   {
    "name": "extensionNameTwo(No .js included)",
    "description": "Another Spicetify extension to show how to make a manifest.",
-   "preview": "filepathFromGitRepoTwo/myExtTwo.png",
+   "preview": "http://i.imgur.com/foo.png",
    "main": "filepathFromGitRepoTwo/myExtTwo.js",
    "readme": "filepathFromGitRepoTwo/THIS_IS_MY_README.md",
+   "branch": "some-branch"
   },
 ]
 ```
@@ -111,7 +114,8 @@ For themes:
     "preview": "filepathFromGitRepo/theme.png",
     "readme": "README.md",
     "usercss": "filepathFromGitRepo/user.css",
-    "schemes": "filepathFromGitRepo/color.ini"
+    "schemes": "filepathFromGitRepo/color.ini",
+    "branch": "beta-release"
 }
 ```
 _Please note that if all your extensions are in the root folder, you don't need to include a filepath._
