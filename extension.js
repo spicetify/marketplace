@@ -183,15 +183,19 @@ const getParamsFromGithubRaw = (url) => {
         let css = await fetch(userCssUrl).then(res => res.text());
         // console.log("Parsed CSS: ", css);
 
-        const dotSlashUrls = css.match(/['|"]\.\/.+['|"]/gm);
-        console.log("DotSlashUrls: ", dotSlashUrls);
+        let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
 
-        dotSlashUrls.forEach((url) => {
-            const newUrl = url.replace(/\.\//g, assetsUrl);
-            css = css.replace(url, newUrl);
-        });
+        for (const match of urls) {
+            const url = match.groups.path;
+            // console.log(url);
+            // If it's a relative URL, transform it to HTTP URL
+            if (!url.startsWith("http") && !url.startsWith("data")) {
+                const newUrl = assetsUrl + url.replace(/\.\//g, "");
+                css = css.replace(url, newUrl);
+            }
+        }
 
-        console.log("New CSS: ", css);
+        // console.log("New CSS: ", css);
 
         return css;
     };
