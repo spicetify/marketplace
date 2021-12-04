@@ -127,6 +127,31 @@ const getParamsFromGithubRaw = (url) => {
         }
     };
 
+    // I guess this is okay to not have an end condition on the interval
+    // because if they turn the setting on or off,
+    // closing the settings modal will reload the page
+    const initColorShiftLoop = (schemes) => {
+        let i = 0;
+        const NUM_SCHEMES = Object.keys(schemes).length;
+        setInterval(() => {
+            // Resets to zero when passes the last scheme
+            i = i % NUM_SCHEMES;
+            const style = document.createElement("style");
+            style.className = "colorShift-style";
+            style.innerHTML = `* {
+                transition-duration: 400ms;
+            }
+            main-type-bass {
+                transition-duration: unset !important;
+            }`;
+
+            document.body.appendChild(style);
+            injectColourScheme(Object.values(schemes)[i]);
+            i++;
+            style.remove();
+        }, 60 * 1000);
+    };
+
     const initializeTheme = (themeKey) => {
         const themeManifest = getLocalStorageDataFromKey(themeKey);
         // Abort if no manifest found
@@ -142,29 +167,8 @@ const getParamsFromGithubRaw = (url) => {
             const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
             injectColourScheme(activeScheme);
 
-            // I guess this is okay to not have an end condition on the interval
-            // because if they turn the setting on or off,
-            // closing the settings modal will reload the page
             if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
-                let i = 0;
-                const NUM_SCHEMES = Object.keys(themeManifest.schemes).length;
-                setInterval(() => {
-                    // Resets to zero when passes the last scheme
-                    i = i % NUM_SCHEMES;
-                    const style = document.createElement("style");
-                    style.className = "colorShift-style";
-                    style.innerHTML = `* {
-                        transition-duration: 400ms;
-                    }
-                    main-type-bass {
-                        transition-duration: unset !important;
-                    }`;
-
-                    document.body.appendChild(style);
-                    injectColourScheme(Object.values(themeManifest.schemes)[i]);
-                    i++;
-                    style.remove();
-                }, 60 * 1000);
+                initColorShiftLoop(themeManifest.schemes);
             }
         } else {
             console.warn("No schemes found for theme");
