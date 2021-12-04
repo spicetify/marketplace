@@ -101,7 +101,7 @@ const getParamsFromGithubRaw = (url) => {
     // NOTE: Keep in sync with index.js
     const injectColourScheme = (scheme) => {
         try {
-            // Remove default scheme
+            // Remove any existing Spicetify scheme
             const existingColorsCSS = document.querySelector("link[href='colors.css']");
             if (existingColorsCSS) existingColorsCSS.remove();
 
@@ -131,6 +131,10 @@ const getParamsFromGithubRaw = (url) => {
 
     const injectUserCSS = (userCSS) => {
         try {
+            // Remove any existing Spicetify user.css
+            const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+            if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
             // Remove any existing marketplace scheme
             const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
             if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();

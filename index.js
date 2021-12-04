@@ -379,7 +379,7 @@ class Grid extends react.Component {
 
     // NOTE: Keep in sync with extension.js
     injectColourScheme (scheme) {
-        // Remove default scheme
+        // Remove any existing Spicetify scheme
         const existingColorsCSS = document.querySelector("link[href='colors.css']");
         if (existingColorsCSS) existingColorsCSS.remove();
 
@@ -411,6 +411,7 @@ class Grid extends react.Component {
         // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
         const existingUserThemeCSS = document.querySelector("link[href='user.css']");
         if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
         const existingColorsCSS = document.querySelector("link[href='colors.css']");
         if (existingColorsCSS) existingColorsCSS.remove();
 
@@ -426,7 +427,7 @@ class Grid extends react.Component {
         newUserThemeCSS.href = cssUrl;
         newUserThemeCSS.rel = "stylesheet";
         newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
-        document.body.appendChild(newUserThemeCSS);
+        document.head.appendChild(newUserThemeCSS);
     }
 
     async componentDidMount() {
