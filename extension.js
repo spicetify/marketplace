@@ -98,6 +98,7 @@ const getParamsFromGithubRaw = (url) => {
         document.body.appendChild(script);
     };
 
+    // NOTE: Keep in sync with index.js
     const injectColourScheme = (scheme) => {
         try {
             // Remove default scheme
@@ -105,8 +106,8 @@ const getParamsFromGithubRaw = (url) => {
             if (existingColorsCSS) existingColorsCSS.remove();
 
             // Remove any existing marketplace scheme
-            const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
-            if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+            const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
+            if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
 
             // Add new marketplace scheme
             const schemeTag = document.createElement("style");
@@ -224,8 +225,8 @@ const getParamsFromGithubRaw = (url) => {
 
         // Remove default css
         // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
-        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
-        if (existingUserThemeCSS) existingUserThemeCSS.remove();
+        // const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+        // if (existingUserThemeCSS) existingUserThemeCSS.remove();
 
         // Remove any existing marketplace theme
         const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");

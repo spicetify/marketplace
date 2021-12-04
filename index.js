@@ -377,14 +377,20 @@ class Grid extends react.Component {
         this.setState({});
     }
 
+    // NOTE: Keep in sync with extension.js
     injectColourScheme (scheme) {
+        // Remove default scheme
+        const existingColorsCSS = document.querySelector("link[href='colors.css']");
+        if (existingColorsCSS) existingColorsCSS.remove();
+
         // Remove any existing marketplace scheme
-        const existingMarketplaceThemeCSS = document.querySelector("style.marketplaceCSS");
-        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+        const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
+        if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
 
         // Add new marketplace scheme
-        const themeTag = document.createElement("style");
-        themeTag.classList.add("marketplaceCSS");
+        const schemeTag = document.createElement("style");
+        schemeTag.classList.add("marketplaceCSS");
+        schemeTag.classList.add("marketplaceScheme");
         // const theme = document.querySelector('#theme');
         let injectStr = ":root {";
         const themeIniKeys = Object.keys(scheme);
@@ -393,11 +399,12 @@ class Grid extends react.Component {
             injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
         });
         injectStr += "}";
-        themeTag.innerHTML = injectStr;
-        document.head.appendChild(themeTag);
+        schemeTag.innerHTML = injectStr;
+        document.head.appendChild(schemeTag);
     }
 
     // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
+    // NOTE: Keep in sync with extension.js
     // eslint-disable-next-line
     applyTheme(theme) {
         // Remove default css
