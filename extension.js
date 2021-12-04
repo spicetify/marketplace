@@ -232,20 +232,6 @@ const getParamsFromGithubRaw = (url) => {
         if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
         // Add theme css
-        /*
-        const newUserThemeCSS = document.createElement("link");
-        newUserThemeCSS.rel = "stylesheet";
-
-        // If it's a github raw link, use jsdelivr
-        newUserThemeCSS.href = themeManifest.cssURL.indexOf("raw.githubusercontent.com") > -1
-        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-        ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
-        : themeManifest.cssURL;
-
-        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
-        document.body.appendChild(newUserThemeCSS);
-        */
-
         const userCSS = await parseCSS(themeManifest);
         injectUserCSS(userCSS);
 
