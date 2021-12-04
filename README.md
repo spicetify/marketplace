@@ -76,6 +76,7 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `schemes`: A path to your color.ini file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root 
     * `branch`: Optional branch to specify. Will use default branch if none
+    
 (Extension e.g.): 
 ```json
 {
