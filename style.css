@@ -29,27 +29,6 @@
   pointer-events: auto;
 }
 
-.marketplace-tabBar-headerItemLink {
-  margin: 0 8px 0 0;
-}
-
-.marketplace-settings-button {
-  border-radius: 4px;
-  color: var(--spice-text);
-  display: inline-block;
-  padding: 10px 14px 6px;
-  margin-left: 8px;
-  position: relative;
-  text-decoration: none !important;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  background-color: var(--spice-sidebar);
-}
-.marketplace-settings-button:hover {
-  background-color: var(--spice-tab-active);
-}
-
 .marketplace-tabBar-active {
   background-color: var(--spice-tab-active);
   border-radius: 4px;
@@ -86,10 +65,6 @@
 .marketplace-tabBar-headerItem .optionsMenu-dropBox svg {
   position: absolute;
   margin-left: 8px;
-}
-
-div.marketplace-tabBar-headerItemLink {
-  padding: 0;
 }
 
 .marketplace-settings-button {
