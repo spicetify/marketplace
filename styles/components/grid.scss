@@ -166,6 +166,8 @@
 .marketplace-card--installed {
   flex: 0 !important;
   -webkit-box-flex: 0 !important;
+
+  border: 1px solid var(--spice-button);
 }
 
 // Search bar
