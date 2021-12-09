@@ -722,3 +722,10 @@ function generateSchemesOptions(schemes) {
     // ]
     return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
 }
+
+// eslint-disable-next-line no-unused-vars
+async function fetchCssSnippets() {
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
+    const json = await fetch(url).then(res => res.json()).catch(() => { });
+    return json;
+}
