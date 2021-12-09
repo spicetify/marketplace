@@ -287,7 +287,7 @@ class Card extends react.Component {
         }, react.createElement("button", {
             className: "main-playButton-PlayButton main-playButton-primary",
             "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
-            style: { "--size": "40px" },
+            style: { "--size": "40px", "cursor": "pointer"},
             onClick: (e) => {
                 e.stopPropagation();
                 this.buttonClicked();
