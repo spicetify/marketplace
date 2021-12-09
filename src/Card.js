@@ -309,7 +309,13 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         },
-        react.createElement("span", null, this.user),
+        react.createElement("a", {
+
+            title: this.user,
+            draggable: "false",
+            dir: "auto",
+            href: "https://github.com/" + this.user,
+        }, this.user),
         react.createElement("br", null, null),
         react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
