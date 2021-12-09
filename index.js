@@ -59,6 +59,7 @@ const ALL_TABS = [
     { name: "Extensions", enabled: true },
     { name: "Themes", enabled: true },
     { name: "Installed", enabled: true },
+    {name:  "Snippets", enabled: true},
 ];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
 let tabs = [];
