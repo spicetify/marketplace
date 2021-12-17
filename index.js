@@ -189,7 +189,7 @@ class Grid extends react.Component {
 
     /**
      * @param {Object} item
-     * @param {"extension" | "theme"} type The type of card
+     * @param {"extension" | "theme" | "snippet"} type The type of card
      */
     appendCard(item, type) {
         item.visual = CONFIG.visual;
@@ -319,6 +319,7 @@ class Grid extends react.Component {
         } else if (CONFIG.activeTab == "Snippets") {
             let pageOfSnippets = await fetchCssSnippets();
             console.log(pageOfSnippets);
+            pageOfSnippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
         }
 
         this.setState({ rest: true, endOfList: true });

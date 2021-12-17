@@ -8,7 +8,7 @@ class Card extends react.Component {
         // From `appendCard()`
         /** @type { { type: string; stars: string; } } */
         this.visual;
-        /** @type { "extension" | "theme" } */
+        /** @type { "extension" | "theme" | "snippet" } */
         this.type;
 
         // From `fetchRepoExtensions()` and `fetchThemes()`
@@ -43,7 +43,8 @@ class Card extends react.Component {
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.type === "theme" ? props.manifest.usercss : props.manifest.main}`;
+        console.log(this);
+        this.localStorageKey = props.type === "snippet" ? "marketplace:installed:" + "snippet:" + `${props.name.replace(" ", "-")}` : "marketplace:installed:" + `${props.user}/${props.repo}/${props.type === "theme" ? props.manifest.usercss : props.manifest.main}`;
 
         Object.assign(this, props);
 
@@ -244,6 +245,7 @@ class Card extends react.Component {
     render() {
         // Kill the card if it has been uninstalled on the "Installed" tab
         // TODO: is this kosher, or is there a better way to handle?
+        console.log(this);
         if (CONFIG.activeTab === "Installed" && !this.state.installed) {
             console.log("extension not installed");
             return null;
@@ -282,10 +284,12 @@ class Card extends react.Component {
                 // Add class for styling
                 e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
             },
+            //Create a div using normalized play button classes to use the css provided by themes
         }))), react.createElement("div", {
             className: "main-card-PlayButtonContainer",
         }, react.createElement("button", {
             className: "main-playButton-PlayButton main-playButton-primary",
+            // If it is installed, it will remove it when button is clicked, if not it will save
             "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
             style: { "--size": "40px" },
             onClick: (e) => {
@@ -293,12 +297,13 @@ class Card extends react.Component {
                 this.buttonClicked();
             },
         },
+        //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
         this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
         ))), react.createElement("div", {
             className: "main-card-cardMetadata",
         }, react.createElement("a", {
             draggable: "false",
-            title: this.manifest.name,
+            title: this.type === "snippet" ? this.props.name : this.manifest.name,
             className: "main-cardHeader-link",
             dir: "auto",
             href: "TODO: add some href here?",
@@ -311,7 +316,7 @@ class Card extends react.Component {
         }, react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
             className: "marketplace-card-desc",
-        }, this.manifest.description),
+        }, this.type === "snippet" ? this.props.description : this.manifest.description),
         this.include && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
