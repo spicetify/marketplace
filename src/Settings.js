@@ -148,6 +148,7 @@ function openConfig() {
     if (closeButton instanceof HTMLElement
     && modalOverlay instanceof HTMLElement) {
         closeButton.onclick = () => location.reload();
+        closeButton.setAttribute("style", "cursor: pointer;");
         modalOverlay.onclick = (e) => {
             // If clicked on overlay, also reload
             if (e.target === modalOverlay) {

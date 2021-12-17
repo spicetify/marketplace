@@ -3,22 +3,13 @@
 "name": "Fix Episodes Icon",
 "description": "Fix the color of the episodes Icon",
 "code": 
-`.main-yourEpisodesButton-yourEpisodesIcon {
-    background: var(--spice-text);
-}
-
-.main-yourEpisodesButton-yourEpisodesIcon path {
-    fill: var(--spice-player);
-    opacity: 0.7;
-}`
+".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }"
 
 },
 {
 "name": "Hide Upgrade Button",
 "description": "Makes the upgrade button hidden",
-"code": `.main-topBar-UpgradeButton {
-    display: none;
-}`
+"code": ".main-topBar-UpgradeButton { display: none; }"
 }
 
 

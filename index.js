@@ -316,6 +316,9 @@ class Grid extends react.Component {
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
             const remainingResults = pageOfRepos.length - soFarResults;
             if (remainingResults) return currentPage + 1;
+        } else if (CONFIG.activeTab == "Snippets") {
+            let pageOfSnippets = await fetchCssSnippets();
+            console.log(pageOfSnippets);
         }
 
         this.setState({ rest: true, endOfList: true });
@@ -725,7 +728,8 @@ function generateSchemesOptions(schemes) {
 
 // eslint-disable-next-line no-unused-vars
 async function fetchCssSnippets() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/css-snippets/snippets.json";
     const json = await fetch(url).then(res => res.json()).catch(() => { });
+    console.log(json);
     return json;
 }
