@@ -44,7 +44,15 @@ class Card extends react.Component {
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
         console.log(this);
-        this.localStorageKey = props.type === "snippet" ? "marketplace:installed:" + "snippet:" + `${props.name.replace(" ", "-")}` : "marketplace:installed:" + `${props.user}/${props.repo}/${props.type === "theme" ? props.manifest.usercss : props.manifest.main}`;
+
+        let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
+
+        let cardId = "";
+        if (props.type === "snippet") cardId = props.name.replace(" ", "-");
+        else if (props.type === "theme") cardId = props.manifest.usercss;
+        else if (props.type === "extension") cardId = props.manifest.main;
+
+        this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
         Object.assign(this, props);
 
