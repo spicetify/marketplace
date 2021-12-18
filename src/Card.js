@@ -12,7 +12,7 @@ class Card extends react.Component {
         this.type;
 
         // From `fetchRepoExtensions()` and `fetchThemes()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string; usercss?: string; schemes?: string; include?: string[] } } */
+        /** @type { { name: string; description: string; main: string; preview: string; readme: string; code: string; usercss?: string; schemes?: string; include?: string[] } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -61,6 +61,7 @@ class Card extends react.Component {
             // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
             stars: this.stars,
         };
+        this.code = this.props.code;
     }
 
     async componentDidMount() {
@@ -100,6 +101,13 @@ class Card extends react.Component {
                 this.installTheme();
             }
             openReloadModal();
+        } else if (this.type === "snippet") {
+            if (this.state.installed) {
+                console.log("Snippet already installed, removing");
+                this.removeSnippet();
+            } else {
+                this.installSnippet();
+            }
         } else {
             console.error("Unknown card type");
         }
@@ -230,7 +238,19 @@ class Card extends react.Component {
             this.setState({ installed: false });
         }
     }
-
+    installSnippet() {
+        console.log(`Installing Snippet ${this.localStorageKey}`);
+        localStorage.setItem(this.localStorageKey, JSON.stringify({
+            code: this.code,
+            name: this.props.name,
+            description: this.props.description,
+        }));
+        this.setState({installed: true});
+    }
+    removeSnippet() {
+        localStorage.removeItem(this.localStorageKey);
+        this.setState({installed: false});
+    }
     openReadme() {
         if (this.manifest.readme) {
             Spicetify.Platform.History.push({
