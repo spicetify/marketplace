@@ -347,21 +347,7 @@ class Card extends react.Component {
                 e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
             },
             //Create a div using normalized play button classes to use the css provided by themes
-        }))), react.createElement("div", {
-            className: "main-card-PlayButtonContainer",
-        }, react.createElement("button", {
-            className: "main-playButton-PlayButton main-playButton-primary",
-            // If it is installed, it will remove it when button is clicked, if not it will save
-            "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
-            style: { "--size": "40px", "cursor": "pointer"},
-            onClick: (e) => {
-                e.stopPropagation();
-                this.buttonClicked();
-            },
-        },
-        //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
-        this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
-        ))), react.createElement("div", {
+        })))), react.createElement("div", {
             className: "main-card-cardMetadata",
         }, react.createElement("a", {
             draggable: "false",
@@ -395,7 +381,21 @@ class Card extends react.Component {
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, "✓ Installed"),
+        }, "✓ Installed"), react.createElement("div", {
+            className: "main-card-PlayButtonContainer",
+        }, react.createElement("button", {
+            className: "main-playButton-PlayButton main-playButton-primary",
+            // If it is installed, it will remove it when button is clicked, if not it will save
+            "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
+            style: { "--size": "40px", "cursor": "pointer" },
+            onClick: (e) => {
+                e.stopPropagation();
+                this.buttonClicked();
+            },
+        },
+        //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
+        this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
+        )),
         ))));
     }
 }
