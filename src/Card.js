@@ -43,7 +43,7 @@ class Card extends react.Component {
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-        console.log(this);
+
 
         let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
 
@@ -340,7 +340,7 @@ class Card extends react.Component {
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div",
-        }, this.title)), detail.length > 0 && react.createElement("div", {
+        }, this.type === "snippet" ? this.props.name : this.manifest.name)), detail.length > 0 && react.createElement("div", {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),
