@@ -49,6 +49,9 @@ class Card extends react.Component {
         this.schemesURL;
         /** @type { string[]? } */
         this.include;
+        // Snippet stuff
+        /** @type { string? } */
+        this.code;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -57,7 +60,7 @@ class Card extends react.Component {
         let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
 
         let cardId = "";
-        if (props.type === "snippet") cardId = props.name.replace(" ", "-");
+        if (props.type === "snippet") cardId = props.title.replace(" ", "-");
         else if (props.type === "theme") cardId = props.manifest.usercss;
         else if (props.type === "extension") cardId = props.manifest.main;
 
@@ -70,7 +73,6 @@ class Card extends react.Component {
             // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
             stars: this.stars,
         };
-        this.code = this.props.code;
     }
 
     async componentDidMount() {
@@ -341,7 +343,7 @@ class Card extends react.Component {
             className: "main-card-cardMetadata",
         }, react.createElement("a", {
             draggable: "false",
-            title: this.type === "snippet" ? this.props.name : this.manifest.name,
+            title: this.type === "snippet" ? this.props.title : this.manifest.name,
             className: "main-cardHeader-link",
             dir: "auto",
             href: "TODO: add some href here?",
