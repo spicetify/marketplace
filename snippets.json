@@ -12,6 +12,6 @@
   {
     "title": "Collapse Friends Activity on small screens",
     "description": "Collapse the friends activity sidebar on small screens",
-    "code": ".main-buddyFeed-buddyFeedRoot { transition: width 0.3s; @media screen and (max-width: 1200px) { width: 0; } }"
+    "code": ".main-buddyFeed-buddyFeedRoot { transition: width 0.3s; } @media screen and (max-width: 1200px) { .main-buddyFeed-buddyFeedRoot { width: 0; } }"
   }
 ]
