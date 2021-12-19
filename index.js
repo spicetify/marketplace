@@ -317,9 +317,16 @@ class Grid extends react.Component {
             const remainingResults = pageOfRepos.length - soFarResults;
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab == "Snippets") {
-            let pageOfSnippets = await fetchCssSnippets();
-            console.log(pageOfSnippets);
-            pageOfSnippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
+            let snippets = await fetchCssSnippets();
+
+            if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                // Stop this queue from continuing to fetch and append to cards list
+                return -1;
+            }
+            if (snippets && snippets.length) {
+                snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
+            }
+
         }
 
         this.setState({ rest: true, endOfList: true });
