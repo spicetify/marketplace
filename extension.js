@@ -109,7 +109,7 @@ const getParamsFromGithubRaw = (url) => {
             accum += `${snippet.code}\n`;
             return accum;
         }, "");
-        console.log(styleContent);
+
         style.innerHTML = styleContent;
         style.classList.add("marketplaceSnippets");
         document.head.appendChild(style);
