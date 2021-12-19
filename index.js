@@ -305,7 +305,7 @@ class Grid extends react.Component {
             // If still have more results, return next page number to fetch
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
-            const installedExtensions = getInstalledExtensions();
+            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
             installedExtensions.forEach(async (extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));

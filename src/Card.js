@@ -363,7 +363,6 @@ class Card extends react.Component {
             as: "div",
         },
         react.createElement("a", {
-
             title: this.user,
             draggable: "false",
             dir: "auto",
