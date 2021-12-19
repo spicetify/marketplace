@@ -55,8 +55,9 @@ spicetify apply
 1. `componentDidMount` triggers `newRequest`, which triggers `loadAmount(30)`
 2. `loadAmount` calls `loadPage` in a loop until it has the requested amount of cards or runs out of results
 3. `loadPage` calls `getRepos(page)` to get the next page of extensions. It queries the GitHub API for any repos with the "spicetify-extension" topic. We'll likely add our own tag in the future, like "spicetify-marketplace". 
-4. The it loops through all the results and runs `fetchRepoExtensions()`, which fetches a `manifest.json` file from the repo's root folder. If it finds one, we generate a card based on the info. 
-* Or if the active tab is "Installed", `loadPage` calls `getInstalledExtensions()` to get the extensions from the localstorage and generate the cards from there. 
+4. The it loops through all the results and runs `fetchRepoExtensions()` or `getThemeRepos()`, which fetches a `manifest.json` file from the repo's root folder. If it finds one, we generate a card based on the info. 
+* Or if the active tab is "Installed", `loadPage` calls `getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets)` to get the extensions from the localstorage and generate the cards from there. 
+* Or if the active tab is "Snippets", `loadPage` calls `fetchCssSnippets()` and generates cards from the most recent `snippets.json` on GitHub. 
 
 ## manifest.json
 In order to show up in the custom app, your repo needs to follow these requirements:
@@ -131,6 +132,7 @@ Once you have your code segment ready, edit snippets.json and add the following:
     "code": "The single line css you have"
 }
 ```
+
 ## Styling + Build Process
 - The stylesheet is built using Sass (scss) with the [Parcel](https://parceljs.org/) bundler
 - The main stylesheet is style/style.scss, which builds all the components, and compiles into style.css
