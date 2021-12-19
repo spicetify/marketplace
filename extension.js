@@ -64,25 +64,12 @@ const getParamsFromGithubRaw = (url) => {
         "colorShift": "marketplace:colorShift",
     };
 
-    const getInstalledExtensions = () => {
-        const installedExtensionsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
-        const installedExtensions = JSON.parse(installedExtensionsStr);
-        return installedExtensions;
-    };
+    const getLocalStorageDataFromKey = (key, fallback) => {
+        const str = LocalStorage.get(key);
+        if (!str) return fallback;
 
-    const getInstalledSnippetKeys = () => {
-        const installedSnippetsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedSnippets) || "[]";
-        const installedSnippetsKeys = JSON.parse(installedSnippetsStr);
-        return installedSnippetsKeys;
-    };
-
-    // TODO: use this instead of the above methods, and provide a default value as 2nd param
-    const getLocalStorageDataFromKey = (key) => {
-        const manifestStr = LocalStorage.get(key);
-        if (!manifestStr) return null;
-
-        const manifest = JSON.parse(manifestStr);
-        return manifest;
+        const obj = JSON.parse(str);
+        return obj;
     };
 
     const initializeExtension = (extensionKey) => {
@@ -110,7 +97,12 @@ const getParamsFromGithubRaw = (url) => {
      * Loop through the snippets and add the contents of the code as a style tag in the DOM
      * @param { { title: string; description: string; code: string;}[] } snippets The snippets to initialize
      */
+    // TODO: keep this in sync with the index.js file
     const initializeSnippets = (snippets) => {
+        // Remove any existing marketplace snippets
+        const existingSnippets = document.querySelector("style.marketplaceSnippets");
+        if (existingSnippets) existingSnippets.remove();
+
         const style = document.createElement("style");
         const styleContent = snippets.reduce((accum, snippet) => {
             accum += `/* ${snippet.title} - ${snippet.description} */\n`;
@@ -290,10 +282,10 @@ const getParamsFromGithubRaw = (url) => {
     const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
     if (installedThemeKey) initializeTheme(installedThemeKey);
 
-    const installedSnippetKeys = getInstalledSnippetKeys();
+    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
     const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
     initializeSnippets(installedSnippets);
 
-    const installedExtensions = getInstalledExtensions();
+    const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();

@@ -149,19 +149,39 @@ const typesLocale = {
     playlist: Spicetify.Locale.get("playlist"),
 };
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
-const getInstalledExtensions = () => {
-    const installedExtensionsStr = localStorage.getItem(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
-    const installedExtensions = JSON.parse(installedExtensionsStr);
-    return installedExtensions;
+/* eslint-disable no-unused-vars, no-redeclare */
+const getLocalStorageDataFromKey = (key, fallback) => {
+    const str = localStorage.getItem(key);
+    if (!str) return fallback;
+
+    const obj = JSON.parse(str);
+    return obj;
 };
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
-const getInstalledSnippets = () => {
-    const installedSnippetsStr = localStorage.getItem(LOCALSTORAGE_KEYS.installedSnippets) || "[]";
-    const installedSnippets = JSON.parse(installedSnippetsStr);
-    return installedSnippets;
+/**
+ * Loop through the snippets and add the contents of the code as a style tag in the DOM
+* @param { { title: string; description: string; code: string;}[] } snippets The snippets to initialize
+*/
+// TODO: keep this in sync with the extension.js file
+const initializeSnippets = (snippets) => {
+    // Remove any existing marketplace snippets
+    const existingSnippets = document.querySelector("style.marketplaceSnippets");
+    if (existingSnippets) existingSnippets.remove();
+
+    const style = document.createElement("style");
+    const styleContent = snippets.reduce((accum, snippet) => {
+        accum += `/* ${snippet.title} - ${snippet.description} */\n`;
+        accum += `${snippet.code}\n`;
+        return accum;
+    }, "");
+
+    console.log(styleContent);
+    style.innerHTML = styleContent;
+    style.classList.add("marketplaceSnippets");
+    document.head.appendChild(style);
 };
+
+/* eslint-enable no-unused-vars, no-redeclare */
 
 class Grid extends react.Component {
     constructor(props) {

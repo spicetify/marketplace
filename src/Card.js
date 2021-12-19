@@ -103,6 +103,7 @@ class Card extends react.Component {
             } else {
                 this.installExtension();
             }
+            openReloadModal();
         } else if (this.type === "theme") {
             if (this.state.installed) {
                 console.log("Theme already installed, removing");
@@ -112,6 +113,7 @@ class Card extends react.Component {
                 this.removeTheme();
                 this.installTheme();
             }
+            openReloadModal();
         } else if (this.type === "snippet") {
             if (this.state.installed) {
                 console.log("Snippet already installed, removing");
@@ -121,10 +123,7 @@ class Card extends react.Component {
             }
         } else {
             console.error("Unknown card type");
-            // Don't open reload modal
-            return;
         }
-        openReloadModal();
     }
 
     installExtension() {
@@ -146,7 +145,7 @@ class Card extends react.Component {
         }));
 
         // Add to installed list if not there already
-        const installedExtensions = getInstalledExtensions();
+        const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
         if (installedExtensions.indexOf(this.localStorageKey) === -1) {
             installedExtensions.push(this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
@@ -166,7 +165,7 @@ class Card extends react.Component {
             localStorage.removeItem(this.localStorageKey);
 
             // Remove from installed list
-            const installedExtensions = getInstalledExtensions();
+            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
             const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
@@ -212,7 +211,7 @@ class Card extends react.Component {
         // TODO: handle this differently?
 
         // Add to installed list if not there already
-        const installedExtensions = getInstalledExtensions();
+        const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
         if (installedExtensions.indexOf(this.localStorageKey) === -1) {
             installedExtensions.push(this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
@@ -242,7 +241,7 @@ class Card extends react.Component {
             localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
 
             // Remove from installed list
-            const installedExtensions = getInstalledExtensions();
+            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
             const remainingInstalledExtensions = installedExtensions.filter((key) => key !== themeKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
@@ -252,6 +251,7 @@ class Card extends react.Component {
             this.setState({ installed: false });
         }
     }
+
     installSnippet() {
         console.log(`Installing Snippet ${this.localStorageKey}`);
         localStorage.setItem(this.localStorageKey, JSON.stringify({
@@ -261,24 +261,30 @@ class Card extends react.Component {
         }));
 
         // Add to installed list if not there already
-        const installedSnippets = getInstalledSnippets();
-        if (installedSnippets.indexOf(this.localStorageKey) === -1) {
-            installedSnippets.push(this.localStorageKey);
-            localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippets));
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+        if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
+            installedSnippetKeys.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
         }
+        const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+        initializeSnippets(installedSnippets);
 
         this.setState({installed: true});
     }
+
     removeSnippet() {
         localStorage.removeItem(this.localStorageKey);
 
         // Remove from installed list
-        const installedSnippets = getInstalledSnippets();
-        const remainingInstalledSnippets = installedSnippets.filter((key) => key !== this.localStorageKey);
-        localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippets));
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+        const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
+        localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
+        const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+        initializeSnippets(remainingInstalledSnippets);
 
         this.setState({installed: false});
     }
+
     openReadme() {
         if (this.manifest.readme) {
             Spicetify.Platform.History.push({
