@@ -259,10 +259,24 @@ class Card extends react.Component {
             title: this.title,
             description: this.description,
         }));
+
+        // Add to installed list if not there already
+        const installedSnippets = getInstalledSnippets();
+        if (installedSnippets.indexOf(this.localStorageKey) === -1) {
+            installedSnippets.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippets));
+        }
+
         this.setState({installed: true});
     }
     removeSnippet() {
         localStorage.removeItem(this.localStorageKey);
+
+        // Remove from installed list
+        const installedSnippets = getInstalledSnippets();
+        const remainingInstalledSnippets = installedSnippets.filter((key) => key !== this.localStorageKey);
+        localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippets));
+
         this.setState({installed: false});
     }
     openReadme() {

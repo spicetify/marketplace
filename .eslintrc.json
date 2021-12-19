@@ -69,6 +69,7 @@
         "gridUpdateTabs": "writable",
         "gridUpdatePostsVisual": "writable",
         "getInstalledExtensions": "writable",
+        "getInstalledSnippets": "writable",
         "LOCALSTORAGE_KEYS": "writable",
         "ALL_TABS": "readonly",
         "hexToRGB": "readonly",

@@ -26,6 +26,7 @@ const {
 // eslint-disable-next-line no-unused-vars, no-redeclare
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
+    "installedSnippets": "marketplace:installed-snippets",
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
@@ -153,6 +154,13 @@ const getInstalledExtensions = () => {
     const installedExtensionsStr = localStorage.getItem(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
     const installedExtensions = JSON.parse(installedExtensionsStr);
     return installedExtensions;
+};
+
+// eslint-disable-next-line no-unused-vars, no-redeclare
+const getInstalledSnippets = () => {
+    const installedSnippetsStr = localStorage.getItem(LOCALSTORAGE_KEYS.installedSnippets) || "[]";
+    const installedSnippets = JSON.parse(installedSnippetsStr);
+    return installedSnippets;
 };
 
 class Grid extends react.Component {

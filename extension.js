@@ -56,6 +56,7 @@ const getParamsFromGithubRaw = (url) => {
     // TODO: can we reference/require/import common files between extension and custom app?
     const LOCALSTORAGE_KEYS = {
         "installedExtensions": "marketplace:installed-extensions",
+        "installedSnippets": "marketplace:installed-snippets",
         "activeTab": "marketplace:active-tab",
         "tabs": "marketplace:tabs",
         // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
@@ -69,6 +70,13 @@ const getParamsFromGithubRaw = (url) => {
         return installedExtensions;
     };
 
+    const getInstalledSnippetKeys = () => {
+        const installedSnippetsStr = LocalStorage.get(LOCALSTORAGE_KEYS.installedSnippets) || "[]";
+        const installedSnippetsKeys = JSON.parse(installedSnippetsStr);
+        return installedSnippetsKeys;
+    };
+
+    // TODO: use this instead of the above methods, and provide a default value as 2nd param
     const getLocalStorageDataFromKey = (key) => {
         const manifestStr = LocalStorage.get(key);
         if (!manifestStr) return null;
@@ -96,6 +104,23 @@ const getParamsFromGithubRaw = (url) => {
         }
 
         document.body.appendChild(script);
+    };
+
+    /**
+     * Loop through the snippets and add the contents of the code as a style tag in the DOM
+     * @param { { title: string; description: string; code: string;}[] } snippets The snippets to initialize
+     */
+    const initializeSnippets = (snippets) => {
+        const style = document.createElement("style");
+        const styleContent = snippets.reduce((accum, snippet) => {
+            accum += `/* ${snippet.title} - ${snippet.description} */\n`;
+            accum += `${snippet.code}\n`;
+            return accum;
+        }, "");
+        console.log(styleContent);
+        style.innerHTML = styleContent;
+        style.classList.add("marketplaceSnippets");
+        document.head.appendChild(style);
     };
 
     // NOTE: Keep in sync with index.js
@@ -264,6 +289,10 @@ const getParamsFromGithubRaw = (url) => {
 
     const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
     if (installedThemeKey) initializeTheme(installedThemeKey);
+
+    const installedSnippetKeys = getInstalledSnippetKeys();
+    const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+    initializeSnippets(installedSnippets);
 
     const installedExtensions = getInstalledExtensions();
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
