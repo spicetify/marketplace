@@ -764,7 +764,7 @@ function generateSchemesOptions(schemes) {
 
 // eslint-disable-next-line no-unused-vars
 async function fetchCssSnippets() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/css-snippets/snippets.json";
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
     const json = await fetch(url).then(res => res.json()).catch(() => { });
     console.log(json);
     return json;
