@@ -123,8 +123,7 @@ For themes:
 _Please note that if all your extensions are in the root folder, you don't need to include a filepath._
 
 ## Snippets
-Snippets are rather basic to implement, please use this website to make the css snippet single line: [Multiline => Singleline](https://tools.knowledgewalls.com/online-multiline-to-single-line-converter)
-Once you have your code segment ready, edit snippets.json and add the following:
+CSS snippets are rather basic to implement. We fetch them from this repo, so you'll need to submit a [pull request](https://github.com/CharlieS1103/spicetify-marketplace/compare). In order to be valid JSON, the CSS needs to be in one line. You can use [this website](https://tools.knowledgewalls.com/online-multiline-to-single-line-converter) to make the css snippet single line. Once you have your code segment ready, edit snippets.json and add the following, before submitting your PR. 
 ```json
 {
     "title": "Title",
