@@ -1,8 +1,13 @@
 [
   {
     "title": "Fix Episodes Icon",
-    "description": "Fix the color of the episodes Icon",
+    "description": "Fix the color of the episodes icon",
     "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }"
+  },
+  {
+    "title": "Fix Liked Icon",
+    "description": "Fix the colours of the liked icon in sidebar",
+    "code": ".main-likedSongsButton-likedSongsIcon { color: var(--spice-sidebar); background: var(--spice-text); }"
   },
   {
     "title": "Hide Upgrade Button",
