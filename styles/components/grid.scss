@@ -163,6 +163,11 @@
   }
 }
 
+// Hide image preview for CSS snippets
+.marketplace-card--snippet {
+  .main-card-imageContainer { display: none; }
+}
+
 .marketplace-card--installed {
   flex: 0 !important;
   -webkit-box-flex: 0 !important;

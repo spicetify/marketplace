@@ -26,6 +26,7 @@ const {
 // eslint-disable-next-line no-unused-vars, no-redeclare
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
+    "installedSnippets": "marketplace:installed-snippets",
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",
@@ -59,6 +60,7 @@ const ALL_TABS = [
     { name: "Extensions", enabled: true },
     { name: "Themes", enabled: true },
     { name: "Installed", enabled: true },
+    {name:  "Snippets", enabled: true},
 ];
 let tabsString = localStorage.getItem(LOCALSTORAGE_KEYS.tabs);
 let tabs = [];
@@ -147,12 +149,39 @@ const typesLocale = {
     playlist: Spicetify.Locale.get("playlist"),
 };
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
-const getInstalledExtensions = () => {
-    const installedExtensionsStr = localStorage.getItem(LOCALSTORAGE_KEYS.installedExtensions) || "[]";
-    const installedExtensions = JSON.parse(installedExtensionsStr);
-    return installedExtensions;
+/* eslint-disable no-unused-vars, no-redeclare */
+const getLocalStorageDataFromKey = (key, fallback) => {
+    const str = localStorage.getItem(key);
+    if (!str) return fallback;
+
+    const obj = JSON.parse(str);
+    return obj;
 };
+
+/**
+ * Loop through the snippets and add the contents of the code as a style tag in the DOM
+* @param { { title: string; description: string; code: string;}[] } snippets The snippets to initialize
+*/
+// TODO: keep this in sync with the extension.js file
+const initializeSnippets = (snippets) => {
+    // Remove any existing marketplace snippets
+    const existingSnippets = document.querySelector("style.marketplaceSnippets");
+    if (existingSnippets) existingSnippets.remove();
+
+    const style = document.createElement("style");
+    const styleContent = snippets.reduce((accum, snippet) => {
+        accum += `/* ${snippet.title} - ${snippet.description} */\n`;
+        accum += `${snippet.code}\n`;
+        return accum;
+    }, "");
+
+    console.log(styleContent);
+    style.innerHTML = styleContent;
+    style.classList.add("marketplaceSnippets");
+    document.head.appendChild(style);
+};
+
+/* eslint-enable no-unused-vars, no-redeclare */
 
 class Grid extends react.Component {
     constructor(props) {
@@ -188,7 +217,7 @@ class Grid extends react.Component {
 
     /**
      * @param {Object} item
-     * @param {"extension" | "theme"} type The type of card
+     * @param {"extension" | "theme" | "snippet"} type The type of card
      */
     appendCard(item, type) {
         item.visual = CONFIG.visual;
@@ -276,7 +305,7 @@ class Grid extends react.Component {
             // If still have more results, return next page number to fetch
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
-            const installedExtensions = getInstalledExtensions();
+            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
             installedExtensions.forEach(async (extensionKey) => {
                 // TODO: err handling
                 const extension = JSON.parse(localStorage.getItem(extensionKey));
@@ -315,6 +344,17 @@ class Grid extends react.Component {
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
             const remainingResults = pageOfRepos.length - soFarResults;
             if (remainingResults) return currentPage + 1;
+        } else if (CONFIG.activeTab == "Snippets") {
+            let snippets = await fetchCssSnippets();
+
+            if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                // Stop this queue from continuing to fetch and append to cards list
+                return -1;
+            }
+            if (snippets && snippets.length) {
+                snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
+            }
+
         }
 
         this.setState({ rest: true, endOfList: true });
@@ -720,4 +760,12 @@ function generateSchemesOptions(schemes) {
     //     { key: "controversial", value: "Controversial" },
     // ]
     return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
+}
+
+// eslint-disable-next-line no-unused-vars
+async function fetchCssSnippets() {
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/css-snippets/snippets.json";
+    const json = await fetch(url).then(res => res.json()).catch(() => { });
+    console.log(json);
+    return json;
 }

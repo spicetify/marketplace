@@ -8,11 +8,21 @@ class Card extends react.Component {
         // From `appendCard()`
         /** @type { { type: string; stars: string; } } */
         this.visual;
-        /** @type { "extension" | "theme" } */
+        /** @type { "extension" | "theme" | "snippet" } */
         this.type;
 
-        // From `fetchRepoExtensions()` and `fetchThemes()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string; usercss?: string; schemes?: string; include?: string[] } } */
+        // From `fetchRepoExtensions()`, `fetchThemes()`, and snippets.json
+        /** @type { {
+         * name: string;
+         * description: string;
+         * main: string;
+         * preview: string;
+         * readme: string;
+         * code?: string;
+         * usercss?: string;
+         * schemes?: string;
+         * include?: string[]
+         * } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -39,11 +49,24 @@ class Card extends react.Component {
         this.schemesURL;
         /** @type { string[]? } */
         this.include;
+        // Snippet stuff
+        /** @type { string? } */
+        this.code;
+        /** @type { string? } */
+        this.description;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-        this.localStorageKey = "marketplace:installed:" + `${props.user}/${props.repo}/${props.type === "theme" ? props.manifest.usercss : props.manifest.main}`;
+
+        let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
+
+        let cardId = "";
+        if (props.type === "snippet") cardId = props.title.replaceAll(" ", "-");
+        else if (props.type === "theme") cardId = props.manifest.usercss;
+        else if (props.type === "extension") cardId = props.manifest.main;
+
+        this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
         Object.assign(this, props);
 
@@ -91,6 +114,13 @@ class Card extends react.Component {
                 this.installTheme();
             }
             openReloadModal();
+        } else if (this.type === "snippet") {
+            if (this.state.installed) {
+                console.log("Snippet already installed, removing");
+                this.removeSnippet();
+            } else {
+                this.installSnippet();
+            }
         } else {
             console.error("Unknown card type");
         }
@@ -115,7 +145,7 @@ class Card extends react.Component {
         }));
 
         // Add to installed list if not there already
-        const installedExtensions = getInstalledExtensions();
+        const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
         if (installedExtensions.indexOf(this.localStorageKey) === -1) {
             installedExtensions.push(this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
@@ -135,7 +165,7 @@ class Card extends react.Component {
             localStorage.removeItem(this.localStorageKey);
 
             // Remove from installed list
-            const installedExtensions = getInstalledExtensions();
+            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
             const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
@@ -181,7 +211,7 @@ class Card extends react.Component {
         // TODO: handle this differently?
 
         // Add to installed list if not there already
-        const installedExtensions = getInstalledExtensions();
+        const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
         if (installedExtensions.indexOf(this.localStorageKey) === -1) {
             installedExtensions.push(this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
@@ -211,7 +241,7 @@ class Card extends react.Component {
             localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
 
             // Remove from installed list
-            const installedExtensions = getInstalledExtensions();
+            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
             const remainingInstalledExtensions = installedExtensions.filter((key) => key !== themeKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
@@ -220,6 +250,39 @@ class Card extends react.Component {
             // if you just install a new theme to replace the existing one
             this.setState({ installed: false });
         }
+    }
+
+    installSnippet() {
+        console.log(`Installing Snippet ${this.localStorageKey}`);
+        localStorage.setItem(this.localStorageKey, JSON.stringify({
+            code: this.code,
+            title: this.title,
+            description: this.description,
+        }));
+
+        // Add to installed list if not there already
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+        if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
+            installedSnippetKeys.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
+        }
+        const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+        initializeSnippets(installedSnippets);
+
+        this.setState({installed: true});
+    }
+
+    removeSnippet() {
+        localStorage.removeItem(this.localStorageKey);
+
+        // Remove from installed list
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+        const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
+        localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
+        const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+        initializeSnippets(remainingInstalledSnippets);
+
+        this.setState({installed: false});
     }
 
     openReadme() {
@@ -244,12 +307,13 @@ class Card extends react.Component {
     render() {
         // Kill the card if it has been uninstalled on the "Installed" tab
         // TODO: is this kosher, or is there a better way to handle?
+        console.log(this);
         if (CONFIG.activeTab === "Installed" && !this.state.installed) {
             console.log("extension not installed");
             return null;
         }
 
-        const cardClasses = ["main-card-card"];
+        const cardClasses = ["main-card-card", `marketplace-card--${this.type}`];
         if (this.state.installed) cardClasses.push("marketplace-card--installed");
 
         let detail = [];
@@ -282,35 +346,23 @@ class Card extends react.Component {
                 // Add class for styling
                 e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
             },
-        }))), react.createElement("div", {
-            className: "main-card-PlayButtonContainer",
-        }, react.createElement("button", {
-            className: "main-playButton-PlayButton main-playButton-primary",
-            "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
-            style: { "--size": "40px", "cursor": "pointer"},
-            onClick: (e) => {
-                e.stopPropagation();
-                this.buttonClicked();
-            },
-        },
-        this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
-        ))), react.createElement("div", {
+            //Create a div using normalized play button classes to use the css provided by themes
+        })))), react.createElement("div", {
             className: "main-card-cardMetadata",
         }, react.createElement("a", {
             draggable: "false",
-            title: this.manifest.name,
+            title: this.type === "snippet" ? this.props.title : this.manifest.name,
             className: "main-cardHeader-link",
             dir: "auto",
             href: "TODO: add some href here?",
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div",
-        }, this.title)), detail.length > 0 && react.createElement("div", {
+        }, this.props.title)), detail.length > 0 && react.createElement("div", {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         },
         react.createElement("a", {
-
             title: this.user,
             draggable: "false",
             dir: "auto",
@@ -320,7 +372,7 @@ class Card extends react.Component {
         react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
             className: "marketplace-card-desc",
-        }, this.manifest.description),
+        }, this.type === "snippet" ? this.props.description : this.manifest.description),
         this.include && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
@@ -328,7 +380,21 @@ class Card extends react.Component {
         this.state.installed && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, "✓ Installed"),
+        }, "✓ Installed"), react.createElement("div", {
+            className: "main-card-PlayButtonContainer",
+        }, react.createElement("button", {
+            className: "main-playButton-PlayButton main-playButton-primary",
+            // If it is installed, it will remove it when button is clicked, if not it will save
+            "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
+            style: { "--size": "40px", "cursor": "pointer" },
+            onClick: (e) => {
+                e.stopPropagation();
+                this.buttonClicked();
+            },
+        },
+        //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
+        this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
+        )),
         ))));
     }
 }
