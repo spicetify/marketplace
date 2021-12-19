@@ -313,7 +313,7 @@ class Card extends react.Component {
             return null;
         }
 
-        const cardClasses = ["main-card-card"];
+        const cardClasses = ["main-card-card", `marketplace-card--${this.type}`];
         if (this.state.installed) cardClasses.push("marketplace-card--installed");
 
         let detail = [];
