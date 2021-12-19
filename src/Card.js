@@ -90,7 +90,7 @@ class Card extends react.Component {
             } else {
                 this.installExtension();
             }
-            openReloadModal();
+
         } else if (this.type === "theme") {
             if (this.state.installed) {
                 console.log("Theme already installed, removing");
@@ -100,7 +100,7 @@ class Card extends react.Component {
                 this.removeTheme();
                 this.installTheme();
             }
-            openReloadModal();
+
         } else if (this.type === "snippet") {
             if (this.state.installed) {
                 console.log("Snippet already installed, removing");
@@ -108,9 +108,11 @@ class Card extends react.Component {
             } else {
                 this.installSnippet();
             }
+
         } else {
             console.error("Unknown card type");
         }
+        openReloadModal();
     }
 
     installExtension() {
