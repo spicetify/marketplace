@@ -282,7 +282,7 @@ const getParamsFromGithubRaw = (url) => {
     const installedThemeKey = LocalStorage.get(LOCALSTORAGE_KEYS.themeInstalled);
     if (installedThemeKey) initializeTheme(installedThemeKey);
 
-    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
     const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
     initializeSnippets(installedSnippets);
 
