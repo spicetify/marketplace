@@ -260,7 +260,7 @@ class Card extends react.Component {
         }));
 
         // Add to installed list if not there already
-        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
         if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
             installedSnippetKeys.push(this.localStorageKey);
             localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
@@ -275,7 +275,7 @@ class Card extends react.Component {
         localStorage.removeItem(this.localStorageKey);
 
         // Remove from installed list
-        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.snippetsInstalled, []);
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
         const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
         localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
         const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
@@ -285,7 +285,7 @@ class Card extends react.Component {
     }
 
     openReadme() {
-        if (this.manifest.readme) {
+        if (this.manifest && this.manifest.readme) {
             Spicetify.Platform.History.push({
                 pathname: "/spicetify-marketplace/readme",
                 state: {
