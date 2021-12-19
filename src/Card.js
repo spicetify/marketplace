@@ -329,7 +329,7 @@ class Card extends react.Component {
             className: "main-playButton-PlayButton main-playButton-primary",
             // If it is installed, it will remove it when button is clicked, if not it will save
             "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
-            style: { "--size": "40px" },
+            style: { "--size": "40px", "cursor": "pointer"},
             onClick: (e) => {
                 e.stopPropagation();
                 this.buttonClicked();
@@ -351,7 +351,16 @@ class Card extends react.Component {
         }, this.props.title)), detail.length > 0 && react.createElement("div", {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
-        }, react.createElement("span", null, detail.join(" ‒ ")),
+        },
+        react.createElement("a", {
+
+            title: this.user,
+            draggable: "false",
+            dir: "auto",
+            href: "https://github.com/" + this.user,
+        }, this.user),
+        react.createElement("br", null, null),
+        react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
             className: "marketplace-card-desc",
         }, this.type === "snippet" ? this.props.description : this.manifest.description),
