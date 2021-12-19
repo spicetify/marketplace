@@ -175,7 +175,6 @@ const initializeSnippets = (snippets) => {
         return accum;
     }, "");
 
-    console.log(styleContent);
     style.innerHTML = styleContent;
     style.classList.add("marketplaceSnippets");
     document.head.appendChild(style);
@@ -766,6 +765,5 @@ function generateSchemesOptions(schemes) {
 async function fetchCssSnippets() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
     const json = await fetch(url).then(res => res.json()).catch(() => { });
-    console.log(json);
     return json;
 }

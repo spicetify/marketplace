@@ -222,7 +222,6 @@ class Card extends react.Component {
 
         console.log("Installed");
         this.setState({ installed: true });
-        // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
     }
 
     removeTheme(themeKey = null) {
@@ -253,7 +252,7 @@ class Card extends react.Component {
     }
 
     installSnippet() {
-        console.log(`Installing Snippet ${this.localStorageKey}`);
+        console.log(`Installing snippet ${this.localStorageKey}`);
         localStorage.setItem(this.localStorageKey, JSON.stringify({
             code: this.code,
             title: this.title,
@@ -307,9 +306,8 @@ class Card extends react.Component {
     render() {
         // Kill the card if it has been uninstalled on the "Installed" tab
         // TODO: is this kosher, or is there a better way to handle?
-        console.log(this);
         if (CONFIG.activeTab === "Installed" && !this.state.installed) {
-            console.log("extension not installed");
+            console.log("Extension not installed");
             return null;
         }
 
