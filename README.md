@@ -121,6 +121,16 @@ For themes:
 ```
 _Please note that if all your extensions are in the root folder, you don't need to include a filepath._
 
+## Snippets
+Snippets are rather basic to implement, please use this website to make the css snippet single line: [Multiline => Singleline](https://tools.knowledgewalls.com/online-multiline-to-single-line-converter)
+Once you have your code segment ready, edit snippets.json and add the following:
+```json
+{
+    "title": "Title",
+    "description": "description",
+    "code": "The single line css you have"
+}
+```
 ## Styling + Build Process
 - The stylesheet is built using Sass (scss) with the [Parcel](https://parceljs.org/) bundler
 - The main stylesheet is style/style.scss, which builds all the components, and compiles into style.css
