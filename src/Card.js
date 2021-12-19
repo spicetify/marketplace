@@ -11,8 +11,18 @@ class Card extends react.Component {
         /** @type { "extension" | "theme" | "snippet" } */
         this.type;
 
-        // From `fetchRepoExtensions()` and `fetchThemes()`
-        /** @type { { name: string; description: string; main: string; preview: string; readme: string; code: string; usercss?: string; schemes?: string; include?: string[] } } */
+        // From `fetchRepoExtensions()`, `fetchThemes()`, and snippets.json
+        /** @type { {
+         * name: string;
+         * description: string;
+         * main: string;
+         * preview: string;
+         * readme: string;
+         * code?: string;
+         * usercss?: string;
+         * schemes?: string;
+         * include?: string[]
+         * } } */
         this.manifest;
         /** @type { string } */
         this.title;
@@ -43,7 +53,6 @@ class Card extends react.Component {
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
         this.menuType = Spicetify.ReactComponent.Menu;
-
 
         let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
 
@@ -90,7 +99,6 @@ class Card extends react.Component {
             } else {
                 this.installExtension();
             }
-
         } else if (this.type === "theme") {
             if (this.state.installed) {
                 console.log("Theme already installed, removing");
@@ -100,7 +108,6 @@ class Card extends react.Component {
                 this.removeTheme();
                 this.installTheme();
             }
-
         } else if (this.type === "snippet") {
             if (this.state.installed) {
                 console.log("Snippet already installed, removing");
@@ -108,9 +115,10 @@ class Card extends react.Component {
             } else {
                 this.installSnippet();
             }
-
         } else {
             console.error("Unknown card type");
+            // Don't open reload modal
+            return;
         }
         openReloadModal();
     }
@@ -340,7 +348,7 @@ class Card extends react.Component {
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div",
-        }, this.type === "snippet" ? this.props.name : this.manifest.name)), detail.length > 0 && react.createElement("div", {
+        }, this.props.title)), detail.length > 0 && react.createElement("div", {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         }, react.createElement("span", null, detail.join(" ‒ ")),

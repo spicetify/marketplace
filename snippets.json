@@ -1,16 +1,16 @@
 [
   {
-    "name": "Fix Episodes Icon",
+    "title": "Fix Episodes Icon",
     "description": "Fix the color of the episodes Icon",
     "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }"
   },
   {
-    "name": "Hide Upgrade Button",
+    "title": "Hide Upgrade Button",
     "description": "Makes the upgrade button hidden",
     "code": ".main-topBar-UpgradeButton { display: none; }"
   },
   {
-    "name": "Collapse Friends Activity on small screens",
+    "title": "Collapse Friends Activity on small screens",
     "description": "Collapse the friends activity sidebar on small screens",
     "code": ".main-buddyFeed-buddyFeedRoot { transition: width 0.3s; @media screen and (max-width: 1200px) { width: 0; } }"
   }
