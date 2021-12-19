@@ -10,7 +10,7 @@
     "code": ".main-topBar-UpgradeButton { display: none; }"
   },
   {
-    "title": "Collapse Friends Activity on small screens",
+    "title": "Auto-hide Friends",
     "description": "Collapse the friends activity sidebar on small screens",
     "code": ".main-buddyFeed-buddyFeedRoot { transition: width 0.3s; } @media screen and (max-width: 1200px) { .main-buddyFeed-buddyFeedRoot { width: 0; } }"
   }
