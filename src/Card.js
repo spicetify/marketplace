@@ -52,6 +52,8 @@ class Card extends react.Component {
         // Snippet stuff
         /** @type { string? } */
         this.code;
+        /** @type { string? } */
+        this.description;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -60,7 +62,7 @@ class Card extends react.Component {
         let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
 
         let cardId = "";
-        if (props.type === "snippet") cardId = props.title.replace(" ", "-");
+        if (props.type === "snippet") cardId = props.title.replaceAll(" ", "-");
         else if (props.type === "theme") cardId = props.manifest.usercss;
         else if (props.type === "extension") cardId = props.manifest.main;
 
@@ -254,8 +256,8 @@ class Card extends react.Component {
         console.log(`Installing Snippet ${this.localStorageKey}`);
         localStorage.setItem(this.localStorageKey, JSON.stringify({
             code: this.code,
-            name: this.props.name,
-            description: this.props.description,
+            title: this.title,
+            description: this.description,
         }));
         this.setState({installed: true});
     }
