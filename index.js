@@ -264,20 +264,29 @@ class Grid extends react.Component {
             // If still have more results, return next page number to fetch
             if (remainingResults) return currentPage + 1;
         } else if (CONFIG.activeTab === "Installed") {
-            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-            installedExtensions.forEach(async (extensionKey) => {
-                // TODO: err handling
-                const extension = JSON.parse(localStorage.getItem(extensionKey));
+            const installedStuff = {
+                extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
+                snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
+                theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
+            };
 
-                // I believe this stops the requests when switching tabs?
-                if (requestQueue.length > 1 && queue !== requestQueue[0]) {
-                    // Stop this queue from continuing to fetch and append to cards list
-                    return -1;
+            for (const type in installedStuff) {
+                if (installedStuff[type].length) {
+                    installedStuff[type].forEach(async (itemKey) => {
+                        // TODO: err handling
+                        const extension = JSON.parse(localStorage.getItem(itemKey));
+
+                        // I believe this stops the requests when switching tabs?
+                        if (requestQueue.length > 1 && queue !== requestQueue[0]) {
+                            // Stop this queue from continuing to fetch and append to cards list
+                            return -1;
+                        }
+
+                        // @ts-ignore
+                        this.appendCard(extension, type);
+                    });
                 }
-
-                // TODO: this needs to know which is a theme vs extension
-                this.appendCard(extension, "extension");
-            });
+            }
 
             // Don't need to return a page number because
             // installed extension do them all in one go, since it's local
