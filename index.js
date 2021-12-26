@@ -27,6 +27,7 @@ const {
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
     "installedSnippets": "marketplace:installed-snippets",
+    "installedThemes": "marketplace:installed-themes",
     "activeTab": "marketplace:active-tab",
     "tabs": "marketplace:tabs",
     "sortBy": "marketplace:sort-by",

@@ -211,10 +211,10 @@ class Card extends react.Component {
         // TODO: handle this differently?
 
         // Add to installed list if not there already
-        const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-        if (installedExtensions.indexOf(this.localStorageKey) === -1) {
-            installedExtensions.push(this.localStorageKey);
-            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+        const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
+        if (installedThemes.indexOf(this.localStorageKey) === -1) {
+            installedThemes.push(this.localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes));
 
             // const usercssURL = `https://raw.github.com/${this.user}/${this.repo}/${this.branch}/${this.manifest.usercss}`;
             localStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
@@ -240,9 +240,9 @@ class Card extends react.Component {
             localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
 
             // Remove from installed list
-            const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-            const remainingInstalledExtensions = installedExtensions.filter((key) => key !== themeKey);
-            localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+            const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
+            const remainingInstalledThemes = installedThemes.filter((key) => key !== themeKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
 
             console.log("Removed");
             // TODO: this doesn't remove the "installed" state on the installed card
