@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare, no-unused-vars */
-
+// TODO: Migrate more things to this file
 const hexToRGB = (hex) => {
     if (hex.length === 3) {
         hex = hex.split("").map((char) => char + char).join("");

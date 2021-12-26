@@ -356,7 +356,7 @@ class Card extends react.Component {
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div",
-        }, this.props.title)), detail.length > 0 && react.createElement("div", {
+        }, this.props.title)),  react.createElement("div", {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         },
