@@ -6,7 +6,7 @@ class Card extends react.Component {
         super(props);
 
         // From `appendCard()`
-        /** @type { { type: string; stars: string; } } */
+        /** @type { { type: string; stars:   string; } } */
         this.visual;
         /** @type { "extension" | "theme" | "snippet" } */
         this.type;
@@ -16,6 +16,7 @@ class Card extends react.Component {
          * name: string;
          * description: string;
          * main: string;
+         * authors: { name: string; url: string; }[];
          * preview: string;
          * readme: string;
          * code?: string;
@@ -28,6 +29,8 @@ class Card extends react.Component {
         this.title;
         /** @type { string } */
         this.subtitle;
+        /** @type { { name: string; url: string; }[] } */
+        this.authors;
         /** @type { string } */
         this.repo;
         /** @type { string } */
@@ -135,6 +138,7 @@ class Card extends react.Component {
             type: this.type,
             title: this.title,
             subtitle: this.subtitle,
+            authors: this.authors,
             user: this.user,
             repo: this.repo,
             branch: this.branch,
@@ -192,6 +196,7 @@ class Card extends react.Component {
             type: this.type,
             title: this.title,
             subtitle: this.subtitle,
+            authors: this.authors,
             user: this.user,
             repo: this.repo,
             branch: this.branch,

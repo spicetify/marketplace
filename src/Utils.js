@@ -77,3 +77,24 @@ const getLocalStorageDataFromKey = (key, fallback) => {
     const obj = JSON.parse(str);
     return obj;
 };
+
+/**
+ * Format an array of authors, given the data from the manifest and the repo owner.
+ * @param {{ name: string; url: string; }[]} authors Array of authors
+ * @param {string} user The repo owner
+ * @returns
+ */
+const processAuthors = (authors, user) => {
+    let parsedAuthors = [];
+
+    if (authors && authors.length > 0) {
+        parsedAuthors = authors;
+    } else {
+        parsedAuthors.push({
+            name: user,
+            url: "https://github.com/" + user,
+        });
+    }
+
+    return parsedAuthors;
+};

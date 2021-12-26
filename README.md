@@ -68,7 +68,8 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `preview`: A path to your preview image. Must be relative to your project root
     * `main`: The filename for your extension's main js file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root
-    * `branch`: Optional branch to specify. Will use default branch if none
+    * `branch`: Optional branch to specify. Will use default branch if none.
+    * `authors`: Optional array of authors with names and urls. Will use repo owner if none.
 * Or for Themes:
     * `name`: Your theme name
     * `description`: Description for your theme
@@ -76,7 +77,8 @@ In order to show up in the custom app, your repo needs to follow these requireme
     * `usercss`: A path to your user.css file. Must be relative to your project root
     * `schemes`: A path to your color.ini file. Must be relative to your project root
     * `readme`: The filename for your extension's README file. Must be relative to your project root 
-    * `branch`: Optional branch to specify. Will use default branch if none
+    * `branch`: Optional branch to specify. Will use default branch if none.
+    * `authors`: Optional array of authors with names and urls. Will use repo owner if none.
     
 (Extension e.g.): 
 ```json
@@ -85,7 +87,10 @@ In order to show up in the custom app, your repo needs to follow these requireme
     "description": "Spicetify extension to hide podcasts.",
     "preview": "screenshot.png",
     "main": "hidePodcasts.js",
-    "readme": "README.md"
+    "readme": "README.md",
+    "authors": [
+        { "name": "theRealPadster", "url": "https://github.com/theRealPadster" }
+    ]
 }
 ```
 If you have multiple extensions in the same repo (subfolder e.g.):
@@ -117,7 +122,11 @@ For themes:
     "readme": "README.md",
     "usercss": "filepathFromGitRepo/user.css",
     "schemes": "filepathFromGitRepo/color.ini",
-    "branch": "beta-release"
+    "branch": "beta-release",
+    "authors": [
+        { "name": "theRealPadster", "url": "https://github.com/theRealPadster" },
+        { "name": "CharlieS1103", "url": "https://github.com/CharlieS1103" }
+    ]
 }
 ```
 _Please note that if all your extensions are in the root folder, you don't need to include a filepath._

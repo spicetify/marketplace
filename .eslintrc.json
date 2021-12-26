@@ -85,6 +85,7 @@
         "ALL_TABS": "readonly",
         "hexToRGB": "readonly",
         "parseIni": "readonly",
+        "processAuthors": "readonly",
         "DOWNLOAD_ICON": "readonly",
         "SETTINGS_ICON": "readonly",
         "TRASH_ICON": "readonly"
