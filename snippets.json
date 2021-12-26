@@ -1,13 +1,18 @@
 [
   {
-    "title": "Fix Episodes Icon",
-    "description": "Fix the color of the episodes icon",
+    "title": "Fix 'Episodes' Icon",
+    "description": "Fix the color of the Episodes icon",
     "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }"
   },
   {
-    "title": "Fix Liked Icon",
-    "description": "Fix the colours of the liked icon in sidebar",
+    "title": "Fix 'Liked' Icon",
+    "description": "Fix the colours of the Liked icon in sidebar",
     "code": ".main-likedSongsButton-likedSongsIcon { color: var(--spice-sidebar); background: var(--spice-text); }"
+  },
+  {
+    "title": "Fix 'Made For You' Icon",
+    "description": "Fix the colours of the Made For You icon",
+    "code": ".utp540VMXpC3bYIxo9wy { color: var(--spice-sidebar); background: var(--spice-text); opacity: 1; } .t6d9Hf7maqFPHp1Y02VR { color: var(--spice-text); }"
   },
   {
     "title": "Hide Upgrade Button",
