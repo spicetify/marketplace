@@ -365,7 +365,8 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         },
-        this.authors.map((author) => react.createElement("a", {
+        // Add authors if they exist
+        this.authors && this.authors.map((author) => react.createElement("a", {
             title: author.name,
             draggable: "false",
             dir: "auto",
