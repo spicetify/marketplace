@@ -141,14 +141,6 @@ let BLACKLIST = [];
 // eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
 
-// eslint-disable-next-line no-unused-vars
-const typesLocale = {
-    // TODO: Remove these, unsure of their purpose.
-    album: Spicetify.Locale.get("album"),
-    song: Spicetify.Locale.get("song"),
-    playlist: Spicetify.Locale.get("playlist"),
-};
-
 class Grid extends react.Component {
     constructor(props) {
         super(props);
