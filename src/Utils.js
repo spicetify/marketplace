@@ -47,3 +47,33 @@ const parseIni = (data) => {
     });
     return value;
 };
+
+/**
+ * Loop through the snippets and add the contents of the code as a style tag in the DOM
+* @param { { title: string; description: string; code: string;}[] } snippets The snippets to initialize
+*/
+// TODO: keep this in sync with the extension.js file
+const initializeSnippets = (snippets) => {
+    // Remove any existing marketplace snippets
+    const existingSnippets = document.querySelector("style.marketplaceSnippets");
+    if (existingSnippets) existingSnippets.remove();
+
+    const style = document.createElement("style");
+    const styleContent = snippets.reduce((accum, snippet) => {
+        accum += `/* ${snippet.title} - ${snippet.description} */\n`;
+        accum += `${snippet.code}\n`;
+        return accum;
+    }, "");
+
+    style.innerHTML = styleContent;
+    style.classList.add("marketplaceSnippets");
+    document.head.appendChild(style);
+};
+
+const getLocalStorageDataFromKey = (key, fallback) => {
+    const str = localStorage.getItem(key);
+    if (!str) return fallback;
+
+    const obj = JSON.parse(str);
+    return obj;
+};
