@@ -123,6 +123,13 @@
   color: var(--spice-subtext);
 }
 
+// author, stars, etc.
+.marketplace-cardSubHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 // Cards
 #marketplace-grid {
   .main-card-draggable {

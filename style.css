@@ -120,6 +120,12 @@
   color: var(--spice-subtext);
 }
 
+.marketplace-cardSubHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 #marketplace-grid .main-card-draggable {
   display: flex;
   flex-direction: column;

@@ -366,7 +366,6 @@ class Card extends react.Component {
             dir: "auto",
             href: "https://github.com/" + this.user,
         }, this.user),
-        react.createElement("br", null, null),
         react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
             className: "marketplace-card-desc",
