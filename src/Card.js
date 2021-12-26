@@ -365,12 +365,12 @@ class Card extends react.Component {
             className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
             as: "div",
         },
-        react.createElement("a", {
-            title: this.user,
+        this.authors.map((author) => react.createElement("a", {
+            title: author.name,
             draggable: "false",
             dir: "auto",
-            href: "https://github.com/" + this.user,
-        }, this.user),
+            href: author.url,
+        }, author.name)),
         react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
             className: "marketplace-card-desc",
