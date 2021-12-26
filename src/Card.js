@@ -268,7 +268,7 @@ class Card extends react.Component {
         const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
         initializeSnippets(installedSnippets);
 
-        this.setState({installed: true});
+        this.setState({ installed: true });
     }
 
     removeSnippet() {
@@ -281,7 +281,7 @@ class Card extends react.Component {
         const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
         initializeSnippets(remainingInstalledSnippets);
 
-        this.setState({installed: false});
+        this.setState({ installed: false });
     }
 
     openReadme() {

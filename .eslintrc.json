@@ -47,7 +47,15 @@
         "keyword-spacing": "error",
         "no-multiple-empty-lines": [
             "error", { "max": 1 }
+        ],
+        "object-curly-spacing": [
+            "error", "always"
         ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     },
     "globals": {
         "react": "readonly",

@@ -2,7 +2,8 @@
   "scripts": {
     "type-check": "tsc",
     "watch": "parcel watch",
-    "build": "parcel build"
+    "build": "parcel build",
+    "lint": "eslint src"
   },
   "source": "styles/style.scss",
   "targets": {
