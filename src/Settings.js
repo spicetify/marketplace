@@ -24,8 +24,8 @@ function openConfig() {
     customCSSHeader.innerText = "Custom CSS";
     configContainer.append(customCSSHeader);
     configContainer.append(createCustomCssOption());
-
-    setTimeout(() => {addCustomCssListeners()}, 5000);
+    // TODO: Create a better method for this (Probably will have to use mutation observer?)
+    setTimeout(() => {addCustomCssListeners();}, 5000);
 
     const optionHeader = document.createElement("h2");
     optionHeader.innerText = "Options";
