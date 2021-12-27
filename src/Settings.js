@@ -241,7 +241,7 @@ function createCustomCssOption() {
     `;
     return container;
 }
-async function addCustomCssListeners() {
+function addCustomCssListeners() {
     console.log("Adding listeners");
     const textarea = document.querySelector("#marketplace-custom-css");
 
@@ -249,7 +249,9 @@ async function addCustomCssListeners() {
     console.log(submit);
     submit.addEventListener("click", function (event) {
         const storedCSS = localStorage.getItem("marketplace:customCSS");
-        console.log(textarea.textContent);
+        // @ts-ignore
+        const value = textarea.value;
+        console.log(value);
         /* if (!storedCSS) {
             localStorage.setItem("marketplace:customCSS", textarea.textContent);
         }
