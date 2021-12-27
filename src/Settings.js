@@ -20,6 +20,13 @@ function openConfig() {
     configContainer = document.createElement("div");
     configContainer.id = "marketplace-config-container";
 
+    const customCSSHeader = document.createElement("h2");
+    customCSSHeader.innerText = "Custom CSS";
+    configContainer.append(customCSSHeader);
+    configContainer.append(createCustomCssOption());
+
+    setTimeout(() => {addCustomCssListeners()}, 5000);
+
     const optionHeader = document.createElement("h2");
     optionHeader.innerText = "Options";
 
@@ -224,4 +231,29 @@ function createTabOption(id, posCallback, toggleCallback) {
     toggle.onchange = () => toggleCallback(container);
 
     return container;
+}
+function createCustomCssOption() {
+    const container = document.createElement("div");
+    container.innerHTML = `
+<textarea id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find the in the installed tab for management."></textarea>
+  <br><br>
+  <button value="Submit" id="marketplace-customCSS-submit">Submit CSS</button>
+    `;
+    return container;
+}
+async function addCustomCssListeners() {
+    console.log("Adding listeners");
+    const textarea = document.querySelector("#marketplace-custom-css");
+
+    const submit = document.querySelector("#marketplace-customCSS-submit");
+    console.log(submit);
+    submit.addEventListener("click", function (event) {
+        const storedCSS = localStorage.getItem("marketplace:customCSS");
+        console.log(textarea.textContent);
+        /* if (!storedCSS) {
+            localStorage.setItem("marketplace:customCSS", textarea.textContent);
+        }
+        */
+        event.preventDefault();
+    }, false);
 }
