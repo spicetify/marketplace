@@ -411,6 +411,33 @@ class Grid extends react.Component {
         document.head.appendChild(schemeTag);
     }
 
+    // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
+    // NOTE: Keep in sync with extension.js
+    // eslint-disable-next-line
+    // applyTheme(theme) {
+    //     // Remove default css
+    //     // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
+    //     const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+    //     if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
+    //     const existingColorsCSS = document.querySelector("link[href='colors.css']");
+    //     if (existingColorsCSS) existingColorsCSS.remove();
+
+    //     // Remove any existing marketplace theme
+    //     const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
+    //     if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+    //     // Add theme css
+    //     const newUserThemeCSS = document.createElement("link");
+    //     // Using jsdelivr since github raw doesn't provide mimetypes
+    //     // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+    //     const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}@${theme.branch}/${theme.manifest.usercss}`;
+    //     newUserThemeCSS.href = cssUrl;
+    //     newUserThemeCSS.rel = "stylesheet";
+    //     newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
+    //     document.head.appendChild(newUserThemeCSS);
+    // }
+
     async componentDidMount() {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
