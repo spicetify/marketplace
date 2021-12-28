@@ -934,21 +934,35 @@
   }
 
   // Add some basic styling (Spotify has it removed)
-  ul {
-    list-style-type: disc;
+  ul, li {
+    list-style-position: inside;
 
     li {
       margin-bottom: 8px;
     }
   }
 
+  ul { list-style-type: disc; }
+
+  ol { list-style-type: auto; }
+
   // Add some basic margin
   p, pre, code {
-    margin: 8px;
+    margin: 8px 0;
   }
 
-  // Stop install directions "platform/path" stuff from doing the widths equally all the time
+  // Make single-line code blocks not trail offscreen
+  pre {
+    overflow-x: auto;
+  }
+
   table {
+    // Stop install directions "platform/path" stuff from doing the widths equally all the time
     table-layout: auto;
+
+    th, td {
+      // Add borders to table cells
+      border: 1px solid var(--spice-button-disabled);
+    }
   }
 }
