@@ -535,14 +535,13 @@ class Grid extends react.Component {
     }
 }
 
-
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
  * Query GitHub for all repos with the "spicetify-extensions" topic
  * @param {number} page The query page number
- * @returns Array of search results
+ * @returns Array of search results (filtered through the blacklist)
  */
 async function getRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
@@ -577,7 +576,7 @@ async function getRepoManifest(user, repo, branch) {
 
 // TODO: can we add a return type here?
 /**
- * Fetch an extension and format data for generating a card
+ * Fetch extensions from a repo and format data for generating cards
  * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
  * @param {string} branch The repo's default branch (e.g. main or master)
  * @param {number} stars The number of stars the repo has
@@ -643,6 +642,14 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
     }
 }
 
+// TODO: can we add a return type here?
+/**
+ * Fetch themes from a repo and format data for generating cards
+ * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param {string} branch The repo's default branch (e.g. main or master)
+ * @param {number} stars The number of stars the repo has
+ * @returns Extension info for card (or null)
+ */
 async function fetchThemes(contents_url, branch, stars) {
     try {
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -697,8 +704,12 @@ async function fetchThemes(contents_url, branch, stars) {
     }
 }
 
+/**
+ * Query the GitHub API for a page of theme repos (having "spicetify-themes" topic)
+ * @param {number} page The page to get (defaults to 1)
+ * @returns Array of GitHub API results, filtered through the blacklist
+ */
 async function getThemeRepos(page = 1) {
-    // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
 
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
@@ -713,25 +724,21 @@ async function getThemeRepos(page = 1) {
     return filteredArray;
 }
 
+function generateSchemesOptions(schemes) {
+    if (!schemes) return [];
+    // [
+    //     { key: "red", value: "Red" },
+    //     { key: "dark", value: "Dark" },
+    // ]
+    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
+}
+
 async function getBlacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
     return jsonReturned.repos;
 }
 
-function generateSchemesOptions(schemes) {
-    if (!schemes) return [];
-    // [
-    //     { key: "hot", value: "Hot" },
-    //     { key: "new", value: "New" },
-    //     { key: "top", value: "Top" },
-    //     { key: "rising", value: "Rising" },
-    //     { key: "controversial", value: "Controversial" },
-    // ]
-    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
-}
-
-// eslint-disable-next-line no-unused-vars
 async function fetchCssSnippets() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
     const json = await fetch(url).then(res => res.json()).catch(() => { });
