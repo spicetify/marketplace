@@ -13,7 +13,7 @@
 /* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
 const react = Spicetify.React;
-/** @type {ReactDOM} */
+/** @type {import("react-dom")} */
 const reactDOM = Spicetify.ReactDOM;
 const {
     URI,

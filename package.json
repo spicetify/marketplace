@@ -1,4 +1,13 @@
 {
+  "name": "spicetify-marketplace",
+  "homepage": "https://github.com/CharlieS1103/spicetify-marketplace",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CharlieS1103/spicetify-marketplace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CharlieS1103/spicetify-marketplace/issues"
+  },
   "scripts": {
     "type-check": "tsc",
     "watch": "parcel watch",
@@ -11,6 +20,9 @@
       "distDir": ".",
       "optimize": false
     }
+  },
+  "engines": {
+    "node": "16.x"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0",
