@@ -2,3 +2,10 @@ node_modules/
 dump.rdb
 .DS_Store
 .parcel-cache/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/verisons
