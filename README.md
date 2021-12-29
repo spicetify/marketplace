@@ -26,7 +26,7 @@ Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com
 |------------|-----------------------------------------------------------------------------------------|
 | **Linux**      | `~/.config/spicetify/CustomApps` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
 | **MacOS**      | `~/.config/spicetify/CustomApps` or `$SPICETIFY_CONFIG/CustomApps`                  |
-| **Windows**    | `%userprofile%/.spicetify/CustomApps/`                                              |
+| **Windows**    | `%userprofile%/spicetify-cli/CustomApps`                                            |
 
 After putting the extension file into the correct folder, run the following command to install the extension:
 ```
