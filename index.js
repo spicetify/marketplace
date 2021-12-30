@@ -203,7 +203,7 @@ class Grid extends react.Component {
         });
         endOfList = false;
 
-        this.newRequest(30);
+        this.newRequest(ITEMS_PER_REQUEST);
     }
 
     updateTabs() {
@@ -231,7 +231,7 @@ class Grid extends react.Component {
         });
         endOfList = false;
 
-        this.newRequest(30);
+        this.newRequest(ITEMS_PER_REQUEST);
     }
 
     // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
@@ -240,7 +240,7 @@ class Grid extends react.Component {
     async loadPage(queue) {
         if (CONFIG.activeTab === "Extensions") {
             let pageOfRepos = await getRepos(requestPage);
-            for (const repo of pageOfRepos) {
+            for (const repo of pageOfRepos.items) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
                 // I believe this stops the requests when switching tabs?
@@ -258,11 +258,13 @@ class Grid extends react.Component {
             // First request is null, so coerces to 1
             const currentPage = requestPage || 1;
             // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
-            const remainingResults = pageOfRepos.length - soFarResults;
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.items.length;
+            const remainingResults = pageOfRepos.total_count - soFarResults;
 
             // If still have more results, return next page number to fetch
-            if (remainingResults) return currentPage + 1;
+            console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
+            if (remainingResults > 0) return currentPage + 1;
+            else console.log("No more extension results");
         } else if (CONFIG.activeTab === "Installed") {
             const installedStuff = {
                 snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
@@ -292,7 +294,7 @@ class Grid extends react.Component {
             // installed extension do them all in one go, since it's local
         } else if (CONFIG.activeTab == "Themes") {
             let pageOfRepos = await getThemeRepos(requestPage);
-            for (const repo of pageOfRepos) {
+            for (const repo of pageOfRepos.items) {
 
                 let themes = await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 // I believe this stops the requests when switching tabs?
@@ -309,9 +311,12 @@ class Grid extends react.Component {
             // First request is null, so coerces to 1
             const currentPage = requestPage || 1;
             // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
-            const remainingResults = pageOfRepos.length - soFarResults;
-            if (remainingResults) return currentPage + 1;
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.items.length;
+            const remainingResults = pageOfRepos.total_count - soFarResults;
+
+            console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
+            if (remainingResults > 0) return currentPage + 1;
+            else console.log("No more theme results");
         } else if (CONFIG.activeTab == "Snippets") {
             let snippets = await fetchCssSnippets();
 
@@ -455,7 +460,7 @@ class Grid extends react.Component {
 
         // Load blacklist
         BLACKLIST = await getBlacklist();
-        this.newRequest(30);
+        this.newRequest(ITEMS_PER_REQUEST);
     }
 
     componentWillUnmount() {
@@ -554,9 +559,12 @@ async function getRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-    const filteredArray = allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url));
+    const filteredResults = {
+        ...allRepos,
+        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
 
-    return filteredArray;
+    return filteredResults;
 }
 
 // TODO: add try/catch here?
@@ -720,8 +728,12 @@ async function getThemeRepos(page = 1) {
     //     url += `&t=${sortConfig.time}`
     const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
 
-    const filteredArray = allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url));
-    return filteredArray;
+    const filteredResults = {
+        ...allThemes,
+        items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
+
+    return filteredResults;
 }
 
 function generateSchemesOptions(schemes) {
