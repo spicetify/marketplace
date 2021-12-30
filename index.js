@@ -258,7 +258,7 @@ class Grid extends react.Component {
             // First request is null, so coerces to 1
             const currentPage = requestPage || 1;
             // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.items.length;
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
 
             // If still have more results, return next page number to fetch
@@ -311,7 +311,7 @@ class Grid extends react.Component {
             // First request is null, so coerces to 1
             const currentPage = requestPage || 1;
             // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.items.length;
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
 
             console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
@@ -561,6 +561,9 @@ async function getRepos(page = 1) {
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     const filteredResults = {
         ...allRepos,
+        // Include count of all items on the page, since we're filtering the blacklist below,
+        // which can mess up the paging logic
+        page_count: allRepos.items.length,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
 
@@ -730,6 +733,9 @@ async function getThemeRepos(page = 1) {
 
     const filteredResults = {
         ...allThemes,
+        // Include count of all items on the page, since we're filtering the blacklist below,
+        // which can mess up the paging logic
+        page_count: allThemes.items.length,
         items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
 
