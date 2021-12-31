@@ -118,6 +118,7 @@ class Card extends react.Component {
                 this.removeTheme();
                 this.installTheme();
             }
+            const previousTheme= localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
             if (this.include) { openReloadModal(); }
         } else if (this.type === "snippet") {
             if (this.state.installed) {
@@ -420,7 +421,7 @@ class Card extends react.Component {
         )),
         ))));
     }
-    async injectNewTheme(parsedSchemes) {
+    async injectNewTheme() {
         try {
             // Remove any existing Spicetify user.css
             const existingUserThemeCSS = document.querySelector("link[href='user.css']");
@@ -436,14 +437,6 @@ class Card extends react.Component {
             userCssTag.classList.add("marketplaceUserCSS");
             userCssTag.innerHTML = userCSS;
             document.head.appendChild(userCssTag);
-            //Initialize color scheme
-            if (this.schemesURL) {
-                console.log(Object.values(parsedSchemes)[0]);
-                this.injectColourScheme(Object.values(parsedSchemes)[0]);
-
-            } else {
-                console.warn("No schemes found for theme");
-            }
         } catch (error) {
             console.warn(error);
         }
@@ -479,34 +472,4 @@ class Card extends react.Component {
         return css;
     }
 
-    async injectColourScheme(scheme) {
-        try {
-            // Remove any existing Spicetify scheme
-            console.log(scheme);
-            const existingColorsCSS = document.querySelector("head > style.marketplaceCSS.marketplaceScheme");
-            if (existingColorsCSS) existingColorsCSS.remove();
-
-            // Remove any existing marketplace scheme
-            const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
-            if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
-
-            // Add new marketplace scheme
-            const schemeTag = document.createElement("style");
-            schemeTag.classList.add("marketplaceCSS");
-            schemeTag.classList.add("marketplaceScheme");
-            // const theme = document.querySelector('#theme');
-            let injectStr = ":root {";
-
-            const themeIniKeys = Object.keys(scheme);
-            themeIniKeys.forEach((key) => {
-                injectStr += `--spice-${key}: #${scheme[key]};`;
-                injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
-            });
-            injectStr += "}";
-            schemeTag.innerHTML = injectStr;
-            document.head.appendChild(schemeTag);
-        } catch (error) {
-            console.warn(error);
-        }
-    }
 }
