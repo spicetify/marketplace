@@ -118,7 +118,7 @@ class Card extends react.Component {
                 this.removeTheme();
                 this.installTheme();
             }
-            openReloadModal();
+            if (this.include) { openReloadModal(); }
         } else if (this.type === "snippet") {
             if (this.state.installed) {
                 console.log("Snippet already installed, removing");
@@ -190,7 +190,16 @@ class Card extends react.Component {
             parsedSchemes = parseIni(colourSchemes);
         }
         console.log(parsedSchemes);
-
+        if (!this.include) {
+            this.injectNewTheme(parsedSchemes);
+            this.state.installed = false;
+            const schemeSelector = document.querySelector("div.marketplace-header > div > div");
+            const newSchemeEvent = new CustomEvent("newschemes", {
+                bubbles: true,
+                detail: { schemes: () => parsedSchemes },
+            });
+            schemeSelector.dispatchEvent(newSchemeEvent);
+        }
         const activeScheme = parsedSchemes ? Object.keys(parsedSchemes)[0] : null;
 
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
@@ -410,5 +419,94 @@ class Card extends react.Component {
         this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
         )),
         ))));
+    }
+    async injectNewTheme(parsedSchemes) {
+        try {
+            // Remove any existing Spicetify user.css
+            const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+            if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
+            // Remove any existing marketplace scheme
+            const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
+            if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
+            const userCSS = await this.parseCSS();
+            // Add new marketplace scheme
+            const userCssTag = document.createElement("style");
+            userCssTag.classList.add("marketplaceCSS");
+            userCssTag.classList.add("marketplaceUserCSS");
+            userCssTag.innerHTML = userCSS;
+            document.head.appendChild(userCssTag);
+            //Initialize color scheme
+            if (this.schemesURL) {
+                console.log(Object.values(parsedSchemes)[0]);
+                this.injectColourScheme(Object.values(parsedSchemes)[0]);
+
+            } else {
+                console.warn("No schemes found for theme");
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+    }
+    async parseCSS() {
+
+        const userCssUrl = this.cssURL.indexOf("raw.githubusercontent.com") > -1
+            // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+            ? `https://cdn.jsdelivr.net/gh/${this.user}/${this.repo}@${this.branch}/${this.manifest.usercss}`
+            : this.cssURL;
+        // TODO: Make this more versatile
+        const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
+
+        console.log("Parsing CSS: ", userCssUrl);
+        let css = await fetch(userCssUrl).then(res => res.text());
+        // console.log("Parsed CSS: ", css);
+
+        // @ts-ignore
+        let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
+
+        for (const match of urls) {
+            const url = match.groups.path;
+            // console.log(url);
+            // If it's a relative URL, transform it to HTTP URL
+            if (!url.startsWith("http") && !url.startsWith("data")) {
+                const newUrl = assetsUrl + url.replace(/\.\//g, "");
+                css = css.replace(url, newUrl);
+            }
+        }
+
+        // console.log("New CSS: ", css);
+
+        return css;
+    }
+
+    async injectColourScheme(scheme) {
+        try {
+            // Remove any existing Spicetify scheme
+            console.log(scheme);
+            const existingColorsCSS = document.querySelector("head > style.marketplaceCSS.marketplaceScheme");
+            if (existingColorsCSS) existingColorsCSS.remove();
+
+            // Remove any existing marketplace scheme
+            const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
+            if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
+
+            // Add new marketplace scheme
+            const schemeTag = document.createElement("style");
+            schemeTag.classList.add("marketplaceCSS");
+            schemeTag.classList.add("marketplaceScheme");
+            // const theme = document.querySelector('#theme');
+            let injectStr = ":root {";
+
+            const themeIniKeys = Object.keys(scheme);
+            themeIniKeys.forEach((key) => {
+                injectStr += `--spice-${key}: #${scheme[key]};`;
+                injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+            });
+            injectStr += "}";
+            schemeTag.innerHTML = injectStr;
+            document.head.appendChild(schemeTag);
+        } catch (error) {
+            console.warn(error);
+        }
     }
 }
