@@ -382,7 +382,10 @@ class Grid extends react.Component {
         console.log("updateColourSchemes", schemes, activeScheme);
         CONFIG.theme.schemes = schemes;
         CONFIG.theme.activeScheme = activeScheme;
-        this.injectColourScheme(CONFIG.theme.schemes[activeScheme]);
+
+        if (schemes && schemes[activeScheme]) {
+            this.injectColourScheme(CONFIG.theme.schemes[activeScheme]);
+        }
 
         // Save to localstorage
         const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
