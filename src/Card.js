@@ -416,6 +416,8 @@ class Card extends react.Component {
         )),
         ))));
     }
+
+    // TODO: keep in sync with extension.js
     async injectNewTheme() {
         try {
             // Remove any existing Spicetify user.css
@@ -425,7 +427,9 @@ class Card extends react.Component {
             // Remove any existing marketplace scheme
             const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
             if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
+
             const userCSS = await this.parseCSS();
+
             // Add new marketplace scheme
             const userCssTag = document.createElement("style");
             userCssTag.classList.add("marketplaceCSS");
@@ -436,6 +440,8 @@ class Card extends react.Component {
             console.warn(error);
         }
     }
+
+    // TODO: keep in sync with extension.js
     async parseCSS() {
 
         const userCssUrl = this.cssURL.indexOf("raw.githubusercontent.com") > -1
@@ -466,5 +472,4 @@ class Card extends react.Component {
 
         return css;
     }
-
 }
