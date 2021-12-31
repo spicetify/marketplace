@@ -195,18 +195,16 @@ class Card extends react.Component {
             const colourSchemes = await schemesResponse.text();
             parsedSchemes = parseIni(colourSchemes);
         }
+
         console.log(parsedSchemes);
-        if (!this.include) {
-            this.injectNewTheme(parsedSchemes);
-            this.state.installed = false;
-            const schemeSelector = document.querySelector("div.marketplace-header > div > div");
-            const newSchemeEvent = new CustomEvent("newschemes", {
-                bubbles: true,
-                detail: { schemes: () => parsedSchemes },
-            });
-            schemeSelector.dispatchEvent(newSchemeEvent);
-        }
+
         const activeScheme = parsedSchemes ? Object.keys(parsedSchemes)[0] : null;
+
+        if (!this.include) {
+            this.injectNewTheme();
+            // Update schemes in Grid, triggers state change and re-render
+            this.updateColourSchemes(parsedSchemes, activeScheme);
+        }
 
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
@@ -248,9 +246,6 @@ class Card extends react.Component {
 
         // TODO: We'll also need to actually update the usercss etc, not just the colour scheme
         // e.g. the stuff from extension.js, like injectUserCSS() etc.
-
-        // Update schemes in Grid, triggers state change and re-render
-        this.updateColourSchemes(parsedSchemes, activeScheme);
 
         this.setState({ installed: true });
     }
