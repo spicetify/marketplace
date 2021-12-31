@@ -10,6 +10,8 @@ class Card extends react.Component {
         this.visual;
         /** @type { "extension" | "theme" | "snippet" } */
         this.type;
+        /** @type { (any, string) => void } */
+        this.updateColourSchemes = props.updateColourSchemes;
 
         // From `fetchRepoExtensions()`, `fetchThemes()`, and snippets.json
         /** @type { {
@@ -189,6 +191,8 @@ class Card extends react.Component {
         }
         console.log(parsedSchemes);
 
+        const activeScheme = parsedSchemes ? Object.keys(parsedSchemes)[0] : null;
+
         // Add to localstorage (this stores a copy of all the card props in the localstorage)
         // TODO: refactor/clean this up
         localStorage.setItem(this.localStorageKey, JSON.stringify({
@@ -210,7 +214,7 @@ class Card extends react.Component {
             include: this.include,
             // Installed theme localstorage item has schemes, nothing else does
             schemes: parsedSchemes,
-            activeScheme: parsedSchemes ? Object.keys(parsedSchemes)[0] : null,
+            activeScheme,
         }));
 
         // TODO: handle this differently?
@@ -226,6 +230,13 @@ class Card extends react.Component {
         }
 
         console.log("Installed");
+
+        // TODO: We'll also need to actually update the usercss etc, not just the colour scheme
+        // e.g. the stuff from extension.js, like injectUserCSS() etc.
+
+        // Update schemes in Grid, triggers state change and re-render
+        this.updateColourSchemes(parsedSchemes, activeScheme);
+
         this.setState({ installed: true });
     }
 
