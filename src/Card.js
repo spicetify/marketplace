@@ -110,16 +110,21 @@ class Card extends react.Component {
             }
             openReloadModal();
         } else if (this.type === "theme") {
+            const themeKey = localStorage.getItem("marketplace:theme-installed");
+            const previousTheme = JSON.parse(localStorage.getItem(themeKey));
+            console.log(previousTheme);
+            console.log(themeKey);
             if (this.state.installed) {
                 console.log("Theme already installed, removing");
                 this.removeTheme(this.localStorageKey);
             } else {
                 // Remove theme if already installed, then install the new theme
+
                 this.removeTheme();
                 this.installTheme();
             }
-            const previousTheme= localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
-            if (this.include) { openReloadModal(); }
+
+            if (this.include || "include" in previousTheme) { openReloadModal(); }
         } else if (this.type === "snippet") {
             if (this.state.installed) {
                 console.log("Snippet already installed, removing");
