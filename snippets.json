@@ -25,8 +25,13 @@
     "code": ".main-buddyFeed-buddyFeedRoot { transition: width 0.3s; } @media screen and (max-width: 1200px) { .main-buddyFeed-buddyFeedRoot { width: 0; } }"
   },
   {
-    "title": "Smooth Reveal Playlist Gradient"
-    "description": "Reveals the playlist gradient header gradient with a fade in effect"
+    "title": "Smooth Reveal Playlist Gradient",
+    "description": "Reveals the playlist gradient header gradient with a fade in effect",
     "code": ".main-entityHeader-overlay, .main-actionBarBackground-background, .main-entityHeader-overlay, .main-entityHeader-backgroundColor { -webkit-transition: 3s; }"
+  },
+  {
+    "title": "Fix progress bar displacement",
+    "description": "Fix the progress bar displacement when listening on different devices",
+    "code": ".main-connectBar-connectBar { overflow: visible !important; --triangle-position: 147px !important; align-items: unset !important; height: 0px !important; position: absolute !important; left: 80% !important; display: flex !important; bottom: 2% !important; padding: unset !important; }"
   }
 ]
