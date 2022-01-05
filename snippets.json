@@ -23,5 +23,10 @@
     "title": "Auto-hide Friends",
     "description": "Collapse the friends activity sidebar on small screens",
     "code": ".main-buddyFeed-buddyFeedRoot { transition: width 0.3s; } @media screen and (max-width: 1200px) { .main-buddyFeed-buddyFeedRoot { width: 0; } }"
+  },
+  {
+    "title": "Smooth Reveal Playlist Gradient"
+    "description": "Reveals the playlist gradient header gradient with a fade in effect"
+    "code": ".main-entityHeader-overlay, .main-actionBarBackground-background, .main-entityHeader-overlay, .main-entityHeader-backgroundColor { -webkit-transition: 3s; }"
   }
 ]
