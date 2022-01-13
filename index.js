@@ -559,6 +559,9 @@ async function getRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
     const filteredResults = {
         ...allRepos,
         // Include count of all items on the page, since we're filtering the blacklist below,
@@ -730,7 +733,9 @@ async function getThemeRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
-
+    if (!allThemes.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
     const filteredResults = {
         ...allThemes,
         // Include count of all items on the page, since we're filtering the blacklist below,
