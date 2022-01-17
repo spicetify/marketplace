@@ -21,9 +21,8 @@ const {
     // @ts-ignore
     Platform: { History },
 } = Spicetify;
-/* eslint-enable no-redeclare, no-unused-vars */
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
+// eslint-disable-next-line no-redeclare
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
     "installedSnippets": "marketplace:installed-snippets",
@@ -37,7 +36,6 @@ const LOCALSTORAGE_KEYS = {
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
-// eslint-disable-next-line no-unused-vars
 function render() {
     const { location } = Spicetify.Platform.History;
 
@@ -139,7 +137,6 @@ const ITEMS_PER_REQUEST = 100;
 
 let BLACKLIST = [];
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
 let gridUpdateTabs, gridUpdatePostsVisual;
 
 class Grid extends react.Component {
@@ -255,7 +252,7 @@ class Grid extends react.Component {
                 }
             }
 
-            // First request is null, so coerces to 1
+            // First result is null or -1 so it coerces to 1
             const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
             // -1 because the page number is 1-indexed
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
