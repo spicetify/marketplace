@@ -254,8 +254,7 @@ class Grid extends react.Component {
 
             // First result is null or -1 so it coerces to 1
             const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
-            /* This code is checking to see if the current page is the last page. If it is, then it will return
-            the last page of results. If it is not, then it will return the next page of results. */
+            // Sets the amount of items that have thus been fetched
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
 
