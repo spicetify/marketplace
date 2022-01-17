@@ -67,7 +67,7 @@ spicetify apply
 
 ## manifest.json
 In order to show up in the custom app, your repo needs to follow these requirements:
-* Have the matching **GitHub topic tag** ("**spicetify-extensions**" currently, will likely change)
+* Have the matching **GitHub topic tag** ("**spicetify-extensions**" or "**spicetify-themes**")
 * Have a **`manifest.json`** in the root folder
     * `name`: Your extension name
     * `description`: Description for your extension
