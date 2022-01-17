@@ -254,7 +254,8 @@ class Grid extends react.Component {
 
             // First result is null or -1 so it coerces to 1
             const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
-            // -1 because the page number is 1-indexed
+            /* This code is checking to see if the current page is the last page. If it is, then it will return
+            the last page of results. If it is not, then it will return the next page of results. */
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
 
@@ -449,6 +450,10 @@ class Grid extends react.Component {
         this.newRequest(ITEMS_PER_REQUEST);
     }
 
+    /**
+  * When the component is unmounted, remove the scroll event listener.
+  * @returns None
+  */
     componentWillUnmount() {
         gridUpdateTabs = gridUpdatePostsVisual = null;
         const viewPort = document.querySelector("main .os-viewport");
@@ -456,6 +461,11 @@ class Grid extends react.Component {
         viewPort.removeEventListener("scroll", this.checkScroll);
     }
 
+    /**
+   * If the user has scrolled to the bottom of the page, load more posts.
+   * @param event - The event object that is passed to the callback function.
+   * @returns None
+   */
     isScrolledBottom(event) {
         const viewPort = event.target;
         if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
