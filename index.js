@@ -21,6 +21,7 @@ const {
     // @ts-ignore
     Platform: { History },
 } = Spicetify;
+/* eslint-enable no-redeclare, no-unused-vars */
 
 // eslint-disable-next-line no-redeclare
 const LOCALSTORAGE_KEYS = {
@@ -36,6 +37,7 @@ const LOCALSTORAGE_KEYS = {
 
 // Define a function called "render" to specify app entry point
 // This function will be used to mount app to main view.
+// eslint-disable-next-line no-unused-vars
 function render() {
     const { location } = Spicetify.Platform.History;
 
@@ -137,6 +139,7 @@ const ITEMS_PER_REQUEST = 100;
 
 let BLACKLIST = [];
 
+// eslint-disable-next-line no-redeclare, no-unused-vars
 let gridUpdateTabs, gridUpdatePostsVisual;
 
 class Grid extends react.Component {
@@ -362,9 +365,9 @@ class Grid extends react.Component {
     }
 
     /**
-  * Load more items if there are more items to load.
-  * @returns None
-  */
+     * Load more items if there are more items to load.
+     * @returns {void}
+     */
     loadMore() {
         if (this.state.rest && !endOfList) {
             this.loadAmount(requestQueue[0], ITEMS_PER_REQUEST);
@@ -372,10 +375,10 @@ class Grid extends react.Component {
     }
 
     /**
-    * The function injects the colour scheme into the page.
-    * @param scheme - the name of the colour scheme to use
-    * @returns None
-    */
+     * The function injects the colour scheme into the page.
+     * @param {string} scheme The name of the colour scheme to use
+     * @returns {void}
+     */
     updateColourScheme(scheme) {
         console.log("Injecting colour scheme", scheme);
         CONFIG.theme.activeScheme = scheme;
@@ -451,7 +454,7 @@ class Grid extends react.Component {
 
     /**
   * When the component is unmounted, remove the scroll event listener.
-  * @returns None
+  * @returns {void}
   */
     componentWillUnmount() {
         gridUpdateTabs = gridUpdatePostsVisual = null;
@@ -463,7 +466,7 @@ class Grid extends react.Component {
     /**
    * If the user has scrolled to the bottom of the page, load more posts.
    * @param event - The event object that is passed to the callback function.
-   * @returns None
+   * @returns {void}
    */
     isScrolledBottom(event) {
         const viewPort = event.target;
