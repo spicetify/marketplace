@@ -41,6 +41,7 @@ cp -R "$spicetify_install/spicetify-marketplace/spicetify-marketplace-main" "$sp
 rm -r "$spicetify_install/spicetify-marketplace/"
 mv "$spicetify_install/spicetify-marketplace-placeholder/" "$spicetify_install/spicetify-marketplace/"
 cp -rf "$spicetify_install/spicetify-marketplace/." "$sp_dot_dir"
+rm -r "$spicetify_install/spicetify-marketplace/"
 echo "INSTALLING"
 cd "$spicetify_install/spicetify-marketplace"
 if ../../spicetify config custom_apps spicetify-marketplace ; then
