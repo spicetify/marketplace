@@ -9,6 +9,7 @@ set -e
 
     download_uri="https://github.com/CharlieS1103/spicetify-marketplace/archive/refs/heads/main.zip"
 
+SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"
 
 if [ ! -d "$INSTALL_DIR" ]; then
