@@ -22,7 +22,7 @@ Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/CharlieS11
 Open terminal and paste the following:
 
 ```shell
-curl -fsSL https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplcae/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/install.sh | sh
 ```
 
 ### Manual Install (recommended)
