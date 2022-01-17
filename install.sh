@@ -29,17 +29,18 @@ echo "REMOVING"
 rm "$tar_file"
 
 # Check ~\.spicetify.\CustomApps directory already exists
-sp_dot_dir="$(dirname "$(spicetify -c)")/CustomApps/spicetify-marketplace"
+cd "$spicetify_install/spicetify-marketplace"
+sp_dot_dir="$(dirname "$(../../spicetify -c)")/CustomApps/spicetify-marketplace"
 if [ ! -d "$sp_dot_dir" ]; then
     echo "MAKING FOLDER  $sp_dot_dir";
     mkdir -p "$sp_dot_dir"
 fi
 echo "COPYING"
+echo "$sp_dot_dir"
+cp -R "$spicetify_install/spicetify-marketplace/spicetify-marketplace-main" "$spicetify_install/spicetify-marketplace-placeholder"
+rm -r "$spicetify_install/spicetify-marketplace/"
+mv "$spicetify_install/spicetify-marketplace-placeholder/" "$spicetify_install/spicetify-marketplace/"
 cp -rf "$spicetify_install/spicetify-marketplace/." "$sp_dot_dir"
-
-echo "PATCHING INSTALL"
-rm -r "$spicetify_install/spicetify-marketplace"
-mv "$spicetify_install/spicetify-marketplace-main" "$spicetify_install/spicetify-marketplace"
 echo "INSTALLING"
 cd "$spicetify_install/spicetify-marketplace"
 if ../../spicetify config custom_apps spicetify-marketplace ; then
