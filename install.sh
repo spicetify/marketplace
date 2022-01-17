@@ -28,9 +28,12 @@ unzip -q -d "$spicetify_install/spicetify-marketplace" -o "$tar_file"
 echo "REMOVING"
 rm "$tar_file"
 
-# Check ~\.spicetify.\Themes directory already exists
-
-
+# Check ~\.spicetify.\CustomApps directory already exists
+sp_dot_dir="$(dirname "$(spicetify -c)")/CustomApps/spicetify-marketplace"
+if [ ! -d "$sp_dot_dir" ]; then
+    echo "MAKING FOLDER  $sp_dot_dir";
+    mkdir -p "$sp_dot_dir"
+fi
 echo "COPYING"
 cp -rf "$spicetify_install/spicetify-marketplace/." "$sp_dot_dir"
 
