@@ -256,7 +256,7 @@ class Grid extends react.Component {
             }
 
             // First request is null, so coerces to 1
-            const currentPage = requestPage || 1;
+            const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
             // -1 because the page number is 1-indexed
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
@@ -309,7 +309,7 @@ class Grid extends react.Component {
             }
 
             // First request is null, so coerces to 1
-            const currentPage = requestPage || 1;
+            const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
             // -1 because the page number is 1-indexed
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
