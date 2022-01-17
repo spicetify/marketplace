@@ -18,7 +18,7 @@ Open Powershell and paste the following:
 ```powershell
 Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/master/install.ps1" | Invoke-Expression
 ```
-### Auto Install (Mac)
+### Auto Install (Mac and Linux)
 Open terminal and paste the following:
 
 ```shell
