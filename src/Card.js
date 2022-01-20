@@ -94,7 +94,7 @@ class Card extends react.Component {
 
     async componentDidMount() {
         // Refresh stars if on "Installed" tab with stars enabled
-        if (CONFIG.activeTab === "Installed" && CONFIG.visual.stars) {
+        if (CONFIG.activeTab === "Installed" && CONFIG.visual.stars && this.type !== "snippet") {
             // https://docs.github.com/en/rest/reference/repos#get-a-repository
             const url = `https://api.github.com/repos/${this.user}/${this.repo}`;
             // TODO: This implementation could probably be improved.
@@ -363,7 +363,7 @@ class Card extends react.Component {
 
         let detail = [];
         // this.visual.type && detail.push(this.type);
-        if (this.type != "snippet" && this.visual.stars) {
+        if (this.type !== "snippet" && this.visual.stars) {
             detail.push(`★ ${this.state.stars}`);
         }
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
