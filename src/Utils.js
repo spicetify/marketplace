@@ -99,7 +99,7 @@ const getLocalStorageDataFromKey = (key, fallback) => {
  * Format an array of authors, given the data from the manifest and the repo owner.
  * @param {{ name: string; url: string; }[]} authors Array of authors
  * @param {string} user The repo owner
- * @returns
+ * @returns {{ name: string; url: string; }[]} The authors, with anything missing added
  */
 const processAuthors = (authors, user) => {
     let parsedAuthors = [];
@@ -118,20 +118,18 @@ const processAuthors = (authors, user) => {
 
 /**
  * Generate a list of options for the schemes dropdown.
- * @param schemes - The schemes object from the theme.
- * @returns [
- *     { key: "red", value: "Red" },
- *     { key: "dark", value: "Dark" },
- * ]
+ * @param schemes The schemes object from the theme.
+ * @returns {{ key: string; value: string; }[]} Array of options for the schemes dropdown.
  */
 const generateSchemesOptions = (schemes) => {
+    // e.g. [ { key: "red", value: "Red" }, { key: "dark", value: "Dark" } ]
     if (!schemes) return [];
     return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
 };
 
 /**
- * It fetches the blacklist.json file from the Github repository and returns it as a JSON object.
- * @returns An array of objects. Each object has a name and a url.
+ * It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.
+ * @returns {Promise<string[]>} String array of blacklisted repos
  */
 const getBlacklist = async () => {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
@@ -141,7 +139,7 @@ const getBlacklist = async () => {
 
 /**
  * It fetches the snippets.json file from the Github repository and returns it as a JSON object.
- * @returns The JSON object.
+ * @returns { Promise<{ title: string; description: string; code: string;}[]> } Array of snippets
  */
 const fetchCssSnippets = async () => {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
