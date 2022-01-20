@@ -267,9 +267,9 @@ class Grid extends react.Component {
             else console.log("No more extension results");
         } else if (CONFIG.activeTab === "Installed") {
             const installedStuff = {
+                theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
                 snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
                 extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
-                theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
             };
 
             for (const type in installedStuff) {
