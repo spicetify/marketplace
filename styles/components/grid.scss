@@ -170,10 +170,10 @@
   }
 }
 
-// Hide image preview for CSS snippets
 .marketplace-card--snippet {
-    height: 132px;
+  height: 132px;
 
+  // Hide image preview for CSS snippets
   .main-card-imageContainer { display: none; }
 }
 
