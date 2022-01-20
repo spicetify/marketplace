@@ -363,7 +363,7 @@ class Card extends react.Component {
 
         let detail = [];
         // this.visual.type && detail.push(this.type);
-        this.visual.stars && detail.push(`★ ${this.state.stars}`);
+        this.type != "snippet" ? this.visual.stars && detail.push(`★ ${this.state.stars}`) : null;
         return react.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
             menu: react.createElement(this.menuType, {}),
         }, react.createElement("div", {
