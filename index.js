@@ -114,6 +114,7 @@ const CONFIG = {
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
     theme: {
+        activeThemeKey: localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled) || null,
         schemes,
         activeScheme,
     },
@@ -151,7 +152,9 @@ class Grid extends react.Component {
             tabs: CONFIG.tabs,
             rest: true,
             endOfList: endOfList,
-            // activeScheme: CONFIG.theme.activeScheme,
+            schemes: CONFIG.theme.schemes,
+            activeScheme: CONFIG.theme.activeScheme,
+            activeThemeKey: CONFIG.theme.activeThemeKey,
         };
     }
 
@@ -183,6 +186,11 @@ class Grid extends react.Component {
         // Set key prop so items don't get stuck when switching tabs
         item.key = `${CONFIG.activeTab}:${item.title}`;
         item.type = type;
+        // Pass along the functions to update Grid state on apply
+        item.updateColourSchemes = this.updateColourSchemes.bind(this);
+        item.updateActiveTheme = this.setActiveTheme.bind(this);
+        // This isn't used other than to trigger a re-render
+        item.activeThemeKey = this.state.activeThemeKey;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
@@ -375,28 +383,30 @@ class Grid extends react.Component {
     }
 
     /**
-     * The function injects the colour scheme into the page.
-     * @param {string} scheme The name of the colour scheme to use
-     * @returns {void}
+     * Update the colour schemes in the state + dropdown, and inject the active one
+     * @param {any} schemes Object with the colour schemes
+     * @param {string} activeScheme The name of the active colour scheme (a key in the schemes object)
      */
-    updateColourScheme(scheme) {
-        console.log("Injecting colour scheme", scheme);
-        CONFIG.theme.activeScheme = scheme;
-        this.injectColourScheme(CONFIG.theme.schemes[scheme]);
+    updateColourSchemes(schemes, activeScheme) {
+        console.log("updateColourSchemes", schemes, activeScheme);
+        CONFIG.theme.schemes = schemes;
+        CONFIG.theme.activeScheme = activeScheme;
+
+        if (schemes && schemes[activeScheme]) {
+            this.injectColourScheme(CONFIG.theme.schemes[activeScheme]);
+        }
 
         // Save to localstorage
         const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
         const installedThemeDataStr = localStorage.getItem(installedThemeKey);
         const installedThemeData = JSON.parse(installedThemeDataStr);
-        installedThemeData.activeScheme = scheme;
+        installedThemeData.activeScheme = activeScheme;
         localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
 
-        // TODO: can I put in a hook for when the activeScheme changes? or why do I have it in state??
-        // this.setState({
-        //     activeScheme: CONFIG.theme.activeScheme,
-        // });
-        // TODO: clean this up. The SortBox doesn't re-render (and update the selectedOption in the dropdown unless I set state...)
-        this.setState({});
+        this.setState({
+            schemes,
+            activeScheme,
+        });
     }
 
     // NOTE: Keep in sync with extension.js
@@ -476,9 +486,14 @@ class Grid extends react.Component {
         }
     }
 
+    setActiveTheme(themeKey) {
+        CONFIG.theme.activeThemeKey = themeKey;
+        this.setState({ activeThemeKey: themeKey });
+    }
+
     // TODO: clean this up. It worked when I was using state, but state seems like pointless overhead.
     getActiveScheme() {
-        return CONFIG.theme.activeScheme;
+        return this.state.activeScheme;
     }
 
     render() {
@@ -493,10 +508,10 @@ class Grid extends react.Component {
             className: "marketplace-header__right",
         },
         // Show colour scheme dropdown if there is a theme with schemes installed
-        CONFIG.theme.activeScheme ? react.createElement(SortBox, {
-            onChange: this.updateColourScheme.bind(this),
+        this.state.activeScheme ? react.createElement(SortBox, {
+            onChange: (value) => this.updateColourSchemes(this.state.schemes, value),
             // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
-            sortBoxOptions: generateSchemesOptions(CONFIG.theme.schemes),
+            sortBoxOptions: generateSchemesOptions(this.state.schemes),
             // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
             // because it hardcodes the value into the fn
             sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
@@ -524,7 +539,14 @@ class Grid extends react.Component {
             style: {
                 "--minimumColumnWidth": "180px",
             },
-        }, [...cardList]), react.createElement("footer", {
+        }, cardList.map((card) => {
+            // Clone the cards and update the prop to trigger re-render
+            // TODO: is it possible to only re-render the theme cards whose status have changed?
+            const cardElement = react.cloneElement(card, {
+                activeThemeKey: this.state.activeThemeKey,
+            });
+            return cardElement;
+        })), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",
