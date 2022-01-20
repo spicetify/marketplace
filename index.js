@@ -766,24 +766,3 @@ async function getThemeRepos(page = 1) {
 
     return filteredResults;
 }
-
-function generateSchemesOptions(schemes) {
-    if (!schemes) return [];
-    // [
-    //     { key: "red", value: "Red" },
-    //     { key: "dark", value: "Dark" },
-    // ]
-    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
-}
-
-async function getBlacklist() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
-    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
-    return jsonReturned.repos;
-}
-
-async function fetchCssSnippets() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
-    const json = await fetch(url).then(res => res.json()).catch(() => { });
-    return json;
-}

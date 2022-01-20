@@ -115,3 +115,36 @@ const processAuthors = (authors, user) => {
 
     return parsedAuthors;
 };
+
+/**
+ * Generate a list of options for the schemes dropdown.
+ * @param schemes - The schemes object from the theme.
+ * @returns [
+ *     { key: "red", value: "Red" },
+ *     { key: "dark", value: "Dark" },
+ * ]
+ */
+const generateSchemesOptions = (schemes) => {
+    if (!schemes) return [];
+    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
+};
+
+/**
+ * It fetches the blacklist.json file from the Github repository and returns it as a JSON object.
+ * @returns An array of objects. Each object has a name and a url.
+ */
+const getBlacklist = async () => {
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
+    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
+    return jsonReturned.repos;
+};
+
+/**
+ * It fetches the snippets.json file from the Github repository and returns it as a JSON object.
+ * @returns The JSON object.
+ */
+const fetchCssSnippets = async () => {
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
+    const json = await fetch(url).then(res => res.json()).catch(() => { });
+    return json;
+};
