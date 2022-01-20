@@ -114,6 +114,7 @@ const CONFIG = {
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
     theme: {
+        activeThemeKey: localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled) || null,
         schemes,
         activeScheme,
     },
@@ -153,6 +154,7 @@ class Grid extends react.Component {
             endOfList: endOfList,
             schemes: CONFIG.theme.schemes,
             activeScheme: CONFIG.theme.activeScheme,
+            activeThemeKey: CONFIG.theme.activeThemeKey,
         };
     }
 
@@ -184,8 +186,11 @@ class Grid extends react.Component {
         // Set key prop so items don't get stuck when switching tabs
         item.key = `${CONFIG.activeTab}:${item.title}`;
         item.type = type;
-        // Pass along the function to update Grid state on apply
+        // Pass along the functions to update Grid state on apply
         item.updateColourSchemes = this.updateColourSchemes.bind(this);
+        item.updateActiveTheme = this.setActiveTheme.bind(this);
+        // This isn't used other than to trigger a re-render
+        item.activeThemeKey = this.state.activeThemeKey;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
@@ -488,6 +493,11 @@ class Grid extends react.Component {
         }
     }
 
+    setActiveTheme(themeKey) {
+        CONFIG.theme.activeThemeKey = themeKey;
+        this.setState({ activeThemeKey: themeKey });
+    }
+
     // TODO: clean this up. It worked when I was using state, but state seems like pointless overhead.
     getActiveScheme() {
         return this.state.activeScheme;
@@ -536,7 +546,14 @@ class Grid extends react.Component {
             style: {
                 "--minimumColumnWidth": "180px",
             },
-        }, [...cardList]), react.createElement("footer", {
+        }, cardList.map((card) => {
+            // Clone the cards and update the prop to trigger re-render
+            // TODO: is it possible to only re-render the theme cards whose status have changed?
+            const cardElement = react.cloneElement(card, {
+                activeThemeKey: this.state.activeThemeKey,
+            });
+            return cardElement;
+        })), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",

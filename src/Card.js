@@ -12,6 +12,8 @@ class Card extends react.Component {
         this.type;
         /** @type { (any, string) => void } */
         this.updateColourSchemes = props.updateColourSchemes;
+        /** @type { (string) => void } */
+        this.updateActiveTheme = props.updateActiveTheme;
 
         // From `fetchRepoExtensions()`, `fetchThemes()`, and snippets.json
         /** @type { {
@@ -76,10 +78,18 @@ class Card extends react.Component {
         Object.assign(this, props);
 
         this.state = {
+            // Initial value. Used to trigger a re-render.
+            // isInstalled() is used for all other intents and purposes
             installed: localStorage.getItem(this.localStorageKey) !== null,
+
             // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
             stars: this.stars,
         };
+    }
+
+    // Using this because it gets the live value ('installed' is stuck after a re-render)
+    isInstalled() {
+        return localStorage.getItem(this.localStorageKey) !== null;
     }
 
     async componentDidMount() {
@@ -102,7 +112,7 @@ class Card extends react.Component {
 
     buttonClicked() {
         if (this.type === "extension") {
-            if (this.state.installed) {
+            if (this.isInstalled()) {
                 console.log("Extension already installed, removing");
                 this.removeExtension();
             } else {
@@ -115,7 +125,7 @@ class Card extends react.Component {
             console.log(previousTheme);
             console.log(themeKey);
 
-            if (this.state.installed) {
+            if (this.isInstalled()) {
                 console.log("Theme already installed, removing");
                 this.removeTheme(this.localStorageKey);
             } else {
@@ -127,7 +137,7 @@ class Card extends react.Component {
             // If the new or previous theme has JS, prompt to reload
             if (this.include || previousTheme.include) openReloadModal();
         } else if (this.type === "snippet") {
-            if (this.state.installed) {
+            if (this.isInstalled()) {
                 console.log("Snippet already installed, removing");
                 this.removeSnippet();
             } else {
@@ -244,6 +254,8 @@ class Card extends react.Component {
 
         if (!this.include) {
             this.injectNewTheme();
+            // Update the active theme in Grid state, triggers state change and re-render
+            this.updateActiveTheme(this.localStorageKey);
             // Update schemes in Grid, triggers state change and re-render
             this.updateColourSchemes(parsedSchemes, activeScheme);
         }
@@ -272,6 +284,10 @@ class Card extends react.Component {
             localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
 
             console.log("Removed");
+
+            // Update the active theme in Grid state
+            this.updateActiveTheme(null);
+
             // TODO: this doesn't remove the "installed" state on the installed card
             // if you just install a new theme to replace the existing one
             this.setState({ installed: false });
@@ -331,15 +347,19 @@ class Card extends react.Component {
     }
 
     render() {
+        // Cache this for performance
+        let IS_INSTALLED = this.isInstalled();
+        // console.log(`Rendering ${this.localStorageKey} - is ${IS_INSTALLED ? "" : "not"} installed`);
+
         // Kill the card if it has been uninstalled on the "Installed" tab
         // TODO: is this kosher, or is there a better way to handle?
-        if (CONFIG.activeTab === "Installed" && !this.state.installed) {
-            console.log("Extension not installed");
+        if (CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
+            console.log("Card item not installed");
             return null;
         }
 
         const cardClasses = ["main-card-card", `marketplace-card--${this.type}`];
-        if (this.state.installed) cardClasses.push("marketplace-card--installed");
+        if (IS_INSTALLED) cardClasses.push("marketplace-card--installed");
 
         let detail = [];
         // this.visual.type && detail.push(this.type);
@@ -402,7 +422,7 @@ class Card extends react.Component {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
         }, "Includes external JS"),
-        this.state.installed && react.createElement("div", {
+        IS_INSTALLED && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
         }, "✓ Installed"), react.createElement("div", {
@@ -410,7 +430,7 @@ class Card extends react.Component {
         }, react.createElement("button", {
             className: "main-playButton-PlayButton main-playButton-primary",
             // If it is installed, it will remove it when button is clicked, if not it will save
-            "aria-label": this.state.installed ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
+            "aria-label": IS_INSTALLED ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
             style: { "--size": "40px", "cursor": "pointer" },
             onClick: (e) => {
                 e.stopPropagation();
@@ -418,7 +438,7 @@ class Card extends react.Component {
             },
         },
         //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
-        this.state.installed ? TRASH_ICON : DOWNLOAD_ICON,
+        IS_INSTALLED ? TRASH_ICON : DOWNLOAD_ICON,
         )),
         ))));
     }
