@@ -155,6 +155,9 @@
   display: block;
 }
 
+.marketplace-card--snippet {
+  height: 132px;
+}
 .marketplace-card--snippet .main-card-imageContainer {
   display: none;
 }

@@ -23,7 +23,7 @@ const {
 } = Spicetify;
 /* eslint-enable no-redeclare, no-unused-vars */
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
+// eslint-disable-next-line no-redeclare
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
     "installedSnippets": "marketplace:installed-snippets",
@@ -140,7 +140,7 @@ const ITEMS_PER_REQUEST = 100;
 
 let BLACKLIST = [];
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
+// eslint-disable-next-line no-redeclare, no-unused-vars
 let gridUpdateTabs, gridUpdatePostsVisual;
 
 class Grid extends react.Component {
@@ -263,9 +263,9 @@ class Grid extends react.Component {
                 }
             }
 
-            // First request is null, so coerces to 1
-            const currentPage = requestPage || 1;
-            // -1 because the page number is 1-indexed
+            // First result is null or -1 so it coerces to 1
+            const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
+            // Sets the amount of items that have thus been fetched
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
 
@@ -275,9 +275,9 @@ class Grid extends react.Component {
             else console.log("No more extension results");
         } else if (CONFIG.activeTab === "Installed") {
             const installedStuff = {
-                snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
-                extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
                 theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
+                extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
+                snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
             };
 
             for (const type in installedStuff) {
@@ -317,7 +317,7 @@ class Grid extends react.Component {
             }
 
             // First request is null, so coerces to 1
-            const currentPage = requestPage || 1;
+            const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
             // -1 because the page number is 1-indexed
             const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
             const remainingResults = pageOfRepos.total_count - soFarResults;
@@ -372,6 +372,10 @@ class Grid extends react.Component {
         this.setState({ rest: true });
     }
 
+    /**
+     * Load more items if there are more items to load.
+     * @returns {void}
+     */
     loadMore() {
         if (this.state.rest && !endOfList) {
             this.loadAmount(requestQueue[0], ITEMS_PER_REQUEST);
@@ -431,33 +435,13 @@ class Grid extends react.Component {
         document.head.appendChild(schemeTag);
     }
 
-    // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
-    // NOTE: Keep in sync with extension.js
-    // eslint-disable-next-line
-    // applyTheme(theme) {
-    //     // Remove default css
-    //     // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
-    //     const existingUserThemeCSS = document.querySelector("link[href='user.css']");
-    //     if (existingUserThemeCSS) existingUserThemeCSS.remove();
-
-    //     const existingColorsCSS = document.querySelector("link[href='colors.css']");
-    //     if (existingColorsCSS) existingColorsCSS.remove();
-
-    //     // Remove any existing marketplace theme
-    //     const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
-    //     if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
-
-    //     // Add theme css
-    //     const newUserThemeCSS = document.createElement("link");
-    //     // Using jsdelivr since github raw doesn't provide mimetypes
-    //     // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-    //     const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}@${theme.branch}/${theme.manifest.usercss}`;
-    //     newUserThemeCSS.href = cssUrl;
-    //     newUserThemeCSS.rel = "stylesheet";
-    //     newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
-    //     document.head.appendChild(newUserThemeCSS);
-    // }
-
+    /**
+  * The componentDidMount() method is called when the component is first loaded.
+  * It checks if the cardList is already loaded. If it is, it checks if the lastScroll value is
+ greater than 0.
+  * If it is, it scrolls to the lastScroll value. If it isn't, it scrolls to the top of the page.
+  * If the cardList isn't loaded, it loads the cardList.
+  */
     async componentDidMount() {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
@@ -478,6 +462,10 @@ class Grid extends react.Component {
         this.newRequest(ITEMS_PER_REQUEST);
     }
 
+    /**
+  * When the component is unmounted, remove the scroll event listener.
+  * @returns {void}
+  */
     componentWillUnmount() {
         gridUpdateTabs = gridUpdatePostsVisual = null;
         const viewPort = document.querySelector("main .os-viewport");
@@ -485,6 +473,11 @@ class Grid extends react.Component {
         viewPort.removeEventListener("scroll", this.checkScroll);
     }
 
+    /**
+   * If the user has scrolled to the bottom of the page, load more posts.
+   * @param event - The event object that is passed to the callback function.
+   * @returns {void}
+   */
     isScrolledBottom(event) {
         const viewPort = event.target;
         if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
@@ -586,6 +579,9 @@ async function getRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
     const filteredResults = {
         ...allRepos,
         // Include count of all items on the page, since we're filtering the blacklist below,
@@ -757,7 +753,9 @@ async function getThemeRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
-
+    if (!allThemes.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
     const filteredResults = {
         ...allThemes,
         // Include count of all items on the page, since we're filtering the blacklist below,

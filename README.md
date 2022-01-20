@@ -18,17 +18,23 @@ Open Powershell and paste the following:
 ```powershell
 Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/master/install.ps1" | Invoke-Expression
 ```
+### Auto Install (MacOS and Linux)
+Open a terminal and paste the following:
+
+```shell
+curl -fsSL https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/install.sh | sh
+```
 
 ### Manual Install (recommended)
 
 Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/khanhas/spicetify-cli) custom apps directory:
-| **Platform** | **Path**                                                                              |
-|------------|-----------------------------------------------------------------------------------------|
-| **Linux**      | `~/.config/spicetify/CustomApps` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
-| **MacOS**      | `~/.config/spicetify/CustomApps` or `$SPICETIFY_CONFIG/CustomApps`                  |
-| **Windows**    | `%userprofile%/.spicetify/CustomApps/`                                              |
+| **Platform** | **Path**                                                                               |
+|------------|------------------------------------------------------------------------------------------|
+| **Linux**      | `~/.config/spicetify/CustomApps/` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
+| **MacOS**      | `~/.config/spicetify/CustomApps/` or `$SPICETIFY_CONFIG/CustomApps/`                 |
+| **Windows**    | `%userprofile%/.spicetify/CustomApps/`                                               |
 
-After putting the extension file into the correct folder, run the following command to install the extension:
+After putting the marketplace folder into the correct custom apps folder, run the following command to enable it:
 ```
 spicetify config custom_apps spicetify-marketplace
 spicetify apply
@@ -61,7 +67,7 @@ spicetify apply
 
 ## manifest.json
 In order to show up in the custom app, your repo needs to follow these requirements:
-* Have the matching **GitHub topic tag** ("**spicetify-extensions**" currently, will likely change)
+* Have the matching **GitHub topic tag** ("**spicetify-extensions**" or "**spicetify-themes**")
 * Have a **`manifest.json`** in the root folder
     * `name`: Your extension name
     * `description`: Description for your extension
