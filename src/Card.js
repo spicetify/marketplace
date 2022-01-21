@@ -253,7 +253,8 @@ class Card extends react.Component {
         // e.g. the stuff from extension.js, like injectUserCSS() etc.
 
         if (!this.include) {
-            this.injectNewTheme();
+            // Add new theme css
+            this.injectUserCSS(this.localStorageKey);
             // Update the active theme in Grid state, triggers state change and re-render
             this.updateActiveTheme(this.localStorageKey);
             // Update schemes in Grid, triggers state change and re-render
@@ -285,11 +286,14 @@ class Card extends react.Component {
 
             console.log("Removed");
 
+
+            // Removes the current theme CSS
+            this.injectUserCSS(null);
             // Update the active theme in Grid state
             this.updateActiveTheme(null);
+            // Removes the current colour scheme
+            this.updateColourSchemes(null);
 
-            // TODO: this doesn't remove the "installed" state on the installed card
-            // if you just install a new theme to replace the existing one
             this.setState({ installed: false });
         }
     }
@@ -446,7 +450,11 @@ class Card extends react.Component {
     }
 
     // TODO: keep in sync with extension.js
-    async injectNewTheme() {
+    /**
+     * Update the user.css in the DOM
+     * @param {string | null} theme The theme localStorageKey or null, if we want to reset the theme
+     */
+    async injectUserCSS(theme) {
         try {
             // Remove any existing Spicetify user.css
             const existingUserThemeCSS = document.querySelector("link[href='user.css']");
@@ -456,14 +464,23 @@ class Card extends react.Component {
             const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
             if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
 
-            const userCSS = await this.parseCSS();
+            if (theme) {
+                const userCSS = await this.parseCSS();
 
-            // Add new marketplace scheme
-            const userCssTag = document.createElement("style");
-            userCssTag.classList.add("marketplaceCSS");
-            userCssTag.classList.add("marketplaceUserCSS");
-            userCssTag.innerHTML = userCSS;
-            document.head.appendChild(userCssTag);
+                // Add new marketplace scheme
+                const userCssTag = document.createElement("style");
+                userCssTag.classList.add("marketplaceCSS");
+                userCssTag.classList.add("marketplaceUserCSS");
+                userCssTag.innerHTML = userCSS;
+                document.head.appendChild(userCssTag);
+            } else {
+                // Re-add default user.css
+                const originalUserThemeCSS = document.createElement("link");
+                originalUserThemeCSS.setAttribute("rel", "stylesheet");
+                originalUserThemeCSS.setAttribute("href", "user.css");
+                originalUserThemeCSS.classList.add("userCSS");
+                document.head.appendChild(originalUserThemeCSS);
+            }
         } catch (error) {
             console.warn(error);
         }

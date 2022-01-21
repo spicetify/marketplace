@@ -147,6 +147,10 @@ const getParamsFromGithubRaw = (url) => {
         }
     };
 
+    /**
+     * Update the user.css in the DOM
+     * @param {string} userCSS The contents of the new user.css
+     */
     const injectUserCSS = (userCSS) => {
         try {
             // Remove any existing Spicetify user.css

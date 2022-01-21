@@ -394,6 +394,9 @@ class Grid extends react.Component {
 
         if (schemes && schemes[activeScheme]) {
             this.injectColourScheme(CONFIG.theme.schemes[activeScheme]);
+        } else {
+            // Reset schemes if none sent
+            this.injectColourScheme(null);
         }
 
         // Save to localstorage
@@ -419,20 +422,29 @@ class Grid extends react.Component {
         const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
         if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
 
-        // Add new marketplace scheme
-        const schemeTag = document.createElement("style");
-        schemeTag.classList.add("marketplaceCSS");
-        schemeTag.classList.add("marketplaceScheme");
-        // const theme = document.querySelector('#theme');
-        let injectStr = ":root {";
-        const themeIniKeys = Object.keys(scheme);
-        themeIniKeys.forEach((key) => {
-            injectStr += `--spice-${key}: #${scheme[key]};`;
-            injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
-        });
-        injectStr += "}";
-        schemeTag.innerHTML = injectStr;
-        document.head.appendChild(schemeTag);
+        if (scheme) {
+            // Add new marketplace scheme
+            const schemeTag = document.createElement("style");
+            schemeTag.classList.add("marketplaceCSS");
+            schemeTag.classList.add("marketplaceScheme");
+
+            let injectStr = ":root {";
+            const themeIniKeys = Object.keys(scheme);
+            themeIniKeys.forEach((key) => {
+                injectStr += `--spice-${key}: #${scheme[key]};`;
+                injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+            });
+            injectStr += "}";
+            schemeTag.innerHTML = injectStr;
+            document.head.appendChild(schemeTag);
+        } else {
+            // Re-add default user.css
+            let originalColorsCSS = document.createElement("link");
+            originalColorsCSS.setAttribute("rel", "stylesheet");
+            originalColorsCSS.setAttribute("href", "colors.css");
+            originalColorsCSS.classList.add("userCSS");
+            document.head.appendChild(originalColorsCSS);
+        }
     }
 
     /**
