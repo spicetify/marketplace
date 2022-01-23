@@ -7,6 +7,19 @@
   display: flex;
   justify-content: space-between;
   margin: 16px 0;
+  position: sticky;
+  flex-direction: row-reverse;
+  top: 80px;
+  z-index: 1;
+}
+.marketplace-header h1 {
+  position: fixed;
+  left: 16px;
+}
+@media (min-width: 1024px) {
+  .marketplace-header h1 {
+    left: 32px;
+  }
 }
 
 .marketplace-header__right {
