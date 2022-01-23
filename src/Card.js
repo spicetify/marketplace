@@ -286,7 +286,6 @@ class Card extends react.Component {
 
             console.log("Removed");
 
-
             // Removes the current theme CSS
             this.injectUserCSS(null);
             // Update the active theme in Grid state
