@@ -84,12 +84,16 @@ const getParamsFromGithubRaw = (url) => {
         script.defer = true;
         script.src = extensionManifest.extensionURL;
 
+        const randomString = (Math.random() + 1).toString(36).substring(2);
+        
         // If it's a github raw script, use jsdelivr
         if (script.src.indexOf("raw.githubusercontent.com") > -1) {
             const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
             if (!user || !repo || !branch || !filePath) return;
             script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
         }
+
+        script.src = `${script.src}?dummy=${randomString}`
 
         document.body.appendChild(script);
     };
@@ -207,7 +211,8 @@ const getParamsFromGithubRaw = (url) => {
         const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
         console.log("Parsing CSS: ", userCssUrl);
-        let css = await fetch(userCssUrl).then(res => res.text());
+        const randomString = (Math.random() + 1).toString(36).substring(2);
+        let css = await fetch(`${userCssUrl}?dummy=${randomString}`).then(res => res.text());
         // console.log("Parsed CSS: ", css);
 
         let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
@@ -266,16 +271,18 @@ const getParamsFromGithubRaw = (url) => {
         if (themeManifest.include && themeManifest.include.length) {
             // console.log("Including js", installedThemeData.include);
 
+            const randomString = (Math.random() + 1).toString(36).substring(2);
             themeManifest.include.forEach((script) => {
                 const newScript = document.createElement("script");
                 let src = script;
+                
                 // If it's a github raw script, use jsdelivr
                 if (script.indexOf("raw.githubusercontent.com") > -1) {
                     const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
                     src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
                 }
                 // console.log({src});
-                newScript.src = src;
+                newScript.src = `${src}?dummy=${randomString}`;
                 newScript.classList.add("marketplaceScript");
                 document.body.appendChild(newScript);
             });
