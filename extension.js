@@ -300,6 +300,7 @@ async function storeThemes() {
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
     const filteredResults = {
         ...allRepos,
         // Include count of all items on the page, since we're filtering the blacklist below,
