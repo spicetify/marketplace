@@ -294,3 +294,41 @@ const getParamsFromGithubRaw = (url) => {
     const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
+async function storeThemes() {
+    const BLACKLIST = await Blacklist();
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
+    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    const filteredResults = {
+        ...allRepos,
+        // Include count of all items on the page, since we're filtering the blacklist below,
+        // which can mess up the paging logic
+        page_count: allRepos.items.length,
+        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
+
+    return filteredResults;
+}
+async function storeExtensions() {
+    const BLACKLIST = await Blacklist();
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
+    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
+    const filteredResults = {
+        ...allRepos,
+        // Include count of all items on the page, since we're filtering the blacklist below,
+        // which can mess up the paging logic
+        page_count: allRepos.items.length,
+        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
+
+    return filteredResults;
+}
+async function Blacklist() {
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
+    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
+    return jsonReturned.repos;
+}
