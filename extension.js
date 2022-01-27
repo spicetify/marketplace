@@ -295,37 +295,30 @@ const getParamsFromGithubRaw = (url) => {
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
 const ITEMS_PER_REQUEST = 100;
-async function storeThemes(page) {
+async function storeThemes() {
     const BLACKLIST = await Blacklist();
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
-    if (page) url += `&page=${page}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
     }
     const filteredResults = {
         ...allRepos,
-        // Include count of all items on the page, since we're filtering the blacklist below,
-        // which can mess up the paging logic
-        page_count: allRepos.items.length,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
     console.log(filteredResults);
     return filteredResults;
 }
-async function storeExtensions(page) {
+async function storeExtensions() {
     const BLACKLIST = await Blacklist();
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
-    if (page) url += `&page=${page}`;
+    console.log(url);
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
     }
     const filteredResults = {
         ...allRepos,
-        // Include count of all items on the page, since we're filtering the blacklist below,
-        // which can mess up the paging logic
-        page_count: allRepos.items.length,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
     console.log(filteredResults);
@@ -336,11 +329,155 @@ async function Blacklist() {
     const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
     return jsonReturned.repos;
 }
-(async function initializePreload(page = 1) {
-    // TODO: Fix page loading, they need to have a seperate page var for themes and a seperate for extensions, also I need to figure out how pages work in the first place
-    let lastLoaded = "Extension";
-    // eslint-disable-next-line no-unused-vars
-    console.log(page);
-    setInterval(() => {(lastLoaded == "Extension" ? ( storeThemes(page), page++, lastLoaded == "Extension") : (storeExtensions(page), page++, lastLoaded = "Theme"));
-    }, 10000);
+(async function initializePreload() {
+    const extensionsArray = await storeExtensions();
+    const themesArray = await storeThemes();
+    // @ts-ignore
+    appendInformationToLocalStorage(themesArray, "theme");
+    appendInformationToLocalStorage(extensionsArray, "extension");
 })();
+async function appendInformationToLocalStorage(array, type) {
+    let arrToAppend = [];
+    if (type == "theme") {
+        for (const repo of array.items) {
+            arrToAppend.push(await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count));
+        }
+        console.log(arrToAppend);
+    } else if (type == "extension") {
+        for (const repo of array.items) {
+            arrToAppend.push(await fetchExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count));
+        }
+    }
+}
+async function fetchThemes(contents_url, branch, stars) {
+    try {
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        let { user, repo } = regex_result.groups;
+        let manifests = await getRepoManifest(user, repo, branch);
+        // If the manifest returned is not an array, initialize it as one
+        if (!Array.isArray(manifests)) manifests = [manifests];
+
+        // Manifest is initially parsed
+        const parsedManifests = manifests.reduce((accum, manifest) => {
+            const selectedBranch = manifest.branch || branch;
+            const item = {
+                manifest,
+                title: manifest.name,
+                subtitle: manifest.description,
+                authors: processAuthors(manifest.authors, user),
+                user,
+                repo,
+                branch: selectedBranch,
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
+                    ? manifest.preview
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
+                    ? manifest.readme
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+                stars,
+                // theme stuff
+                cssURL: manifest.usercss.startsWith("http")
+                    ? manifest.usercss
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+                // TODO: clean up indentation etc
+                schemesURL: manifest.schemes
+                    ? (
+                        manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+                    )
+                    : null,
+                include: manifest.include,
+            };
+            // If manifest is valid, add it to the list
+            if (manifest && manifest.name && manifest.usercss && manifest.description) {
+                accum.push(item);
+            }
+            return accum;
+        }, []);
+        return parsedManifests;
+    }
+    catch (err) {
+        // console.warn(contents_url, err);
+        return null;
+    }
+}
+// eslint-disable-next-line no-redeclare
+const processAuthors = (authors, user) => {
+    let parsedAuthors = [];
+
+    if (authors && authors.length > 0) {
+        parsedAuthors = authors;
+    } else {
+        parsedAuthors.push({
+            name: user,
+            url: "https://github.com/" + user,
+        });
+    }
+
+    return parsedAuthors;
+};
+async function fetchExtensions(contents_url, branch, stars) {
+    try {
+        // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        const { user, repo } = regex_result.groups;
+        let manifests = await getRepoManifest(user, repo, branch);
+        // If the manifest returned is not an array, initialize it as one
+        if (!Array.isArray(manifests)) manifests = [manifests];
+
+        // Manifest is initially parsed
+        const parsedManifests = manifests.reduce((accum, manifest) => {
+            const selectedBranch = manifest.branch || branch;
+            const item = {
+                manifest,
+                title: manifest.name,
+                subtitle: manifest.description,
+                authors: processAuthors(manifest.authors, user),
+                user,
+                repo,
+                branch: selectedBranch,
+
+                imageURL: manifest.preview && manifest.preview.startsWith("http")
+                    ? manifest.preview
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+                extensionURL: manifest.main.startsWith("http")
+                    ? manifest.main
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+                readmeURL: manifest.readme && manifest.readme.startsWith("http")
+                    ? manifest.readme
+                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+                stars,
+            };
+
+            // If manifest is valid, add it to the list
+            if (manifest && manifest.name && manifest.description && manifest.main
+            ) {
+                // Add to list unless we're hiding installed items and it's installed
+                if (!(CONFIG.visual.hideInstalled
+                    && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
+                ) {
+                    accum.push(item);
+                }
+            }
+            // else {
+            //     console.error("Invalid manifest:", manifest);
+            // }
+
+            return accum;
+        }, []);
+
+        return parsedManifests;
+    }
+    catch (err) {
+        // console.warn(contents_url, err);
+        return null;
+    }
+}
+async function getRepoManifest(user, repo, branch) {
+    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+
+    return await fetch(url).then(res => res.json()).catch(() => null);
+}
