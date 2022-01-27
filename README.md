@@ -4,6 +4,19 @@ Download extensions and themes directly from within [Spicetify](https://github.c
 
 Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/Custom-Apps#reddit)
 
+<p align="center">
+  <a href="https://github.com/CharlieS1103/spicetify-marketplace/releases/latest">
+    <img src="https://img.shields.io/github/v/release/CharlieS1103/spicetify-marketplace?include_prereleases">
+  </a>
+  <a href="https://github.com/CharlieS1103/spicetify-marketplace/issues?q=is%3Aissue+is%3Aclosed">
+    <img src="https://img.shields.io/github/issues-closed/CharlieS1103/spicetify-marketplace">
+  </a>
+  <a href="https://github.com/CharlieS1103/spicetify-marketplace/commits/main">
+    <img src="https://img.shields.io/github/commit-activity/m/CharlieS1103/spicetify-marketplace">
+  </a>
+
+</p>
+
 ## Disclaimer
 All extensions are from community. They might contain unwanted code. Be careful what you install, or review the code before use. We hold no responsibility for these extensions or anything installed via this custom app. If you find a malicious extension, please [submit an issue](https://github.com/CharlieS1103/spicetify-marketplace/issues/new?template=malicious-extension-report.md) and we can add it to the [blacklist](blacklist.json). 
 
@@ -150,3 +163,5 @@ CSS snippets are rather basic to implement. We fetch them from this repo, so you
 - The main stylesheet is style/style.scss, which builds all the components, and compiles into style.css
 - For development, you can run `npm run watch` to live update the files as you save them
 - For building, you can run `npm run build` to just build the style.css file once
+
+
