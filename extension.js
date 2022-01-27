@@ -294,9 +294,11 @@ const getParamsFromGithubRaw = (url) => {
     const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
-async function storeThemes() {
+const ITEMS_PER_REQUEST = 100;
+async function storeThemes(page) {
     const BLACKLIST = await Blacklist();
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
+    if (page) url += `&page=${page}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
@@ -308,12 +310,13 @@ async function storeThemes() {
         page_count: allRepos.items.length,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
-
+    console.log(filteredResults);
     return filteredResults;
 }
-async function storeExtensions() {
+async function storeExtensions(page) {
     const BLACKLIST = await Blacklist();
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
+    if (page) url += `&page=${page}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
@@ -325,7 +328,7 @@ async function storeExtensions() {
         page_count: allRepos.items.length,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
-
+    console.log(filteredResults);
     return filteredResults;
 }
 async function Blacklist() {
@@ -333,3 +336,11 @@ async function Blacklist() {
     const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
     return jsonReturned.repos;
 }
+(async function initializePreload(page = 1) {
+    // TODO: Fix page loading, they need to have a seperate page var for themes and a seperate for extensions, also I need to figure out how pages work in the first place
+    let lastLoaded = "Extension";
+    // eslint-disable-next-line no-unused-vars
+    console.log(page);
+    setInterval(() => {(lastLoaded == "Extension" ? ( storeThemes(page), page++, lastLoaded == "Extension") : (storeExtensions(page), page++, lastLoaded = "Theme"));
+    }, 10000);
+})();
