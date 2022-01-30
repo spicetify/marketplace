@@ -306,7 +306,6 @@ async function storeThemes() {
         ...allRepos,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
-    console.log(filteredResults);
     return filteredResults;
 }
 async function storeExtensions() {
@@ -321,7 +320,6 @@ async function storeExtensions() {
         ...allRepos,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
-    console.log(filteredResults);
     return filteredResults;
 }
 async function Blacklist() {
@@ -344,7 +342,7 @@ async function appendInformationToLocalStorage(array, type) {
         for (const repo of array.items) {
             await sleep(10000);
             let themes = await fetchThemes(repo.contents_url, repo.default_branch);
-            console.log(themes);
+
             // TODO Implement checks to make sure the theme is valid
             if (themes[0]) {
                 addToSessionStorage(themes);
@@ -354,7 +352,6 @@ async function appendInformationToLocalStorage(array, type) {
         for (const repo of array.items) {
             await sleep(10000);
             let extensions = await fetchExtensions(repo.contents_url, repo.default_branch);
-            console.log(extensions);
             // TODO: Implement checks to make sure it's a valid extension
             if (extensions[0]) {
                 addToSessionStorage(extensions);
@@ -371,7 +368,6 @@ async function fetchThemes(contents_url, branch) {
         if (!regex_result || !regex_result.groups) return null;
         let { user, repo } = regex_result.groups;
         let manifests = await getRepoManifest(user, repo, branch);
-        console.log(manifests);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
         manifests.user = user;
@@ -394,7 +390,6 @@ async function fetchExtensions(contents_url, branch) {
         let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-        console.log(user, repo );
         manifests.user = user;
         manifests.repo = repo;
         return manifests;
@@ -414,7 +409,6 @@ async function getRepoManifest(user, repo, branch) {
 function addToSessionStorage(items) {
     if (!items || items == null) return;
     items.forEach(item => {
-        console.log(item);
         // If the key already exists, it will append to it instead of overwriting it
         const existing = window.sessionStorage.getItem(items.user + "-"+items.repo);
         const parsed = existing ? JSON.parse(existing) : [];
