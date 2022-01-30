@@ -330,96 +330,61 @@ async function Blacklist() {
     return jsonReturned.repos;
 }
 (async function initializePreload() {
+    // Begin by getting the themes and extensions from github
     const extensionsArray = await storeExtensions();
     const themesArray = await storeThemes();
-    // @ts-ignore
+
     appendInformationToLocalStorage(themesArray, "theme");
     appendInformationToLocalStorage(extensionsArray, "extension");
 })();
+
 async function appendInformationToLocalStorage(array, type) {
-    let arrToAppend = [];
+    // This system should make it so themes and extensions are stored concurrently
     if (type == "theme") {
         for (const repo of array.items) {
             await sleep(10000);
-            arrToAppend.push(await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count));
+            let themes = await fetchThemes(repo.contents_url, repo.default_branch);
+            console.log(themes);
+            // TODO Implement checks to make sure the theme is valid
+            if (themes[0]) {
+                addToSessionStorage(themes);
+            }
         }
     } else if (type == "extension") {
         for (const repo of array.items) {
             await sleep(10000);
-            arrToAppend.push(await fetchExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count));
+            let extensions = await fetchExtensions(repo.contents_url, repo.default_branch);
+            console.log(extensions);
+            // TODO: Implement checks to make sure it's a valid extension
+            if (extensions[0]) {
+                addToSessionStorage(extensions);
+            }
+
         }
     }
 }
-async function fetchThemes(contents_url, branch, stars) {
+// This function is used to fetch manifest of a theme and return it
+async function fetchThemes(contents_url, branch) {
     try {
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         let { user, repo } = regex_result.groups;
         let manifests = await getRepoManifest(user, repo, branch);
+        console.log(manifests);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-
-        // Manifest is initially parsed
-        // eslint-disable-next-line no-unused-vars
-        const parsedManifests = manifests.reduce((accum, manifest) => {
-            const selectedBranch = manifest.branch || branch;
-            const item = {
-                manifest,
-                title: manifest.name,
-                subtitle: manifest.description,
-                authors: processAuthors(manifest.authors, user),
-                user,
-                repo,
-                branch: selectedBranch,
-                imageURL: manifest.preview && manifest.preview.startsWith("http")
-                    ? manifest.preview
-                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-                readmeURL: manifest.readme && manifest.readme.startsWith("http")
-                    ? manifest.readme
-                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-                stars,
-                // theme stuff
-                cssURL: manifest.usercss.startsWith("http")
-                    ? manifest.usercss
-                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-                // TODO: clean up indentation etc
-                schemesURL: manifest.schemes
-                    ? (
-                        manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-                    )
-                    : null,
-                include: manifest.include,
-            };
-            // If manifest is valid, add it to the list
-            if (manifest && manifest.name && manifest.usercss && manifest.description) {
-                accum.push(item);
-            }
-            addToSessionStorage(accum);
-            return accum;
-        }, []);
+        manifests.user = user;
+        manifests.repo = repo;
+        return manifests;
     }
     catch (err) {
         console.warn(contents_url, err);
         return null;
     }
 }
-// eslint-disable-next-line no-redeclare
-const processAuthors = (authors, user) => {
-    let parsedAuthors = [];
-
-    if (authors && authors.length > 0) {
-        parsedAuthors = authors;
-    } else {
-        parsedAuthors.push({
-            name: user,
-            url: "https://github.com/" + user,
-        });
-    }
-
-    return parsedAuthors;
-};
-async function fetchExtensions(contents_url, branch, stars) {
+// This function is used to fetch manifest of an extension and return it
+async function fetchExtensions(contents_url, branch) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -429,62 +394,37 @@ async function fetchExtensions(contents_url, branch, stars) {
         let manifests = await getRepoManifest(user, repo, branch);
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
-
-        // Manifest is initially parsed
-        // eslint-disable-next-line no-unused-vars
-        const parsedManifests = manifests.reduce((accum, manifest) => {
-            const selectedBranch = manifest.branch || branch;
-            const item = {
-                manifest,
-                title: manifest.name,
-                subtitle: manifest.description,
-                authors: processAuthors(manifest.authors, user),
-                user,
-                repo,
-                branch: selectedBranch,
-
-                imageURL: manifest.preview && manifest.preview.startsWith("http")
-                    ? manifest.preview
-                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-                extensionURL: manifest.main.startsWith("http")
-                    ? manifest.main
-                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-                readmeURL: manifest.readme && manifest.readme.startsWith("http")
-                    ? manifest.readme
-                    : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-                stars,
-            };
-            if (manifest && manifest.name  && manifest.description) {
-                accum.push(item);
-
-            }
-            addToSessionStorage(accum);
-            return accum;
-        }, []);
+        console.log(user, repo );
+        manifests.user = user;
+        manifests.repo = repo;
+        return manifests;
     }
     catch (err) {
         console.warn(contents_url, err);
         return null;
     }
 }
+
 async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
     return await fetch(url).then(res => res.json()).catch(() => null);
 }
-// make a function to add an array of items to session storage
+// This function appends an array to session storage
 function addToSessionStorage(items) {
-
+    if (!items || items == null) return;
     items.forEach(item => {
-        const existing = window.sessionStorage.getItem(item.user + "-"+item.repo);
-
+        console.log(item);
+        // If the key already exists, it will append to it instead of overwriting it
+        const existing = window.sessionStorage.getItem(items.user + "-"+items.repo);
         const parsed = existing ? JSON.parse(existing) : [];
         parsed.push(item);
-        window.sessionStorage.setItem(item.user + "-" + item.repo, JSON.stringify(parsed));
+        window.sessionStorage.setItem(items.user + "-" + items.repo, JSON.stringify(parsed));
 
     });
 
 }
+// This function is used to sleep for a certain amount of time
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
