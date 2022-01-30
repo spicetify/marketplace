@@ -431,6 +431,7 @@ async function fetchExtensions(contents_url, branch, stars) {
         // Manifest is initially parsed
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
+            // eslint-disable-next-line no-unused-vars
             const item = {
                 manifest,
                 title: manifest.name,
@@ -451,24 +452,11 @@ async function fetchExtensions(contents_url, branch, stars) {
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
             };
-
-            // If manifest is valid, add it to the list
-            if (manifest && manifest.name && manifest.description && manifest.main
-            ) {
-                // Add to list unless we're hiding installed items and it's installed
-                if (!(CONFIG.visual.hideInstalled
-                    && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
-                ) {
-                    accum.push(item);
-                }
+            if (manifest && manifest.name && manifest.usercss && manifest.description) {
+                accum.push(item);
             }
-            // else {
-            //     console.error("Invalid manifest:", manifest);
-            // }
-
             return accum;
         }, []);
-
         return parsedManifests;
     }
     catch (err) {
@@ -480,4 +468,11 @@ async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
     return await fetch(url).then(res => res.json()).catch(() => null);
+}
+// make a function to add an array of items to session storage
+function addToSessionStorage(key, items) {
+    const existing = window.sessionStorage.getItem(key);
+    const parsed = existing ? JSON.parse(existing) : [];
+    parsed.push(...items);
+    window.sessionStorage.setItem(key, JSON.stringify(parsed));
 }
