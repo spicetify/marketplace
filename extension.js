@@ -340,11 +340,12 @@ async function appendInformationToLocalStorage(array, type) {
     let arrToAppend = [];
     if (type == "theme") {
         for (const repo of array.items) {
+            await sleep(10000);
             arrToAppend.push(await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count));
         }
-        console.log(arrToAppend);
     } else if (type == "extension") {
         for (const repo of array.items) {
+            await sleep(10000);
             arrToAppend.push(await fetchExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count));
         }
     }
@@ -360,6 +361,7 @@ async function fetchThemes(contents_url, branch, stars) {
         if (!Array.isArray(manifests)) manifests = [manifests];
 
         // Manifest is initially parsed
+        // eslint-disable-next-line no-unused-vars
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
             const item = {
@@ -393,9 +395,9 @@ async function fetchThemes(contents_url, branch, stars) {
             if (manifest && manifest.name && manifest.usercss && manifest.description) {
                 accum.push(item);
             }
+            addToSessionStorage(accum);
             return accum;
         }, []);
-        return parsedManifests;
     }
     catch (err) {
         // console.warn(contents_url, err);
@@ -429,9 +431,9 @@ async function fetchExtensions(contents_url, branch, stars) {
         if (!Array.isArray(manifests)) manifests = [manifests];
 
         // Manifest is initially parsed
+        // eslint-disable-next-line no-unused-vars
         const parsedManifests = manifests.reduce((accum, manifest) => {
             const selectedBranch = manifest.branch || branch;
-            // eslint-disable-next-line no-unused-vars
             const item = {
                 manifest,
                 title: manifest.name,
@@ -452,12 +454,13 @@ async function fetchExtensions(contents_url, branch, stars) {
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
             };
-            if (manifest && manifest.name && manifest.usercss && manifest.description) {
+            if (manifest && manifest.name  && manifest.description) {
                 accum.push(item);
+                console.log("Pushed to accum");
             }
+            addToSessionStorage(accum);
             return accum;
         }, []);
-        return parsedManifests;
     }
     catch (err) {
         // console.warn(contents_url, err);
@@ -470,9 +473,12 @@ async function getRepoManifest(user, repo, branch) {
     return await fetch(url).then(res => res.json()).catch(() => null);
 }
 // make a function to add an array of items to session storage
-function addToSessionStorage(key, items) {
-    const existing = window.sessionStorage.getItem(key);
-    const parsed = existing ? JSON.parse(existing) : [];
-    parsed.push(...items);
-    window.sessionStorage.setItem(key, JSON.stringify(parsed));
+function addToSessionStorage(items) {
+    items.forEach(item => {
+        window.sessionStorage.setItem(item.title+"-"+item.repo, JSON.stringify(item));
+    });
+
+}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
