@@ -456,7 +456,7 @@ async function fetchExtensions(contents_url, branch, stars) {
             };
             if (manifest && manifest.name  && manifest.description) {
                 accum.push(item);
-                console.log("Pushed to accum");
+
             }
             addToSessionStorage(accum);
             return accum;
@@ -474,8 +474,14 @@ async function getRepoManifest(user, repo, branch) {
 }
 // make a function to add an array of items to session storage
 function addToSessionStorage(items) {
+
     items.forEach(item => {
-        window.sessionStorage.setItem(item.title+"-"+item.repo, JSON.stringify(item));
+        const existing = window.sessionStorage.getItem(item.user + item.repo);
+
+        const parsed = existing ? JSON.parse(existing) : [];
+        parsed.push(item);
+        window.sessionStorage.setItem(item.user + "-" + item.repo, JSON.stringify(parsed));
+
     });
 
 }

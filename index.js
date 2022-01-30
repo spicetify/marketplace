@@ -615,6 +615,9 @@ async function getRepos(page = 1) {
  * @returns The manifest object
  */
 async function getRepoManifest(user, repo, branch) {
+    if (window.sessionStorage.getItem(user + "-" + repo)) {
+        return JSON.parse(window.sessionStorage.getItem(user + "-" + repo));
+    }
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
     return await fetch(url).then(res => res.json()).catch(() => null);
@@ -702,7 +705,11 @@ async function fetchThemes(contents_url, branch, stars) {
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         let { user, repo } = regex_result.groups;
+        if (window.sessionStorage.getItem(user + "-" + repo)) {
+            return JSON.parse(window.sessionStorage.getItem(user + "-" + repo));
+        }
         let manifests = await getRepoManifest(user, repo, branch);
+
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
 
