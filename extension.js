@@ -400,7 +400,7 @@ async function fetchThemes(contents_url, branch, stars) {
         }, []);
     }
     catch (err) {
-        // console.warn(contents_url, err);
+        console.warn(contents_url, err);
         return null;
     }
 }
@@ -463,7 +463,7 @@ async function fetchExtensions(contents_url, branch, stars) {
         }, []);
     }
     catch (err) {
-        // console.warn(contents_url, err);
+        console.warn(contents_url, err);
         return null;
     }
 }
@@ -476,7 +476,7 @@ async function getRepoManifest(user, repo, branch) {
 function addToSessionStorage(items) {
 
     items.forEach(item => {
-        const existing = window.sessionStorage.getItem(item.user + item.repo);
+        const existing = window.sessionStorage.getItem(item.user + "-"+item.repo);
 
         const parsed = existing ? JSON.parse(existing) : [];
         parsed.push(item);
