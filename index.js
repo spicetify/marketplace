@@ -618,8 +618,11 @@ async function getRepoManifest(user, repo, branch) {
     if (window.sessionStorage.getItem(user + "-" + repo)) {
         return JSON.parse(window.sessionStorage.getItem(user + "-" + repo));
     }
-    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
+    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+    if ( getUnloadableManifests.includes(url)) {
+        return null;
+    }
     return await fetch(url).then(res => res.json()).catch(() => null);
 }
 
@@ -786,4 +789,8 @@ async function getThemeRepos(page = 1) {
     };
 
     return filteredResults;
+}
+function getUnloadableManifests() {
+    const unloadableManifests =  window.sessionStorage.getItem("noManifests");
+    return  JSON.parse(unloadableManifests);
 }

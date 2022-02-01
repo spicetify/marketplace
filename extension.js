@@ -311,7 +311,6 @@ async function storeThemes() {
 async function storeExtensions() {
     const BLACKLIST = await Blacklist();
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
-    console.log(url);
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
@@ -372,10 +371,11 @@ async function fetchThemes(contents_url, branch) {
         if (!Array.isArray(manifests)) manifests = [manifests];
         manifests.user = user;
         manifests.repo = repo;
+
         return manifests;
     }
     catch (err) {
-        console.warn(contents_url, err);
+        // console.warn(contents_url, err);
         return null;
     }
 }
@@ -395,7 +395,7 @@ async function fetchExtensions(contents_url, branch) {
         return manifests;
     }
     catch (err) {
-        console.warn(contents_url, err);
+        // console.warn(contents_url, err);
         return null;
     }
 }
@@ -403,17 +403,18 @@ async function fetchExtensions(contents_url, branch) {
 async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 
-    return await fetch(url).then(res => res.json()).catch(() => null);
+    return await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
 }
 // This function appends an array to session storage
-function addToSessionStorage(items) {
+function addToSessionStorage(items, key) {
     if (!items || items == null) return;
     items.forEach(item => {
+        if (!key) key = `${items.user}-${items.repo}`;
         // If the key already exists, it will append to it instead of overwriting it
-        const existing = window.sessionStorage.getItem(items.user + "-"+items.repo);
+        const existing = window.sessionStorage.getItem(key);
         const parsed = existing ? JSON.parse(existing) : [];
         parsed.push(item);
-        window.sessionStorage.setItem(items.user + "-" + items.repo, JSON.stringify(parsed));
+        window.sessionStorage.setItem(key, JSON.stringify(parsed));
 
     });
 
