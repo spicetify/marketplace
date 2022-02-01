@@ -620,7 +620,8 @@ async function getRepoManifest(user, repo, branch) {
     }
 
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-    if ( getUnloadableManifests.includes(url)) {
+    const unloadable = getUnloadableManifests();
+    if ( unloadable.includes(url)) {
         return null;
     }
     return await fetch(url).then(res => res.json()).catch(() => null);
