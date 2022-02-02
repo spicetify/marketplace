@@ -342,8 +342,7 @@ async function appendInformationToLocalStorage(array, type) {
             await sleep(10000);
             let themes = await fetchThemes(repo.contents_url, repo.default_branch);
 
-            // TODO Implement checks to make sure the theme is valid
-            if (themes[0]) {
+            if (themes) {
                 addToSessionStorage(themes);
             }
         }
@@ -351,8 +350,7 @@ async function appendInformationToLocalStorage(array, type) {
         for (const repo of array.items) {
             await sleep(10000);
             let extensions = await fetchExtensions(repo.contents_url, repo.default_branch);
-            // TODO: Implement checks to make sure it's a valid extension
-            if (extensions[0]) {
+            if (extensions) {
                 addToSessionStorage(extensions);
             }
 
@@ -371,8 +369,10 @@ async function fetchThemes(contents_url, branch) {
         if (!Array.isArray(manifests)) manifests = [manifests];
         manifests.user = user;
         manifests.repo = repo;
-
-        return manifests;
+        if (manifests[0] && manifests[0].name && manifests[0].usercss && manifests[0].description) {
+            return manifests;
+        }
+        return null;
     }
     catch (err) {
         // console.warn(contents_url, err);
@@ -392,7 +392,10 @@ async function fetchExtensions(contents_url, branch) {
         if (!Array.isArray(manifests)) manifests = [manifests];
         manifests.user = user;
         manifests.repo = repo;
-        return manifests;
+        if (manifests[0] && manifests[0].name && manifests[0].description && manifests[0].main) {
+            return manifests;
+        }
+        return null;
     }
     catch (err) {
         // console.warn(contents_url, err);
