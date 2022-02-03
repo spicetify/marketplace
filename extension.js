@@ -339,19 +339,18 @@ async function appendInformationToLocalStorage(array, type) {
     // This system should make it so themes and extensions are stored concurrently
     if (type == "theme") {
         for (const repo of array.items) {
-            await sleep(10000);
             let themes = await fetchThemes(repo.contents_url, repo.default_branch);
-
             if (themes) {
                 addToSessionStorage(themes);
+                await sleep(10000);
             }
         }
     } else if (type == "extension") {
         for (const repo of array.items) {
-            await sleep(10000);
             let extensions = await fetchExtensions(repo.contents_url, repo.default_branch);
             if (extensions) {
                 addToSessionStorage(extensions);
+                await sleep(10000);
             }
 
         }
