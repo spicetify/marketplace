@@ -327,10 +327,11 @@ async function Blacklist() {
     return jsonReturned.repos;
 }
 (async function initializePreload() {
+
     // Begin by getting the themes and extensions from github
     const extensionsArray = await storeExtensions();
     const themesArray = await storeThemes();
-
+    window.sessionStorage.clear();
     appendInformationToLocalStorage(themesArray, "theme");
     appendInformationToLocalStorage(extensionsArray, "extension");
 })();
