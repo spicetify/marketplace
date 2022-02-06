@@ -616,7 +616,7 @@ async function getExtensionRepos(page = 1) {
  */
 async function getRepoManifest(user, repo, branch) {
     const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
-    const failedSessionStorageItems = window.sessionStorage.getItem(`noManifests`);
+    const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
     if (sessionStorageItem) {
         return JSON.parse(sessionStorageItem);
     }
