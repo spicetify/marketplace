@@ -624,10 +624,6 @@ async function getRepoManifest(user, repo, branch) {
     if (failedSessionStorageItems.includes(url)) {
         return null;
     }
-    const unloadable = getUnloadableManifests();
-    if ( unloadable.includes(url)) {
-        return null;
-    }
     const manifest = await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
     if (manifest) {
         window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
@@ -798,10 +794,6 @@ async function getThemeRepos(page = 1) {
     };
 
     return filteredResults;
-}
-function getUnloadableManifests() {
-    const unloadableManifests =  window.sessionStorage.getItem("noManifests");
-    return  JSON.parse(unloadableManifests);
 }
 function addToSessionStorage(items, key) {
     if (!items || items == null) return;
