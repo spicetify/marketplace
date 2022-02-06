@@ -638,11 +638,16 @@ async function getRepoManifest(user, repo, branch) {
 async function fetchRepoExtensions(contents_url, branch, stars) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
+        let manifests;
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
         if (!regex_result || !regex_result.groups) return null;
         const { user, repo } = regex_result.groups;
-        let manifests = await getRepoManifest(user, repo, branch);
+        if (window.sessionStorage.getItem(user + "-" + repo)) {
+            manifests = JSON.parse(window.sessionStorage.getItem(user + "-" + repo));
+        } else {
+            manifests = await getRepoManifest(user, repo, branch);
+        }
         // If the manifest returned is not an array, initialize it as one
         if (!Array.isArray(manifests)) manifests = [manifests];
 
