@@ -804,6 +804,5 @@ function addToSessionStorage(items, key) {
         const parsed = existing ? JSON.parse(existing) : [];
         parsed.push(item);
         window.sessionStorage.setItem(key, JSON.stringify(parsed));
-
     });
 }
