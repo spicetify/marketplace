@@ -7,6 +7,7 @@
 /// <reference path="../spicetify-cli/globals.d.ts" />
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
+// eslint-disable-next-line no-redeclare
 const resetMarketplace = () => {
     console.log("Resetting Marketplace");
 
@@ -23,6 +24,7 @@ const resetMarketplace = () => {
 };
 
 // Expose useful methods in global context
+// @ts-ignore
 window.Marketplace = {
     // Should allow you to reset Marketplace from the dev console if it's b0rked
     reset: resetMarketplace,
