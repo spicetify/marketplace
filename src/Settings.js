@@ -112,20 +112,7 @@ function openConfig() {
         </div>
     </div>`;
     const resetBtn = resetContainer.querySelector("button");
-    resetBtn.onclick = () => {
-        console.log("Resetting Marketplace");
-
-        // Loop through and reset marketplace keys
-        Object.keys(localStorage).forEach((key) => {
-            if (key.startsWith("marketplace:")) {
-                localStorage.removeItem(key);
-                console.log(`Removed ${key}`);
-            }
-        });
-
-        console.log("Marketplace has been reset");
-        location.reload();
-    };
+    resetBtn.onclick = resetMarketplace; // in Utils.js
 
     configContainer.append(
         optionHeader,

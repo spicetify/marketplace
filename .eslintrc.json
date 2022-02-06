@@ -89,6 +89,7 @@
         "getBlacklist": "readonly",
         "fetchCssSnippets": "readonly",
         "processAuthors": "readonly",
+        "resetMarketplace": "readonly",
         "DOWNLOAD_ICON": "readonly",
         "SETTINGS_ICON": "readonly",
         "TRASH_ICON": "readonly"
