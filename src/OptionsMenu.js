@@ -7,6 +7,7 @@ const OptionsMenuItemIcon = react.createElement("svg", {
     d: "M13.985 2.383L5.127 12.754 1.388 8.375l-.658.77 4.397 5.149 9.618-11.262z",
 }));
 
+// @ts-ignore
 const OptionsMenuItem = react.memo(({ onSelect, value, isSelected }) => {
     return react.createElement(Spicetify.ReactComponent.MenuItem, {
         onClick: onSelect,
@@ -16,10 +17,15 @@ const OptionsMenuItem = react.memo(({ onSelect, value, isSelected }) => {
 
 // eslint-disable-next-line no-redeclare, no-unused-vars
 const OptionsMenu = react.memo(({
+    // @ts-ignore
     options,
+    // @ts-ignore
     onSelect,
+    // @ts-ignore
     selected,
+    // @ts-ignore
     defaultValue,
+    // @ts-ignore
     bold = false,
 }) => {
     /**
@@ -36,6 +42,7 @@ const OptionsMenu = react.memo(({
     return react.createElement(Spicetify.ReactComponent.ContextMenu, {
         menu: react.createElement(Spicetify.ReactComponent.Menu, {
         }, options.map(({ key, value }) => react.createElement(OptionsMenuItem, {
+            // @ts-ignore
             value,
             onSelect: () => {
                 onSelect(key);
