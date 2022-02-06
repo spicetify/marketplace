@@ -13,7 +13,7 @@
 /* eslint-disable no-redeclare, no-unused-vars */
 /** @type {React} */
 const react = Spicetify.React;
-/** @type {ReactDOM} */
+/** @type {import("react-dom")} */
 const reactDOM = Spicetify.ReactDOM;
 const {
     URI,
@@ -23,7 +23,7 @@ const {
 } = Spicetify;
 /* eslint-enable no-redeclare, no-unused-vars */
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
+// eslint-disable-next-line no-redeclare
 const LOCALSTORAGE_KEYS = {
     "installedExtensions": "marketplace:installed-extensions",
     "installedSnippets": "marketplace:installed-snippets",
@@ -114,6 +114,7 @@ const CONFIG = {
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
     theme: {
+        activeThemeKey: localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled) || null,
         schemes,
         activeScheme,
     },
@@ -139,7 +140,7 @@ const ITEMS_PER_REQUEST = 100;
 
 let BLACKLIST = [];
 
-// eslint-disable-next-line no-unused-vars, no-redeclare
+// eslint-disable-next-line no-redeclare, no-unused-vars
 let gridUpdateTabs, gridUpdatePostsVisual;
 
 class Grid extends react.Component {
@@ -151,7 +152,9 @@ class Grid extends react.Component {
             tabs: CONFIG.tabs,
             rest: true,
             endOfList: endOfList,
-            // activeScheme: CONFIG.theme.activeScheme,
+            schemes: CONFIG.theme.schemes,
+            activeScheme: CONFIG.theme.activeScheme,
+            activeThemeKey: CONFIG.theme.activeThemeKey,
         };
     }
 
@@ -183,6 +186,11 @@ class Grid extends react.Component {
         // Set key prop so items don't get stuck when switching tabs
         item.key = `${CONFIG.activeTab}:${item.title}`;
         item.type = type;
+        // Pass along the functions to update Grid state on apply
+        item.updateColourSchemes = this.updateColourSchemes.bind(this);
+        item.updateActiveTheme = this.setActiveTheme.bind(this);
+        // This isn't used other than to trigger a re-render
+        item.activeThemeKey = this.state.activeThemeKey;
         cardList.push(react.createElement(Card, item));
         this.setState({ cards: cardList });
     }
@@ -203,7 +211,7 @@ class Grid extends react.Component {
         });
         endOfList = false;
 
-        this.newRequest(30);
+        this.newRequest(ITEMS_PER_REQUEST);
     }
 
     updateTabs() {
@@ -231,7 +239,7 @@ class Grid extends react.Component {
         });
         endOfList = false;
 
-        this.newRequest(30);
+        this.newRequest(ITEMS_PER_REQUEST);
     }
 
     // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
@@ -240,7 +248,7 @@ class Grid extends react.Component {
     async loadPage(queue) {
         if (CONFIG.activeTab === "Extensions") {
             let pageOfRepos = await getRepos(requestPage);
-            for (const repo of pageOfRepos) {
+            for (const repo of pageOfRepos.items) {
                 let extensions = await fetchRepoExtensions(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
                 // I believe this stops the requests when switching tabs?
@@ -255,19 +263,21 @@ class Grid extends react.Component {
                 }
             }
 
-            // First request is null, so coerces to 1
-            const currentPage = requestPage || 1;
-            // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
-            const remainingResults = pageOfRepos.length - soFarResults;
+            // First result is null or -1 so it coerces to 1
+            const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
+            // Sets the amount of items that have thus been fetched
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+            const remainingResults = pageOfRepos.total_count - soFarResults;
 
             // If still have more results, return next page number to fetch
-            if (remainingResults) return currentPage + 1;
+            console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
+            if (remainingResults > 0) return currentPage + 1;
+            else console.log("No more extension results");
         } else if (CONFIG.activeTab === "Installed") {
             const installedStuff = {
-                snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
-                extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
                 theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
+                extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
+                snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
             };
 
             for (const type in installedStuff) {
@@ -292,7 +302,7 @@ class Grid extends react.Component {
             // installed extension do them all in one go, since it's local
         } else if (CONFIG.activeTab == "Themes") {
             let pageOfRepos = await getThemeRepos(requestPage);
-            for (const repo of pageOfRepos) {
+            for (const repo of pageOfRepos.items) {
 
                 let themes = await fetchThemes(repo.contents_url, repo.default_branch, repo.stargazers_count);
                 // I believe this stops the requests when switching tabs?
@@ -307,11 +317,14 @@ class Grid extends react.Component {
             }
 
             // First request is null, so coerces to 1
-            const currentPage = requestPage || 1;
+            const currentPage = requestPage > -1 && requestPage ? requestPage : 1;
             // -1 because the page number is 1-indexed
-            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.length;
-            const remainingResults = pageOfRepos.length - soFarResults;
-            if (remainingResults) return currentPage + 1;
+            const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+            const remainingResults = pageOfRepos.total_count - soFarResults;
+
+            console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
+            if (remainingResults > 0) return currentPage + 1;
+            else console.log("No more theme results");
         } else if (CONFIG.activeTab == "Snippets") {
             let snippets = await fetchCssSnippets();
 
@@ -359,30 +372,44 @@ class Grid extends react.Component {
         this.setState({ rest: true });
     }
 
+    /**
+     * Load more items if there are more items to load.
+     * @returns {void}
+     */
     loadMore() {
         if (this.state.rest && !endOfList) {
             this.loadAmount(requestQueue[0], ITEMS_PER_REQUEST);
         }
     }
 
-    updateColourScheme(scheme) {
-        console.log("Injecting colour scheme", scheme);
-        CONFIG.theme.activeScheme = scheme;
-        this.injectColourScheme(CONFIG.theme.schemes[scheme]);
+    /**
+     * Update the colour schemes in the state + dropdown, and inject the active one
+     * @param {any} schemes Object with the colour schemes
+     * @param {string} activeScheme The name of the active colour scheme (a key in the schemes object)
+     */
+    updateColourSchemes(schemes, activeScheme) {
+        console.log("updateColourSchemes", schemes, activeScheme);
+        CONFIG.theme.schemes = schemes;
+        CONFIG.theme.activeScheme = activeScheme;
+
+        if (schemes && schemes[activeScheme]) {
+            this.injectColourScheme(CONFIG.theme.schemes[activeScheme]);
+        } else {
+            // Reset schemes if none sent
+            this.injectColourScheme(null);
+        }
 
         // Save to localstorage
         const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
         const installedThemeDataStr = localStorage.getItem(installedThemeKey);
         const installedThemeData = JSON.parse(installedThemeDataStr);
-        installedThemeData.activeScheme = scheme;
+        installedThemeData.activeScheme = activeScheme;
         localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
 
-        // TODO: can I put in a hook for when the activeScheme changes? or why do I have it in state??
-        // this.setState({
-        //     activeScheme: CONFIG.theme.activeScheme,
-        // });
-        // TODO: clean this up. The SortBox doesn't re-render (and update the selectedOption in the dropdown unless I set state...)
-        this.setState({});
+        this.setState({
+            schemes,
+            activeScheme,
+        });
     }
 
     // NOTE: Keep in sync with extension.js
@@ -395,49 +422,38 @@ class Grid extends react.Component {
         const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
         if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
 
-        // Add new marketplace scheme
-        const schemeTag = document.createElement("style");
-        schemeTag.classList.add("marketplaceCSS");
-        schemeTag.classList.add("marketplaceScheme");
-        // const theme = document.querySelector('#theme');
-        let injectStr = ":root {";
-        const themeIniKeys = Object.keys(scheme);
-        themeIniKeys.forEach((key) => {
-            injectStr += `--spice-${key}: #${scheme[key]};`;
-            injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
-        });
-        injectStr += "}";
-        schemeTag.innerHTML = injectStr;
-        document.head.appendChild(schemeTag);
+        if (scheme) {
+            // Add new marketplace scheme
+            const schemeTag = document.createElement("style");
+            schemeTag.classList.add("marketplaceCSS");
+            schemeTag.classList.add("marketplaceScheme");
+
+            let injectStr = ":root {";
+            const themeIniKeys = Object.keys(scheme);
+            themeIniKeys.forEach((key) => {
+                injectStr += `--spice-${key}: #${scheme[key]};`;
+                injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+            });
+            injectStr += "}";
+            schemeTag.innerHTML = injectStr;
+            document.head.appendChild(schemeTag);
+        } else {
+            // Re-add default user.css
+            let originalColorsCSS = document.createElement("link");
+            originalColorsCSS.setAttribute("rel", "stylesheet");
+            originalColorsCSS.setAttribute("href", "colors.css");
+            originalColorsCSS.classList.add("userCSS");
+            document.head.appendChild(originalColorsCSS);
+        }
     }
 
-    // TODO: this isn't used yet. It would be great if we could add/remove themes without reloading the page
-    // NOTE: Keep in sync with extension.js
-    // eslint-disable-next-line
-    applyTheme(theme) {
-        // Remove default css
-        // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
-        const existingUserThemeCSS = document.querySelector("link[href='user.css']");
-        if (existingUserThemeCSS) existingUserThemeCSS.remove();
-
-        const existingColorsCSS = document.querySelector("link[href='colors.css']");
-        if (existingColorsCSS) existingColorsCSS.remove();
-
-        // Remove any existing marketplace theme
-        const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
-        if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
-
-        // Add theme css
-        const newUserThemeCSS = document.createElement("link");
-        // Using jsdelivr since github raw doesn't provide mimetypes
-        // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-        const cssUrl = `https://cdn.jsdelivr.net/gh/${theme.user}/${theme.repo}@${theme.branch}/${theme.manifest.usercss}`;
-        newUserThemeCSS.href = cssUrl;
-        newUserThemeCSS.rel = "stylesheet";
-        newUserThemeCSS.classList.add("userCSS", "marketplaceCSS");
-        document.head.appendChild(newUserThemeCSS);
-    }
-
+    /**
+  * The componentDidMount() method is called when the component is first loaded.
+  * It checks if the cardList is already loaded. If it is, it checks if the lastScroll value is
+ greater than 0.
+  * If it is, it scrolls to the lastScroll value. If it isn't, it scrolls to the top of the page.
+  * If the cardList isn't loaded, it loads the cardList.
+  */
     async componentDidMount() {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
@@ -455,9 +471,13 @@ class Grid extends react.Component {
 
         // Load blacklist
         BLACKLIST = await getBlacklist();
-        this.newRequest(30);
+        this.newRequest(ITEMS_PER_REQUEST);
     }
 
+    /**
+  * When the component is unmounted, remove the scroll event listener.
+  * @returns {void}
+  */
     componentWillUnmount() {
         gridUpdateTabs = gridUpdatePostsVisual = null;
         const viewPort = document.querySelector("main .os-viewport");
@@ -465,6 +485,11 @@ class Grid extends react.Component {
         viewPort.removeEventListener("scroll", this.checkScroll);
     }
 
+    /**
+   * If the user has scrolled to the bottom of the page, load more posts.
+   * @param event - The event object that is passed to the callback function.
+   * @returns {void}
+   */
     isScrolledBottom(event) {
         const viewPort = event.target;
         if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
@@ -473,9 +498,14 @@ class Grid extends react.Component {
         }
     }
 
+    setActiveTheme(themeKey) {
+        CONFIG.theme.activeThemeKey = themeKey;
+        this.setState({ activeThemeKey: themeKey });
+    }
+
     // TODO: clean this up. It worked when I was using state, but state seems like pointless overhead.
     getActiveScheme() {
-        return CONFIG.theme.activeScheme;
+        return this.state.activeScheme;
     }
 
     render() {
@@ -490,9 +520,10 @@ class Grid extends react.Component {
             className: "marketplace-header__right",
         },
         // Show colour scheme dropdown if there is a theme with schemes installed
-        CONFIG.theme.activeScheme ? react.createElement(SortBox, {
-            onChange: this.updateColourScheme.bind(this),
-            sortBoxOptions: generateSchemesOptions(CONFIG.theme.schemes),
+        this.state.activeScheme ? react.createElement(SortBox, {
+            onChange: (value) => this.updateColourSchemes(this.state.schemes, value),
+            // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
+            sortBoxOptions: generateSchemesOptions(this.state.schemes),
             // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
             // because it hardcodes the value into the fn
             sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
@@ -520,7 +551,14 @@ class Grid extends react.Component {
             style: {
                 "--minimumColumnWidth": "180px",
             },
-        }, [...cardList]), react.createElement("footer", {
+        }, cardList.map((card) => {
+            // Clone the cards and update the prop to trigger re-render
+            // TODO: is it possible to only re-render the theme cards whose status have changed?
+            const cardElement = react.cloneElement(card, {
+                activeThemeKey: this.state.activeThemeKey,
+            });
+            return cardElement;
+        })), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",
@@ -534,14 +572,13 @@ class Grid extends react.Component {
     }
 }
 
-// TODO: add license filter or anything?
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
  * Query GitHub for all repos with the "spicetify-extensions" topic
  * @param {number} page The query page number
- * @returns Array of search results
+ * @returns Array of search results (filtered through the blacklist)
  */
 async function getRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
@@ -554,9 +591,18 @@ async function getRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-    const filteredArray = allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url));
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
+    const filteredResults = {
+        ...allRepos,
+        // Include count of all items on the page, since we're filtering the blacklist below,
+        // which can mess up the paging logic
+        page_count: allRepos.items.length,
+        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
 
-    return filteredArray;
+    return filteredResults;
 }
 
 // TODO: add try/catch here?
@@ -576,7 +622,7 @@ async function getRepoManifest(user, repo, branch) {
 
 // TODO: can we add a return type here?
 /**
- * Fetch an extension and format data for generating a card
+ * Fetch extensions from a repo and format data for generating cards
  * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
  * @param {string} branch The repo's default branch (e.g. main or master)
  * @param {number} stars The number of stars the repo has
@@ -619,8 +665,6 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
 
             // If manifest is valid, add it to the list
             if (manifest && manifest.name && manifest.description && manifest.main
-            // TODO: Do we want to require a preview image or readme?
-            // && manifest.preview && manifest.readme
             ) {
                 // Add to list unless we're hiding installed items and it's installed
                 if (!(CONFIG.visual.hideInstalled
@@ -644,6 +688,14 @@ async function fetchRepoExtensions(contents_url, branch, stars) {
     }
 }
 
+// TODO: can we add a return type here?
+/**
+ * Fetch themes from a repo and format data for generating cards
+ * @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param {string} branch The repo's default branch (e.g. main or master)
+ * @param {number} stars The number of stars the repo has
+ * @returns Extension info for card (or null)
+ */
 async function fetchThemes(contents_url, branch, stars) {
     try {
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -698,8 +750,12 @@ async function fetchThemes(contents_url, branch, stars) {
     }
 }
 
+/**
+ * Query the GitHub API for a page of theme repos (having "spicetify-themes" topic)
+ * @param {number} page The page to get (defaults to 1)
+ * @returns Array of GitHub API results, filtered through the blacklist
+ */
 async function getThemeRepos(page = 1) {
-    // www is needed or it will block with "cross-origin" error.
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
 
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
@@ -709,32 +765,16 @@ async function getThemeRepos(page = 1) {
     // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
     //     url += `&t=${sortConfig.time}`
     const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allThemes.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
+    const filteredResults = {
+        ...allThemes,
+        // Include count of all items on the page, since we're filtering the blacklist below,
+        // which can mess up the paging logic
+        page_count: allThemes.items.length,
+        items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
 
-    const filteredArray = allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url));
-    return filteredArray;
-}
-
-async function getBlacklist() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
-    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
-    return jsonReturned.repos;
-}
-
-function generateSchemesOptions(schemes) {
-    if (!schemes) return [];
-    // [
-    //     { key: "hot", value: "Hot" },
-    //     { key: "new", value: "New" },
-    //     { key: "top", value: "Top" },
-    //     { key: "rising", value: "Rising" },
-    //     { key: "controversial", value: "Controversial" },
-    // ]
-    return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
-}
-
-// eslint-disable-next-line no-unused-vars
-async function fetchCssSnippets() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
-    const json = await fetch(url).then(res => res.json()).catch(() => { });
-    return json;
+    return filteredResults;
 }

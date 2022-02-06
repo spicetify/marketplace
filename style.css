@@ -7,6 +7,19 @@
   display: flex;
   justify-content: space-between;
   margin: 16px 0;
+  position: sticky;
+  flex-direction: row-reverse;
+  top: 80px;
+  z-index: 1;
+}
+.marketplace-header h1 {
+  position: fixed;
+  left: 16px;
+}
+@media (min-width: 1024px) {
+  .marketplace-header h1 {
+    left: 32px;
+  }
 }
 
 .marketplace-header__right {
@@ -155,6 +168,9 @@
   display: block;
 }
 
+.marketplace-card--snippet {
+  height: 132px;
+}
 .marketplace-card--snippet .main-card-imageContainer {
   display: none;
 }
@@ -1028,17 +1044,29 @@ button.arrow-btn.disabled, button.arrow-btn[disabled] {
 #marketplace-readme code {
   border: 1px solid var(--spice-button-disabled);
 }
+#marketplace-readme ul, #marketplace-readme li {
+  list-style-position: inside;
+}
+#marketplace-readme ul li, #marketplace-readme li li {
+  margin-bottom: 8px;
+}
 #marketplace-readme ul {
   list-style-type: disc;
 }
-#marketplace-readme ul li {
-  margin-bottom: 8px;
+#marketplace-readme ol {
+  list-style-type: auto;
 }
 #marketplace-readme p, #marketplace-readme pre, #marketplace-readme code {
-  margin: 8px;
+  margin: 8px 0;
+}
+#marketplace-readme pre {
+  overflow-x: auto;
 }
 #marketplace-readme table {
   table-layout: auto;
+}
+#marketplace-readme table th, #marketplace-readme table td {
+  border: 1px solid var(--spice-button-disabled);
 }
 /*
 TODO: can we get this added to the default Spicetify stylesheet?

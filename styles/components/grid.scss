@@ -7,6 +7,21 @@
   display: flex;
   justify-content: space-between;
   margin: 16px 0;
+
+  // To position the settings button + colour schemes
+  position: sticky;
+  flex-direction: row-reverse;
+  top: 80px;
+  z-index: 1;
+
+  h1 {
+    position: fixed;
+    left: 16px;
+
+    @media (min-width: 1024px) {
+      left: 32px;
+    }
+  }
 }
 
 .marketplace-header__right {
@@ -170,8 +185,10 @@
   }
 }
 
-// Hide image preview for CSS snippets
 .marketplace-card--snippet {
+  height: 132px;
+
+  // Hide image preview for CSS snippets
   .main-card-imageContainer { display: none; }
 }
 

@@ -1,4 +1,13 @@
 {
+  "name": "spicetify-marketplace",
+  "homepage": "https://github.com/CharlieS1103/spicetify-marketplace",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CharlieS1103/spicetify-marketplace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CharlieS1103/spicetify-marketplace/issues"
+  },
   "scripts": {
     "type-check": "tsc",
     "watch": "parcel watch",
@@ -12,12 +21,15 @@
       "optimize": false
     }
   },
+  "engines": {
+    "node": ">=16"
+  },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
-    "eslint": "^8.5.0",
+    "eslint": "^8.8.0",
     "eslint-plugin-react": "^7.27.1",
-    "parcel": "^2.0.0"
+    "parcel": "^2.2.1"
   }
 }

@@ -91,6 +91,8 @@ const getParamsFromGithubRaw = (url) => {
             script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
         }
 
+        script.src = `${script.src}?time=${Date.now()}`;
+
         document.body.appendChild(script);
     };
 
@@ -147,6 +149,10 @@ const getParamsFromGithubRaw = (url) => {
         }
     };
 
+    /**
+     * Update the user.css in the DOM
+     * @param {string} userCSS The contents of the new user.css
+     */
     const injectUserCSS = (userCSS) => {
         try {
             // Remove any existing Spicetify user.css
@@ -203,7 +209,7 @@ const getParamsFromGithubRaw = (url) => {
         const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
         console.log("Parsing CSS: ", userCssUrl);
-        let css = await fetch(userCssUrl).then(res => res.text());
+        let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
         // console.log("Parsed CSS: ", css);
 
         let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
@@ -265,13 +271,14 @@ const getParamsFromGithubRaw = (url) => {
             themeManifest.include.forEach((script) => {
                 const newScript = document.createElement("script");
                 let src = script;
+
                 // If it's a github raw script, use jsdelivr
                 if (script.indexOf("raw.githubusercontent.com") > -1) {
                     const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
                     src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
                 }
                 // console.log({src});
-                newScript.src = src;
+                newScript.src = `${src}?time=${Date.now()}`;
                 newScript.classList.add("marketplaceScript");
                 document.body.appendChild(newScript);
             });
