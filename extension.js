@@ -295,8 +295,9 @@ const getParamsFromGithubRaw = (url) => {
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
 const ITEMS_PER_REQUEST = 100;
+
 async function storeThemes() {
-    const BLACKLIST = await Blacklist();
+    const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
@@ -309,7 +310,7 @@ async function storeThemes() {
     return filteredResults;
 }
 async function storeExtensions() {
-    const BLACKLIST = await Blacklist();
+    const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
@@ -327,38 +328,32 @@ async function Blacklist() {
     return jsonReturned.repos;
 }
 (async function initializePreload() {
-
-    // Begin by getting the themes and extensions from github
-    const extensionsArray = await storeExtensions();
-    const themesArray = await storeThemes();
     window.sessionStorage.clear();
-    appendInformationToLocalStorage(themesArray, "theme");
-    appendInformationToLocalStorage(extensionsArray, "extension");
+    const BLACKLIST = await Blacklist();
+    window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
+    // Begin by getting the themes and extensions from github
+    const [extensionReposArray, themeReposArray] = await Promise.all([
+        storeExtensions(),
+        storeThemes(),
+    ]);
+    appendInformationToLocalStorage(themeReposArray, "theme");
+    appendInformationToLocalStorage(extensionReposArray, "extension");
 })();
 
 async function appendInformationToLocalStorage(array, type) {
     // This system should make it so themes and extensions are stored concurrently
-    if (type == "theme") {
-        for (const repo of array.items) {
-            let themes = await fetchThemes(repo.contents_url, repo.default_branch);
-            if (themes) {
-                addToSessionStorage(themes);
-                await sleep(10000);
-            }
-        }
-    } else if (type == "extension") {
-        for (const repo of array.items) {
-            let extensions = await fetchExtensions(repo.contents_url, repo.default_branch);
-            if (extensions) {
-                addToSessionStorage(extensions);
-                await sleep(10000);
-            }
-
+    for (const repo of array.items) {
+        const data = (type === "theme")
+            ? await fetchThemeManifest(repo.contents_url, repo.default_branch)
+            : await fetchExtensionManifest(repo.contents_url, repo.default_branch);
+        if (data) {
+            addToSessionStorage(data);
+            await sleep(10000);
         }
     }
 }
 // This function is used to fetch manifest of a theme and return it
-async function fetchThemes(contents_url, branch) {
+async function fetchThemeManifest(contents_url, branch) {
     try {
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
         // TODO: err handling?
@@ -380,7 +375,7 @@ async function fetchThemes(contents_url, branch) {
     }
 }
 // This function is used to fetch manifest of an extension and return it
-async function fetchExtensions(contents_url, branch) {
+async function fetchExtensionManifest(contents_url, branch) {
     try {
         // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
         const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -422,6 +417,7 @@ function addToSessionStorage(items, key) {
     });
 
 }
+
 // This function is used to sleep for a certain amount of time
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
