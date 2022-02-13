@@ -6,6 +6,30 @@
 
 /// <reference path="../spicetify-cli/globals.d.ts" />
 
+// Reset any Marketplace localStorage keys (effectively resetting it completely)
+// eslint-disable-next-line no-redeclare
+const resetMarketplace = () => {
+    console.log("Resetting Marketplace");
+
+    // Loop through and reset marketplace keys
+    Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith("marketplace:")) {
+            localStorage.removeItem(key);
+            console.log(`Removed ${key}`);
+        }
+    });
+
+    console.log("Marketplace has been reset");
+    location.reload();
+};
+
+// Expose useful methods in global context
+// @ts-ignore
+window.Marketplace = {
+    // Should allow you to reset Marketplace from the dev console if it's b0rked
+    reset: resetMarketplace,
+};
+
 // eslint-disable-next-line no-redeclare
 const hexToRGB = (hex) => {
     if (hex.length === 3) {
