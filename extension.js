@@ -294,9 +294,10 @@ const getParamsFromGithubRaw = (url) => {
     const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
+
 const ITEMS_PER_REQUEST = 100;
 
-async function storeThemes() {
+async function queryThemeRepos() {
     const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
@@ -309,7 +310,8 @@ async function storeThemes() {
     };
     return filteredResults;
 }
-async function storeExtensions() {
+
+async function queryExtensionRepos() {
     const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
@@ -322,19 +324,21 @@ async function storeExtensions() {
     };
     return filteredResults;
 }
+
 async function Blacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
-    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
+    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
     return jsonReturned.repos;
 }
+
 (async function initializePreload() {
     window.sessionStorage.clear();
     const BLACKLIST = await Blacklist();
     window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
     // Begin by getting the themes and extensions from github
     const [extensionReposArray, themeReposArray] = await Promise.all([
-        storeExtensions(),
-        storeThemes(),
+        queryExtensionRepos(),
+        queryThemeRepos(),
     ]);
     appendInformationToLocalStorage(themeReposArray, "theme");
     appendInformationToLocalStorage(extensionReposArray, "extension");
@@ -348,10 +352,11 @@ async function appendInformationToLocalStorage(array, type) {
             : await fetchExtensionManifest(repo.contents_url, repo.default_branch);
         if (data) {
             addToSessionStorage(data);
-            await sleep(10000);
+            await sleep(5000);
         }
     }
 }
+
 // This function is used to fetch manifest of a theme and return it
 async function fetchThemeManifest(contents_url, branch) {
     try {
@@ -374,6 +379,7 @@ async function fetchThemeManifest(contents_url, branch) {
         return null;
     }
 }
+
 // This function is used to fetch manifest of an extension and return it
 async function fetchExtensionManifest(contents_url, branch) {
     try {
@@ -400,9 +406,9 @@ async function fetchExtensionManifest(contents_url, branch) {
 
 async function getRepoManifest(user, repo, branch) {
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-
     return await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
 }
+
 // This function appends an array to session storage
 function addToSessionStorage(items, key) {
     if (!items || items == null) return;
@@ -413,9 +419,7 @@ function addToSessionStorage(items, key) {
         const parsed = existing ? JSON.parse(existing) : [];
         parsed.push(item);
         window.sessionStorage.setItem(key, JSON.stringify(parsed));
-
     });
-
 }
 
 // This function is used to sleep for a certain amount of time
