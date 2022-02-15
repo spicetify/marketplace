@@ -332,6 +332,7 @@ async function Blacklist() {
 }
 
 (async function initializePreload() {
+    console.log("Preloading Extensions and Themes");
     window.sessionStorage.clear();
     const BLACKLIST = await Blacklist();
     window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
@@ -405,7 +406,15 @@ async function fetchExtensionManifest(contents_url, branch) {
 }
 
 async function getRepoManifest(user, repo, branch) {
+    const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
+    const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
+    if (sessionStorageItem) {
+        return null;
+    }
     const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+    if (failedSessionStorageItems?.includes(url)) {
+        return null;
+    }
     return await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
 }
 
