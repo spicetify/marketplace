@@ -237,6 +237,7 @@ function createCustomCssOption() {
     container.innerHTML = `
 <textarea id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find the in the installed tab for management."></textarea>
   <br><br>
+  <textarea id"marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" rows="1" cols="50" placeholder="Input a name for your custom CSS. This will be used to identify your custom CSS in the installed tab."></textarea>
   <button value="Submit" id="marketplace-customCSS-submit">Submit CSS</button>
     `;
     return container;
@@ -244,18 +245,40 @@ function createCustomCssOption() {
 function addCustomCssListeners() {
     console.log("Adding listeners");
     const textarea = document.querySelector("#marketplace-custom-css");
-
+    const nameArea = document.querySelector("#marketplace-config-container > div:nth-child(2) > textarea:nth-child(4)");
     const submit = document.querySelector("#marketplace-customCSS-submit");
     console.log(submit);
     submit.addEventListener("click", function (event) {
-        const storedCSS = localStorage.getItem("marketplace:customCSS");
         // @ts-ignore
-        const value = textarea.value;
-        console.log(value);
-        /* if (!storedCSS) {
-            localStorage.setItem("marketplace:customCSS", textarea.textContent);
+        let code = textarea.value;
+        code = code.replace(/\n/g, "");
+        // @ts-ignore
+        let name = nameArea.value;
+        name = name.replace(/\n/g, "");
+        if (getLocalStorageDataFromKey(`marketplace:customCSS:${name}`)) {
+            alert("That name is already taken!");
+            return;
         }
-        */
+        let localStorageKey = `marketplace:customCSS:${ name }`;
+        let description = "User added CSS";
+        console.log(`Installing snippet ${name}`);
+        localStorage.setItem(localStorageKey, JSON.stringify({
+            code: code,
+            title: name,
+            description: description,
+        }));
+
+        // Add to installed list if not there already
+        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+        if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
+            installedSnippetKeys.push(localStorageKey);
+            localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
+        }
+        const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+        initializeSnippets(installedSnippets);
+
+        this.setState({ installed: true });
+
         event.preventDefault();
     }, false);
 }
