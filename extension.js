@@ -309,13 +309,13 @@ async function Blacklist() {
  * @param {number} pageNum The page number
  * @returns TODO
  */
-async function queryRepos(type, page = 1) {
+async function queryRepos(type, pageNum = 1) {
     const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
 
     let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
     if (type === "extension") url += `&q=${encodeURIComponent("topic:spicetify-extensions")}`;
     else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
-    if (page) url += `&page=${page}`;
+    if (pageNum) url += `&page=${pageNum}`;
 
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
@@ -324,6 +324,7 @@ async function queryRepos(type, page = 1) {
 
     const filteredResults = {
         ...allRepos,
+        page_count: allRepos.items.length,
         items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
     };
 
@@ -336,17 +337,18 @@ async function queryRepos(type, page = 1) {
  * @param {number} pageNum The page number
  * @returns TODO
  */
- async function loadPageRecursive(type, pageNum) {
+async function loadPageRecursive(type, pageNum) {
     const pageOfRepos = await queryRepos(type, pageNum);
     appendInformationToLocalStorage(pageOfRepos, type);
 
     // Sets the amount of items that have thus been fetched
-    const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+    const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
+    console.log({ pageOfRepos });
     const remainingResults = pageOfRepos.total_count - soFarResults;
 
     // If still have more results, recursively fetch next page
     console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
-    if (remainingResults > 0) return await loadPageRecursive(currentPage + 1); // There are more results. currentPage + 1 is the next page to fetch.
+    if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
     else console.log(`No more ${type} results`);
 }
 
