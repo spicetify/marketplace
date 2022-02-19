@@ -47,6 +47,6 @@
   {
     "title": "Left aligned heart icons",
     "description": "Moves the heart icon to the left side of the track title in track views",
-    "code": ".main-trackList-rowSectionStart { margin-left: 38px !important; } .main-addButton-button.main-trackList-rowHeartButton, .main-addButton-button.main-trackList-rowHeartButton { position: absolute !important; left: 48px !important; } .Root__nav-bar { width: calc(var(--nav-bar-width) + 150px) !important; }"
+    "code": ".main-trackList-rowSectionStart { margin-left: 38px !important; } .main-addButton-button.main-trackList-rowHeartButton, .main-addButton-button.main-trackList-rowHeartButton { position: absolute !important; left: 48px !important; }"
   }
 ]
