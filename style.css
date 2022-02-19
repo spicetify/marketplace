@@ -7,19 +7,6 @@
   display: flex;
   justify-content: space-between;
   margin: 16px 0;
-  position: sticky;
-  flex-direction: row-reverse;
-  top: 80px;
-  z-index: 1;
-}
-.marketplace-header h1 {
-  position: fixed;
-  left: 16px;
-}
-@media (min-width: 1024px) {
-  .marketplace-header h1 {
-    left: 32px;
-  }
 }
 
 .marketplace-header__right {
@@ -280,6 +267,17 @@ button.arrow-btn.small {
 }
 button.arrow-btn.disabled, button.arrow-btn[disabled] {
   color: rgba(var(--spice-rgb-text), 0.3);
+}
+
+.marketplace-settings-textarea {
+  width: 100%;
+  resize: none;
+  border: 1px solid var(--spice-button);
+  border-radius: 4px;
+  padding: 5px;
+  font-size: 14px;
+  color: var(--spice-text);
+  background-color: var(--spice-main);
 }
 /* Need to hijack height because .GenericModal has it set to 90% via style attr... */
 .GenericModal[aria-label="Reload required"] {

@@ -15,6 +15,7 @@
       pointer-events: none;
     }
   }
+ 
 }
 
 .setting-row {
@@ -63,4 +64,14 @@ button.arrow-btn {
   &[disabled] {
     color: rgba(var(--spice-rgb-text), .3);
   }
+}
+.marketplace-settings-textarea{
+    width: 100%;
+    resize: none;
+    border: 1px solid var(--spice-button);
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+    color: var(--spice-text);
+    background-color: var(--spice-main);
 }

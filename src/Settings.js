@@ -17,16 +17,6 @@ function openConfig() {
 
     CONFIG.tabsElement = {};
 
-    configContainer = document.createElement("div");
-    configContainer.id = "marketplace-config-container";
-
-    const customCSSHeader = document.createElement("h2");
-    customCSSHeader.innerText = "Custom CSS";
-    configContainer.append(customCSSHeader);
-    configContainer.append(createCustomCssOption());
-    // TODO: Create a better method for this (Probably will have to use mutation observer?)
-    setTimeout(() => {addCustomCssListeners();}, 5000);
-
     const optionHeader = document.createElement("h2");
     optionHeader.innerText = "Options";
 
@@ -106,7 +96,13 @@ function openConfig() {
         );
     });
     stackTabElements();
+    configContainer = document.createElement("div");
+    configContainer.id = "marketplace-config-container";
 
+    const customCSSHeader = document.createElement("h2");
+    customCSSHeader.innerText = "Custom CSS";
+
+    
     // Reset Marketplace section
     const resetHeader = document.createElement("h2");
     resetHeader.innerText = "Reset Marketplace";
@@ -144,10 +140,13 @@ function openConfig() {
         // createSlider("Post type", "type"),
         tabsHeader,
         tabsContainer,
+        customCSSHeader,
+        createCustomCssOption(),
         resetHeader,
         resetContainer,
     );
-
+    // TODO: Create a better method for this (Probably will have to use mutation observer?)
+    setTimeout(() => { addCustomCssListeners(); }, 5000);
     triggerModal();
 
     const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn");
@@ -235,10 +234,10 @@ function createTabOption(id, posCallback, toggleCallback) {
 function createCustomCssOption() {
     const container = document.createElement("div");
     container.innerHTML = `
-<textarea id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find the in the installed tab for management."></textarea>
+<textarea class="marketplace-settings-textarea"id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find the in the installed tab for management."></textarea>
   <br><br>
-  <textarea id"marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" rows="1" cols="50" placeholder="Input a name for your custom CSS. This will be used to identify your custom CSS in the installed tab."></textarea>
-  <button value="Submit" id="marketplace-customCSS-submit">Submit CSS</button>
+  <textarea class="marketplace-settings-textarea"id="marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" rows="1" cols="50" placeholder="Input a name for your custom CSS."></textarea>
+  <button value="Submit" class="main-buttons-button main-button-secondary" id="marketplace-customCSS-submit">Submit CSS</button>
     `;
     return container;
 }
