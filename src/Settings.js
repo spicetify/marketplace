@@ -101,8 +101,6 @@ function openConfig() {
 
     const customCSSHeader = document.createElement("h2");
     customCSSHeader.innerText = "Custom CSS";
-
-    
     // Reset Marketplace section
     const resetHeader = document.createElement("h2");
     resetHeader.innerText = "Reset Marketplace";
@@ -244,7 +242,7 @@ function createCustomCssOption() {
 function addCustomCssListeners() {
     console.log("Adding listeners");
     const textarea = document.querySelector("#marketplace-custom-css");
-    const nameArea = document.querySelector("#marketplace-config-container > div:nth-child(2) > textarea:nth-child(4)");
+    const nameArea = document.querySelector("#marketplace-customCSS-name-submit");
     const submit = document.querySelector("#marketplace-customCSS-submit");
     console.log(submit);
     submit.addEventListener("click", function (event) {
@@ -254,11 +252,11 @@ function addCustomCssListeners() {
         // @ts-ignore
         let name = nameArea.value;
         name = name.replace(/\n/g, "");
-        if (getLocalStorageDataFromKey(`marketplace:customCSS:${name}`)) {
+        if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${name}`)) {
             alert("That name is already taken!");
             return;
         }
-        let localStorageKey = `marketplace:customCSS:${ name }`;
+        let localStorageKey = `marketplace:installed:snippet:${ name }`;
         let description = "User added CSS";
         console.log(`Installing snippet ${name}`);
         localStorage.setItem(localStorageKey, JSON.stringify({
@@ -275,8 +273,6 @@ function addCustomCssListeners() {
         }
         const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
         initializeSnippets(installedSnippets);
-
-        this.setState({ installed: true });
 
         event.preventDefault();
     }, false);

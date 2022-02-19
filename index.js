@@ -285,7 +285,6 @@ class Grid extends react.Component {
                     installedStuff[type].forEach(async (itemKey) => {
                         // TODO: err handling
                         const extension = JSON.parse(localStorage.getItem(itemKey));
-
                         // I believe this stops the requests when switching tabs?
                         if (requestQueue.length > 1 && queue !== requestQueue[0]) {
                             // Stop this queue from continuing to fetch and append to cards list
