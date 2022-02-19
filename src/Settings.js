@@ -26,7 +26,6 @@ function openConfig() {
     const tabsContainer = document.createElement("div");
 
     function stackTabElements() {
-
         CONFIG.tabs.forEach(({ name }, index) => {
             const el = CONFIG.tabsElement[name];
 
@@ -66,7 +65,6 @@ function openConfig() {
     }
 
     function toggleCallback(el) {
-
         const id = el.dataset.id;
         const slider = el.querySelector("input[type='checkbox']");
 
@@ -229,40 +227,40 @@ function createTabOption(id, posCallback, toggleCallback) {
 
     return container;
 }
+
 function createCustomCssOption() {
     const container = document.createElement("div");
     container.innerHTML = `
-<textarea class="marketplace-settings-textarea"id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find the in the installed tab for management."></textarea>
-  <br><br>
-  <textarea class="marketplace-settings-textarea"id="marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" rows="1" cols="50" placeholder="Input a name for your custom CSS."></textarea>
-  <button value="Submit" class="main-buttons-button main-button-secondary" id="marketplace-customCSS-submit">Submit CSS</button>
+    <textarea class="marketplace-settings-textarea" id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find them in the installed tab for management."></textarea>
+    <br><br>
+    <textarea class="marketplace-settings-textarea" id="marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" rows="1" cols="50" placeholder="Input a name for your custom CSS."></textarea>
+    <button value="Submit" class="main-buttons-button main-button-secondary" id="marketplace-customCSS-submit">Submit CSS</button>
     `;
     return container;
 }
+
 function addCustomCssListeners() {
-    console.log("Adding listeners");
     const textarea = document.querySelector("#marketplace-custom-css");
     const nameArea = document.querySelector("#marketplace-customCSS-name-submit");
     const submit = document.querySelector("#marketplace-customCSS-submit");
-    console.log(submit);
+
     submit.addEventListener("click", function (event) {
         // @ts-ignore
-        let code = textarea.value;
-        code = code.replace(/\n/g, "");
+        const code = textarea.value.replace(/\n/g, "");
         // @ts-ignore
-        let name = nameArea.value;
-        name = name.replace(/\n/g, "");
-        if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${name}`)) {
+        const name = nameArea.value.replace(/\n/g, "");
+        const description = "User-added CSS";
+        const localStorageKey = `marketplace:installed:snippet:${name}`;
+        if (getLocalStorageDataFromKey(localStorageKey)) {
             alert("That name is already taken!");
             return;
         }
-        let localStorageKey = `marketplace:installed:snippet:${ name }`;
-        let description = "User added CSS";
-        console.log(`Installing snippet ${name}`);
+
+        console.log(`Installing snippet: ${name}`);
         localStorage.setItem(localStorageKey, JSON.stringify({
-            code: code,
+            code,
+            description,
             title: name,
-            description: description,
         }));
 
         // Add to installed list if not there already
