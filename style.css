@@ -7,6 +7,19 @@
   display: flex;
   justify-content: space-between;
   margin: 16px 0;
+  position: sticky;
+  flex-direction: row-reverse;
+  top: 80px;
+  z-index: 1;
+}
+.marketplace-header h1 {
+  position: fixed;
+  left: 16px;
+}
+@media (min-width: 1024px) {
+  .marketplace-header h1 {
+    left: 32px;
+  }
 }
 
 .marketplace-header__right {
@@ -203,17 +216,6 @@
   color: var(--spice-text);
 }
 
-#marketplace-config-container input {
-  width: 100%;
-  margin-top: 10px;
-  padding: 0 5px;
-  height: 32px;
-  border: 0;
-  color: var(--spice-text);
-  background-color: initial;
-  border-bottom: 1px solid var(--spice-text);
-}
-
 option {
   background-color: var(--spice-button);
 }
@@ -269,15 +271,15 @@ button.arrow-btn.disabled, button.arrow-btn[disabled] {
   color: rgba(var(--spice-rgb-text), 0.3);
 }
 
-.marketplace-settings-textarea {
+#marketplace-config-container input, textarea {
   width: 100%;
-  resize: none;
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  background-color: var(--spice-main);
+  color: var(--spice-text);
+  font-size: 14px;
   border: 1px solid var(--spice-button);
   border-radius: 4px;
-  padding: 5px;
-  font-size: 14px;
-  color: var(--spice-text);
-  background-color: var(--spice-main);
 }
 /* Need to hijack height because .GenericModal has it set to 90% via style attr... */
 .GenericModal[aria-label="Reload required"] {

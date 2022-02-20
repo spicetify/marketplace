@@ -231,24 +231,24 @@ function createTabOption(id, posCallback, toggleCallback) {
 function createCustomCssOption() {
     const container = document.createElement("div");
     container.innerHTML = `
-    <textarea class="marketplace-settings-textarea" id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find them in the installed tab for management."></textarea>
-    <br><br>
-    <textarea class="marketplace-settings-textarea" id="marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" rows="1" cols="50" placeholder="Input a name for your custom CSS."></textarea>
-    <button value="Submit" class="main-buttons-button main-button-secondary" id="marketplace-customCSS-submit">Submit CSS</button>
+    <textarea id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find them in the installed tab for management."></textarea>
+    <br>
+    <input type="text" id="marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" placeholder="Input a name for your custom CSS." />
+    <button value="Submit" class="main-buttons-button main-button-secondary" id="marketplace-customCSS-submit">Save CSS</button>
     `;
     return container;
 }
 
 function addCustomCssListeners() {
-    const textarea = document.querySelector("#marketplace-custom-css");
-    const nameArea = document.querySelector("#marketplace-customCSS-name-submit");
-    const submit = document.querySelector("#marketplace-customCSS-submit");
+    const textarea = document.getElementById("marketplace-custom-css");
+    const nameInput = document.getElementById("marketplace-customCSS-name-submit");
+    const submitBtn = document.getElementById("marketplace-customCSS-submit");
 
-    submit.addEventListener("click", function (event) {
+    submitBtn.addEventListener("click", function(event) {
         // @ts-ignore
         const code = textarea.value.replace(/\n/g, "");
         // @ts-ignore
-        const name = nameArea.value.replace(/\n/g, "");
+        const name = nameInput.value.replace(/\n/g, "");
         const description = "User-added CSS";
         const localStorageKey = `marketplace:installed:snippet:${name}`;
         if (getLocalStorageDataFromKey(localStorageKey)) {
