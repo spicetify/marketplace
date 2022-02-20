@@ -353,7 +353,7 @@ async function loadPageRecursive(type, pageNum) {
 }
 
 (async function initializePreload() {
-    console.log("Preloading Extensions and Themes");
+    console.log("Preloading extensions and themes...");
     window.sessionStorage.clear();
     const BLACKLIST = await Blacklist();
     window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
@@ -362,9 +362,8 @@ async function loadPageRecursive(type, pageNum) {
     // The recursion isn't super clean...
 
     // Begin by getting the themes and extensions from github
-    const [extensionReposArray, themeReposArray] = await Promise.all([
-        // queryExtensionRepos(),
-        // queryThemeRepos(),
+    // const [extensionReposArray, themeReposArray] = await Promise.all([
+    await Promise.all([
         loadPageRecursive("extension", 1),
         loadPageRecursive("theme", 1),
     ]);
