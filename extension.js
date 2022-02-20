@@ -297,38 +297,59 @@ const getParamsFromGithubRaw = (url) => {
 
 const ITEMS_PER_REQUEST = 100;
 
-async function queryThemeRepos() {
-    const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
-    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-    if (!allRepos.items) {
-        Spicetify.showNotification("Too Many Requests, Cool Down.");
-    }
-    const filteredResults = {
-        ...allRepos,
-        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
-    };
-    return filteredResults;
-}
-
-async function queryExtensionRepos() {
-    const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
-    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-    if (!allRepos.items) {
-        Spicetify.showNotification("Too Many Requests, Cool Down.");
-    }
-    const filteredResults = {
-        ...allRepos,
-        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
-    };
-    return filteredResults;
-}
-
 async function Blacklist() {
     const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
     return jsonReturned.repos;
+}
+
+/**
+ * TODO
+ * @param {"theme"|"extension"} type The repo type
+ * @param {number} pageNum The page number
+ * @returns TODO
+ */
+async function queryRepos(type, pageNum = 1) {
+    const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
+
+    let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
+    if (type === "extension") url += `&q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
+    if (pageNum) url += `&page=${pageNum}`;
+
+    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
+
+    const filteredResults = {
+        ...allRepos,
+        page_count: allRepos.items.length,
+        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
+
+    return filteredResults;
+}
+
+/**
+ * TODO
+ * @param {"theme"|"extension"} type The repo type
+ * @param {number} pageNum The page number
+ * @returns TODO
+ */
+async function loadPageRecursive(type, pageNum) {
+    const pageOfRepos = await queryRepos(type, pageNum);
+    appendInformationToLocalStorage(pageOfRepos, type);
+
+    // Sets the amount of items that have thus been fetched
+    const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
+    console.log({ pageOfRepos });
+    const remainingResults = pageOfRepos.total_count - soFarResults;
+
+    // If still have more results, recursively fetch next page
+    console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
+    if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
+    else console.log(`No more ${type} results`);
 }
 
 (async function initializePreload() {
@@ -336,13 +357,29 @@ async function Blacklist() {
     window.sessionStorage.clear();
     const BLACKLIST = await Blacklist();
     window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
+
+    // TODO: does this work?
+    // The recursion isn't super clean...
+
     // Begin by getting the themes and extensions from github
     const [extensionReposArray, themeReposArray] = await Promise.all([
-        queryExtensionRepos(),
-        queryThemeRepos(),
+        // queryExtensionRepos(),
+        // queryThemeRepos(),
+        loadPageRecursive("extension", 1),
+        loadPageRecursive("theme", 1),
     ]);
-    appendInformationToLocalStorage(themeReposArray, "theme");
-    appendInformationToLocalStorage(extensionReposArray, "extension");
+
+    // let extensionsNextPage = 1;
+    // let themesNextPage = 1;
+    // do {
+    //     extensionReposArray = await loadPage("extension", extensionsNextPage);
+    //     appendInformationToLocalStorage(extensionReposArray, "extension");
+    // } while (extensionsNextPage);
+
+    // do {
+    //     themeReposArray = await loadPage("theme", themesNextPage);
+    //     appendInformationToLocalStorage(themeReposArray, "theme");
+    // } while (themesNextPage);
 })();
 
 async function appendInformationToLocalStorage(array, type) {
