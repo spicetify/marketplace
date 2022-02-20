@@ -321,3 +321,180 @@ const getParamsFromGithubRaw = (url) => {
     const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
     installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
+
+const ITEMS_PER_REQUEST = 100;
+
+async function Blacklist() {
+    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
+    const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
+    return jsonReturned.repos;
+}
+
+/**
+ * TODO
+ * @param {"theme"|"extension"} type The repo type
+ * @param {number} pageNum The page number
+ * @returns TODO
+ */
+async function queryRepos(type, pageNum = 1) {
+    const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
+
+    let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
+    if (type === "extension") url += `&q=${encodeURIComponent("topic:spicetify-extensions")}`;
+    else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
+    if (pageNum) url += `&page=${pageNum}`;
+
+    const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+    if (!allRepos.items) {
+        Spicetify.showNotification("Too Many Requests, Cool Down.");
+    }
+
+    const filteredResults = {
+        ...allRepos,
+        page_count: allRepos.items.length,
+        items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    };
+
+    return filteredResults;
+}
+
+/**
+ * TODO
+ * @param {"theme"|"extension"} type The repo type
+ * @param {number} pageNum The page number
+ * @returns TODO
+ */
+async function loadPageRecursive(type, pageNum) {
+    const pageOfRepos = await queryRepos(type, pageNum);
+    appendInformationToLocalStorage(pageOfRepos, type);
+
+    // Sets the amount of items that have thus been fetched
+    const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
+    console.log({ pageOfRepos });
+    const remainingResults = pageOfRepos.total_count - soFarResults;
+
+    // If still have more results, recursively fetch next page
+    console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
+    if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
+    else console.log(`No more ${type} results`);
+}
+
+(async function initializePreload() {
+    console.log("Preloading extensions and themes...");
+    window.sessionStorage.clear();
+    const BLACKLIST = await Blacklist();
+    window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
+
+    // TODO: does this work?
+    // The recursion isn't super clean...
+
+    // Begin by getting the themes and extensions from github
+    // const [extensionReposArray, themeReposArray] = await Promise.all([
+    await Promise.all([
+        loadPageRecursive("extension", 1),
+        loadPageRecursive("theme", 1),
+    ]);
+
+    // let extensionsNextPage = 1;
+    // let themesNextPage = 1;
+    // do {
+    //     extensionReposArray = await loadPage("extension", extensionsNextPage);
+    //     appendInformationToLocalStorage(extensionReposArray, "extension");
+    // } while (extensionsNextPage);
+
+    // do {
+    //     themeReposArray = await loadPage("theme", themesNextPage);
+    //     appendInformationToLocalStorage(themeReposArray, "theme");
+    // } while (themesNextPage);
+})();
+
+async function appendInformationToLocalStorage(array, type) {
+    // This system should make it so themes and extensions are stored concurrently
+    for (const repo of array.items) {
+        const data = (type === "theme")
+            ? await fetchThemeManifest(repo.contents_url, repo.default_branch)
+            : await fetchExtensionManifest(repo.contents_url, repo.default_branch);
+        if (data) {
+            addToSessionStorage(data);
+            await sleep(5000);
+        }
+    }
+}
+
+// This function is used to fetch manifest of a theme and return it
+async function fetchThemeManifest(contents_url, branch) {
+    try {
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        let { user, repo } = regex_result.groups;
+        let manifests = await getRepoManifest(user, repo, branch);
+        // If the manifest returned is not an array, initialize it as one
+        if (!Array.isArray(manifests)) manifests = [manifests];
+        manifests.user = user;
+        manifests.repo = repo;
+        if (manifests[0] && manifests[0].name && manifests[0].usercss && manifests[0].description) {
+            return manifests;
+        }
+        return null;
+    }
+    catch (err) {
+        // console.warn(contents_url, err);
+        return null;
+    }
+}
+
+// This function is used to fetch manifest of an extension and return it
+async function fetchExtensionManifest(contents_url, branch) {
+    try {
+        // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
+        const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+        // TODO: err handling?
+        if (!regex_result || !regex_result.groups) return null;
+        const { user, repo } = regex_result.groups;
+        let manifests = await getRepoManifest(user, repo, branch);
+        // If the manifest returned is not an array, initialize it as one
+        if (!Array.isArray(manifests)) manifests = [manifests];
+        manifests.user = user;
+        manifests.repo = repo;
+        if (manifests[0] && manifests[0].name && manifests[0].description && manifests[0].main) {
+            return manifests;
+        }
+        return null;
+    }
+    catch (err) {
+        // console.warn(contents_url, err);
+        return null;
+    }
+}
+
+async function getRepoManifest(user, repo, branch) {
+    const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
+    const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
+    if (sessionStorageItem) {
+        return null;
+    }
+    const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+    if (failedSessionStorageItems?.includes(url)) {
+        return null;
+    }
+    return await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
+}
+
+// This function appends an array to session storage
+function addToSessionStorage(items, key) {
+    if (!items || items == null) return;
+    items.forEach(item => {
+        if (!key) key = `${items.user}-${items.repo}`;
+        // If the key already exists, it will append to it instead of overwriting it
+        const existing = window.sessionStorage.getItem(key);
+        const parsed = existing ? JSON.parse(existing) : [];
+        parsed.push(item);
+        window.sessionStorage.setItem(key, JSON.stringify(parsed));
+    });
+}
+
+// This function is used to sleep for a certain amount of time
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
