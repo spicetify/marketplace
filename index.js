@@ -447,12 +447,12 @@ class Grid extends react.Component {
     }
 
     /**
-  * The componentDidMount() method is called when the component is first loaded.
-  * It checks if the cardList is already loaded. If it is, it checks if the lastScroll value is
- greater than 0.
-  * If it is, it scrolls to the lastScroll value. If it isn't, it scrolls to the top of the page.
-  * If the cardList isn't loaded, it loads the cardList.
-  */
+     * The componentDidMount() method is called when the component is first loaded.
+     * It checks if the cardList is already loaded. If it is, it checks if the lastScroll value is
+     greater than 0.
+    * If it is, it scrolls to the lastScroll value. If it isn't, it scrolls to the top of the page.
+    * If the cardList isn't loaded, it loads the cardList.
+    */
     async componentDidMount() {
         gridUpdateTabs = this.updateTabs.bind(this);
         gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
@@ -474,9 +474,9 @@ class Grid extends react.Component {
     }
 
     /**
-  * When the component is unmounted, remove the scroll event listener.
-  * @returns {void}
-  */
+     * When the component is unmounted, remove the scroll event listener.
+     * @returns {void}
+     */
     componentWillUnmount() {
         gridUpdateTabs = gridUpdatePostsVisual = null;
         const viewPort = document.querySelector("main .os-viewport");
@@ -485,10 +485,10 @@ class Grid extends react.Component {
     }
 
     /**
-   * If the user has scrolled to the bottom of the page, load more posts.
-   * @param event - The event object that is passed to the callback function.
-   * @returns {void}
-   */
+     * If the user has scrolled to the bottom of the page, load more posts.
+     * @param event - The event object that is passed to the callback function.
+     * @returns {void}
+     */
     isScrolledBottom(event) {
         const viewPort = event.target;
         if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
@@ -563,6 +563,11 @@ class Grid extends react.Component {
                 textAlign: "center",
             },
         }, !this.state.endOfList && (this.state.rest ? react.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : react.createElement(LoadingIcon)),
+        // Add snippets button if on snippets tab
+        CONFIG.activeTab === "Snippets" ? react.createElement("button", {
+            className: "marketplace-add-snippet-btn main-buttons-button main-button-secondary",
+            onClick: openAddSnippetModal,
+        }, "+Add CSS") : null,
         ), react.createElement(TopBarContent, {
             switchCallback: this.switchTo.bind(this),
             links: CONFIG.tabs,

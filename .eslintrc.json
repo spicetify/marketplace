@@ -76,6 +76,7 @@
         "CONFIG": "writable",
         "openConfig": "writable",
         "openReloadModal": "writable",
+        "openAddSnippetModal": "writable",
         "sortConfig": "writable",
         "gridUpdateTabs": "writable",
         "gridUpdatePostsVisual": "writable",

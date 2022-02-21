@@ -236,3 +236,10 @@
 option {
   background-color: var(--spice-button);
 }
+
+// "Add CSS" button
+.marketplace-add-snippet-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+}
