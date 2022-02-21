@@ -2,6 +2,8 @@
 
 Download extensions and themes directly from within [Spicetify](https://github.com/khanhas/spicetify-cli). 
 
+Made by [@theRealpadster](https://github.com/theRealPadster) and [@CharlieS1103](https://github.com/CharlieS1103).
+
 Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/Custom-Apps#reddit)
 
 <p align="center">
