@@ -70,7 +70,12 @@ Then run:
 ```
 spicetify apply
 ```
-
+## Manual reset
+If you lose access to the marketplace page, and therefore cannot access the setting, follow these steps: 
+- First ensure you have dev-tools enabled by running ``spicetify enable-devtool apply``
+- Open up console by right clicking anywhere on Spotify (that isn't an element), and clicking inspect element.
+- Click the console tab in the devtools window that appears, and run the following command(in console)
+- ``Marketplace.reset()``
 ## Getting your extension/theme on Marketplace
 In order to show up in the custom app, you'll need to make a public GitHub repo that meets these requirements:
 * Have the matching **GitHub topic tag** ("**spicetify-extensions**" or "**spicetify-themes**")
