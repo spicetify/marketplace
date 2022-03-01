@@ -1,4 +1,4 @@
-name: Malicious extension report
+name: 🦠 Malicious extension report
 description: Submit any malicious extensions and we can add them to the denylist.
 labels: [🦠 malicious extension]
 body:
