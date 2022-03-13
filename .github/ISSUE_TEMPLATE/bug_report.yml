@@ -4,15 +4,8 @@ labels: [🐛 bug]
 body:
   - type: checkboxes
     attributes:
-      label: 🔍 Have you checked Spicetify.app page for your issue?
-      description: Please read the <a href="https://spicetify.app/docs/faq">FAQ</a> for steps to resolve common issues.
-      options:
-        - label: I have checked the FAQ
-          required: true
-  - type: checkboxes
-    attributes:
       label: 🔍 Is there already an issue for your problem?
-      description: Please make sure you are not creating an already submitted <a href="https://github.com/khanhas/spicetify-cli/issues">Issue</a>. Check closed issues as well, because your issue may have already been fixed.
+      description: Please make sure you are not creating an already submitted <a href="https://github.com/spicetify/spicetify-marketplace/issues">Issue</a>. Check closed issues as well, because your issue may have already been fixed.
       options:
         - label: I have checked older issues, open and closed
           required: true
@@ -21,7 +14,7 @@ body:
       label: ℹ Environment / Computer Info
       description: Please provide the details of the system Spicetify is running on.
       value: |
-        - Spotify version: 
+        - Spotify version:
         - Spicetify version:
       placeholder: |
         - Spotify version: Spotify for macOS (Apple Silicon) 1.1.77.643.g3c4c6fc6
