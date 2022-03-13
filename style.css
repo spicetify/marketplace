@@ -1081,6 +1081,14 @@ It should fix broken extension modals
 .GenericModal {
   background-color: var(--spice-player);
 }
+#marketplace-add-snippet-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#marketplace-customCSS-submit {
+  margin-left: auto;
+}
 /*
     TODOs:
     - We might want to customize/scope the css classes etc
