@@ -216,14 +216,19 @@
   color: var(--spice-text);
 }
 
-option {
-  background-color: var(--spice-button);
+#marketplace-config-container input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0 5px;
+  height: 32px;
+  border: 0;
+  color: var(--spice-text);
+  background-color: initial;
+  border-bottom: 1px solid var(--spice-text);
 }
 
-.marketplace-add-snippet-btn {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
+option {
+  background-color: var(--spice-button);
 }
 .GenericModal[aria-label=Marketplace] .main-embedWidgetGenerator-container {
   background-color: var(--spice-tab-active);
@@ -345,9 +350,10 @@ button.arrow-btn.disabled, button.arrow-btn[disabled] {
   --select-arrow: url("data:image/svg+xml;charset=utf-8,%3C?xml version='1.0' encoding='utf-8'?%3E %3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' height='62.5' width='116.9' fill='%23efefef'%3E %3Cpath d='M115.3,1.6 C113.7,0 111.1,0 109.5,1.6 L58.5,52.7 L7.4,1.6 C5.8,0 3.2,0 1.6,1.6 C0,3.2 0,5.8 1.6,7.4 L55.5,61.3 C56.3,62.1 57.3,62.5 58.4,62.5 C59.4,62.5 60.5,62.1 61.3,61.3 L115.2,7.4 C116.9,5.8 116.9,3.2 115.3,1.6Z'/%3E %3C/svg%3E");
 }
 #marketplace-readme {
-  /**
-  * Forced dark theme version
-  */
+  user-select: text;
+  /*
+   * Forced dark theme version
+   */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   line-height: 1.4;
   max-width: 800px;
@@ -1080,14 +1086,6 @@ It should fix broken extension modals
 */
 .GenericModal {
   background-color: var(--spice-player);
-}
-#marketplace-add-snippet-container {
-  display: flex;
-  flex-direction: column;
-}
-
-#marketplace-customCSS-submit {
-  margin-left: auto;
 }
 /*
     TODOs:

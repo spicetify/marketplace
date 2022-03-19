@@ -349,6 +349,29 @@ class Card extends react.Component {
         }
     }
 
+    generateAuthorsDiv() {
+        // Add a div with author links inside
+        const authorsDiv = (
+            react.createElement("div", { className: "marketplace-card__authors" },
+                this.authors.map((author) => {
+                    return (
+                        react.createElement("a", {
+                            title: author.name,
+                            className: "marketplace-card__author",
+                            href: author.url,
+                            draggable: false,
+                            dir: "auto",
+                            target: "_blank",
+                            rel: "noopener noreferrer",
+                        }, author.name)
+                    );
+                }),
+            )
+        );
+
+        return authorsDiv;
+    }
+
     render() {
         // Cache this for performance
         let IS_INSTALLED = this.isInstalled();
@@ -413,12 +436,7 @@ class Card extends react.Component {
             as: "div",
         },
         // Add authors if they exist
-        this.authors && this.authors.map((author) => react.createElement("a", {
-            title: author.name,
-            draggable: "false",
-            dir: "auto",
-            href: author.url,
-        }, author.name)),
+        this.authors && this.generateAuthorsDiv(),
         react.createElement("span", null, detail.join(" ‒ ")),
         ), react.createElement("p", {
             className: "marketplace-card-desc",

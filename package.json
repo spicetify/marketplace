@@ -25,11 +25,11 @@
     "node": ">=16"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0",
-    "@types/react": "^17.0.37",
+    "@parcel/transformer-sass": "^2.3.2",
+    "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.11",
-    "eslint": "^8.8.0",
-    "eslint-plugin-react": "^7.27.1",
-    "parcel": "^2.2.1"
+    "eslint": "^8.11.0",
+    "eslint-plugin-react": "^7.29.3",
+    "parcel": "^2.3.2"
   }
 }

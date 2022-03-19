@@ -81,9 +81,12 @@
 }
 
 #marketplace-readme {
-  /**
- * Forced dark theme version
- */
+  // Allow selecting text
+  user-select: text;
+
+  /*
+   * Forced dark theme version
+   */
 
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',

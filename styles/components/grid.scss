@@ -156,6 +156,15 @@
       display: flex;
       flex-direction: column;
 
+      .marketplace-card__author {
+        // Add comma before authors that have a sibling
+        & ~ .marketplace-card__author {
+          &::before {
+            content: ", ";
+          }
+        }
+      }
+
       .marketplace-card-desc {
         font: -webkit-small-control;
         margin: 12px 0;

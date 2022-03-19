@@ -33,5 +33,25 @@
     "title": "Fix progress bar displacement",
     "description": "Fix the progress bar displacement when listening on different devices",
     "code": ".main-connectBar-connectBar { overflow: visible !important; --triangle-position: 147px !important; align-items: unset !important; height: 0px !important; position: absolute !important; left: 80% !important; display: flex !important; bottom: 2% !important; padding: unset !important; }"
+  },
+  {
+    "title": "Fix playlist arrows",
+    "description": "Fixes the opened and closed orientation of the playlist folder arrows",
+    "code": ".main-rootlist-expandArrow { -webkit-transform: rotate(-90deg) !important; transform: rotate(-90deg) !important; } .main-rootlist-expandArrow:hover { -webkit-transform: rotate(-90deg) !important; transform: rotate(-90deg) !important; } .qAAhQw9dXNB7DbPgDDxy { -webkit-transform: rotate(0deg) !important; transform: rotate(0deg) !important; } .qAAhQw9dXNB7DbPgDDxy:hover { -webkit-transform: rotate(0deg) !important; transform: rotate(0deg) !important; }"
+  },
+  {
+    "title": "Fix main view width",
+    "description": "Makes main view fill up all available space",
+    "code": ".contentSpacing { max-width: 100% !important; }"
+  },
+  {
+    "title": "Left aligned heart icons",
+    "description": "Moves the heart icon to the left side of the track title in track views",
+    "code": ".main-trackList-rowSectionStart { margin-left: 38px !important; } .main-addButton-button.main-trackList-rowHeartButton, .main-addButton-button.main-trackList-rowHeartButton { position: absolute !important; left: 48px !important; }"
+  },
+  {
+    "title": "Disable Hover Panels [comfy-shadow]",
+    "description": "For comfy shadow this disables the hovering of panels and bars.",
+    "code": "nav.Root__nav-bar { position: inherit !important; width: calc(var(--nav-bar-width) + 9px) !important; opacity: 1 !important; transition: none !important; } nav.Root__nav-bar:hover { position: inherit !important; width: calc(var(--nav-bar-width) + 9px) !important; opacity: 1 !important; transition: none !important; } .LayoutResizer__resize-bar { cursor: col-resize !important; } .Root__top-bar{ opacity: 1 !important; transition: none !important; } .Root__top-bar:hover { transition-delay: none !important; opacity: 1 !important; transition: none !important; } .main-topBar-container { padding-left: 32px !important; } aside.main-buddyFeed-buddyFeedRoot:hover { position: relative !important; width: var(--buddy-feed-width) !important; opacity: 1 !important; bottom: 0 !important; left: 0 !important; top: 0 !important; z-index: 1 !important; } aside.main-buddyFeed-buddyFeedRoot { position: relative !important; width: var(--buddy-feed-width) !important; opacity: 1 !important; bottom: 0 !important; left: 0 !important; top: 0 !important; z-index: 1 !important; }"
   }
 ]

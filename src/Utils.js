@@ -146,3 +146,19 @@ const fetchCssSnippets = async () => {
     const json = await fetch(url).then(res => res.json()).catch(() => { });
     return json;
 };
+
+// Reset any Marketplace localStorage keys (effectively resetting it completely)
+const resetMarketplace = () => {
+    console.log("Resetting Marketplace");
+
+    // Loop through and reset marketplace keys
+    Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith("marketplace:")) {
+            localStorage.removeItem(key);
+            console.log(`Removed ${key}`);
+        }
+    });
+
+    console.log("Marketplace has been reset");
+    location.reload();
+};
