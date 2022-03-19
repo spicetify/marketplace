@@ -148,9 +148,6 @@
   display: flex;
   flex-direction: column;
 }
-#marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__author ~ .marketplace-card__author::before {
-  content: ", ";
-}
 #marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card-desc {
   font: -webkit-small-control;
   margin: 12px 0;
@@ -283,6 +280,17 @@ button.arrow-btn.small {
 }
 button.arrow-btn.disabled, button.arrow-btn[disabled] {
   color: rgba(var(--spice-rgb-text), 0.3);
+}
+
+#marketplace-add-snippet-container input, textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  background-color: var(--spice-main);
+  color: var(--spice-text);
+  font-size: 14px;
+  border: 1px solid var(--spice-button);
+  border-radius: 4px;
 }
 /* Need to hijack height because .GenericModal has it set to 90% via style attr... */
 .GenericModal[aria-label="Reload required"] {

@@ -11,6 +11,7 @@
         "src/Settings.js",
         "src/ReadmePage.js",
         "src/ReloadModal.js",
+        "src/AddSnippetModal.js",
         "src/Utils.js"
     ],
     "subfiles_extension": [

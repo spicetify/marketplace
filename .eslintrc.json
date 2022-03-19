@@ -80,6 +80,7 @@
         "gridUpdatePostsVisual": "writable",
         "openConfig": "writable",
         "openReloadModal": "writable",
+        "openAddSnippetModal": "writable",
         "sortConfig": "writable",
 
         "hexToRGB": "readonly",

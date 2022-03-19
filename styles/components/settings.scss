@@ -64,3 +64,15 @@ button.arrow-btn {
     color: rgba(var(--spice-rgb-text), .3);
   }
 }
+
+// Add snippet modal
+#marketplace-add-snippet-container input, textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  background-color: var(--spice-main);
+  color: var(--spice-text);
+  font-size: 14px;
+  border: 1px solid var(--spice-button);
+  border-radius: 4px;
+}
