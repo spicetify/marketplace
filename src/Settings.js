@@ -97,8 +97,6 @@ function openConfig() {
     configContainer = document.createElement("div");
     configContainer.id = "marketplace-config-container";
 
-    const customCSSHeader = document.createElement("h2");
-    customCSSHeader.innerText = "Custom CSS";
     // Reset Marketplace section
     const resetHeader = document.createElement("h2");
     resetHeader.innerText = "Reset Marketplace";
@@ -123,13 +121,10 @@ function openConfig() {
         // createSlider("Post type", "type"),
         tabsHeader,
         tabsContainer,
-        customCSSHeader,
-        createCustomCssOption(),
         resetHeader,
         resetContainer,
     );
-    // TODO: Create a better method for this (Probably will have to use mutation observer?)
-    setTimeout(() => { addCustomCssListeners(); }, 5000);
+
     triggerModal();
 
     const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn");
@@ -213,52 +208,4 @@ function createTabOption(id, posCallback, toggleCallback) {
     toggle.onchange = () => toggleCallback(container);
 
     return container;
-}
-
-function createCustomCssOption() {
-    const container = document.createElement("div");
-    container.innerHTML = `
-    <textarea id="marketplace-custom-css" name="marketplace-custom-css" rows="4" cols="50" placeholder="Input your own custom CSS Here! You can find them in the installed tab for management."></textarea>
-    <br>
-    <input type="text" id="marketplace-customCSS-name-submit" name="marketplace-customCSS-name-submit" placeholder="Input a name for your custom CSS." />
-    <button value="Submit" class="main-buttons-button main-button-secondary" id="marketplace-customCSS-submit">Save CSS</button>
-    `;
-    return container;
-}
-
-function addCustomCssListeners() {
-    const textarea = document.getElementById("marketplace-custom-css");
-    const nameInput = document.getElementById("marketplace-customCSS-name-submit");
-    const submitBtn = document.getElementById("marketplace-customCSS-submit");
-
-    submitBtn.addEventListener("click", function(event) {
-        // @ts-ignore
-        const code = textarea.value.replace(/\n/g, "");
-        // @ts-ignore
-        const name = nameInput.value.replace(/\n/g, "");
-        const description = "User-added CSS";
-        const localStorageKey = `marketplace:installed:snippet:${name}`;
-        if (getLocalStorageDataFromKey(localStorageKey)) {
-            alert("That name is already taken!");
-            return;
-        }
-
-        console.log(`Installing snippet: ${name}`);
-        localStorage.setItem(localStorageKey, JSON.stringify({
-            code,
-            description,
-            title: name,
-        }));
-
-        // Add to installed list if not there already
-        const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-        if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
-            installedSnippetKeys.push(localStorageKey);
-            localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
-        }
-        const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-        initializeSnippets(installedSnippets);
-
-        event.preventDefault();
-    }, false);
 }

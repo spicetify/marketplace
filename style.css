@@ -148,6 +148,9 @@
   display: flex;
   flex-direction: column;
 }
+#marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__author ~ .marketplace-card__author::before {
+  content: ", ";
+}
 #marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card-desc {
   font: -webkit-small-control;
   margin: 12px 0;
@@ -211,24 +214,18 @@
   margin-left: 8px;
   padding: 0 8px 0 12px;
 }
-
 .marketplace-sort-container .optionsMenu-dropBox:hover {
   color: var(--spice-text);
 }
 
-#marketplace-config-container input {
-  width: 100%;
-  margin-top: 10px;
-  padding: 0 5px;
-  height: 32px;
-  border: 0;
-  color: var(--spice-text);
-  background-color: initial;
-  border-bottom: 1px solid var(--spice-text);
-}
-
 option {
   background-color: var(--spice-button);
+}
+
+.marketplace-add-snippet-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
 }
 .GenericModal[aria-label=Marketplace] .main-embedWidgetGenerator-container {
   background-color: var(--spice-tab-active);
@@ -280,17 +277,6 @@ button.arrow-btn.small {
 }
 button.arrow-btn.disabled, button.arrow-btn[disabled] {
   color: rgba(var(--spice-rgb-text), 0.3);
-}
-
-#marketplace-add-snippet-container input, textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 3px 5px;
-  background-color: var(--spice-main);
-  color: var(--spice-text);
-  font-size: 14px;
-  border: 1px solid var(--spice-button);
-  border-radius: 4px;
 }
 /* Need to hijack height because .GenericModal has it set to 90% via style attr... */
 .GenericModal[aria-label="Reload required"] {
@@ -1086,6 +1072,30 @@ It should fix broken extension modals
 */
 .GenericModal {
   background-color: var(--spice-player);
+}
+#marketplace-add-snippet-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#marketplace-add-snippet-container input, #marketplace-add-snippet-container textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  background-color: var(--spice-main);
+  color: var(--spice-text);
+  font-size: 14px;
+  border: 1px solid var(--spice-button);
+  border-radius: 4px;
+}
+
+.marketplace-customCSS-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#marketplace-customCSS-submit {
+  margin-left: auto;
 }
 /*
     TODOs:

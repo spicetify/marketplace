@@ -20,9 +20,14 @@ function openAddSnippetModal() {
     addSnippetContainer = document.createElement("div");
     addSnippetContainer.id = "marketplace-add-snippet-container";
 
+    // Code section =====
+    const codeContainer = document.createElement("div");
+    codeContainer.className = "marketplace-customCSS-input-container";
+
     const codeLabel = document.createElement("label");
     codeLabel.setAttribute("for", "marketplace-custom-css");
     codeLabel.innerText = "Custom CSS";
+    codeContainer.appendChild(codeLabel);
 
     const textArea = document.createElement("textarea");
     textArea.id = "marketplace-custom-css";
@@ -30,25 +35,39 @@ function openAddSnippetModal() {
     textArea.rows = "4";
     textArea.cols = "50";
     textArea.placeholder = "Input your own custom CSS here! You can find them in the installed tab for management.";
+    codeContainer.appendChild(textArea);
+
+    // Name section =====
+    const nameContainer = document.createElement("div");
+    nameContainer.className = "marketplace-customCSS-input-container";
 
     const nameLabel = document.createElement("label");
     nameLabel.setAttribute("for", "marketplace-customCSS-name-submit");
     nameLabel.innerText = "Snippet Name";
+    nameContainer.appendChild(nameLabel);
 
     const nameInput = document.createElement("input");
     nameInput.id = "marketplace-customCSS-name-submit";
     nameInput.name = "marketplace-customCSS-name-submit";
     nameInput.placeholder = "Enter a name for your custom snippet.";
+    nameContainer.appendChild(nameInput);
+
+    // Description section =====
+    const descriptionContainer = document.createElement("div");
+    descriptionContainer.className = "marketplace-customCSS-input-container";
 
     const descriptionLabel = document.createElement("label");
     descriptionLabel.setAttribute("for", "marketplace-customCSS-description-submit");
     descriptionLabel.innerText = "Snippet Description";
+    descriptionContainer.appendChild(descriptionLabel);
 
     const descriptionInput = document.createElement("input");
     descriptionInput.id = "marketplace-customCSS-description-submit";
     descriptionInput.name = "marketplace-customCSS-description-submit";
     descriptionInput.placeholder = "Enter a description for your custom snippet.";
+    descriptionContainer.appendChild(descriptionInput);
 
+    // Submit button =====
     const submitBtn = document.createElement("button");
     submitBtn.className = "main-buttons-button main-button-secondary";
     submitBtn.id = "marketplace-customCSS-submit";
@@ -87,12 +106,9 @@ function openAddSnippetModal() {
     }, false);
 
     addSnippetContainer.append(
-        codeLabel,
-        textArea,
-        nameLabel,
-        nameInput,
-        descriptionLabel,
-        descriptionInput,
+        codeContainer,
+        nameContainer,
+        descriptionContainer,
         submitBtn,
     );
 
