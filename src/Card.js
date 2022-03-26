@@ -62,7 +62,7 @@ class Card extends react.Component {
         /** @type { string? } */
         this.description;
         /** @type { string[] } */
-        this.tags = this.include ? ["external JS"] : [];
+        this.tags = props.include ? ["external JS"] : [];
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -383,6 +383,7 @@ class Card extends react.Component {
                         react.createElement("li", {
                             className: "marketplace-card__tag",
                             draggable: false,
+                            "data-tag": tag,
                         }, tag)
                     );
                 }),

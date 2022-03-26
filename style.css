@@ -151,6 +151,28 @@
 #marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__author ~ .marketplace-card__author::before {
   content: ", ";
 }
+#marketplace-grid .main-card-draggable .main-card-cardMetadata ul.marketplace-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#marketplace-grid .main-card-draggable .main-card-cardMetadata li.marketplace-card__tag {
+  background-color: var(--spice-tab-active);
+  border-radius: 4px;
+  padding: 0px 9px 2px;
+}
+#marketplace-grid .main-card-draggable .main-card-cardMetadata li.marketplace-card__tag[data-tag="external JS"] {
+  background-color: #dc3838;
+  color: #fff;
+}
+#marketplace-grid .main-card-draggable .main-card-cardMetadata li.marketplace-card__tag[data-tag=dark] {
+  background-color: #000;
+  color: #fff;
+}
+#marketplace-grid .main-card-draggable .main-card-cardMetadata li.marketplace-card__tag[data-tag=light] {
+  background-color: #fff;
+  color: #333;
+}
 #marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card-desc {
   font: -webkit-small-control;
   margin: 12px 0;

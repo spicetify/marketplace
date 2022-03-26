@@ -165,6 +165,33 @@
         }
       }
 
+      ul.marketplace-card__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      li.marketplace-card__tag {
+        background-color: var(--spice-tab-active);
+        border-radius: 4px;
+        padding: 0px 9px 2px;
+
+        &[data-tag='external JS'] {
+          background-color: hsl(0deg 70% 54%);
+          color: #fff;
+        }
+
+        &[data-tag='dark'] {
+          background-color: #000;
+          color: #fff;
+        }
+
+        &[data-tag='light'] {
+          background-color: #fff;
+          color: #333;
+        }
+      }
+
       .marketplace-card-desc {
         font: -webkit-small-control;
         margin: 12px 0;
