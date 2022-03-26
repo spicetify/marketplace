@@ -61,6 +61,8 @@ class Card extends react.Component {
         this.code;
         /** @type { string? } */
         this.description;
+        /** @type { string[] } */
+        this.tags = this.include ? ["external JS"] : [];
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -372,6 +374,24 @@ class Card extends react.Component {
         return authorsDiv;
     }
 
+    generateTagsList() {
+        // Add a ul with tags inside
+        const tagsList = (
+            react.createElement("ul", { className: "marketplace-card__tags" },
+                this.tags.map((tag) => {
+                    return (
+                        react.createElement("li", {
+                            className: "marketplace-card__tag",
+                            draggable: false,
+                        }, tag)
+                    );
+                }),
+            )
+        );
+
+        return tagsList;
+    }
+
     render() {
         // Cache this for performance
         let IS_INSTALLED = this.isInstalled();
@@ -444,7 +464,7 @@ class Card extends react.Component {
         this.include && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, "Includes external JS"),
+        }, this.generateTagsList()),
         IS_INSTALLED && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
