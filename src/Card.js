@@ -15,7 +15,7 @@ class Card extends react.Component {
         /** @type { (string) => void } */
         this.updateActiveTheme = props.updateActiveTheme;
 
-        // From `fetchRepoExtensions()`, `fetchThemes()`, and snippets.json
+        // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
         /** @type { {
          * name: string;
          * description: string;
@@ -23,6 +23,7 @@ class Card extends react.Component {
          * authors: { name: string; url: string; }[];
          * preview: string;
          * readme: string;
+         * tags?: string[];
          * code?: string;
          * usercss?: string;
          * schemes?: string;
@@ -62,7 +63,7 @@ class Card extends react.Component {
         /** @type { string? } */
         this.description;
         /** @type { string[] } */
-        this.tags = props.include ? ["external JS"] : [];
+        this.tags;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -78,6 +79,10 @@ class Card extends react.Component {
         this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
         Object.assign(this, props);
+
+        // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
+        this.tags = props.tags || [];
+        if (props.include) this.tags.push("external JS");
 
         this.state = {
             // Initial value. Used to trigger a re-render.
@@ -228,6 +233,7 @@ class Card extends react.Component {
             extensionURL: this.extensionURL,
             readmeURL: this.readmeURL,
             stars: this.state.stars,
+            tags: this.tags,
             // Theme stuff
             cssURL: this.cssURL,
             schemesURL: this.schemesURL,

@@ -698,6 +698,7 @@ async function fetchExtensionManifest(contents_url, branch, stars) {
                     ? manifest.readme
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
+                tags: manifest.tags,
             };
 
             // If manifest is valid, add it to the list
@@ -764,6 +765,7 @@ async function fetchThemeManifest(contents_url, branch, stars) {
                     ? manifest.readme
                     : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
                 stars,
+                tags: manifest.tags,
                 // theme stuff
                 cssURL: manifest.usercss.startsWith("http")
                     ? manifest.usercss
