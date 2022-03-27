@@ -508,6 +508,10 @@ class Grid extends react.Component {
     }
 
     render() {
+        let foundExtension = false;
+        let foundSnippet = false;
+        let foundTheme = false;
+
         return react.createElement("section", {
             className: "contentSpacing",
         },
@@ -550,14 +554,37 @@ class Grid extends react.Component {
             style: {
                 "--minimumColumnWidth": "180px",
             },
-        }, cardList.map((card) => {
+        }, cardList.reduce((accum, card) => {
+            if (card.props.type === "extension" && !foundExtension) {
+                foundExtension = true;
+                accum.push(react.createElement(
+                    "h2",
+                    { className: "card-type__heading" },
+                    "Extensions",
+                ));
+            } else if (card.props.type === "snippet" && !foundSnippet) {
+                foundSnippet = true;
+                accum.push(react.createElement(
+                    "h2",
+                    { className: "card-type__heading" },
+                    "Snippets",
+                ));
+            } else if (card.props.type === "theme" && !foundTheme) {
+                foundTheme = true;
+                accum.push(react.createElement(
+                    "h2",
+                    { className: "card-type__heading" },
+                    "Themes",
+                ));
+            }
             // Clone the cards and update the prop to trigger re-render
             // TODO: is it possible to only re-render the theme cards whose status have changed?
             const cardElement = react.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
             });
-            return cardElement;
-        })), react.createElement("footer", {
+            accum.push(cardElement);
+            return accum;
+        }, [])), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",
