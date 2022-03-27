@@ -139,19 +139,19 @@
   gap: 8px;
 }
 
-#marketplace-grid .main-card-draggable {
+.marketplace-grid .main-card-draggable {
   display: flex;
   flex-direction: column;
 }
-#marketplace-grid .main-card-draggable .main-card-cardMetadata {
+.marketplace-grid .main-card-draggable .main-card-cardMetadata {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
-#marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__author ~ .marketplace-card__author::before {
+.marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__author ~ .marketplace-card__author::before {
   content: ", ";
 }
-#marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card-desc {
+.marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card-desc {
   font: -webkit-small-control;
   margin: 12px 0;
   display: -webkit-box;
@@ -159,14 +159,14 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
-#marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__bottom-meta {
+.marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__bottom-meta {
   margin-top: auto;
   margin-bottom: 0;
 }
-#marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__bottom-meta + .marketplace-card__bottom-meta {
+.marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__bottom-meta + .marketplace-card__bottom-meta {
   margin-top: 8px;
 }
-#marketplace-grid[data-tab=Installed]:empty::after {
+.marketplace-grid[data-tab=Installed]:empty::after {
   content: "No installed extensions";
   display: block;
 }
@@ -226,6 +226,12 @@ option {
   position: fixed;
   bottom: 32px;
   right: 32px;
+}
+
+.marketplace-card-type-heading {
+  margin: 1em 0 0.5em;
+  color: var(--spice-subtext);
+  font-size: 1.3em;
 }
 .GenericModal[aria-label=Marketplace] .main-embedWidgetGenerator-container {
   background-color: var(--spice-tab-active);

@@ -508,10 +508,6 @@ class Grid extends react.Component {
     }
 
     render() {
-        let foundExtension = false;
-        let foundSnippet = false;
-        let foundTheme = false;
-
         return react.createElement("section", {
             className: "contentSpacing",
         },
@@ -547,44 +543,37 @@ class Grid extends react.Component {
             //     type: "text",
             //     placeholder: "Search for Extensions?",
             // })),
-        ), react.createElement("div", {
-            id: "marketplace-grid",
-            className: "main-gridContainer-gridContainer",
-            "data-tab": CONFIG.activeTab,
-            style: {
-                "--minimumColumnWidth": "180px",
-            },
-        }, cardList.reduce((accum, card) => {
-            if (card.props.type === "extension" && !foundExtension) {
-                foundExtension = true;
-                accum.push(react.createElement(
-                    "h2",
-                    { className: "card-type__heading" },
-                    "Extensions",
-                ));
-            } else if (card.props.type === "snippet" && !foundSnippet) {
-                foundSnippet = true;
-                accum.push(react.createElement(
-                    "h2",
-                    { className: "card-type__heading" },
-                    "Snippets",
-                ));
-            } else if (card.props.type === "theme" && !foundTheme) {
-                foundTheme = true;
-                accum.push(react.createElement(
-                    "h2",
-                    { className: "card-type__heading" },
-                    "Themes",
-                ));
-            }
-            // Clone the cards and update the prop to trigger re-render
-            // TODO: is it possible to only re-render the theme cards whose status have changed?
-            const cardElement = react.cloneElement(card, {
-                activeThemeKey: this.state.activeThemeKey,
+        ), // Add a header and grid for each card type if it has any cards
+        [ { handle: "extension", name: "Extensions" },
+            { handle: "theme", name: "Themes" },
+            { handle: "snippet", name: "Snippets" }].map((cardType) => {
+            const cardsOfType = cardList.filter((card) => card.props.type === cardType.handle).map((card) => {
+                // Clone the cards and update the prop to trigger re-render
+                // TODO: is it possible to only re-render the theme cards whose status have changed?
+                const cardElement = react.cloneElement(card, {
+                    activeThemeKey: this.state.activeThemeKey,
+                });
+                return cardElement;
             });
-            accum.push(cardElement);
-            return accum;
-        }, [])), react.createElement("footer", {
+
+            if (cardsOfType.length) {
+                return [
+                    // Add a header for the card type
+                    react.createElement("h2",
+                        { className: "marketplace-card-type-heading" },
+                        cardType.name),
+                    // Add the grid and cards
+                    react.createElement("div", {
+                        className: "marketplace-grid main-gridContainer-gridContainer",
+                        "data-tab": CONFIG.activeTab,
+                        style: {
+                            "--minimumColumnWidth": "180px",
+                        },
+                    }, cardsOfType)];
+            } else {
+                return null;
+            }
+        }), react.createElement("footer", {
             style: {
                 margin: "auto",
                 textAlign: "center",

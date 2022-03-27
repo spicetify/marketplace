@@ -146,7 +146,7 @@
 }
 
 // Cards
-#marketplace-grid {
+.marketplace-grid {
   .main-card-draggable {
     display: flex;
     flex-direction: column;
@@ -254,4 +254,11 @@ option {
   position: fixed;
   bottom: 32px;
   right: 32px;
+}
+
+// e.g. "Extensions" heading
+.marketplace-card-type-heading {
+  margin: 1em 0 0.5em;
+  color: var(--spice-subtext);
+  font-size: 1.3em;
 }
