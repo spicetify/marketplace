@@ -543,18 +543,21 @@ class Grid extends react.Component {
             //     type: "text",
             //     placeholder: "Search for Extensions?",
             // })),
-        ), // Add a header and grid for each card type if it has any cards
-        [ { handle: "extension", name: "Extensions" },
+        ),
+        [ // Add a header and grid for each card type if it has any cards
+            { handle: "extension", name: "Extensions" },
             { handle: "theme", name: "Themes" },
-            { handle: "snippet", name: "Snippets" }].map((cardType) => {
-            const cardsOfType = cardList.filter((card) => card.props.type === cardType.handle).map((card) => {
-                // Clone the cards and update the prop to trigger re-render
-                // TODO: is it possible to only re-render the theme cards whose status have changed?
-                const cardElement = react.cloneElement(card, {
-                    activeThemeKey: this.state.activeThemeKey,
+            { handle: "snippet", name: "Snippets" },
+        ].map((cardType) => {
+            const cardsOfType = cardList.filter((card) => card.props.type === cardType.handle)
+                .map((card) => {
+                    // Clone the cards and update the prop to trigger re-render
+                    // TODO: is it possible to only re-render the theme cards whose status have changed?
+                    const cardElement = react.cloneElement(card, {
+                        activeThemeKey: this.state.activeThemeKey,
+                    });
+                    return cardElement;
                 });
-                return cardElement;
-            });
 
             if (cardsOfType.length) {
                 return [
