@@ -1,4 +1,10 @@
-// Cards
+// e.g. "Extensions" heading
+.marketplace-card-type-heading {
+  margin: 1em 0 0.5em;
+  color: var(--spice-subtext);
+  font-size: 1.3em;
+}
+
 #marketplace-grid {
   .main-card-draggable {
     display: flex;
@@ -74,7 +80,7 @@
   }
 }
 
-/* Card preview image error placeholder */
+// Card preview image error placeholder
 .main-cardImage-imageWrapper--error::before {
   content: '';
   display: block;
@@ -120,8 +126,6 @@
 }
 
 .marketplace-card--snippet {
-  height: 132px;
-
   // Hide image preview for CSS snippets
   .main-card-imageContainer { display: none; }
 }

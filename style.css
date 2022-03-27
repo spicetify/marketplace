@@ -1010,6 +1010,12 @@ It should fix broken extension modals
 #marketplace-customCSS-submit {
   margin-left: auto;
 }
+.marketplace-card-type-heading {
+  margin: 1em 0 0.5em;
+  color: var(--spice-subtext);
+  font-size: 1.3em;
+}
+
 #marketplace-grid .main-card-draggable {
   display: flex;
   flex-direction: column;
@@ -1064,7 +1070,6 @@ It should fix broken extension modals
   display: block;
 }
 
-/* Card preview image error placeholder */
 .main-cardImage-imageWrapper--error::before {
   content: "";
   display: block;
@@ -1106,9 +1111,6 @@ It should fix broken extension modals
   gap: 8px;
 }
 
-.marketplace-card--snippet {
-  height: 132px;
-}
 .marketplace-card--snippet .main-card-imageContainer {
   display: none;
 }
