@@ -363,6 +363,7 @@ class Card extends react.Component {
                             dir: "auto",
                             target: "_blank",
                             rel: "noopener noreferrer",
+                            onClick: (e) => e.stopPropagation(),
                         }, author.name)
                     );
                 }),
