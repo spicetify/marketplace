@@ -100,16 +100,18 @@ try {
 
 // eslint-disable-next-line no-redeclare
 const CONFIG = {
+    // Fetch the settings and set defaults. Used in Settings.js
     visual: {
-        //Fetch the settings, defined in Settings.js
-        type: localStorage.getItem("marketplace:type") === "true",
-        stars: localStorage.getItem("marketplace:stars") === "true",
-        hideInstalled: localStorage.getItem("marketplace:hideInstalled") === "true",
-        colorShift: localStorage.getItem("marketplace:colorShift") === "true",
+        stars: JSON.parse(localStorage.getItem("marketplace:stars")) ?? true,
+        tags: JSON.parse(localStorage.getItem("marketplace:tags")) ?? true,
+        hideInstalled: JSON.parse(localStorage.getItem("marketplace:hideInstalled")) ?? false,
+        colorShift: JSON.parse(localStorage.getItem("marketplace:colorShift")) ?? false,
+        // Legacy from reddit app...
+        type: JSON.parse(localStorage.getItem("marketplace:type")) ?? false,
         // I was considering adding watchers as "followers" but it looks like the value is a duplicate
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
-        followers: localStorage.getItem("marketplace:followers") === "true",
+        followers: JSON.parse(localStorage.getItem("marketplace:followers")) ?? false,
     },
     tabs,
     activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),

@@ -90,11 +90,7 @@ const getParamsFromGithubRaw = (url) => {
     };
 
     const getLocalStorageDataFromKey = (key, fallback) => {
-        const str = LocalStorage.get(key);
-        if (!str) return fallback;
-
-        const obj = JSON.parse(str);
-        return obj;
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
     };
 
     const initializeExtension = (extensionKey) => {

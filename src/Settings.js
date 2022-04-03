@@ -114,6 +114,7 @@ function openConfig() {
     configContainer.append(
         optionHeader,
         createToggle("Stars count", "stars"),
+        createToggle("Tags", "tags"),
         createToggle("Hide installed in Marketplace", "hideInstalled"),
         createToggle("Shift Colors Every Minute", "colorShift"),
         // TODO: add these features maybe?

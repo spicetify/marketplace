@@ -88,11 +88,7 @@ const initializeSnippets = (snippets) => {
  * @returns The data stored in localStorage, or the fallback value if not found
  */
 const getLocalStorageDataFromKey = (key, fallback) => {
-    const str = localStorage.getItem(key);
-    if (!str) return fallback;
-
-    const obj = JSON.parse(str);
-    return obj;
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
 };
 
 /**

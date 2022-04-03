@@ -384,15 +384,19 @@ class Card extends react.Component {
         // Add a ul with tags inside
         const tagsList = (
             react.createElement("ul", { className: "marketplace-card__tags" },
-                this.tags.map((tag) => {
-                    return (
-                        react.createElement("li", {
-                            className: "marketplace-card__tag",
-                            draggable: false,
-                            "data-tag": tag,
-                        }, tag)
-                    );
-                }),
+                this.tags.reduce((accum, tag) => {
+                    // Render tags if enabled. Always render external JS tag
+                    if (CONFIG.visual.tags || tag === "external JS") {
+                        accum.push(
+                            react.createElement("li", {
+                                className: "marketplace-card__tag",
+                                draggable: false,
+                                "data-tag": tag,
+                            }, tag),
+                        );
+                    }
+                    return accum;
+                }, []),
             )
         );
 
@@ -468,10 +472,10 @@ class Card extends react.Component {
         ), react.createElement("p", {
             className: "marketplace-card-desc",
         }, this.type === "snippet" ? this.props.description : this.manifest.description),
-        this.include && react.createElement("div", {
+        this.tags.length ? react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, this.generateTagsList()),
+        }, this.generateTagsList()) : null,
         IS_INSTALLED && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
