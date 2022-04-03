@@ -5,6 +5,8 @@ class Card extends react.Component {
     constructor(props) {
         super(props);
 
+        this.MAX_TAGS = 4;
+
         // From `appendCard()`
         /** @type { { type: string; stars:   string; } } */
         this.visual;
@@ -91,6 +93,7 @@ class Card extends react.Component {
 
             // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
             stars: this.stars,
+            tagsExpanded: false,
         };
     }
 
@@ -380,27 +383,47 @@ class Card extends react.Component {
         return authorsDiv;
     }
 
+    generateTags(tags) {
+        return tags.reduce((accum, tag) => {
+            // Render tags if enabled. Always render external JS tag
+            if (CONFIG.visual.tags || tag === "external JS") {
+                accum.push(
+                    react.createElement("li", {
+                        className: "marketplace-card__tag",
+                        draggable: false,
+                        "data-tag": tag,
+                    }, tag),
+                );
+            }
+            return accum;
+        }, []);
+    }
+
     generateTagsList() {
+        const baseTags = this.tags.slice(0, this.MAX_TAGS);
+        const extraTags = this.tags.slice(this.MAX_TAGS);
+
         // Add a ul with tags inside
         const tagsList = (
             react.createElement("ul", { className: "marketplace-card__tags" },
-                this.tags.reduce((accum, tag) => {
-                    // Render tags if enabled. Always render external JS tag
-                    if (CONFIG.visual.tags || tag === "external JS") {
-                        accum.push(
-                            react.createElement("li", {
-                                className: "marketplace-card__tag",
-                                draggable: false,
-                                "data-tag": tag,
-                            }, tag),
-                        );
-                    }
-                    return accum;
-                }, []),
+                this.generateTags(baseTags),
+                // Show any extra tags if expanded
+                extraTags.length && this.state.tagsExpanded
+                    ? this.generateTags(extraTags)
+                    : null,
             )
         );
 
-        return tagsList;
+        // Render the tags list and add expand button if there are more tags
+        return [tagsList, extraTags.length && !this.state.tagsExpanded
+            ? react.createElement("button", {
+                className: "marketplace-card__tags-more-btn",
+                onClick: (e) => {
+                    e.stopPropagation();
+                    this.setState({ tagsExpanded: true });
+                },
+            }, "...")
+            : null];
     }
 
     render() {

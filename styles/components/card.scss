@@ -51,6 +51,18 @@
         }
       }
 
+      .marketplace-card__tags-more-btn {
+        background-color: var(--spice-tab-active);
+        border-radius: 4px;
+        padding: 0px 9px 2px;
+        margin-top: 8px;
+        border: none;
+
+        &:hover, &:focus {
+          filter: brightness(1.4);
+        }
+      }
+
       .marketplace-card-desc {
         font: -webkit-small-control;
         margin: 12px 0;
