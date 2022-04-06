@@ -1,0 +1,150 @@
+// e.g. "Extensions" heading
+.marketplace-card-type-heading {
+  margin: 1em 0 0.5em;
+  color: var(--spice-subtext);
+  font-size: 1.3em;
+}
+
+.marketplace-grid {
+  .main-card-draggable {
+    display: flex;
+    flex-direction: column;
+
+    .main-card-cardMetadata {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+      .marketplace-card__author {
+        // Add comma before authors that have a sibling
+        & ~ .marketplace-card__author {
+          &::before {
+            content: ", ";
+          }
+        }
+      }
+
+      ul.marketplace-card__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      li.marketplace-card__tag {
+        background-color: var(--spice-tab-active);
+        border-radius: 4px;
+        padding: 0px 9px 2px;
+
+        &[data-tag='external JS'] {
+          background-color: hsl(0deg 70% 54%);
+          color: #fff;
+        }
+
+        &[data-tag='dark'] {
+          background-color: #000;
+          color: #fff;
+        }
+
+        &[data-tag='light'] {
+          background-color: #fff;
+          color: #333;
+        }
+      }
+
+      .marketplace-card__tags-more-btn {
+        background-color: var(--spice-tab-active);
+        border-radius: 4px;
+        padding: 0px 9px 2px;
+        margin-top: 8px;
+        border: none;
+
+        &:hover, &:focus {
+          filter: brightness(1.4);
+        }
+      }
+
+      .marketplace-card-desc {
+        font: -webkit-small-control;
+        margin: 12px 0;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
+
+      .marketplace-card__bottom-meta {
+        margin-top: auto;
+        margin-bottom: 0;
+
+        // Add space between multiple blurbs
+        & + .marketplace-card__bottom-meta {
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+
+  &[data-tab='Installed'] {
+    &:empty::after {
+      content: 'No installed extensions';
+      display: block;
+    }
+  }
+}
+
+// Card preview image error placeholder
+.main-cardImage-imageWrapper--error::before {
+  content: '';
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+
+  background-color: var(--spice-subtext);
+  filter: brightness(50%);
+
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path */
+  /* https://icons8.com/icons/set/box */
+  clip-path: path('M41.20833,21.5c-2.54758,0.00136 -4.90298,1.35492 -6.18685,3.55534l-12.54167,21.5c-0.64062,1.09578 -0.97875,2.34203 -0.97982,3.61133v86c0,7.83362 6.49972,14.33333 14.33333,14.33333h100.33333c7.83362,0 14.33333,-6.49972 14.33333,-14.33333v-86c-0.00107,-1.2693 -0.3392,-2.51555 -0.97982,-3.61133l-12.54167,-21.5c-1.28387,-2.20042 -3.63926,-3.55398 -6.18685,-3.55534zM45.32357,35.83333h81.35286l8.35645,14.33333h-98.06576zM35.83333,64.5h100.33333v71.66667h-100.33333zM64.5,78.83333v14.33333h43v-14.33333z');
+  clip-rule: nonzero;
+  transform: scale(0.5);
+}
+
+.main-cardImage-imageWrapper--error {
+  box-shadow: none;
+}
+
+.main-card-card:hover .main-cardImage-imageWrapper--error::before {
+  filter: brightness(100%);
+}
+
+.marketplace-cardSubHeader,
+.marketplace-card__bottom-meta {
+  margin-top: 4px;
+  white-space: normal;
+  color: var(--spice-subtext);
+}
+
+// author, stars, etc.
+.marketplace-cardSubHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.marketplace-card--snippet {
+  // Hide image preview for CSS snippets
+  .main-card-imageContainer { display: none; }
+}
+
+.marketplace-card--installed {
+  flex: 0 !important;
+  -webkit-box-flex: 0 !important;
+
+  border: 1px solid var(--spice-button);
+}

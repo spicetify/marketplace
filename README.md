@@ -89,6 +89,7 @@ In order to show up in the custom app, you'll need to make a public GitHub repo 
 * `readme`: The filename for your extension's README file. Must be relative to your project root. 
 * `branch`: Optional branch to specify. Will use default branch if none. 
 * `authors`: Optional array of authors with names and urls. Will use repo owner if none. 
+* `tags`: Optional array of tags to show along with the card. 
 
 e.g.
 ```json
@@ -101,7 +102,8 @@ e.g.
     "readme": "README.md",
     "authors": [
         { "name": "theRealPadster", "url": "https://github.com/theRealPadster" }
-    ]
+    ],
+    "tags": ["podcasts"]
   },
   {
     "name": "extensionName(No .js included)",
@@ -123,6 +125,7 @@ e.g.
 * `readme`: The filename for your extension's README file. Must be relative to your project root. 
 * `branch`: Optional branch to specify. Will use default branch if none. 
 * `authors`: Optional array of authors with names and urls. Will use repo owner if none. 
+* `tags`: Optional array of tags to show along with the card. 
 
 e.g. 
 ```json
@@ -137,7 +140,8 @@ e.g.
     "authors": [
         { "name": "theRealPadster", "url": "https://github.com/theRealPadster" },
         { "name": "CharlieS1103", "url": "https://github.com/CharlieS1103" }
-    ]
+    ],
+    "tags": ["dark", "minimal"]
 }
 ```
 

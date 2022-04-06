@@ -5,6 +5,8 @@ class Card extends react.Component {
     constructor(props) {
         super(props);
 
+        this.MAX_TAGS = 4;
+
         // From `appendCard()`
         /** @type { { type: string; stars:   string; } } */
         this.visual;
@@ -15,7 +17,7 @@ class Card extends react.Component {
         /** @type { (string) => void } */
         this.updateActiveTheme = props.updateActiveTheme;
 
-        // From `fetchRepoExtensions()`, `fetchThemes()`, and snippets.json
+        // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
         /** @type { {
          * name: string;
          * description: string;
@@ -23,6 +25,7 @@ class Card extends react.Component {
          * authors: { name: string; url: string; }[];
          * preview: string;
          * readme: string;
+         * tags?: string[];
          * code?: string;
          * usercss?: string;
          * schemes?: string;
@@ -61,6 +64,8 @@ class Card extends react.Component {
         this.code;
         /** @type { string? } */
         this.description;
+        /** @type { string[] } */
+        this.tags;
 
         // Added locally
         // this.menuType = Spicetify.ReactComponent.Menu | "div";
@@ -77,6 +82,10 @@ class Card extends react.Component {
 
         Object.assign(this, props);
 
+        // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
+        this.tags = props.tags || [];
+        if (props.include) this.tags.push("external JS");
+
         this.state = {
             // Initial value. Used to trigger a re-render.
             // isInstalled() is used for all other intents and purposes
@@ -84,6 +93,7 @@ class Card extends react.Component {
 
             // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
             stars: this.stars,
+            tagsExpanded: false,
         };
     }
 
@@ -226,6 +236,7 @@ class Card extends react.Component {
             extensionURL: this.extensionURL,
             readmeURL: this.readmeURL,
             stars: this.state.stars,
+            tags: this.tags,
             // Theme stuff
             cssURL: this.cssURL,
             schemesURL: this.schemesURL,
@@ -373,6 +384,49 @@ class Card extends react.Component {
         return authorsDiv;
     }
 
+    generateTags(tags) {
+        return tags.reduce((accum, tag) => {
+            // Render tags if enabled. Always render external JS tag
+            if (CONFIG.visual.tags || tag === "external JS") {
+                accum.push(
+                    react.createElement("li", {
+                        className: "marketplace-card__tag",
+                        draggable: false,
+                        "data-tag": tag,
+                    }, tag),
+                );
+            }
+            return accum;
+        }, []);
+    }
+
+    generateTagsList() {
+        const baseTags = this.tags.slice(0, this.MAX_TAGS);
+        const extraTags = this.tags.slice(this.MAX_TAGS);
+
+        // Add a ul with tags inside
+        const tagsList = (
+            react.createElement("ul", { className: "marketplace-card__tags" },
+                this.generateTags(baseTags),
+                // Show any extra tags if expanded
+                extraTags.length && this.state.tagsExpanded
+                    ? this.generateTags(extraTags)
+                    : null,
+            )
+        );
+
+        // Render the tags list and add expand button if there are more tags
+        return [tagsList, extraTags.length && !this.state.tagsExpanded
+            ? react.createElement("button", {
+                className: "marketplace-card__tags-more-btn",
+                onClick: (e) => {
+                    e.stopPropagation();
+                    this.setState({ tagsExpanded: true });
+                },
+            }, "...")
+            : null];
+    }
+
     render() {
         // Cache this for performance
         let IS_INSTALLED = this.isInstalled();
@@ -442,10 +496,10 @@ class Card extends react.Component {
         ), react.createElement("p", {
             className: "marketplace-card-desc",
         }, this.type === "snippet" ? this.props.description : this.manifest.description),
-        this.include && react.createElement("div", {
+        this.tags.length ? react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
-        }, "Includes external JS"),
+        }, this.generateTagsList()) : null,
         IS_INSTALLED && react.createElement("div", {
             className: "marketplace-card__bottom-meta main-type-mestoBold",
             as: "div",
