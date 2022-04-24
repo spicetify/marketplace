@@ -569,10 +569,13 @@ class Grid extends react.Component {
                         cardType.name),
                     // Add the grid and cards
                     react.createElement("div", {
-                        className: "marketplace-grid main-gridContainer-gridContainer",
+                        className: "marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth",
                         "data-tab": CONFIG.activeTab,
                         style: {
                             "--minimumColumnWidth": "180px",
+                            "--column-width": "minmax(var(--minimumColumnWidth),1fr)",
+                            "--column-count": "auto-fill",
+                            "--grid-gap": "24px",
                         },
                     }, cardsOfType)];
             } else {
