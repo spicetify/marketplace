@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
+    "target": "ES2017",
+    "jsx": "react",
     "module": "commonjs",
-    "target": "es2018",
-    "checkJs": true,
-    "allowJs": true,
-    "noEmit": true,
-    // "typeRoots": ["@types", "../spicetify-cli"],
-    // "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    // "strict": true,
-    "importHelpers": true,
+    "strict": true,
+    "skipLibCheck": true
   },
-  "include": ["index.js"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./src/**/*.*"
+  ]
 }

@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  > * {
+    padding: 40px 0;
+  }
+}
+
+.title {
+  font-size: 50px;
+}
+
+.button {
+  padding: 10px;
+  border-radius: 10px;
+  border:none;
+  color: black;
+  background-color: rgb(255, 255, 255);
+
+  &:hover {
+    background-color: rgb(243, 243, 243);
+  }
+
+  &:active {
+    background-color: rgb(228, 228, 228);
+  }
+}
+
+.counter {
+  font-size: 50px;
+}
