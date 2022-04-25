@@ -1,0 +1,28 @@
+// Entire modal container
+#marketplace-add-snippet-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  input, textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 3px 5px;
+    background-color: var(--spice-main);
+    color: var(--spice-text);
+    font-size: 14px;
+    border: 1px solid var(--spice-button);
+    border-radius: 4px;
+  }
+}
+
+// Container for label + input
+.marketplace-customCSS-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+// Submit button
+#marketplace-customCSS-submit {
+  margin-left: auto;
+}

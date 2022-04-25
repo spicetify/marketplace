@@ -1,4 +1,5 @@
 import { processAuthors } from './Utils';
+import { ITEMS_PER_REQUEST } from '../src/constants';
 
 
 // TODO: add sort type, order, etc?
@@ -9,7 +10,7 @@ import { processAuthors } from './Utils';
  * @param {number} page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getExtensionRepos(page = 1) {
+export async function getExtensionRepos(page = 1, BLACKLIST:string[] = []) {
   // www is needed or it will block with "cross-origin" error.
   let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
 
@@ -47,15 +48,15 @@ export  async function getRepoManifest(user, repo, branch) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
   const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
   if (sessionStorageItem) {
-      return JSON.parse(sessionStorageItem);
+    return JSON.parse(sessionStorageItem);
   }
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (failedSessionStorageItems.includes(url)) {
-      return null;
+  if (failedSessionStorageItems?.includes(url)) {
+    return null;
   }
   const manifest = await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
   if (manifest) {
-      window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+    window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
   }
   return manifest;
 }
@@ -68,7 +69,7 @@ export  async function getRepoManifest(user, repo, branch) {
 * @param {number} stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchExtensionManifest(contents_url, branch, stars) {
+export async function fetchExtensionManifest(contents_url, branch, stars, hideInstalled = false) {
   try {
       // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
       let manifests;
@@ -111,7 +112,7 @@ export async function fetchExtensionManifest(contents_url, branch, stars) {
           if (manifest && manifest.name && manifest.description && manifest.main
           ) {
               // Add to list unless we're hiding installed items and it's installed
-              if (!(CONFIG.visual.hideInstalled
+              if (!(hideInstalled
                   && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
               ) {
                   accum.push(item);
@@ -203,7 +204,7 @@ export async function fetchThemeManifest(contents_url, branch, stars) {
 * @param {number} page The page to get (defaults to 1)
 * @returns Array of GitHub API results, filtered through the blacklist
 */
-export async function getThemeRepos(page = 1) {
+export async function getThemeRepos(page = 1, BLACKLIST:string[] = []) {
   let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
 
   // We can test multiple pages with this URL (58 results), as well as broken iamges etc.

@@ -1,0 +1,149 @@
+.marketplace-header {
+  -webkit-box-pack: justify;
+  -webkit-box-align: center;
+  align-content: space-between;
+  align-items: center;
+  color: var(--spice-text);
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+
+  // To position the settings button + colour schemes
+  position: sticky;
+  flex-direction: row-reverse;
+  top: 80px;
+  z-index: 1;
+
+  h1 {
+    position: fixed;
+    left: 16px;
+
+    @media (min-width: 1024px) {
+      left: 32px;
+    }
+  }
+}
+
+.marketplace-header__right {
+  display: flex;
+}
+
+.marketplace-sort-bar {
+  align-items: center;
+  display: flex;
+}
+
+.marketplace-sort-container {
+  position: relative;
+  display: flex;
+}
+
+.marketplace-tabBar-headerItem {
+  -webkit-app-region: no-drag;
+  display: inline-block;
+  pointer-events: auto;
+}
+
+.marketplace-tabBar-active {
+  background-color: var(--spice-tab-active);
+  border-radius: 4px;
+}
+
+.marketplace-tabBar-headerItemLink {
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  margin: 0 8px 0 0;
+  padding: 8px 16px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.marketplace-tabBar-nav {
+  -webkit-app-region: drag;
+  pointer-events: none;
+  width: 100%;
+}
+
+.marketplace-tabBar-headerItem .optionsMenu-dropBox {
+  color: var(--spice-text);
+  border: 0;
+  max-width: 150px;
+  height: 42px;
+  padding: 0 30px 0 12px;
+  background-color: initial;
+  cursor: pointer;
+  appearance: none;
+}
+
+.marketplace-tabBar-headerItem .optionsMenu-dropBox svg {
+  position: absolute;
+  margin-left: 8px;
+}
+
+.marketplace-settings-button {
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  padding: 10px 14px 6px;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  background-color: var(--spice-sidebar);
+
+  &:hover {
+    background-color: var(--spice-tab-active);
+  }
+}
+
+// Search bar
+.searchbar--bar__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+.searchbar-bar {
+  border: unset;
+  background-color: var(--spice-sidebar) !important;
+  border-radius: 5px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: var(--spice-text) !important;
+  z-index: 1000;
+}
+
+.marketplace-sort-container {
+  // The dropdown menus (sort by)
+  .optionsMenu-dropBox {
+    grid-gap: 8px;
+    align-items: center;
+    background-color: var(--spice-sidebar);
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr 16px;
+    color: rgba(var(--spice-rgb-text), .7);
+    border: 0;
+    height: 32px;
+    margin-left: 8px;
+    padding: 0 8px 0 12px;
+
+    &:hover {
+      color: var(--spice-text);
+    }
+  }
+}
+option {
+  background-color: var(--spice-button);
+}
+
+// "Add CSS" button
+.marketplace-add-snippet-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+}

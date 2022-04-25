@@ -10,6 +10,9 @@ import {
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
+import SortBox from "./Sortbox";
+import { TopBarContent } from "./TabBar";
+import Card from "./Card";
 
 export default class Grid extends React.Component<
 {
@@ -104,7 +107,8 @@ export default class Grid extends React.Component<
       localStorage.setItem(LOCALSTORAGE_KEYS.sortBy, sortByValue);
     }
 
-    this.requestPage = null;
+    // this.requestPage = null;
+    this.requestPage = 0;
     this.cardList = [];
     this.setState({
       cards: [],
@@ -150,9 +154,9 @@ export default class Grid extends React.Component<
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
   async loadPage(queue) {
     if (this.CONFIG.activeTab === "Extensions") {
-      let pageOfRepos = await getExtensionRepos(this.requestPage);
+      let pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
-        let extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+        let extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count, this.CONFIG.visual.hideInstalled);
 
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
@@ -202,7 +206,7 @@ export default class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } else if (this.CONFIG.activeTab == "Themes") {
-      let pageOfRepos = await getThemeRepos(this.requestPage);
+      let pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
 
         let themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -402,7 +406,8 @@ export default class Grid extends React.Component<
           className: "marketplace-settings-button",
           id: "marketplace-settings-button",
 
-          onClick: openConfig,
+          // onClick: openConfig,
+          onClick: () => { console.log('TODO: add settings modal')},
       }, SettingsIcon),
       // End of marketplace-header__right
       ),

@@ -1,7 +1,11 @@
-import styles from './css/app.module.scss'
+// import styles from './styles/app.module.scss'
 import React from 'react'
-import Grid from './components/Grid';
 
+// TODO: the mono-stylesheet doesn't seem to import the component stylesheets properly on build?
+// import './styles/styles.scss'
+import './styles/styles.css'
+
+import Grid from './components/Grid';
 import { getLocalStorageDataFromKey } from '../logic/Utils';
 import { ALL_TABS, LOCALSTORAGE_KEYS } from './constants';
 
@@ -15,12 +19,10 @@ class App extends React.Component<{}, {count: number}> {
 	constructor(props: any) {
 		super(props);
 		this.location = Spicetify.Platform.History.location;
-	}
 
-  componentDidMount() {
     // Get tabs config from local storage
     let tabsString = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
-    let tabs = [];
+    let tabs:any[] = [];
     try {
       tabs = JSON.parse(tabsString);
       if (!Array.isArray(tabs)) {
@@ -69,9 +71,9 @@ class App extends React.Component<{}, {count: number}> {
         followers: JSON.parse(getLocalStorageDataFromKey("marketplace:followers", false)),
       },
       tabs,
-      activeTab: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.activeTab),
+      activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
       theme: {
-        activeThemeKey: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled, null),
+        activeThemeKey: localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled, null),
         schemes,
         activeScheme,
       },
@@ -80,17 +82,7 @@ class App extends React.Component<{}, {count: number}> {
     if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter(tab => tab.name === this.CONFIG.activeTab).length) {
       this.CONFIG.activeTab = this.CONFIG.tabs[0].name;
     }
-
-    let lastScroll = 0;
-    let requestPage = null;
-    // Max GitHub API items per page
-    // https://docs.github.com/en/rest/reference/search#search-repositories
-    const ITEMS_PER_REQUEST = 100;
-
-    let BLACKLIST = [];
-
-    let gridUpdateTabs, gridUpdatePostsVisual;
-  }
+	}
 
   // onButtonClick = () => {
   //   this.setState((state) => {

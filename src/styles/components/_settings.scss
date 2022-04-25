@@ -1,0 +1,78 @@
+// Make settings modal use same background colour as the reload modal
+// (The large style modal uses --spice-player as the background colour by default)
+.GenericModal[aria-label="Marketplace"] {
+  .main-embedWidgetGenerator-container {
+    background-color: var(--spice-tab-active);
+  }
+
+  // Toggle switches
+  .x-toggle-wrapper {
+    cursor: pointer;
+    margin-inline-start: 12px;
+    // Hide disabled toggle rows (i.e. the "Extensions" one)
+    &.disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+.setting-row {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .col {
+    display: flex;
+    padding: 10px 0;
+    align-items: center;
+
+    &.description {
+      float: left;
+      padding-right: 15px;
+      cursor: default;
+    }
+    &.action {
+      float: right;
+      text-align: right;
+    }
+  }
+}
+
+// The up/down arrows
+button.arrow-btn {
+  align-items: center;
+  border: 0px;
+  border-radius: 50%;
+  background-color: rgba(var(--spice-rgb-shadow), .7);
+  color: var(--spice-text);
+  cursor: pointer;
+  display: flex;
+  margin-inline-start: 12px;
+  padding: 8px;
+
+  &.small {
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+  }
+
+  &.disabled,
+  &[disabled] {
+    color: rgba(var(--spice-rgb-text), .3);
+  }
+}
+
+// Add snippet modal
+#marketplace-add-snippet-container input, textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  background-color: var(--spice-main);
+  color: var(--spice-text);
+  font-size: 14px;
+  border: 1px solid var(--spice-button);
+  border-radius: 4px;
+}

@@ -1,4 +1,4 @@
-import React from "React";
+import React from "react";
 
 // TODO: convert this to a functional component
 export default React.createElement("svg", {
