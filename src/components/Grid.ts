@@ -96,6 +96,7 @@ export default class Grid extends React.Component<
     item.updateActiveTheme = this.setActiveTheme.bind(this);
     // This isn't used other than to trigger a re-render
     item.activeThemeKey = this.state.activeThemeKey;
+    item.CONFIG = this.CONFIG;
     this.cardList.push(React.createElement(Card, item));
     this.setState({ cards: this.cardList });
   }
@@ -128,6 +129,7 @@ export default class Grid extends React.Component<
 
   updatePostsVisual() {
     this.cardList = this.cardList.map(card => {
+      card.props.CONFIG = this.CONFIG;
       return React.createElement(Card, card.props);
     });
     this.setState({ cards: [...this.cardList] });
@@ -191,11 +193,11 @@ export default class Grid extends React.Component<
         if (installedStuff[type].length) {
           installedStuff[type].forEach(async (itemKey) => {
             // TODO: err handling
-            const extension = JSON.parse(getLocalStorageDataFromKey(itemKey));
+            const extension = getLocalStorageDataFromKey(itemKey);
             // I believe this stops the requests when switching tabs?
             if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-            // Stop this queue from continuing to fetch and append to cards list
-            return -1;
+              // Stop this queue from continuing to fetch and append to cards list
+              return -1;
             }
 
             this.appendCard(extension, type);

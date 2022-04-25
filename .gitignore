@@ -145,3 +145,6 @@ out
 
 # macOS cache junk
 .DS_Store
+
+# build folder
+dist/
