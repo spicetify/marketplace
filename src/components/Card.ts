@@ -1,7 +1,12 @@
 import React from "react";
 
 import { LOCALSTORAGE_KEYS } from "../constants";
-import { getLocalStorageDataFromKey, parseIni, initializeSnippets } from "../../logic/Utils";
+import {
+  getLocalStorageDataFromKey,
+  parseIni,
+  initializeSnippets,
+  parseCSS,
+} from "../../logic/Utils";
 import TrashIcon from "./Icons/TrashIcon";
 import DownloadIcon from "./Icons/DownloadIcon";
 
@@ -361,7 +366,7 @@ export default class Card extends React.Component<{
       if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
 
       if (theme) {
-        const userCSS = await this.parseCSS();
+        const userCSS = await parseCSS(this.manifest);
 
         // Add new marketplace scheme
         const userCssTag = document.createElement("style");
@@ -380,37 +385,6 @@ export default class Card extends React.Component<{
     } catch (error) {
       console.warn(error);
     }
-  }
-
-  // TODO: keep in sync with extension.js
-  async parseCSS() {
-    const userCssUrl = this.cssURL.indexOf("raw.githubusercontent.com") > -1
-      // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-      ? `https://cdn.jsdelivr.net/gh/${this.user}/${this.repo}@${this.branch}/${this.manifest.usercss}`
-      : this.cssURL;
-    // TODO: Make this more versatile
-    const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
-
-    console.log("Parsing CSS: ", userCssUrl);
-    let css = await fetch(userCssUrl).then(res => res.text());
-    // console.log("Parsed CSS: ", css);
-
-    // @ts-ignore
-    let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
-
-    for (const match of urls) {
-      const url = match.groups.path;
-      // console.log(url);
-      // If it's a relative URL, transform it to HTTP URL
-      if (!url.startsWith("http") && !url.startsWith("data")) {
-        const newUrl = assetsUrl + url.replace(/\.\//g, "");
-        css = css.replace(url, newUrl);
-      }
-    }
-
-    // console.log("New CSS: ", css);
-
-    return css;
   }
 
   openReadme() {

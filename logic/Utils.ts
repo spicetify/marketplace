@@ -18,20 +18,20 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: any) => {
  * @param {string} hex 3 or 6 character hex string
  * @returns Array of RGB values
  */
-export const hexToRGB = (hex) => {
+const hexToRGB = (hex) => {
   if (hex.length === 3) {
-      hex = hex.split("").map((char) => char + char).join("");
+    hex = hex.split("").map((char) => char + char).join("");
   } else if (hex.length != 6) {
-      throw "Only 3- or 6-digit hex colours are allowed.";
+    throw "Only 3- or 6-digit hex colours are allowed.";
   } else if (hex.match(/[^0-9a-f]/i)) {
-      throw "Only hex colours are allowed.";
+    throw "Only hex colours are allowed.";
   }
 
   const aRgbHex = hex.match(/.{1,2}/g);
   const aRgb = [
-      parseInt(aRgbHex[0], 16),
-      parseInt(aRgbHex[1], 16),
-      parseInt(aRgbHex[2], 16),
+    parseInt(aRgbHex[0], 16),
+    parseInt(aRgbHex[1], 16),
+    parseInt(aRgbHex[2], 16),
   ];
   return aRgb;
 };
@@ -43,30 +43,30 @@ export const hexToRGB = (hex) => {
 */
 export const parseIni = (data) => {
   const regex = {
-      section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
-      param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
-      comment: /^\s*;.*$/,
+  section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
+  param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
+  comment: /^\s*;.*$/,
   };
   let value = {};
   let lines = data.split(/[\r\n]+/);
   let section = null;
   lines.forEach(function(line) {
-      if (regex.comment.test(line)) {
-          return;
-      } else if (regex.param.test(line)) {
-          let match = line.match(regex.param);
-          if (section) {
-              value[section][match[1]] = match[2];
-          } else {
-              value[match[1]] = match[2];
-          }
-      } else if (regex.section.test(line)) {
-          let match = line.match(regex.section);
-          value[match[1]] = {};
-          section = match[1];
-      } else if (line.length == 0 && section) {
-          section = null;
+    if (regex.comment.test(line)) {
+      return;
+    } else if (regex.param.test(line)) {
+      let match = line.match(regex.param);
+      if (section) {
+        value[section][match[1]] = match[2];
+      } else {
+        value[match[1]] = match[2];
       }
+    } else if (regex.section.test(line)) {
+      let match = line.match(regex.section);
+      value[match[1]] = {};
+      section = match[1];
+    } else if (line.length == 0 && section) {
+      section = null;
+    }
   });
   return value;
 };
@@ -83,9 +83,9 @@ export const initializeSnippets = (snippets) => {
 
   const style = document.createElement("style");
   const styleContent = snippets.reduce((accum, snippet) => {
-      accum += `/* ${snippet.title} - ${snippet.description} */\n`;
-      accum += `${snippet.code}\n`;
-      return accum;
+    accum += `/* ${snippet.title} - ${snippet.description} */\n`;
+    accum += `${snippet.code}\n`;
+    return accum;
   }, "");
 
   style.innerHTML = styleContent;
@@ -101,15 +101,15 @@ export const initializeSnippets = (snippets) => {
  * @returns {{ name: string; url: string; }[]} The authors, with anything missing added
  */
 export const processAuthors = (authors, user) => {
-  let parsedAuthors = [];
+  let parsedAuthors: { name: string; url: string }[] = [];
 
   if (authors && authors.length > 0) {
-      parsedAuthors = authors;
+    parsedAuthors = authors;
   } else {
-      parsedAuthors.push({
-          name: user,
-          url: "https://github.com/" + user,
-      });
+    parsedAuthors.push({
+      name: user,
+      url: "https://github.com/" + user,
+    });
   }
 
   return parsedAuthors;
@@ -132,10 +132,10 @@ export const resetMarketplace = () => {
 
   // Loop through and reset marketplace keys
   Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith("marketplace:")) {
-          localStorage.removeItem(key);
-          console.log(`Removed ${key}`);
-      }
+    if (key.startsWith("marketplace:")) {
+      localStorage.removeItem(key);
+      console.log(`Removed ${key}`);
+    }
   });
 
   console.log("Marketplace has been reset");
@@ -175,4 +175,119 @@ export const injectColourScheme = (scheme) => {
     originalColorsCSS.classList.add("userCSS");
     document.head.appendChild(originalColorsCSS);
   }
+}
+
+/**
+ * Update the user.css in the DOM
+ * @param {string} userCSS The contents of the new user.css
+ */
+export const injectUserCSS = (userCSS) => {
+  try {
+    // Remove any existing Spicetify user.css
+    const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+    if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
+    // Remove any existing marketplace scheme
+    const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
+    if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
+
+    // Add new marketplace scheme
+    const userCssTag = document.createElement("style");
+    userCssTag.classList.add("marketplaceCSS");
+    userCssTag.classList.add("marketplaceUserCSS");
+    userCssTag.innerHTML = userCSS;
+    document.head.appendChild(userCssTag);
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
+// I guess this is okay to not have an end condition on the interval
+// because if they turn the setting on or off,
+// closing the settings modal will reload the page
+export const initColorShiftLoop = (schemes) => {
+  let i = 0;
+  const NUM_SCHEMES = Object.keys(schemes).length;
+  setInterval(() => {
+    // Resets to zero when passes the last scheme
+    i = i % NUM_SCHEMES;
+    const style = document.createElement("style");
+    style.className = "colorShift-style";
+    style.innerHTML = `* {
+      transition-duration: 400ms;
+    }
+    main-type-bass {
+      transition-duration: unset !important;
+    }`;
+
+    document.body.appendChild(style);
+    injectColourScheme(Object.values(schemes)[i]);
+    i++;
+    style.remove();
+  }, 60 * 1000);
+};
+
+export const parseCSS = async (themeManifest) => {
+  const userCssUrl = themeManifest.cssURL.indexOf("raw.githubusercontent.com") > -1
+  // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+    ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
+    : themeManifest.cssURL;
+  // TODO: Make this more versatile
+  const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
+
+  console.log("Parsing CSS: ", userCssUrl);
+  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
+  // console.log("Parsed CSS: ", css);
+
+  let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
+
+  for (const match of urls) {
+    const url = match.groups.path;
+    // console.log(url);
+    // If it's a relative URL, transform it to HTTP URL
+    if (!url.startsWith("http") && !url.startsWith("data")) {
+      const newUrl = assetsUrl + url.replace(/\.\//g, "");
+      css = css.replace(url, newUrl);
+    }
+  }
+
+  // console.log("New CSS: ", css);
+
+  return css;
+};
+
+/**
+ * Get user, repo, and branch from a GitHub raw URL
+ * @param {string} url Github Raw URL
+ * @returns { { user: string, repo: string, branch: string, filePath: string } }
+ */
+export const getParamsFromGithubRaw = (url) => {
+  const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\/(?<filePath>.+$)/);
+  // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
+
+  const obj = {
+    user: regex_result ? regex_result.groups.user : null,
+    repo: regex_result ? regex_result.groups.repo : null,
+    branch: regex_result ? regex_result.groups.branch : null,
+    filePath: regex_result ? regex_result.groups.filePath : null,
+  };
+
+  return obj;
+};
+
+export function addToSessionStorage(items, key?) {
+  if (!items || items == null) return;
+  items.forEach(item => {
+    if (!key) key = `${items.user}-${items.repo}`;
+    // If the key already exists, it will append to it instead of overwriting it
+    const existing = window.sessionStorage.getItem(key);
+    const parsed = existing ? JSON.parse(existing) : [];
+    parsed.push(item);
+    window.sessionStorage.setItem(key, JSON.stringify(parsed));
+  });
+}
+
+// This function is used to sleep for a certain amount of time
+export function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

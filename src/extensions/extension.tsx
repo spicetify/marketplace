@@ -1,8 +1,224 @@
+// NAME: Spicetify Marketplace Extension
+// AUTHOR: theRealPadster, CharlieS1103
+// DESCRIPTION: Companion extension for Spicetify Marketplace
+
+import { LOCALSTORAGE_KEYS } from "../constants";
+import {
+  getLocalStorageDataFromKey,
+  resetMarketplace,
+  getParamsFromGithubRaw,
+  initializeSnippets,
+  injectColourScheme,
+  initColorShiftLoop,
+  parseCSS,
+  // TODO: there's a slightly different copy of this function in Card.ts?
+  injectUserCSS,
+  addToSessionStorage,
+  sleep,
+} from "../../logic/Utils";
+import {
+  getBlacklist,
+  fetchThemeManifest,
+  fetchExtensionManifest,
+} from "../../logic/GetStuff";
+
 (async () => {
-  while (!Spicetify?.showNotification) {
+  while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
   // Show message on start.
-  Spicetify.showNotification("Welcome!");
-})()
+  Spicetify.showNotification("Loaded Marketplace extension!");
+
+  // Expose useful methods in global context
+  // @ts-ignore
+  window.Marketplace = {
+    // Should allow you to reset Marketplace from the dev console if it's b0rked
+    reset: resetMarketplace,
+  };
+
+  const initializeExtension = (extensionKey) => {
+    const extensionManifest = getLocalStorageDataFromKey(extensionKey);
+    // Abort if no manifest found or no extension URL (i.e. a theme)
+    if (!extensionManifest || !extensionManifest.extensionURL) return;
+
+    console.log("Initializing extension: ", extensionManifest);
+
+    const script = document.createElement("script");
+    script.defer = true;
+    script.src = extensionManifest.extensionURL;
+
+    // If it's a github raw script, use jsdelivr
+    if (script.src.indexOf("raw.githubusercontent.com") > -1) {
+      const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
+      if (!user || !repo || !branch || !filePath) return;
+      script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+    }
+
+    script.src = `${script.src}?time=${Date.now()}`;
+
+    document.body.appendChild(script);
+  };
+
+  const initializeTheme = async (themeKey) => {
+    const themeManifest = getLocalStorageDataFromKey(themeKey);
+    // Abort if no manifest found
+    if (!themeManifest) {
+      console.log("No theme manifest found");
+      return;
+    }
+
+    console.log("Initializing theme: ", themeManifest);
+
+    // Inject colour scheme if found
+    if (themeManifest.schemes) {
+      const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
+      injectColourScheme(activeScheme);
+
+      if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
+        initColorShiftLoop(themeManifest.schemes);
+      }
+    } else {
+      console.warn("No schemes found for theme");
+    }
+
+    // Remove default css
+    // TODO: what about if we remove the theme? Should we re-add the user.css/colors.css?
+    // const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+    // if (existingUserThemeCSS) existingUserThemeCSS.remove();
+
+    // Remove any existing marketplace theme
+    const existingMarketplaceThemeCSS = document.querySelector("link.marketplaceCSS");
+    if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
+
+    // Add theme css
+    const userCSS = await parseCSS(themeManifest);
+    injectUserCSS(userCSS);
+
+    // Inject any included js
+    if (themeManifest.include && themeManifest.include.length) {
+      // console.log("Including js", installedThemeData.include);
+
+      themeManifest.include.forEach((script) => {
+        const newScript = document.createElement("script");
+        let src = script;
+
+        // If it's a github raw script, use jsdelivr
+        if (script.indexOf("raw.githubusercontent.com") > -1) {
+          const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
+          src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+        }
+        // console.log({src});
+        newScript.src = `${src}?time=${Date.now()}`;
+        newScript.classList.add("marketplaceScript");
+        document.body.appendChild(newScript);
+      });
+    }
+  };
+
+  console.log("Loaded Marketplace extension");
+
+  const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+  if (installedThemeKey) initializeTheme(installedThemeKey);
+
+  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+  initializeSnippets(installedSnippets);
+
+  const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
+  installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
+})();
+
+const ITEMS_PER_REQUEST = 100;
+
+/**
+ * TODO
+ * @param {"theme"|"extension"} type The repo type
+ * @param {number} pageNum The page number
+ * @returns TODO
+ */
+async function queryRepos(type, pageNum = 1) {
+  const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
+
+  let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
+  if (type === "extension") url += `&q=${encodeURIComponent("topic:spicetify-extensions")}`;
+  else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
+  if (pageNum) url += `&page=${pageNum}`;
+
+  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+  if (!allRepos.items) {
+      Spicetify.showNotification("Too Many Requests, Cool Down.");
+  }
+
+  const filteredResults = {
+    ...allRepos,
+    page_count: allRepos.items.length,
+    items: allRepos.items.filter(item => !BLACKLIST?.includes(item.html_url)),
+  };
+
+  return filteredResults;
+}
+
+/**
+ * TODO
+ * @param {"theme"|"extension"} type The repo type
+ * @param {number} pageNum The page number
+ * @returns TODO
+ */
+async function loadPageRecursive(type, pageNum) {
+  const pageOfRepos = await queryRepos(type, pageNum);
+  appendInformationToLocalStorage(pageOfRepos, type);
+
+  // Sets the amount of items that have thus been fetched
+  const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
+  console.log({ pageOfRepos });
+  const remainingResults = pageOfRepos.total_count - soFarResults;
+
+  // If still have more results, recursively fetch next page
+  console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
+  if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
+  else console.log(`No more ${type} results`);
+}
+
+(async function initializePreload() {
+  console.log("Preloading extensions and themes...");
+  window.sessionStorage.clear();
+  const BLACKLIST = await getBlacklist();
+  window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
+
+  // TODO: does this work?
+  // The recursion isn't super clean...
+
+  // Begin by getting the themes and extensions from github
+  // const [extensionReposArray, themeReposArray] = await Promise.all([
+  await Promise.all([
+    loadPageRecursive("extension", 1),
+    loadPageRecursive("theme", 1),
+  ]);
+
+  // let extensionsNextPage = 1;
+  // let themesNextPage = 1;
+  // do {
+  //     extensionReposArray = await loadPage("extension", extensionsNextPage);
+  //     appendInformationToLocalStorage(extensionReposArray, "extension");
+  // } while (extensionsNextPage);
+
+  // do {
+  //     themeReposArray = await loadPage("theme", themesNextPage);
+  //     appendInformationToLocalStorage(themeReposArray, "theme");
+  // } while (themesNextPage);
+})();
+
+async function appendInformationToLocalStorage(array, type) {
+  // This system should make it so themes and extensions are stored concurrently
+  for (const repo of array.items) {
+    const data = (type === "theme")
+    // TODO: these functions are expecting a third 'stars' parameter, but where do I get it from?
+      ? await fetchThemeManifest(repo.contents_url, repo.default_branch)
+      : await fetchExtensionManifest(repo.contents_url, repo.default_branch);
+    if (data) {
+      addToSessionStorage(data);
+      await sleep(5000);
+    }
+  }
+}

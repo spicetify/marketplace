@@ -1,6 +1,5 @@
-import { processAuthors } from './Utils';
+import { processAuthors, addToSessionStorage } from './Utils';
 import { ITEMS_PER_REQUEST } from '../src/constants';
-
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -44,7 +43,7 @@ export async function getExtensionRepos(page = 1, BLACKLIST:string[] = []) {
 * @param {string} branch Default branch name (e.g. main or master)
 * @returns The manifest object
 */
-export  async function getRepoManifest(user, repo, branch) {
+async function getRepoManifest(user, repo, branch) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
   const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
   if (sessionStorageItem) {
@@ -226,18 +225,6 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = []) {
   };
 
   return filteredResults;
-}
-
-function addToSessionStorage(items, key) {
-  if (!items || items == null) return;
-  items.forEach(item => {
-      if (!key) key = `${items.user}-${items.repo}`;
-      // If the key already exists, it will append to it instead of overwriting it
-      const existing = window.sessionStorage.getItem(key);
-      const parsed = existing ? JSON.parse(existing) : [];
-      parsed.push(item);
-      window.sessionStorage.setItem(key, JSON.stringify(parsed));
-  });
 }
 
 /**
