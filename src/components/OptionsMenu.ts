@@ -17,17 +17,17 @@ const OptionsMenuItem = React.memo(({ onSelect, value, isSelected }) => {
   }, value);
 });
 
-// eslint-disable-next-line no-redeclare, no-unused-vars
-const OptionsMenu = React.memo(({
-  // @ts-ignore
+const OptionsMenu = React.memo<{
+  options: any[];
+  onSelect: Function;
+  selected: any;
+  defaultValue?: string;
+  bold?: boolean;
+}>(({
   options,
-  // @ts-ignore
   onSelect,
-  // @ts-ignore
   selected,
-  // @ts-ignore
-  defaultValue,
-  // @ts-ignore
+  defaultValue = "",
   bold = false,
 }) => {
   /**

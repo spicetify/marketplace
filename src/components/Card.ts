@@ -134,7 +134,7 @@ export default class Card extends React.Component<{
       // openReloadModal();
     } else if (this.type === "theme") {
       const themeKey = localStorage.getItem("marketplace:theme-installed");
-      const previousTheme = getLocalStorageDataFromKey(themeKey, {});
+      const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
       console.log(previousTheme);
       console.log(themeKey);
 
@@ -210,7 +210,6 @@ export default class Card extends React.Component<{
       this.setState({ installed: false });
     }
   }
-
 
   async installTheme() {
     console.log(`Installing theme ${this.localStorageKey}`);
@@ -307,7 +306,7 @@ export default class Card extends React.Component<{
       // Update the active theme in Grid state
       this.updateActiveTheme(null);
       // Removes the current colour scheme
-      this.updateColourSchemes(null);
+      this.updateColourSchemes(null, null);
 
       this.setState({ installed: false });
     }
@@ -593,12 +592,4 @@ export default class Card extends React.Component<{
     )),
     ))));
   }
-
-  // render() {
-  //   return React.createElement("div", {
-  //     className: "card",
-  //   }, React.createElement("h2", {
-  //     className: "card-title",
-  //   }, "TODO: add card component"));
-  // }
 }

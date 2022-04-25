@@ -1,4 +1,5 @@
 import React from "react";
+
 import OptionsMenu from "./OptionsMenu";
 
 const SortBox = (props) => {
@@ -18,13 +19,13 @@ const SortBox = (props) => {
   // console.log(sortBySelected);
 
   return React.createElement("div", {
-      className: "marketplace-sort-bar",
+    className: "marketplace-sort-bar",
   }, React.createElement("div", {
-      className: "marketplace-sort-container",
+    className: "marketplace-sort-container",
   }, React.createElement(OptionsMenu, {
-      options: props.sortBoxOptions,
-      onSelect: (value) => props.onChange(value),
-      selected: sortBySelected,
+    options: props.sortBoxOptions,
+    onSelect: (value) => props.onChange(value),
+    selected: sortBySelected,
   })));
 };
 
