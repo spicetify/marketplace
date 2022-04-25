@@ -1,0 +1,6 @@
+☐ Convert icons into same component with different content/svg
+☐ Make having addSnippetContainer var outside of function work
+☐ Make sure anywhere using the icons doesn't have issues with it returning a component instead of a react.createElement
+☐ Use ?? and .? operators where possible
+☐ Set up proper typings and remove "any" where I can
+☐ Make sure the logic with requestPage is correct (needs to be a number, original logic has it sometimes null)

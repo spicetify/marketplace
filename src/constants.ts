@@ -8,3 +8,16 @@ export const LOCALSTORAGE_KEYS = {
   // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
   "themeInstalled": "marketplace:theme-installed",
 };
+
+// Initalize topbar tabs
+// Data initalized in TabBar.js
+export const ALL_TABS = [
+  { name: "Extensions", enabled: true },
+  { name: "Themes", enabled: true },
+  { name: "Snippets", enabled: true },
+  { name: "Installed", enabled: true },
+];
+
+// Max GitHub API items per page
+// https://docs.github.com/en/rest/reference/search#search-repositories
+export const ITEMS_PER_REQUEST = 100;

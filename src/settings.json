@@ -1,6 +1,6 @@
 {
   "displayName": "Marketplace",
   "nameId": "marketplace",
-  "icon": "css/icon.svg",
-  "activeIcon": "css/icon.svg"
+  "icon": "assets/icon.svg",
+  "activeIcon": "assets/icon-active.svg"
 }
