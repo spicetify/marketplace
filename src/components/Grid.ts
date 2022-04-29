@@ -1,7 +1,7 @@
 import React from "react";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
-import { openAddSnippetModal } from "../../logic/LaunchModals";
+import { openModal } from "../../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
   getThemeRepos, fetchThemeManifest,
@@ -466,7 +466,7 @@ export default class Grid extends React.Component<
       // Add snippets button if on snippets tab
       this.CONFIG.activeTab === "Snippets" ? React.createElement("button", {
           className: "marketplace-add-snippet-btn main-buttons-button main-button-secondary",
-          onClick: openAddSnippetModal,
+          onClick: () => openModal('ADD_SNIPPET'),
       }, "+Add CSS") : null,
       ), React.createElement(TopBarContent, {
           switchCallback: this.switchTo.bind(this),

@@ -1,5 +1,5 @@
 ☐ Convert icons into same component with different content/svg
-☐ Make having addSnippetContainer var outside of function work
+✔ Make having addSnippetContainer var outside of function work @done(22-04-29 19:02)
 ☐ Make sure anywhere using the icons doesn't have issues with it returning a component instead of a react.createElement
 ☐ Use ?? and .? operators where possible
 ☐ Set up proper typings and remove "any" where I can
