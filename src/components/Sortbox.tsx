@@ -18,15 +18,17 @@ const SortBox = (props) => {
   const sortBySelected = props.sortBoxOptions.find(props.sortBySelectedFn);
   // console.log(sortBySelected);
 
-  return React.createElement("div", {
-    className: "marketplace-sort-bar",
-  }, React.createElement("div", {
-    className: "marketplace-sort-container",
-  }, React.createElement(OptionsMenu, {
-    options: props.sortBoxOptions,
-    onSelect: (value) => props.onChange(value),
-    selected: sortBySelected,
-  })));
+  return (
+    <div className="marketplace-sort-bar">
+      <div className="marketplace-sort-container">
+        <OptionsMenu
+          options={props.sortBoxOptions}
+          onSelect={(value) => props.onChange(value)}
+          selected={sortBySelected}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default SortBox;
