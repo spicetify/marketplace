@@ -1,7 +1,7 @@
 import React from "react";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
-import { openAddSnippetModal } from "../../logic/AddSnippetModal";
+import { openAddSnippetModal } from "../../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
   getThemeRepos, fetchThemeManifest,
