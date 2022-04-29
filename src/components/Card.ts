@@ -9,6 +9,7 @@ import {
 } from "../../logic/Utils";
 import TrashIcon from "./Icons/TrashIcon";
 import DownloadIcon from "./Icons/DownloadIcon";
+import { openReloadModal } from "../../logic/LaunchModals";
 
 export default class Card extends React.Component<{
   title: string;
@@ -135,8 +136,7 @@ export default class Card extends React.Component<{
       } else {
         this.installExtension();
       }
-      console.log('TODO: open reload modal');
-      // openReloadModal();
+      openReloadModal();
     } else if (this.type === "theme") {
       const themeKey = localStorage.getItem("marketplace:theme-installed");
       const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
@@ -153,8 +153,7 @@ export default class Card extends React.Component<{
       }
 
       // If the new or previous theme has JS, prompt to reload
-      // if (this.include || previousTheme.include) openReloadModal();
-      if (this.include || previousTheme.include) console.log("TODO: open reload modal");
+      if (this.include || previousTheme.include) openReloadModal();
     } else if (this.type === "snippet") {
       if (this.isInstalled()) {
         console.log("Snippet already installed, removing");

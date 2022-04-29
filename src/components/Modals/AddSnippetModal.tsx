@@ -1,12 +1,12 @@
-/// <reference path='../../../spicetify-cli/globals.d.ts' />
-/// <reference path='../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
+/// <reference path='../../../../spicetify-cli/globals.d.ts' />
+/// <reference path='../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
 
 import React from 'react';
 import {
   getLocalStorageDataFromKey,
   initializeSnippets,
-} from '../../logic/Utils';
-import { LOCALSTORAGE_KEYS } from '../../src/constants';
+} from '../../../logic/Utils';
+import { LOCALSTORAGE_KEYS } from '../../constants';
 
 const AddSnippetModal = () => {
   function saveSnippet() {
