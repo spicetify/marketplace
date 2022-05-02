@@ -150,6 +150,7 @@ class Grid extends react.Component {
         super(props);
         Object.assign(this, props);
         this.state = {
+            searchValue: "",
             cards: [],
             tabs: CONFIG.tabs,
             rest: true,
@@ -537,14 +538,15 @@ class Grid extends react.Component {
         }, SETTINGS_ICON),
         // End of marketplace-header__right
         ),
-            // TODO: Add search bar and sort functionality
-            // react.createElement("div", {
-            //     className: "searchbar--bar__wrapper",
-            // }, react.createElement("input", {
-            //     className: "searchbar-bar",
-            //     type: "text",
-            //     placeholder: "Search for Extensions?",
-            // })),
+        react.createElement("div", {
+            className: "searchbar--bar__wrapper",
+        }, react.createElement("input", {
+            className: "searchbar-bar",
+            type: "text",
+            placeholder: "Search",
+            value: this.state.searchValue,
+            onChange: (event) => this.setState({ searchValue: event.target.value }),
+        })),
         ),
         [ // Add a header and grid for each card type if it has any cards
             { handle: "extension", name: "Extensions" },
@@ -552,6 +554,18 @@ class Grid extends react.Component {
             { handle: "snippet", name: "Snippets" },
         ].map((cardType) => {
             const cardsOfType = cardList.filter((card) => card.props.type === cardType.handle)
+                .filter((card) => { // Search filter
+                    const { searchValue } = this.state;
+                    const { title, user } = card.props;
+
+                    if (searchValue.trim() === "")
+                        return card;
+                    else if (
+                        title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+                        user.toLowerCase().includes(searchValue.trim().toLowerCase())
+                    )
+                        return card;
+                })
                 .map((card) => {
                     // Clone the cards and update the prop to trigger re-render
                     // TODO: is it possible to only re-render the theme cards whose status have changed?
@@ -826,7 +840,7 @@ async function getThemeRepos(page = 1) {
     return filteredResults;
 }
 function addToSessionStorage(items, key) {
-    if (!items || items == null) return;
+    if (!items) return;
     items.forEach(item => {
         if (!key) key = `${items.user}-${items.repo}`;
         // If the key already exists, it will append to it instead of overwriting it
