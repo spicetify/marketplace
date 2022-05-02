@@ -558,13 +558,11 @@ class Grid extends react.Component {
                     const { searchValue } = this.state;
                     const { title, user } = card.props;
 
-                    if (searchValue.trim() === "")
-                        return card;
-                    else if (
+                    if (
+                        searchValue.trim() === "" ||
                         title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
                         user.toLowerCase().includes(searchValue.trim().toLowerCase())
-                    )
-                        return card;
+                    ) return card;
                 })
                 .map((card) => {
                     // Clone the cards and update the prop to trigger re-render
