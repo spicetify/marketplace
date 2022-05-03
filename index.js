@@ -142,7 +142,10 @@ let requestPage = null;
 const ITEMS_PER_REQUEST = 100;
 
 let BLACKLIST = [];
+
+// Search variables
 let searchQuery = "";
+let requested = false;
 
 // eslint-disable-next-line no-redeclare, no-unused-vars
 let gridUpdateTabs, gridUpdatePostsVisual;
@@ -554,8 +557,18 @@ class Grid extends react.Component {
                 this.setState({ searchValue: event.target.value });
                 searchQuery = event.target.value;
             },
-            onKeyPress: (event) => {
-                if (event.key === "Enter") this.newRequest(ITEMS_PER_REQUEST);
+            onKeyDown: (event) => {
+                if (event.key === "Enter") {
+                    this.newRequest(ITEMS_PER_REQUEST);
+                    requested = true;
+                } else if ( // Refreshes result when user deletes all queries
+                    ((event.key === "Backspace") || (event.key === "Delete")) &&
+                    requested &&
+                    this.state.searchValue.trim() === ""
+                ) {
+                    this.newRequest(ITEMS_PER_REQUEST);
+                    requested = false;
+                }
             },
         })),
         ),
