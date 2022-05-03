@@ -2,6 +2,7 @@
 /// <reference types="react-dom" />
 /// <reference path="../spicetify-cli/globals.d.ts" />
 /// <reference path="../spicetify-cli/jsHelper/spicetifyWrapper.js" />
+/// <reference path="src/AddSnippetModal.js" />
 /// <reference path="src/Card.js" />
 /// <reference path="src/Icons.js" />
 /// <reference path="src/Settings.js" />
@@ -646,6 +647,7 @@ async function getExtensionRepos(page = 1) {
     const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allRepos.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
+        return null;
     }
     const filteredResults = {
         ...allRepos,
@@ -841,6 +843,7 @@ async function getThemeRepos(page = 1) {
     const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
     if (!allThemes.items) {
         Spicetify.showNotification("Too Many Requests, Cool Down.");
+        return null;
     }
     const filteredResults = {
         ...allThemes,
