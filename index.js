@@ -141,6 +141,7 @@ let requestPage = null;
 const ITEMS_PER_REQUEST = 100;
 
 let BLACKLIST = [];
+let searchQuery = "";
 
 // eslint-disable-next-line no-redeclare, no-unused-vars
 let gridUpdateTabs, gridUpdatePostsVisual;
@@ -249,7 +250,8 @@ class Grid extends react.Component {
     // Returns the next page number to fetch, or null if at end
     // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
     async loadPage(queue) {
-        if (CONFIG.activeTab === "Extensions") {
+        switch (CONFIG.activeTab) {
+        case "Extensions": {
             let pageOfRepos = await getExtensionRepos(requestPage);
             for (const repo of pageOfRepos.items) {
                 let extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -276,7 +278,8 @@ class Grid extends react.Component {
             console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
             if (remainingResults > 0) return currentPage + 1;
             else console.log("No more extension results");
-        } else if (CONFIG.activeTab === "Installed") {
+            break;
+        } case "Installed": {
             const installedStuff = {
                 theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
                 extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
@@ -299,10 +302,10 @@ class Grid extends react.Component {
                     });
                 }
             }
-
+            break;
             // Don't need to return a page number because
             // installed extension do them all in one go, since it's local
-        } else if (CONFIG.activeTab == "Themes") {
+        } case "Themes": {
             let pageOfRepos = await getThemeRepos(requestPage);
             for (const repo of pageOfRepos.items) {
 
@@ -327,7 +330,8 @@ class Grid extends react.Component {
             console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
             if (remainingResults > 0) return currentPage + 1;
             else console.log("No more theme results");
-        } else if (CONFIG.activeTab == "Snippets") {
+            break;
+        } case "Snippets": {
             let snippets = await fetchCssSnippets();
 
             if (requestQueue.length > 1 && queue !== requestQueue[0]) {
@@ -337,8 +341,8 @@ class Grid extends react.Component {
             if (snippets && snippets.length) {
                 snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
             }
-
-        }
+            break;
+        }}
 
         this.setState({ rest: true, endOfList: true });
         endOfList = true;
@@ -545,7 +549,13 @@ class Grid extends react.Component {
             type: "text",
             placeholder: "Search",
             value: this.state.searchValue,
-            onChange: (event) => this.setState({ searchValue: event.target.value }),
+            onChange: (event) => {
+                this.setState({ searchValue: event.target.value });
+                searchQuery = event.target.value;
+            },
+            onKeyPress: (event) => {
+                if (event.key === "Enter") this.newRequest(ITEMS_PER_REQUEST);
+            },
         })),
         ),
         [ // Add a header and grid for each card type if it has any cards
@@ -622,7 +632,10 @@ class Grid extends react.Component {
  */
 async function getExtensionRepos(page = 1) {
     // www is needed or it will block with "cross-origin" error.
-    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
+    let url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`;
+    if (searchQuery?.trim() !== "") {
+        url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`${searchQuery} topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`;
+    }
 
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
     // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
@@ -816,7 +829,9 @@ async function fetchThemeManifest(contents_url, branch, stars) {
  */
 async function getThemeRepos(page = 1) {
     let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
-
+    if (searchQuery?.trim() !== "") {
+        url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`${searchQuery} topic:spicetify-themes`)}&per_page=${ITEMS_PER_REQUEST}`;
+    }
     // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
     // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
     if (page) url += `&page=${page}`;
