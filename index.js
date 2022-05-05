@@ -559,6 +559,8 @@ class Grid extends react.Component {
             },
             onKeyDown: (event) => {
                 if (event.key === "Enter") {
+                    this.setState({ endOfList: false });
+                    endOfList = false;
                     this.newRequest(ITEMS_PER_REQUEST);
                     requested = true;
                 } else if ( // Refreshes result when user deletes all queries
@@ -566,6 +568,8 @@ class Grid extends react.Component {
                     requested &&
                     this.state.searchValue.trim() === ""
                 ) {
+                    this.setState({ endOfList: false });
+                    endOfList = false;
                     this.newRequest(ITEMS_PER_REQUEST);
                     requested = false;
                 }
