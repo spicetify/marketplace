@@ -164,6 +164,8 @@ class Grid extends react.Component {
             activeScheme: CONFIG.theme.activeScheme,
             activeThemeKey: CONFIG.theme.activeThemeKey,
         };
+
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
     // TODO: should I put this in Grid state?
@@ -518,6 +520,25 @@ class Grid extends react.Component {
         return this.state.activeScheme;
     }
 
+    /**
+     * @param {import("react").KeyboardEvent} event
+     */
+    handleSearch (event) {
+        if (event.key === "Enter") {
+            this.setState({ endOfList: false });
+            this.newRequest(ITEMS_PER_REQUEST);
+            requested = true;
+        } else if ( // Refreshes result when user deletes all queries
+            ((event.key === "Backspace") || (event.key === "Delete")) &&
+            requested &&
+            this.state.searchValue.trim() === ""
+        ) {
+            this.setState({ endOfList: false });
+            this.newRequest(ITEMS_PER_REQUEST);
+            requested = false;
+        }
+    }
+
     render() {
         return react.createElement("section", {
             className: "contentSpacing",
@@ -557,23 +578,7 @@ class Grid extends react.Component {
                 this.setState({ searchValue: event.target.value });
                 searchQuery = event.target.value;
             },
-            onKeyDown: (event) => {
-                if (event.key === "Enter") {
-                    this.setState({ endOfList: false });
-                    endOfList = false;
-                    this.newRequest(ITEMS_PER_REQUEST);
-                    requested = true;
-                } else if ( // Refreshes result when user deletes all queries
-                    ((event.key === "Backspace") || (event.key === "Delete")) &&
-                    requested &&
-                    this.state.searchValue.trim() === ""
-                ) {
-                    this.setState({ endOfList: false });
-                    endOfList = false;
-                    this.newRequest(ITEMS_PER_REQUEST);
-                    requested = false;
-                }
-            },
+            onKeyDown: (event) => this.handleSearch(event),
         })),
         ),
         [ // Add a header and grid for each card type if it has any cards
