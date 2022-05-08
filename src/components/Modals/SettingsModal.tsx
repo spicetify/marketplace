@@ -72,7 +72,7 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
       <label className={`x-toggle-wrapper ${classes ? classes.join(" "): ""}`}>
         <input type="checkbox" className="x-toggle-input" title={`Toggle for ${key}`}
           checked={enabled}
-          disabled={!enabled}
+          disabled={key === "Extensions"}
           onChange={clickToggle}
         />
         <span className="x-toggle-indicatorWrapper">

@@ -1,9 +1,15 @@
 // import styles from './styles/app.module.scss'
 import React from 'react'
 
-// TODO: the mono-stylesheet doesn't seem to import the component stylesheets properly on build?
+// TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
-import './styles/styles.css'
+import './styles/components/_grid.scss';
+import './styles/components/_card.scss';
+import './styles/components/_settings.scss';
+import './styles/components/_reload-modal.scss';
+import './styles/components/_add-snippet-modal.scss';
+import './styles/components/_readme-pages.scss';
+import './styles/components/_fixes.scss';
 
 import Grid from './components/Grid';
 import { getLocalStorageDataFromKey } from '../logic/Utils';
