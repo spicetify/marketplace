@@ -1,37 +1,51 @@
 /// <reference path='../../spicetify-cli/globals.d.ts' />
 /// <reference path='../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
 
-import React from'react';
+import React from 'react';
 
 import AddSnippetModal from '../src/components/Modals/AddSnippetModal';
 import ReloadModal from '../src/components/Modals/ReloadModal';
+import SettingsModal from '../src/components/Modals/SettingsModal';
 // import SettingsModal from '../src/components/Modals/SettingsModal';
 
-type ModalType = 'ADD_SNIPPET' | 'RELOAD'; // | 'SETTINGS';
+type ModalType = 'ADD_SNIPPET' | 'RELOAD' | 'SETTINGS';
 
-const MODAL_SETTING_MAP: { [key in ModalType]: { title: string; content: any; isLarge: boolean} } = {
-    ADD_SNIPPET: {
+const getModalSettings = (modalType: ModalType, CONFIG?: any, triggerRefresh?: (CONFIG: any) => void) => {
+  switch (modalType) {
+    case 'ADD_SNIPPET':
+      return {
         title: 'Add Snippet',
         content: <AddSnippetModal />,
-        isLarge: true,
-    },
-    RELOAD: {
-        title: 'Reload required',
+        isLarge: false,
+      };
+    case 'RELOAD':
+      return {
+        title: 'Reload',
         content: <ReloadModal />,
         isLarge: false,
-    },
-    // SETTINGS: {
-    //     title: 'Marketplace Settings',
-    //     content: <SettingsModal />,
-    //     isLarge: true,
-    // },
-}
+      };
+    case 'SETTINGS':
+      return {
+        title: 'Settings',
+        // TODO: If I just use {CONFIG}, it nests it inside another object...
+        content: <SettingsModal CONFIG={CONFIG} triggerRefresh={triggerRefresh} />,
+        isLarge: true,
+      };
+    default:
+      return {
+        title: '',
+        content: null,
+        isLarge: false,
+      };
+  }
+};
 
-export const openModal = (modal: ModalType) => {
-    const triggerModal = () => {
-        Spicetify.PopupModal.display(MODAL_SETTING_MAP[modal]);
-    };
+export const openModal = (modal: ModalType, CONFIG?: any, triggerRefresh?: (CONFIG: any) => void) => {
+  const triggerModal = () => {
+    const modalSettings = getModalSettings(modal, CONFIG, triggerRefresh);
+    Spicetify.PopupModal.display(modalSettings);
+  };
 
-    triggerModal();
-    return;
-}
+  triggerModal();
+  return;
+};

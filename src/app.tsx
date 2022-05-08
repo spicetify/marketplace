@@ -2,16 +2,17 @@
 import React from 'react'
 
 // TODO: the mono-stylesheet doesn't seem to import the component stylesheets properly on build?
-// import './styles/styles.scss'
+// import './styles/styles.scss';
 import './styles/styles.css'
 
 import Grid from './components/Grid';
 import { getLocalStorageDataFromKey } from '../logic/Utils';
 import { ALL_TABS, LOCALSTORAGE_KEYS } from './constants';
 
-class App extends React.Component<{}, {count: number}> {
+class App extends React.Component<{}, {count: number, CONFIG: any}> {
   state = {
     count: 0,
+    CONFIG: {},
   };
 
   location: any;
@@ -84,6 +85,14 @@ class App extends React.Component<{}, {count: number}> {
     }
 	}
 
+  updateConfig = (config: any) => {
+    this.CONFIG = {...config};
+    console.log('updated config', this.CONFIG);
+    this.setState({
+      CONFIG: {...config},
+    });
+  }
+
   // onButtonClick = () => {
   //   this.setState((state) => {
   //     return {
@@ -105,7 +114,7 @@ class App extends React.Component<{}, {count: number}> {
       // });
     } // Otherwise, render the main Grid
     else {
-      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} />
+      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} triggerRefresh={this.updateConfig} />
     }
 
     return <>

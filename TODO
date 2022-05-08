@@ -5,4 +5,6 @@
 ☐ Set up proper typings and remove "any" where I can
 ☐ Make sure the logic with requestPage is correct (needs to be a number, original logic has it sometimes null)
 ☐ Get the settings modal working
+  ☐ It looks like it's applying but I need to update state on the App, and the modal isn't updating...
+☐ Component-ize the settings modal
 ☐ Use spcr-navigation-bar

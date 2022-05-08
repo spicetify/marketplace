@@ -18,6 +18,7 @@ export default class Grid extends React.Component<
 {
   title: string,
   CONFIG: any,
+  triggerRefresh: (CONFIG: any) => void,
 },
 {
   // TODO: add types
@@ -33,6 +34,7 @@ export default class Grid extends React.Component<
   constructor(props) {
     super(props);
     Object.assign(this, props);
+    this.triggerRefresh = props.triggerRefresh.bind(this);
 
     // Fetches the sorting options, fetched from SortBox.js
     this.sortConfig = {
@@ -61,6 +63,7 @@ export default class Grid extends React.Component<
   gridUpdatePostsVisual: any;
   checkScroll: any;
   CONFIG: any;
+  triggerRefresh: (CONFIG: any) => void;
   BLACKLIST: any;
 
   // TODO: should I put this in Grid state?
@@ -408,8 +411,8 @@ export default class Grid extends React.Component<
           className: "marketplace-settings-button",
           id: "marketplace-settings-button",
 
-          // onClick: openConfig,
-          onClick: () => { console.log('TODO: add settings modal')},
+          onClick: () => openModal('SETTINGS', this.CONFIG, this.triggerRefresh),
+          // onClick: () => { console.log('TODO: add settings modal')},
       }, SettingsIcon),
       // End of marketplace-header__right
       ),
