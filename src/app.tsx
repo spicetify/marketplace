@@ -22,11 +22,9 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
     CONFIG: {},
   };
 
-  location: any;
   CONFIG: any;
 	constructor(props: any) {
 		super(props);
-		this.location = Spicetify.Platform.History.location;
 
     // Get tabs config from local storage
     let tabsString = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
@@ -101,10 +99,11 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
   }
 
   render() {
+    const { location } = Spicetify.Platform.History;
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
-    if (this.location.pathname === `${CUSTOM_APP_PATH}/readme`) {
-      return <ReadmePage title='Spicetify Marketplace - Readme' data={this.location.state.data} />;
+    if (location.pathname === `${CUSTOM_APP_PATH}/readme`) {
+      return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {
       return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} triggerRefresh={this.updateConfig} />
