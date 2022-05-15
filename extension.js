@@ -57,7 +57,7 @@ const hexToRGB = (hex) => {
 const getParamsFromGithubRaw = (url) => {
     // eslint-disable-next-line no-useless-escape
     const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\/(?<filePath>.+$)/);
-    // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
+    // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
     const obj = {
         user: regex_result ? regex_result.groups.user : null,
@@ -321,7 +321,8 @@ const getParamsFromGithubRaw = (url) => {
 const ITEMS_PER_REQUEST = 100;
 
 async function Blacklist() {
-    const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
+    // TODO
+    const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/blacklist.json";
     const jsonReturned = await fetch(url).then(res => res.json()).catch(() => {});
     return jsonReturned.repos;
 }

@@ -7,20 +7,20 @@ Made by [@theRealpadster](https://github.com/theRealPadster) and [@CharlieS1103]
 Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/Custom-Apps#reddit)
 
 <p align="center">
-  <a href="https://github.com/CharlieS1103/spicetify-marketplace/releases/latest">
-    <img src="https://img.shields.io/github/v/release/CharlieS1103/spicetify-marketplace?include_prereleases">
+  <a href="https://github.com/spicetify/spicetify-marketplace/releases/latest">
+    <img src="https://img.shields.io/github/v/release/spicetify/spicetify-marketplace?include_prereleases">
   </a>
-  <a href="https://github.com/CharlieS1103/spicetify-marketplace/issues?q=is%3Aissue+is%3Aclosed">
-    <img src="https://img.shields.io/github/issues-closed/CharlieS1103/spicetify-marketplace">
+  <a href="https://github.com/spicetify/spicetify-marketplace/issues?q=is%3Aissue+is%3Aclosed">
+    <img src="https://img.shields.io/github/issues-closed/spicetify/spicetify-marketplace">
   </a>
-  <a href="https://github.com/CharlieS1103/spicetify-marketplace/commits/main">
-    <img src="https://img.shields.io/github/commit-activity/m/CharlieS1103/spicetify-marketplace">
+  <a href="https://github.com/spicetify/spicetify-marketplace/commits/main">
+    <img src="https://img.shields.io/github/commit-activity/m/spicetify/spicetify-marketplace">
   </a>
 
 </p>
 
 ## Disclaimer
-All extensions are from community. They might contain unwanted code. Be careful what you install, or review the code before use. We hold no responsibility for these extensions or anything installed via this custom app. If you find a malicious extension, please [submit an issue](https://github.com/CharlieS1103/spicetify-marketplace/issues/new?template=malicious-extension-report.md) and we can add it to the [blacklist](blacklist.json). 
+All extensions are from community. They might contain unwanted code. Be careful what you install, or review the code before use. We hold no responsibility for these extensions or anything installed via this custom app. If you find a malicious extension, please [submit an issue](https://github.com/spicetify/spicetify-marketplace/issues/new?template=malicious-extension-report.md) and we can add it to the [blacklist](blacklist.json). 
 
 ## Notes: 
 This project is a work-in-progress and is not finished, polished, or guaranteed to work. Use at your own risk. 
@@ -31,13 +31,13 @@ This project is a work-in-progress and is not finished, polished, or guaranteed 
 Open Powershell and paste the following:
 
 ```powershell
-Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/master/install.ps1" | Invoke-Expression
+Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/master/install.ps1" | Invoke-Expression
 ```
 ### Auto Install (MacOS and Linux)
 Open a terminal and paste the following:
 
 ```shell
-curl -fsSL https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/install.sh | sh
 ```
 
 ### Manual Install (recommended)

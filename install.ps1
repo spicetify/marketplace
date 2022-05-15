@@ -24,7 +24,7 @@ if (-not (Test-Path $sp_dot_dir)) {
 }
 
 Write-Host "Downloading..." -ForegroundColor "Green"
-Invoke-WebRequest -Uri "https://github.com/CharlieS1103/spicetify-marketplace/archive/refs/heads/main.zip" -UseBasicParsing -OutFile "${HOME}/spicetify-cli/CustomApps/spicetify-marketplace.zip"
+Invoke-WebRequest -Uri "https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/main.zip" -UseBasicParsing -OutFile "${HOME}/spicetify-cli/CustomApps/spicetify-marketplace.zip"
 
 Write-Host "Unzipping and installing..." -ForegroundColor "Green"
 Expand-Archive -Path "${HOME}/spicetify-cli/CustomApps/spicetify-marketplace.zip" -DestinationPath "${HOME}/spicetify-cli/CustomApps/" -Force

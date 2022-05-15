@@ -1,6 +1,6 @@
 import React from "react";
 
-import { LOCALSTORAGE_KEYS } from "../constants";
+import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../constants";
 import {
   getLocalStorageDataFromKey,
   parseIni,
@@ -389,7 +389,7 @@ export default class Card extends React.Component<{
   openReadme() {
     if (this.manifest && this.manifest.readme) {
       Spicetify.Platform.History.push({
-        pathname: "/spicetify-marketplace/readme",
+        pathname: `${CUSTOM_APP_PATH}/readme`,
         state: {
           data: {
             title: this.title,

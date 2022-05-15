@@ -4,10 +4,10 @@
 
 set -e
 
-    latest_release_uri="https://github.com/CharlieS1103/spicetify-marketplace/archive/refs/heads/main.zip"
+    latest_release_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/main.zip"
     echo "DOWNLOADING    $latest_release_uri"
 
-    download_uri="https://github.com/CharlieS1103/spicetify-marketplace/archive/refs/heads/main.zip"
+    download_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/main.zip"
 
 SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"

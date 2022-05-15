@@ -263,7 +263,7 @@ export const parseCSS = async (themeManifest) => {
  */
 export const getParamsFromGithubRaw = (url) => {
   const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\/(?<filePath>.+$)/);
-  // e.g. https://raw.githubusercontent.com/CharlieS1103/spicetify-extensions/main/featureshuffle/featureshuffle.js
+  // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
   const obj = {
     user: regex_result ? regex_result.groups.user : null,

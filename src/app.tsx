@@ -14,7 +14,7 @@ import './styles/components/_fixes.scss';
 import Grid from './components/Grid';
 import ReadmePage from './components/ReadmePage';
 import { getLocalStorageDataFromKey } from '../logic/Utils';
-import { ALL_TABS, LOCALSTORAGE_KEYS } from './constants';
+import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from './constants';
 
 class App extends React.Component<{}, {count: number, CONFIG: any}> {
   state = {
@@ -103,7 +103,7 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
   render() {
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
-    if (this.location.pathname === "/spicetify-marketplace/readme") {
+    if (this.location.pathname === `${CUSTOM_APP_PATH}/readme`) {
       return <ReadmePage title='Spicetify Marketplace - Readme' data={this.location.state.data} />;
     } // Otherwise, render the main Grid
     else {

@@ -232,7 +232,7 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = []) {
 * @returns {Promise<string[]>} String array of blacklisted repos
 */
 export const getBlacklist = async () => {
-  const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/blacklist.json";
+  const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/blacklist.json";
   const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
   return jsonReturned.repos;
 };
@@ -242,7 +242,7 @@ export const getBlacklist = async () => {
 * @returns { Promise<{ title: string; description: string; code: string;}[]> } Array of snippets
 */
 export const fetchCssSnippets = async () => {
-  const url = "https://raw.githubusercontent.com/CharlieS1103/spicetify-marketplace/main/snippets.json";
+  const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/snippets.json";
   const json = await fetch(url).then(res => res.json()).catch(() => { });
   return json;
 };

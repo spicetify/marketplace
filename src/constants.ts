@@ -22,3 +22,5 @@ export const ALL_TABS = [
 // Max GitHub API items per page
 // https://docs.github.com/en/rest/reference/search#search-repositories
 export const ITEMS_PER_REQUEST = 100;
+
+export const CUSTOM_APP_PATH = '/spicetify-marketplace';
