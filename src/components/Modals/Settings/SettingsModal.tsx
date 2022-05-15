@@ -1,38 +1,13 @@
-/// <reference path='../../../../spicetify-cli/globals.d.ts' />
-/// <reference path='../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
+/// <reference path='../../../../../spicetify-cli/globals.d.ts' />
+/// <reference path='../../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
 
 import React from 'react';
-import { resetMarketplace } from '../../../logic/Utils';
-import { LOCALSTORAGE_KEYS } from '../../constants';
+import { resetMarketplace } from '../../../../logic/Utils';
+import { LOCALSTORAGE_KEYS } from '../../../constants';
+import SettingsToggle from './SettingsToggle';
 
 const SettingsModal = ({ CONFIG, triggerRefresh }) => {
   console.log(CONFIG);
-
-  // Generate the DOM markup for a toggle switch
-  function renderToggle(key: string, classes?: string[]) {
-    const enabled = !!CONFIG.visual[key];
-    console.log(`toggling ${key} to ${enabled}`);
-
-    const clickToggle = (e) => {
-      const state = e.target.checked;
-      CONFIG.visual[key] = state;
-      localStorage.setItem(`marketplace:${key}`, String(state));
-
-      // TODO: does this work?
-      triggerRefresh(CONFIG);
-      // gridUpdatePostsVisual && gridUpdatePostsVisual();
-    };
-
-    // convert to jsx
-    return (
-      <label className={`x-toggle-wrapper ${classes ? classes.join(" "): ""}`}>
-        <input title={`Toggle for ${key}`} className="x-toggle-input" type="checkbox" checked={enabled} onChange={clickToggle} />
-        <span className="x-toggle-indicatorWrapper">
-          <span className="x-toggle-indicator"></span>
-        </span>
-      </label>
-    );
-  }
 
   // TODO: add index?
   function renderTabToggle(key: string, classes?: string[]) {
@@ -79,17 +54,6 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
           <span className="x-toggle-indicator"></span>
         </span>
       </label>
-    );
-  }
-
-  function createToggle(name, key) {
-    return (
-      <div className="setting-row">
-        <label className="col description">{name}</label>
-        <div className="col action">
-          {renderToggle(key)}
-        </div>
-      </div>
     );
   }
 
@@ -142,10 +106,10 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
   return (
     <div id="marketplace-config-container">
       <h2>Options</h2>
-      {createToggle("Stars count", "stars")}
-      {createToggle("Tags", "tags")}
-      {createToggle("Hide installed in Marketplace", "hideInstalled")}
-      {createToggle("Shift Colors Every Minute", "colorShift")}
+      <SettingsToggle name='Stars count' key='stars' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Tags' key='tags' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Hide installed in Marketplace' key='hideInstalled' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Shift Colors Every Minute' key='colorShift' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
       <h2>Tabs</h2>
       <div className="tabs-container">
         {/* TODO: pass index? */}

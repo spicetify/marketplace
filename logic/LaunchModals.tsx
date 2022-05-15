@@ -5,7 +5,7 @@ import React from 'react';
 
 import AddSnippetModal from '../src/components/Modals/AddSnippetModal';
 import ReloadModal from '../src/components/Modals/ReloadModal';
-import SettingsModal from '../src/components/Modals/SettingsModal';
+import SettingsModal from '../src/components/Modals/Settings/SettingsModal';
 // import SettingsModal from '../src/components/Modals/SettingsModal';
 
 type ModalType = 'ADD_SNIPPET' | 'RELOAD' | 'SETTINGS';
