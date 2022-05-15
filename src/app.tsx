@@ -12,6 +12,7 @@ import './styles/components/_readme-pages.scss';
 import './styles/components/_fixes.scss';
 
 import Grid from './components/Grid';
+import ReadmePage from './components/ReadmePage';
 import { getLocalStorageDataFromKey } from '../logic/Utils';
 import { ALL_TABS, LOCALSTORAGE_KEYS } from './constants';
 
@@ -99,37 +100,15 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
     });
   }
 
-  // onButtonClick = () => {
-  //   this.setState((state) => {
-  //     return {
-  //       count: state.count+1,
-  //     }
-  //   });
-  // };
-
   render() {
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
-    if (location.pathname === "/spicetify-marketplace/readme") {
-      return <div>
-        <h1>TODO: readme pages</h1>
-      </div>;
-      // return react.createElement(ReadmePage, {
-      //     title: "Spicetify Marketplace - Readme",
-      //     data: this.location.state.data,
-      // });
+    if (this.location.pathname === "/spicetify-marketplace/readme") {
+      return <ReadmePage title='Spicetify Marketplace - Readme' data={this.location.state.data} />;
     } // Otherwise, render the main Grid
     else {
       return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} triggerRefresh={this.updateConfig} />
     }
-
-    return <>
-      <div className={styles.container}>
-        <div className={styles.title}>{"My Custom App!"}</div>
-        <button className={styles.button} onClick={this.onButtonClick}>{"Count up"}</button>
-        <div className={styles.counter}>{this.state.count}</div>
-      </div>
-    </>
   }
 }
 
