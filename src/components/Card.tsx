@@ -408,22 +408,24 @@ export default class Card extends React.Component<{
   generateAuthorsDiv() {
     // Add a div with author links inside
     const authorsDiv = (
-      React.createElement("div", { className: "marketplace-card__authors" },
-        this.authors.map((author) => {
+      <div className="marketplace-card__authors">
+        {this.authors.map((author) => {
           return (
-            React.createElement("a", {
-              title: author.name,
-              className: "marketplace-card__author",
-              href: author.url,
-              draggable: false,
-              dir: "auto",
-              target: "_blank",
-              rel: "noopener noreferrer",
-              onClick: (e) => e.stopPropagation(),
-            }, author.name)
+            <a
+              title={author.name}
+              className="marketplace-card__author"
+              href={author.url}
+              draggable="false"
+              dir="auto"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {author.name}
+            </a>
           );
-        }),
-      )
+        })}
+      </div>
     );
 
     return authorsDiv;

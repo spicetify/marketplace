@@ -1,20 +1,21 @@
 import React from "react";
 
-const OptionsMenuItemIcon = React.createElement("svg", {
-  width: 16,
-  height: 16,
-  viewBox: "0 0 16 16",
-  fill: "currentColor",
-}, React.createElement("path", {
-  d: "M13.985 2.383L5.127 12.754 1.388 8.375l-.658.77 4.397 5.149 9.618-11.262z",
-}));
+const OptionsMenuItemIcon = (
+  <svg width="16px" height="16px" viewBox="0 0 16 16" fill="currentColor">
+    <path d="M13.985 2.383L5.127 12.754 1.388 8.375l-.658.77 4.397 5.149 9.618-11.262z" />
+  </svg>
+);
 
 // @ts-ignore
 const OptionsMenuItem = React.memo(({ onSelect, value, isSelected }) => {
-  return React.createElement(Spicetify.ReactComponent.MenuItem, {
-      onClick: onSelect,
-      icon: isSelected ? OptionsMenuItemIcon : null,
-  }, value);
+  return (
+    <Spicetify.ReactComponent.MenuItem
+      onClick={onSelect}
+      icon={isSelected ? OptionsMenuItemIcon : null}
+    >
+      {value}
+    </Spicetify.ReactComponent.MenuItem>
+  );
 });
 
 const OptionsMenu = React.memo<{
