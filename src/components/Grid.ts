@@ -12,7 +12,7 @@ import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
-import Card from "./Card";
+import Card from "./Card/Card";
 
 export default class Grid extends React.Component<
 {

@@ -1,15 +1,17 @@
 import React from "react";
 
-import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../constants";
+import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
 import {
   getLocalStorageDataFromKey,
   parseIni,
   initializeSnippets,
   parseCSS,
-} from "../../logic/Utils";
-import TrashIcon from "./Icons/TrashIcon";
-import DownloadIcon from "./Icons/DownloadIcon";
-import { openModal } from "../../logic/LaunchModals";
+} from "../../../logic/Utils";
+import TrashIcon from "../Icons/TrashIcon";
+import DownloadIcon from "../Icons/DownloadIcon";
+import { openModal } from "../../../logic/LaunchModals";
+import AuthorsDiv from "./AuthorsDiv";
+import TagsDiv from "./TagsDiv";
 
 export default class Card extends React.Component<{
   title: string;
@@ -24,7 +26,6 @@ export default class Card extends React.Component<{
 }> {
 
   // From `appendCard()`
-  MAX_TAGS: number;
   visual: { type: string; stars: string; };
   type: "extension" | "theme" | "snippet";
   updateColourSchemes: (any, string) => void;
@@ -71,7 +72,6 @@ export default class Card extends React.Component<{
   constructor(props) {
     super(props);
 
-    this.MAX_TAGS = 4;
     this.updateColourSchemes = props.updateColourSchemes;
     this.updateActiveTheme = props.updateActiveTheme;
 
@@ -405,75 +405,6 @@ export default class Card extends React.Component<{
     }
   }
 
-  generateAuthorsDiv() {
-    // Add a div with author links inside
-    const authorsDiv = (
-      <div className="marketplace-card__authors">
-        {this.authors.map((author) => {
-          return (
-            <a
-              title={author.name}
-              className="marketplace-card__author"
-              href={author.url}
-              draggable="false"
-              dir="auto"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {author.name}
-            </a>
-          );
-        })}
-      </div>
-    );
-
-    return authorsDiv;
-  }
-
-  generateTags(tags) {
-    return tags.reduce((accum, tag) => {
-      // Render tags if enabled. Always render external JS tag
-      if (this.props.CONFIG.visual.tags || tag === "external JS") {
-        accum.push(
-          React.createElement("li", {
-            className: "marketplace-card__tag",
-            draggable: false,
-            "data-tag": tag,
-          }, tag),
-        );
-      }
-      return accum;
-    }, []);
-  }
-
-  generateTagsList() {
-    const baseTags = this.tags.slice(0, this.MAX_TAGS);
-    const extraTags = this.tags.slice(this.MAX_TAGS);
-
-    // Add a ul with tags inside
-    const tagsList = (
-      React.createElement("ul", { className: "marketplace-card__tags" },
-        this.generateTags(baseTags),
-        // Show any extra tags if expanded
-        extraTags.length && this.state.tagsExpanded
-          ? this.generateTags(extraTags)
-          : null,
-      )
-    );
-
-    // Render the tags list and add expand button if there are more tags
-    return [tagsList, extraTags.length && !this.state.tagsExpanded
-      ? React.createElement("button", {
-        className: "marketplace-card__tags-more-btn",
-        onClick: (e) => {
-          e.stopPropagation();
-          this.setState({ tagsExpanded: true });
-        },
-      }, "...")
-      : null];
-  }
-
   render() {
     // Cache this for performance
     let IS_INSTALLED = this.isInstalled();
@@ -538,7 +469,7 @@ export default class Card extends React.Component<{
         as: "div",
     },
     // Add authors if they exist
-    this.authors && this.generateAuthorsDiv(),
+    this.authors && <AuthorsDiv authors={this.authors} />,
     React.createElement("span", null, detail.join(" ‒ ")),
     ), React.createElement("p", {
         className: "marketplace-card-desc",
@@ -546,7 +477,7 @@ export default class Card extends React.Component<{
     this.tags.length ? React.createElement("div", {
         className: "marketplace-card__bottom-meta main-type-mestoBold",
         as: "div",
-    }, this.generateTagsList()) : null,
+    }, <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />) : null,
     IS_INSTALLED && React.createElement("div", {
         className: "marketplace-card__bottom-meta main-type-mestoBold",
         as: "div",

@@ -126,18 +126,19 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
   );
 
   const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn");
-    const modalOverlay = document.querySelector("body > generic-modal > div");
-    if (closeButton instanceof HTMLElement
-    && modalOverlay instanceof HTMLElement) {
-        closeButton.onclick = () => location.reload();
-        closeButton.setAttribute("style", "cursor: pointer;");
-        modalOverlay.onclick = (e) => {
-            // If clicked on overlay, also reload
-            if (e.target === modalOverlay) {
-                location.reload();
-            }
-        };
-    }
+  const modalOverlay = document.querySelector("body > generic-modal > div");
+  if (closeButton instanceof HTMLElement
+    && modalOverlay instanceof HTMLElement
+  ) {
+    closeButton.onclick = () => location.reload();
+    closeButton.setAttribute("style", "cursor: pointer;");
+    modalOverlay.onclick = (e) => {
+      // If clicked on overlay, also reload
+      if (e.target === modalOverlay) {
+        location.reload();
+      }
+    };
+  }
 };
 
 export default SettingsModal;

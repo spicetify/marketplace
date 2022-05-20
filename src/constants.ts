@@ -24,3 +24,6 @@ export const ALL_TABS = [
 export const ITEMS_PER_REQUEST = 100;
 
 export const CUSTOM_APP_PATH = '/spicetify-marketplace';
+
+// Used in Card.tsx
+export const MAX_TAGS = 4;
