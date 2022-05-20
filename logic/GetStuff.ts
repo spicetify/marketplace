@@ -1,3 +1,4 @@
+import { CardManifest } from '../src/types/marketplace-types';
 import { processAuthors, addToSessionStorage } from './Utils';
 import { ITEMS_PER_REQUEST } from '../src/constants';
 
@@ -83,7 +84,7 @@ export async function fetchExtensionManifest(contents_url, branch, stars, hideIn
       if (!Array.isArray(manifests)) manifests = [manifests];
 
       // Manifest is initially parsed
-      const parsedManifests = manifests.reduce((accum, manifest) => {
+      const parsedManifests: CardManifest[] = manifests.reduce((accum, manifest) => {
           const selectedBranch = manifest.branch || branch;
           const item = {
               manifest,

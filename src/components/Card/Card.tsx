@@ -1,4 +1,5 @@
 import React from "react";
+import { Manifest } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
 import {
@@ -34,19 +35,7 @@ export default class Card extends React.Component<{
 
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
   // TODO: clean up typings
-  manifest: {
-    name: string;
-    description: string;
-    main: string;
-    authors: { name: string; url: string; }[];
-    preview: string;
-    readme: string;
-    tags?: string[];
-    code?: string;
-    usercss?: string;
-    schemes?: string;
-    include?: string[]
-  };
+  manifest: Manifest;
   title: string;
   subtitle: string;
   authors: { name: string; url: string; }[];
