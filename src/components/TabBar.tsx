@@ -18,21 +18,27 @@ class TabBarItem extends React.Component<{
   render() {
     if (!this.props.item.enabled) return null;
 
-    return React.createElement("li", {
-      className: "marketplace-tabBar-headerItem",
-      "data-tab": this.props.item.value,
-      onClick: (event) => {
-        event.preventDefault();
-        this.props.switchTo(this.props.item.key);
-      },
-    }, React.createElement("a", {
-      "aria-current": "page",
-      className: `marketplace-tabBar-headerItemLink ${this.props.item.active ? "marketplace-tabBar-active" : ""}`,
-      draggable: "false",
-      href: "",
-    }, React.createElement("span", {
-      className: "main-type-mestoBold",
-    }, this.props.item.value)));
+    return (
+      <li
+        className="marketplace-tabBar-headerItem"
+        data-tab={this.props.item.value}
+        onClick={(event) => {
+          event.preventDefault();
+          this.props.switchTo(this.props.item.key);
+        }}
+      >
+        <a
+          aria-current="page"
+          className={`marketplace-tabBar-headerItemLink ${
+            this.props.item.active ? "marketplace-tabBar-active" : ""
+          }`}
+          draggable="false"
+          href=""
+        >
+          <span className="main-type-mestoBold">{this.props.item.value}</span>
+        </a>
+      </li>
+    );
   }
 }
 
@@ -144,21 +150,25 @@ const TabBar = React.memo<{
     setDroplistItems(itemsToHide);
   }, [availableSpace, childrenSizes]);
 
-  return React.createElement("nav", {
-    className: "marketplace-tabBar marketplace-tabBar-nav",
-  }, React.createElement("ul", {
-    className: "marketplace-tabBar-header",
-    ref: tabBarRef,
-  }, options
-    .filter((_, id) => !droplistItem.includes(id))
-    .map(item => React.createElement(TabBarItem, {
-      item,
-      switchTo: switchCallback,
-    })),
-  (droplistItem.length || childrenSizes.length === 0) ?
-    React.createElement(TabBarMore, {
-      items: droplistItem.map(i => options[i]).filter(i => i),
-      switchTo: switchCallback,
-    }) : null),
+  return (
+    <nav className="marketplace-tabBar marketplace-tabBar-nav">
+      <ul className="marketplace-tabBar-header" ref={tabBarRef}>
+        {options
+          .filter((_, id) => !droplistItem.includes(id))
+          .map(item => (
+            <TabBarItem
+              key={item.key}
+              item={item}
+              switchTo={switchCallback}
+            />
+          ))}
+        {droplistItem.length || childrenSizes.length === 0 ? (
+          <TabBarMore
+            items={droplistItem.map(i => options[i]).filter(i => i)}
+            switchTo={switchCallback}
+          />
+        ) : null}
+      </ul>
+    </nav>
   );
 });
