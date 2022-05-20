@@ -179,9 +179,9 @@ export const injectColourScheme = (scheme) => {
 
 /**
  * Update the user.css in the DOM
- * @param {string} userCSS The contents of the new user.css
+ * @param userCSS The contents of the new user.css
  */
-export const injectUserCSS = (userCSS) => {
+export const injectUserCSS = (userCSS?: string) => {
   try {
     // Remove any existing Spicetify user.css
     const existingUserThemeCSS = document.querySelector("link[href='user.css']");
@@ -191,12 +191,21 @@ export const injectUserCSS = (userCSS) => {
     const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
     if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
 
-    // Add new marketplace scheme
-    const userCssTag = document.createElement("style");
-    userCssTag.classList.add("marketplaceCSS");
-    userCssTag.classList.add("marketplaceUserCSS");
-    userCssTag.innerHTML = userCSS;
-    document.head.appendChild(userCssTag);
+    if (userCSS) {
+      // Add new marketplace scheme
+      const userCssTag = document.createElement("style");
+      userCssTag.classList.add("marketplaceCSS");
+      userCssTag.classList.add("marketplaceUserCSS");
+      userCssTag.innerHTML = userCSS;
+      document.head.appendChild(userCssTag);
+    } else {
+      // Re-add default user.css
+      const originalUserThemeCSS = document.createElement("link");
+      originalUserThemeCSS.setAttribute("rel", "stylesheet");
+      originalUserThemeCSS.setAttribute("href", "user.css");
+      originalUserThemeCSS.classList.add("userCSS");
+      document.head.appendChild(originalUserThemeCSS);
+    }
   } catch (error) {
     console.warn(error);
   }
