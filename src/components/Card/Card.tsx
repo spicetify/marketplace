@@ -404,6 +404,8 @@ export default class Card extends React.Component<{
     if (this.type !== "snippet" && this.visual.stars) {
       detail.push(`★ ${this.state.stars}`);
     }
+
+    /*
     return React.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
         menu: React.createElement(this.menuType, {}),
     }, React.createElement("div", {
@@ -476,5 +478,83 @@ export default class Card extends React.Component<{
     IS_INSTALLED ? TrashIcon : DownloadIcon,
     )),
     ))));
+    */
+
+    return (
+      <div className={cardClasses.join(" ")} onClick={() => this.openReadme()}>
+        <div className="main-card-draggable" draggable="true">
+          <div className="main-card-imageContainer">
+            <div className="main-cardImage-imageWrapper">
+              <div>
+                <img
+                  alt=""
+                  aria-hidden="false"
+                  draggable="false"
+                  loading="lazy"
+                  src={this.imageURL}
+                  className="main-image-image main-cardImage-image"
+                  onError={(e) => {
+                    // Set to transparent PNG to remove the placeholder icon
+                    // https://png-pixel.com
+                    // @ts-ignore
+                    e.target.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
+
+                    // Add class for styling
+                    // @ts-ignore
+                    e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="main-card-cardMetadata">
+            <a
+              draggable="false"
+              title={this.type === "snippet" ? this.props.title : this.manifest.name}
+              className="main-cardHeader-link"
+              dir="auto"
+              href="TODO: add some href here?"
+            >
+              <div className="main-cardHeader-text main-type-balladBold">
+                {this.props.title}
+              </div>
+            </a>
+            <div className="main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader">
+              {/* Add authors if they exist */}
+              {this.authors && <AuthorsDiv authors={this.authors} />}
+              <span>{detail.join(" ‒ ")}</span>
+            </div>
+            <p className="marketplace-card-desc">
+              {this.type === "snippet" ? this.props.description : this.manifest.description}
+            </p>
+            {this.tags.length ? (
+              <div className="marketplace-card__bottom-meta main-type-mestoBold">
+                <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />
+              </div>
+            ) : null}
+            {IS_INSTALLED && (
+              <div className="marketplace-card__bottom-meta main-type-mestoBold">
+                ✓ Installed
+              </div>
+            )}
+            <div className="main-card-PlayButtonContainer">
+              <button
+                className="main-playButton-PlayButton main-playButton-primary"
+                // If it is installed, it will remove it when button is clicked, if not it will save
+                aria-label={IS_INSTALLED ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save")}
+                style={{ "--size": "40px", "cursor": "pointer" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  this.buttonClicked();
+                }}
+              >
+                {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
+                {IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
