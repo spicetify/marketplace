@@ -464,7 +464,7 @@ export default class Card extends React.Component<{
         },
     },
     //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
-    IS_INSTALLED ? TrashIcon : DownloadIcon,
+    IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />,
     )),
     ))));
     */
