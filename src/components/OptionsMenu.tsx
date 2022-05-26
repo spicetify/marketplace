@@ -42,6 +42,40 @@ const OptionsMenu = React.memo<{
    * </Spicetify.ReactComponent.ContextMenu>
    */
   let menuRef = React.useRef(null);
+
+  // TODO: this is untested jsx conversion
+  return (
+    <Spicetify.ReactComponent.ContextMenu
+      menu={<Spicetify.ReactComponent.Menu>
+        {options.map(option => (
+          <OptionsMenuItem
+            key={option.value}
+            value={option.value}
+            isSelected={selected?.key === option.key}
+            onSelect={() => {
+              onSelect(option.key);
+              // Close menu on item click
+              menuRef.current?.click();
+            }}
+          />
+        ))}
+      </Spicetify.ReactComponent.Menu>}
+      trigger="click"
+      action="toggle"
+      renderInline={true}
+    >
+      <button className="optionsMenu-dropBox" ref={menuRef}>
+        <span className={bold ? "main-type-mestoBold" : "main-type-mesto"}>
+          {selected?.value || defaultValue}
+        </span>
+        <svg width="16px" height="16px" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M3 6l5 5.794L13 6z" />
+        </svg>
+      </button>
+    </Spicetify.ReactComponent.ContextMenu>
+  );
+
+  /*
   return React.createElement(Spicetify.ReactComponent.ContextMenu, {
       menu: React.createElement(Spicetify.ReactComponent.Menu, {
       }, options.map(({ key, value }) => React.createElement(OptionsMenuItem, {
@@ -73,6 +107,7 @@ const OptionsMenu = React.memo<{
   }, React.createElement("path", {
       d: "M3 6l5 5.794L13 6z",
   }))));
+  */
 });
 
 export default OptionsMenu;

@@ -89,7 +89,7 @@ export default class Grid extends React.Component<
    * @param {Object} item
    * @param {"extension" | "theme" | "snippet"} type The type of card
    */
-  appendCard(item, type) {
+  appendCard(item, type: string) {
     item.visual = this.props.CONFIG.visual;
     // Set key prop so items don't get stuck when switching tabs
     item.key = `${this.props.CONFIG.activeTab}:${item.title}`;
@@ -138,7 +138,7 @@ export default class Grid extends React.Component<
     this.setState({ cards: [...this.cardList] });
   }
 
-  switchTo(value) {
+  switchTo(value: "Extensions" | "Themes" | "Snippets" | "Installed") {
     this.CONFIG.activeTab = value;
     localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
     this.cardList = [];
@@ -251,7 +251,7 @@ export default class Grid extends React.Component<
     this.endOfList = true;
     // return null;
     // TODO: what does returning null mean?
-    return 0
+    return 0;
   }
   /**
    * Load a new set of extensions
@@ -296,9 +296,9 @@ export default class Grid extends React.Component<
   /**
    * Update the colour schemes in the state + dropdown, and inject the active one
    * @param {any} schemes Object with the colour schemes
-   * @param {string} activeScheme The name of the active colour scheme (a key in the schemes object)
+   * @param activeScheme The name of the active colour scheme (a key in the schemes object)
    */
-  updateColourSchemes(schemes, activeScheme) {
+  updateColourSchemes(schemes, activeScheme: string) {
     console.log("updateColourSchemes", schemes, activeScheme);
     this.CONFIG.theme.schemes = schemes;
     this.CONFIG.theme.activeScheme = activeScheme;
@@ -377,7 +377,7 @@ export default class Grid extends React.Component<
     }
   }
 
-  setActiveTheme(themeKey) {
+  setActiveTheme(themeKey: string) {
     this.BLACKLIST.theme.activeThemeKey = themeKey;
     this.setState({ activeThemeKey: themeKey });
   }
