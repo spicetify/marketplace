@@ -49,10 +49,9 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
     try {
       const installedThemeKey = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled, null);
       if (installedThemeKey) {
-        const installedThemeDataStr = getLocalStorageDataFromKey(installedThemeKey, null);
-        if (!installedThemeDataStr) throw new Error("No installed theme data");
+        const installedTheme = getLocalStorageDataFromKey(installedThemeKey, null);
+        if (!installedTheme) throw new Error("No installed theme data");
 
-        const installedTheme = JSON.parse(installedThemeDataStr);
         schemes = installedTheme.schemes;
         activeScheme = installedTheme.activeScheme;
       } else {
