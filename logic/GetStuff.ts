@@ -1,4 +1,5 @@
-import { CardManifest } from '../src/types/marketplace-types';
+import { Snippet } from '../src/types/marketplace-types';
+import { CardItem } from '../src/types/marketplace-types';
 import { processAuthors, addToSessionStorage } from './Utils';
 import { ITEMS_PER_REQUEST } from '../src/constants';
 
@@ -84,7 +85,7 @@ export async function fetchExtensionManifest(contents_url, branch, stars, hideIn
       if (!Array.isArray(manifests)) manifests = [manifests];
 
       // Manifest is initially parsed
-      const parsedManifests: CardManifest[] = manifests.reduce((accum, manifest) => {
+      const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
           const selectedBranch = manifest.branch || branch;
           const item = {
               manifest,
@@ -155,7 +156,8 @@ export async function fetchThemeManifest(contents_url, branch, stars) {
       if (!Array.isArray(manifests)) manifests = [manifests];
 
       // Manifest is initially parsed
-      const parsedManifests = manifests.reduce((accum, manifest) => {
+      // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
+      const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
           const selectedBranch = manifest.branch || branch;
           const item = {
               manifest,
@@ -240,10 +242,10 @@ export const getBlacklist = async () => {
 
 /**
 * It fetches the snippets.json file from the Github repository and returns it as a JSON object.
-* @returns { Promise<{ title: string; description: string; code: string;}[]> } Array of snippets
+* @returns { Promise<Snippet[]> } Array of snippets
 */
 export const fetchCssSnippets = async () => {
   const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/snippets.json";
   const json = await fetch(url).then(res => res.json()).catch(() => { });
-  return json;
+  return json as Snippet[];
 };

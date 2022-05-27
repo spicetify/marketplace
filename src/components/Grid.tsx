@@ -13,6 +13,7 @@ import SettingsIcon from "./Icons/SettingsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
+import { CardItem, CardType, Snippet } from "../types/marketplace-types";
 
 export default class Grid extends React.Component<
 {
@@ -86,21 +87,25 @@ export default class Grid extends React.Component<
   }
 
   /**
-   * @param {Object} item
-   * @param {"extension" | "theme" | "snippet"} type The type of card
+   * @param {CardItem} item
+   * @param type The type of card
    */
-  appendCard(item, type: string) {
-    item.visual = this.props.CONFIG.visual;
-    // Set key prop so items don't get stuck when switching tabs
-    item.key = `${this.props.CONFIG.activeTab}:${item.title}`;
-    item.type = type;
-    // Pass along the functions to update Grid state on apply
-    item.updateColourSchemes = this.updateColourSchemes.bind(this);
-    item.updateActiveTheme = this.setActiveTheme.bind(this);
-    // This isn't used other than to trigger a re-render
-    item.activeThemeKey = this.state.activeThemeKey;
-    item.CONFIG = this.CONFIG;
-    this.cardList.push(React.createElement(Card, item));
+  appendCard(item: CardItem | Snippet, type: CardType) {
+    const card = <Card
+      item={item}
+      // Set key prop so items don't get stuck when switching tabs
+      key={`${this.props.CONFIG.activeTab}:${item.title}`}
+      CONFIG={this.CONFIG}
+      visual={this.props.CONFIG.visual}
+      type={type}
+      // This isn't used other than to trigger a re-render
+      activeThemeKey={this.state.activeThemeKey}
+      // Pass along the functions to update Grid state on apply
+      updateColourSchemes={this.updateColourSchemes.bind(this)}
+      updateActiveTheme={this.setActiveTheme.bind(this)}
+    />;
+
+    this.cardList.push(card);
     this.setState({ cards: this.cardList });
   }
 
@@ -132,8 +137,9 @@ export default class Grid extends React.Component<
 
   updatePostsVisual() {
     this.cardList = this.cardList.map(card => {
-      card.props.CONFIG = this.CONFIG;
-      return React.createElement(Card, card.props);
+      return <Card {...card.props}
+        CONFIG={this.CONFIG}
+      />;
     });
     this.setState({ cards: [...this.cardList] });
   }
