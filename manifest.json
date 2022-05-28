@@ -5,7 +5,6 @@
     "subfiles": [
         "src/Card.js",
         "src/Icons.js",
-        "src/OptionsMenu.js",
         "src/SortBox.js",
         "src/TabBar.js",
         "src/Settings.js",

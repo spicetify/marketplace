@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { TabItemConfig } from "../types/marketplace-types";
-import OptionsMenu from "./OptionsMenu";
+
 
 class TabBarItem extends React.Component<{
   item: {
@@ -51,7 +51,6 @@ const TabBarMore = React.memo<{
   const activeItem = items.find((item) => item.active);
 
   return <li className={`marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`}>
-    <OptionsMenu options={items} onSelect={switchTo} selected={activeItem} defaultValue="More" bold={true} />
   </li>;
 });
 

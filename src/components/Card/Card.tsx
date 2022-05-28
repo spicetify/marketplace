@@ -201,7 +201,7 @@ export default class Card extends React.Component<{
     }
 
     console.log(parsedSchemes);
-
+    console.log( Object.keys(parsedSchemes)[0])
     const activeScheme = parsedSchemes ? Object.keys(parsedSchemes)[0] : null;
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)

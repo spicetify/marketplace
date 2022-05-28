@@ -148,3 +148,5 @@ out
 
 # build folder
 dist/
+yarn.lock
+package-lock.json

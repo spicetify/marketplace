@@ -67,6 +67,7 @@ export default class Grid extends React.Component<
   triggerRefresh: (CONFIG: any) => void;
   BLACKLIST: any;
 
+
   // TODO: should I put this in Grid state?
   getInstalledTheme() {
     const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
@@ -319,8 +320,10 @@ export default class Grid extends React.Component<
     // Save to localstorage
     const installedThemeKey = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled);
     const installedThemeDataStr = getLocalStorageDataFromKey(installedThemeKey);
-    const installedThemeData = JSON.parse(installedThemeDataStr);
+    const installedThemeData = installedThemeDataStr
     installedThemeData.activeScheme = activeScheme;
+    console.log(installedThemeData)
+    console.log(JSON.stringify(installedThemeData))
     localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
 
     this.setState({
@@ -384,7 +387,7 @@ export default class Grid extends React.Component<
   }
 
   setActiveTheme(themeKey: string) {
-    this.BLACKLIST.theme.activeThemeKey = themeKey;
+    this.CONFIG.theme.activeThemeKey = themeKey;
     this.setState({ activeThemeKey: themeKey });
   }
 
@@ -484,13 +487,14 @@ export default class Grid extends React.Component<
           activeLink: this.CONFIG.activeTab,
       }));
       */
-
+console.log("SPRC Version!")
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
           <h1>{this.props.title}</h1>
           <div className="marketplace-header__right">
           {/* Show colour scheme dropdown if there is a theme with schemes installed */}
+          
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
               // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
@@ -498,6 +502,7 @@ export default class Grid extends React.Component<
               // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
               // because it hardcodes the value into the fn
               sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
+              
             /> : null}
             <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
               onClick={() => openModal('SETTINGS', this.CONFIG, this.triggerRefresh)}
