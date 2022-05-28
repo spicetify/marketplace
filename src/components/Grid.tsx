@@ -209,7 +209,7 @@ export default class Grid extends React.Component<
               return -1;
             }
 
-            this.appendCard(extension, type);
+            this.appendCard(extension, type as CardType);
           });
         }
       }
@@ -538,6 +538,7 @@ export default class Grid extends React.Component<
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
                 {/* Add the grid and cards */}
                 <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth" data-tab={this.CONFIG.activeTab} style={{
+                  // @ts-ignore
                   '--minimumColumnWidth': '180px',
                   '--column-width': 'minmax(var(--minimumColumnWidth),1fr)',
                   '--column-count': 'auto-fill',

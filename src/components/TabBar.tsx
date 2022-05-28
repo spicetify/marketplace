@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import { TabItemConfig } from "../types/marketplace-types";
 import OptionsMenu from "./OptionsMenu";
 
 class TabBarItem extends React.Component<{
@@ -54,7 +55,20 @@ const TabBarMore = React.memo<{
   </li>;
 });
 
-export const TopBarContent = ({ links, activeLink, switchCallback }) => {
+const TabBarContext = ({ children }) => {
+  return ReactDOM.createPortal(
+    <div className="main-topBar-topbarContent">
+      {children}
+    </div>,
+    document.querySelector(".main-topBar-topbarContentWrapper") as Element,
+  );
+};
+
+export const TopBarContent = (props: {
+  links: TabItemConfig[];
+  activeLink: string;
+  switchCallback: Function;
+}) => {
   const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
   if (!resizeHost) return null;
 
@@ -69,34 +83,28 @@ export const TopBarContent = ({ links, activeLink, switchCallback }) => {
     };
   }, [resizeHandler]);
 
-  return React.createElement(TabBarContext, null, React.createElement(TabBar, {
-    links,
-    activeLink,
-    windowSize,
-    switchCallback,
-  }));
-};
-
-const TabBarContext = ({ children }) => {
-  return ReactDOM.createPortal(
-    React.createElement("div", {
-      className: "main-topBar-topbarContent",
-    }, children),
-    document.querySelector(".main-topBar-topbarContentWrapper"),
+  return (
+    <TabBarContext>
+      <TabBar
+        windowSize={windowSize}
+        links={props.links}
+        activeLink={props.activeLink}
+        switchCallback={props.switchCallback}
+      />
+    </TabBarContext>
   );
 };
 
-// TODO: figure out types
 const TabBar = React.memo<{
-  links: any;
-  activeLink: any;
+  links: TabItemConfig[];
+  activeLink: string;
   switchCallback: any;
-  windowSize: any
+  windowSize: any; // TODO: add type
 }>(({ links, activeLink, switchCallback, windowSize = Infinity }) => {
   const tabBarRef = React.useRef(null);
-  const [childrenSizes, setChildrenSizes] = useState([]);
+  const [childrenSizes, setChildrenSizes] = useState([] as number[]);
   const [availableSpace, setAvailableSpace] = useState(0);
-  const [droplistItem, setDroplistItems] = useState([]);
+  const [droplistItem, setDroplistItems] = useState([] as number[]);
 
   // Key is the tab name, value is also the tab name, active is if it's active
   const options = links.map(({ name, enabled }) => {
@@ -136,7 +144,7 @@ const TabBar = React.memo<{
 
     // Figure out how many children we can render while also showing
     // the More button
-    const itemsToHide: any = [];
+    const itemsToHide = [] as number[];
     let stopWidth = viewMoreButtonSize;
 
     childrenSizes.forEach((childWidth, i) => {

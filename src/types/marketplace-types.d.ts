@@ -1,3 +1,9 @@
+// e.g. CONFIG.tabs
+export type TabItemConfig = {
+  name: string;
+  enabled: boolean;
+};
+
 export type CardType = "extension" | "theme" | "snippet";
 
 export type Author = {
