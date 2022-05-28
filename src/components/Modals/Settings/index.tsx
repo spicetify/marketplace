@@ -106,10 +106,10 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
   return (
     <div id="marketplace-config-container">
       <h2>Options</h2>
-      <SettingsToggle name='Stars count' key='stars' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
-      <SettingsToggle name='Tags' key='tags' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
-      <SettingsToggle name='Hide installed in Marketplace' key='hideInstalled' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
-      <SettingsToggle name='Shift Colors Every Minute' key='colorShift' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Stars count' storageKey='stars' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Tags' storageKey='tags' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Hide installed in Marketplace' storageKey='hideInstalled' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Shift Colors Every Minute' storageKey='colorShift' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
       <h2>Tabs</h2>
       <div className="tabs-container">
         {/* TODO: pass index? */}
