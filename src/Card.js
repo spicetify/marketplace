@@ -482,7 +482,10 @@ class Card extends react.Component {
             title: this.type === "snippet" ? this.props.title : this.manifest.name,
             className: "main-cardHeader-link",
             dir: "auto",
-            href: "TODO: add some href here?",
+            href: `https://github.com/${this.user}/${this.repo}`,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            onClick: (e) => e.stopPropagation(),
         }, react.createElement("div", {
             className: "main-cardHeader-text main-type-balladBold",
             as: "div",

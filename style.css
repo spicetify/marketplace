@@ -155,6 +155,9 @@ option {
   display: flex;
   flex-direction: column;
 }
+.marketplace-grid .main-card-draggable .main-card-cardMetadata .main-cardHeader-link:hover {
+  text-decoration: underline;
+}
 .marketplace-grid .main-card-draggable .main-card-cardMetadata .marketplace-card__author ~ .marketplace-card__author::before {
   content: ", ";
 }
