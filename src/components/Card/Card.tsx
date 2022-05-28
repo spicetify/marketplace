@@ -488,7 +488,10 @@ export default class Card extends React.Component<{
               title={this.props.type === "snippet" ? this.props.item.title : this.props.item.manifest?.name}
               className="main-cardHeader-link"
               dir="auto"
-              href="TODO: add some href here?"
+              href={`https://github.com/${this.props.item.user}/${this.props.item.repo}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="main-cardHeader-text main-type-balladBold">
                 {this.props.item.title}
