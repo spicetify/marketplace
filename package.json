@@ -13,6 +13,7 @@
     "build": "spicetify-creator",
     "build-local": "spicetify-creator --out=dist --minify",
     "watch": "spicetify-creator --watch"
+    
   },
   "engines": {
     "node": ">=16"

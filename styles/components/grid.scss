@@ -116,10 +116,26 @@
   color: var(--spice-text) !important;
   z-index: 1000;
 }
+.marketplace-sortBox{
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  padding: 10px 14px 6px;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  background-color: var(--spice-sidebar);
 
-.marketplace-sort-container {
+  &:hover {
+    background-color: var(--spice-tab-active);
+  }
+}
+.marketplace-sortBox {
   // The dropdown menus (sort by)
-  .optionsMenu-dropBox {
+  .marketplace-sortBox-header-selector {
     grid-gap: 8px;
     align-items: center;
     background-color: var(--spice-sidebar);

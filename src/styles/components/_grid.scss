@@ -117,9 +117,9 @@
   z-index: 1000;
 }
 
-.marketplace-sort-container {
+.marketplace-sortBox {
   // The dropdown menus (sort by)
-  .optionsMenu-dropBox {
+  .marketplace-sortBox-header-selector {
     grid-gap: 8px;
     align-items: center;
     background-color: var(--spice-sidebar);

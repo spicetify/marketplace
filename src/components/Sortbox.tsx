@@ -23,7 +23,6 @@ console.log(props)
     <div className="marketplace-sortBox">
       <div className="marketplace-sortBox-header">
         <div className="marketplace-sortBox-header-title">
-          <span className="main-type-mestoBold">Sort by</span>
         </div>
         <div className="marketplace-sortBox-header-selector">
           <select
@@ -36,7 +35,6 @@ console.log(props)
             value={sortBySelected.key}
           >
             {props.sortBoxOptions.map((item) => {
-              console.log(item)
               return (
                 <option
                   key={item.key}

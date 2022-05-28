@@ -21,7 +21,7 @@ import {
   getBlacklist,
   fetchThemeManifest,
   fetchExtensionManifest,
-} from "../../logic/GetStuff";
+} from "../../logic/FetchRemotes";
 
 (async () => {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
@@ -211,10 +211,10 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
+    console.log(repo);
     const data = (type === "theme")
-    // TODO: these functions are expecting a third 'stars' parameter, but where do I get it from?
-      ? await fetchThemeManifest(repo.contents_url, repo.default_branch)
-      : await fetchExtensionManifest(repo.contents_url, repo.default_branch);
+      ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
+      : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
     if (data) {
       addToSessionStorage(data);
       await sleep(5000);

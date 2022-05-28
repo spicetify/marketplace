@@ -6,7 +6,7 @@ import {
   getExtensionRepos, fetchExtensionManifest,
   getThemeRepos, fetchThemeManifest,
   fetchCssSnippets, getBlacklist,
-} from "../../logic/GetStuff";
+} from "../../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
