@@ -1,5 +1,5 @@
 import React from "react";
-import { CardItem, CardType, Snippet } from "../../types/marketplace-types";
+import { CardItem, CardType, Config, Snippet } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
 import {
@@ -15,11 +15,11 @@ import { openModal } from "../../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 
-export default class Card extends React.Component<{
+type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
   item: CardItem | Snippet;
 
-  CONFIG: any;
+  CONFIG: Config;
 
   // From `appendCard()`
   updateColourSchemes: (any, string) => void;
@@ -28,7 +28,9 @@ export default class Card extends React.Component<{
   visual: { type: string; stars: string; }
   key: string;
   activeThemeKey?: string;
-}, {
+};
+
+export default class Card extends React.Component<CardProps, {
   installed: boolean
   // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
   stars: number;
@@ -47,27 +49,27 @@ export default class Card extends React.Component<{
   menuType;
   localStorageKey: string;
 
-  constructor(props) {
+  constructor(props: CardProps) {
     super(props);
 
     // Added locally
     // this.menuType = Spicetify.ReactComponent.Menu | "div";
     this.menuType = Spicetify.ReactComponent.Menu;
 
-    let prefix = props.type === "snippet" ? "snippet:" : `${props.user}/${props.repo}/`;
+    let prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
 
     let cardId = "";
     if (props.type === "snippet") cardId = props.item.title.replaceAll(" ", "-");
-    else if (props.type === "theme") cardId = props.item.manifest.usercss;
-    else if (props.type === "extension") cardId = props.item.manifest.main;
+    else if (props.type === "theme") cardId = props.item.manifest?.usercss || "";
+    else if (props.type === "extension") cardId = props.item.manifest?.main || "";
 
     this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
     Object.assign(this, props);
 
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
-    this.tags = props.tags || [];
-    if (props.include) this.tags.push("external JS");
+    this.tags = props.item.tags || [];
+    if (props.item.include) this.tags.push("external JS");
 
     this.state = {
       // Initial value. Used to trigger a re-render.

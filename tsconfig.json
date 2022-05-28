@@ -10,6 +10,10 @@
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
+    "lib": [
+      "ES2021.String",
+      "dom"
+    ]
   },
   "include": [
     "./src/**/*.*"
