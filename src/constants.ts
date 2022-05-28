@@ -1,3 +1,5 @@
+import { TabItemConfig } from "./types/marketplace-types";
+
 export const LOCALSTORAGE_KEYS = {
   "installedExtensions": "marketplace:installed-extensions",
   "installedSnippets": "marketplace:installed-snippets",
@@ -12,7 +14,7 @@ export const LOCALSTORAGE_KEYS = {
 
 // Initalize topbar tabs
 // Data initalized in TabBar.js
-export const ALL_TABS = [
+export const ALL_TABS: TabItemConfig[] = [
   { name: "Extensions", enabled: true },
   { name: "Themes", enabled: true },
   { name: "Snippets", enabled: true },
@@ -23,7 +25,7 @@ export const ALL_TABS = [
 // https://docs.github.com/en/rest/reference/search#search-repositories
 export const ITEMS_PER_REQUEST = 100;
 
-export const CUSTOM_APP_PATH = '/spicetify-marketplace';
+export const CUSTOM_APP_PATH = '/marketplace';
 
 // Used in Card.tsx
 export const MAX_TAGS = 4;

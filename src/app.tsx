@@ -1,5 +1,6 @@
 // import styles from './styles/app.module.scss'
 import React from 'react'
+import { Config } from './types/marketplace-types';
 
 // TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
@@ -19,10 +20,10 @@ import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from './constants';
 class App extends React.Component<{}, {count: number, CONFIG: any}> {
   state = {
     count: 0,
-    CONFIG: {},
+    CONFIG: {} as Config,
   };
 
-  CONFIG: any;
+  CONFIG: Config;
 	constructor(props: any) {
 		super(props);
 
@@ -76,9 +77,9 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
         followers: JSON.parse(getLocalStorageDataFromKey("marketplace:followers", false)),
       },
       tabs,
-      activeTab: localStorage.getItem(LOCALSTORAGE_KEYS.activeTab),
+      activeTab: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.activeTab, tabs[0]),
       theme: {
-        activeThemeKey: localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled, null),
+        activeThemeKey: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled, null),
         schemes,
         activeScheme,
       },

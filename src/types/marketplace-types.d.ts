@@ -88,3 +88,26 @@ export type CardItem = {
 //   schemesURL?: string;
 //   include?: string[];
 // };
+
+export type Config = {
+  // Fetch the settings and set defaults. Used in Settings.js
+  visual: {
+    stars: boolean;
+    tags: boolean;
+    hideInstalled: boolean;
+    colorShift: boolean;
+    // Legacy from reddit app
+    type: boolean;
+    // I was considering adding watchers as "followers" but it looks like the value is a duplicate
+    // of stargazers, and the subscribers_count isn't returned in the main API call we make
+    // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
+    followers: boolean;
+  },
+  tabs: TabItemConfig[],
+  activeTab: string;
+  theme: {
+    activeThemeKey?: string;
+    schemes?: any[]; // TODO: add type
+    activeScheme?: string | null;
+  },
+};
