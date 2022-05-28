@@ -6,6 +6,8 @@ export type TabItemConfig = {
 
 export type CardType = "extension" | "theme" | "snippet";
 
+export type RepoType = "extension" | "theme";
+
 export type Author = {
   name: string;
   url: string;

@@ -2,7 +2,8 @@
 // AUTHOR: theRealPadster, CharlieS1103
 // DESCRIPTION: Companion extension for Spicetify Marketplace
 
-import { LOCALSTORAGE_KEYS } from "../constants";
+import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS } from "../constants";
+import { RepoType } from "../types/marketplace-types";
 import {
   getLocalStorageDataFromKey,
   resetMarketplace,
@@ -37,7 +38,7 @@ import {
     reset: resetMarketplace,
   };
 
-  const initializeExtension = (extensionKey) => {
+  const initializeExtension = (extensionKey: string) => {
     const extensionManifest = getLocalStorageDataFromKey(extensionKey);
     // Abort if no manifest found or no extension URL (i.e. a theme)
     if (!extensionManifest || !extensionManifest.extensionURL) return;
@@ -60,7 +61,7 @@ import {
     document.body.appendChild(script);
   };
 
-  const initializeTheme = async (themeKey) => {
+  const initializeTheme = async (themeKey: string) => {
     const themeManifest = getLocalStorageDataFromKey(themeKey);
     // Abort if no manifest found
     if (!themeManifest) {
@@ -129,15 +130,13 @@ import {
   installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
 })();
 
-const ITEMS_PER_REQUEST = 100;
-
 /**
  * TODO
- * @param {"theme"|"extension"} type The repo type
- * @param {number} pageNum The page number
+ * @param type The repo type
+ * @param pageNum The page number
  * @returns TODO
  */
-async function queryRepos(type, pageNum = 1) {
+async function queryRepos(type: RepoType, pageNum = 1) {
   const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
 
   let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
@@ -161,11 +160,11 @@ async function queryRepos(type, pageNum = 1) {
 
 /**
  * TODO
- * @param {"theme"|"extension"} type The repo type
- * @param {number} pageNum The page number
+ * @param type The repo type
+ * @param pageNum The page number
  * @returns TODO
  */
-async function loadPageRecursive(type, pageNum) {
+async function loadPageRecursive(type: RepoType, pageNum: number) {
   const pageOfRepos = await queryRepos(type, pageNum);
   appendInformationToLocalStorage(pageOfRepos, type);
 
@@ -209,7 +208,7 @@ async function loadPageRecursive(type, pageNum) {
   // } while (themesNextPage);
 })();
 
-async function appendInformationToLocalStorage(array, type) {
+async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
     const data = (type === "theme")
