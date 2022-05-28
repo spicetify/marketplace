@@ -6,5 +6,12 @@
 ☐ Set up proper typings and remove "any" where I can
 ☐ Make sure the logic with requestPage is correct (needs to be a number, original logic has it sometimes null)
 ☐ Get the settings modal working
-  ☐ It looks like it's applying but I need to update state on the App, and the modal isn't updating...
-☐ Use spcr-navigation-bar
+  - It looks like it's applying but I need to update state on the App, and the modal isn't updating...
+  - Using the `app.triggerRefresh` makes it apply in real time in the background (e.g. when toggling stars)
+  - Using a `forceUpdate` in the `SettingsToggle` can make the toggle update
+  - It's probably because the modal isn't in the app's component tree, so state changes don't affect it!
+☐ Use spcr-navigation-bar?
+☐ Fix `.GenericModal[aria-label="Marketplace"]` styling (the titles are the modal types now)
+☐ Memo-ize the Sortbox
+☐ Add a working dropdown to `TabBarMore`
+☐ Fix themes installation
