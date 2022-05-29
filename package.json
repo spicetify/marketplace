@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "spicetify-creator",
-    "build-local": "spicetify-creator --out=dist --minify",
+    "build:local": "spicetify-creator --out=dist --minify",
     "build:prod": "yarn build:local && yarn copy:docs",
     "copy:docs": "copyfiles README.md docs/* dist/",
     "watch": "spicetify-creator --watch"
