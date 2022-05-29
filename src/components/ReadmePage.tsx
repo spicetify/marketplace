@@ -74,11 +74,10 @@ class ReadmePage extends React.Component<
     // This works for urls relative to the repo root
     document.querySelectorAll("#marketplace-readme img").forEach((img) => {
       img.addEventListener("error", (e) => {
-        // @ts-ignore
-        const originalSrc = e.target.getAttribute("src");
+        const element = e.target as HTMLImageElement;
+        const originalSrc = element.getAttribute("src");
         const fixedSrc = `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc}`;
-        // @ts-ignore
-        e.target.setAttribute("src", fixedSrc);
+        element.setAttribute("src", fixedSrc);
       }, { once: true });
     });
   }

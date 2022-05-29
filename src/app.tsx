@@ -18,7 +18,7 @@ import ReadmePage from "./components/ReadmePage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";
 import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
-class App extends React.Component<{}, {count: number, CONFIG: any}> {
+class App extends React.Component<null, {count: number, CONFIG: any}> {
   state = {
     count: 0,
     CONFIG: {} as Config,

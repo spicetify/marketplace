@@ -25,7 +25,7 @@ export const ALL_TABS: TabItemConfig[] = [
 // https://docs.github.com/en/rest/reference/search#search-repositories
 export const ITEMS_PER_REQUEST = 100;
 
-export const CUSTOM_APP_PATH = '/marketplace';
+export const CUSTOM_APP_PATH = "/marketplace";
 
 // Used in Card.tsx
 export const MAX_TAGS = 4;

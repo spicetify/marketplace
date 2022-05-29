@@ -235,8 +235,8 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = []) {
 */
 export const getBlacklist = async () => {
   const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/blacklist.json";
-  const jsonReturned = await fetch(url).then(res => res.json()).catch(() => { });
-  return jsonReturned.repos;
+  const json = await fetch(url).then(res => res.json()).catch(() => ({}));
+  return json.repos;
 };
 
 /**
@@ -245,6 +245,6 @@ export const getBlacklist = async () => {
 */
 export const fetchCssSnippets = async () => {
   const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/snippets.json";
-  const json = await fetch(url).then(res => res.json()).catch(() => { });
+  const json = await fetch(url).then(res => res.json()).catch(() => ({}));
   return json as Snippet[];
 };

@@ -32,7 +32,6 @@ import {
   Spicetify.showNotification("Loaded Marketplace extension!");
 
   // Expose useful methods in global context
-  // @ts-ignore
   window.Marketplace = {
     // Should allow you to reset Marketplace from the dev console if it's b0rked
     reset: resetMarketplace,

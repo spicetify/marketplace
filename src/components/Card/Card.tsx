@@ -382,81 +382,6 @@ export default class Card extends React.Component<CardProps, {
       detail.push(`★ ${this.state.stars}`);
     }
 
-    /*
-    return React.createElement(Spicetify.ReactComponent.RightClickMenu || "div", {
-        menu: React.createElement(this.menuType, {}),
-    }, React.createElement("div", {
-        className: cardClasses.join(" "),
-        onClick: () => this.openReadme(),
-    }, React.createElement("div", {
-        className: "main-card-draggable",
-        draggable: "true",
-    }, React.createElement("div", {
-        className: "main-card-imageContainer",
-    }, React.createElement("div", {
-        className: "main-cardImage-imageWrapper",
-    }, React.createElement("div", {
-    }, React.createElement("img", {
-        "aria-hidden": "false",
-        draggable: "false",
-        loading: "lazy",
-        src: this.imageURL,
-        className: "main-image-image main-cardImage-image",
-        onError: (e) => {
-            // Set to transparent PNG to remove the placeholder icon
-            // https://png-pixel.com
-            e.target.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
-
-            // Add class for styling
-            e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
-        },
-        //Create a div using normalized play button classes to use the css provided by themes
-    })))), React.createElement("div", {
-        className: "main-card-cardMetadata",
-    }, React.createElement("a", {
-        draggable: "false",
-        title: this.type === "snippet" ? this.props.title : this.manifest.name,
-        className: "main-cardHeader-link",
-        dir: "auto",
-        href: "TODO: add some href here?",
-    }, React.createElement("div", {
-        className: "main-cardHeader-text main-type-balladBold",
-        as: "div",
-    }, this.props.title)),  React.createElement("div", {
-        className: "main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader",
-        as: "div",
-    },
-    // Add authors if they exist
-    this.authors && <AuthorsDiv authors={this.authors} />,
-    React.createElement("span", null, detail.join(" ‒ ")),
-    ), React.createElement("p", {
-        className: "marketplace-card-desc",
-    }, this.type === "snippet" ? this.props.description : this.manifest.description),
-    this.tags.length ? React.createElement("div", {
-        className: "marketplace-card__bottom-meta main-type-mestoBold",
-        as: "div",
-    }, <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />) : null,
-    IS_INSTALLED && React.createElement("div", {
-        className: "marketplace-card__bottom-meta main-type-mestoBold",
-        as: "div",
-    }, "✓ Installed"), React.createElement("div", {
-        className: "main-card-PlayButtonContainer",
-    }, React.createElement("button", {
-        className: "main-playButton-PlayButton main-playButton-primary",
-        // If it is installed, it will remove it when button is clicked, if not it will save
-        "aria-label": IS_INSTALLED ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save"),
-        style: { "--size": "40px", "cursor": "pointer" },
-        onClick: (e) => {
-            e.stopPropagation();
-            this.buttonClicked();
-        },
-    },
-    //If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download
-    IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />,
-    )),
-    ))));
-    */
-
     return (
       <div className={cardClasses.join(" ")} onClick={() => this.openReadme()}>
         <div className="main-card-draggable" draggable="true">
@@ -473,12 +398,10 @@ export default class Card extends React.Component<CardProps, {
                   onError={(e) => {
                     // Set to transparent PNG to remove the placeholder icon
                     // https://png-pixel.com
-                    // @ts-ignore
-                    e.target.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
+                    e.currentTarget.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
 
                     // Add class for styling
-                    // @ts-ignore
-                    e.target.closest(".main-cardImage-imageWrapper").classList.add("main-cardImage-imageWrapper--error");
+                    e.currentTarget.closest(".main-cardImage-imageWrapper")?.classList.add("main-cardImage-imageWrapper--error");
                   }}
                 />
               </div>
@@ -522,7 +445,6 @@ export default class Card extends React.Component<CardProps, {
                 className="main-playButton-PlayButton main-playButton-primary"
                 // If it is installed, it will remove it when button is clicked, if not it will save
                 aria-label={IS_INSTALLED ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save")}
-                // @ts-ignore
                 style={{ "--size": "40px", "cursor": "pointer" }}
                 onClick={(e) => {
                   e.stopPropagation();

@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    Marketplace: Record<string, unknown>;
+  }
+}
+
 // e.g. CONFIG.tabs
 export type TabItemConfig = {
   name: string;
