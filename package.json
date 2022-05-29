@@ -12,6 +12,8 @@
   "scripts": {
     "build": "spicetify-creator",
     "build-local": "spicetify-creator --out=dist --minify",
+    "build:prod": "yarn build:local && yarn copy:docs",
+    "copy:docs": "copyfiles README.md docs/* dist/",
     "watch": "spicetify-creator --watch"
   },
   "engines": {
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@types/react": "^18.0.6",
     "@types/react-dom": "^18.0.2",
+    "copyfiles": "^2.4.1",
     "react-dropdown": "^1.10.0",
     "spicetify-creator": "^1.0.10"
   }
