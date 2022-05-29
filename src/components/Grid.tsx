@@ -1,4 +1,5 @@
 import React from "react";
+import { CardItem, CardType, Snippet, TabType } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
 import { openModal } from "../../logic/LaunchModals";
@@ -13,7 +14,6 @@ import SettingsIcon from "./Icons/SettingsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
-import { CardItem, CardType, Snippet } from "../types/marketplace-types";
 
 export default class Grid extends React.Component<
 {
@@ -145,7 +145,7 @@ export default class Grid extends React.Component<
     this.setState({ cards: [...this.cardList] });
   }
 
-  switchTo(value: "Extensions" | "Themes" | "Snippets" | "Installed") {
+  switchTo(value: TabType) {
     this.CONFIG.activeTab = value;
     localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
     this.cardList = [];
@@ -494,7 +494,7 @@ console.log("SPRC Version!")
           <h1>{this.props.title}</h1>
           <div className="marketplace-header__right">
           {/* Show colour scheme dropdown if there is a theme with schemes installed */}
-          
+
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
               // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
@@ -502,7 +502,7 @@ console.log("SPRC Version!")
               // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
               // because it hardcodes the value into the fn
               sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
-              
+
             /> : null}
             <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
               onClick={() => openModal('SETTINGS', this.CONFIG, this.triggerRefresh)}

@@ -4,6 +4,8 @@ export type TabItemConfig = {
   enabled: boolean;
 };
 
+export type TabType = "Extensions" | "Themes" | "Snippets" | "Installed";
+
 export type CardType = "extension" | "theme" | "snippet";
 
 export type RepoType = "extension" | "theme";

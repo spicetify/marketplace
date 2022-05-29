@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { TabItemConfig } from "../types/marketplace-types";
+import Dropdown, { Option } from "react-dropdown";
+import { TabItemConfig, TabType } from "../types/marketplace-types";
 
+type TabOptionConfig = {
+  key: string;
+  value: string;
+  active: boolean;
+  enabled: boolean;
+};
 
 class TabBarItem extends React.Component<{
-  item: {
-    key: string;
-    value: string;
-    active: boolean;
-    enabled: boolean;
-  };
+  item: TabOptionConfig;
   switchTo: Function;
 }> {
   constructor(props) {
@@ -45,14 +47,39 @@ class TabBarItem extends React.Component<{
 
 // TODO: is this the right type stuff?
 const TabBarMore = React.memo<{
-  items: any;
-  switchTo: Function
+  items: TabOptionConfig[];
+  switchTo: (value: TabType) => void;
 }>(({ items, switchTo }) => {
-  const activeItem = items.find((item) => item.active);
 
-  return <li className={`marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`}>
-    <span>TODO: add a dropdown here</span>
-  </li>;
+  // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
+  // Transform this into the format that react-dropdown expects
+  const transformedOptions: Option[] = items.map((item) => {
+    return {
+      value: item.key,
+      label: item.value,
+    };
+  });
+
+  // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
+  const _onSelect = (item: Option) => {
+    switchTo(item.value as TabType);
+  };
+
+  // It was this before
+  // const activeItem = items.find((item) => item.active);
+  // <OptionsMenu options={items} onSelect={switchTo} selected={activeItem} defaultValue="More" bold={true} />
+  // return <li className={`marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`}>
+
+  // TODO: figure out how to get the styling matching the other tabs, or how it was before
+  // TODO: remove any unused styles
+  return (
+    <li className={"marketplace-tabBar-headerItem"}>
+      <Dropdown className="marketplace-sortBox-header-selector-select"
+        options={transformedOptions} value="More" placeholder="More"
+        onChange={_onSelect}
+      />
+    </li>
+  );
 });
 
 const TabBarContext = ({ children }) => {
@@ -67,7 +94,7 @@ const TabBarContext = ({ children }) => {
 export const TopBarContent = (props: {
   links: TabItemConfig[];
   activeLink: string;
-  switchCallback: Function;
+  switchCallback: (value: TabType) => void;
 }) => {
   const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
   if (!resizeHost) return null;
@@ -98,7 +125,7 @@ export const TopBarContent = (props: {
 const TabBar = React.memo<{
   links: TabItemConfig[];
   activeLink: string;
-  switchCallback: any;
+  switchCallback: (value: TabType) => void;
   windowSize: any; // TODO: add type
 }>(({ links, activeLink, switchCallback, windowSize = Infinity }) => {
   const tabBarRef = React.useRef(null);
@@ -109,7 +136,7 @@ const TabBar = React.memo<{
   // Key is the tab name, value is also the tab name, active is if it's active
   const options = links.map(({ name, enabled }) => {
     const active = name === activeLink;
-    return ({ key: name, value: name, active, enabled });
+    return ({ key: name, value: name, active, enabled } as TabOptionConfig);
   });
 
   useEffect(() => {
