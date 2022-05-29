@@ -5,7 +5,7 @@ import React from 'react';
 import {
   getLocalStorageDataFromKey,
   initializeSnippets,
-} from '../../../../logic/Utils';
+} from '../../../logic/Utils';
 import { LOCALSTORAGE_KEYS } from '../../../constants';
 
 const AddSnippetModal = () => {

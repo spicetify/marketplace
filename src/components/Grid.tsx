@@ -1,13 +1,13 @@
 import React from "react";
 import { CardItem, CardType, Snippet, TabType } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../../logic/Utils";
+import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
-import { openModal } from "../../logic/LaunchModals";
+import { openModal } from "../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
   getThemeRepos, fetchThemeManifest,
   fetchCssSnippets, getBlacklist,
-} from "../../logic/FetchRemotes";
+} from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";

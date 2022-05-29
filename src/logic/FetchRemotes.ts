@@ -1,7 +1,7 @@
-import { Snippet } from '../src/types/marketplace-types';
-import { CardItem } from '../src/types/marketplace-types';
+import { Snippet } from '../types/marketplace-types';
+import { CardItem } from '../types/marketplace-types';
 import { processAuthors, addToSessionStorage } from './Utils';
-import { ITEMS_PER_REQUEST } from '../src/constants';
+import { ITEMS_PER_REQUEST } from '../constants';
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic

@@ -3,9 +3,9 @@
 
 import React from 'react';
 
-import AddSnippetModal from '../src/components/Modals/AddSnippet';
-import ReloadModal from '../src/components/Modals/Reload';
-import SettingsModal from '../src/components/Modals/Settings';
+import AddSnippetModal from '../components/Modals/AddSnippet';
+import ReloadModal from '../components/Modals/Reload';
+import SettingsModal from '../components/Modals/Settings';
 
 type ModalType = 'ADD_SNIPPET' | 'RELOAD' | 'SETTINGS';
 

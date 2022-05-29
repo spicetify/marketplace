@@ -2,7 +2,7 @@
 /// <reference path='../../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
 
 import React from 'react';
-import { resetMarketplace } from '../../../../logic/Utils';
+import { resetMarketplace } from '../../../logic/Utils';
 import { LOCALSTORAGE_KEYS } from '../../../constants';
 import SettingsToggle from './SettingsToggle';
 

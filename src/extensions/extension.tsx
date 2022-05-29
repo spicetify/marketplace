@@ -16,12 +16,12 @@ import {
   injectUserCSS,
   addToSessionStorage,
   sleep,
-} from "../../logic/Utils";
+} from "../logic/Utils";
 import {
   getBlacklist,
   fetchThemeManifest,
   fetchExtensionManifest,
-} from "../../logic/FetchRemotes";
+} from "../logic/FetchRemotes";
 
 (async () => {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {

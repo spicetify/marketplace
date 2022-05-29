@@ -8,10 +8,10 @@ import {
   initializeSnippets,
   parseCSS,
   injectUserCSS,
-} from "../../../logic/Utils";
+} from "../../logic/Utils";
 import TrashIcon from "../Icons/TrashIcon";
 import DownloadIcon from "../Icons/DownloadIcon";
-import { openModal } from "../../../logic/LaunchModals";
+import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 

@@ -15,7 +15,7 @@ import './styles/components/_fixes.scss';
 
 import Grid from './components/Grid';
 import ReadmePage from './components/ReadmePage';
-import { getLocalStorageDataFromKey } from '../logic/Utils';
+import { getLocalStorageDataFromKey } from './logic/Utils';
 import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from './constants';
 
 class App extends React.Component<{}, {count: number, CONFIG: any}> {
