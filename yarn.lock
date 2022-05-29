@@ -212,6 +212,11 @@ chalk@^4.1.2:
   optionalDependencies:
     fsevents "~2.3.2"
 
+classnames@^2.2.3:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
+
 clean-css@^5.2.4:
   version "5.3.0"
   resolved "https://registry.npmjs.org/clean-css/-/clean-css-5.3.0.tgz"
@@ -1112,6 +1117,13 @@ punycode@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+
+react-dropdown@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/react-dropdown/-/react-dropdown-1.10.0.tgz#c566e5de5212dc4bf2041c20d755e667760b8fab"
+  integrity sha512-jvlPVB5KU1tuacx9+igu5c+Xtpzjos5ZRXhMxHiVmdEM0SR2vabeAoL9QfN3p4e1CjgdjYsM8gCXbFNSyT25EQ==
+  dependencies:
+    classnames "^2.2.3"
 
 readdirp@~3.6.0:
   version "3.6.0"

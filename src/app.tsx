@@ -5,6 +5,7 @@ import { Config } from './types/marketplace-types';
 // TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
 import './styles/components/_grid.scss';
+import './styles/components/_dropdown.scss';
 import './styles/components/_card.scss';
 import './styles/components/_settings.scss';
 import './styles/components/_reload-modal.scss';

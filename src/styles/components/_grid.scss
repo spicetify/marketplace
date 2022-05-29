@@ -117,26 +117,6 @@
   z-index: 1000;
 }
 
-.marketplace-sortBox {
-  // The dropdown menus (sort by)
-  .marketplace-sortBox-header-selector {
-    grid-gap: 8px;
-    align-items: center;
-    background-color: var(--spice-sidebar);
-    border-radius: 4px;
-    display: grid;
-    grid-template-columns: 1fr 16px;
-    color: rgba(var(--spice-rgb-text), .7);
-    border: 0;
-    height: 32px;
-    margin-left: 8px;
-    padding: 0 8px 0 12px;
-
-    &:hover {
-      color: var(--spice-text);
-    }
-  }
-}
 option {
   background-color: var(--spice-button);
 }
