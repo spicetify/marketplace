@@ -1,12 +1,18 @@
 /// <reference path='../../../../../spicetify-cli/globals.d.ts' />
 /// <reference path='../../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
 
-import React from 'react';
-import { resetMarketplace } from '../../../logic/Utils';
-import { LOCALSTORAGE_KEYS } from '../../../constants';
-import SettingsToggle from './SettingsToggle';
+import React from "react";
+import { Config } from "../../../types/marketplace-types";
+import { resetMarketplace } from "../../../logic/Utils";
+import { LOCALSTORAGE_KEYS } from "../../../constants";
+import SettingsToggle from "./SettingsToggle";
 
-const SettingsModal = ({ CONFIG, triggerRefresh }) => {
+interface Props {
+  CONFIG: Config;
+  triggerRefresh: (CONFIG: Config) => void;
+}
+
+const SettingsModal = ({ CONFIG, triggerRefresh } : Props) => {
   console.log(CONFIG);
 
   // TODO: add index?
@@ -17,7 +23,7 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
     const { enabled } = CONFIG.tabs[index];
 
     const clickToggle = (e) => {
-      console.log({e});
+      console.log({ e });
       // const id = el.dataset.id;
       // const slider = el.querySelector("input[type='checkbox']");
 
@@ -59,7 +65,7 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
 
   function posCallback(currPos, dir) {
     // const el = document.querySelector(`[data-id="${tabName}"]`);
-    console.log({currPos, dir});
+    console.log({ currPos, dir });
     // const id = el.dataset.id;
     // const curPos = CONFIG.tabs.findIndex(({ name }) => name === id);
     const newPos = currPos + dir;
@@ -69,8 +75,8 @@ const SettingsModal = ({ CONFIG, triggerRefresh }) => {
     CONFIG.tabs[currPos] = temp;
 
     localStorage.setItem(
-        LOCALSTORAGE_KEYS.tabs,
-        JSON.stringify(CONFIG.tabs),
+      LOCALSTORAGE_KEYS.tabs,
+      JSON.stringify(CONFIG.tabs),
     );
 
     // TODO: does this work?

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class ReadmePage extends React.Component<
 {
@@ -37,11 +37,11 @@ class ReadmePage extends React.Component<
       const postBody = {
         text: readmeText,
         context: `${this.props.data.user}/${this.props.data.repo}`,
-        mode: 'gfm',
+        mode: "gfm",
       };
 
-      const readmeHtmlRes = await fetch('https://api.github.com/markdown', {
-        method: 'POST',
+      const readmeHtmlRes = await fetch("https://api.github.com/markdown", {
+        method: "POST",
         body: JSON.stringify(postBody),
       });
       if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
@@ -63,7 +63,7 @@ class ReadmePage extends React.Component<
     this.getReadmeHTML()
       .then((html) => {
         if (html == null) return;
-        this.setState({ html })
+        this.setState({ html });
       });
   }
 
@@ -94,6 +94,6 @@ class ReadmePage extends React.Component<
       </section>
     );
   }
-};
+}
 
 export default ReadmePage;

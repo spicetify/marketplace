@@ -1,7 +1,14 @@
 import React from "react";
 import Dropdown, { Option } from "react-dropdown";
+import { SortBoxOption } from "../types/marketplace-types";
 
-const SortBox = (props) => {
+interface Props {
+  sortBoxOptions: SortBoxOption[];
+  onChange: (value: string) => void;
+  sortBySelectedFn: (item: SortBoxOption) => boolean;
+}
+
+const SortBox = (props: Props) => {
 
   const _onSelect = (item: Option) => {
     props.onChange(item.value);
@@ -24,7 +31,7 @@ const SortBox = (props) => {
         </div>
 
         <Dropdown className="marketplace-sortBox-header-selector-select"
-          options={options} value={sortBySelected.key} placeholder="Select an option"
+          options={options} value={sortBySelected?.key} placeholder="Select an option"
           onChange={_onSelect}
         />
 

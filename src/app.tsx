@@ -1,22 +1,22 @@
 // import styles from './styles/app.module.scss'
-import React from 'react'
-import { Config } from './types/marketplace-types';
+import React from "react";
+import { Config } from "./types/marketplace-types";
 
 // TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
-import './styles/components/_grid.scss';
-import './styles/components/_dropdown.scss';
-import './styles/components/_card.scss';
-import './styles/components/_settings.scss';
-import './styles/components/_reload-modal.scss';
-import './styles/components/_add-snippet-modal.scss';
-import './styles/components/_readme-pages.scss';
-import './styles/components/_fixes.scss';
+import "./styles/components/_grid.scss";
+import "./styles/components/_dropdown.scss";
+import "./styles/components/_card.scss";
+import "./styles/components/_settings.scss";
+import "./styles/components/_reload-modal.scss";
+import "./styles/components/_add-snippet-modal.scss";
+import "./styles/components/_readme-pages.scss";
+import "./styles/components/_fixes.scss";
 
-import Grid from './components/Grid';
-import ReadmePage from './components/ReadmePage';
-import { getLocalStorageDataFromKey } from './logic/Utils';
-import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from './constants';
+import Grid from "./components/Grid";
+import ReadmePage from "./components/ReadmePage";
+import { getLocalStorageDataFromKey } from "./logic/Utils";
+import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
 class App extends React.Component<{}, {count: number, CONFIG: any}> {
   state = {
@@ -25,11 +25,11 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
   };
 
   CONFIG: Config;
-	constructor(props: any) {
-		super(props);
+  constructor(props: any) {
+    super(props);
 
     // Get tabs config from local storage
-    let tabsString = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
+    const tabsString = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
     let tabs:any[] = [];
     try {
       tabs = JSON.parse(tabsString);
@@ -89,13 +89,13 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
     if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter(tab => tab.name === this.CONFIG.activeTab).length) {
       this.CONFIG.activeTab = this.CONFIG.tabs[0].name;
     }
-	}
+  }
 
   updateConfig = (config: any) => {
-    this.CONFIG = {...config};
-    console.log('updated config', this.CONFIG);
+    this.CONFIG = { ...config };
+    console.log("updated config", this.CONFIG);
     this.setState({
-      CONFIG: {...config},
+      CONFIG: { ...config },
     });
   }
 
@@ -107,7 +107,7 @@ class App extends React.Component<{}, {count: number, CONFIG: any}> {
       return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {
-      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} triggerRefresh={this.updateConfig} />
+      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} triggerRefresh={this.updateConfig} />;
     }
   }
 }

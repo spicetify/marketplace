@@ -12,7 +12,7 @@ type TabOptionConfig = {
 
 class TabBarItem extends React.Component<{
   item: TabOptionConfig;
-  switchTo: Function;
+  switchTo: (value: TabType) => void;
 }> {
   constructor(props) {
     super(props);
@@ -27,7 +27,7 @@ class TabBarItem extends React.Component<{
         data-tab={this.props.item.value}
         onClick={(event) => {
           event.preventDefault();
-          this.props.switchTo(this.props.item.key);
+          this.props.switchTo(this.props.item.key as TabType);
         }}
       >
         <a
@@ -45,42 +45,43 @@ class TabBarItem extends React.Component<{
   }
 }
 
-// TODO: is this the right type stuff?
-const TabBarMore = React.memo<{
+interface TabBarMoreProps {
   items: TabOptionConfig[];
   switchTo: (value: TabType) => void;
-}>(({ items, switchTo }) => {
+}
+const TabBarMore = React.memo<TabBarMoreProps>(
+  function TabBarMore({ items, switchTo } : TabBarMoreProps) {
+    // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
+    // Transform this into the format that react-dropdown expects
+    const transformedOptions: Option[] = items.map((item) => {
+      return {
+        value: item.key,
+        label: item.value,
+      };
+    });
 
-  // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
-  // Transform this into the format that react-dropdown expects
-  const transformedOptions: Option[] = items.map((item) => {
-    return {
-      value: item.key,
-      label: item.value,
+    // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
+    const _onSelect = (item: Option) => {
+      switchTo(item.value as TabType);
     };
-  });
 
-  // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
-  const _onSelect = (item: Option) => {
-    switchTo(item.value as TabType);
-  };
+    // It was this before
+    // const activeItem = items.find((item) => item.active);
+    // <OptionsMenu options={items} onSelect={switchTo} selected={activeItem} defaultValue="More" bold={true} />
+    // return <li className={`marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`}>
 
-  // It was this before
-  // const activeItem = items.find((item) => item.active);
-  // <OptionsMenu options={items} onSelect={switchTo} selected={activeItem} defaultValue="More" bold={true} />
-  // return <li className={`marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`}>
-
-  // TODO: figure out how to get the styling matching the other tabs, or how it was before
-  // TODO: remove any unused styles
-  return (
-    <li className={"marketplace-tabBar-headerItem"}>
-      <Dropdown className="marketplace-sortBox-header-selector-select"
-        options={transformedOptions} value="More" placeholder="More"
-        onChange={_onSelect}
-      />
-    </li>
-  );
-});
+    // TODO: figure out how to get the styling matching the other tabs, or how it was before
+    // TODO: remove any unused styles
+    return (
+      <li className={"marketplace-tabBar-headerItem"}>
+        <Dropdown className="marketplace-sortBox-header-selector-select"
+          options={transformedOptions} value="More" placeholder="More"
+          onChange={_onSelect}
+        />
+      </li>
+    );
+  },
+);
 
 const TabBarContext = ({ children }) => {
   return ReactDOM.createPortal(
@@ -122,88 +123,91 @@ export const TopBarContent = (props: {
   );
 };
 
-const TabBar = React.memo<{
+interface TabBarProps {
   links: TabItemConfig[];
   activeLink: string;
   switchCallback: (value: TabType) => void;
-  windowSize: any; // TODO: add type
-}>(({ links, activeLink, switchCallback, windowSize = Infinity }) => {
-  const tabBarRef = React.useRef(null);
-  const [childrenSizes, setChildrenSizes] = useState([] as number[]);
-  const [availableSpace, setAvailableSpace] = useState(0);
-  const [droplistItem, setDroplistItems] = useState([] as number[]);
+  windowSize: number;
+}
+const TabBar = React.memo<TabBarProps>(
+  function TabBar({ links, activeLink, switchCallback, windowSize = Infinity } : TabBarProps) {
+    const tabBarRef = React.useRef(null);
+    const [childrenSizes, setChildrenSizes] = useState([] as number[]);
+    const [availableSpace, setAvailableSpace] = useState(0);
+    const [droplistItem, setDroplistItems] = useState([] as number[]);
 
-  // Key is the tab name, value is also the tab name, active is if it's active
-  const options = links.map(({ name, enabled }) => {
-    const active = name === activeLink;
-    return ({ key: name, value: name, active, enabled } as TabOptionConfig);
-  });
-
-  useEffect(() => {
-    if (!tabBarRef.current) return;
-    setAvailableSpace(tabBarRef.current.clientWidth);
-  }, [windowSize]);
-
-  useEffect(() => {
-    if (!tabBarRef.current) return;
-
-    const children = Array.from(tabBarRef.current.children);
-    const tabbarItemSizes = children.map(child => child.clientWidth);
-
-    setChildrenSizes(tabbarItemSizes);
-  }, [links]);
-
-  useEffect(() => {
-    if (!tabBarRef.current) return;
-
-    const totalSize = childrenSizes.reduce((a, b) => a + b, 0);
-
-    // Can we render everything?
-    if (totalSize <= availableSpace) {
-      setDroplistItems([]);
-      return;
-    }
-
-    // The `More` button can be set to _any_ of the children. So we
-    // reserve space for the largest item instead of always taking
-    // the last item.
-    const viewMoreButtonSize = Math.max(...childrenSizes);
-
-    // Figure out how many children we can render while also showing
-    // the More button
-    const itemsToHide = [] as number[];
-    let stopWidth = viewMoreButtonSize;
-
-    childrenSizes.forEach((childWidth, i) => {
-      if (availableSpace >= stopWidth + childWidth) {
-        stopWidth += childWidth;
-      } else {
-        itemsToHide.push(i);
-      }
+    // Key is the tab name, value is also the tab name, active is if it's active
+    const options = links.map(({ name, enabled }) => {
+      const active = name === activeLink;
+      return ({ key: name, value: name, active, enabled } as TabOptionConfig);
     });
 
-    setDroplistItems(itemsToHide);
-  }, [availableSpace, childrenSizes]);
+    useEffect(() => {
+      if (!tabBarRef.current) return;
+      setAvailableSpace(tabBarRef.current.clientWidth);
+    }, [windowSize]);
 
-  return (
-    <nav className="marketplace-tabBar marketplace-tabBar-nav">
-      <ul className="marketplace-tabBar-header" ref={tabBarRef}>
-        {options
-          .filter((_, id) => !droplistItem.includes(id))
-          .map(item => (
-            <TabBarItem
-              key={item.key}
-              item={item}
+    useEffect(() => {
+      if (!tabBarRef.current) return;
+
+      const children = Array.from(tabBarRef.current.children);
+      const tabbarItemSizes = children.map(child => child.clientWidth);
+
+      setChildrenSizes(tabbarItemSizes);
+    }, [links]);
+
+    useEffect(() => {
+      if (!tabBarRef.current) return;
+
+      const totalSize = childrenSizes.reduce((a, b) => a + b, 0);
+
+      // Can we render everything?
+      if (totalSize <= availableSpace) {
+        setDroplistItems([]);
+        return;
+      }
+
+      // The `More` button can be set to _any_ of the children. So we
+      // reserve space for the largest item instead of always taking
+      // the last item.
+      const viewMoreButtonSize = Math.max(...childrenSizes);
+
+      // Figure out how many children we can render while also showing
+      // the More button
+      const itemsToHide = [] as number[];
+      let stopWidth = viewMoreButtonSize;
+
+      childrenSizes.forEach((childWidth, i) => {
+        if (availableSpace >= stopWidth + childWidth) {
+          stopWidth += childWidth;
+        } else {
+          itemsToHide.push(i);
+        }
+      });
+
+      setDroplistItems(itemsToHide);
+    }, [availableSpace, childrenSizes]);
+
+    return (
+      <nav className="marketplace-tabBar marketplace-tabBar-nav">
+        <ul className="marketplace-tabBar-header" ref={tabBarRef}>
+          {options
+            .filter((_, id) => !droplistItem.includes(id))
+            .map(item => (
+              <TabBarItem
+                key={item.key}
+                item={item}
+                switchTo={switchCallback}
+              />
+            ))}
+          {droplistItem.length || childrenSizes.length === 0 ? (
+            <TabBarMore
+              items={droplistItem.map(i => options[i]).filter(i => i)}
               switchTo={switchCallback}
             />
-          ))}
-        {droplistItem.length || childrenSizes.length === 0 ? (
-          <TabBarMore
-            items={droplistItem.map(i => options[i]).filter(i => i)}
-            switchTo={switchCallback}
-          />
-        ) : null}
-      </ul>
-    </nav>
-  );
-});
+          ) : null}
+        </ul>
+      </nav>
+    );
+  },
+);

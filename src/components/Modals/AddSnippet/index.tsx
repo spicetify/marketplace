@@ -1,31 +1,31 @@
 /// <reference path='../../../../../spicetify-cli/globals.d.ts' />
 /// <reference path='../../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
 
-import React from 'react';
+import React from "react";
 import {
   getLocalStorageDataFromKey,
   initializeSnippets,
-} from '../../../logic/Utils';
-import { LOCALSTORAGE_KEYS } from '../../../constants';
+} from "../../../logic/Utils";
+import { LOCALSTORAGE_KEYS } from "../../../constants";
 
 const AddSnippetModal = () => {
   function saveSnippet() {
     const textArea = document.querySelector(
-      '#marketplace-custom-css'
+      "#marketplace-custom-css",
     ) as HTMLTextAreaElement;
     const nameInput = document.querySelector(
-      '#marketplace-customCSS-name-submit'
+      "#marketplace-customCSS-name-submit",
     ) as HTMLInputElement;
     const descriptionInput = document.querySelector(
-      '#marketplace-customCSS-description-submit'
+      "#marketplace-customCSS-description-submit",
     ) as HTMLInputElement;
 
-    const code = textArea.value.replace(/\n/g, '');
-    const name = nameInput.value.replace(/\n/g, '');
+    const code = textArea.value.replace(/\n/g, "");
+    const name = nameInput.value.replace(/\n/g, "");
     const description = descriptionInput.value.trim();
     const localStorageKey = `marketplace:installed:snippet:${name}`;
     if (getLocalStorageDataFromKey(localStorageKey)) {
-      alert('That name is already taken!');
+      alert("That name is already taken!");
       return;
     }
 
@@ -36,23 +36,23 @@ const AddSnippetModal = () => {
         code,
         description,
         title: name,
-      })
+      }),
     );
 
     // Add to installed list if not there already
     const installedSnippetKeys = getLocalStorageDataFromKey(
       LOCALSTORAGE_KEYS.installedSnippets,
-      []
+      [],
     );
     if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
       installedSnippetKeys.push(localStorageKey);
       localStorage.setItem(
         LOCALSTORAGE_KEYS.installedSnippets,
-        JSON.stringify(installedSnippetKeys)
+        JSON.stringify(installedSnippetKeys),
       );
     }
     const installedSnippets = installedSnippetKeys.map((key) =>
-      getLocalStorageDataFromKey(key)
+      getLocalStorageDataFromKey(key),
     );
     initializeSnippets(installedSnippets);
 

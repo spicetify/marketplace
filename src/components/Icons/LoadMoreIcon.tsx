@@ -3,17 +3,17 @@ import React from "react";
 export default class LoadMoreIcon extends React.Component<
 {onClick: Function}
 > {
-    render() {
-        return (
-            <div onClick={this.props.onClick}>
-                <p style={{
-                    fontSize: 100,
-                    lineHeight: "65px",
-                }}>»</p>
-                <span style={{
-                    fontSize: 20,
-                }}>Load more</span>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div onClick={this.props.onClick}>
+        <p style={{
+          fontSize: 100,
+          lineHeight: "65px",
+        }}>»</p>
+        <span style={{
+          fontSize: 20,
+        }}>Load more</span>
+      </div>
+    );
+  }
 }

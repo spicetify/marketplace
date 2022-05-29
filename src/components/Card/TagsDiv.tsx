@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { MAX_TAGS } from '../../constants';
+import { MAX_TAGS } from "../../constants";
 
-export default (props: {
+const TagsDiv = (props: {
   tags: string[];
   showTags: boolean;
 }) => {
@@ -22,7 +22,7 @@ export default (props: {
       }
       return accum;
     }, []);
-  }
+  };
 
   const baseTags = props.tags.slice(0, MAX_TAGS);
   const extraTags = props.tags.slice(MAX_TAGS);
@@ -41,12 +41,12 @@ export default (props: {
       </ul>
       { extraTags.length && !expanded
         ? <button
-            className="marketplace-card__tags-more-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              setExpanded(true);
-            }}
-          >...</button>
+          className="marketplace-card__tags-more-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(true);
+          }}
+        >...</button>
         : null
       }
     </div>
@@ -63,3 +63,5 @@ export default (props: {
   //     : null
   // ];
 };
+
+export default TagsDiv;

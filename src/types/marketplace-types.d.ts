@@ -4,6 +4,11 @@ export type TabItemConfig = {
   enabled: boolean;
 };
 
+export type SortBoxOption = {
+  key: string;
+  value: string;
+};
+
 export type TabType = "Extensions" | "Themes" | "Snippets" | "Installed";
 
 export type CardType = "extension" | "theme" | "snippet";

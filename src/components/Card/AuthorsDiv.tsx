@@ -1,13 +1,13 @@
-import React from 'react';
-import { Author } from '../../types/marketplace-types';
+import React from "react";
+import { Author } from "../../types/marketplace-types";
 
-export default (props: {
+const AuthorsDiv = (props: {
   authors: Author[];
 }) => {
   // Add a div with author links inside
   const authorsDiv = (
     <div className="marketplace-card__authors">
-      { props.authors.map((author) => {
+      { props.authors.map((author, index) => {
         return (
           <a
             title={author.name}
@@ -18,6 +18,7 @@ export default (props: {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
+            key={index}
           >
             {author.name}
           </a>
@@ -28,3 +29,5 @@ export default (props: {
 
   return authorsDiv;
 };
+
+export default AuthorsDiv;

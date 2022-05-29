@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
+import { Config } from "../../../types/marketplace-types";
 
 const SettingsToggle = (props: {
   name: string;
   storageKey: string;
   classes?: string[];
   CONFIG: any;
-  triggerRefresh: Function;
+  triggerRefresh: (CONFIG: Config) => void;
 }) => {
   const enabled = !!props.CONFIG.visual[props.storageKey];
   console.log(`toggling ${props.storageKey} to ${enabled}`);
@@ -24,7 +25,7 @@ const SettingsToggle = (props: {
     <div className='setting-row'>
       <label className='col description'>{props.name}</label>
       <div className='col action'>
-        <label className={`x-toggle-wrapper ${props.classes ? props.classes.join(' '): ''}`}>
+        <label className={`x-toggle-wrapper ${props.classes ? props.classes.join(" "): ""}`}>
           <input title={`Toggle for ${props.storageKey}`} className='x-toggle-input' type='checkbox' checked={enabled} onChange={clickToggle} />
           <span className='x-toggle-indicatorWrapper'>
             <span className='x-toggle-indicator'></span>

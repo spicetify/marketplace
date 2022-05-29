@@ -1,7 +1,9 @@
+import { Author, Snippet, SortBoxOption } from "../types/marketplace-types";
+
 /**
  * Get localStorage data (or fallback value), given a key
- * @param {string} key The localStorage key
- * @param {any} fallback Fallback value if the key is not found
+ * @param key The localStorage key
+ * @param fallback Fallback value if the key is not found
  * @returns The data stored in localStorage, or the fallback value if not found
  */
 export const getLocalStorageDataFromKey = (key: string, fallback?: any) => {
@@ -22,10 +24,10 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: any) => {
 
 /**
  * Convert hexadeciaml string to rgb values
- * @param {string} hex 3 or 6 character hex string
+ * @param hex 3 or 6 character hex string
  * @returns Array of RGB values
  */
-const hexToRGB = (hex) => {
+const hexToRGB = (hex: string) => {
   if (hex.length === 3) {
     hex = hex.split("").map((char) => char + char).join("");
   } else if (hex.length != 6) {
@@ -35,40 +37,51 @@ const hexToRGB = (hex) => {
   }
 
   const aRgbHex = hex.match(/.{1,2}/g);
+  if (!aRgbHex || aRgbHex.length !== 3) {
+    throw "Could not parse hex colour.";
+  }
+
   const aRgb = [
     parseInt(aRgbHex[0], 16),
     parseInt(aRgbHex[1], 16),
     parseInt(aRgbHex[2], 16),
   ];
+
   return aRgb;
 };
 
 /**
 * Parse INI file into a colour scheme object
-* @param {string} data The INI file string data
+* @param data The INI file string data
 * @returns Object containing the parsed colour schemes
 */
-export const parseIni = (data) => {
+export const parseIni = (data: string) => {
   const regex = {
-  section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
-  param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
-  comment: /^\s*;.*$/,
+    section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
+    param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
+    comment: /^\s*;.*$/,
   };
-  let value = {};
-  let lines = data.split(/[\r\n]+/);
+  const value = {};
+  const lines = data.split(/[\r\n]+/);
   let section = null;
   lines.forEach(function(line) {
     if (regex.comment.test(line)) {
       return;
     } else if (regex.param.test(line)) {
-      let match = line.match(regex.param);
+      const match = line.match(regex.param);
+
+      // TODO: github copilot made this part, but I have no idea what it does
+      // if (match?.length !== 3) {
+      //   throw "Could not parse INI file.";
+      // }
+
       if (section) {
         value[section][match[1]] = match[2];
       } else {
         value[match[1]] = match[2];
       }
     } else if (regex.section.test(line)) {
-      let match = line.match(regex.section);
+      const match = line.match(regex.section);
       value[match[1]] = {};
       section = match[1];
     } else if (line.length == 0 && section) {
@@ -80,10 +93,10 @@ export const parseIni = (data) => {
 
 /**
 * Loop through the snippets and add the contents of the code as a style tag in the DOM
-* @param { { title: string; description: string; code: string;}[] } snippets The snippets to initialize
+* @param snippets The snippets to initialize
 */
 // TODO: keep this in sync with the extension.js file
-export const initializeSnippets = (snippets) => {
+export const initializeSnippets = (snippets: Snippet[]) => {
   // Remove any existing marketplace snippets
   const existingSnippets = document.querySelector("style.marketplaceSnippets");
   if (existingSnippets) existingSnippets.remove();
@@ -100,15 +113,14 @@ export const initializeSnippets = (snippets) => {
   document.head.appendChild(style);
 };
 
-
 /**
  * Format an array of authors, given the data from the manifest and the repo owner.
- * @param {{ name: string; url: string; }[]} authors Array of authors
- * @param {string} user The repo owner
- * @returns {{ name: string; url: string; }[]} The authors, with anything missing added
+ * @param authors Array of authors
+ * @param user The repo owner
+ * @returns The authors, with anything missing added
  */
-export const processAuthors = (authors, user) => {
-  let parsedAuthors: { name: string; url: string }[] = [];
+export const processAuthors = (authors: Author[], user: string) => {
+  let parsedAuthors: Author[] = [];
 
   if (authors && authors.length > 0) {
     parsedAuthors = authors;
@@ -125,12 +137,12 @@ export const processAuthors = (authors, user) => {
 /**
 * Generate a list of options for the schemes dropdown.
 * @param schemes The schemes object from the theme.
-* @returns {{ key: string; value: string; }[]} Array of options for the schemes dropdown.
+* @returns Array of options for the schemes dropdown.
 */
 export const generateSchemesOptions = (schemes) => {
   // e.g. [ { key: "red", value: "Red" }, { key: "dark", value: "Dark" } ]
   if (!schemes) return [];
-  return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName }));
+  return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName } as SortBoxOption));
 };
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
@@ -176,13 +188,13 @@ export const injectColourScheme = (scheme) => {
     document.head.appendChild(schemeTag);
   } else {
     // Re-add default user.css
-    let originalColorsCSS = document.createElement("link");
+    const originalColorsCSS = document.createElement("link");
     originalColorsCSS.setAttribute("rel", "stylesheet");
     originalColorsCSS.setAttribute("href", "colors.css");
     originalColorsCSS.classList.add("userCSS");
     document.head.appendChild(originalColorsCSS);
   }
-}
+};
 
 /**
  * Update the user.css in the DOM
@@ -255,10 +267,12 @@ export const parseCSS = async (themeManifest) => {
   let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
   // console.log("Parsed CSS: ", css);
 
-  let urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
+  const urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
 
   for (const match of urls) {
-    const url = match.groups.path;
+    const url = match?.groups?.path;
+    if (!url) continue;
+
     // console.log(url);
     // If it's a relative URL, transform it to HTTP URL
     if (!url.startsWith("http") && !url.startsWith("data")) {
@@ -274,18 +288,18 @@ export const parseCSS = async (themeManifest) => {
 
 /**
  * Get user, repo, and branch from a GitHub raw URL
- * @param {string} url Github Raw URL
+ * @param url Github Raw URL
  * @returns { { user: string, repo: string, branch: string, filePath: string } }
  */
-export const getParamsFromGithubRaw = (url) => {
+export const getParamsFromGithubRaw = (url: string) => {
   const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^\/]+)\/(?<repo>[^\/]+)\/(?<branch>[^\/]+)\/(?<filePath>.+$)/);
   // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
   const obj = {
-    user: regex_result ? regex_result.groups.user : null,
-    repo: regex_result ? regex_result.groups.repo : null,
-    branch: regex_result ? regex_result.groups.branch : null,
-    filePath: regex_result ? regex_result.groups.filePath : null,
+    user: regex_result ? regex_result?.groups?.user : null,
+    repo: regex_result ? regex_result?.groups?.repo : null,
+    branch: regex_result ? regex_result?.groups?.branch : null,
+    filePath: regex_result ? regex_result?.groups?.filePath : null,
   };
 
   return obj;

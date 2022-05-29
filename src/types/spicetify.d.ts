@@ -25,7 +25,7 @@ declare namespace Spicetify {
         next_page_url?: string;
         restrictions?: Record<string, string[]>;
         referrer?: string;
-    };
+    }
     type PlayerState = {
         timestamp: number;
         context_uri: string;
@@ -332,7 +332,7 @@ declare namespace Spicetify {
         function registerImportantShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void);
         function _deregisterShortcut(keys: KeysDefine);
         function deregisterImportantShortcut(keys: KeysDefine);
-    };
+    }
 
     /**
      * @deprecated
@@ -365,7 +365,7 @@ declare namespace Spicetify {
          * Create a single toggle.
          */
         class Item {
-            constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void);
+          constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void);
             name: string;
             isEnabled: boolean;
             /**
@@ -392,7 +392,7 @@ declare namespace Spicetify {
          * `Item`s in `subItems` array shouldn't be registered.
          */
         class SubMenu {
-            constructor(name: string, subItems: Item[]);
+          constructor(name: string, subItems: Item[]);
             name: string;
             /**
              * Change SubMenu name
@@ -416,12 +416,12 @@ declare namespace Spicetify {
             deregister(): void;
         }
     }
-    
+
     /**
      * Keyboard shortcut library
-     * 
+     *
      * Documentation: https://craig.is/killing/mice v1.6.5
-     * 
+     *
      * Spicetify.Keyboard is wrapper of this library to be compatible with legacy Spotify,
      * so new extension should use this library instead.
      */
@@ -454,7 +454,7 @@ declare namespace Spicetify {
      * Set of APIs method to parse and validate URIs.
      */
     class URI {
-        constructor(type: string, props: any);
+      constructor(type: string, props: any);
         public type: string;
         public id: string;
 
@@ -986,7 +986,6 @@ declare namespace Spicetify {
          */
         static imageURI(id: string): URI;
 
-
         /**
          * Creates a new 'mosaic' type URI.
          *
@@ -1087,9 +1086,9 @@ declare namespace Spicetify {
          * @param id The token needed to join a social session.
          * @return The socialsession URI.
          */
-         static socialSessionURI(id: string): URI;
+        static socialSessionURI(id: string): URI;
 
-         /**
+        /**
          * Creates a new 'interruption' type URI.
          *
          * @param id The id of the interruption.
@@ -1168,7 +1167,7 @@ declare namespace Spicetify {
          * `Item`s in `subItems` array shouldn't be registered.
          */
         class SubMenu {
-            constructor(name: string, subItems: Iterable<Item>, shouldAdd?: ShouldAddCallback, disabled?: boolean);
+          constructor(name: string, subItems: Iterable<Item>, shouldAdd?: ShouldAddCallback, disabled?: boolean);
             name: string;
             disabled: boolean;
             /**
@@ -1226,16 +1225,16 @@ declare namespace Spicetify {
             /**
              * Determins what will trigger the context menu. For example, a click, or a right-click
              */
-            trigger?: 'click' | 'right-click';
+            trigger?: "click" | "right-click";
             /**
              * Determins is the context menu should open or toggle when triggered
              */
-            action?: 'toggle' | 'open';
+            action?: "toggle" | "open";
             /**
              * The preferred placement of the context menu when it opens.
              * Relative to trigger element.
              */
-            placement?: 'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end';
+            placement?: "top" | "top-start" | "top-end" | "right" | "right-start" | "right-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end";
             /**
              * The x and y offset distances at which the context menu should open.
              * Relative to trigger element and `position`.
@@ -1285,7 +1284,7 @@ declare namespace Spicetify {
             /**
              * Indicate that a divider line should be added `before` or `after` this `MenuItem`
              */
-            divider?: 'before' | 'after' | 'both';
+            divider?: "before" | "after" | "both";
             /**
              * React component icon that will be rendered at the end of the `MenuItem`
              */
@@ -1293,21 +1292,21 @@ declare namespace Spicetify {
         };
         /**
          * Generic context menu provider
-         * 
+         *
          * Props:
          * @see Spicetify.ReactComponent.ContextMenuProps
          */
         const ContextMenu: any;
         /**
          * Wrapper of ReactComponent.ContextMenu with props: action = 'toggle' and trigger = 'right-click'
-         * 
+         *
          * Props:
          * @see Spicetify.ReactComponent.ContextMenuProps
          */
         const RightClickMenu: any;
         /**
          * Outer layer contain ReactComponent.MenuItem(s)
-         * 
+         *
          * Props:
          * @see Spicetify.ReactComponent.MenuProps
          */
@@ -1315,14 +1314,14 @@ declare namespace Spicetify {
         /**
          * Component to construct menu item
          * Used as ReactComponent.Menu children
-         * 
+         *
          * Props:
          * @see Spicetify.ReactComponent.MenuItemProps
          */
         const MenuItem: any;
         /**
          * Tailored ReactComponent.Menu for specific type of object
-         * 
+         *
          * Props: {
          *      uri: string;
          *      onRemoveCallback?: (uri: string) => void;
@@ -1332,14 +1331,14 @@ declare namespace Spicetify {
         const PodcastShowMenu: any;
         const ArtistMenu: any;
         const PlaylistMenu: any;
-    };
+    }
 
     /**
      * Add button in top bar next to navigation buttons
      */
     namespace Topbar {
         class Button {
-            constructor(label: string, icon: string, onClick: (self: Button) => void, disabled = false);
+          constructor(label: string, icon: string, onClick: (self: Button) => void, disabled = false);
             label: string;
             icon: string;
             onClick: (self: Button) => void;
@@ -1349,7 +1348,7 @@ declare namespace Spicetify {
     }
 
     /**
-     * SVG icons 
+     * SVG icons
      */
     namespace SVGIcons {
         const check: string;

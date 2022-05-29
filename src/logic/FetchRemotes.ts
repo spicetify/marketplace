@@ -1,14 +1,13 @@
-import { Snippet } from '../types/marketplace-types';
-import { CardItem } from '../types/marketplace-types';
-import { processAuthors, addToSessionStorage } from './Utils';
-import { ITEMS_PER_REQUEST } from '../constants';
+import { CardItem, Snippet } from "../types/marketplace-types";
+import { processAuthors, addToSessionStorage } from "./Utils";
+import { ITEMS_PER_REQUEST } from "../constants";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
 /**
  * Query GitHub for all repos with the "spicetify-extensions" topic
- * @param {number} page The query page number
+ * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
 export async function getExtensionRepos(page = 1, BLACKLIST:string[] = []) {
@@ -23,14 +22,14 @@ export async function getExtensionRepos(page = 1, BLACKLIST:string[] = []) {
   //     url += `&t=${sortConfig.time}`
   const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
   if (!allRepos.items) {
-      Spicetify.showNotification("Too Many Requests, Cool Down.");
+    Spicetify.showNotification("Too Many Requests, Cool Down.");
   }
   const filteredResults = {
-      ...allRepos,
-      // Include count of all items on the page, since we're filtering the blacklist below,
-      // which can mess up the paging logic
-      page_count: allRepos.items.length,
-      items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    ...allRepos,
+    // Include count of all items on the page, since we're filtering the blacklist below,
+    // which can mess up the paging logic
+    page_count: allRepos.items.length,
+    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
   };
 
   return filteredResults;
@@ -40,12 +39,12 @@ export async function getExtensionRepos(page = 1, BLACKLIST:string[] = []) {
 // TODO: can we add a return type here?
 /**
 * Get the manifest object for a repo
-* @param {string} user Owner username
-* @param {string} repo Repo name
-* @param {string} branch Default branch name (e.g. main or master)
+* @param user Owner username
+* @param repo Repo name
+* @param branch Default branch name (e.g. main or master)
 * @returns The manifest object
 */
-async function getRepoManifest(user, repo, branch) {
+async function getRepoManifest(user: string, repo: string, branch: string) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
   const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
   if (sessionStorageItem) {
@@ -65,139 +64,139 @@ async function getRepoManifest(user, repo, branch) {
 // TODO: can we add a return type here?
 /**
 * Fetch extensions from a repo and format data for generating cards
-* @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
-* @param {string} branch The repo's default branch (e.g. main or master)
-* @param {number} stars The number of stars the repo has
+* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+* @param branch The repo's default branch (e.g. main or master)
+* @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchExtensionManifest(contents_url, branch, stars, hideInstalled = false) {
+export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
   try {
-      // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
-      let manifests;
-      const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
-      // TODO: err handling?
-      if (!regex_result || !regex_result.groups) return null;
-      const { user, repo } = regex_result.groups;
+    // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
+    let manifests;
+    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+    // TODO: err handling?
+    if (!regex_result || !regex_result.groups) return null;
+    const { user, repo } = regex_result.groups;
 
-      manifests = await getRepoManifest(user, repo, branch);
+    manifests = await getRepoManifest(user, repo, branch);
 
-      // If the manifest returned is not an array, initialize it as one
-      if (!Array.isArray(manifests)) manifests = [manifests];
+    // If the manifest returned is not an array, initialize it as one
+    if (!Array.isArray(manifests)) manifests = [manifests];
 
-      // Manifest is initially parsed
-      const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-          const selectedBranch = manifest.branch || branch;
-          const item = {
-              manifest,
-              title: manifest.name,
-              subtitle: manifest.description,
-              authors: processAuthors(manifest.authors, user),
-              user,
-              repo,
-              branch: selectedBranch,
+    // Manifest is initially parsed
+    const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+      const selectedBranch = manifest.branch || branch;
+      const item = {
+        manifest,
+        title: manifest.name,
+        subtitle: manifest.description,
+        authors: processAuthors(manifest.authors, user),
+        user,
+        repo,
+        branch: selectedBranch,
 
-              imageURL: manifest.preview && manifest.preview.startsWith("http")
-                  ? manifest.preview
-                  : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-              extensionURL: manifest.main.startsWith("http")
-                  ? manifest.main
-                  : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-              readmeURL: manifest.readme && manifest.readme.startsWith("http")
-                  ? manifest.readme
-                  : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-              stars,
-              tags: manifest.tags,
-          };
+        imageURL: manifest.preview && manifest.preview.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        extensionURL: manifest.main.startsWith("http")
+          ? manifest.main
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        stars,
+        tags: manifest.tags,
+      };
 
-          // If manifest is valid, add it to the list
-          if (manifest && manifest.name && manifest.description && manifest.main
-          ) {
-              // Add to list unless we're hiding installed items and it's installed
-              if (!(hideInstalled
+      // If manifest is valid, add it to the list
+      if (manifest && manifest.name && manifest.description && manifest.main
+      ) {
+        // Add to list unless we're hiding installed items and it's installed
+        if (!(hideInstalled
                   && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
-              ) {
-                  accum.push(item);
-              }
-          }
-          // else {
-          //     console.error("Invalid manifest:", manifest);
-          // }
+        ) {
+          accum.push(item);
+        }
+      }
+      // else {
+      //     console.error("Invalid manifest:", manifest);
+      // }
 
-          return accum;
-      }, []);
+      return accum;
+    }, []);
 
-      return parsedManifests;
+    return parsedManifests;
   }
   catch (err) {
-      // console.warn(contents_url, err);
-      return null;
+    // console.warn(contents_url, err);
+    return null;
   }
 }
 
 // TODO: can we add a return type here?
 /**
 * Fetch themes from a repo and format data for generating cards
-* @param {string} contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
-* @param {string} branch The repo's default branch (e.g. main or master)
-* @param {number} stars The number of stars the repo has
+* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+* @param branch The repo's default branch (e.g. main or master)
+* @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchThemeManifest(contents_url, branch, stars) {
+export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
   try {
-      let manifests;
-      const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
-      // TODO: err handling?
-      if (!regex_result || !regex_result.groups) return null;
-      let { user, repo } = regex_result.groups;
+    let manifests;
+    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+    // TODO: err handling?
+    if (!regex_result || !regex_result.groups) return null;
+    const { user, repo } = regex_result.groups;
 
-      manifests = await getRepoManifest(user, repo, branch);
+    manifests = await getRepoManifest(user, repo, branch);
 
-      // If the manifest returned is not an array, initialize it as one
-      if (!Array.isArray(manifests)) manifests = [manifests];
+    // If the manifest returned is not an array, initialize it as one
+    if (!Array.isArray(manifests)) manifests = [manifests];
 
-      // Manifest is initially parsed
-      // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
-      const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-          const selectedBranch = manifest.branch || branch;
-          const item = {
-              manifest,
-              title: manifest.name,
-              subtitle: manifest.description,
-              authors: processAuthors(manifest.authors, user),
-              user,
-              repo,
-              branch: selectedBranch,
-              imageURL: manifest.preview && manifest.preview.startsWith("http")
-                  ? manifest.preview
-                  : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-              readmeURL: manifest.readme && manifest.readme.startsWith("http")
-                  ? manifest.readme
-                  : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-              stars,
-              tags: manifest.tags,
-              // theme stuff
-              cssURL: manifest.usercss.startsWith("http")
-                  ? manifest.usercss
-                  : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-              // TODO: clean up indentation etc
-              schemesURL: manifest.schemes
-                  ? (
-                      manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-                  )
-                  : null,
-              include: manifest.include,
-          };
-          // If manifest is valid, add it to the list
-          if (manifest && manifest.name && manifest.usercss && manifest.description) {
-              accum.push(item);
-          }
-          return accum;
-      }, []);
-      return parsedManifests;
+    // Manifest is initially parsed
+    // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
+    const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+      const selectedBranch = manifest.branch || branch;
+      const item = {
+        manifest,
+        title: manifest.name,
+        subtitle: manifest.description,
+        authors: processAuthors(manifest.authors, user),
+        user,
+        repo,
+        branch: selectedBranch,
+        imageURL: manifest.preview && manifest.preview.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        stars,
+        tags: manifest.tags,
+        // theme stuff
+        cssURL: manifest.usercss.startsWith("http")
+          ? manifest.usercss
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+        // TODO: clean up indentation etc
+        schemesURL: manifest.schemes
+          ? (
+            manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+          )
+          : null,
+        include: manifest.include,
+      };
+      // If manifest is valid, add it to the list
+      if (manifest && manifest.name && manifest.usercss && manifest.description) {
+        accum.push(item);
+      }
+      return accum;
+    }, []);
+    return parsedManifests;
   }
   catch (err) {
-      // console.warn(contents_url, err);
-      return null;
+    // console.warn(contents_url, err);
+    return null;
   }
 }
 
@@ -217,14 +216,14 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = []) {
   //     url += `&t=${sortConfig.time}`
   const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
   if (!allThemes.items) {
-      Spicetify.showNotification("Too Many Requests, Cool Down.");
+    Spicetify.showNotification("Too Many Requests, Cool Down.");
   }
   const filteredResults = {
-      ...allThemes,
-      // Include count of all items on the page, since we're filtering the blacklist below,
-      // which can mess up the paging logic
-      page_count: allThemes.items.length,
-      items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    ...allThemes,
+    // Include count of all items on the page, since we're filtering the blacklist below,
+    // which can mess up the paging logic
+    page_count: allThemes.items.length,
+    items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
   };
 
   return filteredResults;
@@ -242,7 +241,7 @@ export const getBlacklist = async () => {
 
 /**
 * It fetches the snippets.json file from the Github repository and returns it as a JSON object.
-* @returns { Promise<Snippet[]> } Array of snippets
+* @returns Array of snippets
 */
 export const fetchCssSnippets = async () => {
   const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/snippets.json";

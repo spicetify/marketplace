@@ -56,7 +56,7 @@ export default class Card extends React.Component<CardProps, {
     // this.menuType = Spicetify.ReactComponent.Menu | "div";
     this.menuType = Spicetify.ReactComponent.Menu;
 
-    let prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
+    const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
 
     let cardId = "";
     if (props.type === "snippet") cardId = props.item.title.replaceAll(" ", "-");
@@ -113,7 +113,7 @@ export default class Card extends React.Component<CardProps, {
       } else {
         this.installExtension();
       }
-      openModal('RELOAD');
+      openModal("RELOAD");
     } else if (this.props.type === "theme") {
       const themeKey = localStorage.getItem("marketplace:theme-installed");
       const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
@@ -130,7 +130,7 @@ export default class Card extends React.Component<CardProps, {
       }
 
       // If the new or previous theme has JS, prompt to reload
-      if (this.props.item.manifest?.include || previousTheme.include) openModal('RELOAD');
+      if (this.props.item.manifest?.include || previousTheme.include) openModal("RELOAD");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.log("Snippet already installed, removing");
@@ -203,7 +203,7 @@ export default class Card extends React.Component<CardProps, {
     }
 
     console.log(parsedSchemes);
-    console.log( Object.keys(parsedSchemes)[0])
+    console.log( Object.keys(parsedSchemes)[0]);
     const activeScheme = parsedSchemes ? Object.keys(parsedSchemes)[0] : null;
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
@@ -363,20 +363,20 @@ export default class Card extends React.Component<CardProps, {
 
   render() {
     // Cache this for performance
-    let IS_INSTALLED = this.isInstalled();
+    const IS_INSTALLED = this.isInstalled();
     // console.log(`Rendering ${this.localStorageKey} - is ${IS_INSTALLED ? "" : "not"} installed`);
 
     // Kill the card if it has been uninstalled on the "Installed" tab
     // TODO: is this kosher, or is there a better way to handle?
     if (this.props.CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
-        console.log("Card item not installed");
-        return null;
+      console.log("Card item not installed");
+      return null;
     }
 
     const cardClasses = ["main-card-card", `marketplace-card--${this.props.type}`];
     if (IS_INSTALLED) cardClasses.push("marketplace-card--installed");
 
-    let detail: string[] = [];
+    const detail: string[] = [];
     // this.visual.type && detail.push(this.type);
     if (this.props.type !== "snippet" && this.props.visual.stars) {
       detail.push(`★ ${this.state.stars}`);
