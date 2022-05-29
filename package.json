@@ -14,6 +14,7 @@
     "build:local": "spicetify-creator --out=dist --minify",
     "build:prod": "yarn build:local && yarn copy:docs",
     "copy:docs": "copyfiles README.md docs/* dist/",
+    "lint": "eslint src",
     "watch": "spicetify-creator --watch"
   },
   "engines": {
