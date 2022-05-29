@@ -1,10 +1,11 @@
 # spicetify-marketplace
 
-Download extensions and themes directly from within [Spicetify](https://github.com/khanhas/spicetify-cli). 
+Download extensions and themes directly from within [Spicetify](https://github.com/spicetify/spicetify-cli). 
 
-Made by [@theRealpadster](https://github.com/theRealPadster) and [@CharlieS1103](https://github.com/CharlieS1103).
+Made by [@theRealPadster](https://github.com/theRealPadster) and [@CharlieS1103](https://github.com/CharlieS1103).
 
-Based on the [reddit Custom App](https://github.com/khanhas/spicetify-cli/wiki/Custom-Apps#reddit)
+Based on the [reddit Custom App](https://github.com/spicetify/spicetify-cli/wiki/Custom-Apps#reddit)
+Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 
 <p align="center">
   <a href="https://github.com/spicetify/spicetify-marketplace/releases/latest">
@@ -42,7 +43,7 @@ curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/mai
 
 ### Manual Install (recommended)
 
-Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/khanhas/spicetify-cli) custom apps directory:
+Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/spicetify/spicetify-cli) custom apps directory:
 | **Platform** | **Path**                                                                               |
 |------------|------------------------------------------------------------------------------------------|
 | **Linux**      | `~/.config/spicetify/CustomApps/` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
@@ -72,7 +73,7 @@ spicetify apply
 ```
 ## Manual reset
 If you lose access to the marketplace page, and therefore cannot access the setting, follow these steps: 
-- First ensure you have dev-tools enabled by running ``spicetify enable-devtool apply``
+- First ensure you have dev-tools enabled by running ``spicetify enable-devtools apply``
 - Open up console by right clicking anywhere on Spotify (that isn't an element), and clicking inspect element.
 - Click the console tab in the devtools window that appears, and run the following command(in console)
 - ``Marketplace.reset()``
@@ -162,6 +163,7 @@ CSS snippets are rather basic to implement. We fetch them from this repo, so you
 ```
 
 ## Basic card loading functionality outline
+### TODO: Re-write this entire section, since it will change a lot once we switch to the mono-manifest system
 1. `componentDidMount` triggers `newRequest`, which triggers `loadAmount(30)`
 2. `loadAmount` calls `loadPage` in a loop until it has the requested amount of cards or runs out of results
 3. `loadPage` calls `getRepos(page)` to get the next page of extensions. It queries the GitHub API for any repos with the "spicetify-extensions" topic. We'll likely add our own tag in the future, like "spicetify-marketplace". 
@@ -169,10 +171,11 @@ CSS snippets are rather basic to implement. We fetch them from this repo, so you
 * Or if the active tab is "Installed", `loadPage` calls `getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets)` to get the extensions from the localstorage and generate the cards from there. 
 * Or if the active tab is "Snippets", `loadPage` calls `fetchCssSnippets()` and generates cards from the most recent `snippets.json` on GitHub. 
 
-## Styling + Build Process
-- The stylesheet is built using Sass (scss) with the [Parcel](https://parceljs.org/) bundler
-- The main stylesheet is style/style.scss, which builds all the components, and compiles into style.css
-- For development, you can run `npm run watch` to live update the files as you save them
-- For building, you can run `npm run build` to just build the style.css file once
-
-
+## Development + Build Process
+- This project uses [yarn](https://yarnpkg.com), not [npm](https://www.npmjs.com)
+- Run `yarn` to install the packages etc. 
+- The app entry point is located in `/src/app.tsx`
+- The SCSS stylesheets are all imported in `app.tsx`
+- Build the app once with `yarn build`. This needs to be done before the `watch` command works. 
+- For development, you can run `yarn watch` to live update the files as you save them. This works well when paired with `spicetify watch -a`, to live reload spotify as the files are saved. 
+- Refer to the [Spicetify Creator](https://github.com/spicetify/spicetify-creator) [docs](https://spicetify.app/docs/development/spicetify-creator) for more information
