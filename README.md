@@ -4,7 +4,7 @@ Download extensions and themes directly from within [Spicetify](https://github.c
 
 Made by [@theRealPadster](https://github.com/theRealPadster) and [@CharlieS1103](https://github.com/CharlieS1103).
 
-Based on the [reddit Custom App](https://github.com/spicetify/spicetify-cli/wiki/Custom-Apps#reddit)
+Based on the [reddit Custom App](https://github.com/spicetify/spicetify-cli/wiki/Custom-Apps#reddit)  
 Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 
 <p align="center">
