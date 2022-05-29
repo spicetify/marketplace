@@ -1,6 +1,3 @@
-/// <reference path='../../../spicetify-cli/globals.d.ts' />
-/// <reference path='../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
-
 import React from "react";
 import { Config } from "../types/marketplace-types";
 
@@ -34,7 +31,7 @@ const getModalSettings = (modalType: ModalType, CONFIG?: Config, triggerRefresh?
   default:
     return {
       title: "",
-      content: null,
+      content: <div />,
       isLarge: false,
     };
   }

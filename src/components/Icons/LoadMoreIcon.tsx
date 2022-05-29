@@ -1,7 +1,7 @@
 import React from "react";
 
 export default class LoadMoreIcon extends React.Component<
-{onClick: Function}
+{onClick: () => void}
 > {
   render() {
     return (

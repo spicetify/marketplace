@@ -1,5 +1,5 @@
 import React from "react";
-import { CardItem, CardType, Config, Snippet } from "../../types/marketplace-types";
+import { CardItem, CardType, Config, Snippet, VisualConfig } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
 import {
@@ -25,7 +25,7 @@ type CardProps = {
   updateColourSchemes: (any, string) => void;
   updateActiveTheme: (string) => void;
   type: CardType;
-  visual: { type: string; stars: string; }
+  visual: VisualConfig;
   key: string;
   activeThemeKey?: string;
 };

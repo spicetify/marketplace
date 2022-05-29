@@ -1,6 +1,3 @@
-/// <reference path='../../../../../spicetify-cli/globals.d.ts' />
-/// <reference path='../../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
-
 import React from "react";
 import {
   getLocalStorageDataFromKey,

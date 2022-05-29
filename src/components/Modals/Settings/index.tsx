@@ -1,6 +1,3 @@
-/// <reference path='../../../../../spicetify-cli/globals.d.ts' />
-/// <reference path='../../../../../spicetify-cli/jsHelper/spicetifyWrapper.js' />
-
 import React from "react";
 import { Config } from "../../../types/marketplace-types";
 import { resetMarketplace } from "../../../logic/Utils";
