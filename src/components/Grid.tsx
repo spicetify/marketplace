@@ -19,7 +19,7 @@ export default class Grid extends React.Component<
 {
   title: string,
   CONFIG: Config,
-  triggerRefresh: (CONFIG: any) => void,
+  updateAppConfig: (CONFIG: Config) => void,
 },
 {
   // TODO: add types
@@ -35,7 +35,7 @@ export default class Grid extends React.Component<
   constructor(props) {
     super(props);
     Object.assign(this, props);
-    this.triggerRefresh = props.triggerRefresh.bind(this);
+    this.updateAppConfig = props.updateAppConfig.bind(this);
 
     // Fetches the sorting options, fetched from SortBox.js
     this.sortConfig = {
@@ -64,7 +64,7 @@ export default class Grid extends React.Component<
   gridUpdatePostsVisual: any;
   checkScroll: any;
   CONFIG: Config;
-  triggerRefresh: (CONFIG: Config) => void;
+  updateAppConfig: (CONFIG: Config) => void;
   BLACKLIST: any;
 
   // TODO: should I put this in Grid state?
@@ -420,7 +420,7 @@ export default class Grid extends React.Component<
           className: "marketplace-settings-button",
           id: "marketplace-settings-button",
 
-          onClick: () => openModal('SETTINGS', this.CONFIG, this.triggerRefresh),
+          onClick: () => openModal('SETTINGS', this.CONFIG, this.updateAppConfig),
           // onClick: () => { console.log('TODO: add settings modal')},
       }, SettingsIcon),
       // End of marketplace-header__right
@@ -486,7 +486,7 @@ export default class Grid extends React.Component<
           activeLink: this.CONFIG.activeTab,
       }));
       */
-    console.log("SPRC Version!");
+
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
@@ -504,7 +504,7 @@ export default class Grid extends React.Component<
 
             /> : null}
             <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
-              onClick={() => openModal("SETTINGS", this.CONFIG, this.triggerRefresh)}
+              onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
             </button>

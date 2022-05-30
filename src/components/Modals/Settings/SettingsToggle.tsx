@@ -5,19 +5,26 @@ const SettingsToggle = (props: {
   name: string;
   storageKey: string;
   classes?: string[];
-  CONFIG: any;
-  triggerRefresh: (CONFIG: Config) => void;
+  modalConfig: Config;
+  updateConfig: (CONFIG: Config) => void;
 }) => {
-  const enabled = !!props.CONFIG.visual[props.storageKey];
-  console.log(`toggling ${props.storageKey} to ${enabled}`);
+  // TODO: This seems to get it to work, but it's really dirty...
+  // https://blog.logrocket.com/how-when-to-force-react-component-re-render
+  // const [, updateState] = React.useState();
+  // const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  // console.log("rendering...");
+
+  const enabled = !!props.modalConfig.visual[props.storageKey];
 
   const clickToggle = (e) => {
     const state = e.target.checked;
-    props.CONFIG.visual[props.storageKey] = state;
+    props.modalConfig.visual[props.storageKey] = state;
+    console.log(`toggling ${props.storageKey} to ${state}`);
     localStorage.setItem(`marketplace:${props.storageKey}`, String(state));
 
-    // TODO: does this work?
-    props.triggerRefresh(props.CONFIG);
+    // Saves the config settings to app as well as SettingsModal state
+    props.updateConfig(props.modalConfig);
     // gridUpdatePostsVisual && gridUpdatePostsVisual();
   };
 

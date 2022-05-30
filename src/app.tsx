@@ -107,7 +107,7 @@ class App extends React.Component<null, {count: number, CONFIG: any}> {
       return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {
-      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} triggerRefresh={this.updateConfig} />;
+      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
     }
   }
 }

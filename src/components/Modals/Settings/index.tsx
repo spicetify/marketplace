@@ -6,18 +6,30 @@ import SettingsToggle from "./SettingsToggle";
 
 interface Props {
   CONFIG: Config;
-  triggerRefresh: (CONFIG: Config) => void;
+  updateAppConfig: (CONFIG: Config) => void;
 }
 
-const SettingsModal = ({ CONFIG, triggerRefresh } : Props) => {
-  console.log(CONFIG);
+const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
+  // TODO: basically take in the app's CONFIG and create the initial state,
+  // but also copy it into the SettingsModal state
+  // and when updating anything in the main state, also update the SettingsModal state
+
+  const [modalConfig, setModalConfig] = React.useState({ ...CONFIG });
+  // TODO: use React.useCallback?
+  const updateConfig = (CONFIG: Config) => {
+    updateAppConfig({ ...CONFIG });
+    setModalConfig({ ...CONFIG });
+  };
+
+  console.log("Rendering SettingsModal...");
+  console.log({ CONFIG, modalCONFIG: modalConfig });
 
   // TODO: add index?
   function renderTabToggle(key: string, classes?: string[]) {
-    const index:number = CONFIG.tabs.reduce((accum, tab, index) => {
+    const index: number = modalConfig.tabs.reduce((accum, tab, index) => {
       return tab.name === key ? index : accum;
     }, -1); // TODO: null protect...
-    const { enabled } = CONFIG.tabs[index];
+    const { enabled } = modalConfig.tabs[index];
 
     const clickToggle = (e) => {
       console.log({ e });
@@ -32,14 +44,14 @@ const SettingsModal = ({ CONFIG, triggerRefresh } : Props) => {
       // tabItem.enabled = !toRemove;
 
       // Always "remove" because it re-adds it with the right settings/order in stackTabElements()
-      // CONFIG.tabsElement[id].remove();
-      CONFIG.tabs[index].enabled = e.target.checked;
+      // modalCONFIG.tabsElement[id].remove();
+      modalConfig.tabs[index].enabled = e.target.checked;
 
       // Persist the new enabled tabs
-      localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(CONFIG.tabs));
+      localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(modalConfig.tabs));
 
-      // TODO: does this work?
-      triggerRefresh(CONFIG);
+      // Saves the config settings to app as well as SettingsModal state
+      updateConfig(modalConfig);
 
       // Refresh
       // stackTabElements();
@@ -64,26 +76,26 @@ const SettingsModal = ({ CONFIG, triggerRefresh } : Props) => {
     // const el = document.querySelector(`[data-id="${tabName}"]`);
     console.log({ currPos, dir });
     // const id = el.dataset.id;
-    // const curPos = CONFIG.tabs.findIndex(({ name }) => name === id);
+    // const curPos = modalCONFIG.tabs.findIndex(({ name }) => name === id);
     const newPos = currPos + dir;
 
-    const temp = CONFIG.tabs[newPos];
-    CONFIG.tabs[newPos] = CONFIG.tabs[currPos];
-    CONFIG.tabs[currPos] = temp;
+    const temp = modalConfig.tabs[newPos];
+    modalConfig.tabs[newPos] = modalConfig.tabs[currPos];
+    modalConfig.tabs[currPos] = temp;
 
     localStorage.setItem(
       LOCALSTORAGE_KEYS.tabs,
-      JSON.stringify(CONFIG.tabs),
+      JSON.stringify(modalConfig.tabs),
     );
 
     // TODO: does this work?
-    triggerRefresh(CONFIG);
+    updateAppConfig(modalConfig);
 
     // stackTabElements();
   }
 
   function createTabOption(name, index) {
-    // const tabEnabled = CONFIG.tabs[index].enabled;
+    // const tabEnabled = modalCONFIG.tabs[index].enabled;
 
     return (
       <div className="setting-row" key={name}>
@@ -109,14 +121,14 @@ const SettingsModal = ({ CONFIG, triggerRefresh } : Props) => {
   return (
     <div id="marketplace-config-container">
       <h2>Options</h2>
-      <SettingsToggle name='Stars count' storageKey='stars' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
-      <SettingsToggle name='Tags' storageKey='tags' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
-      <SettingsToggle name='Hide installed in Marketplace' storageKey='hideInstalled' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
-      <SettingsToggle name='Shift Colors Every Minute' storageKey='colorShift' CONFIG={CONFIG} triggerRefresh={triggerRefresh} />
+      <SettingsToggle name='Stars count' storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <SettingsToggle name='Tags' storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <SettingsToggle name='Hide installed in Marketplace' storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <SettingsToggle name='Shift Colors Every Minute' storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
       <h2>Tabs</h2>
       <div className="tabs-container">
         {/* TODO: pass index? */}
-        {CONFIG.tabs.map(({ name }, index) => createTabOption(name, index))}
+        {modalConfig.tabs.map(({ name }, index) => createTabOption(name, index))}
       </div>
       <h2>Reset</h2>
       <div className="setting-row">

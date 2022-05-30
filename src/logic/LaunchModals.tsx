@@ -7,7 +7,11 @@ import SettingsModal from "../components/Modals/Settings";
 
 type ModalType = "ADD_SNIPPET" | "RELOAD" | "SETTINGS";
 
-const getModalSettings = (modalType: ModalType, CONFIG?: Config, triggerRefresh?: (CONFIG: Config) => void) => {
+const getModalSettings = (
+  modalType: ModalType,
+  CONFIG?: Config,
+  updateAppConfig?: (CONFIG: Config) => void,
+) => {
   switch (modalType) {
   case "ADD_SNIPPET":
     return {
@@ -25,7 +29,7 @@ const getModalSettings = (modalType: ModalType, CONFIG?: Config, triggerRefresh?
     return {
       title: "Settings",
       // TODO: If I just use {CONFIG}, it nests it inside another object...
-      content: <SettingsModal CONFIG={CONFIG} triggerRefresh={triggerRefresh} />,
+      content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
       isLarge: true,
     };
   default:
@@ -37,9 +41,13 @@ const getModalSettings = (modalType: ModalType, CONFIG?: Config, triggerRefresh?
   }
 };
 
-export const openModal = (modal: ModalType, CONFIG?: Config, triggerRefresh?: (CONFIG: Config) => void) => {
+export const openModal = (
+  modal: ModalType,
+  CONFIG?: Config,
+  updateAppConfig?: (CONFIG: Config) => void,
+) => {
   const triggerModal = () => {
-    const modalSettings = getModalSettings(modal, CONFIG, triggerRefresh);
+    const modalSettings = getModalSettings(modal, CONFIG, updateAppConfig);
     Spicetify.PopupModal.display(modalSettings);
   };
 
