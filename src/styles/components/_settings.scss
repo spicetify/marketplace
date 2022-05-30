@@ -19,24 +19,21 @@
 }
 
 .setting-row {
-  &::after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+  display: flex;
+  justify-content: space-between;
 
   .col {
     display: flex;
     padding: 10px 0;
     align-items: center;
 
-    &.description {
-      float: left;
-      padding-right: 15px;
-      cursor: default;
-    }
+    // &.description {
+    //   float: left;
+    //   padding-right: 15px;
+    //   cursor: default;
+    // }
     &.action {
-      float: right;
+      // float: right;
       text-align: right;
     }
   }
@@ -51,7 +48,7 @@ button.arrow-btn {
   color: var(--spice-text);
   cursor: pointer;
   display: flex;
-  margin-inline-start: 12px;
+  margin-inline-end: 12px;
   padding: 8px;
 
   &.small {

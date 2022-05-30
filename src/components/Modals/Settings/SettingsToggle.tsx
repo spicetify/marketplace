@@ -8,6 +8,7 @@ const SettingsToggle = (props: {
   modalConfig: Config;
   updateConfig: (CONFIG: Config) => void;
 }) => {
+  const toggleId = `toggle:${props.storageKey}`;
   const enabled = !!props.modalConfig.visual[props.storageKey];
 
   const clickToggle = (e) => {
@@ -23,11 +24,11 @@ const SettingsToggle = (props: {
 
   return (
     <div className='setting-row'>
-      <label htmlFor={`toggle:${props.storageKey}`} className='col description'>{props.name}</label>
+      <label htmlFor={toggleId} className='col description'>{props.name}</label>
       <div className='col action'>
         <label className={`x-toggle-wrapper ${props.classes ? props.classes.join(" "): ""}`}>
           <input className='x-toggle-input' type='checkbox' checked={enabled}
-            id={`toggle:${props.storageKey}`}
+            id={toggleId}
             title={`Toggle for ${props.storageKey}`}
             onChange={clickToggle}
           />

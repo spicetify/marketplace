@@ -51,17 +51,6 @@ const TagsDiv = (props: {
       }
     </div>
   );
-
-  // return [tagsList, extraTags.length && !expanded
-  //   ? <button
-  //       className="marketplace-card__tags-more-btn"
-  //       onClick={(e) => {
-  //         e.stopPropagation();
-  //         setExpanded(true);
-  //       }}
-  //     >...</button>
-  //     : null
-  // ];
 };
 
 export default TagsDiv;

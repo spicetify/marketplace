@@ -1,8 +1,11 @@
 import React from "react";
 import { Config } from "../../../types/marketplace-types";
+
 import { resetMarketplace } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
+
 import SettingsToggle from "./SettingsToggle";
+import Button from "../../Button";
 
 interface Props {
   CONFIG: Config;
@@ -123,7 +126,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <div className="setting-row">
         <label className="col description">Uninstall all extensions and themes, and reset preferences</label>
         <div className="col action">
-          <button className="main-buttons-button main-button-secondary" onClick={resetMarketplace}>Reset</button>
+          <Button onClick={resetMarketplace}>Reset</Button>
         </div>
       </div>
     </div>
