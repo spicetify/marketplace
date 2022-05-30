@@ -1,10 +1,11 @@
 import React from "react";
 import { Config } from "../../../types/marketplace-types";
 
+import styles from "../../../styles/modules/toggle.module.scss";
+
 const SettingsToggle = (props: {
   name: string;
   storageKey: string;
-  classes?: string[];
   modalConfig: Config;
   updateConfig: (CONFIG: Config) => void;
 }) => {
@@ -26,14 +27,14 @@ const SettingsToggle = (props: {
     <div className='setting-row'>
       <label htmlFor={toggleId} className='col description'>{props.name}</label>
       <div className='col action'>
-        <label className={`x-toggle-wrapper ${props.classes ? props.classes.join(" "): ""}`}>
-          <input className='x-toggle-input' type='checkbox' checked={enabled}
+        <label className={styles["toggle-wrapper"]}>
+          <input className={styles["toggle-input"]} type='checkbox' checked={enabled}
             id={toggleId}
             title={`Toggle for ${props.storageKey}`}
             onChange={clickToggle}
           />
-          <span className='x-toggle-indicatorWrapper'>
-            <span className='x-toggle-indicator'></span>
+          <span className={styles["toggle-indicator-wrapper"]}>
+            <span className={styles["toggle-indicator"]}></span>
           </span>
         </label>
       </div>
