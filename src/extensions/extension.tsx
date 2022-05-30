@@ -210,7 +210,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
-    console.log(repo);
+    // console.log(repo);
     const data = (type === "theme")
       ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
       : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);

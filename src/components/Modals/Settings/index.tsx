@@ -33,18 +33,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 
     const clickToggle = (e) => {
       console.log({ e });
-      // const id = el.dataset.id;
-      // const slider = el.querySelector("input[type='checkbox']");
 
-      // If we're removing the tab, it's not in the enabled tabs list
-      // const toRemove = !slider.checked;
-      // const tabItem = CONFIG.tabs.filter(({ name }) => name === id)[0];
-
-      // Enable/disable tab
-      // tabItem.enabled = !toRemove;
-
-      // Always "remove" because it re-adds it with the right settings/order in stackTabElements()
-      // modalCONFIG.tabsElement[id].remove();
       modalConfig.tabs[index].enabled = e.target.checked;
 
       // Persist the new enabled tabs
@@ -60,7 +49,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
     // convert to jsx
     return (
       <label className={`x-toggle-wrapper ${classes ? classes.join(" "): ""}`}>
-        <input type="checkbox" className="x-toggle-input" title={`Toggle for ${key}`}
+        <input id={`toggle:${key}`} type="checkbox" className="x-toggle-input" title={`Toggle for ${key}`}
           checked={enabled}
           disabled={key === "Extensions"}
           onChange={clickToggle}
@@ -99,7 +88,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 
     return (
       <div className="setting-row" key={name}>
-        <h3 className="col description">{name}</h3>
+        <label htmlFor={`toggle:${name}`} className='col description'>{name}</label>
         <div className="col action">
           <button title="Move up" className="arrow-btn" onClick={() => posCallback(index, -1)}>
             <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"

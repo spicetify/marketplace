@@ -23,10 +23,14 @@ const SettingsToggle = (props: {
 
   return (
     <div className='setting-row'>
-      <label className='col description'>{props.name}</label>
+      <label htmlFor={`toggle:${props.storageKey}`} className='col description'>{props.name}</label>
       <div className='col action'>
         <label className={`x-toggle-wrapper ${props.classes ? props.classes.join(" "): ""}`}>
-          <input title={`Toggle for ${props.storageKey}`} className='x-toggle-input' type='checkbox' checked={enabled} onChange={clickToggle} />
+          <input className='x-toggle-input' type='checkbox' checked={enabled}
+            id={`toggle:${props.storageKey}`}
+            title={`Toggle for ${props.storageKey}`}
+            onChange={clickToggle}
+          />
           <span className='x-toggle-indicatorWrapper'>
             <span className='x-toggle-indicator'></span>
           </span>
