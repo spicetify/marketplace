@@ -102,13 +102,13 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
         <h3 className="col description">{name}</h3>
         <div className="col action">
           <button title="Move up" className="arrow-btn" onClick={() => posCallback(index, -1)}>
-            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-              ${Spicetify.SVGIcons["chart-up"]}
+            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
+              dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-up"]) }}>
             </svg>
           </button>
           <button title="Move down" className="arrow-btn" onClick={() => posCallback(index, 1)}>
-            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-              ${Spicetify.SVGIcons["chart-down"]}
+            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
+              dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-down"]) }}>
             </svg>
           </button>
           {/* TODO: is this right for the tab settings, do does it do something else? */}
@@ -123,8 +123,8 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <h2>Options</h2>
       <SettingsToggle name='Stars count' storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
       <SettingsToggle name='Tags' storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <SettingsToggle name='Hide installed in Marketplace' storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <SettingsToggle name='Shift Colors Every Minute' storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <SettingsToggle name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <SettingsToggle name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
       <h2>Tabs</h2>
       <div className="tabs-container">
         {/* TODO: pass index? */}

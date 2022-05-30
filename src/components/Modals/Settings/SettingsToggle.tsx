@@ -8,13 +8,6 @@ const SettingsToggle = (props: {
   modalConfig: Config;
   updateConfig: (CONFIG: Config) => void;
 }) => {
-  // TODO: This seems to get it to work, but it's really dirty...
-  // https://blog.logrocket.com/how-when-to-force-react-component-re-render
-  // const [, updateState] = React.useState();
-  // const forceUpdate = React.useCallback(() => updateState({}), []);
-
-  // console.log("rendering...");
-
   const enabled = !!props.modalConfig.visual[props.storageKey];
 
   const clickToggle = (e) => {
