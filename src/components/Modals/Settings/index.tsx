@@ -110,16 +110,29 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
     );
   }
 
+  const settingsToggleChange = (e) => {
+    const state = e.target.checked;
+    const storageKey = e.target.dataset.storageKey;
+    modalConfig.visual[storageKey] = state;
+    console.log(`toggling ${storageKey} to ${state}`);
+    localStorage.setItem(`marketplace:${storageKey}`, String(state));
+
+    // Saves the config settings to app as well as SettingsModal state
+    updateConfig(modalConfig);
+    // gridUpdatePostsVisual && gridUpdatePostsVisual();
+  };
+
   return (
     <div id="marketplace-config-container">
       <h2>Options</h2>
-      <SettingsToggle name='Stars count' storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <SettingsToggle name='Tags' storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <SettingsToggle name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <SettingsToggle name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <SettingsToggle name='Stars count' storageKey='stars' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <SettingsToggle name='Tags' storageKey='tags' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <SettingsToggle name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <SettingsToggle name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} onChange={settingsToggleChange} />
       <h2>Tabs</h2>
       <div className="tabs-container">
         {/* TODO: pass index? */}
+        {/* TODO: make this use the same toggle component as the top ones */}
         {modalConfig.tabs.map(({ name }, index) => createTabOption(name, index))}
       </div>
       <h2>Reset</h2>

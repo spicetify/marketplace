@@ -8,6 +8,14 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+
+  cursor: pointer;
+}
+
+// Hide disabled toggle rows (i.e. the "Extensions" one)
+.disabled {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .toggle-input {
