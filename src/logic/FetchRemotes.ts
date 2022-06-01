@@ -231,12 +231,12 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = []) {
 
 /**
 * It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.
-* @returns {Promise<string[]>} String array of blacklisted repos
+* @returns String array of blacklisted repos
 */
 export const getBlacklist = async () => {
   const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/blacklist.json";
   const json = await fetch(url).then(res => res.json()).catch(() => ({}));
-  return json.repos;
+  return json.repos as string[] | undefined;
 };
 
 /**
@@ -246,5 +246,5 @@ export const getBlacklist = async () => {
 export const fetchCssSnippets = async () => {
   const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/snippets.json";
   const json = await fetch(url).then(res => res.json()).catch(() => ({}));
-  return json as Snippet[];
+  return json as Snippet[] | undefined;
 };

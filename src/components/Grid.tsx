@@ -1,5 +1,5 @@
 import React from "react";
-import { CardItem, CardType, Config, SchemeIni, Snippet, TabType } from "../types/marketplace-types";
+import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
 import { openModal } from "../logic/LaunchModals";
@@ -23,8 +23,8 @@ export default class Grid extends React.Component<
 },
 {
   // TODO: add types
-  cards: any[],
-  tabs: any,
+  cards: Card[],
+  tabs: TabItemConfig[],
   rest: boolean,
   endOfList: boolean,
   activeThemeKey?: string,
@@ -57,15 +57,15 @@ export default class Grid extends React.Component<
   lastScroll = 0;
   requestQueue: any[] = [];
   requestPage = 0;
-  cardList: any[] = [];
+  cardList: Card[] = [];
   sortConfig: { by: string };
   // TODO: why are these set up funny?
-  gridUpdateTabs: any;
-  gridUpdatePostsVisual: any;
-  checkScroll: any;
+  gridUpdateTabs: (() => void) | null;
+  gridUpdatePostsVisual: (() => void) | null;
+  checkScroll: (e: Event) => void;
   CONFIG: Config;
   updateAppConfig: (CONFIG: Config) => void;
-  BLACKLIST: any;
+  BLACKLIST: string[] | undefined;
 
   // TODO: should I put this in Grid state?
   getInstalledTheme() {
@@ -377,8 +377,9 @@ export default class Grid extends React.Component<
    * @param event - The event object that is passed to the callback function.
    * @returns {void}
    */
-  isScrolledBottom(event) {
-    const viewPort = event.target;
+  // Add scroll event listener with type
+  isScrolledBottom(event: Event) {
+    const viewPort = event.target as HTMLElement;
     if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
       // At bottom, load more posts
       this.loadMore();
