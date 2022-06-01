@@ -28,6 +28,13 @@
   display: flex;
 }
 
+.marketplace-grid {
+  --minimumColumnWidth: 180px;
+  --column-width: minmax(var(--minimumColumnWidth),1fr);
+  --column-count: auto-fill;
+  --grid-gap: 24px;
+}
+
 .marketplace-sort-bar {
   align-items: center;
   display: flex;
@@ -126,4 +133,9 @@ option {
   position: fixed;
   bottom: 32px;
   right: 32px;
+}
+
+.marketplace-footer {
+  margin: auto;
+  text-align: center;
 }

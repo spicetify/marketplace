@@ -2,7 +2,6 @@ import React from "react";
 import { Config } from "../../../types/marketplace-types";
 
 import { resetMarketplace } from "../../../logic/Utils";
-import { LOCALSTORAGE_KEYS } from "../../../constants";
 
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";

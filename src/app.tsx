@@ -1,6 +1,6 @@
 // import styles from './styles/app.module.scss'
 import React from "react";
-import { Config } from "./types/marketplace-types";
+import { Config, TabItemConfig } from "./types/marketplace-types";
 
 // TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
@@ -18,7 +18,7 @@ import ReadmePage from "./components/ReadmePage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";
 import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
-class App extends React.Component<null, {count: number, CONFIG: any}> {
+class App extends React.Component<null, {count: number, CONFIG: Config}> {
   state = {
     count: 0,
     CONFIG: {} as Config,
@@ -30,7 +30,7 @@ class App extends React.Component<null, {count: number, CONFIG: any}> {
 
     // Get tabs config from local storage
     const tabsString = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
-    let tabs:any[] = [];
+    let tabs: TabItemConfig[] = [];
     try {
       tabs = JSON.parse(tabsString);
       if (!Array.isArray(tabs)) {
@@ -91,7 +91,7 @@ class App extends React.Component<null, {count: number, CONFIG: any}> {
     }
   }
 
-  updateConfig = (config: any) => {
+  updateConfig = (config: Config) => {
     this.CONFIG = { ...config };
     console.log("updated config", this.CONFIG);
     this.setState({

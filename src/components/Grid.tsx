@@ -541,12 +541,7 @@ export default class Grid extends React.Component<
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
                 {/* Add the grid and cards */}
-                <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth" data-tab={this.CONFIG.activeTab} style={{
-                  "--minimumColumnWidth": "180px",
-                  "--column-width": "minmax(var(--minimumColumnWidth),1fr)",
-                  "--column-count": "auto-fill",
-                  "--grid-gap": "24px",
-                }}>
+                <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth" data-tab={this.CONFIG.activeTab}>
                   {cardsOfType}
                 </div>
               </>
@@ -554,10 +549,7 @@ export default class Grid extends React.Component<
           }
           return null;
         })}
-        <footer style={{
-          margin: "auto",
-          textAlign: "center",
-        }}>
+        <footer className="marketplace-footer">
           {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
           {/* Add snippets button if on snippets tab */}
           {this.CONFIG.activeTab === "Snippets" ? <button className="marketplace-add-snippet-btn main-buttons-button main-button-secondary" onClick={() => openModal("ADD_SNIPPET")}>+Add CSS</button> : null}
