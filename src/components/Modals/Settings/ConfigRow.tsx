@@ -4,7 +4,7 @@ import { Config } from "../../../types/marketplace-types";
 import styles from "../../../styles/modules/toggle.module.scss";
 import Toggle from "../../Toggle";
 
-const SettingsToggle = (props: {
+const ConfigRow = (props: {
   name: string;
   storageKey: string;
   modalConfig: Config;
@@ -27,4 +27,4 @@ const SettingsToggle = (props: {
   );
 };
 
-export default SettingsToggle;
+export default ConfigRow;

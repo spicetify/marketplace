@@ -4,7 +4,7 @@ import { Config } from "../../../types/marketplace-types";
 import { resetMarketplace } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 
-import SettingsToggle from "./SettingsToggle";
+import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
 
 interface Props {
@@ -125,10 +125,10 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
   return (
     <div id="marketplace-config-container">
       <h2>Options</h2>
-      <SettingsToggle name='Stars count' storageKey='stars' modalConfig={modalConfig} onChange={settingsToggleChange} />
-      <SettingsToggle name='Tags' storageKey='tags' modalConfig={modalConfig} onChange={settingsToggleChange} />
-      <SettingsToggle name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} onChange={settingsToggleChange} />
-      <SettingsToggle name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <ConfigRow name='Stars count' storageKey='stars' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <ConfigRow name='Tags' storageKey='tags' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <ConfigRow name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} onChange={settingsToggleChange} />
+      <ConfigRow name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} onChange={settingsToggleChange} />
       <h2>Tabs</h2>
       <div className="tabs-container">
         {/* TODO: pass index? */}
