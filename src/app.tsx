@@ -25,7 +25,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
   };
 
   CONFIG: Config;
-  constructor(props: any) {
+  constructor(props) {
     super(props);
 
     // Get tabs config from local storage
@@ -46,7 +46,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
     }
 
     // Get active theme
-    let schemes = [];
+    let schemes = {};
     let activeScheme = null;
     try {
       const installedThemeKey = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled, null);

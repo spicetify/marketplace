@@ -1,5 +1,5 @@
 import React from "react";
-import { CardItem, CardType, Config, Snippet, TabType } from "../types/marketplace-types";
+import { CardItem, CardType, Config, SchemeIni, Snippet, TabType } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
 import { openModal } from "../logic/LaunchModals";
@@ -27,9 +27,9 @@ export default class Grid extends React.Component<
   tabs: any,
   rest: boolean,
   endOfList: boolean,
-  schemes: any,
-  activeScheme: any,
-  activeThemeKey: any,
+  activeThemeKey?: string,
+  schemes: SchemeIni,
+  activeScheme?: string | null,
 }
 > {
   constructor(props) {
@@ -304,13 +304,13 @@ export default class Grid extends React.Component<
    * @param {any} schemes Object with the colour schemes
    * @param activeScheme The name of the active colour scheme (a key in the schemes object)
    */
-  updateColourSchemes(schemes, activeScheme: string) {
+  updateColourSchemes(schemes: SchemeIni, activeScheme: string) {
     console.log("updateColourSchemes", schemes, activeScheme);
     this.CONFIG.theme.schemes = schemes;
     this.CONFIG.theme.activeScheme = activeScheme;
 
     if (schemes && schemes[activeScheme]) {
-      injectColourScheme(this.CONFIG.theme.schemes[activeScheme]);
+      injectColourScheme(this.CONFIG.theme.schemes?.[activeScheme]);
     } else {
       // Reset schemes if none sent
       injectColourScheme(null);
@@ -396,97 +396,6 @@ export default class Grid extends React.Component<
   }
 
   render() {
-    /*
-      return React.createElement("section", {
-          className: "contentSpacing",
-      },
-      React.createElement("div", {
-          className: "marketplace-header",
-      }, React.createElement("h1", null, this.props.title),
-      // Start of marketplace-header__right
-      React.createElement("div", {
-          className: "marketplace-header__right",
-      },
-      // Show colour scheme dropdown if there is a theme with schemes installed
-      this.state.activeScheme ? React.createElement(SortBox, {
-          onChange: (value) => this.updateColourSchemes(this.state.schemes, value),
-          // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
-          sortBoxOptions: generateSchemesOptions(this.state.schemes),
-          // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
-          // because it hardcodes the value into the fn
-          sortBySelectedFn: (a) => a.key === this.getActiveScheme(),
-      }) : null,
-      React.createElement("button", {
-          className: "marketplace-settings-button",
-          id: "marketplace-settings-button",
-
-          onClick: () => openModal('SETTINGS', this.CONFIG, this.updateAppConfig),
-          // onClick: () => { console.log('TODO: add settings modal')},
-      }, SettingsIcon),
-      // End of marketplace-header__right
-      ),
-          // TODO: Add search bar and sort functionality
-          // React.createElement("div", {
-          //     className: "searchbar--bar__wrapper",
-          // }, React.createElement("input", {
-          //     className: "searchbar-bar",
-          //     type: "text",
-          //     placeholder: "Search for Extensions?",
-          // })),
-      ),
-      [ // Add a header and grid for each card type if it has any cards
-          { handle: "extension", name: "Extensions" },
-          { handle: "theme", name: "Themes" },
-          { handle: "snippet", name: "Snippets" },
-      ].map((cardType) => {
-          const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
-              .map((card) => {
-                  // Clone the cards and update the prop to trigger re-render
-                  // TODO: is it possible to only re-render the theme cards whose status have changed?
-                  const cardElement = React.cloneElement(card, {
-                      activeThemeKey: this.state.activeThemeKey,
-                  });
-                  return cardElement;
-              });
-
-          if (cardsOfType.length) {
-              return [
-                  // Add a header for the card type
-                  React.createElement("h2",
-                      { className: "marketplace-card-type-heading" },
-                      cardType.name),
-                  // Add the grid and cards
-                  React.createElement("div", {
-                      className: "marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth",
-                      "data-tab": this.CONFIG.activeTab,
-                      style: {
-                          "--minimumColumnWidth": "180px",
-                          "--column-width": "minmax(var(--minimumColumnWidth),1fr)",
-                          "--column-count": "auto-fill",
-                          "--grid-gap": "24px",
-                      },
-                  }, cardsOfType)];
-          } else {
-              return null;
-          }
-      }), React.createElement("footer", {
-          style: {
-              margin: "auto",
-              textAlign: "center",
-          },
-      }, !this.state.endOfList && (this.state.rest ? React.createElement(LoadMoreIcon, { onClick: this.loadMore.bind(this) }) : React.createElement(LoadingIcon)),
-      // Add snippets button if on snippets tab
-      this.CONFIG.activeTab === "Snippets" ? React.createElement("button", {
-          className: "marketplace-add-snippet-btn main-buttons-button main-button-secondary",
-          onClick: () => openModal('ADD_SNIPPET'),
-      }, "+Add CSS") : null,
-      ), React.createElement(TopBarContent, {
-          switchCallback: this.switchTo.bind(this),
-          links: this.CONFIG.tabs,
-          activeLink: this.CONFIG.activeTab,
-      }));
-      */
-
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">

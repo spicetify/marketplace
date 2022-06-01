@@ -3,7 +3,7 @@ import React from "react";
 import styles from "../styles/modules/button.module.scss";
 
 const Button = (props: {
-  onClick: (e?: any) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   classes?: string[];
   children: React.ReactNode;
 }) => {

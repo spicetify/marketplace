@@ -1,4 +1,4 @@
-import { Author, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -6,7 +6,7 @@ import { Author, Snippet, SortBoxOption } from "../types/marketplace-types";
  * @param fallback Fallback value if the key is not found
  * @returns The data stored in localStorage, or the fallback value if not found
  */
-export const getLocalStorageDataFromKey = (key: string, fallback?: any) => {
+export const getLocalStorageDataFromKey = (key: string, fallback?) => {
   const data = localStorage.getItem(key);
 
   if (data) {
@@ -139,10 +139,12 @@ export const processAuthors = (authors: Author[], user: string) => {
 * @param schemes The schemes object from the theme.
 * @returns Array of options for the schemes dropdown.
 */
-export const generateSchemesOptions = (schemes) => {
+export const generateSchemesOptions = (schemes: SchemeIni) => {
   // e.g. [ { key: "red", value: "Red" }, { key: "dark", value: "Dark" } ]
   if (!schemes) return [];
-  return Object.keys(schemes).map(schemeName => ({ key: schemeName, value: schemeName } as SortBoxOption));
+  return Object.keys(schemes).map(schemeName => (
+    { key: schemeName, value: schemeName } as SortBoxOption
+  ));
 };
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
@@ -233,7 +235,7 @@ export const injectUserCSS = (userCSS?: string) => {
 // I guess this is okay to not have an end condition on the interval
 // because if they turn the setting on or off,
 // closing the settings modal will reload the page
-export const initColorShiftLoop = (schemes) => {
+export const initColorShiftLoop = (schemes: SchemeIni) => {
   let i = 0;
   const NUM_SCHEMES = Object.keys(schemes).length;
   setInterval(() => {

@@ -115,6 +115,29 @@ export type VisualConfig = {
   followers: boolean;
 }
 
+// example colour scheme
+// const exampleSchemes = {
+//   "blue": {
+//     "text": "00bcd4",
+//     "subtext": "ff9800",
+//     "main": "ff5722",
+//   },
+//   "red": {
+//     "text": "00bcd4",
+//     "subtext": "ff9800",
+//     "main": "2257ff",
+//   },
+// };
+
+// https://bobbyhadz.com/blog/typescript-key-string-string
+export type ColourScheme = {
+  [key: string]: string;
+};
+
+export type SchemeIni = {
+  [key: string]: ColourScheme;
+};
+
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js
   visual: VisualConfig,
@@ -122,7 +145,7 @@ export type Config = {
   activeTab: string;
   theme: {
     activeThemeKey?: string;
-    schemes?: any[]; // TODO: add type
+    schemes?: SchemeIni;
     activeScheme?: string | null;
   },
 };

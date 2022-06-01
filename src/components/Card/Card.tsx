@@ -1,5 +1,5 @@
 import React from "react";
-import { CardItem, CardType, Config, Snippet, VisualConfig } from "../../types/marketplace-types";
+import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
 import {
@@ -22,7 +22,7 @@ type CardProps = {
   CONFIG: Config;
 
   // From `appendCard()`
-  updateColourSchemes: (any, string) => void;
+  updateColourSchemes: (SchemeIni, string) => void;
   updateActiveTheme: (string) => void;
   type: CardType;
   visual: VisualConfig;
@@ -195,16 +195,16 @@ export default class Card extends React.Component<CardProps, {
   async installTheme() {
     console.log(`Installing theme ${this.localStorageKey}`);
 
-    let parsedSchemes: any = null;
+    let parsedSchemes: SchemeIni = {};
     if (this.props.item.schemesURL) {
       const schemesResponse = await fetch(this.props.item.schemesURL);
       const colourSchemes = await schemesResponse.text();
       parsedSchemes = parseIni(colourSchemes);
     }
 
-    console.log(parsedSchemes);
-    console.log( Object.keys(parsedSchemes)[0]);
-    const activeScheme = parsedSchemes ? Object.keys(parsedSchemes)[0] : null;
+    const firstSchemeName = Object.keys(parsedSchemes)[0];
+    console.log(parsedSchemes, firstSchemeName);
+    const activeScheme = firstSchemeName || null;
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
@@ -261,13 +261,13 @@ export default class Card extends React.Component<CardProps, {
     this.setState({ installed: true });
   }
 
-  removeTheme(themeKey: any = null) {
+  removeTheme(themeKey?: string | null) {
     // If don't specify theme, remove the currently installed theme
     themeKey = themeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
     const themeValue = themeKey && localStorage.getItem(themeKey);
 
-    if (themeValue) {
+    if (themeKey && themeValue) {
       console.log(`Removing theme ${themeKey}`);
 
       // Remove from localstorage
