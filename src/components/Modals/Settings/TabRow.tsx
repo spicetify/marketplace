@@ -2,7 +2,6 @@ import React from "react";
 import { Config } from "../../../types/marketplace-types";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 
-import styles from "../../../styles/modules/toggle.module.scss";
 import Toggle from "../../Toggle";
 
 const TabRow = (props: {
@@ -34,7 +33,7 @@ const TabRow = (props: {
 
   // TODO: for some reason it just closes the modal when you click it...
   // Ohh. The app state changes, so it re-renders the entire marketplace app.
-  // That's not ideal. Hmm.
+  // That's not ideal. Hmm. Wait, it doesn't break for the visual options (ConfigRow)
   function moveTab(currPos, dir) {
     console.log({ currPos, dir });
 
@@ -56,7 +55,7 @@ const TabRow = (props: {
   }
 
   return (
-    <div className="setting-row" key={props.name}>
+    <div className="setting-row">
       <label htmlFor={toggleId} className='col description'>{props.name}</label>
       <div className="col action">
         <button title="Move up" className="arrow-btn" onClick={() => moveTab(index, -1)}>

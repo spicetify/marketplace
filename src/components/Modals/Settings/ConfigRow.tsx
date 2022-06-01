@@ -1,7 +1,6 @@
 import React from "react";
 import { Config } from "../../../types/marketplace-types";
 
-import styles from "../../../styles/modules/toggle.module.scss";
 import Toggle from "../../Toggle";
 
 const ConfigRow = (props: {
@@ -13,9 +12,6 @@ const ConfigRow = (props: {
 }) => {
   const toggleId = `toggle:${props.storageKey}`;
   const enabled = !!props.modalConfig.visual[props.storageKey];
-
-  const wrapperClassList = [styles["toggle-wrapper"]];
-  if (!props.clickable === false) wrapperClassList.push(styles.disabled);
 
   const settingsToggleChange = (e) => {
     const state = e.target.checked;
