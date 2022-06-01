@@ -10,9 +10,9 @@ const Toggle = (props: {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const toggleId = `toggle:${props.storageKey}`;
-  // const enabled = !!props.modalConfig.visual[props.storageKey];
+
   const wrapperClassList = [styles["toggle-wrapper"]];
-  if (!props.clickable === false) wrapperClassList.push(styles.disabled);
+  if (props.clickable === false) wrapperClassList.push(styles.disabled);
 
   return (
     <label className={wrapperClassList.join(" ")}>

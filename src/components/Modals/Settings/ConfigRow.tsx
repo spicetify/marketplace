@@ -9,7 +9,7 @@ const ConfigRow = (props: {
   storageKey: string;
   modalConfig: Config;
   clickable?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  updateConfig: (CONFIG: Config) => void;
 }) => {
   const toggleId = `toggle:${props.storageKey}`;
   const enabled = !!props.modalConfig.visual[props.storageKey];
@@ -17,11 +17,23 @@ const ConfigRow = (props: {
   const wrapperClassList = [styles["toggle-wrapper"]];
   if (!props.clickable === false) wrapperClassList.push(styles.disabled);
 
+  const settingsToggleChange = (e) => {
+    const state = e.target.checked;
+    const storageKey = e.target.dataset.storageKey;
+    props.modalConfig.visual[storageKey] = state;
+    console.log(`toggling ${storageKey} to ${state}`);
+    localStorage.setItem(`marketplace:${storageKey}`, String(state));
+
+    // Saves the config settings to app as well as SettingsModal state
+    props.updateConfig(props.modalConfig);
+    // gridUpdatePostsVisual && gridUpdatePostsVisual();
+  };
+
   return (
     <div className='setting-row'>
       <label htmlFor={toggleId} className='col description'>{props.name}</label>
       <div className='col action'>
-        <Toggle name='Stars count' storageKey='stars' enabled={enabled} onChange={props.onChange} />
+        <Toggle name='Stars count' storageKey='stars' enabled={enabled} onChange={settingsToggleChange} />
       </div>
     </div>
   );
