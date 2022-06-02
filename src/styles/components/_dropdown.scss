@@ -1,7 +1,9 @@
+@use '../constants.scss';
+
 $dropdown-text: rgba(var(--spice-rgb-text), .7);
 $dropdown-text-hover: rgb(var(--spice-rgb-text));
 $dropdown-bg: var(--spice-sidebar);
-$dropdown-radius: 4px;
+$dropdown-radius: constants.$btn-radius;
 
 .arrow-closed, .arrow-open {
   border: solid $dropdown-text;
@@ -58,11 +60,12 @@ $dropdown-radius: 4px;
   color: $dropdown-text;
   cursor: default;
   outline: none;
-  padding: 8px 30px 8px 10px;
-  transition: all 200ms ease;
+  padding: 8px 36px 8px 16px;
+  transition: all constants.$transition-default ease;
 
   &:hover {
     color: $dropdown-text-hover;
+    background-color: var(--spice-button-disabled);
 
     .Dropdown-arrow {
       border-color: $dropdown-text-hover transparent transparent;
@@ -79,7 +82,7 @@ $dropdown-radius: 4px;
   height: 0;
   margin-top: -ceil(2.5);
   position: absolute;
-  right: 10px;
+  right: 16px;
   top: 18px;
   width: 0
 }

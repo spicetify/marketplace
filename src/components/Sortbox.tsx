@@ -30,8 +30,8 @@ const SortBox = (props: Props) => {
         <div className="marketplace-sortBox-header-title">
         </div>
 
-        <Dropdown className="marketplace-sortBox-header-selector-select"
-          options={options} value={sortBySelected?.key} placeholder="Select an option"
+        <Dropdown placeholder="Select an option"
+          options={options} value={sortBySelected?.key}
           onChange={_onSelect}
         />
 

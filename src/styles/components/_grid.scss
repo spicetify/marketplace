@@ -1,3 +1,5 @@
+@use '../constants.scss';
+
 .marketplace-header {
   -webkit-box-pack: justify;
   -webkit-box-align: center;
@@ -49,6 +51,9 @@
   -webkit-app-region: no-drag;
   display: inline-block;
   pointer-events: auto;
+
+  // Fixes the tab bar alignment going weird when the "more" dropdown menu appears
+  vertical-align: middle;
 }
 
 .marketplace-tabBar-active {
@@ -101,6 +106,7 @@
   background-color: transparent;
   border: none;
   background-color: var(--spice-sidebar);
+  transition-duration: constants.$transition-default;
 
   &:hover {
     background-color: var(--spice-tab-active);

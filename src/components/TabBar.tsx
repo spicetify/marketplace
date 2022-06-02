@@ -65,16 +65,9 @@ const TabBarMore = React.memo<TabBarMoreProps>(
       switchTo(item.value as TabType);
     };
 
-    // It was this before
-    // const activeItem = items.find((item) => item.active);
-    // <OptionsMenu options={items} onSelect={switchTo} selected={activeItem} defaultValue="More" bold={true} />
-    // return <li className={`marketplace-tabBar-headerItem ${activeItem ? "marketplace-tabBar-active" : ""}`}>
-
-    // TODO: figure out how to get the styling matching the other tabs, or how it was before
-    // TODO: remove any unused styles
     return (
-      <li className={"marketplace-tabBar-headerItem"}>
-        <Dropdown className="marketplace-sortBox-header-selector-select"
+      <li className="marketplace-tabBar-headerItem">
+        <Dropdown className="main-type-mestoBold"
           options={transformedOptions} value="More" placeholder="More"
           onChange={_onSelect}
         />
