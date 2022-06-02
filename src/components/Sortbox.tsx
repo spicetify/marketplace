@@ -24,7 +24,7 @@ const SortBox = (props: Props) => {
   const sortBySelected = props.sortBoxOptions.find(props.sortBySelectedFn);
   // console.log(sortBySelected);
   return (
-    // Create a drop down menu for the color scheme selector
+    // Create a drop down menu
     <div className="marketplace-sortBox">
       <div className="marketplace-sortBox-header">
         <div className="marketplace-sortBox-header-title">

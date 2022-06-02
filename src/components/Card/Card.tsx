@@ -442,10 +442,9 @@ export default class Card extends React.Component<CardProps, {
             )}
             <div className="main-card-PlayButtonContainer">
               <button
-                className="main-playButton-PlayButton main-playButton-primary"
+                className="main-playButton-PlayButton main-playButton-primary marketplace-installButton"
                 // If it is installed, it will remove it when button is clicked, if not it will save
-                aria-label={IS_INSTALLED ? Spicetify.Locale.get("remove") : Spicetify.Locale.get("save")}
-                style={{ "--size": "40px", "cursor": "pointer" }}
+                aria-label={IS_INSTALLED ? "Remove" : "Save"}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();

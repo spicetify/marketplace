@@ -37,6 +37,7 @@ import {
     reset: resetMarketplace,
   };
 
+
   const initializeExtension = (extensionKey: string) => {
     const extensionManifest = getLocalStorageDataFromKey(extensionKey);
     // Abort if no manifest found or no extension URL (i.e. a theme)
