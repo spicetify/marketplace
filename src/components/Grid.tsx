@@ -83,7 +83,7 @@ export default class Grid extends React.Component<
     return installedTheme;
   }
 
-  newRequest(amount: number | undefined, query?: string | undefined) {
+  newRequest(amount: number | undefined, query?: string) {
     this.cardList = [];
     const queue = [];
     this.requestQueue.unshift(queue);
@@ -167,7 +167,7 @@ export default class Grid extends React.Component<
   // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
   // Returns the next page number to fetch, or null if at end
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
-  async loadPage(queue: never[], query?: string | undefined) {
+  async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
     case "Extensions": {
       const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
@@ -272,7 +272,7 @@ export default class Grid extends React.Component<
    * @param {any} queue An array of the extensions to be loaded
    * @param {number} [quantity] Amount of extensions to be loaded per page. (Defaults to ITEMS_PER_REQUEST constant)
    */
-  async loadAmount(queue: never[], quantity: number = ITEMS_PER_REQUEST, query?: string | undefined) {
+  async loadAmount(queue: never[], quantity: number = ITEMS_PER_REQUEST, query?: string) {
     this.setState({ rest: false });
     quantity += this.cardList.length;
 
