@@ -4,6 +4,7 @@ import {
   initializeSnippets,
 } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
+import Button from "../../Button";
 
 const AddSnippetModal = () => {
   function saveSnippet() {
@@ -86,13 +87,9 @@ const AddSnippetModal = () => {
           placeholder="Enter a description for your custom snippet."
         />
       </div>
-      <button
-        className="main-buttons-button main-button-secondary"
-        id="marketplace-customCSS-submit"
-        onClick={saveSnippet}
-      >
+      <Button onClick={saveSnippet}>
         Save CSS
-      </button>
+      </Button>
     </div>
   );
 };

@@ -34,8 +34,8 @@
 
   // From the inner div...
   position: relative;
-  background-color: var(--background-base,var(--spice-text));
-  color: var(--text-base,#000000);
+  background-color: var(--spice-text);
+  color: #000;
   border-radius: 500px;
   font-size: inherit;
   padding-block: 12px;
@@ -46,7 +46,7 @@
   }
 
   &:active {
-    background-color: var(--background-press,var(--spice-subtext));
+    background-color: var(--spice-subtext);
     box-shadow: none;
     transform: scale(1);
   }

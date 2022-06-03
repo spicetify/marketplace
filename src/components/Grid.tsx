@@ -14,6 +14,7 @@ import SettingsIcon from "./Icons/SettingsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
+import Button from "./Button";
 
 export default class Grid extends React.Component<
 {
@@ -462,7 +463,9 @@ export default class Grid extends React.Component<
         <footer className="marketplace-footer">
           {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
           {/* Add snippets button if on snippets tab */}
-          {this.CONFIG.activeTab === "Snippets" ? <button className="marketplace-add-snippet-btn main-buttons-button main-button-secondary" onClick={() => openModal("ADD_SNIPPET")}>+Add CSS</button> : null}
+          {this.CONFIG.activeTab === "Snippets"
+            ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+Add CSS</Button>
+            : null}
         </footer>
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}

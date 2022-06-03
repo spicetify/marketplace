@@ -134,14 +134,14 @@ option {
   background-color: var(--spice-button);
 }
 
-// "Add CSS" button
-.marketplace-add-snippet-btn {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-}
-
 .marketplace-footer {
   margin: auto;
   text-align: center;
+
+  // "Add CSS" button
+  .marketplace-add-snippet-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+  }
 }
