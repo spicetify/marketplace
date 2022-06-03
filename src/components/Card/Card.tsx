@@ -14,6 +14,7 @@ import DownloadIcon from "../Icons/DownloadIcon";
 import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
+import Button from "../Button";
 
 type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
@@ -441,10 +442,10 @@ export default class Card extends React.Component<CardProps, {
               </div>
             )}
             <div className="main-card-PlayButtonContainer">
-              <button
-                className="main-playButton-PlayButton main-playButton-primary marketplace-installButton"
+              <Button classes={["marketplace-installButton"]}
+                type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
-                aria-label={IS_INSTALLED ? "Remove" : "Save"}
+                label={IS_INSTALLED ? "Remove" : "Save"}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();
@@ -452,7 +453,7 @@ export default class Card extends React.Component<CardProps, {
               >
                 {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
                 {IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

@@ -51,3 +51,16 @@
     transform: scale(1);
   }
 }
+
+.circle {
+  padding-inline: 16px;
+  width: 48px;
+  height: 48px;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
