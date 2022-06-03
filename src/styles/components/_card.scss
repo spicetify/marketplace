@@ -90,7 +90,7 @@
 
   &[data-tab='Installed'] {
     &:empty::after {
-      content: 'No installed extensions';
+      content: 'No installed ' attr(data-card-type);
       display: block;
     }
   }

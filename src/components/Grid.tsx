@@ -452,7 +452,10 @@ export default class Grid extends React.Component<
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
                 {/* Add the grid and cards */}
-                <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth" data-tab={this.CONFIG.activeTab}>
+                <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth"
+                  data-tab={this.CONFIG.activeTab}
+                  data-card-type={cardType.name}
+                >
                   {cardsOfType}
                 </div>
               </>
