@@ -13,9 +13,9 @@ interface Props {
 }
 
 const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
-  // TODO: basically take in the app's CONFIG and create the initial state,
-  // but also copy it into the SettingsModal state
-  // and when updating anything in the main state, also update the SettingsModal state
+  // Basically takes in the app's CONFIG and create the initial state,
+  // and copies it into the SettingsModal state
+  // then when updating anything in the main state, also updates the SettingsModal state
 
   const [modalConfig, setModalConfig] = React.useState({ ...CONFIG });
   // TODO: use React.useCallback?

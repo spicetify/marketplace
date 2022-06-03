@@ -3,7 +3,6 @@ import React from "react";
 class ReadmePage extends React.Component<
 {
   // props
-
   // TODO: decide what data we want to pass in and how we want to store it
   // (this currently comes from Card.openReadme)
   data: {
@@ -18,7 +17,6 @@ class ReadmePage extends React.Component<
 },
 {
   // state
-  // TODO: convert to JSX if possible?
   html: string,
 }
 > {
@@ -83,7 +81,6 @@ class ReadmePage extends React.Component<
   }
 
   render() {
-    // Convert component to JSX
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">

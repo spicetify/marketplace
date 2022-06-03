@@ -12,11 +12,9 @@ const ReloadModal = () => {
         }}>
           Reload now
         </Button>
-        <Button
-          onClick={() => {
-            Spicetify.PopupModal.hide();
-          }}
-        >
+        <Button onClick={() => {
+          Spicetify.PopupModal.hide();
+        }}>
           Reload later
         </Button>
       </div>
