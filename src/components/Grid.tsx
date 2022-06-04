@@ -433,7 +433,7 @@ export default class Grid extends React.Component<
             <input
               className="searchbar-bar"
               type="text"
-              placeholder="Search for Extensions?"
+              placeholder={`Search ${this.CONFIG.activeTab}...`}
               value={this.state.searchValue}
               onChange={(event) => {
                 this.setState({ searchValue: event.target.value });

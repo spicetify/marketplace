@@ -123,11 +123,9 @@
 .searchbar-bar {
   border: unset;
   background-color: var(--spice-sidebar) !important;
-  border-radius: 5px !important;
-  padding-left: 10px;
-  padding-right: 10px;
+  border-radius: constants.$btn-radius;
+  padding: 10px 12px;
   color: var(--spice-text) !important;
-  z-index: 1000;
 }
 
 option {
