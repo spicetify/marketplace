@@ -29,7 +29,6 @@ jobs:
       - name: yarn install and build
         run: |
           yarn install --immutable --immutable-cache --check-cache
-          yarn build:prod
 
       # ESLint must be in `package.json`
       - name: Run linters
