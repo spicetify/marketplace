@@ -309,15 +309,15 @@ export default class Grid extends React.Component<
 
   /**
    * Update the colour schemes in the state + dropdown, and inject the active one
-   * @param {any} schemes Object with the colour schemes
+   * @param schemes Object with the colour schemes
    * @param activeScheme The name of the active colour scheme (a key in the schemes object)
    */
-  updateColourSchemes(schemes: SchemeIni, activeScheme: string) {
+  updateColourSchemes(schemes: SchemeIni, activeScheme: string | null) {
     console.log("updateColourSchemes", schemes, activeScheme);
     this.CONFIG.theme.schemes = schemes;
     this.CONFIG.theme.activeScheme = activeScheme;
 
-    if (schemes && schemes[activeScheme]) {
+    if (schemes && activeScheme && schemes[activeScheme]) {
       injectColourScheme(this.CONFIG.theme.schemes?.[activeScheme]);
     } else {
       // Reset schemes if none sent
@@ -326,12 +326,14 @@ export default class Grid extends React.Component<
 
     // Save to localstorage
     const installedThemeKey = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled);
-    const installedThemeDataStr = getLocalStorageDataFromKey(installedThemeKey);
-    const installedThemeData = installedThemeDataStr;
-    installedThemeData.activeScheme = activeScheme;
-    console.log(installedThemeData);
-    console.log(JSON.stringify(installedThemeData));
-    localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
+    const installedThemeData = getLocalStorageDataFromKey(installedThemeKey);
+    if (installedThemeData) {
+      installedThemeData.activeScheme = activeScheme;
+      console.log(installedThemeData);
+      localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
+    } else {
+      console.log("No installed theme data");
+    }
 
     this.setState({
       schemes,
