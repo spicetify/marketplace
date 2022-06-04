@@ -137,11 +137,12 @@ option {
 .marketplace-footer {
   margin: auto;
   text-align: center;
+}
 
-  // "Add CSS" button
-  .marketplace-add-snippet-btn {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-  }
+// "Add CSS" button
+.marketplace-add-snippet-btn {
+  position: -webkit-sticky;
+  position: sticky !important;
+  bottom: 32px;
+  left: 100%;
 }
