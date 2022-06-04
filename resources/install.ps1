@@ -24,7 +24,7 @@ if (-not (Test-Path $sp_dot_dir)) {
 }
 
 Write-Host "Downloading..." -ForegroundColor "Green"
-Invoke-WebRequest -Uri "https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/main.zip" -UseBasicParsing -OutFile "${HOME}/spicetify-cli/CustomApps/marketplace.zip"
+Invoke-WebRequest -Uri "https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip" -UseBasicParsing -OutFile "${HOME}/spicetify-cli/CustomApps/marketplace.zip"
 
 Write-Host "Unzipping and installing..." -ForegroundColor "Green"
 Expand-Archive -Path "${HOME}/spicetify-cli/CustomApps/marketplace.zip" -DestinationPath "${HOME}/spicetify-cli/CustomApps/" -Force
@@ -33,7 +33,7 @@ if (Test-Path -Path "${HOME}/spicetify-cli/CustomApps/marketplace") {
   Write-Host "marketplace was already found! Updating..." -ForegroundColor "Cyan"
   Remove-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace" -Force -Recurse
 }
-Rename-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace-main" -NewName "marketplace" -Force
+Rename-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace-dist" -NewName "marketplace" -Force
 Copy-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace" -Destination $sp_dot_dir -Recurse -Force
 spicetify config custom_apps marketplace
 spicetify backup apply

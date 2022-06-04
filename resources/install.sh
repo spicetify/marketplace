@@ -4,10 +4,8 @@
 
 set -e
 
-    latest_release_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/main.zip"
-    echo "DOWNLOADING $latest_release_uri"
-
-    download_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/main.zip"
+    download_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip"
+    echo "DOWNLOADING $download_uri"
 
 SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"
@@ -17,7 +15,7 @@ if [ ! -d "$INSTALL_DIR" ]; then
     mkdir -p "$INSTALL_DIR"
 fi
 
-TAR_FILE="$INSTALL_DIR/marketplace-main.zip"
+TAR_FILE="$INSTALL_DIR/marketplace-dist.zip"
 
 echo "DOWNLOADING   $download_uri"
 curl --fail --location --progress-bar --output "$TAR_FILE" "$download_uri"
@@ -39,7 +37,7 @@ cd "$INSTALL_DIR/marketplace-tmp"
 echo "COPYING"
 # echo "$sp_dot_dir"
 rm -rf "$INSTALL_DIR/marketplace/"
-mv "$INSTALL_DIR/marketplace-tmp/marketplace-main" "$INSTALL_DIR/marketplace"
+mv "$INSTALL_DIR/marketplace-tmp/marketplace-dist" "$INSTALL_DIR/marketplace"
 # cp -rf "$INSTALL_DIR/marketplace/." "$sp_dot_dir"
 echo "INSTALLING"
 cd "$INSTALL_DIR/marketplace"

@@ -1,6 +1,6 @@
 {
   "name": "spicetify-marketplace",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "homepage": "https://github.com/spicetify/spicetify-marketplace",
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
     "build:prod": "yarn build:local && yarn copy:docs",
     "copy:docs": "copyfiles README.md docs/* dist/",
     "lint": "eslint src",
+    "type-check": "tsc --noEmit",
     "watch": "spicetify-creator --watch"
   },
   "engines": {
