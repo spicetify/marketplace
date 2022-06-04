@@ -1,4 +1,4 @@
-import { Author, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -257,11 +257,13 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   }, 60 * 1000);
 };
 
-export const parseCSS = async (themeManifest) => {
-  const userCssUrl = themeManifest.cssURL.indexOf("raw.githubusercontent.com") > -1
+export const parseCSS = async (themeData: CardItem) => {
+  if (!themeData.cssURL) throw new Error("No CSS URL provided");
+
+  const userCssUrl = themeData.cssURL.indexOf("raw.githubusercontent.com") > -1
   // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-    ? `https://cdn.jsdelivr.net/gh/${themeManifest.user}/${themeManifest.repo}@${themeManifest.branch}/${themeManifest.manifest.usercss}`
-    : themeManifest.cssURL;
+    ? `https://cdn.jsdelivr.net/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
+    : themeData.cssURL;
   // TODO: Make this more versatile
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 

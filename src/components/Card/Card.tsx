@@ -90,7 +90,8 @@ export default class Card extends React.Component<CardProps, {
 
   async componentDidMount() {
     // Refresh stars if on "Installed" tab with stars enabled
-    if (this.props.CONFIG.activeTab === "Installed" && this.props.CONFIG.visual.stars && this.props.type !== "snippet") {
+    if (this.props.CONFIG.activeTab === "Installed" &&
+      this.props.CONFIG.visual.stars && this.props.type !== "snippet") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
@@ -335,7 +336,7 @@ export default class Card extends React.Component<CardProps, {
   async fetchAndInjectUserCSS(theme) {
     try {
       const userCSS = theme
-        ? await parseCSS(this.props.item.manifest)
+        ? await parseCSS(this.props.item as CardItem)
         : undefined;
       injectUserCSS(userCSS);
     } catch (error) {
