@@ -1,23 +1,3 @@
-// Make settings modal use same background colour as the reload modal
-// (The large style modal uses --spice-player as the background colour by default)
-// TODO: this doesn't apply anymore because the titles are the titles of the modal types
-.GenericModal[aria-label="Marketplace"] {
-  .main-embedWidgetGenerator-container {
-    background-color: var(--spice-tab-active);
-  }
-
-  // Toggle switches
-  .x-toggle-wrapper {
-    cursor: pointer;
-    margin-inline-start: 12px;
-    // Hide disabled toggle rows (i.e. the "Extensions" one)
-    &.disabled {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
-}
-
 .setting-row {
   display: flex;
   justify-content: space-between;
