@@ -24,6 +24,7 @@ export default class Grid extends React.Component<
 },
 {
   // TODO: add types
+  searchValue: string,
   cards: Card[],
   tabs: TabItemConfig[],
   rest: boolean,
@@ -44,6 +45,7 @@ export default class Grid extends React.Component<
     };
 
     this.state = {
+      searchValue: "",
       cards: [],
       tabs: props.CONFIG.tabs,
       rest: true,
@@ -54,6 +56,7 @@ export default class Grid extends React.Component<
     };
   }
 
+  searchRequested: boolean;
   endOfList = false;
   lastScroll = 0;
   requestQueue: any[] = [];
@@ -80,11 +83,11 @@ export default class Grid extends React.Component<
     return installedTheme;
   }
 
-  newRequest(amount) {
+  newRequest(amount: number | undefined, query?: string) {
     this.cardList = [];
     const queue = [];
     this.requestQueue.unshift(queue);
-    this.loadAmount(queue, amount);
+    this.loadAmount(queue, amount, query);
   }
 
   /**
@@ -164,9 +167,10 @@ export default class Grid extends React.Component<
   // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
   // Returns the next page number to fetch, or null if at end
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
-  async loadPage(queue) {
-    if (this.CONFIG.activeTab === "Extensions") {
-      const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST);
+  async loadPage(queue: never[], query?: string) {
+    switch (this.CONFIG.activeTab) {
+    case "Extensions": {
+      const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
         const extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count, this.CONFIG.visual.hideInstalled);
 
@@ -192,7 +196,8 @@ export default class Grid extends React.Component<
       console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
       if (remainingResults > 0) return currentPage + 1;
       else console.log("No more extension results");
-    } else if (this.CONFIG.activeTab === "Installed") {
+      break;
+    } case "Installed": {
       const installedStuff = {
         theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
         extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
@@ -214,11 +219,12 @@ export default class Grid extends React.Component<
           });
         }
       }
+      break;
 
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
-    } else if (this.CONFIG.activeTab == "Themes") {
-      const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST);
+    } case "Themes": {
+      const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
 
         const themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -242,7 +248,8 @@ export default class Grid extends React.Component<
       console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
       if (remainingResults > 0) return currentPage + 1;
       else console.log("No more theme results");
-    } else if (this.CONFIG.activeTab == "Snippets") {
+      break;
+    } case "Snippets": {
       const snippets = await fetchCssSnippets();
 
       if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
@@ -252,7 +259,7 @@ export default class Grid extends React.Component<
       if (snippets && snippets.length) {
         snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
       }
-    }
+    }}
 
     this.setState({ rest: true, endOfList: true });
     this.endOfList = true;
@@ -265,11 +272,11 @@ export default class Grid extends React.Component<
    * @param {any} queue An array of the extensions to be loaded
    * @param {number} [quantity] Amount of extensions to be loaded per page. (Defaults to ITEMS_PER_REQUEST constant)
    */
-  async loadAmount(queue, quantity = ITEMS_PER_REQUEST) {
+  async loadAmount(queue: never[], quantity: number = ITEMS_PER_REQUEST, query?: string) {
     this.setState({ rest: false });
     quantity += this.cardList.length;
 
-    this.requestPage = await this.loadPage(queue);
+    this.requestPage = await this.loadPage(queue, query);
 
     while (
       this.requestPage &&
@@ -277,7 +284,7 @@ export default class Grid extends React.Component<
       this.cardList.length < quantity &&
       !this.state.endOfList
     ) {
-      this.requestPage = await this.loadPage(queue);
+      this.requestPage = await this.loadPage(queue, query);
     }
 
     if (this.requestPage === -1) {
@@ -364,7 +371,7 @@ export default class Grid extends React.Component<
    * When the component is unmounted, remove the scroll event listener.
    * @returns {void}
    */
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.gridUpdateTabs = this.gridUpdatePostsVisual = null;
     const viewPort = document.querySelector(".os-viewport");
     if (viewPort) {
@@ -421,11 +428,32 @@ export default class Grid extends React.Component<
             </button>
           </div>
         </div>
-        {/* TODO: add search bar here
-        <div className="searchbar--bar__wrapper">
-          <input className="searchbar-bar" type="text" placeholder="Search for Extensions?" />
-        </div>
-        */}
+        {
+          <div className="searchbar--bar__wrapper">
+            <input
+              className="searchbar-bar"
+              type="text"
+              placeholder="Search for Extensions?"
+              value={this.state.searchValue}
+              onChange={(event) => {
+                this.setState({ searchValue: event.target.value });
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  this.setState({ endOfList: false });
+                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+                  this.searchRequested = true;
+                } else if ( // Refreshes result when user deletes all queries
+                  ((event.key === "Backspace") || (event.key === "Delete")) &&
+                  this.searchRequested &&
+                  this.state.searchValue.trim() === ""
+                ) {
+                  this.setState({ endOfList: false });
+                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+                  this.searchRequested = false;
+                }}} />
+          </div>
+        }
         {/* Add a header and grid for each card type if it has any cards */}
         {[
           { handle: "extension", name: "Extensions" },
@@ -433,6 +461,16 @@ export default class Grid extends React.Component<
           { handle: "snippet", name: "Snippets" },
         ].map((cardType) => {
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
+            .filter((card) => { // Search filter
+              const { searchValue } = this.state;
+              const { title, user } = card.props.item;
+
+              if (
+                searchValue.trim() === "" ||
+                title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+                user?.toLowerCase().includes(searchValue.trim().toLowerCase())
+              ) return card;
+            })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
               // TODO: is it possible to only re-render the theme cards whose status have changed?
