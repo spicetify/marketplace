@@ -24,8 +24,19 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
     setModalConfig({ ...CONFIG });
   };
 
-  console.log("Rendering SettingsModal...");
-  console.log({ CONFIG, modalCONFIG: modalConfig });
+  // Can't use proper event listener here because it's just the DOM outside the component
+  const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn") as HTMLElement;
+  const modalOverlay = document.querySelector("body > generic-modal > div") as HTMLElement;
+  if (closeButton && modalOverlay) {
+    closeButton.onclick = () => location.reload();
+    closeButton.setAttribute("style", "cursor: pointer;");
+    modalOverlay.onclick = (e) => {
+      // If clicked on overlay, also reload
+      if (e.target === modalOverlay) {
+        location.reload();
+      }
+    };
+  }
 
   return (
     <div id="marketplace-config-container">
@@ -37,7 +48,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <h2>Tabs</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {
-          return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig}  />;
+          return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
         })}
       </div>
       <h2>Reset</h2>
@@ -49,21 +60,6 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       </div>
     </div>
   );
-
-  const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn");
-  const modalOverlay = document.querySelector("body > generic-modal > div");
-  if (closeButton instanceof HTMLElement
-    && modalOverlay instanceof HTMLElement
-  ) {
-    closeButton.onclick = () => location.reload();
-    closeButton.setAttribute("style", "cursor: pointer;");
-    modalOverlay.onclick = (e) => {
-      // If clicked on overlay, also reload
-      if (e.target === modalOverlay) {
-        location.reload();
-      }
-    };
-  }
 };
 
 export default SettingsModal;
