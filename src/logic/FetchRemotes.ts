@@ -12,10 +12,9 @@ import { ITEMS_PER_REQUEST, BLACKLIST_URL, SNIPPETS_URL } from "../constants";
  */
 export async function getExtensionRepos(page = 1, BLACKLIST:string[] = [], query?: string) {
   // www is needed or it will block with "cross-origin" error.
-  let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
-  if (query) {
-    url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`;
-  }
+  let url = query
+    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`
+    : `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
 
   // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
   // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
@@ -50,17 +49,14 @@ export async function getExtensionRepos(page = 1, BLACKLIST:string[] = [], query
 async function getRepoManifest(user: string, repo: string, branch: string) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
   const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
-  if (sessionStorageItem) {
-    return JSON.parse(sessionStorageItem);
-  }
+  if (sessionStorageItem) return JSON.parse(sessionStorageItem);
+
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (failedSessionStorageItems?.includes(url)) {
-    return null;
-  }
+  if (failedSessionStorageItems?.includes(url)) return null;
+
   const manifest = await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
-  if (manifest) {
-    window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
-  }
+  if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+
   return manifest;
 }
 
@@ -116,10 +112,8 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
       ) {
         // Add to list unless we're hiding installed items and it's installed
         if (!(hideInstalled
-                  && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
-        ) {
-          accum.push(item);
-        }
+          && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
+        ) accum.push(item);
       }
       // else {
       //     console.error("Invalid manifest:", manifest);
@@ -190,7 +184,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
         include: manifest.include,
       };
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.usercss && manifest.description) {
+      if (manifest?.name && manifest?.usercss && manifest?.description) {
         accum.push(item);
       }
       return accum;
@@ -209,10 +203,9 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
 * @returns Array of GitHub API results, filtered through the blacklist
 */
 export async function getThemeRepos(page = 1, BLACKLIST:string[] = [], query?: string) {
-  let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
-  if (query) {
-    url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`;
-  }
+  let url = query
+    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`
+    : `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
 
   // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
   // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
@@ -221,9 +214,8 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = [], query?: s
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
   const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
-  if (!allThemes.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.");
-  }
+  if (!allThemes.items) Spicetify.showNotification("Too Many Requests, Cool Down.");
+
   const filteredResults = {
     ...allThemes,
     // Include count of all items on the page, since we're filtering the blacklist below,
@@ -240,7 +232,6 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = [], query?: s
 * @returns String array of blacklisted repos
 */
 export const getBlacklist = async () => {
-;
   const json = await fetch(BLACKLIST_URL).then(res => res.json()).catch(() => ({}));
   return json.repos as string[] | undefined;
 };
