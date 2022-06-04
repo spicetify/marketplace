@@ -1,6 +1,6 @@
 import { CardItem, Snippet } from "../types/marketplace-types";
 import { processAuthors, addToSessionStorage } from "./Utils";
-import { ITEMS_PER_REQUEST } from "../constants";
+import { ITEMS_PER_REQUEST, BLACKLIST_URL, SNIPPETS_URL } from "../constants";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -240,8 +240,8 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = [], query?: s
 * @returns String array of blacklisted repos
 */
 export const getBlacklist = async () => {
-  const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
-  const json = await fetch(url).then(res => res.json()).catch(() => ({}));
+;
+  const json = await fetch(BLACKLIST_URL).then(res => res.json()).catch(() => ({}));
   return json.repos as string[] | undefined;
 };
 
@@ -250,7 +250,6 @@ export const getBlacklist = async () => {
 * @returns Array of snippets
 */
 export const fetchCssSnippets = async () => {
-  const url = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/snippets.json";
-  const json = await fetch(url).then(res => res.json()).catch(() => ({}));
+  const json = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => ({}));
   return json as Snippet[] | undefined;
 };
