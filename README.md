@@ -32,13 +32,13 @@ This project is a work-in-progress and is not finished, polished, or guaranteed 
 Open Powershell and paste the following:
 
 ```powershell
-Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/master/install.ps1" | Invoke-Expression
+Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/install.ps1" | Invoke-Expression
 ```
 ### Auto Install (MacOS and Linux)
 Open a terminal and paste the following:
 
 ```shell
-curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/install.sh | sh
 ```
 
 ### Manual Install (recommended)
@@ -63,7 +63,7 @@ Example:
 ```ini
 [AdditionalOptions]
 ...
-custom_apps = reddit | spicetify-marketplace
+custom_apps = reddit | marketplace
 ```
 
 Then run:
