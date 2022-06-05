@@ -37,6 +37,7 @@ Rename-Item -Path "${HOME}/spicetify-cli/CustomApps/spicetify-marketplace-dist" 
 Copy-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace" -Destination $sp_dot_dir -Recurse -Force
 spicetify config custom_apps spicetify-marketplace-
 spicetify config custom_apps marketplace
-spicetify backup apply
+spicetify backup
+spicetify apply
 
 Write-Host "Done! If nothing has happened, do spicetify apply" -ForegroundColor "Green"
