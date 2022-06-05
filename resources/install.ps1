@@ -33,7 +33,7 @@ if (Test-Path -Path "${HOME}/spicetify-cli/CustomApps/marketplace") {
   Write-Host "marketplace was already found! Updating..." -ForegroundColor "Cyan"
   Remove-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace" -Force -Recurse
 }
-Rename-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace-dist" -NewName "marketplace" -Force
+Rename-Item -Path "${HOME}/spicetify-cli/CustomApps/spicetify-marketplace-dist" -NewName "marketplace" -Force
 Copy-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace" -Destination $sp_dot_dir -Recurse -Force
 spicetify config custom_apps marketplace
 spicetify backup apply
