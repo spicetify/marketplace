@@ -43,7 +43,7 @@ curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/mai
 
 ### Manual Install (recommended)
 
-Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/spicetify/spicetify-cli) custom apps directory:
+Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/spicetify/spicetify-cli) custom apps directory as "marketplace":
 | **Platform** | **Path**                                                                               |
 |------------|------------------------------------------------------------------------------------------|
 | **Linux**      | `~/.config/spicetify/CustomApps/` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
@@ -52,7 +52,7 @@ Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com
 
 After putting the marketplace folder into the correct custom apps folder, run the following command to enable it:
 ```
-spicetify config custom_apps spicetify-marketplace
+spicetify config custom_apps marketplace
 spicetify apply
 ```
 Note: Using the `config` command to add the custom app will always append the file name to the existing custom apps list. It does not replace the whole key's value.
