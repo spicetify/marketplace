@@ -59,7 +59,7 @@ export default class Grid extends React.Component<
   searchRequested: boolean;
   endOfList = false;
   lastScroll = 0;
-  requestQueue: any[] = [];
+  requestQueue: never[][] = [];
   requestPage = 0;
   cardList: Card[] = [];
   sortConfig: { by: string };
