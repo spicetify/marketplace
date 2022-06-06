@@ -39,6 +39,7 @@ echo "COPYING"
 rm -rf "$INSTALL_DIR/marketplace/"
 mv "$INSTALL_DIR/marketplace-tmp/spicetify-marketplace-dist" "$INSTALL_DIR/marketplace"
 # cp -rf "$INSTALL_DIR/marketplace/." "$sp_dot_dir"
+rm -rf "$INSTALL_DIR/marketplace-tmp"
 echo "INSTALLING"
 cd "$INSTALL_DIR/marketplace"
 
