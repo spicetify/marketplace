@@ -27,7 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "copyfiles": "^2.4.1",
-    "eslint": "7.32.0",
+    "eslint": "8.17.0",
     "eslint-plugin-react": "^7.30.0",
     "react-dropdown": "^1.10.0",
     "spicetify-creator": "^1.0.10",
