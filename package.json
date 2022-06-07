@@ -22,10 +22,10 @@
     "node": ">=16"
   },
   "devDependencies": {
-    "@types/react": "^18.0.6",
+    "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.26.0",
-    "@typescript-eslint/parser": "^5.26.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
     "copyfiles": "^2.4.1",
     "eslint": "7.32.0",
     "eslint-plugin-react": "^7.30.0",
