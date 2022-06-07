@@ -2,10 +2,9 @@ name: Push new version to dist branch
 on:
   push:
     branches:
-      - spcr
-      # - main
-  pull_request:
-    branches:
+      - main
+  # pull_request:
+    # branches:
       # - main
 
 jobs:

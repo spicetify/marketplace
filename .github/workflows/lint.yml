@@ -5,11 +5,9 @@ on:
   # but only for the main branch
   push:
     branches:
-      - spcr
-      # - main
-  pull_request:
-    branches:
-      - spcr
+      - main
+  # pull_request:
+    # branches:
       # - main
 
 jobs:
