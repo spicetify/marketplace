@@ -1,0 +1,16 @@
+// This is the main file that imports all the components
+
+/*
+    TODOs:
+    - We might want to customize/scope the css classes etc
+        so we don't interfere with other extension like reddit
+*/
+
+@import url('./components/_grid.scss');
+@import url('./components/_dropdown.scss');
+@import url('./components/_card.scss');
+@import url('./components/_settings.scss');
+@import url('./components/_reload-modal.scss');
+@import url('./components/_add-snippet-modal.scss');
+@import url('./components/_readme-pages.scss');
+@import url('./components/_fixes.scss');

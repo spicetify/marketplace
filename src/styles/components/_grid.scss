@@ -1,0 +1,146 @@
+@use '../constants.scss';
+
+.marketplace-header {
+  -webkit-box-pack: justify;
+  -webkit-box-align: center;
+  align-content: space-between;
+  align-items: center;
+  color: var(--spice-text);
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+
+  // To position the settings button + colour schemes
+  position: sticky;
+  flex-direction: row-reverse;
+  top: 80px;
+  z-index: 1;
+
+  h1 {
+    position: fixed;
+    left: 16px;
+
+    @media (min-width: 1024px) {
+      left: 32px;
+    }
+  }
+}
+
+.marketplace-header__right {
+  display: flex;
+}
+
+.marketplace-grid {
+  --minimumColumnWidth: 180px;
+  --column-width: minmax(var(--minimumColumnWidth),1fr);
+  --column-count: auto-fill;
+  --grid-gap: 24px;
+}
+
+.marketplace-sort-bar {
+  align-items: center;
+  display: flex;
+}
+
+.marketplace-sort-container {
+  position: relative;
+  display: flex;
+}
+
+.marketplace-tabBar-headerItem {
+  -webkit-app-region: no-drag;
+  display: inline-block;
+  pointer-events: auto;
+
+  // Fixes the tab bar alignment going weird when the "more" dropdown menu appears
+  vertical-align: middle;
+}
+
+.marketplace-tabBar-active {
+  background-color: var(--spice-tab-active);
+  border-radius: 4px;
+}
+
+.marketplace-tabBar-headerItemLink {
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  margin: 0 8px 0 0;
+  padding: 8px 16px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.marketplace-tabBar-nav {
+  -webkit-app-region: drag;
+  pointer-events: none;
+  width: 100%;
+}
+
+.marketplace-tabBar-headerItem .optionsMenu-dropBox {
+  color: var(--spice-text);
+  border: 0;
+  max-width: 150px;
+  height: 42px;
+  padding: 0 30px 0 12px;
+  background-color: initial;
+  cursor: pointer;
+  appearance: none;
+}
+
+.marketplace-tabBar-headerItem .optionsMenu-dropBox svg {
+  position: absolute;
+  margin-left: 8px;
+}
+
+.marketplace-settings-button {
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  padding: 10px 14px 6px;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  background-color: var(--spice-sidebar);
+  transition-duration: constants.$transition-default;
+
+  &:hover {
+    background-color: var(--spice-tab-active);
+  }
+}
+
+// Search bar
+.searchbar--bar__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+.searchbar-bar {
+  border: unset;
+  background-color: var(--spice-sidebar) !important;
+  border-radius: constants.$btn-radius;
+  padding: 10px 12px;
+  color: var(--spice-text) !important;
+}
+
+option {
+  background-color: var(--spice-button);
+}
+
+.marketplace-footer {
+  margin: auto;
+  text-align: center;
+}
+
+// "Add CSS" button
+.marketplace-add-snippet-btn {
+  position: -webkit-sticky;
+  position: sticky !important;
+  bottom: 32px;
+  left: 100%;
+}

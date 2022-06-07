@@ -1,0 +1,143 @@
+@use '../constants.scss';
+
+$dropdown-text: rgba(var(--spice-rgb-text), .7);
+$dropdown-text-hover: rgb(var(--spice-rgb-text));
+$dropdown-bg: var(--spice-sidebar);
+$dropdown-radius: constants.$btn-radius;
+
+.arrow-closed, .arrow-open {
+  border: solid $dropdown-text;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+  position: absolute;
+  right: 10px;
+}
+
+.arrow-closed {
+  top: 10px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.arrow-open {
+  top: 14px;
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.Dropdown-root {
+  position: relative;
+
+  &.is-open {
+    .Dropdown-control {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      &:hover .Dropdown-arrow {
+        border-color: transparent transparent $dropdown-text-hover;
+      }
+    }
+    .Dropdown-arrow {
+      border-color: transparent transparent $dropdown-text;
+      border-width: 0 5px 5px;
+    }
+    .Dropdown-menu {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+}
+
+// The button (collapsed)
+.Dropdown-control {
+  position: relative;
+  overflow: hidden;
+  background-color: $dropdown-bg;
+  border: 0;
+  border-radius: $dropdown-radius;
+  box-sizing: border-box;
+  color: $dropdown-text;
+  cursor: default;
+  outline: none;
+  padding: 8px 36px 8px 16px;
+  transition: all constants.$transition-default ease;
+
+  &:hover {
+    color: $dropdown-text-hover;
+    background-color: var(--spice-button-disabled);
+
+    .Dropdown-arrow {
+      border-color: $dropdown-text-hover transparent transparent;
+    }
+  }
+}
+
+.Dropdown-arrow {
+  border-color: $dropdown-text transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  content: ' ';
+  display: block;
+  height: 0;
+  margin-top: -ceil(2.5);
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  width: 0
+}
+
+// The expanded list
+.Dropdown-menu {
+  background-color: $dropdown-bg;
+  border: 0;
+  border-radius: $dropdown-radius;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin-top: -1px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+
+  .Dropdown-group > .Dropdown-title {
+    padding: 8px 10px;
+    color: rgba(51, 51, 51, 1.2);
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+}
+
+.Dropdown-option {
+  box-sizing: border-box;
+  color: $dropdown-text;
+  cursor: pointer;
+  display: block;
+  padding: 8px 10px;
+
+  &:last-child {
+    border-bottom-right-radius: $dropdown-radius;
+    border-bottom-left-radius: $dropdown-radius;
+  }
+
+  &.is-selected {
+    background-color: $dropdown-text;
+    color: $dropdown-bg;
+  }
+
+  &:hover {
+    background-color: $dropdown-text-hover;
+    color: $dropdown-bg;
+  }
+}
+
+.Dropdown-noresults {
+  box-sizing: border-box;
+  color: #ccc;
+  cursor: default;
+  display: block;
+  padding: 8px 10px;
+}

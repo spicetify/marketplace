@@ -1,35 +1,36 @@
 {
   "name": "spicetify-marketplace",
-  "homepage": "https://github.com/CharlieS1103/spicetify-marketplace",
+  "version": "0.5.0",
+  "homepage": "https://github.com/spicetify/spicetify-marketplace",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CharlieS1103/spicetify-marketplace.git"
+    "url": "https://github.com/spicetify/spicetify-marketplace.git"
   },
   "bugs": {
-    "url": "https://github.com/CharlieS1103/spicetify-marketplace/issues"
+    "url": "https://github.com/spicetify/spicetify-marketplace/issues"
   },
   "scripts": {
-    "type-check": "tsc",
-    "watch": "parcel watch",
-    "build": "parcel build",
-    "lint": "eslint src"
-  },
-  "source": "styles/style.scss",
-  "targets": {
-    "default": {
-      "distDir": ".",
-      "optimize": false
-    }
+    "build": "spicetify-creator",
+    "build:local": "spicetify-creator --out=dist --minify",
+    "build:prod": "yarn build:local && yarn copy:docs",
+    "copy:docs": "copyfiles README.md docs/* dist/",
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit",
+    "watch": "spicetify-creator --watch"
   },
   "engines": {
     "node": ">=16"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.3.2",
-    "@types/react": "^17.0.40",
-    "@types/react-dom": "^17.0.11",
-    "eslint": "^8.11.0",
-    "eslint-plugin-react": "^7.29.3",
-    "parcel": "^2.3.2"
+    "@types/react": "^18.0.6",
+    "@types/react-dom": "^18.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "7.32.0",
+    "eslint-plugin-react": "^7.30.0",
+    "react-dropdown": "^1.10.0",
+    "spicetify-creator": "^1.0.10",
+    "typescript": "^4.7.2"
   }
 }

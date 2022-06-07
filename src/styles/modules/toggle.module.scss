@@ -1,0 +1,87 @@
+// This was taken from the Spotify styles
+.toggle-wrapper {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  position: relative;
+
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+// Hide disabled toggle rows (i.e. the "Extensions" one)
+.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toggle-input {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+
+  &:checked ~ .toggle-indicator-wrapper {
+    // Checked colour
+    background-color: var(--spice-text);
+
+    .toggle-indicator {
+      // From xpui.css
+      // Unchecked colour
+      background-color: #fff;
+      left: auto;
+      right: 2px;
+
+      // From <style> tag
+      right: 3px;
+    }
+  }
+
+  &:hover {
+    // Unchecked colour (hover)
+    & ~ .toggle-indicator-wrapper {
+      filter: brightness(1.3);
+    }
+
+    // Checked colour (hover)
+    &:checked ~ .toggle-indicator-wrapper {
+      filter: brightness(1.15);
+    }
+  }
+
+  &:active:not([disabled]) ~ .toggle-indicator-wrapper .toggle-indicator {
+    width: 20px;
+  }
+}
+
+// The trough
+.toggle-indicator-wrapper {
+  background-color: #535353;
+  border-radius: 24px;
+  height: 24px;
+  position: relative;
+  width: 42px;
+}
+
+// The circle
+.toggle-indicator {
+  // From xpui.css
+  background: #fff;
+  border-radius: inherit;
+  height: 20px;
+  left: 2px;
+  position: absolute;
+  top: 2px;
+  -webkit-transition: background-color,left,right,width .1s ease;
+  transition: background-color,left,right,width .1s ease;
+  width: 20px;
+
+  // From <style> tag
+  height: 18px;
+  width: 18px;
+  top: 3px;
+  left: 3px;
+  background: var(--spice-shadow) !important;
+}
