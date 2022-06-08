@@ -415,7 +415,7 @@ export default class Card extends React.Component<CardProps, {
               title={this.props.type === "snippet" ? this.props.item.title : this.props.item.manifest?.name}
               className="main-cardHeader-link"
               dir="auto"
-              href={this.props.type === "snippet"
+              href={this.props.type !== "snippet"
                 ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
                 : "https://github.com/spicetify/spicetify-marketplace/blob/main/resources/snippets.json"
               }
