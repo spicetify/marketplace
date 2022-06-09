@@ -123,7 +123,12 @@ export const processAuthors = (authors: Author[], user: string) => {
   let parsedAuthors: Author[] = [];
 
   if (authors && authors.length > 0) {
-    parsedAuthors = authors;
+    parsedAuthors = authors.map((author) => ({
+      name: author.name,
+      url: author.url.startsWith("javascript:")
+        ? ""
+        : author.url,
+    }));
   } else {
     parsedAuthors.push({
       name: user,
