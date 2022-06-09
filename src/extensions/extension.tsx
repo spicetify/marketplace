@@ -28,6 +28,11 @@ import {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
+  // https://github.com/satya164/react-simple-code-editor/issues/86
+  const reactSimpleCodeEditorFix = document.createElement("script");
+  reactSimpleCodeEditorFix.innerHTML = "const global = globalThis;";
+  document.head.appendChild(reactSimpleCodeEditorFix);
+
   // Show message on start.
   // Spicetify.showNotification("Loaded Marketplace extension!");
 

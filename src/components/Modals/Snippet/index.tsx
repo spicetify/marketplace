@@ -1,4 +1,8 @@
 import React from "react";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-css";
+
 import {
   getLocalStorageDataFromKey,
   initializeSnippets,
@@ -71,14 +75,21 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
     <div id="marketplace-add-snippet-container">
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-custom-css">Custom CSS</label>
-        <textarea id="marketplace-custom-css"
-          rows={4} cols={50}
-          value={code} onChange={(e) => {
-            if (props.type !== "VIEW_SNIPPET")
-              setCode(e.target.value);
-          }}
-          placeholder="Input your own custom CSS here! You can find them in the installed tab for management."
-        />
+        <div className="marketplace-customCSS-editor-wrapper">
+          <Editor
+            value={code}
+            onValueChange={code => setCode(code)}
+            highlight={code => highlight(code, languages.css)}
+            textareaId="marketplace-custom-css"
+            textareaClassName="snippet-code-editor"
+            readOnly={props.type === "VIEW_SNIPPET"}
+            placeholder="Input your own custom CSS here! You can find them in the installed tab for management."
+            style={{
+              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
+              // fontSize: 12,
+            }}
+          />
+        </div>
       </div>
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-customCSS-name-submit">Snippet Name</label>
