@@ -29,7 +29,7 @@ import {
   }
 
   // Show message on start.
-  Spicetify.showNotification("Loaded Marketplace extension!");
+  // Spicetify.showNotification("Loaded Marketplace extension!");
 
   // Expose useful methods in global context
   window.Marketplace = {

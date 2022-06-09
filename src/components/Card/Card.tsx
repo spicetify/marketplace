@@ -16,7 +16,7 @@ import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
 
-type CardProps = {
+export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
   item: CardItem | Snippet;
 
@@ -385,7 +385,17 @@ export default class Card extends React.Component<CardProps, {
     }
 
     return (
-      <div className={cardClasses.join(" ")} onClick={() => this.openReadme()}>
+      <div className={cardClasses.join(" ")} onClick={() => {
+        if (this.props.type === "snippet") {
+          const processedName = this.props.item.title.replace(/\n/g, "");
+
+          if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
+            return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
+
+          openModal("VIEW_SNIPPET", undefined, undefined, this.props);
+        } else this.openReadme();
+      }
+      }>
         <div className="main-card-draggable" draggable="true">
           <div className="main-card-imageContainer">
             <div className="main-cardImage-imageWrapper">

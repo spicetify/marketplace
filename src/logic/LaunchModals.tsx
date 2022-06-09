@@ -1,22 +1,36 @@
 import React from "react";
 import { Config } from "../types/marketplace-types";
 
-import AddSnippetModal from "../components/Modals/AddSnippet";
+import SnippetModal from "../components/Modals/Snippet";
 import ReloadModal from "../components/Modals/Reload";
 import SettingsModal from "../components/Modals/Settings";
+import { CardProps } from "../components/Card/Card";
 
-type ModalType = "ADD_SNIPPET" | "RELOAD" | "SETTINGS";
+export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS";
 
 const getModalSettings = (
   modalType: ModalType,
   CONFIG?: Config,
   updateAppConfig?: (CONFIG: Config) => void,
+  props?: CardProps,
 ) => {
   switch (modalType) {
   case "ADD_SNIPPET":
     return {
       title: "Add Snippet",
-      content: <AddSnippetModal />,
+      content: <SnippetModal type={modalType} />,
+      isLarge: false,
+    };
+  case "EDIT_SNIPPET":
+    return {
+      title: "Edit Snippet",
+      content: <SnippetModal type={modalType} content={props as CardProps} />,
+      isLarge: false,
+    };
+  case "VIEW_SNIPPET":
+    return {
+      title: "View Snippet",
+      content: <SnippetModal type={modalType} content={props as CardProps} />,
       isLarge: false,
     };
   case "RELOAD":
@@ -45,9 +59,10 @@ export const openModal = (
   modal: ModalType,
   CONFIG?: Config,
   updateAppConfig?: (CONFIG: Config) => void,
+  props?: CardProps,
 ) => {
   const triggerModal = () => {
-    const modalSettings = getModalSettings(modal, CONFIG, updateAppConfig);
+    const modalSettings = getModalSettings(modal, CONFIG, updateAppConfig, props);
     Spicetify.PopupModal.display(modalSettings);
   };
 
