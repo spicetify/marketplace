@@ -1,7 +1,7 @@
 import React from "react";
 import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 
-import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
+import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
 import {
   getLocalStorageDataFromKey,
   parseIni,
@@ -417,7 +417,7 @@ export default class Card extends React.Component<CardProps, {
               dir="auto"
               href={this.props.type !== "snippet"
                 ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
-                : "https://github.com/spicetify/spicetify-marketplace/blob/main/resources/snippets.json"
+                : SNIPPETS_PAGE_URL
               }
               target="_blank"
               rel="noopener noreferrer"
