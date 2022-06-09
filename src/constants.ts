@@ -32,4 +32,6 @@ export const MAX_TAGS = 4;
 
 export const SNIPPETS_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/snippets.json";
 
+export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/spicetify-marketplace/blob/main/resources/snippets.json";
+
 export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
