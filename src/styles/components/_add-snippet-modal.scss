@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 16px;
 
-  input, textarea {
+  input, textarea, .marketplace-customCSS-editor-wrapper {
     width: 100%;
     margin-bottom: 10px;
     padding: 3px 5px;
@@ -14,12 +14,25 @@
     border: 1px solid var(--spice-button);
     border-radius: 4px;
   }
+
+  // Stop it from adding a blue outline when you tab in the editor
+  #marketplace-custom-css:focus-visible {
+    outline: none;
+  }
 }
 
 // Container for label + input
 .marketplace-customCSS-input-container {
   display: flex;
   flex-direction: column;
+}
+
+// Preview image in the modal
+img.marketplace-customCSS-image-preview {
+  height: 180px;
+  width: 180px;
+  object-fit: cover;
+  margin: 0 auto;
 }
 
 // Submit button

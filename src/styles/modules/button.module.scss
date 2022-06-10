@@ -50,6 +50,11 @@
     box-shadow: none;
     transform: scale(1);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .circle {

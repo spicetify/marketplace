@@ -113,6 +113,19 @@ export const initializeSnippets = (snippets: Snippet[]) => {
   document.head.appendChild(style);
 };
 
+export const fileToBase64 = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
+
 /**
  * Format an array of authors, given the data from the manifest and the repo owner.
  * @param authors Array of authors
