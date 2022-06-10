@@ -44,7 +44,8 @@
   {
     "title": "Fix playlist arrows",
     "description": "Fixes the opened and closed orientation of the playlist folder arrows",
-    "code": ".main-rootlist-expandArrow { -webkit-transform: rotate(-90deg) !important; transform: rotate(-90deg) !important; } .main-rootlist-expandArrow:hover { -webkit-transform: rotate(-90deg) !important; transform: rotate(-90deg) !important; } .qAAhQw9dXNB7DbPgDDxy { -webkit-transform: rotate(0deg) !important; transform: rotate(0deg) !important; } .qAAhQw9dXNB7DbPgDDxy:hover { -webkit-transform: rotate(0deg) !important; transform: rotate(0deg) !important; }"
+    "code": ".main-rootlist-expandArrow { -webkit-transform: rotate(-90deg) !important; transform: rotate(-90deg) !important; } .main-rootlist-expandArrow:hover { -webkit-transform: rotate(-90deg) !important; transform: rotate(-90deg) !important; } .qAAhQw9dXNB7DbPgDDxy { -webkit-transform: rotate(0deg) !important; transform: rotate(0deg) !important; } .qAAhQw9dXNB7DbPgDDxy:hover { -webkit-transform: rotate(0deg) !important; transform: rotate(0deg) !important; }",
+    "preview": "resources/assets/snippets/fix-playlist-arrows.png"
   },
   {
     "title": "Fix main view width",
