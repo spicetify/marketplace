@@ -32,6 +32,11 @@ export type Snippet = {
   description: string;
   code: string;
 
+  // preview is used in the JSON to stay consistent with the other manifest formats
+  preview?: string;
+  // it's parsed into an imageURL because that's what the Card component uses
+  imageURL?: string;
+
   // TODO: clean this up somehow
   // It complains bitterly in Card.tsx
   // if I don't have all the same properties as CardItem
@@ -41,7 +46,6 @@ export type Snippet = {
   user: undefined;
   repo: undefined;
   branch: undefined;
-  imageURL: undefined;
   extensionURL: undefined;
   readmeURL: undefined;
   stars: undefined;

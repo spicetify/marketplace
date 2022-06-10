@@ -19,19 +19,19 @@ const getModalSettings = (
     return {
       title: "Add Snippet",
       content: <SnippetModal type={modalType} />,
-      isLarge: false,
+      isLarge: true,
     };
   case "EDIT_SNIPPET":
     return {
       title: "Edit Snippet",
       content: <SnippetModal type={modalType} content={props as CardProps} />,
-      isLarge: false,
+      isLarge: true,
     };
   case "VIEW_SNIPPET":
     return {
       title: "View Snippet",
       content: <SnippetModal type={modalType} content={props as CardProps} />,
-      isLarge: false,
+      isLarge: true,
     };
   case "RELOAD":
     return {

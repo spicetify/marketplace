@@ -302,6 +302,7 @@ export default class Card extends React.Component<CardProps, {
       code: this.props.item.code,
       title: this.props.item.title,
       description: this.props.item.description,
+      imageURL: this.props.item.imageURL,
     }));
 
     // Add to installed list if not there already

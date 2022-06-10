@@ -27,6 +27,14 @@
   flex-direction: column;
 }
 
+// Preview image in the modal
+img.marketplace-customCSS-image-preview {
+  height: 180px;
+  width: 180px;
+  object-fit: cover;
+  margin: 0 auto;
+}
+
 // Submit button
 #marketplace-customCSS-submit {
   margin-left: auto;

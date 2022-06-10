@@ -6,20 +6,26 @@ import "prismjs/components/prism-css";
 import {
   getLocalStorageDataFromKey,
   initializeSnippets,
+  fileToBase64,
 } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import Button from "../../Button";
 import { CardProps } from "../../Card/Card";
 import { ModalType } from "../../../logic/LaunchModals";
+import FileInput from "../../FileInput";
 
 const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
   const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
   const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
   const [description, setDescription] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "");
+  const [imageURL, setimageURL] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.imageURL || "");
+
+  const processName = () => name.replace(/\n/g, "").replaceAll(" ", "-");
+  const processCode = () => code.replace(/\n/g, "\\n");
 
   const saveSnippet = () => {
-    // const processedCode = code.replace(/\n/g, "");
-    const processedName = name.replace(/\n/g, "");
+    // const processedCode = processCode();
+    const processedName = processName();
     const processedDescription = description.trim();
 
     const localStorageKey = `marketplace:installed:snippet:${processedName}`;
@@ -42,9 +48,10 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
     localStorage.setItem(
       localStorageKey,
       JSON.stringify({
-        code: code,
-        description: processedDescription,
         title: processedName,
+        code,
+        description: processedDescription,
+        imageURL,
         custom: true,
       }),
     );
@@ -113,8 +120,37 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
           placeholder="Enter a description for your custom snippet."
         />
       </div>
+      <div className="marketplace-customCSS-input-container">
+        <label htmlFor="marketplace-customCSS-preview">
+          Snippet Preview { props.type !== "VIEW_SNIPPET" && "(optional)" }
+        </label>
+        <FileInput
+          id="marketplace-customCSS-preview"
+          disabled={props.type === "VIEW_SNIPPET"}
+          value={imageURL}
+          onChange={
+            async (file?: File) => {
+              if (props.type !== "VIEW_SNIPPET") {
+                if (file) {
+                  try {
+                    const b64 = await fileToBase64(file);
+                    if (b64) {
+                      console.log(b64);
+                      setimageURL(b64 as string);
+                    }
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }
+              }
+            }
+          }
+        />
+        {imageURL && <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview"/>}
+      </div>
       {props.type !== "VIEW_SNIPPET"
-        ? <Button onClick={saveSnippet}>
+        // Disable the save button if the name or code are empty
+        ? <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
           Save CSS
         </Button>
         : <></>}
