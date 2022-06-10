@@ -18,7 +18,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
   const [description, setDescription] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "");
 
   const saveSnippet = () => {
-    const processedCode = code.replace(/\n/g, "");
+    // const processedCode = code.replace(/\n/g, "");
     const processedName = name.replace(/\n/g, "");
     const processedDescription = description.trim();
 
@@ -42,7 +42,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
     localStorage.setItem(
       localStorageKey,
       JSON.stringify({
-        code: processedCode,
+        code: code,
         description: processedDescription,
         title: processedName,
         custom: true,
