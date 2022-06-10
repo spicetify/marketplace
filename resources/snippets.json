@@ -2,22 +2,26 @@
   {
     "title": "Fix 'Episodes' Icon",
     "description": "Fix the color of the Episodes icon",
-    "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }"
+    "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }",
+    "preview": "src/assets/icon.svg"
   },
   {
     "title": "Fix 'Liked' Icon",
     "description": "Fix the colours of the Liked icon in sidebar",
-    "code": ".main-likedSongsButton-likedSongsIcon { color: var(--spice-sidebar); background: var(--spice-text); }"
+    "code": ".main-likedSongsButton-likedSongsIcon { color: var(--spice-sidebar); background: var(--spice-text); }",
+    "preview": "https://placekitten.com/300/300"
   },
   {
     "title": "Fix 'Made For You' Icon",
     "description": "Fix the colours of the Made For You icon",
-    "code": ".utp540VMXpC3bYIxo9wy { color: var(--spice-sidebar); background: var(--spice-text); opacity: 1; } .t6d9Hf7maqFPHp1Y02VR { color: var(--spice-text); }"
+    "code": ".utp540VMXpC3bYIxo9wy { color: var(--spice-sidebar); background: var(--spice-text); opacity: 1; } .t6d9Hf7maqFPHp1Y02VR { color: var(--spice-text); }",
+    "preview": "https://placekitten.com/350/350"
   },
   {
     "title": "Hide Upgrade Button",
     "description": "Makes the upgrade button hidden",
-    "code": ".main-topBar-UpgradeButton { display: none; }"
+    "code": ".main-topBar-UpgradeButton { display: none; }",
+    "preview": "https://i.imgur.com/XqQZQZS.png"
   },
   {
     "title": "Auto-hide Friends",
@@ -27,12 +31,14 @@
   {
     "title": "Smooth Reveal Playlist Gradient",
     "description": "Reveals the playlist gradient header gradient with a fade in effect",
-    "code": ".main-entityHeader-overlay, .main-actionBarBackground-background, .main-entityHeader-overlay, .main-entityHeader-backgroundColor { -webkit-transition: 3s; }"
+    "code": ".main-entityHeader-overlay, .main-actionBarBackground-background, .main-entityHeader-overlay, .main-entityHeader-backgroundColor { -webkit-transition: 3s; }",
+    "preview": "https://placekitten.com/150/150"
   },
   {
     "title": "Fix progress bar displacement",
     "description": "Fix the progress bar displacement when listening on different devices",
-    "code": ".main-connectBar-connectBar { overflow: visible !important; --triangle-position: 147px !important; align-items: unset !important; height: 0px !important; position: absolute !important; left: 80% !important; display: flex !important; bottom: 2% !important; padding: unset !important; }"
+    "code": ".main-connectBar-connectBar { overflow: visible !important; --triangle-position: 147px !important; align-items: unset !important; height: 0px !important; position: absolute !important; left: 80% !important; display: flex !important; bottom: 2% !important; padding: unset !important; }",
+    "preview": "https://placekitten.com/400/400"
   },
   {
     "title": "Fix playlist arrows",
@@ -42,7 +48,8 @@
   {
     "title": "Fix main view width",
     "description": "Makes main view fill up all available space",
-    "code": ".contentSpacing { max-width: 100% !important; }"
+    "code": ".contentSpacing { max-width: 100% !important; }",
+    "preview": "https://i.imgur.com/XqQZQZS.png"
   },
   {
     "title": "Left aligned heart icons",

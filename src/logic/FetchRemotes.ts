@@ -2,6 +2,8 @@ import { CardItem, Snippet } from "../types/marketplace-types";
 import { processAuthors, addToSessionStorage } from "./Utils";
 import { ITEMS_PER_REQUEST, BLACKLIST_URL, SNIPPETS_URL } from "../constants";
 
+import snippetsJSON from "../../resources/snippets.json";
+
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
@@ -241,6 +243,25 @@ export const getBlacklist = async () => {
 * @returns Array of snippets
 */
 export const fetchCssSnippets = async () => {
-  const json = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => ({}));
-  return json as Snippet[] | undefined;
+  // const json = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => ({}));
+  // TODO: change this back before merging
+  const json = snippetsJSON;
+
+  if (!json) return undefined;
+
+  const snippets: Snippet[] = json.reduce((accum, snippet) => {
+    const snip = { ...snippet };
+
+    // Because the card component looks for an imageURL prop
+    if (snip.preview) {
+      snip.imageURL = snip.preview && snip.preview.startsWith("http")
+        ? snip.preview
+        : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
+      delete snip.preview;
+    }
+
+    accum.push(snip);
+    return accum;
+  }, []);
+  return snippets;
 };

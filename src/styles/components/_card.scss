@@ -143,7 +143,9 @@
 
 .marketplace-card--snippet {
   // Hide image preview for CSS snippets
-  .main-card-imageContainer { display: none; }
+  // .main-card-imageContainer { display: none; }
+
+  // TODO: what do we do if the snippet has no image?
 }
 
 .marketplace-card--installed {
