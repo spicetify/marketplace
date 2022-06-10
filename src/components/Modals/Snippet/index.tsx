@@ -15,6 +15,7 @@ import { ModalType } from "../../../logic/LaunchModals";
 import FileInput from "../../FileInput";
 
 const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
+  const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
   const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
   const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
   const [description, setDescription] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "");
@@ -121,11 +122,11 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
         />
       </div>
       <div className="marketplace-customCSS-input-container">
-        <label htmlFor="marketplace-customCSS-preview">
+        <label htmlFor={PREVIEW_IMAGE_ID}>
           Snippet Preview { props.type !== "VIEW_SNIPPET" && "(optional)" }
         </label>
         <FileInput
-          id="marketplace-customCSS-preview"
+          id={PREVIEW_IMAGE_ID}
           disabled={props.type === "VIEW_SNIPPET"}
           value={imageURL}
           onChange={
@@ -146,7 +147,11 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
             }
           }
         />
-        {imageURL && <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview"/>}
+        {imageURL &&
+          <label htmlFor={PREVIEW_IMAGE_ID} style={{ textAlign: "center" }}>
+            <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview" />
+          </label>
+        }
       </div>
       {props.type !== "VIEW_SNIPPET"
         // Disable the save button if the name or code are empty
