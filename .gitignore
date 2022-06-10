@@ -151,6 +151,3 @@ dist/
 
 # vectornator files for snippet previews
 *.vectornator
-
-# Editor configuations
-.vscode
