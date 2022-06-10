@@ -26,7 +26,8 @@
   {
     "title": "Auto-hide Friends",
     "description": "Collapse the friends activity sidebar on small screens",
-    "code": "[aria-label='Friend Activity'] { transition: width 0.3s; } @media screen and (max-width: 1200px) { [aria-label='Friend Activity'] { width: 0; } [aria-label='Friend Activity'] .LayoutResizer__resize-bar { display: none; } }"
+    "code": "[aria-label='Friend Activity'] { transition: width 0.3s; } @media screen and (max-width: 1200px) { [aria-label='Friend Activity'] { width: 0; } [aria-label='Friend Activity'] .LayoutResizer__resize-bar { display: none; } }",
+    "preview": "resources/assets/snippets/auto-hide-friends.png"
   },
   {
     "title": "Smooth Reveal Playlist Gradient",
