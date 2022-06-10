@@ -19,7 +19,7 @@ import ReadmePage from "./components/ReadmePage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";
 import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
-class App extends React.Component<null, {count: number, CONFIG: Config}> {
+class App extends React.Component<null, { count: number; CONFIG: Config }> {
   state = {
     count: 0,
     CONFIG: {} as Config,
@@ -38,7 +38,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
         throw new Error("Could not parse marketplace tabs key");
       } else if (tabs.length === 0) {
         throw new Error("Empty marketplace tabs key");
-      } else if (tabs.filter(tab => !tab).length > 0) {
+      } else if (tabs.filter((tab) => !tab).length > 0) {
         throw new Error("Falsey marketplace tabs key");
       }
     } catch {
@@ -87,7 +87,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
       },
     };
 
-    if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter(tab => tab.name === this.CONFIG.activeTab).length) {
+    if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter((tab) => tab.name === this.CONFIG.activeTab).length) {
       this.CONFIG.activeTab = this.CONFIG.tabs[0].name;
     }
   }
@@ -98,14 +98,14 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
     this.setState({
       CONFIG: { ...config },
     });
-  }
+  };
 
   render() {
     const { location } = Spicetify.Platform.History;
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
     if (location.pathname === `${CUSTOM_APP_PATH}/readme`) {
-      return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
+      return <ReadmePage title="Spicetify Marketplace - Readme" data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {
       return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;

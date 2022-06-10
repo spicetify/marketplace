@@ -1,29 +1,29 @@
 import React from "react";
 
 class ReadmePage extends React.Component<
-{
-  // props
-  // TODO: decide what data we want to pass in and how we want to store it
-  // (this currently comes from Card.openReadme)
-  data: {
+  {
+    // props
+    // TODO: decide what data we want to pass in and how we want to store it
+    // (this currently comes from Card.openReadme)
+    data: {
+      title: string;
+      user: string;
+      repo: string;
+      branch: string;
+      readmeURL: string;
+      readmeDir: string;
+    };
     title: string;
-    user: string;
-    repo: string;
-    branch: string;
-    readmeURL: string;
-    readmeDir: string;
   },
-  title: string,
-},
-{
-  // state
-  html: string,
-}
+  {
+    // state
+    html: string;
+  }
 > {
   state = {
     // TODO: use <Suspense> or show a better loading indicator
     html: "<p>Loading...</p>",
-  }
+  };
 
   async getReadmeHTML() {
     try {
@@ -58,11 +58,10 @@ class ReadmePage extends React.Component<
 
   componentDidMount() {
     // Get and set readme html once loaded
-    this.getReadmeHTML()
-      .then((html) => {
-        if (html == null) return;
-        this.setState({ html });
-      });
+    this.getReadmeHTML().then((html) => {
+      if (html == null) return;
+      this.setState({ html });
+    });
   }
 
   componentDidUpdate() {
@@ -71,12 +70,16 @@ class ReadmePage extends React.Component<
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
     // This works for urls relative to the repo root
     document.querySelectorAll("#marketplace-readme img").forEach((img) => {
-      img.addEventListener("error", (e) => {
-        const element = e.target as HTMLImageElement;
-        const originalSrc = element.getAttribute("src");
-        const fixedSrc = `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc}`;
-        element.setAttribute("src", fixedSrc);
-      }, { once: true });
+      img.addEventListener(
+        "error",
+        (e) => {
+          const element = e.target as HTMLImageElement;
+          const originalSrc = element.getAttribute("src");
+          const fixedSrc = `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc}`;
+          element.setAttribute("src", fixedSrc);
+        },
+        { once: true },
+      );
     });
   }
 
@@ -86,7 +89,11 @@ class ReadmePage extends React.Component<
         <div className="marketplace-header">
           <h1>{this.props.title}</h1>
         </div>
-        <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        <div
+          id="marketplace-readme"
+          className="marketplace-readme__container"
+          dangerouslySetInnerHTML={{ __html: this.state.html }}
+        ></div>
       </section>
     );
   }

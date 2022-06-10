@@ -1,4 +1,4 @@
-@use '../constants.scss';
+@use "../constants.scss";
 
 .marketplace-header {
   -webkit-box-pack: justify;
@@ -32,7 +32,7 @@
 
 .marketplace-grid {
   --minimumColumnWidth: 180px;
-  --column-width: minmax(var(--minimumColumnWidth),1fr);
+  --column-width: minmax(var(--minimumColumnWidth), 1fr);
   --column-count: auto-fill;
   --grid-gap: 24px;
 }

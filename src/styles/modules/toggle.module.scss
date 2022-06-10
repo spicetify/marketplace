@@ -74,8 +74,8 @@
   left: 2px;
   position: absolute;
   top: 2px;
-  -webkit-transition: background-color,left,right,width .1s ease;
-  transition: background-color,left,right,width .1s ease;
+  -webkit-transition: background-color, left, right, width 0.1s ease;
+  transition: background-color, left, right, width 0.1s ease;
   width: 20px;
 
   // From <style> tag

@@ -17,15 +17,11 @@ import {
   addToSessionStorage,
   sleep,
 } from "../logic/Utils";
-import {
-  getBlacklist,
-  fetchThemeManifest,
-  fetchExtensionManifest,
-} from "../logic/FetchRemotes";
+import { getBlacklist, fetchThemeManifest, fetchExtensionManifest } from "../logic/FetchRemotes";
 
 (async () => {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   // https://github.com/satya164/react-simple-code-editor/issues/86
@@ -149,7 +145,9 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+  const allRepos = await fetch(url)
+    .then((res) => res.json())
+    .catch(() => []);
   if (!allRepos.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.");
   }
@@ -157,7 +155,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   const filteredResults = {
     ...allRepos,
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST?.includes(item.html_url)),
+    items: allRepos.items.filter((item) => !BLACKLIST?.includes(item.html_url)),
   };
 
   return filteredResults;
@@ -180,7 +178,8 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 
   // If still have more results, recursively fetch next page
   console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
-  if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
+  if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1);
+  // There are more results. currentPage + 1 is the next page to fetch.
   else console.log(`No more ${type} results`);
 }
 
@@ -195,10 +194,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 
   // Begin by getting the themes and extensions from github
   // const [extensionReposArray, themeReposArray] = await Promise.all([
-  await Promise.all([
-    loadPageRecursive("extension", 1),
-    loadPageRecursive("theme", 1),
-  ]);
+  await Promise.all([loadPageRecursive("extension", 1), loadPageRecursive("theme", 1)]);
 
   // let extensionsNextPage = 1;
   // let themesNextPage = 1;
@@ -217,9 +213,10 @@ async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
     // console.log(repo);
-    const data = (type === "theme")
-      ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
-      : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    const data =
+      type === "theme"
+        ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
+        : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
     if (data) {
       addToSessionStorage(data);
       await sleep(5000);

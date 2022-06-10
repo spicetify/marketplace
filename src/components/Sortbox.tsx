@@ -9,7 +9,6 @@ interface Props {
 }
 
 const SortBox = (props: Props) => {
-
   const _onSelect = (item: Option) => {
     props.onChange(item.value);
   };
@@ -27,14 +26,9 @@ const SortBox = (props: Props) => {
     // Create a drop down menu
     <div className="marketplace-sortBox">
       <div className="marketplace-sortBox-header">
-        <div className="marketplace-sortBox-header-title">
-        </div>
+        <div className="marketplace-sortBox-header-title"></div>
 
-        <Dropdown placeholder="Select an option"
-          options={options} value={sortBySelected?.key}
-          onChange={_onSelect}
-        />
-
+        <Dropdown placeholder="Select an option" options={options} value={sortBySelected?.key} onChange={_onSelect} />
       </div>
     </div>
   );

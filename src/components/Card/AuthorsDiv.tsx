@@ -1,13 +1,11 @@
 import React from "react";
 import { Author } from "../../types/marketplace-types";
 
-const AuthorsDiv = (props: {
-  authors: Author[];
-}) => {
+const AuthorsDiv = (props: { authors: Author[] }) => {
   // Add a div with author links inside
   const authorsDiv = (
     <div className="marketplace-card__authors">
-      { props.authors.map((author, index) => {
+      {props.authors.map((author, index) => {
         return (
           <a
             title={author.name}

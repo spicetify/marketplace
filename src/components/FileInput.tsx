@@ -2,10 +2,10 @@
 import React from "react";
 
 type FileInputProps = {
-  value: string | File[],
-  onChange: (file?: File) => void,
-  disabled?: boolean,
-  id?: string,
+  value: string | File[];
+  onChange: (file?: File) => void;
+  disabled?: boolean;
+  id?: string;
   // [x:string]: any;
 };
 
@@ -18,19 +18,17 @@ const FileInput = (props: FileInputProps) => (
     )}
     */}
     <label style={{ display: "block", textAlign: "center" }}>
-      {!props.disabled &&
+      {!props.disabled && (
         // Don't render label if not editable
-        <span>
-          {props.value.length ? "Click to change image" : "Click to add image"}
-        </span>
-      }
+        <span>{props.value.length ? "Click to change image" : "Click to add image"}</span>
+      )}
       <input
         id={props.id}
         disabled={props.disabled}
         // {...rest}
         style={{ display: "none" }}
         type="file"
-        onChange={e => {
+        onChange={(e) => {
           props.onChange(e.target.files?.[0]);
         }}
       />

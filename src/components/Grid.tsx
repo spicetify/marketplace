@@ -4,9 +4,12 @@ import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme 
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
-  getExtensionRepos, fetchExtensionManifest,
-  getThemeRepos, fetchThemeManifest,
-  fetchCssSnippets, getBlacklist,
+  getExtensionRepos,
+  fetchExtensionManifest,
+  getThemeRepos,
+  fetchThemeManifest,
+  fetchCssSnippets,
+  getBlacklist,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
@@ -17,22 +20,22 @@ import Card from "./Card/Card";
 import Button from "./Button";
 
 export default class Grid extends React.Component<
-{
-  title: string,
-  CONFIG: Config,
-  updateAppConfig: (CONFIG: Config) => void,
-},
-{
-  // TODO: add types
-  searchValue: string,
-  cards: Card[],
-  tabs: TabItemConfig[],
-  rest: boolean,
-  endOfList: boolean,
-  activeThemeKey?: string,
-  schemes: SchemeIni,
-  activeScheme?: string | null,
-}
+  {
+    title: string;
+    CONFIG: Config;
+    updateAppConfig: (CONFIG: Config) => void;
+  },
+  {
+    // TODO: add types
+    searchValue: string;
+    cards: Card[];
+    tabs: TabItemConfig[];
+    rest: boolean;
+    endOfList: boolean;
+    activeThemeKey?: string;
+    schemes: SchemeIni;
+    activeScheme?: string | null;
+  }
 > {
   constructor(props) {
     super(props);
@@ -95,19 +98,21 @@ export default class Grid extends React.Component<
    * @param type The type of card
    */
   appendCard(item: CardItem | Snippet, type: CardType) {
-    const card = <Card
-      item={item}
-      // Set key prop so items don't get stuck when switching tabs
-      key={`${this.props.CONFIG.activeTab}:${item.title}`}
-      CONFIG={this.CONFIG}
-      visual={this.props.CONFIG.visual}
-      type={type}
-      // This isn't used other than to trigger a re-render
-      activeThemeKey={this.state.activeThemeKey}
-      // Pass along the functions to update Grid state on apply
-      updateColourSchemes={this.updateColourSchemes.bind(this)}
-      updateActiveTheme={this.setActiveTheme.bind(this)}
-    />;
+    const card = (
+      <Card
+        item={item}
+        // Set key prop so items don't get stuck when switching tabs
+        key={`${this.props.CONFIG.activeTab}:${item.title}`}
+        CONFIG={this.CONFIG}
+        visual={this.props.CONFIG.visual}
+        type={type}
+        // This isn't used other than to trigger a re-render
+        activeThemeKey={this.state.activeThemeKey}
+        // Pass along the functions to update Grid state on apply
+        updateColourSchemes={this.updateColourSchemes.bind(this)}
+        updateActiveTheme={this.setActiveTheme.bind(this)}
+      />
+    );
 
     this.cardList.push(card);
     this.setState({ cards: this.cardList });
@@ -141,9 +146,7 @@ export default class Grid extends React.Component<
 
   updatePostsVisual() {
     this.cardList = this.cardList.map((card) => {
-      return <Card {...card.props}
-        CONFIG={this.CONFIG}
-      />;
+      return <Card {...card.props} CONFIG={this.CONFIG} />;
     });
     this.setState({ cards: [...this.cardList] });
   }
@@ -169,97 +172,105 @@ export default class Grid extends React.Component<
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
   async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
-    case "Extensions": {
-      const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
-      for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count, this.CONFIG.visual.hideInstalled);
+      case "Extensions": {
+        const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
+        for (const repo of pageOfRepos.items) {
+          const extensions = await fetchExtensionManifest(
+            repo.contents_url,
+            repo.default_branch,
+            repo.stargazers_count,
+            this.CONFIG.visual.hideInstalled,
+          );
 
-        // I believe this stops the requests when switching tabs?
+          // I believe this stops the requests when switching tabs?
+          if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+            // Stop this queue from continuing to fetch and append to cards list
+            return -1;
+          }
+
+          if (extensions && extensions.length) {
+            // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
+            extensions.forEach((extension) => this.appendCard(extension, "extension"));
+          }
+        }
+
+        // First result is null or -1 so it coerces to 1
+        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+        // Sets the amount of items that have thus been fetched
+        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+        const remainingResults = pageOfRepos.total_count - soFarResults;
+
+        // If still have more results, return next page number to fetch
+        console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
+        if (remainingResults > 0) return currentPage + 1;
+        else console.log("No more extension results");
+        break;
+      }
+      case "Installed": {
+        const installedStuff = {
+          theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
+          extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
+          snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
+        };
+
+        for (const type in installedStuff) {
+          if (installedStuff[type].length) {
+            installedStuff[type].forEach(async (itemKey) => {
+              // TODO: err handling
+              const extension = getLocalStorageDataFromKey(itemKey);
+              // I believe this stops the requests when switching tabs?
+              if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+                // Stop this queue from continuing to fetch and append to cards list
+                return -1;
+              }
+
+              this.appendCard(extension, type as CardType);
+            });
+          }
+        }
+        break;
+
+        // Don't need to return a page number because
+        // installed extension do them all in one go, since it's local
+      }
+      case "Themes": {
+        const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST, query);
+        for (const repo of pageOfRepos.items) {
+          const themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+          // I believe this stops the requests when switching tabs?
+          if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+            // Stop this queue from continuing to fetch and append to cards list
+            return -1;
+          }
+
+          if (themes && themes.length) {
+            themes.forEach((theme) => this.appendCard(theme, "theme"));
+          }
+        }
+
+        // First request is null, so coerces to 1
+        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+        // -1 because the page number is 1-indexed
+        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+        const remainingResults = pageOfRepos.total_count - soFarResults;
+
+        console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
+        if (remainingResults > 0) return currentPage + 1;
+        else console.log("No more theme results");
+        break;
+      }
+      case "Snippets": {
+        const snippets = await fetchCssSnippets();
+
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
           return -1;
         }
-
-        if (extensions && extensions.length) {
-          // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
-          extensions.forEach((extension) => this.appendCard(extension, "extension"));
+        if (snippets && snippets.length) {
+          snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
         }
       }
-
-      // First result is null or -1 so it coerces to 1
-      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-      // Sets the amount of items that have thus been fetched
-      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-      const remainingResults = pageOfRepos.total_count - soFarResults;
-
-      // If still have more results, return next page number to fetch
-      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
-      if (remainingResults > 0) return currentPage + 1;
-      else console.log("No more extension results");
-      break;
-    } case "Installed": {
-      const installedStuff = {
-        theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
-        extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
-        snippet: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []),
-      };
-
-      for (const type in installedStuff) {
-        if (installedStuff[type].length) {
-          installedStuff[type].forEach(async (itemKey) => {
-            // TODO: err handling
-            const extension = getLocalStorageDataFromKey(itemKey);
-            // I believe this stops the requests when switching tabs?
-            if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-              // Stop this queue from continuing to fetch and append to cards list
-              return -1;
-            }
-
-            this.appendCard(extension, type as CardType);
-          });
-        }
-      }
-      break;
-
-      // Don't need to return a page number because
-      // installed extension do them all in one go, since it's local
-    } case "Themes": {
-      const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST, query);
-      for (const repo of pageOfRepos.items) {
-
-        const themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-        // I believe this stops the requests when switching tabs?
-        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-          // Stop this queue from continuing to fetch and append to cards list
-          return -1;
-        }
-
-        if (themes && themes.length) {
-          themes.forEach((theme) => this.appendCard(theme, "theme"));
-        }
-      }
-
-      // First request is null, so coerces to 1
-      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-      // -1 because the page number is 1-indexed
-      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-      const remainingResults = pageOfRepos.total_count - soFarResults;
-
-      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
-      if (remainingResults > 0) return currentPage + 1;
-      else console.log("No more theme results");
-      break;
-    } case "Snippets": {
-      const snippets = await fetchCssSnippets();
-
-      if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-        // Stop this queue from continuing to fetch and append to cards list
-        return -1;
-      }
-      if (snippets && snippets.length) {
-        snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
-      }
-    }}
+    }
 
     this.setState({ rest: true, endOfList: true });
     this.endOfList = true;
@@ -278,17 +289,12 @@ export default class Grid extends React.Component<
 
     this.requestPage = await this.loadPage(queue, query);
 
-    while (
-      this.requestPage &&
-      this.requestPage !== -1 &&
-      this.cardList.length < quantity &&
-      !this.state.endOfList
-    ) {
+    while (this.requestPage && this.requestPage !== -1 && this.cardList.length < quantity && !this.state.endOfList) {
       this.requestPage = await this.loadPage(queue, query);
     }
 
     if (this.requestPage === -1) {
-      this.requestQueue = this.requestQueue.filter(a => a !== queue);
+      this.requestQueue = this.requestQueue.filter((a) => a !== queue);
       return;
     }
 
@@ -356,7 +362,8 @@ export default class Grid extends React.Component<
     this.checkScroll = this.isScrolledBottom.bind(this);
     if (viewPort) {
       viewPort.addEventListener("scroll", this.checkScroll);
-      if (this.cardList.length) { // Already loaded
+      if (this.cardList.length) {
+        // Already loaded
         if (this.lastScroll > 0) {
           viewPort.scrollTo(0, this.lastScroll);
         }
@@ -390,7 +397,7 @@ export default class Grid extends React.Component<
   // Add scroll event listener with type
   isScrolledBottom(event: Event) {
     const viewPort = event.target as HTMLElement;
-    if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
+    if (viewPort.scrollTop + viewPort.clientHeight >= viewPort.scrollHeight) {
       // At bottom, load more posts
       this.loadMore();
     }
@@ -414,16 +421,21 @@ export default class Grid extends React.Component<
           <div className="marketplace-header__right">
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
 
-            {this.state.activeScheme ? <SortBox
-              onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
-              // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
-              sortBoxOptions={generateSchemesOptions(this.state.schemes)}
-              // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
-              // because it hardcodes the value into the fn
-              sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
-
-            /> : null}
-            <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
+            {this.state.activeScheme ? (
+              <SortBox
+                onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
+                // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
+                sortBoxOptions={generateSchemesOptions(this.state.schemes)}
+                // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
+                // because it hardcodes the value into the fn
+                sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
+              />
+            ) : null}
+            <button
+              type="button"
+              title="Settings"
+              className="marketplace-settings-button"
+              id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
@@ -445,15 +457,18 @@ export default class Grid extends React.Component<
                   this.setState({ endOfList: false });
                   this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
                   this.searchRequested = true;
-                } else if ( // Refreshes result when user deletes all queries
-                  ((event.key === "Backspace") || (event.key === "Delete")) &&
+                } else if (
+                  // Refreshes result when user deletes all queries
+                  (event.key === "Backspace" || event.key === "Delete") &&
                   this.searchRequested &&
                   this.state.searchValue.trim() === ""
                 ) {
                   this.setState({ endOfList: false });
                   this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
                   this.searchRequested = false;
-                }}} />
+                }
+              }}
+            />
           </div>
         }
         {/* Add a header and grid for each card type if it has any cards */}
@@ -462,8 +477,10 @@ export default class Grid extends React.Component<
           { handle: "theme", name: "Themes" },
           { handle: "snippet", name: "Snippets" },
         ].map((cardType) => {
-          const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
-            .filter((card) => { // Search filter
+          const cardsOfType = this.cardList
+            .filter((card) => card.props.type === cardType.handle)
+            .filter((card) => {
+              // Search filter
               const { searchValue } = this.state;
               const { title, user } = card.props.item;
 
@@ -471,7 +488,8 @@ export default class Grid extends React.Component<
                 searchValue.trim() === "" ||
                 title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
                 user?.toLowerCase().includes(searchValue.trim().toLowerCase())
-              ) return card;
+              )
+                return card;
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
@@ -492,7 +510,8 @@ export default class Grid extends React.Component<
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
                 {/* Add the grid and cards */}
-                <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth"
+                <div
+                  className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth"
                   data-tab={this.CONFIG.activeTab}
                   data-card-type={cardType.name}
                 >
@@ -504,11 +523,14 @@ export default class Grid extends React.Component<
           return null;
         })}
         {/* Add snippets button if on snippets tab */}
-        {this.CONFIG.activeTab === "Snippets"
-          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+Add CSS</Button>
-          : null}
+        {this.CONFIG.activeTab === "Snippets" ? (
+          <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>
+            +Add CSS
+          </Button>
+        ) : null}
         <footer className="marketplace-footer">
-          {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
+          {!this.state.endOfList &&
+            (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
         </footer>
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}

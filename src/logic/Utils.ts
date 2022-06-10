@@ -29,7 +29,10 @@ export const getLocalStorageDataFromKey = (key: string, fallback?) => {
  */
 const hexToRGB = (hex: string) => {
   if (hex.length === 3) {
-    hex = hex.split("").map((char) => char + char).join("");
+    hex = hex
+      .split("")
+      .map((char) => char + char)
+      .join("");
   } else if (hex.length != 6) {
     throw "Only 3- or 6-digit hex colours are allowed.";
   } else if (hex.match(/[^0-9a-f]/i)) {
@@ -41,20 +44,16 @@ const hexToRGB = (hex: string) => {
     throw "Could not parse hex colour.";
   }
 
-  const aRgb = [
-    parseInt(aRgbHex[0], 16),
-    parseInt(aRgbHex[1], 16),
-    parseInt(aRgbHex[2], 16),
-  ];
+  const aRgb = [parseInt(aRgbHex[0], 16), parseInt(aRgbHex[1], 16), parseInt(aRgbHex[2], 16)];
 
   return aRgb;
 };
 
 /**
-* Parse INI file into a colour scheme object
-* @param data The INI file string data
-* @returns Object containing the parsed colour schemes
-*/
+ * Parse INI file into a colour scheme object
+ * @param data The INI file string data
+ * @returns Object containing the parsed colour schemes
+ */
 export const parseIni = (data: string) => {
   const regex = {
     section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
@@ -64,7 +63,7 @@ export const parseIni = (data: string) => {
   const value = {};
   const lines = data.split(/[\r\n]+/);
   let section = null;
-  lines.forEach(function(line) {
+  lines.forEach(function (line) {
     if (regex.comment.test(line)) {
       return;
     } else if (regex.param.test(line)) {
@@ -92,9 +91,9 @@ export const parseIni = (data: string) => {
 };
 
 /**
-* Loop through the snippets and add the contents of the code as a style tag in the DOM
-* @param snippets The snippets to initialize
-*/
+ * Loop through the snippets and add the contents of the code as a style tag in the DOM
+ * @param snippets The snippets to initialize
+ */
 // TODO: keep this in sync with the extension.js file
 export const initializeSnippets = (snippets: Snippet[]) => {
   // Remove any existing marketplace snippets
@@ -138,9 +137,7 @@ export const processAuthors = (authors: Author[], user: string) => {
   if (authors && authors.length > 0) {
     parsedAuthors = authors.map((author) => ({
       name: author.name,
-      url: author.url.startsWith("javascript:")
-        ? ""
-        : author.url,
+      url: author.url.startsWith("javascript:") ? "" : author.url,
     }));
   } else {
     parsedAuthors.push({
@@ -153,16 +150,14 @@ export const processAuthors = (authors: Author[], user: string) => {
 };
 
 /**
-* Generate a list of options for the schemes dropdown.
-* @param schemes The schemes object from the theme.
-* @returns Array of options for the schemes dropdown.
-*/
+ * Generate a list of options for the schemes dropdown.
+ * @param schemes The schemes object from the theme.
+ * @returns Array of options for the schemes dropdown.
+ */
 export const generateSchemesOptions = (schemes: SchemeIni) => {
   // e.g. [ { key: "red", value: "Red" }, { key: "dark", value: "Dark" } ]
   if (!schemes) return [];
-  return Object.keys(schemes).map(schemeName => (
-    { key: schemeName, value: schemeName } as SortBoxOption
-  ));
+  return Object.keys(schemes).map((schemeName) => ({ key: schemeName, value: schemeName } as SortBoxOption));
 };
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
@@ -278,15 +273,16 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 export const parseCSS = async (themeData: CardItem) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
 
-  const userCssUrl = themeData.cssURL.indexOf("raw.githubusercontent.com") > -1
-  // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-    ? `https://cdn.jsdelivr.net/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
-    : themeData.cssURL;
+  const userCssUrl =
+    themeData.cssURL.indexOf("raw.githubusercontent.com") > -1
+      ? // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+        `https://cdn.jsdelivr.net/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
+      : themeData.cssURL;
   // TODO: Make this more versatile
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
   console.log("Parsing CSS: ", userCssUrl);
-  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
+  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then((res) => res.text());
   // console.log("Parsed CSS: ", css);
 
   const urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
@@ -314,7 +310,9 @@ export const parseCSS = async (themeData: CardItem) => {
  * @returns { { user: string, repo: string, branch: string, filePath: string } }
  */
 export const getParamsFromGithubRaw = (url: string) => {
-  const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^/]+)\/(?<repo>[^/]+)\/(?<branch>[^/]+)\/(?<filePath>.+$)/);
+  const regex_result = url.match(
+    /https:\/\/raw\.githubusercontent\.com\/(?<user>[^/]+)\/(?<repo>[^/]+)\/(?<branch>[^/]+)\/(?<filePath>.+$)/,
+  );
   // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
   const obj = {
@@ -329,7 +327,7 @@ export const getParamsFromGithubRaw = (url: string) => {
 
 export function addToSessionStorage(items, key?) {
   if (!items || items == null) return;
-  items.forEach(item => {
+  items.forEach((item) => {
     if (!key) key = `${items.user}-${items.repo}`;
     // If the key already exists, it will append to it instead of overwriting it
     const existing = window.sessionStorage.getItem(key);
@@ -341,5 +339,5 @@ export function addToSessionStorage(items, key?) {
 
 // This function is used to sleep for a certain amount of time
 export function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

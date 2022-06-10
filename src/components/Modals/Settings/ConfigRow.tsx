@@ -26,9 +26,11 @@ const ConfigRow = (props: {
   };
 
   return (
-    <div className='setting-row'>
-      <label htmlFor={toggleId} className='col description'>{props.name}</label>
-      <div className='col action'>
+    <div className="setting-row">
+      <label htmlFor={toggleId} className="col description">
+        {props.name}
+      </label>
+      <div className="col action">
         <Toggle name={props.name} storageKey={props.storageKey} enabled={enabled} onChange={settingsToggleChange} />
       </div>
     </div>

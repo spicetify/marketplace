@@ -24,7 +24,7 @@ button.arrow-btn {
   align-items: center;
   border: 0px;
   border-radius: 50%;
-  background-color: rgba(var(--spice-rgb-shadow), .7);
+  background-color: rgba(var(--spice-rgb-shadow), 0.7);
   color: var(--spice-text);
   cursor: pointer;
   display: flex;
@@ -39,12 +39,13 @@ button.arrow-btn {
 
   &.disabled,
   &[disabled] {
-    color: rgba(var(--spice-rgb-text), .3);
+    color: rgba(var(--spice-rgb-text), 0.3);
   }
 }
 
 // Add snippet modal
-#marketplace-add-snippet-container input, textarea {
+#marketplace-add-snippet-container input,
+textarea {
   width: 100%;
   margin-bottom: 10px;
   padding: 3px 5px;

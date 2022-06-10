@@ -1,11 +1,12 @@
-@use '../constants.scss';
+@use "../constants.scss";
 
-$dropdown-text: rgba(var(--spice-rgb-text), .7);
+$dropdown-text: rgba(var(--spice-rgb-text), 0.7);
 $dropdown-text-hover: rgb(var(--spice-rgb-text));
 $dropdown-bg: var(--spice-sidebar);
 $dropdown-radius: constants.$btn-radius;
 
-.arrow-closed, .arrow-open {
+.arrow-closed,
+.arrow-open {
   border: solid $dropdown-text;
   border-width: 0 2px 2px 0;
   display: inline-block;
@@ -77,14 +78,14 @@ $dropdown-radius: constants.$btn-radius;
   border-color: $dropdown-text transparent transparent;
   border-style: solid;
   border-width: 5px 5px 0;
-  content: ' ';
+  content: " ";
   display: block;
   height: 0;
   margin-top: -ceil(2.5);
   position: absolute;
   right: 16px;
   top: 18px;
-  width: 0
+  width: 0;
 }
 
 // The expanded list

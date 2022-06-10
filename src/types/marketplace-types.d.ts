@@ -117,7 +117,7 @@ export type VisualConfig = {
   // of stargazers, and the subscribers_count isn't returned in the main API call we make
   // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
   followers: boolean;
-}
+};
 
 // example colour scheme
 // const exampleSchemes = {
@@ -144,12 +144,12 @@ export type SchemeIni = {
 
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js
-  visual: VisualConfig,
-  tabs: TabItemConfig[],
+  visual: VisualConfig;
+  tabs: TabItemConfig[];
   activeTab: string;
   theme: {
     activeThemeKey?: string;
     schemes?: SchemeIni;
     activeScheme?: string | null;
-  },
+  };
 };

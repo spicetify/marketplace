@@ -2,10 +2,7 @@ import React from "react";
 
 import { MAX_TAGS } from "../../constants";
 
-const TagsDiv = (props: {
-  tags: string[];
-  showTags: boolean;
-}) => {
+const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const generateTags = (tags) => {
@@ -13,11 +10,15 @@ const TagsDiv = (props: {
       // Render tags if enabled. Always render external JS tag
       if (props.showTags || tag === "external JS") {
         accum.push(
-          React.createElement("li", {
-            className: "marketplace-card__tag",
-            draggable: false,
-            "data-tag": tag,
-          }, tag),
+          React.createElement(
+            "li",
+            {
+              className: "marketplace-card__tag",
+              draggable: false,
+              "data-tag": tag,
+            },
+            tag,
+          ),
         );
       }
       return accum;
@@ -33,22 +34,20 @@ const TagsDiv = (props: {
   return (
     <div className="marketplace-card__tags-container">
       <ul className="marketplace-card__tags">
-        { generateTags(baseTags) }
-        { extraTags.length && expanded
-          ? generateTags(extraTags)
-          : null
-        }
+        {generateTags(baseTags)}
+        {extraTags.length && expanded ? generateTags(extraTags) : null}
       </ul>
-      { extraTags.length && !expanded
-        ? <button
+      {extraTags.length && !expanded ? (
+        <button
           className="marketplace-card__tags-more-btn"
           onClick={(e) => {
             e.stopPropagation();
             setExpanded(true);
           }}
-        >...</button>
-        : null
-      }
+        >
+          ...
+        </button>
+      ) : null}
     </div>
   );
 };

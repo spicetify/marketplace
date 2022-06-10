@@ -15,43 +15,45 @@ const getModalSettings = (
   props?: CardProps,
 ) => {
   switch (modalType) {
-  case "ADD_SNIPPET":
-    return {
-      title: "Add Snippet",
-      content: <SnippetModal type={modalType} />,
-      isLarge: true,
-    };
-  case "EDIT_SNIPPET":
-    return {
-      title: "Edit Snippet",
-      content: <SnippetModal type={modalType} content={props as CardProps} />,
-      isLarge: true,
-    };
-  case "VIEW_SNIPPET":
-    return {
-      title: "View Snippet",
-      content: <SnippetModal type={modalType} content={props as CardProps} />,
-      isLarge: true,
-    };
-  case "RELOAD":
-    return {
-      title: "Reload",
-      content: <ReloadModal />,
-      isLarge: false,
-    };
-  case "SETTINGS":
-    return {
-      title: "Settings",
-      // TODO: If I just use {CONFIG}, it nests it inside another object...
-      content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
-      isLarge: true,
-    };
-  default:
-    return {
-      title: "",
-      content: <div />,
-      isLarge: false,
-    };
+    case "ADD_SNIPPET":
+      return {
+        title: "Add Snippet",
+        content: <SnippetModal type={modalType} />,
+        isLarge: true,
+      };
+    case "EDIT_SNIPPET":
+      return {
+        title: "Edit Snippet",
+        content: <SnippetModal type={modalType} content={props as CardProps} />,
+        isLarge: true,
+      };
+    case "VIEW_SNIPPET":
+      return {
+        title: "View Snippet",
+        content: <SnippetModal type={modalType} content={props as CardProps} />,
+        isLarge: true,
+      };
+    case "RELOAD":
+      return {
+        title: "Reload",
+        content: <ReloadModal />,
+        isLarge: false,
+      };
+    case "SETTINGS":
+      return {
+        title: "Settings",
+        // TODO: If I just use {CONFIG}, it nests it inside another object...
+        content: (
+          <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />
+        ),
+        isLarge: true,
+      };
+    default:
+      return {
+        title: "",
+        content: <div />,
+        isLarge: false,
+      };
   }
 };
 
