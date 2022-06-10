@@ -15,7 +15,6 @@ module.exports = {
   },
   plugins: ["react", "prettier", "@typescript-eslint"],
   rules: {
-    indent: [0],
     "linebreak-style": ["error", "unix"],
     quotes: ["error", "double", { allowTemplateLiterals: true }],
     semi: ["error", "always"],
