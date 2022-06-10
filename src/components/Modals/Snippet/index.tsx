@@ -16,9 +16,12 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
   const [description, setDescription] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "");
   const [imageURL, setimageURL] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.imageURL || "");
 
+  const processName = () => name.replace(/\n/g, "").replaceAll(" ", "-");
+  const processCode = () => code.replace(/\n/g, "\\n");
+
   const saveSnippet = () => {
-    const processedCode = code.replace(/\n/g, "");
-    const processedName = name.replace(/\n/g, "").replaceAll(" ", "-");
+    const processedCode = processCode();
+    const processedName = processName();
     const processedDescription = description.trim();
 
     const localStorageKey = `marketplace:installed:snippet:${processedName}`;
@@ -135,7 +138,8 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
         {imageURL && <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview"/>}
       </div>
       {props.type !== "VIEW_SNIPPET"
-        ? <Button onClick={saveSnippet}>
+        // Disable the save button if the name or code are empty
+        ? <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
           Save CSS
         </Button>
         : <></>}
