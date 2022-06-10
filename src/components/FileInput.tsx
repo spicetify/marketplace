@@ -20,7 +20,9 @@ const FileInput = (props: FileInputProps) => (
     <label style={{ display: "block", textAlign: "center" }}>
       {!props.disabled && (
         // Don't render label if not editable
-        <span>{props.value.length ? "Click to change image" : "Click to add image"}</span>
+        <span>
+          {props.value.length ? "Click to change image" : "Click to add image"}
+        </span>
       )}
       <input
         id={props.id}
@@ -28,7 +30,7 @@ const FileInput = (props: FileInputProps) => (
         // {...rest}
         style={{ display: "none" }}
         type="file"
-        onChange={(e) => {
+        onChange={e => {
           props.onChange(e.target.files?.[0]);
         }}
       />

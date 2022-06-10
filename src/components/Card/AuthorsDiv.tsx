@@ -15,7 +15,7 @@ const AuthorsDiv = (props: { authors: Author[] }) => {
             dir="auto"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
             key={index}
           >
             {author.name}

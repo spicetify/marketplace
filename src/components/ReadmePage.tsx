@@ -28,7 +28,10 @@ class ReadmePage extends React.Component<
   async getReadmeHTML() {
     try {
       const readmeTextRes = await fetch(this.props.data.readmeURL);
-      if (!readmeTextRes.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${readmeTextRes.status})`);
+      if (!readmeTextRes.ok)
+        throw Spicetify.showNotification(
+          `Error loading README (HTTP ${readmeTextRes.status})`,
+        );
 
       const readmeText = await readmeTextRes.text();
 
@@ -42,7 +45,10 @@ class ReadmePage extends React.Component<
         method: "POST",
         body: JSON.stringify(postBody),
       });
-      if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
+      if (!readmeHtmlRes.ok)
+        throw Spicetify.showNotification(
+          `Error parsing README (HTTP ${readmeHtmlRes.status})`,
+        );
 
       const readmeHtml = await readmeHtmlRes.text();
 
@@ -58,7 +64,7 @@ class ReadmePage extends React.Component<
 
   componentDidMount() {
     // Get and set readme html once loaded
-    this.getReadmeHTML().then((html) => {
+    this.getReadmeHTML().then(html => {
       if (html == null) return;
       this.setState({ html });
     });
@@ -69,10 +75,10 @@ class ReadmePage extends React.Component<
     // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
     // This works for urls relative to the repo root
-    document.querySelectorAll("#marketplace-readme img").forEach((img) => {
+    document.querySelectorAll("#marketplace-readme img").forEach(img => {
       img.addEventListener(
         "error",
-        (e) => {
+        e => {
           const element = e.target as HTMLImageElement;
           const originalSrc = element.getAttribute("src");
           const fixedSrc = `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc}`;

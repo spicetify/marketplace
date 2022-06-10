@@ -28,11 +28,13 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
   const closeButton = document.querySelector(
     "body > generic-modal button.main-trackCreditsModal-closeBtn",
   ) as HTMLElement;
-  const modalOverlay = document.querySelector("body > generic-modal > div") as HTMLElement;
+  const modalOverlay = document.querySelector(
+    "body > generic-modal > div",
+  ) as HTMLElement;
   if (closeButton && modalOverlay) {
     closeButton.onclick = () => location.reload();
     closeButton.setAttribute("style", "cursor: pointer;");
-    modalOverlay.onclick = (e) => {
+    modalOverlay.onclick = e => {
       // If clicked on overlay, also reload
       if (e.target === modalOverlay) {
         location.reload();
@@ -43,8 +45,18 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
   return (
     <div id="marketplace-config-container">
       <h2>Options</h2>
-      <ConfigRow name="Stars count" storageKey="stars" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name="Tags" storageKey="tags" modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow
+        name="Stars count"
+        storageKey="stars"
+        modalConfig={modalConfig}
+        updateConfig={updateConfig}
+      />
+      <ConfigRow
+        name="Tags"
+        storageKey="tags"
+        modalConfig={modalConfig}
+        updateConfig={updateConfig}
+      />
       <ConfigRow
         name="Hide installed when browsing"
         storageKey="hideInstalled"
@@ -60,12 +72,21 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <h2>Tabs</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {
-          return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
+          return (
+            <TabRow
+              key={index}
+              name={name}
+              modalConfig={modalConfig}
+              updateConfig={updateConfig}
+            />
+          );
         })}
       </div>
       <h2>Reset</h2>
       <div className="setting-row">
-        <label className="col description">Uninstall all extensions and themes, and reset preferences</label>
+        <label className="col description">
+          Uninstall all extensions and themes, and reset preferences
+        </label>
         <div className="col action">
           <Button onClick={resetMarketplace}>Reset</Button>
         </div>

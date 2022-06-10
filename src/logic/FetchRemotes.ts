@@ -12,7 +12,11 @@ import snippetsJSON from "../../resources/snippets.json";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getExtensionRepos(page = 1, BLACKLIST: string[] = [], query?: string) {
+export async function getExtensionRepos(
+  page = 1,
+  BLACKLIST: string[] = [],
+  query?: string,
+) {
   // www is needed or it will block with "cross-origin" error.
   let url = query
     ? `https://api.github.com/search/repositories?q=${encodeURIComponent(
@@ -29,7 +33,7 @@ export async function getExtensionRepos(page = 1, BLACKLIST: string[] = [], quer
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
   const allRepos = await fetch(url)
-    .then((res) => res.json())
+    .then(res => res.json())
     .catch(() => []);
   if (!allRepos.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.");
@@ -39,7 +43,7 @@ export async function getExtensionRepos(page = 1, BLACKLIST: string[] = [], quer
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url)),
+    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
   };
 
   return filteredResults;
@@ -56,16 +60,18 @@ export async function getExtensionRepos(page = 1, BLACKLIST: string[] = [], quer
  */
 async function getRepoManifest(user: string, repo: string, branch: string) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
-  const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
+  const failedSessionStorageItems =
+    window.sessionStorage.getItem("noManifests");
   if (sessionStorageItem) return JSON.parse(sessionStorageItem);
 
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
   if (failedSessionStorageItems?.includes(url)) return null;
 
   const manifest = await fetch(url)
-    .then((res) => res.json())
+    .then(res => res.json())
     .catch(() => addToSessionStorage([url], "noManifests"));
-  if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+  if (manifest)
+    window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
 
   return manifest;
 }
@@ -87,7 +93,9 @@ export async function fetchExtensionManifest(
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     let manifests;
-    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+    const regex_result = contents_url.match(
+      /https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/,
+    );
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
@@ -127,7 +135,14 @@ export async function fetchExtensionManifest(
       // If manifest is valid, add it to the list
       if (manifest && manifest.name && manifest.description && manifest.main) {
         // Add to list unless we're hiding installed items and it's installed
-        if (!(hideInstalled && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`)))
+        if (
+          !(
+            hideInstalled &&
+            localStorage.getItem(
+              "marketplace:installed:" + `${user}/${repo}/${manifest.main}`,
+            )
+          )
+        )
           accum.push(item);
       }
       // else {
@@ -152,10 +167,16 @@ export async function fetchExtensionManifest(
  * @param stars The number of stars the repo has
  * @returns Extension info for card (or null)
  */
-export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
+export async function fetchThemeManifest(
+  contents_url: string,
+  branch: string,
+  stars: number,
+) {
   try {
     let manifests;
-    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+    const regex_result = contents_url.match(
+      /https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/,
+    );
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
@@ -217,7 +238,11 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
  * @param {number} page The page to get (defaults to 1)
  * @returns Array of GitHub API results, filtered through the blacklist
  */
-export async function getThemeRepos(page = 1, BLACKLIST: string[] = [], query?: string) {
+export async function getThemeRepos(
+  page = 1,
+  BLACKLIST: string[] = [],
+  query?: string,
+) {
   let url = query
     ? `https://api.github.com/search/repositories?q=${encodeURIComponent(
         `${query}+topic:spicetify-extensions`,
@@ -233,16 +258,17 @@ export async function getThemeRepos(page = 1, BLACKLIST: string[] = [], query?: 
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
   const allThemes = await fetch(url)
-    .then((res) => res.json())
+    .then(res => res.json())
     .catch(() => []);
-  if (!allThemes.items) Spicetify.showNotification("Too Many Requests, Cool Down.");
+  if (!allThemes.items)
+    Spicetify.showNotification("Too Many Requests, Cool Down.");
 
   const filteredResults = {
     ...allThemes,
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allThemes.items.length,
-    items: allThemes.items.filter((item) => !BLACKLIST.includes(item.html_url)),
+    items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
   };
 
   return filteredResults;
@@ -254,7 +280,7 @@ export async function getThemeRepos(page = 1, BLACKLIST: string[] = [], query?: 
  */
 export const getBlacklist = async () => {
   const json = await fetch(BLACKLIST_URL)
-    .then((res) => res.json())
+    .then(res => res.json())
     .catch(() => ({}));
   return json.repos as string[] | undefined;
 };

@@ -13,7 +13,7 @@ const SortBox = (props: Props) => {
     props.onChange(item.value);
   };
 
-  const options: Option[] = props.sortBoxOptions.map((item) => {
+  const options: Option[] = props.sortBoxOptions.map(item => {
     return {
       value: item.key,
       label: item.value,
@@ -28,7 +28,12 @@ const SortBox = (props: Props) => {
       <div className="marketplace-sortBox-header">
         <div className="marketplace-sortBox-header-title"></div>
 
-        <Dropdown placeholder="Select an option" options={options} value={sortBySelected?.key} onChange={_onSelect} />
+        <Dropdown
+          placeholder="Select an option"
+          options={options}
+          value={sortBySelected?.key}
+          onChange={_onSelect}
+        />
       </div>
     </div>
   );

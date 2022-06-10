@@ -13,7 +13,7 @@ const ConfigRow = (props: {
   const toggleId = `toggle:${props.storageKey}`;
   const enabled = !!props.modalConfig.visual[props.storageKey];
 
-  const settingsToggleChange = (e) => {
+  const settingsToggleChange = e => {
     const state = e.target.checked;
     const storageKey = e.target.dataset.storageKey;
     props.modalConfig.visual[storageKey] = state;
@@ -31,7 +31,12 @@ const ConfigRow = (props: {
         {props.name}
       </label>
       <div className="col action">
-        <Toggle name={props.name} storageKey={props.storageKey} enabled={enabled} onChange={settingsToggleChange} />
+        <Toggle
+          name={props.name}
+          storageKey={props.storageKey}
+          enabled={enabled}
+          onChange={settingsToggleChange}
+        />
       </div>
     </div>
   );

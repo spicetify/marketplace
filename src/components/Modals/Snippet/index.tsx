@@ -3,7 +3,11 @@ import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-css";
 
-import { getLocalStorageDataFromKey, initializeSnippets, fileToBase64 } from "../../../logic/Utils";
+import {
+  getLocalStorageDataFromKey,
+  initializeSnippets,
+  fileToBase64,
+} from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import Button from "../../Button";
 import { CardProps } from "../../Card/Card";
@@ -12,8 +16,12 @@ import FileInput from "../../FileInput";
 
 const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
-  const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
-  const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
+  const [code, setCode] = React.useState(
+    props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "",
+  );
+  const [name, setName] = React.useState(
+    props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "",
+  );
   const [description, setDescription] = React.useState(
     props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "",
   );
@@ -30,7 +38,10 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
     const processedDescription = description.trim();
 
     const localStorageKey = `marketplace:installed:snippet:${processedName}`;
-    if (getLocalStorageDataFromKey(localStorageKey) && props.type !== "EDIT_SNIPPET") {
+    if (
+      getLocalStorageDataFromKey(localStorageKey) &&
+      props.type !== "EDIT_SNIPPET"
+    ) {
       Spicetify.showNotification("That name is already taken!");
       return;
     }
@@ -40,12 +51,21 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
       // Remove from installed list
       console.log(`Deleting outdated snippet: ${props.content.item.title}`);
 
-      localStorage.removeItem(`marketplace:installed:snippet:${props.content.item.title}`);
-      const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-      const remainingInstalledSnippetKeys = installedSnippetKeys.filter(
-        (key: string) => key !== `marketplace:installed:snippet:${props.content?.item.title}`,
+      localStorage.removeItem(
+        `marketplace:installed:snippet:${props.content.item.title}`,
       );
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
+      const installedSnippetKeys = getLocalStorageDataFromKey(
+        LOCALSTORAGE_KEYS.installedSnippets,
+        [],
+      );
+      const remainingInstalledSnippetKeys = installedSnippetKeys.filter(
+        (key: string) =>
+          key !== `marketplace:installed:snippet:${props.content?.item.title}`,
+      );
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedSnippets,
+        JSON.stringify(remainingInstalledSnippetKeys),
+      );
     }
 
     localStorage.setItem(
@@ -60,13 +80,21 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
     );
 
     // Add to installed list if not there already
-    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+    const installedSnippetKeys = getLocalStorageDataFromKey(
+      LOCALSTORAGE_KEYS.installedSnippets,
+      [],
+    );
     if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
       installedSnippetKeys.push(localStorageKey);
       console.log(installedSnippetKeys);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedSnippets,
+        JSON.stringify(installedSnippetKeys),
+      );
     }
-    const installedSnippets = installedSnippetKeys.map((key: string) => getLocalStorageDataFromKey(key));
+    const installedSnippets = installedSnippetKeys.map((key: string) =>
+      getLocalStorageDataFromKey(key),
+    );
     initializeSnippets(installedSnippets);
 
     Spicetify.PopupModal.hide();
@@ -80,8 +108,8 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
         <div className="marketplace-customCSS-editor-wrapper">
           <Editor
             value={code}
-            onValueChange={(code) => setCode(code)}
-            highlight={(code) => highlight(code, languages.css)}
+            onValueChange={code => setCode(code)}
+            highlight={code => highlight(code, languages.css)}
             textareaId="marketplace-custom-css"
             textareaClassName="snippet-code-editor"
             readOnly={props.type === "VIEW_SNIPPET"}
@@ -100,25 +128,29 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
         <input
           id="marketplace-customCSS-name-submit"
           value={name}
-          onChange={(e) => {
+          onChange={e => {
             if (props.type !== "VIEW_SNIPPET") setName(e.target.value);
           }}
           placeholder="Enter a name for your custom snippet."
         />
       </div>
       <div className="marketplace-customCSS-input-container">
-        <label htmlFor="marketplace-customCSS-description-submit">Snippet Description</label>
+        <label htmlFor="marketplace-customCSS-description-submit">
+          Snippet Description
+        </label>
         <input
           id="marketplace-customCSS-description-submit"
           value={description}
-          onChange={(e) => {
+          onChange={e => {
             if (props.type !== "VIEW_SNIPPET") setDescription(e.target.value);
           }}
           placeholder="Enter a description for your custom snippet."
         />
       </div>
       <div className="marketplace-customCSS-input-container">
-        <label htmlFor={PREVIEW_IMAGE_ID}>Snippet Preview {props.type !== "VIEW_SNIPPET" && "(optional)"}</label>
+        <label htmlFor={PREVIEW_IMAGE_ID}>
+          Snippet Preview {props.type !== "VIEW_SNIPPET" && "(optional)"}
+        </label>
         <FileInput
           id={PREVIEW_IMAGE_ID}
           disabled={props.type === "VIEW_SNIPPET"}
@@ -141,13 +173,20 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType }) => {
         />
         {imageURL && (
           <label htmlFor={PREVIEW_IMAGE_ID} style={{ textAlign: "center" }}>
-            <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview" />
+            <img
+              className="marketplace-customCSS-image-preview"
+              src={imageURL}
+              alt="Preview"
+            />
           </label>
         )}
       </div>
       {props.type !== "VIEW_SNIPPET" ? (
         // Disable the save button if the name or code are empty
-        <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
+        <Button
+          onClick={saveSnippet}
+          disabled={!processName() || !processCode()}
+        >
           Save CSS
         </Button>
       ) : (

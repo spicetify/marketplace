@@ -5,7 +5,7 @@ import { MAX_TAGS } from "../../constants";
 const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  const generateTags = (tags) => {
+  const generateTags = tags => {
     return tags.reduce((accum, tag) => {
       // Render tags if enabled. Always render external JS tag
       if (props.showTags || tag === "external JS") {
@@ -40,7 +40,7 @@ const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
       {extraTags.length && !expanded ? (
         <button
           className="marketplace-card__tags-more-btn"
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             setExpanded(true);
           }}

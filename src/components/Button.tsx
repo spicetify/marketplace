@@ -21,7 +21,12 @@ const Button = (props: {
   if (props.classes) classList.push(...props.classes);
 
   return (
-    <button className={classList.join(" ")} onClick={props.onClick} aria-label={props.label} disabled={props.disabled}>
+    <button
+      className={classList.join(" ")}
+      onClick={props.onClick}
+      aria-label={props.label}
+      disabled={props.disabled}
+    >
       {props.children}
     </button>
   );

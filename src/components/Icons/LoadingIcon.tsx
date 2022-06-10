@@ -18,8 +18,20 @@ const LoadingIcon = () => {
   //   })));
 
   return (
-    <svg width="100px" height="100px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
-      <circle cx="50" cy="50" r="0" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      width="100px"
+      height="100px"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid"
+    >
+      <circle
+        cx="50"
+        cy="50"
+        r="0"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
         <animate
           attributeName="r"
           repeatCount="indefinite"
@@ -41,7 +53,14 @@ const LoadingIcon = () => {
           begin="0s"
         />
       </circle>
-      <circle cx="50" cy="50" r="0" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle
+        cx="50"
+        cy="50"
+        r="0"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
         <animate
           attributeName="r"
           repeatCount="indefinite"

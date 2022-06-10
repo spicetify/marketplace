@@ -1,6 +1,8 @@
 import React from "react";
 
-export default class LoadMoreIcon extends React.Component<{ onClick: () => void }> {
+export default class LoadMoreIcon extends React.Component<{
+  onClick: () => void;
+}> {
   render() {
     return (
       <div onClick={this.props.onClick}>

@@ -6,7 +6,12 @@ import ReloadModal from "../components/Modals/Reload";
 import SettingsModal from "../components/Modals/Settings";
 import { CardProps } from "../components/Card/Card";
 
-export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS";
+export type ModalType =
+  | "ADD_SNIPPET"
+  | "EDIT_SNIPPET"
+  | "VIEW_SNIPPET"
+  | "RELOAD"
+  | "SETTINGS";
 
 const getModalSettings = (
   modalType: ModalType,
@@ -44,7 +49,10 @@ const getModalSettings = (
         title: "Settings",
         // TODO: If I just use {CONFIG}, it nests it inside another object...
         content: (
-          <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />
+          <SettingsModal
+            CONFIG={CONFIG as Config}
+            updateAppConfig={updateAppConfig as (CONFIG: Config) => void}
+          />
         ),
         isLarge: true,
       };
@@ -64,7 +72,12 @@ export const openModal = (
   props?: CardProps,
 ) => {
   const triggerModal = () => {
-    const modalSettings = getModalSettings(modal, CONFIG, updateAppConfig, props);
+    const modalSettings = getModalSettings(
+      modal,
+      CONFIG,
+      updateAppConfig,
+      props,
+    );
     Spicetify.PopupModal.display(modalSettings);
   };
 

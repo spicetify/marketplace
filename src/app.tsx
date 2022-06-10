@@ -38,7 +38,7 @@ class App extends React.Component<null, { count: number; CONFIG: Config }> {
         throw new Error("Could not parse marketplace tabs key");
       } else if (tabs.length === 0) {
         throw new Error("Empty marketplace tabs key");
-      } else if (tabs.filter((tab) => !tab).length > 0) {
+      } else if (tabs.filter(tab => !tab).length > 0) {
         throw new Error("Falsey marketplace tabs key");
       }
     } catch {
@@ -50,9 +50,15 @@ class App extends React.Component<null, { count: number; CONFIG: Config }> {
     let schemes = {};
     let activeScheme = null;
     try {
-      const installedThemeKey = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled, null);
+      const installedThemeKey = getLocalStorageDataFromKey(
+        LOCALSTORAGE_KEYS.themeInstalled,
+        null,
+      );
       if (installedThemeKey) {
-        const installedTheme = getLocalStorageDataFromKey(installedThemeKey, null);
+        const installedTheme = getLocalStorageDataFromKey(
+          installedThemeKey,
+          null,
+        );
         if (!installedTheme) throw new Error("No installed theme data");
 
         schemes = installedTheme.schemes;
@@ -67,27 +73,44 @@ class App extends React.Component<null, { count: number; CONFIG: Config }> {
     this.CONFIG = {
       // Fetch the settings and set defaults. Used in Settings.js
       visual: {
-        stars: JSON.parse(getLocalStorageDataFromKey("marketplace:stars", true)),
+        stars: JSON.parse(
+          getLocalStorageDataFromKey("marketplace:stars", true),
+        ),
         tags: JSON.parse(getLocalStorageDataFromKey("marketplace:tags", true)),
-        hideInstalled: JSON.parse(getLocalStorageDataFromKey("marketplace:hideInstalled", false)),
-        colorShift: JSON.parse(getLocalStorageDataFromKey("marketplace:colorShift", false)),
+        hideInstalled: JSON.parse(
+          getLocalStorageDataFromKey("marketplace:hideInstalled", false),
+        ),
+        colorShift: JSON.parse(
+          getLocalStorageDataFromKey("marketplace:colorShift", false),
+        ),
         // Legacy from reddit app
         type: JSON.parse(getLocalStorageDataFromKey("marketplace:type", false)),
         // I was considering adding watchers as "followers" but it looks like the value is a duplicate
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
-        followers: JSON.parse(getLocalStorageDataFromKey("marketplace:followers", false)),
+        followers: JSON.parse(
+          getLocalStorageDataFromKey("marketplace:followers", false),
+        ),
       },
       tabs,
-      activeTab: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.activeTab, tabs[0]),
+      activeTab: getLocalStorageDataFromKey(
+        LOCALSTORAGE_KEYS.activeTab,
+        tabs[0],
+      ),
       theme: {
-        activeThemeKey: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.themeInstalled, null),
+        activeThemeKey: getLocalStorageDataFromKey(
+          LOCALSTORAGE_KEYS.themeInstalled,
+          null,
+        ),
         schemes,
         activeScheme,
       },
     };
 
-    if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter((tab) => tab.name === this.CONFIG.activeTab).length) {
+    if (
+      !this.CONFIG.activeTab ||
+      !this.CONFIG.tabs.filter(tab => tab.name === this.CONFIG.activeTab).length
+    ) {
       this.CONFIG.activeTab = this.CONFIG.tabs[0].name;
     }
   }
@@ -105,10 +128,21 @@ class App extends React.Component<null, { count: number; CONFIG: Config }> {
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
     if (location.pathname === `${CUSTOM_APP_PATH}/readme`) {
-      return <ReadmePage title="Spicetify Marketplace - Readme" data={location.state.data} />;
+      return (
+        <ReadmePage
+          title="Spicetify Marketplace - Readme"
+          data={location.state.data}
+        />
+      );
     } // Otherwise, render the main Grid
     else {
-      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
+      return (
+        <Grid
+          title="Spicetify Marketplace"
+          CONFIG={this.CONFIG}
+          updateAppConfig={this.updateConfig}
+        />
+      );
     }
   }
 }

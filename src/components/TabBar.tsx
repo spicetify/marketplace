@@ -25,14 +25,16 @@ class TabBarItem extends React.Component<{
       <li
         className="marketplace-tabBar-headerItem"
         data-tab={this.props.item.value}
-        onClick={(event) => {
+        onClick={event => {
           event.preventDefault();
           this.props.switchTo(this.props.item.key as TabType);
         }}
       >
         <a
           aria-current="page"
-          className={`marketplace-tabBar-headerItemLink ${this.props.item.active ? "marketplace-tabBar-active" : ""}`}
+          className={`marketplace-tabBar-headerItemLink ${
+            this.props.item.active ? "marketplace-tabBar-active" : ""
+          }`}
           draggable="false"
           href=""
         >
@@ -47,10 +49,13 @@ interface TabBarMoreProps {
   items: TabOptionConfig[];
   switchTo: (value: TabType) => void;
 }
-const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({ items, switchTo }: TabBarMoreProps) {
+const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({
+  items,
+  switchTo,
+}: TabBarMoreProps) {
   // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
   // Transform this into the format that react-dropdown expects
-  const transformedOptions: Option[] = items.map((item) => {
+  const transformedOptions: Option[] = items.map(item => {
     return {
       value: item.key,
       label: item.value,
@@ -88,7 +93,9 @@ export const TopBarContent = (props: {
   activeLink: string;
   switchCallback: (value: TabType) => void;
 }) => {
-  const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
+  const resizeHost = document.querySelector(
+    ".Root__main-view .os-resize-observer-host",
+  );
   if (!resizeHost) return null;
 
   const [windowSize, setWindowSize] = useState(resizeHost.clientWidth);
@@ -146,7 +153,7 @@ const TabBar = React.memo<TabBarProps>(function TabBar({
     if (!tabBarRef.current) return;
 
     const children = Array.from(tabBarRef.current.children);
-    const tabbarItemSizes = children.map((child) => child.clientWidth);
+    const tabbarItemSizes = children.map(child => child.clientWidth);
 
     setChildrenSizes(tabbarItemSizes);
   }, [links]);
@@ -188,11 +195,14 @@ const TabBar = React.memo<TabBarProps>(function TabBar({
       <ul className="marketplace-tabBar-header" ref={tabBarRef}>
         {options
           .filter((_, id) => !droplistItem.includes(id))
-          .map((item) => (
+          .map(item => (
             <TabBarItem key={item.key} item={item} switchTo={switchCallback} />
           ))}
         {droplistItem.length || childrenSizes.length === 0 ? (
-          <TabBarMore items={droplistItem.map((i) => options[i]).filter((i) => i)} switchTo={switchCallback} />
+          <TabBarMore
+            items={droplistItem.map(i => options[i]).filter(i => i)}
+            switchTo={switchCallback}
+          />
         ) : null}
       </ul>
     </nav>

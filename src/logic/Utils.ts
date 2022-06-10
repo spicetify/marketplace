@@ -1,4 +1,10 @@
-import { Author, CardItem, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import {
+  Author,
+  CardItem,
+  SchemeIni,
+  Snippet,
+  SortBoxOption,
+} from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -31,7 +37,7 @@ const hexToRGB = (hex: string) => {
   if (hex.length === 3) {
     hex = hex
       .split("")
-      .map((char) => char + char)
+      .map(char => char + char)
       .join("");
   } else if (hex.length != 6) {
     throw "Only 3- or 6-digit hex colours are allowed.";
@@ -44,7 +50,11 @@ const hexToRGB = (hex: string) => {
     throw "Could not parse hex colour.";
   }
 
-  const aRgb = [parseInt(aRgbHex[0], 16), parseInt(aRgbHex[1], 16), parseInt(aRgbHex[2], 16)];
+  const aRgb = [
+    parseInt(aRgbHex[0], 16),
+    parseInt(aRgbHex[1], 16),
+    parseInt(aRgbHex[2], 16),
+  ];
 
   return aRgb;
 };
@@ -119,7 +129,7 @@ export const fileToBase64 = (file: File) => {
     reader.onload = () => {
       resolve(reader.result as string);
     };
-    reader.onerror = (error) => {
+    reader.onerror = error => {
       reject(error);
     };
   });
@@ -135,7 +145,7 @@ export const processAuthors = (authors: Author[], user: string) => {
   let parsedAuthors: Author[] = [];
 
   if (authors && authors.length > 0) {
-    parsedAuthors = authors.map((author) => ({
+    parsedAuthors = authors.map(author => ({
       name: author.name,
       url: author.url.startsWith("javascript:") ? "" : author.url,
     }));
@@ -157,7 +167,9 @@ export const processAuthors = (authors: Author[], user: string) => {
 export const generateSchemesOptions = (schemes: SchemeIni) => {
   // e.g. [ { key: "red", value: "Red" }, { key: "dark", value: "Dark" } ]
   if (!schemes) return [];
-  return Object.keys(schemes).map((schemeName) => ({ key: schemeName, value: schemeName } as SortBoxOption));
+  return Object.keys(schemes).map(
+    schemeName => ({ key: schemeName, value: schemeName } as SortBoxOption),
+  );
 };
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
@@ -165,7 +177,7 @@ export const resetMarketplace = () => {
   console.log("Resetting Marketplace");
 
   // Loop through and reset marketplace keys
-  Object.keys(localStorage).forEach((key) => {
+  Object.keys(localStorage).forEach(key => {
     if (key.startsWith("marketplace:")) {
       localStorage.removeItem(key);
       console.log(`Removed ${key}`);
@@ -177,13 +189,15 @@ export const resetMarketplace = () => {
 };
 
 // NOTE: Keep in sync with extension.js
-export const injectColourScheme = (scheme) => {
+export const injectColourScheme = scheme => {
   // Remove any existing Spicetify scheme
   const existingColorsCSS = document.querySelector("link[href='colors.css']");
   if (existingColorsCSS) existingColorsCSS.remove();
 
   // Remove any existing marketplace scheme
-  const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
+  const existingMarketplaceSchemeCSS = document.querySelector(
+    "style.marketplaceCSS.marketplaceScheme",
+  );
   if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
 
   if (scheme) {
@@ -194,7 +208,7 @@ export const injectColourScheme = (scheme) => {
 
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
-    themeIniKeys.forEach((key) => {
+    themeIniKeys.forEach(key => {
       injectStr += `--spice-${key}: #${scheme[key]};`;
       injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
     });
@@ -218,11 +232,15 @@ export const injectColourScheme = (scheme) => {
 export const injectUserCSS = (userCSS?: string) => {
   try {
     // Remove any existing Spicetify user.css
-    const existingUserThemeCSS = document.querySelector("link[href='user.css']");
+    const existingUserThemeCSS = document.querySelector(
+      "link[href='user.css']",
+    );
     if (existingUserThemeCSS) existingUserThemeCSS.remove();
 
     // Remove any existing marketplace scheme
-    const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
+    const existingMarketplaceUserCSS = document.querySelector(
+      "style.marketplaceCSS.marketplaceUserCSS",
+    );
     if (existingMarketplaceUserCSS) existingMarketplaceUserCSS.remove();
 
     if (userCSS) {
@@ -282,7 +300,9 @@ export const parseCSS = async (themeData: CardItem) => {
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
   console.log("Parsing CSS: ", userCssUrl);
-  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then((res) => res.text());
+  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res =>
+    res.text(),
+  );
   // console.log("Parsed CSS: ", css);
 
   const urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
@@ -327,7 +347,7 @@ export const getParamsFromGithubRaw = (url: string) => {
 
 export function addToSessionStorage(items, key?) {
   if (!items || items == null) return;
-  items.forEach((item) => {
+  items.forEach(item => {
     if (!key) key = `${items.user}-${items.repo}`;
     // If the key already exists, it will append to it instead of overwriting it
     const existing = window.sessionStorage.getItem(key);
@@ -339,5 +359,5 @@ export function addToSessionStorage(items, key?) {
 
 // This function is used to sleep for a certain amount of time
 export function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

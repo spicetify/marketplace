@@ -1,8 +1,25 @@
 import React from "react";
-import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
+import {
+  CardItem,
+  CardType,
+  Config,
+  SchemeIni,
+  Snippet,
+  VisualConfig,
+} from "../../types/marketplace-types";
 
-import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
-import { getLocalStorageDataFromKey, parseIni, initializeSnippets, parseCSS, injectUserCSS } from "../../logic/Utils";
+import {
+  LOCALSTORAGE_KEYS,
+  CUSTOM_APP_PATH,
+  SNIPPETS_PAGE_URL,
+} from "../../constants";
+import {
+  getLocalStorageDataFromKey,
+  parseIni,
+  initializeSnippets,
+  parseCSS,
+  injectUserCSS,
+} from "../../logic/Utils";
 import TrashIcon from "../Icons/TrashIcon";
 import DownloadIcon from "../Icons/DownloadIcon";
 import { openModal } from "../../logic/LaunchModals";
@@ -54,12 +71,18 @@ export default class Card extends React.Component<
     // this.menuType = Spicetify.ReactComponent.Menu | "div";
     this.menuType = Spicetify.ReactComponent.Menu;
 
-    const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
+    const prefix =
+      props.type === "snippet"
+        ? "snippet:"
+        : `${props.item.user}/${props.item.repo}/`;
 
     let cardId = "";
-    if (props.type === "snippet") cardId = props.item.title.replaceAll(" ", "-");
-    else if (props.type === "theme") cardId = props.item.manifest?.usercss || "";
-    else if (props.type === "extension") cardId = props.item.manifest?.main || "";
+    if (props.type === "snippet")
+      cardId = props.item.title.replaceAll(" ", "-");
+    else if (props.type === "theme")
+      cardId = props.item.manifest?.usercss || "";
+    else if (props.type === "extension")
+      cardId = props.item.manifest?.main || "";
 
     this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
@@ -96,11 +119,13 @@ export default class Card extends React.Component<
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
-      const repoData = await fetch(url).then((res) => res.json());
+      const repoData = await fetch(url).then(res => res.json());
 
       if (this.state.stars !== repoData.stargazers_count) {
         this.setState({ stars: repoData.stargazers_count }, () => {
-          console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
+          console.log(
+            `Stars updated to: ${this.state.stars}; updating localstorage.`,
+          );
           this.installExtension();
         });
       }
@@ -118,7 +143,9 @@ export default class Card extends React.Component<
       openModal("RELOAD");
     } else if (this.props.type === "theme") {
       const themeKey = localStorage.getItem("marketplace:theme-installed");
-      const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
+      const previousTheme = themeKey
+        ? getLocalStorageDataFromKey(themeKey, {})
+        : {};
       console.log(previousTheme);
       console.log(themeKey);
 
@@ -132,7 +159,8 @@ export default class Card extends React.Component<
       }
 
       // If the new or previous theme has JS, prompt to reload
-      if (this.props.item.manifest?.include || previousTheme.include) openModal("RELOAD");
+      if (this.props.item.manifest?.include || previousTheme.include)
+        openModal("RELOAD");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.log("Snippet already installed, removing");
@@ -168,10 +196,16 @@ export default class Card extends React.Component<
     );
 
     // Add to installed list if not there already
-    const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
+    const installedExtensions = getLocalStorageDataFromKey(
+      LOCALSTORAGE_KEYS.installedExtensions,
+      [],
+    );
     if (installedExtensions.indexOf(this.localStorageKey) === -1) {
       installedExtensions.push(this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedExtensions,
+        JSON.stringify(installedExtensions),
+      );
     }
 
     console.log("Installed");
@@ -188,9 +222,17 @@ export default class Card extends React.Component<
       localStorage.removeItem(this.localStorageKey);
 
       // Remove from installed list
-      const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-      const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+      const installedExtensions = getLocalStorageDataFromKey(
+        LOCALSTORAGE_KEYS.installedExtensions,
+        [],
+      );
+      const remainingInstalledExtensions = installedExtensions.filter(
+        key => key !== this.localStorageKey,
+      );
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedExtensions,
+        JSON.stringify(remainingInstalledExtensions),
+      );
 
       console.log("Removed");
       this.setState({ installed: false });
@@ -243,13 +285,22 @@ export default class Card extends React.Component<
     // TODO: handle this differently?
 
     // Add to installed list if not there already
-    const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
+    const installedThemes = getLocalStorageDataFromKey(
+      LOCALSTORAGE_KEYS.installedThemes,
+      [],
+    );
     if (installedThemes.indexOf(this.localStorageKey) === -1) {
       installedThemes.push(this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes));
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedThemes,
+        JSON.stringify(installedThemes),
+      );
 
       // const usercssURL = `https://raw.github.com/${this.user}/${this.repo}/${this.branch}/${this.manifest.usercss}`;
-      localStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.themeInstalled,
+        this.localStorageKey,
+      );
     }
 
     console.log("Installed");
@@ -271,7 +322,8 @@ export default class Card extends React.Component<
 
   removeTheme(themeKey?: string | null) {
     // If don't specify theme, remove the currently installed theme
-    themeKey = themeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    themeKey =
+      themeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
     const themeValue = themeKey && localStorage.getItem(themeKey);
 
@@ -285,9 +337,17 @@ export default class Card extends React.Component<
       localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
 
       // Remove from installed list
-      const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
-      const remainingInstalledThemes = installedThemes.filter((key) => key !== themeKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
+      const installedThemes = getLocalStorageDataFromKey(
+        LOCALSTORAGE_KEYS.installedThemes,
+        [],
+      );
+      const remainingInstalledThemes = installedThemes.filter(
+        key => key !== themeKey,
+      );
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedThemes,
+        JSON.stringify(remainingInstalledThemes),
+      );
 
       console.log("Removed");
 
@@ -315,12 +375,20 @@ export default class Card extends React.Component<
     );
 
     // Add to installed list if not there already
-    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+    const installedSnippetKeys = getLocalStorageDataFromKey(
+      LOCALSTORAGE_KEYS.installedSnippets,
+      [],
+    );
     if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
       installedSnippetKeys.push(this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
+      localStorage.setItem(
+        LOCALSTORAGE_KEYS.installedSnippets,
+        JSON.stringify(installedSnippetKeys),
+      );
     }
-    const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+    const installedSnippets = installedSnippetKeys.map(key =>
+      getLocalStorageDataFromKey(key),
+    );
     initializeSnippets(installedSnippets);
 
     this.setState({ installed: true });
@@ -330,10 +398,20 @@ export default class Card extends React.Component<
     localStorage.removeItem(this.localStorageKey);
 
     // Remove from installed list
-    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-    const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
-    localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
-    const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+    const installedSnippetKeys = getLocalStorageDataFromKey(
+      LOCALSTORAGE_KEYS.installedSnippets,
+      [],
+    );
+    const remainingInstalledSnippetKeys = installedSnippetKeys.filter(
+      key => key !== this.localStorageKey,
+    );
+    localStorage.setItem(
+      LOCALSTORAGE_KEYS.installedSnippets,
+      JSON.stringify(remainingInstalledSnippetKeys),
+    );
+    const remainingInstalledSnippets = remainingInstalledSnippetKeys.map(key =>
+      getLocalStorageDataFromKey(key),
+    );
     initializeSnippets(remainingInstalledSnippets);
 
     this.setState({ installed: false });
@@ -345,7 +423,9 @@ export default class Card extends React.Component<
    */
   async fetchAndInjectUserCSS(theme) {
     try {
-      const userCSS = theme ? await parseCSS(this.props.item as CardItem) : undefined;
+      const userCSS = theme
+        ? await parseCSS(this.props.item as CardItem)
+        : undefined;
       injectUserCSS(userCSS);
     } catch (error) {
       console.warn(error);
@@ -383,7 +463,10 @@ export default class Card extends React.Component<
       return null;
     }
 
-    const cardClasses = ["main-card-card", `marketplace-card--${this.props.type}`];
+    const cardClasses = [
+      "main-card-card",
+      `marketplace-card--${this.props.type}`,
+    ];
     if (IS_INSTALLED) cardClasses.push("marketplace-card--installed");
 
     const detail: string[] = [];
@@ -399,8 +482,17 @@ export default class Card extends React.Component<
           if (this.props.type === "snippet") {
             const processedName = this.props.item.title.replace(/\n/g, "");
 
-            if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
-              return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
+            if (
+              getLocalStorageDataFromKey(
+                `marketplace:installed:snippet:${processedName}`,
+              )?.custom
+            )
+              return openModal(
+                "EDIT_SNIPPET",
+                undefined,
+                undefined,
+                this.props,
+              );
 
             openModal("VIEW_SNIPPET", undefined, undefined, this.props);
           } else this.openReadme();
@@ -417,7 +509,7 @@ export default class Card extends React.Component<
                   loading="lazy"
                   src={this.props.item.imageURL}
                   className="main-image-image main-cardImage-image"
-                  onError={(e) => {
+                  onError={e => {
                     // Set to transparent PNG to remove the placeholder icon
                     // https://png-pixel.com
                     e.currentTarget.setAttribute(
@@ -437,7 +529,11 @@ export default class Card extends React.Component<
           <div className="main-card-cardMetadata">
             <a
               draggable="false"
-              title={this.props.type === "snippet" ? this.props.item.title : this.props.item.manifest?.name}
+              title={
+                this.props.type === "snippet"
+                  ? this.props.item.title
+                  : this.props.item.manifest?.name
+              }
               className="main-cardHeader-link"
               dir="auto"
               href={
@@ -447,31 +543,44 @@ export default class Card extends React.Component<
               }
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             >
-              <div className="main-cardHeader-text main-type-balladBold">{this.props.item.title}</div>
+              <div className="main-cardHeader-text main-type-balladBold">
+                {this.props.item.title}
+              </div>
             </a>
             <div className="main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader">
               {/* Add authors if they exist */}
-              {this.props.item.authors && <AuthorsDiv authors={this.props.item.authors} />}
+              {this.props.item.authors && (
+                <AuthorsDiv authors={this.props.item.authors} />
+              )}
               <span>{detail.join(" ‒ ")}</span>
             </div>
             <p className="marketplace-card-desc">
-              {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
+              {this.props.type === "snippet"
+                ? this.props.item.description
+                : this.props.item.manifest?.description}
             </p>
             {this.tags.length ? (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
-                <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />
+                <TagsDiv
+                  tags={this.tags}
+                  showTags={this.props.CONFIG.visual.tags}
+                />
               </div>
             ) : null}
-            {IS_INSTALLED && <div className="marketplace-card__bottom-meta main-type-mestoBold">✓ Installed</div>}
+            {IS_INSTALLED && (
+              <div className="marketplace-card__bottom-meta main-type-mestoBold">
+                ✓ Installed
+              </div>
+            )}
             <div className="main-card-PlayButtonContainer">
               <Button
                 classes={["marketplace-installButton"]}
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
                 label={IS_INSTALLED ? "Remove" : "Save"}
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   this.buttonClicked();
                 }}
