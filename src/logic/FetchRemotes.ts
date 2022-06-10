@@ -257,7 +257,7 @@ export const fetchCssSnippets = async () => {
       snip.imageURL = snip.preview && snip.preview.startsWith("http")
         ? snip.preview
         // : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
-        : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/feat/snippet-preview/${snip.preview}`;
+        : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/feat/snippet-previews/${snip.preview}`;
       delete snip.preview;
     }
 
