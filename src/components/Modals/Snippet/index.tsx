@@ -108,11 +108,11 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
       </div>
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-customCSS-preview">
-          Snippet Description
+          Snippet Preview { props.type !== "VIEW_SNIPPET" && "(optional)" }
         </label>
-        <FileInput id="marketplace-customCSS-preview"
+        <FileInput
+          id="marketplace-customCSS-preview"
           disabled={props.type === "VIEW_SNIPPET"}
-          placeholder="Add a preview image"
           value={imageURL}
           onChange={
             async (file?: File) => {
@@ -132,6 +132,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
             }
           }
         />
+        {imageURL && <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview"/>}
       </div>
       {props.type !== "VIEW_SNIPPET"
         ? <Button onClick={saveSnippet}>
