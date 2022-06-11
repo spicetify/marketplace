@@ -140,9 +140,9 @@ export default class Grid extends React.Component<
   }
 
   updatePostsVisual() {
-    this.cardList = this.cardList.map((card) => {
+    this.cardList = this.cardList.map((card, index) => {
       return <Card {...card.props}
-        CONFIG={this.CONFIG}
+        key={index.toString()} CONFIG={this.CONFIG}
       />;
     });
     this.setState({ cards: [...this.cardList] });

@@ -1,6 +1,6 @@
 import { CardItem, Snippet } from "../types/marketplace-types";
 import { processAuthors, addToSessionStorage } from "./Utils";
-import { ITEMS_PER_REQUEST, BLACKLIST_URL, SNIPPETS_URL } from "../constants";
+import { ITEMS_PER_REQUEST, BLACKLIST_URL /*, SNIPPETS_URL */ } from "../constants";
 
 import snippetsJSON from "../../resources/snippets.json";
 

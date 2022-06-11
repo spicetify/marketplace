@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Dropdown, { Option } from "react-dropdown";
 import { TabItemConfig, TabType } from "../types/marketplace-types";
+import PropTypes from "prop-types";
 
 type TabOptionConfig = {
   key: string;
@@ -84,6 +85,10 @@ const TabBarContext = ({ children }) => {
     </div>,
     document.querySelector(".main-topBar-topbarContentWrapper") as Element,
   );
+};
+
+TabBarContext.propTypes = {
+  children: PropTypes.element,
 };
 
 export const TopBarContent = (props: {
