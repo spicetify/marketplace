@@ -20,7 +20,7 @@
   {
     "title": "Hide Upgrade Button",
     "description": "Makes the upgrade button hidden",
-    "code": ".main-topBar-UpgradeButton {\n  display: none;\n}",
+    "code": ".main-topBar-UpgradeButton {\n  display: none !important;\n}",
     "preview": "https://placekitten.com/250/250"
   },
   {
