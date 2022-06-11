@@ -3,7 +3,7 @@
     "title": "Fix 'Episodes' Icon",
     "description": "Fix the color of the Episodes icon",
     "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }",
-    "preview": "src/assets/icon.svg"
+    "preview": "https://i.imgur.com/n3EwrTL.png"
   },
   {
     "title": "Fix 'Liked' Icon",
