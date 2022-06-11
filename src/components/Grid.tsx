@@ -1,7 +1,7 @@
 import React from "react";
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
-import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
+import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
@@ -24,6 +24,7 @@ export default class Grid extends React.Component<
 },
 {
   // TODO: add types
+  version: string,
   searchValue: string,
   cards: Card[],
   tabs: TabItemConfig[],
@@ -45,6 +46,7 @@ export default class Grid extends React.Component<
     };
 
     this.state = {
+      version: MARKETPLACE_VERSION,
       searchValue: "",
       cards: [],
       tabs: props.CONFIG.tabs,
@@ -349,6 +351,18 @@ export default class Grid extends React.Component<
   * If the cardList isn't loaded, it loads the cardList.
   */
   async componentDidMount() {
+    // Checks for new Marketplace updates
+    fetch("https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/package.json").then(res => res.json()).then(
+      result => {
+        this.setState({
+          version: result.version,
+        });
+      },
+      error => {
+        console.log("Failed to check for updates", error);
+      },
+    );
+
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
@@ -410,7 +424,18 @@ export default class Grid extends React.Component<
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
-          <h1>{this.props.title}</h1>
+          <div className="marketplace-header__left">
+            <h1>{this.props.title}</h1>
+            {
+              this.state.version !== MARKETPLACE_VERSION
+                ? <button type="button" title="New update" className="marketplace-update" id="marketplace-update"
+                  onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
+                >
+                  v{this.state.version} available!
+                </button>
+                : null
+            }
+          </div>
           <div className="marketplace-header__right">
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
 
@@ -423,6 +448,30 @@ export default class Grid extends React.Component<
               sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
 
             /> : null}
+            <div className="searchbar--bar__wrapper">
+              <input
+                className="searchbar-bar"
+                type="text"
+                placeholder={`Search ${this.CONFIG.activeTab}...`}
+                value={this.state.searchValue}
+                onChange={(event) => {
+                  this.setState({ searchValue: event.target.value });
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    this.setState({ endOfList: false });
+                    this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+                    this.searchRequested = true;
+                  } else if ( // Refreshes result when user deletes all queries
+                    ((event.key === "Backspace") || (event.key === "Delete")) &&
+                  this.searchRequested &&
+                  this.state.searchValue.trim() === ""
+                  ) {
+                    this.setState({ endOfList: false });
+                    this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+                    this.searchRequested = false;
+                  }}} />
+            </div>
             <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
@@ -430,32 +479,6 @@ export default class Grid extends React.Component<
             </button>
           </div>
         </div>
-        {
-          <div className="searchbar--bar__wrapper">
-            <input
-              className="searchbar-bar"
-              type="text"
-              placeholder={`Search ${this.CONFIG.activeTab}...`}
-              value={this.state.searchValue}
-              onChange={(event) => {
-                this.setState({ searchValue: event.target.value });
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  this.setState({ endOfList: false });
-                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                  this.searchRequested = true;
-                } else if ( // Refreshes result when user deletes all queries
-                  ((event.key === "Backspace") || (event.key === "Delete")) &&
-                  this.searchRequested &&
-                  this.state.searchValue.trim() === ""
-                ) {
-                  this.setState({ endOfList: false });
-                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                  this.searchRequested = false;
-                }}} />
-          </div>
-        }
         {/* Add a header and grid for each card type if it has any cards */}
         {[
           { handle: "extension", name: "Extensions" },
