@@ -22,7 +22,6 @@ class ReadmePage extends React.Component<
 }
 > {
   state = {
-    // TODO: use <Suspense> or show a better loading indicator
     html: "<p>Loading...</p>",
   }
 
