@@ -14,9 +14,11 @@
     "build:local": "spicetify-creator --out=dist --minify",
     "build:prod": "yarn build:local && yarn copy:docs",
     "copy:docs": "copyfiles README.md docs/* dist/",
-    "lint": "eslint src",
+    "lint": "eslint --fix src",
+    "lint:ci": "eslint src",
     "type-check": "tsc --noEmit",
-    "watch": "spicetify-creator --watch"
+    "watch": "spicetify-creator --watch",
+    "prepare": "husky install"
   },
   "engines": {
     "node": ">=16"
@@ -29,6 +31,7 @@
     "copyfiles": "^2.4.1",
     "eslint": "7.32.0",
     "eslint-plugin-react": "^7.30.0",
+    "husky": "^8.0.1",
     "prismjs": "^1.28.0",
     "react-dropdown": "^1.10.0",
     "react-simple-code-editor": "^0.11.2",
