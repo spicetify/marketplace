@@ -1,6 +1,6 @@
 {
   "name": "spicetify-marketplace",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "homepage": "https://github.com/spicetify/spicetify-marketplace",
   "repository": {
     "type": "git",
@@ -29,7 +29,9 @@
     "copyfiles": "^2.4.1",
     "eslint": "7.32.0",
     "eslint-plugin-react": "^7.30.0",
+    "prismjs": "^1.28.0",
     "react-dropdown": "^1.10.0",
+    "react-simple-code-editor": "^0.11.2",
     "spicetify-creator": "^1.0.10",
     "typescript": "^4.7.3"
   }

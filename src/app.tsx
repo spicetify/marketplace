@@ -12,6 +12,7 @@ import "./styles/components/_reload-modal.scss";
 import "./styles/components/_add-snippet-modal.scss";
 import "./styles/components/_readme-pages.scss";
 import "./styles/components/_fixes.scss";
+import "./styles/components/prismjs-themes/prism-tomorrow.css";
 
 import Grid from "./components/Grid";
 import ReadmePage from "./components/ReadmePage";

@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 16px;
 
-  input, textarea {
+  input, textarea, .marketplace-customCSS-editor-wrapper {
     width: 100%;
     margin-bottom: 10px;
     padding: 3px 5px;
@@ -13,6 +13,11 @@
     font-size: 14px;
     border: 1px solid var(--spice-button);
     border-radius: 4px;
+  }
+
+  // Stop it from adding a blue outline when you tab in the editor
+  #marketplace-custom-css:focus-visible {
+    outline: none;
   }
 }
 

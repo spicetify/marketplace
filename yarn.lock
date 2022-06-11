@@ -2097,6 +2097,11 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
+prismjs@^1.28.0:
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.28.0.tgz#0d8f561fa0f7cf6ebca901747828b149147044b6"
+  integrity sha512-8aaXdYvl1F7iC7Xm1spqSaY/OJBpYW3v+KJ+F17iYxvdc8sfjW194COK5wVhMZX45tGteiBQgdvD/nhxcRwylw==
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -2142,6 +2147,11 @@ react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-simple-code-editor@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/react-simple-code-editor/-/react-simple-code-editor-0.11.2.tgz#af9da6706b76d2a520bd7b82e3383b329f61cd87"
+  integrity sha512-vLMEDj+qLrZ88zK/8bhRdqM2Mp0cQJCUbHPc/QIfxlIYHzAclaAzPX0TQ4ZI5LTYSP3hsYYOT3EciV2dCG4o0Q==
 
 readable-stream@~1.0.31:
   version "1.0.34"
