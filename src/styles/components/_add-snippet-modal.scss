@@ -29,8 +29,10 @@
 
 // Preview image in the modal
 img.marketplace-customCSS-image-preview {
-  height: 180px;
-  width: 180px;
+  aspect-ratio: 1;
+  width: 100%;
+  height: auto;
+  max-width: 400px;
   object-fit: cover;
   margin: 0 auto;
 }

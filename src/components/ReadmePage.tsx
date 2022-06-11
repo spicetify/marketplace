@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingIcon from "./Icons/LoadingIcon";
 
 class ReadmePage extends React.Component<
 {
@@ -21,7 +22,6 @@ class ReadmePage extends React.Component<
 }
 > {
   state = {
-    // TODO: use <Suspense> or show a better loading indicator
     html: "<p>Loading...</p>",
   }
 
@@ -86,7 +86,9 @@ class ReadmePage extends React.Component<
         <div className="marketplace-header">
           <h1>{this.props.title}</h1>
         </div>
-        <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        {this.state.html === "<p>Loading...</p>"
+          ? <footer className="marketplace-footer"><LoadingIcon /></footer>
+          : <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>}
       </section>
     );
   }
