@@ -66,6 +66,16 @@ class ReadmePage extends React.Component<
   }
 
   componentDidUpdate() {
+
+    // Make the page scrollable
+    const main = document.querySelector("#marketplace-readme")?.closest("main");
+    if (main) {
+      setTimeout(() => {
+        // TODO: see if it's possible to use some load event or mutation observer to do this
+        main.style.overflowY = "auto";
+      }, 1000);
+    }
+
     // Add error handler in attempt to fix broken image urls
     // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
