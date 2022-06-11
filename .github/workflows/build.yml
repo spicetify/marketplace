@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Push new version to dist branch
+    name: Push
     runs-on: ubuntu-latest
     steps:
     - name: Check out Git repository
