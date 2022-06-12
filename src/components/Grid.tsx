@@ -412,8 +412,11 @@ export default class Grid extends React.Component<
         <div className="marketplace-header">
           <h1>{this.props.title}</h1>
           <div className="marketplace-header__right">
+            {/*Show theme developer tools button if themeDevTools is enabled*/}
+            {this.CONFIG.visual.themeDevTools ? <button type="button" title="ThemeDevTools" className="marketplace-theme-dev-tools-button" onClick={() => {
+              openModal("THEME_DEV_TOOLS");
+            }}>test</button>: null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
-
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
               // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.

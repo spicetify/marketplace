@@ -63,12 +63,12 @@ export const parseIni = (data: string) => {
   };
   const value = {};
   const lines = data.split(/[\r\n]+/);
-  let section = null;
+  let section: string | null = null;
   lines.forEach(function(line) {
     if (regex.comment.test(line)) {
       return;
     } else if (regex.param.test(line)) {
-      const match = line.match(regex.param);
+      const match: string[] | null = line.match(regex.param);
 
       // TODO: github copilot made this part, but I have no idea what it does
       // if (match?.length !== 3) {
@@ -76,14 +76,14 @@ export const parseIni = (data: string) => {
       // }
 
       if (section) {
-        value[section][match[1]] = match[2];
+        value[section][match![1]] = match![2];
       } else {
-        value[match[1]] = match[2];
+        value[match![1]] = match![2];
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
-      value[match[1]] = {};
-      section = match[1];
+      value[match![1]] = {};
+      section = match![1];
     } else if (line.length == 0 && section) {
       section = null;
     }
@@ -337,6 +337,23 @@ export function addToSessionStorage(items, key?) {
     parsed.push(item);
     window.sessionStorage.setItem(key, JSON.stringify(parsed));
   });
+}
+export function getInvalidCSS(css) {
+  const unparsedCSS = document.querySelector("head > style.marketplaceCSS.marketplaceUserCSS")
+  const classNameList = unparsedCSS?.innerHTML;
+  const regex = new RegExp (`(?:(\\S+? ?\\S + | (?: \\S + > \\S +) +) ?\\{) \\g`);
+  if(!classNameList) return "Error: Class name list not found, please create an issue";
+  const matches = classNameList.matchAll(regex);
+  const invalidCssClassName: string[] = [];
+  for (const match of matches) {
+      // Check if match is the same class name as an html element
+      const className = match[0].trim();
+      const element = document.querySelector(`.${className}`);
+      if (element) {
+          invalidCssClassName.push(className);
+      }
+
+  }
 }
 
 // This function is used to sleep for a certain amount of time
