@@ -1,0 +1,21 @@
+.invalid-css-container{
+    height: 400px;
+    width: 50%;
+    position: relative;
+    background-color: var(--spice-sidebar);
+    color: var(--spice-text);
+    font-weight: bold;
+    overflow:scroll;
+    padding: 1rem;
+
+}
+.marketplace-theme-dev-tools-container {
+    justify-content: flex-end;
+    display: flex;
+}
+.invalid-css-heading{
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration:underline;
+    margin-bottom: 1rem;
+}

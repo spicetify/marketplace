@@ -338,21 +338,29 @@ export function addToSessionStorage(items, key?) {
     window.sessionStorage.setItem(key, JSON.stringify(parsed));
   });
 }
-export function getInvalidCSS() {
+export function getInvalidCSS(): string[] {
   const unparsedCSS = document.querySelector("head > style.marketplaceCSS.marketplaceUserCSS")
   const classNameList = unparsedCSS?.innerHTML;
-  const regex = new RegExp (`(?:(\\S+? ?\\S + | (?: \\S + > \\S +) +) ?\\{) \\g`);
-  if(!classNameList) return "Error: Class name list not found, please create an issue";
+  const regex = new RegExp (`\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*\{`, "g");
+  if(!classNameList) return ["Error: Class name list not found, please create an issue"];
   const matches = classNameList.matchAll(regex);
   const invalidCssClassName: string[] = [];
   for (const match of matches) {
       // Check if match is the same class name as an html element
-      const className = match[0].trim();
-      const element = document.querySelector(`.${className}`);
-      if (element) {
+      let className = match[0].replace("{", "").trim();
+      let classesArr = className.split(" ");
+      let element;
+      for(let i = 0; i < classesArr.length; i++) {
+        try{
+          element = document.querySelector(`${classesArr[i]}`);
+        }
+        catch(e) {
+          element = document.getElementsByClassName(`${className}`); 
+        }
+      if (!element) {
           invalidCssClassName.push(className);
       }
-
+    }
   }
   return invalidCssClassName
 }
