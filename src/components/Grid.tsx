@@ -61,9 +61,11 @@ export default class Grid extends React.Component<
   lastScroll = 0;
   requestQueue: never[][] = [];
   requestPage = 0;
-  cardList: Card[] = [];
+  // TODO: Don't use any here
+  cardList: any[] = [];
   sortConfig: { by: string };
-  // TODO: why are these set up funny?
+  // TODO: why are these set up funny? 
+  // To get to the other side
   gridUpdateTabs: (() => void) | null;
   gridUpdatePostsVisual: (() => void) | null;
   checkScroll: (e: Event) => void;

@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../../Button";
-
+import {getInvalidCSS} from "../../../logic/Utils";
 const ThemeDevToolsModal = () => {
   return (
     <div id="marketplace-theme-dev-tools-container">
@@ -9,9 +9,9 @@ const ThemeDevToolsModal = () => {
         </p>
         <div className="marketplace-theme-dev-tools-modal__button-container">
             <Button onClick={() => {
-                Spicetify.PopupModal.hide();
+                console.log(getInvalidCSS())
             }}>
-                Close
+                Invalid CSS Detector
             </Button>
         </div>
     </div>

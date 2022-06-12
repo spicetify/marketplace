@@ -338,7 +338,7 @@ export function addToSessionStorage(items, key?) {
     window.sessionStorage.setItem(key, JSON.stringify(parsed));
   });
 }
-export function getInvalidCSS(css) {
+export function getInvalidCSS() {
   const unparsedCSS = document.querySelector("head > style.marketplaceCSS.marketplaceUserCSS")
   const classNameList = unparsedCSS?.innerHTML;
   const regex = new RegExp (`(?:(\\S+? ?\\S + | (?: \\S + > \\S +) +) ?\\{) \\g`);
@@ -354,6 +354,7 @@ export function getInvalidCSS(css) {
       }
 
   }
+  return invalidCssClassName
 }
 
 // This function is used to sleep for a certain amount of time
