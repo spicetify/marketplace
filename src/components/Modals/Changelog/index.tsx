@@ -29,8 +29,8 @@ import { COMMIT_LIST, MARKETPLACE_VERSION } from "../../../constants";
 ); */
 const commitArray: string[] = [];
 
-const changelogDetails = () => {
-  fetch(COMMIT_LIST).then(res => res.json())
+const changelogDetails = async () => {
+  await fetch(COMMIT_LIST).then(res => res.json())
     .then(commits => {
       for (const { commit } of commits) {
         commitArray.push(
@@ -40,12 +40,12 @@ const changelogDetails = () => {
     });
 };
 
-const Changelog = () => {
-  changelogDetails();
-  if (commitArray.length > 0) whatsNew(
+const Changelog = async () => {
+  await changelogDetails();
+  whatsNew(
     "marketplace",
     // This semver version is only used to trigger the Changelog modal and must be bumped simutaneously as MARKETPLACE_VERSION
-    "1.0.0",
+    "1.0.1",
     {
       title: `✨ Marketplace v${MARKETPLACE_VERSION}`,
       content: <ul>
@@ -56,9 +56,5 @@ const Changelog = () => {
       isLarge: true,
     },
   );
-  else setTimeout(() => {
-    console.log("No commit found, retrying");
-    setTimeout(() => Changelog(), 1000);
-  });
 };
 export default Changelog;
