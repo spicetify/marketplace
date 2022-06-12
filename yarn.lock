@@ -2318,7 +2318,7 @@ semver@^6.3.0:
   resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
-semver@^7.2.1, semver@^7.3.7:
+semver@^7.2.1, semver@^7.3.5, semver@^7.3.7:
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
   integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
@@ -2420,6 +2420,13 @@ source-map@~0.8.0-beta.0:
   integrity sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==
   dependencies:
     whatwg-url "^7.0.0"
+
+spcr-whats-new@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/spcr-whats-new/-/spcr-whats-new-1.0.1.tgz#cafa24ceb0d2f21bf432975c32c14c27907bc7dc"
+  integrity sha512-hLr3PvgVGVqRoDdJEfPxjdmOeJMz0uzjfELk2QBYQT0ulxPkUXEBqe7/scNTdi/Z1mwy1gIZNNjnpOORk1Xwug==
+  dependencies:
+    semver "^7.3.5"
 
 spicetify-creator@^1.0.10:
   version "1.0.10"

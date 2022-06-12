@@ -15,6 +15,8 @@ import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
 import Button from "./Button";
+import DownloadIcon from "./Icons/DownloadIcon";
+import whatsNew from "./Modals/Changelog";
 
 export default class Grid extends React.Component<
 {
@@ -363,6 +365,8 @@ export default class Grid extends React.Component<
       },
     );
 
+    whatsNew;
+
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
@@ -420,21 +424,25 @@ export default class Grid extends React.Component<
     return this.state.activeScheme;
   }
 
+  changelogModal() {
+    return Changelog;
+  }
+
   render() {
     return (
+
       <section className="contentSpacing">
         <div className="marketplace-header">
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
-            {
-              this.state.version !== MARKETPLACE_VERSION
-                ? <button type="button" title="New update" className="marketplace-update" id="marketplace-update"
-                  onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
-                >
-                  v{this.state.version} available!
-                </button>
-                : null
-            }
+            {this.state.version !== MARKETPLACE_VERSION
+              ? <button type="button" title="New update" className="marketplace-update" id="marketplace-update"
+                onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
+              >
+                <DownloadIcon />
+                &nbsp;{this.state.version}
+              </button>
+              : null}
           </div>
           <div className="marketplace-header__right">
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
@@ -445,9 +453,7 @@ export default class Grid extends React.Component<
               sortBoxOptions={generateSchemesOptions(this.state.schemes)}
               // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
               // because it hardcodes the value into the fn
-              sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
-
-            /> : null}
+              sortBySelectedFn={(a) => a.key === this.getActiveScheme()} /> : null}
             <div className="searchbar--bar__wrapper">
               <input
                 className="searchbar-bar"
@@ -456,7 +462,7 @@ export default class Grid extends React.Component<
                 value={this.state.searchValue}
                 onChange={(event) => {
                   this.setState({ searchValue: event.target.value });
-                }}
+                } }
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     this.setState({ endOfList: false });
@@ -464,13 +470,13 @@ export default class Grid extends React.Component<
                     this.searchRequested = true;
                   } else if ( // Refreshes result when user deletes all queries
                     ((event.key === "Backspace") || (event.key === "Delete")) &&
-                  this.searchRequested &&
-                  this.state.searchValue.trim() === ""
-                  ) {
+                    this.searchRequested &&
+                    this.state.searchValue.trim() === "") {
                     this.setState({ endOfList: false });
                     this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
                     this.searchRequested = false;
-                  }}} />
+                  }
+                } } />
             </div>
             <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
@@ -486,15 +492,14 @@ export default class Grid extends React.Component<
           { handle: "snippet", name: "Snippets" },
         ].map((cardType) => {
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
-            .filter((card) => { // Search filter
+            .filter((card) => {
               const { searchValue } = this.state;
               const { title, user } = card.props.item;
 
-              if (
-                searchValue.trim() === "" ||
+              if (searchValue.trim() === "" ||
                 title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
-                user?.toLowerCase().includes(searchValue.trim().toLowerCase())
-              ) return card;
+                user?.toLowerCase().includes(searchValue.trim().toLowerCase()))
+                return card;
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
@@ -536,8 +541,7 @@ export default class Grid extends React.Component<
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}
           links={this.CONFIG.tabs}
-          activeLink={this.CONFIG.activeTab}
-        />
+          activeLink={this.CONFIG.activeTab} />
       </section>
     );
   }
