@@ -58,12 +58,12 @@ const TabRow = (props: {
     <div className="setting-row">
       <label htmlFor={toggleId} className='col description'>{props.name}</label>
       <div className="col action">
-        <button title="Move up" className="arrow-btn" onClick={() => moveTab(index, -1)}>
+        <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
             dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-up"]) }}>
           </svg>
         </button>
-        <button title="Move down" className="arrow-btn" onClick={() => moveTab(index, 1)}>
+        <button title="Move down" className="arrow-btn" disabled={index === props.modalConfig.tabs.length - 1} onClick={() => moveTab(index, 1)}>
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
             dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-down"]) }}>
           </svg>
