@@ -1,7 +1,7 @@
 import React from "react";
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
-import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION } from "../constants";
+import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, REMOTE_VERSION } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
@@ -354,7 +354,7 @@ export default class Grid extends React.Component<
   */
   async componentDidMount() {
     // Checks for new Marketplace updates
-    fetch("https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/package.json").then(res => res.json()).then(
+    fetch(REMOTE_VERSION).then(res => res.json()).then(
       result => {
         this.setState({
           version: result.version,
