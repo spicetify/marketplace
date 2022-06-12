@@ -40,3 +40,7 @@ export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/spicetify-marketp
 export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
 
 export const REMOTE_VERSION = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/package.json";
+
+// Used for Changelog
+const commitTimestamp = "2022-06-07T21:05:22Z"; // Must be in ISO format
+export const COMMIT_LIST = `https://api.github.com/repos/spicetify/spicetify-marketplace/commits?since${commitTimestamp}`;

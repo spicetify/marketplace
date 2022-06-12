@@ -1,8 +1,8 @@
 import React from "react";
 import whatsNew from "spcr-whats-new";
-import { MARKETPLACE_VERSION } from "../../../constants";
+import { COMMIT_LIST, MARKETPLACE_VERSION } from "../../../constants";
 
-const changelogDetails = (
+/* const changelogDetails = (
   <>
     <h2>0.6.1</h2>
     <ul>
@@ -26,15 +26,39 @@ const changelogDetails = (
       <li>General improvements</li>
     </ul>
   </>
-);
+); */
+const commitArray: string[] = [];
 
-export default whatsNew(
-  "marketplace",
-  // This semver version is only used to trigger the Changelog modal and must be bumped simutaneously as MARKETPLACE_VERSION
-  "1.0.0",
-  {
-    title: `✨ Marketplace v${MARKETPLACE_VERSION}`,
-    content: changelogDetails,
-    isLarge: true,
-  },
-);
+const changelogDetails = () => {
+  fetch(COMMIT_LIST).then(res => res.json())
+    .then(commits => {
+      for (const { commit } of commits) {
+        commitArray.push(
+          commit.message.split("\n")[0],
+        );
+      }
+    });
+};
+
+const Changelog = () => {
+  changelogDetails();
+  if (commitArray.length > 0) whatsNew(
+    "marketplace",
+    // This semver version is only used to trigger the Changelog modal and must be bumped simutaneously as MARKETPLACE_VERSION
+    "1.0.1",
+    {
+      title: `✨ Marketplace v${MARKETPLACE_VERSION}`,
+      content: <ul>
+        {commitArray.map((title, index) =>
+          <li key={index}>{title}</li>,
+        )}
+      </ul>,
+      isLarge: true,
+    },
+  );
+  else setTimeout(() => {
+    console.log("No commit found, retrying");
+    setTimeout(() => Changelog(), 1000);
+  });
+};
+export default Changelog;

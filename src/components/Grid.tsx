@@ -16,7 +16,7 @@ import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
 import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
-import whatsNew from "./Modals/Changelog";
+import Changelog from "./Modals/Changelog";
 
 export default class Grid extends React.Component<
 {
@@ -365,7 +365,7 @@ export default class Grid extends React.Component<
       },
     );
 
-    whatsNew;
+    Changelog();
 
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
