@@ -93,7 +93,7 @@ class ReadmePage extends React.Component<
   render() {
     return (
       <section className="contentSpacing">
-        <div className="marketplace-header">
+        <div className="marketplace-header" style={ { flexDirection: "row" } }>
           <h1>{this.props.title}</h1>
         </div>
         {this.state.html === "<p>Loading...</p>"
