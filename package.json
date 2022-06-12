@@ -35,6 +35,7 @@
     "prismjs": "^1.28.0",
     "react-dropdown": "^1.10.0",
     "react-simple-code-editor": "^0.11.2",
+    "spcr-whats-new": "^1.0.1",
     "spicetify-creator": "^1.0.10",
     "typescript": "^4.7.3"
   }
