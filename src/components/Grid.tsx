@@ -62,9 +62,9 @@ export default class Grid extends React.Component<
   requestQueue: never[][] = [];
   requestPage = 0;
   // TODO: Don't use any here
-  cardList: any[] = [];
+  cardList: Card[] = [];
   sortConfig: { by: string };
-  // TODO: why are these set up funny? 
+  // TODO: why are these set up funny
   // To get to the other side
   gridUpdateTabs: (() => void) | null;
   gridUpdatePostsVisual: (() => void) | null;
@@ -111,7 +111,7 @@ export default class Grid extends React.Component<
       updateActiveTheme={this.setActiveTheme.bind(this)}
     />;
 
-    this.cardList.push(card);
+    this.cardList.push(card as unknown as Card);
     this.setState({ cards: this.cardList });
   }
 
@@ -144,9 +144,8 @@ export default class Grid extends React.Component<
   updatePostsVisual() {
     this.cardList = this.cardList.map((card, index) => {
       return <Card {...card.props}
-        key={index.toString()} CONFIG={this.CONFIG}
-      />;
-    });
+        key={index.toString()} CONFIG={this.CONFIG} />;
+    }) as unknown as Card[];
     this.setState({ cards: [...this.cardList] });
   }
 
@@ -478,9 +477,10 @@ export default class Grid extends React.Component<
                 user?.toLowerCase().includes(searchValue.trim().toLowerCase())
               ) return card;
             })
-            .map((card) => {
+            .map((card, index) => {
               // Clone the cards and update the prop to trigger re-render
               // TODO: is it possible to only re-render the theme cards whose status have changed?
+              card.key = index;
               const cardElement = React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
               });

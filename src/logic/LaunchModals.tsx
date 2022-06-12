@@ -47,12 +47,12 @@ const getModalSettings = (
       content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
       isLarge: true,
     };
-    case "THEME_DEV_TOOLS":
-      return {
-        title: "Theme Dev Tools",
-        content: <ThemeDevToolsModal />,
-        isLarge: true,
-      };
+  case "THEME_DEV_TOOLS":
+    return {
+      title: "Theme Dev Tools",
+      content: <ThemeDevToolsModal />,
+      isLarge: true,
+    };
 
   default:
     return {
