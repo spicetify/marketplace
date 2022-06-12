@@ -45,7 +45,7 @@ const Changelog = () => {
   if (commitArray.length > 0) whatsNew(
     "marketplace",
     // This semver version is only used to trigger the Changelog modal and must be bumped simutaneously as MARKETPLACE_VERSION
-    "1.0.1",
+    "1.0.0",
     {
       title: `✨ Marketplace v${MARKETPLACE_VERSION}`,
       content: <ul>
