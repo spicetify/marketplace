@@ -61,7 +61,6 @@ export default class Grid extends React.Component<
   lastScroll = 0;
   requestQueue: never[][] = [];
   requestPage = 0;
-  // TODO: Don't use any here
   cardList: Card[] = [];
   sortConfig: { by: string };
   // TODO: why are these set up funny
