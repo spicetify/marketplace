@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "../../Button";
 import { getInvalidCSS } from "../../../logic/Utils";
 const ThemeDevToolsModal = () => {
   return (
