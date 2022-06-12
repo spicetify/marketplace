@@ -424,13 +424,8 @@ export default class Grid extends React.Component<
     return this.state.activeScheme;
   }
 
-  changelogModal() {
-    return Changelog;
-  }
-
   render() {
     return (
-
       <section className="contentSpacing">
         <div className="marketplace-header">
           <div className="marketplace-header__left">
