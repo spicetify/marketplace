@@ -28,6 +28,7 @@ export default class Grid extends React.Component<
 {
   // TODO: add types
   version: string,
+  newUpdate: boolean,
   searchValue: string,
   cards: Card[],
   tabs: TabItemConfig[],
@@ -50,6 +51,7 @@ export default class Grid extends React.Component<
 
     this.state = {
       version: MARKETPLACE_VERSION,
+      newUpdate: false,
       searchValue: "",
       cards: [],
       tabs: props.CONFIG.tabs,
@@ -360,6 +362,12 @@ export default class Grid extends React.Component<
         this.setState({
           version: result[0].name,
         });
+
+        try {
+          this.setState({ newUpdate: semver.gt(this.state.version, MARKETPLACE_VERSION) });
+        } catch (err) {
+          console.error(err);
+        }
       },
       error => {
         console.error("Failed to check for updates", error);
@@ -431,7 +439,7 @@ export default class Grid extends React.Component<
         <div className="marketplace-header">
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
-            {semver.gt(this.state.version, MARKETPLACE_VERSION)
+            {this.state.newUpdate
               ? <button type="button" title="New update" className="marketplace-update" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
               >
