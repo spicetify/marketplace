@@ -433,6 +433,21 @@ export default class Grid extends React.Component<
     return this.state.activeScheme;
   }
 
+  handleSearch(event: React.KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.setState({ endOfList: false });
+      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+      this.searchRequested = true;
+    } else if ( // Refreshes result when user deletes all queries
+      ((event.key === "Backspace") || (event.key === "Delete")) &&
+        this.searchRequested &&
+        this.state.searchValue.trim() === "") {
+      this.setState({ endOfList: false });
+      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+      this.searchRequested = false;
+    }
+  }
+
   render() {
     return (
       <section className="contentSpacing">
@@ -466,21 +481,8 @@ export default class Grid extends React.Component<
                 value={this.state.searchValue}
                 onChange={(event) => {
                   this.setState({ searchValue: event.target.value });
-                } }
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    this.setState({ endOfList: false });
-                    this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                    this.searchRequested = true;
-                  } else if ( // Refreshes result when user deletes all queries
-                    ((event.key === "Backspace") || (event.key === "Delete")) &&
-                    this.searchRequested &&
-                    this.state.searchValue.trim() === "") {
-                    this.setState({ endOfList: false });
-                    this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                    this.searchRequested = false;
-                  }
-                } } />
+                }}
+                onKeyDown={this.handleSearch.bind(this)} />
             </div>
             <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
