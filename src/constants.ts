@@ -42,5 +42,6 @@ export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicet
 export const REMOTE_VERSION = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/package.json";
 
 // Used for Changelog
-const commitTimestamp = "2022-06-07T21:05:22Z"; // Must be in ISO format
-export const COMMIT_LIST = `https://api.github.com/repos/spicetify/spicetify-marketplace/commits?since${commitTimestamp}`;
+// Will be changed to be consistent with MARKETPLACE_VERSION
+const RELEASE_TAG = "v0.5.0-beta";
+export const RELEASE_CHANGELOG = `https://api.github.com/repos/spicetify/spicetify-marketplace/releases/tags/${RELEASE_TAG}`;

@@ -1,6 +1,7 @@
 import React from "react";
 import whatsNew from "spcr-whats-new";
-import { COMMIT_LIST, MARKETPLACE_VERSION } from "../../../constants";
+import ReactMarkdown from "react-markdown";
+import { RELEASE_CHANGELOG, MARKETPLACE_VERSION } from "../../../constants";
 
 /* const changelogDetails = (
   <>
@@ -27,32 +28,24 @@ import { COMMIT_LIST, MARKETPLACE_VERSION } from "../../../constants";
     </ul>
   </>
 ); */
-const commitArray: string[] = [];
+let changelogBody: string;
 
-const changelogDetails = async () => {
-  await fetch(COMMIT_LIST).then(res => res.json())
-    .then(commits => {
-      for (const { commit } of commits) {
-        commitArray.push(
-          commit.message.split("\n")[0],
-        );
-      }
-    });
+const fetchRelease = async () => {
+  await fetch(RELEASE_CHANGELOG)
+    .then(res => res.json())
+    .then(result => changelogBody = result.body)
+    .catch(err => console.error(err));
 };
 
 const Changelog = async () => {
-  await changelogDetails();
+  await fetchRelease();
   whatsNew(
     "marketplace",
     // This semver version is only used to trigger the Changelog modal and must be bumped simutaneously as MARKETPLACE_VERSION
-    "1.0.0",
+    "1.0.1",
     {
       title: `✨ Marketplace v${MARKETPLACE_VERSION}`,
-      content: <ul>
-        {commitArray.map((title, index) =>
-          <li key={index}>{title}</li>,
-        )}
-      </ul>,
+      content: <ReactMarkdown>{changelogBody}</ReactMarkdown>,
       isLarge: true,
     },
   );
