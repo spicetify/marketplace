@@ -41,8 +41,7 @@ const Changelog = async () => {
   await fetchRelease();
   whatsNew(
     "marketplace",
-    // This semver version is only used to trigger the Changelog modal and must be bumped simutaneously as MARKETPLACE_VERSION
-    "1.0.1",
+    MARKETPLACE_VERSION,
     {
       title: `✨ Marketplace v${MARKETPLACE_VERSION}`,
       content: <ReactMarkdown>{changelogBody}</ReactMarkdown>,

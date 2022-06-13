@@ -39,7 +39,7 @@ export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/spicetify-marketp
 
 export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
 
-export const REMOTE_VERSION = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/package.json";
+export const LATEST_RELEASE = "https://api.github.com/repos/spicetify/spicetify-marketplace/releases";
 
 // Used for Changelog
 // Will be changed to be consistent with MARKETPLACE_VERSION

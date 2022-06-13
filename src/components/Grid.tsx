@@ -1,7 +1,8 @@
 import React from "react";
+import semver from "semver";
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
-import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, REMOTE_VERSION } from "../constants";
+import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
@@ -354,14 +355,14 @@ export default class Grid extends React.Component<
   */
   async componentDidMount() {
     // Checks for new Marketplace updates
-    fetch(REMOTE_VERSION).then(res => res.json()).then(
+    fetch(LATEST_RELEASE).then(res => res.json()).then(
       result => {
         this.setState({
-          version: result.version,
+          version: result[0].name,
         });
       },
       error => {
-        console.log("Failed to check for updates", error);
+        console.error("Failed to check for updates", error);
       },
     );
 
@@ -430,7 +431,7 @@ export default class Grid extends React.Component<
         <div className="marketplace-header">
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
-            {this.state.version !== MARKETPLACE_VERSION
+            {semver.gt(this.state.version, MARKETPLACE_VERSION)
               ? <button type="button" title="New update" className="marketplace-update" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
               >
