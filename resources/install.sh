@@ -39,7 +39,7 @@ spicetify config inject_css 1
 spicetify config replace_colors 1
 
 current_theme=$(spicetify config current_theme)
-if [ ${#current_theme} -le 3 ]; then spicetify config current_theme SpicetifyDefault
+if [ ${#"$current_theme"} -le 3 ]; then spicetify config current_theme SpicetifyDefault
 
 if spicetify config custom_apps marketplace ; then
     echo "Added to config!"
