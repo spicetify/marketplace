@@ -42,8 +42,8 @@ curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/mai
 ```
 
 ### Manual Install (recommended)
-
-Copy the `spicetify-marketplace` folder into your [Spicetify](https://github.com/spicetify/spicetify-cli) custom apps directory as "marketplace":
+You can either download the latest release from [here](https://github.com/spicetify/spicetify-marketplace/releases), or download the latest dev build from the [dist](https://github.com/spicetify/spicetify-marketplace/tree/dist) branch [here](https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip). 
+Extract the zip, and copy resulting folder into your [Spicetify](https://github.com/spicetify/spicetify-cli) custom apps directory as "marketplace":
 | **Platform** | **Path**                                                                               |
 |------------|------------------------------------------------------------------------------------------|
 | **Linux**      | `~/.config/spicetify/CustomApps/` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
