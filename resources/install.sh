@@ -34,6 +34,12 @@ cd "$INSTALL_DIR/marketplace"
 # Remove old custom app name if exists
 spicetify config custom_apps spicetify-marketplace-
 
+# Color injection fix
+spicetify config inject_css 1
+spicetify config replace_colors 1
+spicetify config current_theme SpicetifyDefault
+spicetify config color_scheme SpicetifyDefault
+
 if spicetify config custom_apps marketplace ; then
     echo "Added to config!"
     echo "APPLYING"
