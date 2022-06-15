@@ -34,7 +34,7 @@ const fetchRelease = async () => {
   await fetch(RELEASE_CHANGELOG)
     .then(res => res.json())
     .then(result => {
-      // If a release is found then display changelog modal
+      // If API returns no error message then get release body
       if (!result.message) changelogBody = result.body;
     })
     .catch(err => console.error(err));
@@ -42,6 +42,7 @@ const fetchRelease = async () => {
 
 const Changelog = async () => {
   await fetchRelease();
+  // If a release is not found then don't display changelog modal
   if (!changelogBody) return;
   whatsNew(
     "marketplace",
