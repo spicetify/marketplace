@@ -41,8 +41,12 @@ spicetify config custom_apps marketplace
 # Color injection fix
 spicetify config inject_css 1
 spicetify config replace_colors 1
-spicetify config current_theme SpicetifyDefault
-spicetify config color_scheme SpicetifyDefault
+
+$currentTheme = spicetify config current_theme | Out-String
+if ($currentTheme.Length -lt 3) {
+  Write-Host -ForegroundColor Red "No theme is found, applying default theme..."
+  spicetify config current_theme SpicetifyDefault
+}
 
 spicetify backup
 spicetify apply
