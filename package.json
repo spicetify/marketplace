@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.2",
+    "@types/semver": "^7.3.9",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "copyfiles": "^2.4.1",
@@ -34,7 +35,10 @@
     "husky": "^8.0.1",
     "prismjs": "^1.28.0",
     "react-dropdown": "^1.10.0",
+    "react-markdown": "^8.0.3",
     "react-simple-code-editor": "^0.11.2",
+    "semver": "^7.3.7",
+    "spcr-whats-new": "^1.0.1",
     "spicetify-creator": "^1.0.10",
     "typescript": "^4.7.3"
   }

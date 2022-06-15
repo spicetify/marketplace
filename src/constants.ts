@@ -38,3 +38,7 @@ export const SNIPPETS_URL = "https://raw.githubusercontent.com/spicetify/spiceti
 export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/spicetify-marketplace/blob/main/resources/snippets.json";
 
 export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
+
+export const LATEST_RELEASE = "https://api.github.com/repos/spicetify/spicetify-marketplace/releases";
+
+export const RELEASE_CHANGELOG = `https://api.github.com/repos/spicetify/spicetify-marketplace/releases/tags/v${MARKETPLACE_VERSION}`;
