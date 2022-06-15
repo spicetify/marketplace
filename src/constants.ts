@@ -41,7 +41,4 @@ export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicet
 
 export const LATEST_RELEASE = "https://api.github.com/repos/spicetify/spicetify-marketplace/releases";
 
-// Used for Changelog
-// Will be changed to be consistent with MARKETPLACE_VERSION
-const RELEASE_TAG = "v0.5.0-beta";
-export const RELEASE_CHANGELOG = `https://api.github.com/repos/spicetify/spicetify-marketplace/releases/tags/${RELEASE_TAG}`;
+export const RELEASE_CHANGELOG = `https://api.github.com/repos/spicetify/spicetify-marketplace/releases/tags/v${MARKETPLACE_VERSION}`;

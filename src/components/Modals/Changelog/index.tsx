@@ -33,12 +33,16 @@ let changelogBody: string;
 const fetchRelease = async () => {
   await fetch(RELEASE_CHANGELOG)
     .then(res => res.json())
-    .then(result => changelogBody = result.body)
+    .then(result => {
+      // If a release is found then display changelog modal
+      if (!result.message) changelogBody = result.body;
+    })
     .catch(err => console.error(err));
 };
 
 const Changelog = async () => {
   await fetchRelease();
+  if (!changelogBody) return;
   whatsNew(
     "marketplace",
     MARKETPLACE_VERSION,
