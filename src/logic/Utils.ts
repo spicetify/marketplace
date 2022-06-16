@@ -91,6 +91,26 @@ export const parseIni = (data: string) => {
   return value;
 };
 
+/* Pretty much just reverse the above function */
+export const unparseIni = (data: SchemeIni) => {
+  let output = "";
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      if (typeof data[key] === "object") {
+        output += `[${key}]\n`;
+        for (const subKey in data[key]) {
+          if (Object.prototype.hasOwnProperty.call(data[key], subKey)) {
+            output += `${subKey}=${data[key][subKey]}\n`;
+          }
+        }
+      } else {
+        output += `${key}=${data[key]}\n`;
+      }
+    }
+  }
+  return output;
+};
+
 /**
 * Loop through the snippets and add the contents of the code as a style tag in the DOM
 * @param snippets The snippets to initialize
