@@ -362,7 +362,7 @@ export function getInvalidCSS(): string[] {
   const unparsedCSS = document.querySelector("head > style.marketplaceCSS.marketplaceUserCSS");
   const classNameList = unparsedCSS?.innerHTML;
   const regex = new RegExp (`.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*{`, "g");
-  if (!classNameList) return ["Error: Class name list not found, please create an issue"];
+  if (!classNameList) return ["Error: Class name list not found; please create an issue"];
   const matches = classNameList.matchAll(regex);
   const invalidCssClassName: string[] = [];
   for (const match of matches) {
