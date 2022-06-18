@@ -1,4 +1,4 @@
-import React from "react";
+import React, { DetailedReactHTMLElement } from "react";
 
 import { MAX_TAGS } from "../../constants";
 
@@ -8,8 +8,11 @@ const TagsDiv = (props: {
 }) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  const generateTags = (tags) => {
-    return tags.reduce((accum, tag) => {
+  const generateTags = (tags: string[]) => {
+    // Remove duplicate tags from appearing
+    const uniqueTags = tags.filter((item, pos, self) => self.indexOf(item) === pos);
+
+    return uniqueTags.reduce<DetailedReactHTMLElement<{ className: string; draggable: false; "data-tag": string; }, HTMLElement>[]>((accum, tag) => {
       // Render tags if enabled. Always render external JS tag
       if (props.showTags || tag === "external JS") {
         accum.push(
