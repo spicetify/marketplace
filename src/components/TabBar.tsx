@@ -13,7 +13,7 @@ type TabOptionConfig = {
 
 class TabBarItem extends React.Component<{
   item: TabOptionConfig;
-  switchTo: (value: TabType) => void;
+  switchTo: (option: Option) => void;
 }> {
   constructor(props) {
     super(props);
@@ -28,7 +28,11 @@ class TabBarItem extends React.Component<{
         data-tab={this.props.item.value}
         onClick={(event) => {
           event.preventDefault();
-          this.props.switchTo(this.props.item.key as TabType);
+          this.props.switchTo({
+            // TODO: make label/key/value all consistently named
+            value: this.props.item.key,
+            label: this.props.item.value,
+          });
         }}
       >
         <a
@@ -48,7 +52,7 @@ class TabBarItem extends React.Component<{
 
 interface TabBarMoreProps {
   items: TabOptionConfig[];
-  switchTo: (value: TabType) => void;
+  switchTo: (option: Option) => void;
 }
 const TabBarMore = React.memo<TabBarMoreProps>(
   function TabBarMore({ items, switchTo } : TabBarMoreProps) {
@@ -61,16 +65,11 @@ const TabBarMore = React.memo<TabBarMoreProps>(
       };
     });
 
-    // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
-    const _onSelect = (item: Option) => {
-      switchTo(item.value as TabType);
-    };
-
     return (
       <li className="marketplace-tabBar-headerItem">
         <Dropdown className="main-type-mestoBold"
           options={transformedOptions} value="More" placeholder="More"
-          onChange={_onSelect}
+          onChange={switchTo}
         />
       </li>
     );
@@ -94,7 +93,7 @@ TabBarContext.propTypes = {
 export const TopBarContent = (props: {
   links: TabItemConfig[];
   activeLink: string;
-  switchCallback: (value: TabType) => void;
+  switchCallback: (option: Option) => void;
 }) => {
   const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
   if (!resizeHost) return null;
@@ -125,7 +124,7 @@ export const TopBarContent = (props: {
 interface TabBarProps {
   links: TabItemConfig[];
   activeLink: string;
-  switchCallback: (value: TabType) => void;
+  switchCallback: (option: Option) => void;
   windowSize: number;
 }
 const TabBar = React.memo<TabBarProps>(

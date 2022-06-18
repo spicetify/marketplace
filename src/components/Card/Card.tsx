@@ -370,7 +370,6 @@ export default class Card extends React.Component<CardProps, {
     // console.log(`Rendering ${this.localStorageKey} - is ${IS_INSTALLED ? "" : "not"} installed`);
 
     // Kill the card if it has been uninstalled on the "Installed" tab
-    // TODO: is this kosher, or is there a better way to handle?
     if (this.props.CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
       console.log("Card item not installed");
       return null;
