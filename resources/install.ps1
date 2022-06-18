@@ -37,6 +37,17 @@ Rename-Item -Path "${HOME}/spicetify-cli/CustomApps/spicetify-marketplace-dist" 
 Copy-Item -Path "${HOME}/spicetify-cli/CustomApps/marketplace" -Destination $sp_dot_dir -Recurse -Force
 spicetify config custom_apps spicetify-marketplace-
 spicetify config custom_apps marketplace
+
+# Color injection fix
+spicetify config inject_css 1
+spicetify config replace_colors 1
+
+$currentTheme = spicetify config current_theme | Out-String
+if ($currentTheme.Length -lt 3) {
+  Write-Host -ForegroundColor Red "No theme is found, applying default theme..."
+  spicetify config current_theme SpicetifyDefault
+}
+
 spicetify backup
 spicetify apply
 

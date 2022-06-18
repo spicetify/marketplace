@@ -1,10 +1,7 @@
 # spicetify-marketplace
 
-Download extensions and themes directly from within [Spicetify](https://github.com/spicetify/spicetify-cli). 
+Download extensions and themes directly from within [Spicetify](https://github.com/spicetify/spicetify-cli).
 
-Made by [@theRealPadster](https://github.com/theRealPadster) and [@CharlieS1103](https://github.com/CharlieS1103).
-
-Based on the [reddit Custom App](https://github.com/spicetify/spicetify-cli/wiki/Custom-Apps#reddit)  
 Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 
 <p align="center">
@@ -21,10 +18,10 @@ Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 </p>
 
 ## Disclaimer
-All extensions are from community. They might contain unwanted code. Be careful what you install, or review the code before use. We hold no responsibility for these extensions or anything installed via this custom app. If you find a malicious extension, please [submit an issue](https://github.com/spicetify/spicetify-marketplace/issues/new?template=malicious-extension-report.md) and we can add it to the [blacklist](blacklist.json). 
+All extensions are from community. They might contain unwanted code. Be careful what you install, or review the code before use. We hold no responsibility for these extensions or anything installed via this custom app. If you find a malicious extension, please [submit an issue](https://github.com/spicetify/spicetify-marketplace/issues/new?template=malicious-extension-report.md) and we can add it to the [blacklist](blacklist.json).
 
-## Notes: 
-This project is a work-in-progress and is not finished, polished, or guaranteed to work. Use at your own risk. 
+## Notes:
+This project is a work-in-progress and is not finished, polished, or guaranteed to work. Use at your own risk.
 
 ## Install
 
@@ -42,13 +39,22 @@ curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-marketplace/mai
 ```
 
 ### Manual Install (recommended)
-You can either download the latest release from [here](https://github.com/spicetify/spicetify-marketplace/releases), or download the latest dev build from the [dist](https://github.com/spicetify/spicetify-marketplace/tree/dist) branch [here](https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip). 
+You can either download the latest release from [here](https://github.com/spicetify/spicetify-marketplace/releases), or download the latest dev build from the [dist](https://github.com/spicetify/spicetify-marketplace/tree/dist) branch [here](https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip).
 Extract the zip, and copy resulting folder into your [Spicetify](https://github.com/spicetify/spicetify-cli) custom apps directory as "marketplace":
 | **Platform** | **Path**                                                                               |
 |------------|------------------------------------------------------------------------------------------|
 | **Linux**      | `~/.config/spicetify/CustomApps/` or `$XDG_CONFIG_HOME/.config/spicetify/CustomApps/`|
 | **MacOS**      | `~/.config/spicetify/CustomApps/` or `$SPICETIFY_CONFIG/CustomApps/`                 |
 | **Windows**    | `%userprofile%/.spicetify/CustomApps/`                                               |
+
+
+At least one theme must be applied in order for Marketplace to install themes correctly, in case you haven't applied one you can use the `SpicetifyDefault` theme
+```
+spicetify config inject_css 1
+spicetify config replace_colors 1
+spicetify config current_theme SpicetifyDefault
+spicetify config color_scheme SpicetifyDefault
+```
 
 After putting the marketplace folder into the correct custom apps folder, run the following command to enable it:
 ```
@@ -72,7 +78,7 @@ Then run:
 spicetify apply
 ```
 ## Manual reset
-If you lose access to the marketplace page, and therefore cannot access the setting, follow these steps: 
+If you lose access to the marketplace page, and therefore cannot access the setting, follow these steps:
 - First ensure you have dev-tools enabled by running ``spicetify enable-devtools apply``
 - Open up console by right clicking anywhere on Spotify (that isn't an element), and clicking inspect element.
 - Click the console tab in the devtools window that appears, and run the following command(in console)
@@ -85,12 +91,12 @@ In order to show up in the custom app, you'll need to make a public GitHub repo 
 ### Extension manifests
 * `name`: Your extension name
 * `description`: Description for your extension
-* `preview`: A path to your preview image. Must be relative to your project root. 
-* `main`: The filename for your extension's main js file. Must be relative to your project root. 
-* `readme`: The filename for your extension's README file. Must be relative to your project root. 
-* `branch`: Optional branch to specify. Will use default branch if none. 
-* `authors`: Optional array of authors with names and urls. Will use repo owner if none. 
-* `tags`: Optional array of tags to show along with the card. 
+* `preview`: A path to your preview image. Must be relative to your project root.
+* `main`: The filename for your extension's main js file. Must be relative to your project root.
+* `readme`: The filename for your extension's README file. Must be relative to your project root.
+* `branch`: Optional branch to specify. Will use default branch if none.
+* `authors`: Optional array of authors with names and urls. Will use repo owner if none.
+* `tags`: Optional array of tags to show along with the card.
 
 e.g.
 ```json
@@ -120,15 +126,15 @@ e.g.
 ### Theme manifests
 * `name`: Your theme name
 * `description`: Description for your theme
-* `preview`: A path to your preview image. Must be relative to your project root. 
-* `usercss`: A path to your user.css file. Must be relative to your project root. 
-* `schemes`: A path to your color.ini file. Must be relative to your project root. 
-* `readme`: The filename for your extension's README file. Must be relative to your project root. 
-* `branch`: Optional branch to specify. Will use default branch if none. 
-* `authors`: Optional array of authors with names and urls. Will use repo owner if none. 
-* `tags`: Optional array of tags to show along with the card. 
+* `preview`: A path to your preview image. Must be relative to your project root.
+* `usercss`: A path to your user.css file. Must be relative to your project root.
+* `schemes`: A path to your color.ini file. Must be relative to your project root.
+* `readme`: The filename for your extension's README file. Must be relative to your project root.
+* `branch`: Optional branch to specify. Will use default branch if none.
+* `authors`: Optional array of authors with names and urls. Will use repo owner if none.
+* `tags`: Optional array of tags to show along with the card.
 
-e.g. 
+e.g.
 ```json
 {
     "name": "Theme Name",
@@ -147,18 +153,19 @@ e.g.
 ```
 
 ### Further manifest notes
-* If you have multiple extensions in the same repo (such as using subfolders), you can make your `manifest.json` an array, and include them all. 
+* If you have multiple extensions in the same repo (such as using subfolders), you can make your `manifest.json` an array, and include them all.
 * Most fields also support http/https URLs (`preview`, `main`, `readme`, `usercss`, `schemes`)
-* If all your extensions/themes are in the root folder, you don't need to include an absolute file path. 
+* If all your extensions/themes are in the root folder, you don't need to include an absolute file path.
 
 
 ## Snippets
-CSS snippets are rather basic to implement. We fetch them from this repo, so you'll need to submit a [pull request](https://github.com/CharlieS1103/spicetify-marketplace/compare). In order to be valid JSON, the CSS needs to be in one line. You can use [this website](https://tools.knowledgewalls.com/online-multiline-to-single-line-converter) to make the css snippet single line. Once you have your code segment ready, edit snippets.json and add the following, before submitting your PR. 
+CSS snippets are rather basic to implement. We fetch them from this repo, so you'll need to submit a [pull request](https://github.com/CharlieS1103/spicetify-marketplace/compare). In order to be valid JSON, the CSS needs to be in one line. You can use [this website](https://tools.knowledgewalls.com/online-multiline-to-single-line-converter) to make the css snippet single line. Once you have your code segment ready, edit snippets.json and add the following, before submitting your PR.
 ```json
 {
     "title": "Title",
     "description": "description",
-    "code": "The single line css you have"
+    "code": "The single line css you have",
+    "preview": "Preview image of the snippet"
 }
 ```
 
@@ -166,16 +173,16 @@ CSS snippets are rather basic to implement. We fetch them from this repo, so you
 ### TODO: Re-write this entire section, since it will change a lot once we switch to the mono-manifest system
 1. `componentDidMount` triggers `newRequest`, which triggers `loadAmount(30)`
 2. `loadAmount` calls `loadPage` in a loop until it has the requested amount of cards or runs out of results
-3. `loadPage` calls `getRepos(page)` to get the next page of extensions. It queries the GitHub API for any repos with the "spicetify-extensions" topic. We'll likely add our own tag in the future, like "spicetify-marketplace". 
-4. The it loops through all the results and runs `fetchRepoExtensions()` or `getThemeRepos()`, which fetches a `manifest.json` file from the repo's root folder. If it finds one, we generate a card based on the info. 
-* Or if the active tab is "Installed", `loadPage` calls `getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets)` to get the extensions from the localstorage and generate the cards from there. 
-* Or if the active tab is "Snippets", `loadPage` calls `fetchCssSnippets()` and generates cards from the most recent `snippets.json` on GitHub. 
+3. `loadPage` calls `getRepos(page)` to get the next page of extensions. It queries the GitHub API for any repos with the "spicetify-extensions" topic. We'll likely add our own tag in the future, like "spicetify-marketplace".
+4. The it loops through all the results and runs `fetchRepoExtensions()` or `getThemeRepos()`, which fetches a `manifest.json` file from the repo's root folder. If it finds one, we generate a card based on the info.
+* Or if the active tab is "Installed", `loadPage` calls `getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets)` to get the extensions from the localstorage and generate the cards from there.
+* Or if the active tab is "Snippets", `loadPage` calls `fetchCssSnippets()` and generates cards from the most recent `snippets.json` on GitHub.
 
 ## Development + Build Process
 - This project uses [yarn](https://yarnpkg.com), not [npm](https://www.npmjs.com)
-- Run `yarn` to install the packages etc. 
+- Run `yarn` to install the packages etc.
 - The app entry point is located in `/src/app.tsx`
 - The SCSS stylesheets are all imported in `app.tsx`
-- Build the app once with `yarn build`. This needs to be done before the `watch` command works. 
-- For development, you can run `yarn watch` to live update the files as you save them. This works well when paired with `spicetify watch -a`, to live reload spotify as the files are saved. 
+- Build the app once with `yarn build`. This needs to be done before the `watch` command works.
+- For development, you can run `yarn watch` to live update the files as you save them. This works well when paired with `spicetify watch -a`, to live reload spotify as the files are saved.
 - Refer to the [Spicetify Creator](https://github.com/spicetify/spicetify-creator) [docs](https://spicetify.app/docs/development/spicetify-creator) for more information
