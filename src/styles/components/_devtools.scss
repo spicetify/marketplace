@@ -1,4 +1,4 @@
-.invalid-css-container{
+.invalid-css-container, .color-picker-container{
     height: 400px;
     width: 50%;
     position: relative;
@@ -9,11 +9,30 @@
     padding: 1rem;
 
 }
+.color-ini-editor{
+    height: 70%;
+    width: 100%;
+    background-color: var(--spice-sidebar);
+    color: var(--spice-text);
+    font-weight: bold;
+    overflow:scroll;
+    padding: 1rem;
+    resize:none;
+}
+.color-ini-editor-save-button{
+    width: 60px;
+    height: 30px;
+    background-color: var(--spice-button);
+    border-radius: 12px;
+    color: var(--spice-subtext);
+    font-weight: bold;
+    border:none;
+}
 .marketplace-theme-dev-tools-container {
     justify-content: flex-end;
     display: flex;
 }
-.invalid-css-heading{
+.invalid-css-heading, .devtools-heading{
     font-size: 1.5rem;
     font-weight: bold;
     text-decoration:underline;
