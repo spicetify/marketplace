@@ -1,6 +1,8 @@
 import React from "react";
 import semver from "semver";
-import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
+import { Option } from "react-dropdown";
+
+import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
@@ -26,7 +28,6 @@ export default class Grid extends React.Component<
   updateAppConfig: (CONFIG: Config) => void,
 },
 {
-  // TODO: add types
   version: string,
   newUpdate: boolean,
   searchValue: string,
@@ -155,9 +156,9 @@ export default class Grid extends React.Component<
     this.setState({ cards: [...this.cardList] });
   }
 
-  switchTo(value: TabType) {
-    this.CONFIG.activeTab = value;
-    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
+  switchTo(option: Option) {
+    this.CONFIG.activeTab = option.value;
+    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, option.value);
     this.cardList = [];
     // this.requestPage = null;
     this.requestPage = 0;
@@ -270,8 +271,7 @@ export default class Grid extends React.Component<
 
     this.setState({ rest: true, endOfList: true });
     this.endOfList = true;
-    // return null;
-    // TODO: what does returning null mean?
+
     return 0;
   }
   /**
@@ -519,9 +519,6 @@ export default class Grid extends React.Component<
           if (cardsOfType.length) {
             return (
               // Add a header for the card type
-              // TODO: does the styling etc work here?
-              // I had to wrap with a <> because it's jsx
-              // The original returned an array of two elements: the header and the cards
               <>
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>

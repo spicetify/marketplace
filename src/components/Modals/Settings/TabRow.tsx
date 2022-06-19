@@ -26,14 +26,8 @@ const TabRow = (props: {
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
     // Saves the config settings to app as well as SettingsModal state
     props.updateConfig(props.modalConfig);
-
-    // Refresh
-    // stackTabElements();
   };
 
-  // TODO: for some reason it just closes the modal when you click it...
-  // Ohh. The app state changes, so it re-renders the entire marketplace app.
-  // That's not ideal. Hmm. Wait, it doesn't break for the visual options (ConfigRow)
   function moveTab(currPos, dir) {
     console.log({ currPos, dir });
 
@@ -50,8 +44,6 @@ const TabRow = (props: {
 
     // Saves the config settings to app as well as SettingsModal state
     props.updateConfig(props.modalConfig);
-
-    // stackTabElements();
   }
 
   return (
