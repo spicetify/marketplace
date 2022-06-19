@@ -36,6 +36,7 @@ export default class Card extends React.Component<CardProps, {
   // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
   stars: number;
   tagsExpanded: boolean;
+  externalUrl: string;
 }> {
   // Theme stuff
   // cssURL?: string;
@@ -47,7 +48,7 @@ export default class Card extends React.Component<CardProps, {
   tags: string[];
 
   // Added locally
-  menuType;
+  menuType: typeof Spicetify.ReactComponent.Menu;
   localStorageKey: string;
 
   constructor(props: CardProps) {
@@ -59,10 +60,21 @@ export default class Card extends React.Component<CardProps, {
 
     const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
 
-    let cardId = "";
-    if (props.type === "snippet") cardId = props.item.title.replaceAll(" ", "-");
-    else if (props.type === "theme") cardId = props.item.manifest?.usercss || "";
-    else if (props.type === "extension") cardId = props.item.manifest?.main || "";
+    let cardId: string;
+    switch (props.type) {
+    case "snippet":
+      cardId = props.item.title.replaceAll(" ", "-");
+      break;
+    case "theme":
+      cardId = props.item.manifest?.usercss || "";
+      break;
+    case "extension":
+      cardId = props.item.manifest?.main || "";
+      break;
+    case "app":
+      cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
+      break;
+    }
 
     this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
@@ -80,6 +92,9 @@ export default class Card extends React.Component<CardProps, {
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
       tagsExpanded: false,
+      externalUrl: (this.props.item.user && this.props.item.repo) // These won't exist for snippets
+        ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
+        : "",
     };
   }
 
@@ -133,6 +148,9 @@ export default class Card extends React.Component<CardProps, {
 
       // If the new or previous theme has JS, prompt to reload
       if (this.props.item.manifest?.include || previousTheme.include) openModal("RELOAD");
+    } else if (this.props.type === "app") {
+      // Open repo in new tab
+      window.open(this.state.externalUrl, "_blank");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.log("Snippet already installed, removing");
@@ -149,18 +167,23 @@ export default class Card extends React.Component<CardProps, {
     console.log(`Installing extension ${this.localStorageKey}`);
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
+    if (!this.props.item) {
+      Spicetify.showNotification("There was an error installing extension");
+      return;
+    }
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL } = this.props.item;
     localStorage.setItem(this.localStorageKey, JSON.stringify({
-      manifest: this.props.item?.manifest,
+      manifest,
       type: this.props.type,
-      title: this.props.item.title,
-      subtitle: this.props.item.subtitle,
-      authors: this.props.item.authors,
-      user: this.props.item.user,
-      repo: this.props.item.repo,
-      branch: this.props.item.branch,
-      imageURL: this.props.item.imageURL,
-      extensionURL: this.props.item.extensionURL,
-      readmeURL: this.props.item.readmeURL,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
       stars: this.state.stars,
     }));
 
@@ -195,11 +218,16 @@ export default class Card extends React.Component<CardProps, {
   }
 
   async installTheme() {
+    const { item } = this.props;
+    if (!item) {
+      Spicetify.showNotification("There was an error installing theme");
+      return;
+    }
     console.log(`Installing theme ${this.localStorageKey}`);
 
     let parsedSchemes: SchemeIni = {};
-    if (this.props.item.schemesURL) {
-      const schemesResponse = await fetch(this.props.item.schemesURL);
+    if (item.schemesURL) {
+      const schemesResponse = await fetch(item.schemesURL);
       const colourSchemes = await schemesResponse.text();
       parsedSchemes = parseIni(colourSchemes);
     }
@@ -210,25 +238,27 @@ export default class Card extends React.Component<CardProps, {
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
+
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include } = item;
+
     localStorage.setItem(this.localStorageKey, JSON.stringify({
-      // TODO: can I clean this up so it's less repetition?
-      manifest: this.props.item?.manifest,
+      manifest,
       type: this.props.type,
-      title: this.props.item.title,
-      subtitle: this.props.item.subtitle,
-      authors: this.props.item.authors,
-      user: this.props.item.user,
-      repo: this.props.item.repo,
-      branch: this.props.item.branch,
-      imageURL: this.props.item.imageURL,
-      extensionURL: this.props.item.extensionURL,
-      readmeURL: this.props.item.readmeURL,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
       stars: this.state.stars,
       tags: this.tags,
       // Theme stuff
-      cssURL: this.props.item.cssURL,
-      schemesURL: this.props.item.schemesURL,
-      include: this.props.item.include,
+      cssURL,
+      schemesURL,
+      include,
       // Installed theme localstorage item has schemes, nothing else does
       schemes: parsedSchemes,
       activeScheme,
@@ -251,7 +281,7 @@ export default class Card extends React.Component<CardProps, {
     // TODO: We'll also need to actually update the usercss etc, not just the colour scheme
     // e.g. the stuff from extension.js, like injectUserCSS() etc.
 
-    if (!this.props.item.include) {
+    if (!item.include) {
       // Add new theme css
       this.fetchAndInjectUserCSS(this.localStorageKey);
       // Update the active theme in Grid state, triggers state change and re-render
@@ -426,7 +456,7 @@ export default class Card extends React.Component<CardProps, {
               className="main-cardHeader-link"
               dir="auto"
               href={this.props.type !== "snippet"
-                ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
+                ? this.state.externalUrl
                 : SNIPPETS_PAGE_URL
               }
               target="_blank"

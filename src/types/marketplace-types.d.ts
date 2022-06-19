@@ -15,11 +15,13 @@ export type SortBoxOption = {
   value: string;
 };
 
-export type TabType = "Extensions" | "Themes" | "Snippets" | "Installed";
+export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps";
 
-export type CardType = "extension" | "theme" | "snippet";
+export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
 
-export type RepoType = "extension" | "theme";
+export type CardType = "extension" | "theme" | "snippet" | "app";
+
+export type RepoType = "extension" | "theme" | "app";
 
 export type Author = {
   name: string;
