@@ -144,3 +144,22 @@ option {
   bottom: 32px;
   left: 100%;
 }
+
+.marketplace-theme-dev-tools-button{
+  border-radius: 4px;
+  color: var(--spice-text);
+  display: inline-block;
+  padding: 10px 14px 6px;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none !important;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  background-color: var(--spice-sidebar);
+  transition-duration: constants.$transition-default;
+
+  &:hover {
+    background-color: var(--spice-tab-active);
+  }
+}

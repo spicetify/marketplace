@@ -11,6 +11,7 @@ import {
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
+import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
@@ -415,7 +416,7 @@ export default class Grid extends React.Component<
             {/*Show theme developer tools button if themeDevTools is enabled*/}
             {this.CONFIG.visual.themeDevTools ? <button type="button" title="ThemeDevTools" className="marketplace-theme-dev-tools-button" onClick={() => {
               openModal("THEME_DEV_TOOLS");
-            }}>test</button>: null}
+            }}><ThemeDeveloperToolsIcon/> </button>: null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
