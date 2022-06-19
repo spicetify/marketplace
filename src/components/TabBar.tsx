@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Dropdown, { Option } from "react-dropdown";
-import { TabItemConfig, TabType } from "../types/marketplace-types";
+import { TabItemConfig } from "../types/marketplace-types";
 import PropTypes from "prop-types";
 
-type TabOptionConfig = {
-  key: string;
-  value: string;
+// NOTE: The label and value are the same (e.g. "Extensions")
+type TabOptionConfig = Option & {
   active: boolean;
   enabled: boolean;
 };
 
 class TabBarItem extends React.Component<{
   item: TabOptionConfig;
-  switchTo: (value: TabType) => void;
+  switchTo: (option: Option) => void;
 }> {
   constructor(props) {
     super(props);
@@ -28,7 +27,7 @@ class TabBarItem extends React.Component<{
         data-tab={this.props.item.value}
         onClick={(event) => {
           event.preventDefault();
-          this.props.switchTo(this.props.item.key as TabType);
+          this.props.switchTo(this.props.item);
         }}
       >
         <a
@@ -48,29 +47,15 @@ class TabBarItem extends React.Component<{
 
 interface TabBarMoreProps {
   items: TabOptionConfig[];
-  switchTo: (value: TabType) => void;
+  switchTo: (option: Option) => void;
 }
 const TabBarMore = React.memo<TabBarMoreProps>(
   function TabBarMore({ items, switchTo } : TabBarMoreProps) {
-    // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
-    // Transform this into the format that react-dropdown expects
-    const transformedOptions: Option[] = items.map((item) => {
-      return {
-        value: item.key,
-        label: item.value,
-      };
-    });
-
-    // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
-    const _onSelect = (item: Option) => {
-      switchTo(item.value as TabType);
-    };
-
     return (
       <li className="marketplace-tabBar-headerItem">
         <Dropdown className="main-type-mestoBold"
-          options={transformedOptions} value="More" placeholder="More"
-          onChange={_onSelect}
+          options={items} value="More" placeholder="More"
+          onChange={switchTo}
         />
       </li>
     );
@@ -94,7 +79,7 @@ TabBarContext.propTypes = {
 export const TopBarContent = (props: {
   links: TabItemConfig[];
   activeLink: string;
-  switchCallback: (value: TabType) => void;
+  switchCallback: (option: Option) => void;
 }) => {
   const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
   if (!resizeHost) return null;
@@ -125,7 +110,7 @@ export const TopBarContent = (props: {
 interface TabBarProps {
   links: TabItemConfig[];
   activeLink: string;
-  switchCallback: (value: TabType) => void;
+  switchCallback: (option: Option) => void;
   windowSize: number;
 }
 const TabBar = React.memo<TabBarProps>(
@@ -138,7 +123,7 @@ const TabBar = React.memo<TabBarProps>(
     // Key is the tab name, value is also the tab name, active is if it's active
     const options = links.map(({ name, enabled }) => {
       const active = name === activeLink;
-      return ({ key: name, value: name, active, enabled } as TabOptionConfig);
+      return ({ label: name, value: name, active, enabled } as TabOptionConfig);
     });
 
     useEffect(() => {
@@ -194,7 +179,7 @@ const TabBar = React.memo<TabBarProps>(
             .filter((_, id) => !droplistItem.includes(id))
             .map(item => (
               <TabBarItem
-                key={item.key}
+                key={item.value}
                 item={item}
                 switchTo={switchCallback}
               />
