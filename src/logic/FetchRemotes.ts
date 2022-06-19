@@ -1,22 +1,24 @@
 import { CardItem, Snippet } from "../types/marketplace-types";
 import { processAuthors, addToSessionStorage } from "./Utils";
-import { ITEMS_PER_REQUEST, BLACKLIST_URL /*, SNIPPETS_URL */ } from "../constants";
+import { ITEMS_PER_REQUEST, BLACKLIST_URL, RepoTopic /*, SNIPPETS_URL */ } from "../constants";
 
 import snippetsJSON from "../../resources/snippets.json";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
+
 /**
- * Query GitHub for all repos with the "spicetify-extensions" topic
+ * Query GitHub for all repos with the requested topic
+ * @param tag The tag ("topic") to search for
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getExtensionRepos(page = 1, BLACKLIST:string[] = [], query?: string) {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
   // www is needed or it will block with "cross-origin" error.
   let url = query
-    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`
-    : `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-extensions")}&per_page=${ITEMS_PER_REQUEST}`;
+    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`
+    : `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
 
   // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
   // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
@@ -197,36 +199,6 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     // console.warn(contents_url, err);
     return null;
   }
-}
-
-/**
-* Query the GitHub API for a page of theme repos (having "spicetify-themes" topic)
-* @param {number} page The page to get (defaults to 1)
-* @returns Array of GitHub API results, filtered through the blacklist
-*/
-export async function getThemeRepos(page = 1, BLACKLIST:string[] = [], query?: string) {
-  let url = query
-    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:spicetify-extensions`)}&per_page=${ITEMS_PER_REQUEST}`
-    : `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify-themes")}&per_page=${ITEMS_PER_REQUEST}`;
-
-  // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
-  // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
-  if (page) url += `&page=${page}`;
-  // Sorting params (not implemented for Marketplace yet)
-  // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
-  //     url += `&t=${sortConfig.time}`
-  const allThemes = await fetch(url).then(res => res.json()).catch(() => []);
-  if (!allThemes.items) Spicetify.showNotification("Too Many Requests, Cool Down.");
-
-  const filteredResults = {
-    ...allThemes,
-    // Include count of all items on the page, since we're filtering the blacklist below,
-    // which can mess up the paging logic
-    page_count: allThemes.items.length,
-    items: allThemes.items.filter(item => !BLACKLIST.includes(item.html_url)),
-  };
-
-  return filteredResults;
 }
 
 /**

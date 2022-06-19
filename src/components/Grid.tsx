@@ -5,8 +5,8 @@ import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme 
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
-  getExtensionRepos, fetchExtensionManifest,
-  getThemeRepos, fetchThemeManifest,
+  getTaggedRepos,
+  fetchExtensionManifest, fetchThemeManifest,
   fetchCssSnippets, getBlacklist,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
@@ -177,9 +177,14 @@ export default class Grid extends React.Component<
   async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
     case "Extensions": {
-      const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count, this.CONFIG.visual.hideInstalled);
+        const extensions = await fetchExtensionManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+          this.CONFIG.visual.hideInstalled,
+        );
 
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
@@ -231,10 +236,14 @@ export default class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } case "Themes": {
-      const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
 
-        const themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+        const themes = await fetchThemeManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+        );
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
