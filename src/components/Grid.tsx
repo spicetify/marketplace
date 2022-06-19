@@ -6,7 +6,7 @@ import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEA
 import { openModal } from "../logic/LaunchModals";
 import {
   getTaggedRepos,
-  fetchExtensionManifest, fetchThemeManifest,
+  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
   fetchCssSnippets, getBlacklist,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
@@ -265,6 +265,36 @@ export default class Grid extends React.Component<
       if (remainingResults > 0) return currentPage + 1;
       else console.log("No more theme results");
       break;
+    } case "Apps": {
+      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
+      for (const repo of pageOfRepos.items) {
+
+        const apps = await fetchAppManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+        );
+        // I believe this stops the requests when switching tabs?
+        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+          // Stop this queue from continuing to fetch and append to cards list
+          return -1;
+        }
+
+        if (apps && apps.length) {
+          apps.forEach((app) => this.appendCard(app, "app"));
+        }
+      }
+
+      // First request is null, so coerces to 1
+      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+      // -1 because the page number is 1-indexed
+      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+      const remainingResults = pageOfRepos.total_count - soFarResults;
+
+      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
+      if (remainingResults > 0) return currentPage + 1;
+      else console.log("No more app results");
+      break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
 
@@ -505,6 +535,7 @@ export default class Grid extends React.Component<
           { handle: "extension", name: "Extensions" },
           { handle: "theme", name: "Themes" },
           { handle: "snippet", name: "Snippets" },
+          { handle: "app", name: "Apps" },
         ].map((cardType) => {
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
             .filter((card) => {

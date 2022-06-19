@@ -59,7 +59,9 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
   if (failedSessionStorageItems?.includes(url)) return null;
 
-  const manifest = await fetch(url).then(res => res.json()).catch(() => addToSessionStorage([url], "noManifests"));
+  const manifest = await fetch(url).then(res => res.json()).catch(
+    () => addToSessionStorage([url], "noManifests"),
+  );
   if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
 
   return manifest;
@@ -194,6 +196,73 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
       }
       return accum;
     }, []);
+    return parsedManifests;
+  }
+  catch (err) {
+    // console.warn(contents_url, err);
+    return null;
+  }
+}
+
+/**
+* Fetch custom apps from a repo and format data for generating cards
+* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+* @param branch The repo's default branch (e.g. main or master)
+* @param stars The number of stars the repo has
+* @returns Extension info for card (or null)
+*/
+export async function fetchAppManifest(contents_url: string, branch: string, stars: number) {
+  try {
+    // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
+    let manifests;
+    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+    // TODO: err handling?
+    if (!regex_result || !regex_result.groups) return null;
+    const { user, repo } = regex_result.groups;
+
+    manifests = await getRepoManifest(user, repo, branch);
+
+    // If the manifest returned is not an array, initialize it as one
+    if (!Array.isArray(manifests)) manifests = [manifests];
+
+    // Manifest is initially parsed
+    const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+      const selectedBranch = manifest.branch || branch;
+      // TODO: tweak saved items
+      const item = {
+        manifest,
+        title: manifest.name,
+        subtitle: manifest.description,
+        authors: processAuthors(manifest.authors, user),
+        user,
+        repo,
+        branch: selectedBranch,
+
+        imageURL: manifest.preview && manifest.preview.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        // Custom Apps don't have an entry point; they're just listed so they can link out from the card
+        // extensionURL: manifest.main.startsWith("http")
+        //   ? manifest.main
+        //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        stars,
+        tags: manifest.tags,
+      };
+
+      // If manifest is valid, add it to the list
+      if (manifest && manifest.name && manifest.description) {
+        accum.push(item);
+      }
+      // else {
+      //     console.error("Invalid manifest:", manifest);
+      // }
+
+      return accum;
+    }, []);
+
     return parsedManifests;
   }
   catch (err) {

@@ -21,6 +21,7 @@ export const ALL_TABS: TabItemConfig[] = [
   { name: "Extensions", enabled: true },
   { name: "Themes", enabled: true },
   { name: "Snippets", enabled: true },
+  { name: "Apps", enabled: true },
   { name: "Installed", enabled: true },
 ];
 
