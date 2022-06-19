@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Dropdown, { Option } from "react-dropdown";
-import { TabItemConfig, TabType } from "../types/marketplace-types";
+import { TabItemConfig } from "../types/marketplace-types";
 import PropTypes from "prop-types";
 
-type TabOptionConfig = {
-  key: string;
-  value: string;
+// NOTE: The label and value are the same (e.g. "Extensions")
+type TabOptionConfig = Option & {
   active: boolean;
   enabled: boolean;
 };
@@ -28,11 +27,7 @@ class TabBarItem extends React.Component<{
         data-tab={this.props.item.value}
         onClick={(event) => {
           event.preventDefault();
-          this.props.switchTo({
-            // TODO: make label/key/value all consistently named
-            value: this.props.item.key,
-            label: this.props.item.value,
-          });
+          this.props.switchTo(this.props.item);
         }}
       >
         <a
@@ -56,19 +51,10 @@ interface TabBarMoreProps {
 }
 const TabBarMore = React.memo<TabBarMoreProps>(
   function TabBarMore({ items, switchTo } : TabBarMoreProps) {
-    // TODO: refactor the `switchTo` function to just be what's expected by react-dropdown
-    // Transform this into the format that react-dropdown expects
-    const transformedOptions: Option[] = items.map((item) => {
-      return {
-        value: item.key,
-        label: item.value,
-      };
-    });
-
     return (
       <li className="marketplace-tabBar-headerItem">
         <Dropdown className="main-type-mestoBold"
-          options={transformedOptions} value="More" placeholder="More"
+          options={items} value="More" placeholder="More"
           onChange={switchTo}
         />
       </li>
@@ -137,7 +123,7 @@ const TabBar = React.memo<TabBarProps>(
     // Key is the tab name, value is also the tab name, active is if it's active
     const options = links.map(({ name, enabled }) => {
       const active = name === activeLink;
-      return ({ key: name, value: name, active, enabled } as TabOptionConfig);
+      return ({ label: name, value: name, active, enabled } as TabOptionConfig);
     });
 
     useEffect(() => {
@@ -193,7 +179,7 @@ const TabBar = React.memo<TabBarProps>(
             .filter((_, id) => !droplistItem.includes(id))
             .map(item => (
               <TabBarItem
-                key={item.key}
+                key={item.value}
                 item={item}
                 switchTo={switchCallback}
               />
