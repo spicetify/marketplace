@@ -1,6 +1,6 @@
 # spicetify-marketplace
 
-Download extensions and themes directly from within [Spicetify](https://github.com/spicetify/spicetify-cli).
+Download extensions and themes directly from within [Spicetify](https://github.com/spicetify/spicetify-cli). Also browse custom apps, but those need to be downloaded and installed locally. This is a limitation of how Spicetify itself works. 
 
 Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 
@@ -83,9 +83,9 @@ If you lose access to the marketplace page, and therefore cannot access the sett
 - Open up console by right clicking anywhere on Spotify (that isn't an element), and clicking inspect element.
 - Click the console tab in the devtools window that appears, and run the following command(in console)
 - ``Marketplace.reset()``
-## Getting your extension/theme on Marketplace
-In order to show up in the custom app, you'll need to make a public GitHub repo that meets these requirements:
-* Have the matching **GitHub topic tag** ("**spicetify-extensions**" or "**spicetify-themes**")
+## Getting your extension/theme/app on Marketplace
+In order to show up in the marketplace, you'll need to make a public GitHub repo that meets these requirements:
+* Have the matching **GitHub topic tag** ("**spicetify-extensions**"/"**spicetify-themes**"/"**spicetify-apps**")
 * Have a valid **`manifest.json`** in the root folder (format outlined below)
 
 ### Extension manifests
@@ -149,6 +149,31 @@ e.g.
         { "name": "CharlieS1103", "url": "https://github.com/CharlieS1103" }
     ],
     "tags": ["dark", "minimal"]
+}
+```
+
+### Custom App manifests
+* `name`: Your custom app name
+* `description`: Description for your custom app
+* `preview`: A path to your preview image. Must be relative to your project root.
+* `readme`: The filename for your extension's README file. Must be relative to your project root.
+* `branch`: Optional branch to specify. Will use default branch if none.
+* `authors`: Optional array of authors with names and urls. Will use repo owner if none.
+* `tags`: Optional array of tags to show along with the card.
+
+e.g.
+```json
+{
+    "name": "App Name",
+    "description": "App description",
+    "preview": "filepathFromGitRepo/theme.png",
+    "readme": "README.md",
+    "branch": "beta-release",
+    "authors": [
+        { "name": "theRealPadster", "url": "https://github.com/theRealPadster" },
+        { "name": "CharlieS1103", "url": "https://github.com/CharlieS1103" }
+    ],
+    "tags": ["game", "beta"]
 }
 ```
 
