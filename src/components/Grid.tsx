@@ -364,7 +364,7 @@ export default class Grid extends React.Component<
     this.CONFIG.theme.activeScheme = activeScheme;
 
     if (schemes && activeScheme && schemes[activeScheme]) {
-      injectColourScheme(this.CONFIG.theme.schemes?.[activeScheme]);
+      injectColourScheme(this.CONFIG.theme.schemes[activeScheme]);
     } else {
       // Reset schemes if none sent
       injectColourScheme(null);
