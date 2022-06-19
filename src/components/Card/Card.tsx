@@ -36,6 +36,7 @@ export default class Card extends React.Component<CardProps, {
   // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
   stars: number;
   tagsExpanded: boolean;
+  externalUrl: string;
 }> {
   // Theme stuff
   // cssURL?: string;
@@ -63,6 +64,7 @@ export default class Card extends React.Component<CardProps, {
     if (props.type === "snippet") cardId = props.item.title.replaceAll(" ", "-");
     else if (props.type === "theme") cardId = props.item.manifest?.usercss || "";
     else if (props.type === "extension") cardId = props.item.manifest?.main || "";
+    else if (props.type === "app") cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
 
     this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
@@ -80,6 +82,9 @@ export default class Card extends React.Component<CardProps, {
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
       tagsExpanded: false,
+      externalUrl: (this.props.item.user && this.props.item.repo) // These won't exist for snippets
+        ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
+        : "",
     };
   }
 
@@ -133,6 +138,9 @@ export default class Card extends React.Component<CardProps, {
 
       // If the new or previous theme has JS, prompt to reload
       if (this.props.item.manifest?.include || previousTheme.include) openModal("RELOAD");
+    } else if (this.props.type === "app") {
+      // Open repo in new tab
+      window.open(this.state.externalUrl, "_blank");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.log("Snippet already installed, removing");
@@ -427,7 +435,7 @@ export default class Card extends React.Component<CardProps, {
               className="main-cardHeader-link"
               dir="auto"
               href={this.props.type !== "snippet"
-                ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
+                ? this.state.externalUrl
                 : SNIPPETS_PAGE_URL
               }
               target="_blank"
