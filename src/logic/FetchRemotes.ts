@@ -287,14 +287,14 @@ export const getBlacklist = async () => {
 export const fetchCssSnippets = async () => {
   const json = snippetsJSON;
 
-  if (!json) return undefined;
+  if (!json) return;
 
-  const snippets: Snippet[] = json.reduce((accum, snippet) => {
-    const snip = { ...snippet };
+  const snippets = json.reduce<Snippet[]>((accum, snippet) => {
+    const snip = { ...snippet } as Snippet;
 
     // Because the card component looks for an imageURL prop
     if (snip.preview) {
-      snip.imageURL = snip.preview && snip.preview.startsWith("http")
+      snip.imageURL = snip.preview.startsWith("http")
         ? snip.preview
         : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
       delete snip.preview;
