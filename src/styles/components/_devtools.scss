@@ -1,48 +1,49 @@
-.invalid-css-container, .color-picker-container{
+.invalid-css-container,
+.color-picker-container {
     height: 400px;
     width: 50%;
     position: relative;
     background-color: var(--spice-sidebar);
     color: var(--spice-text);
     font-weight: bold;
-    overflow:scroll;
+    overflow: scroll;
     padding: 1rem;
 
 }
-.color-ini-editor{
+.color-ini-editor {
     height: 70%;
     width: 100%;
     background-color: var(--spice-sidebar);
     color: var(--spice-text);
     font-weight: bold;
-    overflow:scroll;
+    overflow: scroll;
     padding: 1rem;
-    resize:none;
+    resize: none;
 }
-.color-ini-editor-save-button{
+.color-ini-editor-save-button {
     width: 60px;
     height: 30px;
     background-color: var(--spice-button);
     border-radius: 12px;
     color: var(--spice-subtext);
     font-weight: bold;
-    border:none;
+    border: none;
 }
 .marketplace-theme-dev-tools-container {
     justify-content: flex-end;
     display: flex;
 }
-.invalid-css-heading, .devtools-heading{
+.invalid-css-heading,
+.devtools-heading {
     font-size: 1.5rem;
     font-weight: bold;
-    text-decoration:underline;
+    text-decoration: underline;
     margin-bottom: 1rem;
 }
-.invalid-css-text{
+.invalid-css-text {
     margin-bottom: 1.5rem;
 }
-.devtools-icon{
+.devtools-icon {
     width: 30px;
     fill: var(--spice-button)
 }
-

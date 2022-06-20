@@ -413,24 +413,23 @@ export default class Grid extends React.Component<
         <div className="marketplace-header">
           <h1>{this.props.title}</h1>
           <div className="marketplace-header__right">
-            {/*Show theme developer tools button if themeDevTools is enabled*/}
+            {/* Show theme developer tools button if themeDevTools is enabled */}
             {this.CONFIG.visual.themeDevTools
-              ? <button type="button" title="ThemeDevTools" className="marketplace-theme-dev-tools-button" 
-              onClick={() => {
-                openModal("THEME_DEV_TOOLS");
-              }}><ThemeDeveloperToolsIcon/></button>
+              ? <button type="button" title="ThemeDevTools" className="marketplace-header-icon-button"
+                onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
               : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
-            {this.state.activeScheme ? <SortBox
-              onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
-              // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
-              sortBoxOptions={generateSchemesOptions(this.state.schemes)}
-              // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
-              // because it hardcodes the value into the fn
-              sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
-
-            /> : null}
-            <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
+            {this.state.activeScheme
+              ? <SortBox
+                onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
+                // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
+                sortBoxOptions={generateSchemesOptions(this.state.schemes)}
+                // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
+                // because it hardcodes the value into the fn
+                sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
+              />
+              : null}
+            <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
