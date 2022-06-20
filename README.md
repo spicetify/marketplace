@@ -20,8 +20,9 @@ Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 
 Head to the [wiki](https://github.com/spicetify/spicetify-marketplace/wiki) to get started!
 
-<img src=".github/assets/preview.png" alt="img" align="right" width="560px" height="400px">
+---
 
+## Links
 - [Overview](https://github.com/spicetify/spicetify-marketplace/wiki)
 - [Installation](https://github.com/spicetify/spicetify-marketplace/wiki/Installation)
 - [Adding your creation to Marketplace](https://github.com/spicetify/spicetify-marketplace/wiki/Adding-your-own-creation-to-Marketplace)
