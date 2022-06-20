@@ -12,7 +12,8 @@ const ThemeDevToolsModal = () => {
     <div id="marketplace-theme-dev-tools-container" className="marketplace-theme-dev-tools-container">
       <div className="color-picker-container">
         <h2 className="devtools-heading">Color.ini Editor</h2>
-        <textarea className="color-ini-editor" id="color-ini-editor">{themeManifest ? unparseIni(themeManifest.schemes) : "Error, no marketplace installed theme found."}</textarea>
+        <textarea className="color-ini-editor" id="color-ini-editor">{themeManifest ? unparseIni(themeManifest.schemes) : "Error, no marketplace theme installed."}</textarea>
+
         <button className="color-ini-editor-save-button" id="color-ini-editor-save-button" onClick={saveColorIni}>Save</button>
       </div>
       {/* Create a box containing the invalid css classnames fetched from "getInvalidCSS()"*/}
