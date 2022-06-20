@@ -15,7 +15,7 @@ const themeManifest = themeKey
 const ThemeDevToolsModal = () => {
   const [code, setCode] = React.useState(themeManifest
     ? unparseIni(themeManifest.schemes)
-    : "Error, no marketplace theme installed.",
+    : "Error: No marketplace theme installed",
   );
 
   return (
