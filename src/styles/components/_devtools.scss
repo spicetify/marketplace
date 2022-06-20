@@ -1,6 +1,5 @@
-.invalid-css-container,
-.color-picker-container {
-    height: 400px;
+.devtools-column {
+    height: 450px;
     width: 50%;
     position: relative;
     background-color: var(--spice-sidebar);
@@ -20,15 +19,6 @@
     padding: 1rem;
     resize: none;
 }
-.color-ini-editor-save-button {
-    width: 60px;
-    height: 30px;
-    background-color: var(--spice-button);
-    border-radius: 12px;
-    color: var(--spice-subtext);
-    font-weight: bold;
-    border: none;
-}
 .marketplace-theme-dev-tools-container {
     justify-content: flex-end;
     display: flex;
@@ -42,6 +32,7 @@
 }
 .invalid-css-text {
     margin-bottom: 1.5rem;
+    font-family: monospace;
 }
 .devtools-icon {
     width: 30px;
