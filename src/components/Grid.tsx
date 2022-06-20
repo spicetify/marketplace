@@ -414,9 +414,12 @@ export default class Grid extends React.Component<
           <h1>{this.props.title}</h1>
           <div className="marketplace-header__right">
             {/*Show theme developer tools button if themeDevTools is enabled*/}
-            {this.CONFIG.visual.themeDevTools ? <button type="button" title="ThemeDevTools" className="marketplace-theme-dev-tools-button" onClick={() => {
-              openModal("THEME_DEV_TOOLS");
-            }}><ThemeDeveloperToolsIcon/> </button>: null}
+            {this.CONFIG.visual.themeDevTools
+              ? <button type="button" title="ThemeDevTools" className="marketplace-theme-dev-tools-button" 
+              onClick={() => {
+                openModal("THEME_DEV_TOOLS");
+              }}><ThemeDeveloperToolsIcon/></button>
+              : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
