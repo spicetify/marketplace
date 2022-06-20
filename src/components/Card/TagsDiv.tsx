@@ -1,4 +1,4 @@
-import React from "react";
+import React, { DetailedReactHTMLElement } from "react";
 
 import { MAX_TAGS } from "../../constants";
 
@@ -8,8 +8,15 @@ const TagsDiv = (props: {
 }) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  const generateTags = (tags) => {
-    return tags.reduce((accum, tag) => {
+  const generateTags = (tags: string[]) => {
+    // Stop duplicate tags from appearing
+    const uniqueTags = tags.filter((item, pos, arr) => arr.indexOf(item) === pos);
+
+    return uniqueTags.reduce<DetailedReactHTMLElement<{
+      className: string;
+      draggable: false;
+      "data-tag": string;
+    }, HTMLElement>[]>((accum, tag) => {
       // Render tags if enabled. Always render external JS tag
       if (props.showTags || tag === "external JS") {
         accum.push(
@@ -28,8 +35,6 @@ const TagsDiv = (props: {
   const extraTags = props.tags.slice(MAX_TAGS);
 
   // Render the tags list and add expand button if there are more tags
-  // TODO: JSX needs to return a single element,
-  // so may need to adjust the css that had it returning an array before...
   return (
     <div className="marketplace-card__tags-container">
       <ul className="marketplace-card__tags">

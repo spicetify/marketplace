@@ -1,11 +1,14 @@
 import React from "react";
-import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
+import semver from "semver";
+import { Option } from "react-dropdown";
+
+import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
-import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
+import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
-  getExtensionRepos, fetchExtensionManifest,
-  getThemeRepos, fetchThemeManifest,
+  getTaggedRepos,
+  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
   fetchCssSnippets, getBlacklist,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
@@ -16,6 +19,8 @@ import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
 import Button from "./Button";
+import DownloadIcon from "./Icons/DownloadIcon";
+import Changelog from "./Modals/Changelog";
 
 export default class Grid extends React.Component<
 {
@@ -24,7 +29,8 @@ export default class Grid extends React.Component<
   updateAppConfig: (CONFIG: Config) => void,
 },
 {
-  // TODO: add types
+  version: string,
+  newUpdate: boolean,
   searchValue: string,
   cards: Card[],
   tabs: TabItemConfig[],
@@ -46,6 +52,8 @@ export default class Grid extends React.Component<
     };
 
     this.state = {
+      version: MARKETPLACE_VERSION,
+      newUpdate: false,
       searchValue: "",
       cards: [],
       tabs: props.CONFIG.tabs,
@@ -149,9 +157,9 @@ export default class Grid extends React.Component<
     this.setState({ cards: [...this.cardList] });
   }
 
-  switchTo(value: TabType) {
-    this.CONFIG.activeTab = value;
-    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
+  switchTo(option: Option) {
+    this.CONFIG.activeTab = option.value;
+    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, option.value);
     this.cardList = [];
     // this.requestPage = null;
     this.requestPage = 0;
@@ -171,9 +179,14 @@ export default class Grid extends React.Component<
   async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
     case "Extensions": {
-      const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count, this.CONFIG.visual.hideInstalled);
+        const extensions = await fetchExtensionManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+          this.CONFIG.visual.hideInstalled,
+        );
 
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
@@ -225,10 +238,14 @@ export default class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } case "Themes": {
-      const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
 
-        const themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+        const themes = await fetchThemeManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+        );
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
@@ -250,6 +267,36 @@ export default class Grid extends React.Component<
       if (remainingResults > 0) return currentPage + 1;
       else console.log("No more theme results");
       break;
+    } case "Apps": {
+      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
+      for (const repo of pageOfRepos.items) {
+
+        const apps = await fetchAppManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+        );
+        // I believe this stops the requests when switching tabs?
+        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+          // Stop this queue from continuing to fetch and append to cards list
+          return -1;
+        }
+
+        if (apps && apps.length) {
+          apps.forEach((app) => this.appendCard(app, "app"));
+        }
+      }
+
+      // First request is null, so coerces to 1
+      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+      // -1 because the page number is 1-indexed
+      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+      const remainingResults = pageOfRepos.total_count - soFarResults;
+
+      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
+      if (remainingResults > 0) return currentPage + 1;
+      else console.log("No more app results");
+      break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
 
@@ -264,8 +311,7 @@ export default class Grid extends React.Component<
 
     this.setState({ rest: true, endOfList: true });
     this.endOfList = true;
-    // return null;
-    // TODO: what does returning null mean?
+
     return 0;
   }
   /**
@@ -319,7 +365,7 @@ export default class Grid extends React.Component<
     this.CONFIG.theme.activeScheme = activeScheme;
 
     if (schemes && activeScheme && schemes[activeScheme]) {
-      injectColourScheme(this.CONFIG.theme.schemes?.[activeScheme]);
+      injectColourScheme(this.CONFIG.theme.schemes[activeScheme]);
     } else {
       // Reset schemes if none sent
       injectColourScheme(null);
@@ -350,6 +396,26 @@ export default class Grid extends React.Component<
   * If the cardList isn't loaded, it loads the cardList.
   */
   async componentDidMount() {
+    // Checks for new Marketplace updates
+    fetch(LATEST_RELEASE).then(res => res.json()).then(
+      result => {
+        this.setState({
+          version: result[0].name,
+        });
+
+        try {
+          this.setState({ newUpdate: semver.gt(this.state.version, MARKETPLACE_VERSION) });
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      error => {
+        console.error("Failed to check for updates", error);
+      },
+    );
+
+    Changelog();
+
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
@@ -407,11 +473,36 @@ export default class Grid extends React.Component<
     return this.state.activeScheme;
   }
 
+  handleSearch(event: React.KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.setState({ endOfList: false });
+      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+      this.searchRequested = true;
+    } else if ( // Refreshes result when user deletes all queries
+      ((event.key === "Backspace") || (event.key === "Delete")) &&
+        this.searchRequested &&
+        this.state.searchValue.trim() === "") {
+      this.setState({ endOfList: false });
+      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+      this.searchRequested = false;
+    }
+  }
+
   render() {
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
-          <h1>{this.props.title}</h1>
+          <div className="marketplace-header__left">
+            <h1>{this.props.title}</h1>
+            {this.state.newUpdate
+              ? <button type="button" title="New update" className="marketplace-header-icon-button" id="marketplace-update"
+                onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
+              >
+                <DownloadIcon />
+                &nbsp;{this.state.version}
+              </button>
+              : null}
+          </div>
           <div className="marketplace-header__right">
             {/* Show theme developer tools button if themeDevTools is enabled */}
             {this.CONFIG.visual.themeDevTools
@@ -419,16 +510,24 @@ export default class Grid extends React.Component<
                 onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
               : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
-            {this.state.activeScheme
-              ? <SortBox
-                onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
-                // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
-                sortBoxOptions={generateSchemesOptions(this.state.schemes)}
-                // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
-                // because it hardcodes the value into the fn
-                sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
-              />
-              : null}
+            {this.state.activeScheme ? <SortBox
+              onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
+              // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
+              sortBoxOptions={generateSchemesOptions(this.state.schemes)}
+              // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
+              // because it hardcodes the value into the fn
+              sortBySelectedFn={(a) => a.key === this.getActiveScheme()} /> : null}
+            <div className="searchbar--bar__wrapper">
+              <input
+                className="searchbar-bar"
+                type="text"
+                placeholder={`Search ${this.CONFIG.activeTab}...`}
+                value={this.state.searchValue}
+                onChange={(event) => {
+                  this.setState({ searchValue: event.target.value });
+                }}
+                onKeyDown={this.handleSearch.bind(this)} />
+            </div>
             <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
@@ -436,48 +535,22 @@ export default class Grid extends React.Component<
             </button>
           </div>
         </div>
-        {
-          <div className="searchbar--bar__wrapper">
-            <input
-              className="searchbar-bar"
-              type="text"
-              placeholder={`Search ${this.CONFIG.activeTab}...`}
-              value={this.state.searchValue}
-              onChange={(event) => {
-                this.setState({ searchValue: event.target.value });
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  this.setState({ endOfList: false });
-                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                  this.searchRequested = true;
-                } else if ( // Refreshes result when user deletes all queries
-                  ((event.key === "Backspace") || (event.key === "Delete")) &&
-                  this.searchRequested &&
-                  this.state.searchValue.trim() === ""
-                ) {
-                  this.setState({ endOfList: false });
-                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                  this.searchRequested = false;
-                }}} />
-          </div>
-        }
         {/* Add a header and grid for each card type if it has any cards */}
         {[
           { handle: "extension", name: "Extensions" },
           { handle: "theme", name: "Themes" },
           { handle: "snippet", name: "Snippets" },
+          { handle: "app", name: "Apps" },
         ].map((cardType) => {
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
-            .filter((card) => { // Search filter
+            .filter((card) => {
               const { searchValue } = this.state;
               const { title, user } = card.props.item;
 
-              if (
-                searchValue.trim() === "" ||
+              if (searchValue.trim() === "" ||
                 title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
-                user?.toLowerCase().includes(searchValue.trim().toLowerCase())
-              ) return card;
+                user?.toLowerCase().includes(searchValue.trim().toLowerCase()))
+                return card;
             })
             .map((card, index) => {
               // Clone the cards and update the prop to trigger re-render
@@ -492,9 +565,6 @@ export default class Grid extends React.Component<
           if (cardsOfType.length) {
             return (
               // Add a header for the card type
-              // TODO: does the styling etc work here?
-              // I had to wrap with a <> because it's jsx
-              // The original returned an array of two elements: the header and the cards
               <>
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
@@ -520,8 +590,7 @@ export default class Grid extends React.Component<
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}
           links={this.CONFIG.tabs}
-          activeLink={this.CONFIG.activeTab}
-        />
+          activeLink={this.CONFIG.activeTab} />
       </section>
     );
   }
