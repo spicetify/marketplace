@@ -2,6 +2,7 @@ import React from "react";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-ini";
+
 import Button from "../../Button";
 import { getInvalidCSS, getLocalStorageDataFromKey, unparseIni, parseIni } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
@@ -19,11 +20,12 @@ const ThemeDevToolsModal = () => {
 
   return (
     <div id="marketplace-theme-dev-tools-container" className="marketplace-theme-dev-tools-container">
+
       <div className="devtools-column">
         <label htmlFor="color-ini-editor">
           <h2 className="devtools-heading">Color.ini Editor</h2>
         </label>
-        <div className="marketplace-code-editor-wrapper">
+        <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={code}
             onValueChange={code => setCode(code)}
@@ -31,12 +33,10 @@ const ThemeDevToolsModal = () => {
             textareaId="color-ini-editor"
             textareaClassName="color-ini-editor"
             readOnly={!themeManifest}
-            placeholder=";..."
+            placeholder="[your-color-scheme-name]"
             style={{
               fontFamily: "monospace",
               resize: "none",
-              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
-              // fontSize: 12,
             }}
           />
         </div>
@@ -44,13 +44,16 @@ const ThemeDevToolsModal = () => {
           Save
         </Button>
       </div>
+
       {/* Create a box containing the invalid css classnames fetched from "getInvalidCSS()"*/}
       <div className="devtools-column">
         <h2 className="devtools-heading">Invalid CSS</h2>
 
-        {getInvalidCSS().map((cssClass, index) => {
-          return <div key={index} className="invalid-css-text">{cssClass}</div>;
-        })}
+        <div className="marketplace-code-editor-wrapper marketplace-code-editor">
+          {getInvalidCSS().map((cssClass, index) => {
+            return <div key={index} className="invalid-css-text">{cssClass}</div>;
+          })}
+        </div>
 
       </div>
     </div>
