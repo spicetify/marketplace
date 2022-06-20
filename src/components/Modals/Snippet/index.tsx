@@ -12,7 +12,6 @@ import { LOCALSTORAGE_KEYS } from "../../../constants";
 import Button from "../../Button";
 import { CardProps } from "../../Card/Card";
 import { ModalType } from "../../../logic/LaunchModals";
-import FileInput from "../../FileInput";
 
 const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
@@ -79,6 +78,11 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
     if (props.type === "EDIT_SNIPPET") location.reload();
   };
 
+  let inputElement: HTMLInputElement;
+  const FileInputClick = () => {
+    inputElement.click();
+  };
+
   return (
     <div id="marketplace-add-snippet-container">
       <div className="marketplace-customCSS-input-container">
@@ -125,28 +129,6 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
         <label htmlFor={PREVIEW_IMAGE_ID}>
           Snippet Preview { props.type !== "VIEW_SNIPPET" && "(optional)" }
         </label>
-        <FileInput
-          id={PREVIEW_IMAGE_ID}
-          disabled={props.type === "VIEW_SNIPPET"}
-          value={imageURL}
-          onChange={
-            async (file?: File) => {
-              if (props.type !== "VIEW_SNIPPET") {
-                if (file) {
-                  try {
-                    const b64 = await fileToBase64(file);
-                    if (b64) {
-                      console.log(b64);
-                      setimageURL(b64 as string);
-                    }
-                  } catch (err) {
-                    console.error(err);
-                  }
-                }
-              }
-            }
-          }
-        />
         {imageURL &&
           <label htmlFor={PREVIEW_IMAGE_ID} style={{ textAlign: "center" }}>
             <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview" />
@@ -154,11 +136,36 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
         }
       </div>
       {props.type !== "VIEW_SNIPPET"
-        // Disable the save button if the name or code are empty
-        ? <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
-          Save CSS
-        </Button>
-        : <></>}
+        // Don't display buttons on "View Snippet" modal
+        &&
+          <>
+            <Button onClick={FileInputClick}>
+              {imageURL.length ? "Change image" : "Add image"}
+              <input
+                id={PREVIEW_IMAGE_ID}
+                type="file"
+                style={{ display: "none" }}
+                ref={(input: HTMLInputElement) => inputElement = input}
+                onChange={async (event) => {
+                  if (event.target.files?.[0]) {
+                    try {
+                      const b64 = await fileToBase64(event.target.files?.[0]);
+                      if (b64) {
+                        console.log(b64);
+                        setimageURL(b64 as string);
+                      }
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }
+                }} />
+            </Button>
+            {/* Disable the save button if the name or code are empty */}
+            <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
+            Save CSS
+            </Button>
+          </>
+      }
     </div>
   );
 };
