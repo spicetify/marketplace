@@ -1,6 +1,8 @@
-# spicetify-marketplace
+# Spicetify Marketplace
 
-Download extensions and themes directly from within [Spicetify](https://github.com/spicetify/spicetify-cli). Also browse custom apps, but those need to be downloaded and installed locally. This is a limitation of how Spicetify itself works.
+Customize your Spotify client directly from within [Spicetify](https://github.com/spicetify/spicetify-cli)!
+
+Marketplace allows you to **browse, download, and install** extensions, themes and CSS snippets with ease. You can also browse custom apps, but will need to do some manual installing to get it working.
 
 Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
 
@@ -14,10 +16,11 @@ Made with [Spicetify Creator](https://github.com/spicetify/spicetify-creator)
   <a href="https://github.com/spicetify/spicetify-marketplace/commits/main">
     <img src="https://img.shields.io/github/commit-activity/m/spicetify/spicetify-marketplace">
   </a>
-
 </p>
 
-<img src=".github/assets/preview.img" alt="img" align="right" width="560px" height="400px">
+Head to the [wiki](https://github.com/spicetify/spicetify-marketplace/wiki) to get started!
+
+<img src=".github/assets/preview.png" alt="img" align="right" width="560px" height="400px">
 
 - [Overview](https://github.com/spicetify/spicetify-marketplace/wiki)
 - [Installation](https://github.com/spicetify/spicetify-marketplace/wiki/Installation)
