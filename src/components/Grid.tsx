@@ -14,6 +14,7 @@ import {
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
+import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
@@ -71,7 +72,8 @@ export default class Grid extends React.Component<
   requestPage = 0;
   cardList: Card[] = [];
   sortConfig: { by: string };
-  // TODO: why are these set up funny?
+  // TODO: why are these set up funny
+  // To get to the other side
   gridUpdateTabs: (() => void) | null;
   gridUpdatePostsVisual: (() => void) | null;
   checkScroll: (e: Event) => void;
@@ -117,7 +119,7 @@ export default class Grid extends React.Component<
       updateActiveTheme={this.setActiveTheme.bind(this)}
     />;
 
-    this.cardList.push(card);
+    this.cardList.push(card as unknown as Card);
     this.setState({ cards: this.cardList });
   }
 
@@ -150,9 +152,8 @@ export default class Grid extends React.Component<
   updatePostsVisual() {
     this.cardList = this.cardList.map((card, index) => {
       return <Card {...card.props}
-        key={index.toString()} CONFIG={this.CONFIG}
-      />;
-    });
+        key={index.toString()} CONFIG={this.CONFIG} />;
+    }) as unknown as Card[];
     this.setState({ cards: [...this.cardList] });
   }
 
@@ -494,7 +495,7 @@ export default class Grid extends React.Component<
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
             {this.state.newUpdate
-              ? <button type="button" title="New update" className="marketplace-update" id="marketplace-update"
+              ? <button type="button" title="New update" className="marketplace-header-icon-button" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
               >
                 <DownloadIcon />
@@ -503,8 +504,12 @@ export default class Grid extends React.Component<
               : null}
           </div>
           <div className="marketplace-header__right">
+            {/* Show theme developer tools button if themeDevTools is enabled */}
+            {this.CONFIG.visual.themeDevTools
+              ? <button type="button" title="ThemeDevTools" className="marketplace-header-icon-button"
+                onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
+              : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
-
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
               // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
@@ -523,7 +528,7 @@ export default class Grid extends React.Component<
                 }}
                 onKeyDown={this.handleSearch.bind(this)} />
             </div>
-            <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
+            <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
@@ -547,9 +552,10 @@ export default class Grid extends React.Component<
                 user?.toLowerCase().includes(searchValue.trim().toLowerCase()))
                 return card;
             })
-            .map((card) => {
+            .map((card, index) => {
               // Clone the cards and update the prop to trigger re-render
               // TODO: is it possible to only re-render the theme cards whose status have changed?
+              card.key = index;
               const cardElement = React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
               });

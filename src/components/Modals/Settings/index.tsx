@@ -43,6 +43,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <h2>Options</h2>
       <ConfigRow name='Stars count' storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name='Tags' storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow name='Theme developer tools' storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
       <h2>Tabs</h2>

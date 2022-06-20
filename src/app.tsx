@@ -12,7 +12,9 @@ import "./styles/components/_reload-modal.scss";
 import "./styles/components/_add-snippet-modal.scss";
 import "./styles/components/_readme-pages.scss";
 import "./styles/components/_fixes.scss";
-import "./styles/components/prismjs-themes/prism-tomorrow.css";
+import "./styles/components/prismjs-themes/prism-tomorrow.scss";
+import "./styles/components/_devtools.scss";
+import "./styles/components/_code-editors.scss";
 
 import Grid from "./components/Grid";
 import ReadmePage from "./components/ReadmePage";
@@ -71,6 +73,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
         tags: JSON.parse(getLocalStorageDataFromKey("marketplace:tags", true)),
         hideInstalled: JSON.parse(getLocalStorageDataFromKey("marketplace:hideInstalled", false)),
         colorShift: JSON.parse(getLocalStorageDataFromKey("marketplace:colorShift", false)),
+        themeDevTools: JSON.parse(getLocalStorageDataFromKey("marketplace:themeDevTools", false)),
         // Legacy from reddit app
         type: JSON.parse(getLocalStorageDataFromKey("marketplace:type", false)),
         // I was considering adding watchers as "followers" but it looks like the value is a duplicate

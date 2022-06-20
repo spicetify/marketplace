@@ -83,7 +83,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
     <div id="marketplace-add-snippet-container">
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-custom-css">Custom CSS</label>
-        <div className="marketplace-customCSS-editor-wrapper">
+        <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={code}
             onValueChange={code => setCode(code)}
@@ -101,7 +101,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
       </div>
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-customCSS-name-submit">Snippet Name</label>
-        <input id="marketplace-customCSS-name-submit"
+        <input id="marketplace-customCSS-name-submit" className="marketplace-code-editor"
           value={name} onChange={(e) => {
             if (props.type !== "VIEW_SNIPPET")
               setName(e.target.value);
@@ -113,7 +113,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
         <label htmlFor="marketplace-customCSS-description-submit">
           Snippet Description
         </label>
-        <input id="marketplace-customCSS-description-submit"
+        <input id="marketplace-customCSS-description-submit" className="marketplace-code-editor"
           value={description} onChange={(e) => {
             if (props.type !== "VIEW_SNIPPET")
               setDescription(e.target.value);

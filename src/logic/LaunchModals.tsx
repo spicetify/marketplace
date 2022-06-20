@@ -4,9 +4,10 @@ import { Config } from "../types/marketplace-types";
 import SnippetModal from "../components/Modals/Snippet";
 import ReloadModal from "../components/Modals/Reload";
 import SettingsModal from "../components/Modals/Settings";
+import ThemeDevToolsModal from "../components/Modals/ThemeDevTools";
 import { CardProps } from "../components/Card/Card";
 
-export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS";
+export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS";
 
 const getModalSettings = (
   modalType: ModalType,
@@ -46,6 +47,13 @@ const getModalSettings = (
       content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
       isLarge: true,
     };
+  case "THEME_DEV_TOOLS":
+    return {
+      title: "Theme Dev Tools",
+      content: <ThemeDevToolsModal />,
+      isLarge: true,
+    };
+
   default:
     return {
       title: "",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Key } from "react";
 import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
@@ -19,9 +19,7 @@ import Button from "../Button";
 export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
   item: CardItem | Snippet;
-
   CONFIG: Config;
-
   // From `appendCard()`
   updateColourSchemes: (SchemeIni, string) => void;
   updateActiveTheme: (string) => void;
@@ -50,6 +48,8 @@ export default class Card extends React.Component<CardProps, {
   // Added locally
   menuType: typeof Spicetify.ReactComponent.Menu;
   localStorageKey: string;
+  key: Key | null = null;
+  type = Card;
 
   constructor(props: CardProps) {
     super(props);
@@ -287,7 +287,7 @@ export default class Card extends React.Component<CardProps, {
       // Update the active theme in Grid state, triggers state change and re-render
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
-      this.props.updateColourSchemes(parsedSchemes, activeScheme);
+      this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
     }
 
     this.setState({ installed: true });

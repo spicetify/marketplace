@@ -113,6 +113,7 @@ export type VisualConfig = {
   tags: boolean;
   hideInstalled: boolean;
   colorShift: boolean;
+  themeDevTools: boolean;
   // Legacy from reddit app
   type: boolean;
   // I was considering adding watchers as "followers" but it looks like the value is a duplicate
