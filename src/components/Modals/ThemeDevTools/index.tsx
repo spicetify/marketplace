@@ -1,4 +1,7 @@
 import React from "react";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-ini";
 import Button from "../../Button";
 import { getInvalidCSS, getLocalStorageDataFromKey, unparseIni, parseIni } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
@@ -9,6 +12,10 @@ const themeManifest = themeKey
   : null;
 
 const ThemeDevToolsModal = () => {
+  const [code, setCode] = React.useState(themeManifest
+    ? unparseIni(themeManifest.schemes)
+    : "Error, no marketplace theme installed.",
+  );
 
   return (
     <div id="marketplace-theme-dev-tools-container" className="marketplace-theme-dev-tools-container">
@@ -16,11 +23,24 @@ const ThemeDevToolsModal = () => {
         <label htmlFor="color-ini-editor">
           <h2 className="devtools-heading">Color.ini Editor</h2>
         </label>
-        <textarea className="color-ini-editor" id="color-ini-editor">
-          {themeManifest ? unparseIni(themeManifest.schemes) : "Error, no marketplace theme installed."}
-        </textarea>
-
-        <Button onClick={saveColorIni}>
+        <div className="marketplace-code-editor-wrapper">
+          <Editor
+            value={code}
+            onValueChange={code => setCode(code)}
+            highlight={code => highlight(code, languages.ini)}
+            textareaId="color-ini-editor"
+            textareaClassName="color-ini-editor"
+            readOnly={!themeManifest}
+            placeholder=";..."
+            style={{
+              fontFamily: "monospace",
+              resize: "none",
+              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
+              // fontSize: 12,
+            }}
+          />
+        </div>
+        <Button onClick={() => saveColorIni(code)}>
           Save
         </Button>
       </div>
@@ -37,10 +57,9 @@ const ThemeDevToolsModal = () => {
   );
 };
 
-const saveColorIni = () => {
+const saveColorIni = (code: string) => {
   if (themeKey) {
-    const colorIni = document.getElementById("color-ini-editor") as HTMLTextAreaElement;
-    const colorIniParsed = parseIni(colorIni.value);
+    const colorIniParsed = parseIni(code);
     themeManifest.schemes = colorIniParsed;
     localStorage.setItem(themeKey, JSON.stringify(themeManifest));
   } else {

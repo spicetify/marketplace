@@ -83,7 +83,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
     <div id="marketplace-add-snippet-container">
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-custom-css">Custom CSS</label>
-        <div className="marketplace-customCSS-editor-wrapper">
+        <div className="marketplace-code-editor-wrapper">
           <Editor
             value={code}
             onValueChange={code => setCode(code)}

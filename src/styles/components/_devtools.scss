@@ -1,10 +1,9 @@
 .devtools-column {
-    height: 450px;
+    height: 570px;
     width: 50%;
     position: relative;
     background-color: var(--spice-sidebar);
     color: var(--spice-text);
-    font-weight: bold;
     overflow: scroll;
     padding: 1rem;
 
@@ -14,14 +13,20 @@
     width: 100%;
     background-color: var(--spice-sidebar);
     color: var(--spice-text);
-    font-weight: bold;
     overflow: scroll;
     padding: 1rem;
     resize: none;
+    font-family: monospace;
 }
 .marketplace-theme-dev-tools-container {
     justify-content: flex-end;
     display: flex;
+
+    .marketplace-code-editor-wrapper {
+        height: 400px;
+        margin-bottom: 16px;
+        overflow: auto;
+    }
 }
 .invalid-css-heading,
 .devtools-heading {
@@ -35,6 +40,6 @@
     font-family: monospace;
 }
 .devtools-icon {
-    width: 30px;
+    width: 24px;
     fill: var(--spice-button)
 }
