@@ -38,6 +38,8 @@
 .invalid-css-text {
     margin-bottom: 1.5rem;
     font-family: monospace;
+    -webkit-user-select: text;
+    user-select: text;
 }
 .devtools-icon {
     width: 24px;
