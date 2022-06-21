@@ -33,7 +33,7 @@
     "title": "Smooth Reveal Playlist Gradient",
     "description": "Reveals the playlist gradient header gradient with a fade in effect",
     "code": ".main-entityHeader-overlay,\n.main-actionBarBackground-background,\n.main-entityHeader-overlay,\n.main-entityHeader-backgroundColor {\n  -webkit-transition: 3s;\n}",
-    "preview": "https://placekitten.com/300/300"
+    "preview": "resources/assets/snippets/smooth-playlist-reveal-gradient.png"
   },
   {
     "title": "Fix progress bar displacement",
