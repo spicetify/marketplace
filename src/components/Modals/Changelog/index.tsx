@@ -1,15 +1,16 @@
 import React from "react";
 import whatsNew from "spcr-whats-new";
 import { RELEASE_CHANGELOG, MARKETPLACE_VERSION } from "../../../constants";
-import { getReadmeHTML } from "../../../logic/Utils";
+import { getMarkdownHTML } from "../../../logic/Utils";
 
 const fetchReleaseBody = async () => {
+  // TODO: test this
   return fetch(RELEASE_CHANGELOG)
     .then((res) => res.json())
-    .then(async (result) => {
+    .then((result) => {
       // If API returns no error message then get release body
       const body = !result.message ? result.body as string : null;
-      if (body) return await getReadmeHTML(body, "spicetify", "spicetify-marketplace");
+      if (body) return getMarkdownHTML(body, "spicetify", "spicetify-marketplace");
       return body;
     })
     .catch((err) => {

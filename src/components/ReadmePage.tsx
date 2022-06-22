@@ -1,5 +1,5 @@
 import React from "react";
-import { getReadmeHTML } from "../logic/Utils";
+import { getMarkdownHTML } from "../logic/Utils";
 import LoadingIcon from "./Icons/LoadingIcon";
 
 class ReadmePage extends React.Component<
@@ -26,9 +26,28 @@ class ReadmePage extends React.Component<
     html: "<p>Loading...</p>",
   }
 
+  // TODO: test this
+  getReadmeHTML = async () => {
+    return fetch(this.props.data.readmeURL)
+      .then((res) => {
+        if (!res.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${res.status})`);
+        return res.text();
+      })
+      .then((readmeText) => getMarkdownHTML(readmeText, this.props.data.user, this.props.data.repo))
+      .then((html) => {
+        if (!html) Spicetify.Platform.History.goBack();
+        return html;
+      })
+      .catch((err) => {
+        console.error(err);
+        Spicetify.Platform.History.goBack();
+        return null;
+      });
+  }
+
   componentDidMount() {
     // Get and set readme html once loaded
-    getReadmeHTML(this.props.data.readmeURL, this.props.data.user, this.props.data.repo)
+    this.getReadmeHTML()
       .then((html) => {
         if (html == null) return;
         this.setState({ html });

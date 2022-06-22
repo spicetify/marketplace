@@ -384,16 +384,9 @@ export function getInvalidCSS(): string[] {
   }
   return invalidCssClassName;
 }
-export async function getReadmeHTML(readme: string, user: string, repo: string) {
-  const isURL = readme.startsWith("http");
-  try {
-    if (isURL) {
-      const readmeTextRes = await fetch(readme);
-      if (!readmeTextRes.ok)
-        throw Spicetify.showNotification(`Error loading README (HTTP ${readmeTextRes.status})`);
-      readme = await readmeTextRes.text();
-    }
 
+export async function getMarkdownHTML(readme: string, user: string, repo: string) {
+  try {
     const postBody = {
       text: readme,
       context: `${user}/${repo}`,
@@ -408,10 +401,8 @@ export async function getReadmeHTML(readme: string, user: string, repo: string) 
 
     const readmeHtml = await readmeHtmlRes.text();
 
-    if (isURL && !readmeHtml) Spicetify.Platform.History.goBack();
     return readmeHtml;
   } catch (err) {
-    if (isURL) Spicetify.Platform.History.goBack();
     return null;
   }
 }
