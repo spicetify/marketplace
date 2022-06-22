@@ -196,7 +196,10 @@ export default class Grid extends React.Component<
 
         if (extensions && extensions.length) {
           // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
-          extensions.forEach((extension) => this.appendCard(extension, "extension"));
+          extensions.forEach((extension) => {
+            Object.assign(extension, { lastUpdated: repo.pushed_at });
+            this.appendCard(extension, "extension");
+          });
         }
       }
 
@@ -253,7 +256,10 @@ export default class Grid extends React.Component<
         }
 
         if (themes && themes.length) {
-          themes.forEach((theme) => this.appendCard(theme, "theme"));
+          themes.forEach((theme) => {
+            Object.assign(theme, { lastUpdated: repo.pushed_at });
+            this.appendCard(theme, "theme");
+          });
         }
       }
 
@@ -283,7 +289,10 @@ export default class Grid extends React.Component<
         }
 
         if (apps && apps.length) {
-          apps.forEach((app) => this.appendCard(app, "app"));
+          apps.forEach((app) => {
+            Object.assign(app, { lastUpdated: repo.pushed_at });
+            this.appendCard(app, "app");
+          });
         }
       }
 
@@ -452,10 +461,9 @@ export default class Grid extends React.Component<
   /**
    * If the user has scrolled to the bottom of the page, load more posts.
    * @param event - The event object that is passed to the callback function.
-   * @returns {void}
    */
   // Add scroll event listener with type
-  isScrolledBottom(event: Event) {
+  isScrolledBottom(event: Event): void {
     const viewPort = event.target as HTMLElement;
     if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
       // At bottom, load more posts

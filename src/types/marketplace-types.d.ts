@@ -55,6 +55,7 @@ export type Snippet = {
   cssURL: undefined;
   schemesURL: undefined;
   include: undefined;
+  lastUpdated: undefined;
 };
 
 // From `fetchExtensionManifest()` and `fetchThemeManifest()`
@@ -88,6 +89,7 @@ export type CardItem = {
   readmeURL: string;
   stars: number;
   tags: string[];
+  lastUpdated: string;
 
   // For themes only
   cssURL?: string;
