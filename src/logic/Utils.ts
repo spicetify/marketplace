@@ -385,23 +385,23 @@ export function getInvalidCSS(): string[] {
   return invalidCssClassName;
 }
 
-export async function getMarkdownHTML(readme: string, user: string, repo: string) {
+export async function getMarkdownHTML(markdown: string, user: string, repo: string) {
   try {
     const postBody = {
-      text: readme,
+      text: markdown,
       context: `${user}/${repo}`,
       mode: "gfm",
     };
 
-    const readmeHtmlRes = await fetch("https://api.github.com/markdown", {
+    const response = await fetch("https://api.github.com/markdown", {
       method: "POST",
       body: JSON.stringify(postBody),
     });
-    if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
+    if (!response.ok) throw Spicetify.showNotification(`Error parsing markdown (HTTP ${response.status})`);
 
-    const readmeHtml = await readmeHtmlRes.text();
+    const html = await response.text();
 
-    return readmeHtml;
+    return html;
   } catch (err) {
     return null;
   }
