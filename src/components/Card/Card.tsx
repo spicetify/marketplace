@@ -121,14 +121,28 @@ export default class Card extends React.Component<CardProps, {
       if (this.state.stars !== stargazers_count) {
         this.setState({ stars: stargazers_count }, () => {
           console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
-          this.installExtension();
+          switch (this.props.type) {
+          case "extension":
+            this.installExtension();
+            break;
+          case "theme":
+            this.installTheme();
+            break;
+          }
         });
       }
 
       if (this.state.lastUpdated !== pushed_at) {
         this.setState({ lastUpdated: pushed_at }, () => {
           console.log(`New update pushed at: ${this.state.lastUpdated}; updating localstorage.`);
-          this.installExtension();
+          switch (this.props.type) {
+          case "extension":
+            this.installExtension();
+            break;
+          case "theme":
+            this.installTheme();
+            break;
+          }
         });
       }
     }
