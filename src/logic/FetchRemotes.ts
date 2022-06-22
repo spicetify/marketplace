@@ -3,7 +3,7 @@ import { processAuthors, addToSessionStorage } from "./Utils";
 import { ITEMS_PER_REQUEST, BLACKLIST_URL } from "../constants";
 import { RepoTopic } from "../types/marketplace-types";
 
-import snippetsJSON from "../../resources/snippets.json";
+import snippetsJSON from "../../resources/snippets";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -286,11 +286,7 @@ export const getBlacklist = async () => {
 * @returns Array of snippets
 */
 export const fetchCssSnippets = async () => {
-  const json = snippetsJSON;
-
-  if (!json) return;
-
-  const snippets = json.reduce<Snippet[]>((accum, snippet) => {
+  const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
     const snip = { ...snippet } as Snippet;
 
     // Because the card component looks for an imageURL prop
