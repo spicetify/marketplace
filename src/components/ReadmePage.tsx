@@ -26,7 +26,6 @@ class ReadmePage extends React.Component<
     html: "<p>Loading...</p>",
   }
 
-  // TODO: test this
   getReadmeHTML = async () => {
     return fetch(this.props.data.readmeURL)
       .then((res) => {

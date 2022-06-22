@@ -4,7 +4,6 @@ import { RELEASE_CHANGELOG, MARKETPLACE_VERSION } from "../../../constants";
 import { getMarkdownHTML } from "../../../logic/Utils";
 
 const fetchReleaseBody = async () => {
-  // TODO: test this
   return fetch(RELEASE_CHANGELOG)
     .then((res) => res.json())
     .then((result) => {
