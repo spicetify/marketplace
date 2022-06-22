@@ -108,8 +108,7 @@ export default class Card extends React.Component<CardProps, {
 
   async componentDidMount() {
     // Refresh stars if on "Installed" tab with stars enabled
-    if (this.props.CONFIG.activeTab === "Installed" &&
-      this.props.CONFIG.visual.stars && this.props.type !== "snippet") {
+    if (this.props.CONFIG.activeTab === "Installed" && this.props.type !== "snippet") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
@@ -118,7 +117,7 @@ export default class Card extends React.Component<CardProps, {
 
       const { stargazers_count, pushed_at } = repoData;
 
-      if (this.state.stars !== stargazers_count) {
+      if (this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars) {
         this.setState({ stars: stargazers_count }, () => {
           console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
           switch (this.props.type) {
