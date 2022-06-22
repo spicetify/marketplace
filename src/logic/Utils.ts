@@ -384,8 +384,39 @@ export function getInvalidCSS(): string[] {
   }
   return invalidCssClassName;
 }
+export async function getReadmeHTML(readme: string, user: string, repo: string) {
+  const isURL = readme.startsWith("http");
+  try {
+    if (isURL) {
+      const readmeTextRes = await fetch(readme);
+      if (!readmeTextRes.ok)
+        throw Spicetify.showNotification(`Error loading README (HTTP ${readmeTextRes.status})`);
+      readme = await readmeTextRes.text();
+    }
+
+    const postBody = {
+      text: readme,
+      context: `${user}/${repo}`,
+      mode: "gfm",
+    };
+
+    const readmeHtmlRes = await fetch("https://api.github.com/markdown", {
+      method: "POST",
+      body: JSON.stringify(postBody),
+    });
+    if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
+
+    const readmeHtml = await readmeHtmlRes.text();
+
+    if (isURL && !readmeHtml) Spicetify.Platform.History.goBack();
+    return readmeHtml;
+  } catch (err) {
+    if (isURL) Spicetify.Platform.History.goBack();
+    return null;
+  }
+}
 
 // This function is used to sleep for a certain amount of time
-export function sleep(ms) {
+export function sleep(ms: number | undefined) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

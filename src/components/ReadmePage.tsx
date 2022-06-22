@@ -1,4 +1,5 @@
 import React from "react";
+import { getReadmeHTML } from "../logic/Utils";
 import LoadingIcon from "./Icons/LoadingIcon";
 
 class ReadmePage extends React.Component<
@@ -25,40 +26,9 @@ class ReadmePage extends React.Component<
     html: "<p>Loading...</p>",
   }
 
-  async getReadmeHTML() {
-    try {
-      const readmeTextRes = await fetch(this.props.data.readmeURL);
-      if (!readmeTextRes.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${readmeTextRes.status})`);
-
-      const readmeText = await readmeTextRes.text();
-
-      const postBody = {
-        text: readmeText,
-        context: `${this.props.data.user}/${this.props.data.repo}`,
-        mode: "gfm",
-      };
-
-      const readmeHtmlRes = await fetch("https://api.github.com/markdown", {
-        method: "POST",
-        body: JSON.stringify(postBody),
-      });
-      if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
-
-      const readmeHtml = await readmeHtmlRes.text();
-
-      if (readmeHtml == null) {
-        Spicetify.Platform.History.goBack();
-      }
-      return readmeHtml;
-    } catch (err) {
-      Spicetify.Platform.History.goBack();
-      return null;
-    }
-  }
-
   componentDidMount() {
     // Get and set readme html once loaded
-    this.getReadmeHTML()
+    getReadmeHTML(this.props.data.readmeURL, this.props.data.user, this.props.data.repo)
       .then((html) => {
         if (html == null) return;
         this.setState({ html });
