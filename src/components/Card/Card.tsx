@@ -129,6 +129,8 @@ export default class Card extends React.Component<CardProps, {
             break;
           }
         });
+        // Stops updating based on commit timestamp if stars are already updated
+        return;
       }
 
       if (this.state.lastUpdated !== pushed_at) {
@@ -526,6 +528,7 @@ export default class Card extends React.Component<CardProps, {
               <Button classes={["marketplace-installButton"]}
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
+                // TODO: Refactor this using lookups or sth similar
                 label={this.props.type === "app" ? "GitHub" : IS_INSTALLED ? "Remove" : "Install"}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -533,6 +536,7 @@ export default class Card extends React.Component<CardProps, {
                 }}
               >
                 {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
+                {/* TODO: Refactor this using lookups or sth similar */}
                 {this.props.type === "app" ? <GitHubIcon /> : IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
               </Button>
             </div>
