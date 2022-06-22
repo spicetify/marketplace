@@ -114,28 +114,21 @@ export default class Card extends React.Component<CardProps, {
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
       const repoData = await fetch(url).then(res => res.json());
-
       const { stargazers_count, pushed_at } = repoData;
 
-      if (this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars) {
-        this.setState({ stars: stargazers_count }, () => {
-          console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
-          switch (this.props.type) {
-          case "extension":
-            this.installExtension();
-            break;
-          case "theme":
-            this.installTheme();
-            break;
-          }
-        });
-        // Stops updating based on commit timestamp if stars are already updated
-        return;
+      const stateUpdate = { stars: 0, lastUpdated: undefined };
+      if ((this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars)) {
+        stateUpdate.stars = stargazers_count;
+        console.log(`Stars updated to: ${stargazers_count}`);
+      }
+      if (this.state.lastUpdated !== pushed_at) {
+        stateUpdate.lastUpdated = pushed_at;
+        console.log(`New update pushed at: ${pushed_at}`);
       }
 
-      if (this.state.lastUpdated !== pushed_at) {
-        this.setState({ lastUpdated: pushed_at }, () => {
-          console.log(`New update pushed at: ${this.state.lastUpdated}; updating localstorage.`);
+      if (stateUpdate.stars || stateUpdate.lastUpdated) {
+        this.setState(stateUpdate, () => {
+          console.log("Card updated; updating localstorage.");
           switch (this.props.type) {
           case "extension":
             this.installExtension();
