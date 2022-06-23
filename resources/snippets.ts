@@ -69,6 +69,6 @@ export default [
     "title": "Fix progress bar displacement when listening from a different Device",
     "description": "Fixes the progress bar displacement for a few Themes. Better Version of @CharlieS1103 Snippet",
     "code": ".main-connectBar-connectBar { overflow: visible !important; position: absolute !important; display: flex !important; align-items: unset !important; left: 80% !important; height: 20px !important; bottom: 1% !important; padding: 2px !important; background-color: transparent !important; color: var(--spice-text) !important; } .control-button::after { display: none !important; }",
-    "preview": "https://i.imgur.com/gcbz6l6.png"
+    "preview": "resources/assets/snippets/fix-progress-bar.png"
   },
 ];
