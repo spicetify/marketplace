@@ -65,4 +65,10 @@ export default [
     "code": ".Root__nav-bar {\n  position: absolute;\n  width: 40px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 1;\n}\nnav.Root__nav-bar:hover {\n  position: inherit;\n  width: 225px;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\naside.main-buddyFeed-buddyFeedRoot:hover {\n  position: inherit;\n  width: var(--buddy-feed-width);\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n  left: 0;\n}\naside.main-buddyFeed-buddyFeedRoot {\n  position: absolute;\n  width: 65px;\n  opacity: 0;\n  bottom: 0;\n  left: -30px;\n  top: 0;\n  z-index: 1;\n}",
     "preview": "resources/assets/snippets/hover-panels.png",
   },
+  {
+    "title": "Fix progress bar displacement when listening from a different Device",
+    "description": "Fixes the progress bar displacement for a few Themes. Better Version of @CharlieS1103 Snippet",
+    "code": ".main-connectBar-connectBar { overflow: visible !important; position: absolute !important; display: flex !important; align-items: unset !important; left: 80% !important; height: 20px !important; bottom: 1% !important; padding: 2px !important; background-color: transparent !important; color: var(--spice-text) !important; } .control-button::after { display: none !important; }",
+    "preview": "https://i.imgur.com/gcbz6l6.png"
+  },
 ];
