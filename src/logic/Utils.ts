@@ -77,13 +77,15 @@ export const parseIni = (data: string) => {
 
       if (section) {
         value[section][match?.[1]] = match?.[2];
-      } else {
-        value[match![1]] = match?.[2];
+      } else if (match) {
+        value[match[1]] = match[2];
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
-      value[match![1]] = {};
-      section = match![1];
+      if (match) {
+        value[match[1]] = {};
+        section = match[1];
+      }
     } else if (line.length == 0 && section) {
       section = null;
     }
@@ -338,10 +340,10 @@ export const getParamsFromGithubRaw = (url: string) => {
   // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
   const obj = {
-    user: regex_result ? regex_result?.groups?.user : null,
-    repo: regex_result ? regex_result?.groups?.repo : null,
-    branch: regex_result ? regex_result?.groups?.branch : null,
-    filePath: regex_result ? regex_result?.groups?.filePath : null,
+    user: regex_result ? regex_result.groups?.user : null,
+    repo: regex_result ? regex_result.groups?.repo : null,
+    branch: regex_result ? regex_result.groups?.branch : null,
+    filePath: regex_result ? regex_result.groups?.filePath : null,
   };
 
   return obj;
@@ -385,7 +387,29 @@ export function getInvalidCSS(): string[] {
   return invalidCssClassName;
 }
 
+export async function getMarkdownHTML(markdown: string, user: string, repo: string) {
+  try {
+    const postBody = {
+      text: markdown,
+      context: `${user}/${repo}`,
+      mode: "gfm",
+    };
+
+    const response = await fetch("https://api.github.com/markdown", {
+      method: "POST",
+      body: JSON.stringify(postBody),
+    });
+    if (!response.ok) throw Spicetify.showNotification(`Error parsing markdown (HTTP ${response.status})`);
+
+    const html = await response.text();
+
+    return html;
+  } catch (err) {
+    return null;
+  }
+}
+
 // This function is used to sleep for a certain amount of time
-export function sleep(ms) {
+export function sleep(ms: number | undefined) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

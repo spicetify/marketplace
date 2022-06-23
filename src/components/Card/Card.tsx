@@ -11,6 +11,7 @@ import {
 } from "../../logic/Utils";
 import TrashIcon from "../Icons/TrashIcon";
 import DownloadIcon from "../Icons/DownloadIcon";
+import GitHubIcon from "../Icons/GitHubIcon";
 import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
@@ -35,6 +36,7 @@ export default class Card extends React.Component<CardProps, {
   stars: number;
   tagsExpanded: boolean;
   externalUrl: string;
+  lastUpdated: string | undefined;
 }> {
   // Theme stuff
   // cssURL?: string;
@@ -95,6 +97,7 @@ export default class Card extends React.Component<CardProps, {
       externalUrl: (this.props.item.user && this.props.item.repo) // These won't exist for snippets
         ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
         : "",
+      lastUpdated: (this.props.item.user && this.props.item.repo) ? this.props.item.lastUpdated : undefined,
     };
   }
 
@@ -105,18 +108,35 @@ export default class Card extends React.Component<CardProps, {
 
   async componentDidMount() {
     // Refresh stars if on "Installed" tab with stars enabled
-    if (this.props.CONFIG.activeTab === "Installed" &&
-      this.props.CONFIG.visual.stars && this.props.type !== "snippet") {
+    if (this.props.CONFIG.activeTab === "Installed" && this.props.type !== "snippet") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
       const repoData = await fetch(url).then(res => res.json());
+      const { stargazers_count, pushed_at } = repoData;
 
-      if (this.state.stars !== repoData.stargazers_count) {
-        this.setState({ stars: repoData.stargazers_count }, () => {
-          console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
-          this.installExtension();
+      const stateUpdate = { stars: 0, lastUpdated: undefined };
+      if ((this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars)) {
+        stateUpdate.stars = stargazers_count;
+        console.log(`Stars updated to: ${stargazers_count}`);
+      }
+      if (this.state.lastUpdated !== pushed_at) {
+        stateUpdate.lastUpdated = pushed_at;
+        console.log(`New update pushed at: ${pushed_at}`);
+      }
+
+      if (stateUpdate.stars || stateUpdate.lastUpdated) {
+        this.setState(stateUpdate, () => {
+          console.log("Card updated; updating localstorage.");
+          switch (this.props.type) {
+          case "extension":
+            this.installExtension();
+            break;
+          case "theme":
+            this.installTheme();
+            break;
+          }
         });
       }
     }
@@ -171,7 +191,7 @@ export default class Card extends React.Component<CardProps, {
       Spicetify.showNotification("There was an error installing extension");
       return;
     }
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL } = this.props.item;
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated } = this.props.item;
     localStorage.setItem(this.localStorageKey, JSON.stringify({
       manifest,
       type: this.props.type,
@@ -185,6 +205,7 @@ export default class Card extends React.Component<CardProps, {
       extensionURL,
       readmeURL,
       stars: this.state.stars,
+      lastUpdated,
     }));
 
     // Add to installed list if not there already
@@ -239,7 +260,7 @@ export default class Card extends React.Component<CardProps, {
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
 
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include } = item;
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include, lastUpdated } = item;
 
     localStorage.setItem(this.localStorageKey, JSON.stringify({
       manifest,
@@ -262,6 +283,7 @@ export default class Card extends React.Component<CardProps, {
       // Installed theme localstorage item has schemes, nothing else does
       schemes: parsedSchemes,
       activeScheme,
+      lastUpdated,
     }));
 
     // TODO: handle this differently?
@@ -475,6 +497,16 @@ export default class Card extends React.Component<CardProps, {
             <p className="marketplace-card-desc">
               {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
             </p>
+            {this.props.item.lastUpdated &&
+            <p className="marketplace-card-desc">Last updated:{" "}
+              {new Date(
+                this.props.item.lastUpdated,
+              ).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>}
             {this.tags.length ? (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
                 <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />
@@ -489,14 +521,16 @@ export default class Card extends React.Component<CardProps, {
               <Button classes={["marketplace-installButton"]}
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
-                label={IS_INSTALLED ? "Remove" : "Save"}
+                // TODO: Refactor this using lookups or sth similar
+                label={this.props.type === "app" ? "GitHub" : IS_INSTALLED ? "Remove" : "Install"}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();
                 }}
               >
                 {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
-                {IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
+                {/* TODO: Refactor this using lookups or sth similar */}
+                {this.props.type === "app" ? <GitHubIcon /> : IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
               </Button>
             </div>
           </div>
