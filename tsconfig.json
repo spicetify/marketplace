@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "noImplicitAny": false,
     "lib": [
-      "ES2021.String",
+      "ES2021",
       "dom"
     ]
   },
