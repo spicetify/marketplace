@@ -3,6 +3,7 @@ import { processAuthors, addToSessionStorage } from "./Utils";
 import { ITEMS_PER_REQUEST, BLACKLIST_URL, THEMES_URL } from "../constants";
 import { RepoTopic } from "../types/marketplace-types";
 import snippetsJSON from "../../resources/snippets";
+import appsManifest from "../../resources/manifests/apps";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -189,6 +190,7 @@ export async function buildThemeCardData(manifest: any) { // TODO: add type
   }
 }
 
+// TODO: Update these docs
 /**
 * Fetch custom apps from a repo and format data for generating cards
 * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
@@ -196,59 +198,37 @@ export async function buildThemeCardData(manifest: any) { // TODO: add type
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchAppManifest(contents_url: string, branch: string, stars: number) {
+export async function buildAppCardData(manifest: any) { // TODO: add type
   try {
-    // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
-    let manifests;
-    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
-    // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
-    const { user, repo } = regex_result.groups;
-
-    manifests = await getRepoManifest(user, repo, branch);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    // TODO: figure this out...
+    // TODO: Update these once we get a repo for apps
+    const [ user, repo, selectedBranch ] = ["spicetify", "spicetify-themes", "generated-manifest"];
 
     // Manifest is initially parsed
-    const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-      const selectedBranch = manifest.branch || branch;
-      // TODO: tweak saved items
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
+    const parsedManifest: CardItem[] = {
+      manifest,
+      title: manifest.name,
+      subtitle: manifest.description,
+      authors: processAuthors(manifest.authors, "user..."), // TODO: do we need a fallback?
+      user,
+      repo,
+      branch: selectedBranch,
 
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        // Custom Apps don't have an entry point; they're just listed so they can link out from the card
-        // extensionURL: manifest.main.startsWith("http")
-        //   ? manifest.main
-        //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags,
-      };
+      imageURL: manifest.preview && manifest.preview.startsWith("http")
+        ? manifest.preview
+        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+      // Custom Apps don't have an entry point; they're just listed so they can link out from the card
+      // extensionURL: manifest.main.startsWith("http")
+      //   ? manifest.main
+      //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+      readmeURL: manifest.readme && manifest.readme.startsWith("http")
+        ? manifest.readme
+        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+      stars: 0, // TODO: get stars working
+      tags: manifest.tags,
+    };
 
-      // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description) {
-        accum.push(item);
-      }
-      // else {
-      //     console.error("Invalid manifest:", manifest);
-      // }
-
-      return accum;
-    }, []);
-
-    return parsedManifests;
+    return parsedManifest;
   }
   catch (err) {
     // console.warn(contents_url, err);
@@ -258,6 +238,12 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 
 export const getThemesMonoManifest = async () => {
   const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
+  return manifest;
+};
+
+export const getAppsMonoManifest = async () => {
+  // const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
+  const manifest = appsManifest;
   return manifest;
 };
 

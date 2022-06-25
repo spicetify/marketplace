@@ -8,9 +8,10 @@ import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEA
 import { openModal } from "../logic/LaunchModals";
 import {
   getTaggedRepos,
-  fetchExtensionManifest, fetchAppManifest,
+  fetchExtensionManifest,
   fetchCssSnippets, fetchBlacklist,
   getThemesMonoManifest, buildThemeCardData,
+  getAppsMonoManifest, buildAppCardData,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
@@ -262,37 +263,24 @@ export default class Grid extends React.Component<
       console.log("Parsed themes");
       break;
     } case "Apps": {
-      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
-      for (const repo of pageOfRepos.items) {
+      const allApps = await getAppsMonoManifest();
+      console.log(allApps);
 
-        const apps = await fetchAppManifest(
-          repo.contents_url,
-          repo.default_branch,
-          repo.stargazers_count,
-        );
+      for (const app of allApps) {
+        const appCardData = await buildAppCardData(app);
+
+        // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
           return -1;
         }
 
-        if (apps && apps.length) {
-          apps.forEach((app) => {
-            Object.assign(app, { lastUpdated: repo.pushed_at });
-            this.appendCard(app, "app");
-          });
-        }
+        // TODO: it's complaining about the argument type here...
+        this.appendCard(appCardData, "app");
       }
 
-      // First request is null, so coerces to 1
-      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-      // -1 because the page number is 1-indexed
-      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-      const remainingResults = pageOfRepos.total_count - soFarResults;
-
-      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
-      if (remainingResults > 0) return currentPage + 1;
-      else console.log("No more app results");
+      console.log("Parsed apps");
       break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
