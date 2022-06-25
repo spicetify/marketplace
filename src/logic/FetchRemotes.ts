@@ -1,4 +1,4 @@
-import { CardItem, Snippet } from "../types/marketplace-types";
+import { CardItem, Manifest, Snippet } from "../types/marketplace-types";
 import { processAuthors, addToSessionStorage } from "./Utils";
 import { ITEMS_PER_REQUEST, BLACKLIST_URL, THEMES_URL } from "../constants";
 import { RepoTopic } from "../types/marketplace-types";
@@ -147,7 +147,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function buildThemeCardData(manifest: any) { // TODO: add type
+export async function buildThemeCardData(manifest: Manifest) {
   try {
     // TODO: figure this out...
     const [ user, repo, selectedBranch ] = ["spicetify", "spicetify-themes", "generated-manifest"];
@@ -199,7 +199,7 @@ export async function buildThemeCardData(manifest: any) { // TODO: add type
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function buildAppCardData(manifest: any) { // TODO: add type
+export async function buildAppCardData(manifest: Manifest) {
   try {
     // TODO: figure this out...
     // TODO: Update these once we get a repo for apps
