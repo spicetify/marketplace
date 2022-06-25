@@ -198,10 +198,13 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   // The recursion isn't super clean...
 
   // TODO: re-enable this once everything works with mono-manifest...
-  await Promise.all([
-    loadPageRecursive("extension", 1),
-    loadPageRecursive("theme", 1),
-  ]);
+  if (LOCALSTORAGE_KEYS.githubTopics) {
+    await Promise.all([
+      loadPageRecursive("extension", 1),
+      loadPageRecursive("theme", 1),
+    ]);
+  }
+
 })();
 
 async function appendInformationToLocalStorage(array, type: RepoType) {
