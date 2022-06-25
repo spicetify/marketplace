@@ -256,8 +256,7 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        // TODO: it's complaining about the argument type here...
-        this.appendCard(themeCardData, "theme");
+        if (themeCardData) this.appendCard(themeCardData, "theme");
       }
 
       console.log("Parsed themes");
@@ -276,8 +275,7 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        // TODO: it's complaining about the argument type here...
-        this.appendCard(appCardData, "app");
+        if (appCardData) this.appendCard(appCardData, "app");
       }
 
       console.log("Parsed apps");

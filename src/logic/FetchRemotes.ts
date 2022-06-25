@@ -153,7 +153,7 @@ export async function buildThemeCardData(manifest: any) { // TODO: add type
     const [ user, repo, selectedBranch ] = ["spicetify", "spicetify-themes", "generated-manifest"];
 
     // Manifest is initially parsed
-    const parsedManifest: CardItem[] = {
+    const parsedManifest: CardItem = {
       manifest,
       title: manifest.name,
       subtitle: manifest.description,
@@ -182,6 +182,7 @@ export async function buildThemeCardData(manifest: any) { // TODO: add type
         : null,
       include: manifest.include,
     };
+
     return parsedManifest;
   }
   catch (err) {
@@ -205,7 +206,7 @@ export async function buildAppCardData(manifest: any) { // TODO: add type
     const [ user, repo, selectedBranch ] = ["spicetify", "spicetify-themes", "generated-manifest"];
 
     // Manifest is initially parsed
-    const parsedManifest: CardItem[] = {
+    const parsedManifest: CardItem = {
       manifest,
       title: manifest.name,
       subtitle: manifest.description,
