@@ -186,6 +186,7 @@ export default class Grid extends React.Component<
       if (this.CONFIG.visual.githubTopics) {
         pageOfRepos = await getTaggedReposFromTopic("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       } else {
+        // Do whatever you need to here for the monomanifest system
         pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       }
 
@@ -260,7 +261,6 @@ export default class Grid extends React.Component<
 
       for (const theme of allThemes) {
         let cardData;
-
         if (this.CONFIG.visual.githubTopics) {
           cardData = await fetchThemeManifestFromTopic(theme.contents_url, theme.default_branch, theme.stargazers_count);
         } else {
@@ -276,8 +276,11 @@ export default class Grid extends React.Component<
 
         if (cardData && !this.CONFIG.visual.githubTopics) this.appendCard(cardData, "theme");
         if (cardData && this.CONFIG.visual.githubTopics) {
-          Object.assign(cardData[0], { lastUpdated: theme.pushed_at });
-          this.appendCard(cardData[0], "theme");
+          for (const item of cardData) {
+
+            Object.assign(item, { lastUpdated: theme.pushed_at });
+            this.appendCard(item, "theme");
+          }
         }
       }
       console.log("Parsed themes");

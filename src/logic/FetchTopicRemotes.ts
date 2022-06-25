@@ -195,7 +195,7 @@ export async function fetchThemeManifestFromTopic(contents_url: string, branch: 
     return parsedManifests;
   }
   catch (err) {
-    console.warn(contents_url, err);
+    //console.warn(contents_url, err);
     return null;
   }
 }
