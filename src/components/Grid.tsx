@@ -247,7 +247,7 @@ export default class Grid extends React.Component<
       console.log(allThemes);
 
       for (const theme of allThemes) {
-        const themeCardData = await buildThemeCardData(theme);
+        const cardData = await buildThemeCardData(theme);
 
         // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
@@ -256,7 +256,7 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        if (themeCardData) this.appendCard(themeCardData, "theme");
+        if (cardData) this.appendCard(cardData, "theme");
       }
 
       console.log("Parsed themes");
@@ -266,7 +266,7 @@ export default class Grid extends React.Component<
       console.log(allApps);
 
       for (const app of allApps) {
-        const appCardData = await buildAppCardData(app);
+        const cardData = await buildAppCardData(app);
 
         // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
@@ -275,7 +275,7 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        if (appCardData) this.appendCard(appCardData, "app");
+        if (cardData) this.appendCard(cardData, "app");
       }
 
       console.log("Parsed apps");
