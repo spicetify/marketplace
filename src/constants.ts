@@ -13,6 +13,7 @@ export const LOCALSTORAGE_KEYS = {
   // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
   "themeInstalled": "marketplace:theme-installed",
   "colorShift": "marketplace:colorShift",
+  "githubTopics": "marketplace:githubTopics",
 };
 
 // Initalize topbar tabs

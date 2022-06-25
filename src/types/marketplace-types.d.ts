@@ -72,6 +72,7 @@ export type Manifest = {
   usercss?: string; // URL for usercss
   schemes?: string; // URL for schemes
   include?: string[];
+  lastUpdated: undefined;
 };
 
 // From fetchExtensionManifest
@@ -122,6 +123,7 @@ export type VisualConfig = {
   // of stargazers, and the subscribers_count isn't returned in the main API call we make
   // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
   followers: boolean;
+  githubTopics: boolean;
 }
 
 // example colour scheme

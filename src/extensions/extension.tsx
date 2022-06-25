@@ -22,6 +22,10 @@ import {
   buildThemeCardData,
   fetchExtensionManifest,
 } from "../logic/FetchRemotes";
+import {
+  fetchThemeManifestFromTopic,
+  fetchExtensionManifestFromTopic
+} from "../logic/FetchTopicRemotes";
 
 (async () => {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
@@ -171,6 +175,8 @@ async function queryRepos(type: RepoType, pageNum = 1) {
  */
 async function loadPageRecursive(type: RepoType, pageNum: number) {
   const pageOfRepos = await queryRepos(type, pageNum);
+  console.log(pageOfRepos);
+  // TODO: Once we migrate to the mono-manifest repo, implement the option for enabling topics search here
   appendInformationToLocalStorage(pageOfRepos, type);
 
   // Sets the amount of items that have thus been fetched
@@ -194,16 +200,27 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   // The recursion isn't super clean...
 
   // TODO: re-enable this once everything works with mono-manifest...
-  // await Promise.all([
-  //   loadPageRecursive("extension", 1),
-  //   loadPageRecursive("theme", 1),
-  // ]);
+   await Promise.all([
+  loadPageRecursive("extension", 1),
+  loadPageRecursive("theme", 1),
+   ]);
 })();
 
 async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
+    if(LOCALSTORAGE_KEYS.githubTopics){
+        for (const repo of array.items) {
     // console.log(repo);
+    const data = (type === "theme")
+      ? await fetchThemeManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count)
+      : await fetchExtensionManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    if (data) {
+      addToSessionStorage(data);
+      await sleep(5000);
+    }
+  }
+    }
     const data = (type === "theme")
       ? await buildThemeCardData(repo.contents_url, repo.default_branch, repo.stargazers_count)
       : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
