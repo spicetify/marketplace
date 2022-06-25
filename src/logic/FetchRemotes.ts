@@ -181,7 +181,7 @@ export async function buildThemeCardData(manifest: Manifest) {
         )
         : undefined,
       include: manifest.include,
-      lastUpdated : ""
+      lastUpdated: "",
     };
 
     return parsedManifest;
@@ -228,7 +228,7 @@ export async function buildAppCardData(manifest: Manifest) {
         : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
       stars: 0, // TODO: get stars working
       tags: manifest.tags || [],
-      lastUpdated: ""
+      lastUpdated: "",
     };
 
     return parsedManifest;

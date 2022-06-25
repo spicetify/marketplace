@@ -24,7 +24,7 @@ import {
 } from "../logic/FetchRemotes";
 import {
   fetchThemeManifestFromTopic,
-  fetchExtensionManifestFromTopic
+  fetchExtensionManifestFromTopic,
 } from "../logic/FetchTopicRemotes";
 
 (async () => {
@@ -200,26 +200,26 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   // The recursion isn't super clean...
 
   // TODO: re-enable this once everything works with mono-manifest...
-   await Promise.all([
-  loadPageRecursive("extension", 1),
-  loadPageRecursive("theme", 1),
-   ]);
+  await Promise.all([
+    loadPageRecursive("extension", 1),
+    loadPageRecursive("theme", 1),
+  ]);
 })();
 
 async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
-    if(LOCALSTORAGE_KEYS.githubTopics){
-        for (const repo of array.items) {
-    // console.log(repo);
-    const data = (type === "theme")
-      ? await fetchThemeManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count)
-      : await fetchExtensionManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count);
-    if (data) {
-      addToSessionStorage(data);
-      await sleep(5000);
-    }
-  }
+    if (LOCALSTORAGE_KEYS.githubTopics) {
+      for (const repo of array.items) {
+        // console.log(repo);
+        const data = (type === "theme")
+          ? await fetchThemeManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count)
+          : await fetchExtensionManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count);
+        if (data) {
+          addToSessionStorage(data);
+          await sleep(5000);
+        }
+      }
     }
     const data = (type === "theme")
       ? await buildThemeCardData(repo.contents_url, repo.default_branch, repo.stargazers_count)

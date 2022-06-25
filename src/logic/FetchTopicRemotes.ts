@@ -1,9 +1,7 @@
-import { CardItem, Snippet } from "../types/marketplace-types";
-import { processAuthors, addToSessionStorage } from "./Utils";
-import { ITEMS_PER_REQUEST, BLACKLIST_URL } from "../constants";
-import { RepoTopic } from "../types/marketplace-types";
 
-import snippetsJSON from "../../resources/snippets";
+import { processAuthors, addToSessionStorage } from "./Utils";
+import { CardItem, RepoTopic } from "../types/marketplace-types";
+import { ITEMS_PER_REQUEST } from "../constants";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -271,5 +269,4 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     return null;
   }
 }
-
 
