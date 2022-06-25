@@ -15,11 +15,13 @@ export type SortBoxOption = {
   value: string;
 };
 
-export type TabType = "Extensions" | "Themes" | "Snippets" | "Installed";
+export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps";
 
-export type CardType = "extension" | "theme" | "snippet";
+export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
 
-export type RepoType = "extension" | "theme";
+export type CardType = "extension" | "theme" | "snippet" | "app";
+
+export type RepoType = "extension" | "theme" | "app";
 
 export type Author = {
   name: string;
@@ -32,6 +34,11 @@ export type Snippet = {
   description: string;
   code: string;
 
+  // preview is used in the JSON to stay consistent with the other manifest formats
+  preview?: string;
+  // it's parsed into an imageURL because that's what the Card component uses
+  imageURL?: string;
+
   // TODO: clean this up somehow
   // It complains bitterly in Card.tsx
   // if I don't have all the same properties as CardItem
@@ -41,7 +48,6 @@ export type Snippet = {
   user: undefined;
   repo: undefined;
   branch: undefined;
-  imageURL: undefined;
   extensionURL: undefined;
   readmeURL: undefined;
   stars: undefined;
@@ -49,6 +55,7 @@ export type Snippet = {
   cssURL: undefined;
   schemesURL: undefined;
   include: undefined;
+  lastUpdated: undefined;
 };
 
 // From `fetchExtensionManifest()` and `fetchThemeManifest()`
@@ -82,6 +89,7 @@ export type CardItem = {
   readmeURL: string;
   stars: number;
   tags: string[];
+  lastUpdated: string;
 
   // For themes only
   cssURL?: string;
@@ -107,6 +115,7 @@ export type VisualConfig = {
   tags: boolean;
   hideInstalled: boolean;
   colorShift: boolean;
+  themeDevTools: boolean;
   // Legacy from reddit app
   type: boolean;
   // I was considering adding watchers as "followers" but it looks like the value is a duplicate

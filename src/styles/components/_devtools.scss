@@ -1,0 +1,51 @@
+.devtools-column {
+  height: 570px;
+  width: 50%;
+  position: relative;
+  background-color: var(--spice-sidebar);
+  color: var(--spice-text);
+  overflow: scroll;
+  padding: 1rem;
+}
+
+.color-ini-editor {
+  height: 70%;
+  width: 100%;
+  background-color: var(--spice-sidebar);
+  color: var(--spice-text);
+  overflow: scroll;
+  padding: 1rem;
+  resize: none;
+  font-family: monospace;
+}
+
+.marketplace-theme-dev-tools-container {
+  justify-content: flex-end;
+  display: flex;
+
+  .marketplace-code-editor-wrapper {
+    height: 400px;
+    margin-bottom: 16px;
+    overflow: auto;
+  }
+}
+
+.invalid-css-heading,
+.devtools-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-bottom: 1rem;
+}
+
+.invalid-css-text {
+  margin-bottom: 1.5rem;
+  font-family: monospace;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.devtools-icon {
+  width: 18px;
+  fill: var(--spice-button)
+}

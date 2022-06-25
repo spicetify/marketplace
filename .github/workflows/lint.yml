@@ -6,30 +6,22 @@ on:
   push:
     branches:
       - main
-  # pull_request:
-    # branches:
-      # - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  run-linters:
-    name: Run linters
+  lint:
+    name: lint
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2.4.0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2.5.1
+      - name: Checkout Project
+        uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3.1.0
         with:
-          node-version: '16.x'
-
-      - name: yarn install
-        run: |
-          yarn install --immutable --immutable-cache --check-cache
-
-      # ESLint must be in `package.json`
-      - name: Run linters
-        uses: wearerequired/lint-action@v1
-        with:
-          eslint: true
+          node-version: 16
+      - name: Install dependencies
+        run: yarn
+      - name: Lint checks
+        run: yarn lint:ci

@@ -2,7 +2,7 @@
 // AUTHOR: theRealPadster, CharlieS1103
 // DESCRIPTION: Companion extension for Spicetify Marketplace
 
-import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS } from "../constants";
+import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
 import { RepoType } from "../types/marketplace-types";
 import {
   getLocalStorageDataFromKey,
@@ -28,13 +28,19 @@ import {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
+  // https://github.com/satya164/react-simple-code-editor/issues/86
+  const reactSimpleCodeEditorFix = document.createElement("script");
+  reactSimpleCodeEditorFix.innerHTML = "const global = globalThis;";
+  document.head.appendChild(reactSimpleCodeEditorFix);
+
   // Show message on start.
-  Spicetify.showNotification("Loaded Marketplace extension!");
+  console.log(`Initializing Spicetify Marketplace v${MARKETPLACE_VERSION}`);
 
   // Expose useful methods in global context
   window.Marketplace = {
     // Should allow you to reset Marketplace from the dev console if it's b0rked
     reset: resetMarketplace,
+    version: MARKETPLACE_VERSION,
   };
 
   const initializeExtension = (extensionKey: string) => {

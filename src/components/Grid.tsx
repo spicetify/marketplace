@@ -1,20 +1,27 @@
 import React from "react";
-import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig, TabType } from "../types/marketplace-types";
+import semver from "semver";
+import { Option } from "react-dropdown";
+
+import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
-import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
+import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
-  getExtensionRepos, fetchExtensionManifest,
-  getThemeRepos, buildThemeCardData,
-  fetchCssSnippets, getBlacklist, getThemesMonoManifest,
+  getTaggedRepos,
+  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
+  fetchCssSnippets, getBlacklist, 
+  getThemesMonoManifest, buildThemeCardData,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
+import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
 import Button from "./Button";
+import DownloadIcon from "./Icons/DownloadIcon";
+import Changelog from "./Modals/Changelog";
 
 export default class Grid extends React.Component<
 {
@@ -23,7 +30,8 @@ export default class Grid extends React.Component<
   updateAppConfig: (CONFIG: Config) => void,
 },
 {
-  // TODO: add types
+  version: string,
+  newUpdate: boolean,
   searchValue: string,
   cards: Card[],
   tabs: TabItemConfig[],
@@ -45,6 +53,8 @@ export default class Grid extends React.Component<
     };
 
     this.state = {
+      version: MARKETPLACE_VERSION,
+      newUpdate: false,
       searchValue: "",
       cards: [],
       tabs: props.CONFIG.tabs,
@@ -63,7 +73,8 @@ export default class Grid extends React.Component<
   requestPage = 0;
   cardList: Card[] = [];
   sortConfig: { by: string };
-  // TODO: why are these set up funny?
+  // TODO: why are these set up funny
+  // To get to the other side
   gridUpdateTabs: (() => void) | null;
   gridUpdatePostsVisual: (() => void) | null;
   checkScroll: (e: Event) => void;
@@ -109,7 +120,7 @@ export default class Grid extends React.Component<
       updateActiveTheme={this.setActiveTheme.bind(this)}
     />;
 
-    this.cardList.push(card);
+    this.cardList.push(card as unknown as Card);
     this.setState({ cards: this.cardList });
   }
 
@@ -140,17 +151,16 @@ export default class Grid extends React.Component<
   }
 
   updatePostsVisual() {
-    this.cardList = this.cardList.map((card) => {
+    this.cardList = this.cardList.map((card, index) => {
       return <Card {...card.props}
-        CONFIG={this.CONFIG}
-      />;
-    });
+        key={index.toString()} CONFIG={this.CONFIG} />;
+    }) as unknown as Card[];
     this.setState({ cards: [...this.cardList] });
   }
 
-  switchTo(value: TabType) {
-    this.CONFIG.activeTab = value;
-    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, value);
+  switchTo(option: Option) {
+    this.CONFIG.activeTab = option.value;
+    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, option.value);
     this.cardList = [];
     // this.requestPage = null;
     this.requestPage = 0;
@@ -170,9 +180,14 @@ export default class Grid extends React.Component<
   async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
     case "Extensions": {
-      const pageOfRepos = await getExtensionRepos(this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count, this.CONFIG.visual.hideInstalled);
+        const extensions = await fetchExtensionManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+          this.CONFIG.visual.hideInstalled,
+        );
 
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
@@ -182,7 +197,10 @@ export default class Grid extends React.Component<
 
         if (extensions && extensions.length) {
           // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
-          extensions.forEach((extension) => this.appendCard(extension, "extension"));
+          extensions.forEach((extension) => {
+            Object.assign(extension, { lastUpdated: repo.pushed_at });
+            this.appendCard(extension, "extension");
+          });
         }
       }
 
@@ -230,7 +248,7 @@ export default class Grid extends React.Component<
       for (const theme of allThemes) {
         const themeCardData = await buildThemeCardData(theme);
 
-        // TODO: do we need this queue stuff any more
+        // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
@@ -242,6 +260,39 @@ export default class Grid extends React.Component<
       }
 
       console.log("Parsed themes");
+      break;
+    } case "Apps": {
+      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
+      for (const repo of pageOfRepos.items) {
+
+        const apps = await fetchAppManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+        );
+        // I believe this stops the requests when switching tabs?
+        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+          // Stop this queue from continuing to fetch and append to cards list
+          return -1;
+        }
+
+        if (apps && apps.length) {
+          apps.forEach((app) => {
+            Object.assign(app, { lastUpdated: repo.pushed_at });
+            this.appendCard(app, "app");
+          });
+        }
+      }
+
+      // First request is null, so coerces to 1
+      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+      // -1 because the page number is 1-indexed
+      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+      const remainingResults = pageOfRepos.total_count - soFarResults;
+
+      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
+      if (remainingResults > 0) return currentPage + 1;
+      else console.log("No more app results");
       break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
@@ -257,8 +308,7 @@ export default class Grid extends React.Component<
 
     this.setState({ rest: true, endOfList: true });
     this.endOfList = true;
-    // return null;
-    // TODO: what does returning null mean?
+
     return 0;
   }
   /**
@@ -312,7 +362,7 @@ export default class Grid extends React.Component<
     this.CONFIG.theme.activeScheme = activeScheme;
 
     if (schemes && activeScheme && schemes[activeScheme]) {
-      injectColourScheme(this.CONFIG.theme.schemes?.[activeScheme]);
+      injectColourScheme(this.CONFIG.theme.schemes[activeScheme]);
     } else {
       // Reset schemes if none sent
       injectColourScheme(null);
@@ -343,6 +393,26 @@ export default class Grid extends React.Component<
   * If the cardList isn't loaded, it loads the cardList.
   */
   async componentDidMount() {
+    // Checks for new Marketplace updates
+    fetch(LATEST_RELEASE).then(res => res.json()).then(
+      result => {
+        this.setState({
+          version: result[0].name,
+        });
+
+        try {
+          this.setState({ newUpdate: semver.gt(this.state.version, MARKETPLACE_VERSION) });
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      error => {
+        console.error("Failed to check for updates", error);
+      },
+    );
+
+    Changelog();
+
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
@@ -379,10 +449,9 @@ export default class Grid extends React.Component<
   /**
    * If the user has scrolled to the bottom of the page, load more posts.
    * @param event - The event object that is passed to the callback function.
-   * @returns {void}
    */
   // Add scroll event listener with type
-  isScrolledBottom(event: Event) {
+  isScrolledBottom(event: Event): void {
     const viewPort = event.target as HTMLElement;
     if ((viewPort.scrollTop + viewPort.clientHeight) >= viewPort.scrollHeight) {
       // At bottom, load more posts
@@ -400,76 +469,89 @@ export default class Grid extends React.Component<
     return this.state.activeScheme;
   }
 
+  handleSearch(event: React.KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.setState({ endOfList: false });
+      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+      this.searchRequested = true;
+    } else if ( // Refreshes result when user deletes all queries
+      ((event.key === "Backspace") || (event.key === "Delete")) &&
+        this.searchRequested &&
+        this.state.searchValue.trim() === "") {
+      this.setState({ endOfList: false });
+      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
+      this.searchRequested = false;
+    }
+  }
+
   render() {
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
-          <h1>{this.props.title}</h1>
+          <div className="marketplace-header__left">
+            <h1>{this.props.title}</h1>
+            {this.state.newUpdate
+              ? <button type="button" title="New update" className="marketplace-header-icon-button" id="marketplace-update"
+                onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
+              >
+                <DownloadIcon />
+                &nbsp;{this.state.version}
+              </button>
+              : null}
+          </div>
           <div className="marketplace-header__right">
+            {/* Show theme developer tools button if themeDevTools is enabled */}
+            {this.CONFIG.visual.themeDevTools
+              ? <button type="button" title="ThemeDevTools" className="marketplace-header-icon-button"
+                onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
+              : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
-
             {this.state.activeScheme ? <SortBox
               onChange={(value) => this.updateColourSchemes(this.state.schemes, value)}
               // TODO: Make this compatible with the changes to the theme install process: need to create a method to update the scheme options without a full reload.
               sortBoxOptions={generateSchemesOptions(this.state.schemes)}
               // It doesn't work when I directly use CONFIG.theme.activeScheme in the sortBySelectedFn
               // because it hardcodes the value into the fn
-              sortBySelectedFn={(a) => a.key === this.getActiveScheme()}
-
-            /> : null}
-            <button type="button" title="Settings" className="marketplace-settings-button" id="marketplace-settings-button"
+              sortBySelectedFn={(a) => a.key === this.getActiveScheme()} /> : null}
+            <div className="searchbar--bar__wrapper">
+              <input
+                className="searchbar-bar"
+                type="text"
+                placeholder={`Search ${this.CONFIG.activeTab}...`}
+                value={this.state.searchValue}
+                onChange={(event) => {
+                  this.setState({ searchValue: event.target.value });
+                }}
+                onKeyDown={this.handleSearch.bind(this)} />
+            </div>
+            <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
             </button>
           </div>
         </div>
-        {
-          <div className="searchbar--bar__wrapper">
-            <input
-              className="searchbar-bar"
-              type="text"
-              placeholder={`Search ${this.CONFIG.activeTab}...`}
-              value={this.state.searchValue}
-              onChange={(event) => {
-                this.setState({ searchValue: event.target.value });
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  this.setState({ endOfList: false });
-                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                  this.searchRequested = true;
-                } else if ( // Refreshes result when user deletes all queries
-                  ((event.key === "Backspace") || (event.key === "Delete")) &&
-                  this.searchRequested &&
-                  this.state.searchValue.trim() === ""
-                ) {
-                  this.setState({ endOfList: false });
-                  this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-                  this.searchRequested = false;
-                }}} />
-          </div>
-        }
         {/* Add a header and grid for each card type if it has any cards */}
         {[
           { handle: "extension", name: "Extensions" },
           { handle: "theme", name: "Themes" },
           { handle: "snippet", name: "Snippets" },
+          { handle: "app", name: "Apps" },
         ].map((cardType) => {
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
-            .filter((card) => { // Search filter
+            .filter((card) => {
               const { searchValue } = this.state;
               const { title, user } = card.props.item;
 
-              if (
-                searchValue.trim() === "" ||
+              if (searchValue.trim() === "" ||
                 title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
-                user?.toLowerCase().includes(searchValue.trim().toLowerCase())
-              ) return card;
+                user?.toLowerCase().includes(searchValue.trim().toLowerCase()))
+                return card;
             })
-            .map((card) => {
+            .map((card, index) => {
               // Clone the cards and update the prop to trigger re-render
               // TODO: is it possible to only re-render the theme cards whose status have changed?
+              card.key = index;
               const cardElement = React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
               });
@@ -479,9 +561,6 @@ export default class Grid extends React.Component<
           if (cardsOfType.length) {
             return (
               // Add a header for the card type
-              // TODO: does the styling etc work here?
-              // I had to wrap with a <> because it's jsx
-              // The original returned an array of two elements: the header and the cards
               <>
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
@@ -507,8 +586,7 @@ export default class Grid extends React.Component<
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}
           links={this.CONFIG.tabs}
-          activeLink={this.CONFIG.activeTab}
-        />
+          activeLink={this.CONFIG.activeTab} />
       </section>
     );
   }

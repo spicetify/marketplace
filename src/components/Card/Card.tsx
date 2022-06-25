@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Key } from "react";
 import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 
-import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
+import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
 import {
   getLocalStorageDataFromKey,
   parseIni,
@@ -11,17 +11,16 @@ import {
 } from "../../logic/Utils";
 import TrashIcon from "../Icons/TrashIcon";
 import DownloadIcon from "../Icons/DownloadIcon";
+import GitHubIcon from "../Icons/GitHubIcon";
 import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
 
-type CardProps = {
+export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
   item: CardItem | Snippet;
-
   CONFIG: Config;
-
   // From `appendCard()`
   updateColourSchemes: (SchemeIni, string) => void;
   updateActiveTheme: (string) => void;
@@ -36,6 +35,8 @@ export default class Card extends React.Component<CardProps, {
   // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
   stars: number;
   tagsExpanded: boolean;
+  externalUrl: string;
+  lastUpdated: string | undefined;
 }> {
   // Theme stuff
   // cssURL?: string;
@@ -47,8 +48,10 @@ export default class Card extends React.Component<CardProps, {
   tags: string[];
 
   // Added locally
-  menuType;
+  menuType: typeof Spicetify.ReactComponent.Menu;
   localStorageKey: string;
+  key: Key | null = null;
+  type = Card;
 
   constructor(props: CardProps) {
     super(props);
@@ -59,10 +62,21 @@ export default class Card extends React.Component<CardProps, {
 
     const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
 
-    let cardId = "";
-    if (props.type === "snippet") cardId = props.item.title.replaceAll(" ", "-");
-    else if (props.type === "theme") cardId = props.item.manifest?.usercss || "";
-    else if (props.type === "extension") cardId = props.item.manifest?.main || "";
+    let cardId: string;
+    switch (props.type) {
+    case "snippet":
+      cardId = props.item.title.replaceAll(" ", "-");
+      break;
+    case "theme":
+      cardId = props.item.manifest?.usercss || "";
+      break;
+    case "extension":
+      cardId = props.item.manifest?.main || "";
+      break;
+    case "app":
+      cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
+      break;
+    }
 
     this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
 
@@ -80,6 +94,10 @@ export default class Card extends React.Component<CardProps, {
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
       tagsExpanded: false,
+      externalUrl: (this.props.item.user && this.props.item.repo) // These won't exist for snippets
+        ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
+        : "",
+      lastUpdated: (this.props.item.user && this.props.item.repo) ? this.props.item.lastUpdated : undefined,
     };
   }
 
@@ -90,18 +108,35 @@ export default class Card extends React.Component<CardProps, {
 
   async componentDidMount() {
     // Refresh stars if on "Installed" tab with stars enabled
-    if (this.props.CONFIG.activeTab === "Installed" &&
-      this.props.CONFIG.visual.stars && this.props.type !== "snippet") {
+    if (this.props.CONFIG.activeTab === "Installed" && this.props.type !== "snippet") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
       const repoData = await fetch(url).then(res => res.json());
+      const { stargazers_count, pushed_at } = repoData;
 
-      if (this.state.stars !== repoData.stargazers_count) {
-        this.setState({ stars: repoData.stargazers_count }, () => {
-          console.log(`Stars updated to: ${this.state.stars}; updating localstorage.`);
-          this.installExtension();
+      const stateUpdate = { stars: 0, lastUpdated: undefined };
+      if ((this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars)) {
+        stateUpdate.stars = stargazers_count;
+        console.log(`Stars updated to: ${stargazers_count}`);
+      }
+      if (this.state.lastUpdated !== pushed_at) {
+        stateUpdate.lastUpdated = pushed_at;
+        console.log(`New update pushed at: ${pushed_at}`);
+      }
+
+      if (stateUpdate.stars || stateUpdate.lastUpdated) {
+        this.setState(stateUpdate, () => {
+          console.log("Card updated; updating localstorage.");
+          switch (this.props.type) {
+          case "extension":
+            this.installExtension();
+            break;
+          case "theme":
+            this.installTheme();
+            break;
+          }
         });
       }
     }
@@ -133,6 +168,9 @@ export default class Card extends React.Component<CardProps, {
 
       // If the new or previous theme has JS, prompt to reload
       if (this.props.item.manifest?.include || previousTheme.include) openModal("RELOAD");
+    } else if (this.props.type === "app") {
+      // Open repo in new tab
+      window.open(this.state.externalUrl, "_blank");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.log("Snippet already installed, removing");
@@ -149,19 +187,25 @@ export default class Card extends React.Component<CardProps, {
     console.log(`Installing extension ${this.localStorageKey}`);
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
+    if (!this.props.item) {
+      Spicetify.showNotification("There was an error installing extension");
+      return;
+    }
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated } = this.props.item;
     localStorage.setItem(this.localStorageKey, JSON.stringify({
-      manifest: this.props.item?.manifest,
+      manifest,
       type: this.props.type,
-      title: this.props.item.title,
-      subtitle: this.props.item.subtitle,
-      authors: this.props.item.authors,
-      user: this.props.item.user,
-      repo: this.props.item.repo,
-      branch: this.props.item.branch,
-      imageURL: this.props.item.imageURL,
-      extensionURL: this.props.item.extensionURL,
-      readmeURL: this.props.item.readmeURL,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
       stars: this.state.stars,
+      lastUpdated,
     }));
 
     // Add to installed list if not there already
@@ -195,11 +239,16 @@ export default class Card extends React.Component<CardProps, {
   }
 
   async installTheme() {
+    const { item } = this.props;
+    if (!item) {
+      Spicetify.showNotification("There was an error installing theme");
+      return;
+    }
     console.log(`Installing theme ${this.localStorageKey}`);
 
     let parsedSchemes: SchemeIni = {};
-    if (this.props.item.schemesURL) {
-      const schemesResponse = await fetch(this.props.item.schemesURL);
+    if (item.schemesURL) {
+      const schemesResponse = await fetch(item.schemesURL);
       const colourSchemes = await schemesResponse.text();
       parsedSchemes = parseIni(colourSchemes);
     }
@@ -210,28 +259,31 @@ export default class Card extends React.Component<CardProps, {
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
+
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include, lastUpdated } = item;
+
     localStorage.setItem(this.localStorageKey, JSON.stringify({
-      // TODO: can I clean this up so it's less repetition?
-      manifest: this.props.item?.manifest,
+      manifest,
       type: this.props.type,
-      title: this.props.item.title,
-      subtitle: this.props.item.subtitle,
-      authors: this.props.item.authors,
-      user: this.props.item.user,
-      repo: this.props.item.repo,
-      branch: this.props.item.branch,
-      imageURL: this.props.item.imageURL,
-      extensionURL: this.props.item.extensionURL,
-      readmeURL: this.props.item.readmeURL,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
       stars: this.state.stars,
       tags: this.tags,
       // Theme stuff
-      cssURL: this.props.item.cssURL,
-      schemesURL: this.props.item.schemesURL,
-      include: this.props.item.include,
+      cssURL,
+      schemesURL,
+      include,
       // Installed theme localstorage item has schemes, nothing else does
       schemes: parsedSchemes,
       activeScheme,
+      lastUpdated,
     }));
 
     // TODO: handle this differently?
@@ -251,13 +303,13 @@ export default class Card extends React.Component<CardProps, {
     // TODO: We'll also need to actually update the usercss etc, not just the colour scheme
     // e.g. the stuff from extension.js, like injectUserCSS() etc.
 
-    if (!this.props.item.include) {
+    if (!item.include) {
       // Add new theme css
       this.fetchAndInjectUserCSS(this.localStorageKey);
       // Update the active theme in Grid state, triggers state change and re-render
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
-      this.props.updateColourSchemes(parsedSchemes, activeScheme);
+      this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
     }
 
     this.setState({ installed: true });
@@ -302,6 +354,7 @@ export default class Card extends React.Component<CardProps, {
       code: this.props.item.code,
       title: this.props.item.title,
       description: this.props.item.description,
+      imageURL: this.props.item.imageURL,
     }));
 
     // Add to installed list if not there already
@@ -369,7 +422,6 @@ export default class Card extends React.Component<CardProps, {
     // console.log(`Rendering ${this.localStorageKey} - is ${IS_INSTALLED ? "" : "not"} installed`);
 
     // Kill the card if it has been uninstalled on the "Installed" tab
-    // TODO: is this kosher, or is there a better way to handle?
     if (this.props.CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
       console.log("Card item not installed");
       return null;
@@ -385,7 +437,17 @@ export default class Card extends React.Component<CardProps, {
     }
 
     return (
-      <div className={cardClasses.join(" ")} onClick={() => this.openReadme()}>
+      <div className={cardClasses.join(" ")} onClick={() => {
+        if (this.props.type === "snippet") {
+          const processedName = this.props.item.title.replace(/\n/g, "");
+
+          if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
+            return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
+
+          openModal("VIEW_SNIPPET", undefined, undefined, this.props);
+        } else this.openReadme();
+      }
+      }>
         <div className="main-card-draggable" draggable="true">
           <div className="main-card-imageContainer">
             <div className="main-cardImage-imageWrapper">
@@ -415,7 +477,10 @@ export default class Card extends React.Component<CardProps, {
               title={this.props.type === "snippet" ? this.props.item.title : this.props.item.manifest?.name}
               className="main-cardHeader-link"
               dir="auto"
-              href={`https://github.com/${this.props.item.user}/${this.props.item.repo}`}
+              href={this.props.type !== "snippet"
+                ? this.state.externalUrl
+                : SNIPPETS_PAGE_URL
+              }
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
@@ -432,6 +497,16 @@ export default class Card extends React.Component<CardProps, {
             <p className="marketplace-card-desc">
               {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
             </p>
+            {this.props.item.lastUpdated &&
+            <p className="marketplace-card-desc">Last updated:{" "}
+              {new Date(
+                this.props.item.lastUpdated,
+              ).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>}
             {this.tags.length ? (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
                 <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />
@@ -446,14 +521,16 @@ export default class Card extends React.Component<CardProps, {
               <Button classes={["marketplace-installButton"]}
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
-                label={IS_INSTALLED ? "Remove" : "Save"}
+                // TODO: Refactor this using lookups or sth similar
+                label={this.props.type === "app" ? "GitHub" : IS_INSTALLED ? "Remove" : "Install"}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();
                 }}
               >
                 {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
-                {IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
+                {/* TODO: Refactor this using lookups or sth similar */}
+                {this.props.type === "app" ? <GitHubIcon /> : IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
               </Button>
             </div>
           </div>

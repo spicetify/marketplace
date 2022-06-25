@@ -148,3 +148,6 @@ out
 
 # build folder
 dist/
+
+# vectornator files for snippet previews
+*.vectornator

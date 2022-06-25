@@ -63,12 +63,12 @@ export const parseIni = (data: string) => {
   };
   const value = {};
   const lines = data.split(/[\r\n]+/);
-  let section = null;
+  let section: string | null = null;
   lines.forEach(function(line) {
     if (regex.comment.test(line)) {
       return;
     } else if (regex.param.test(line)) {
-      const match = line.match(regex.param);
+      const match: string[] | null = line.match(regex.param);
 
       // TODO: github copilot made this part, but I have no idea what it does
       // if (match?.length !== 3) {
@@ -76,19 +76,41 @@ export const parseIni = (data: string) => {
       // }
 
       if (section) {
-        value[section][match[1]] = match[2];
-      } else {
+        value[section][match?.[1]] = match?.[2];
+      } else if (match) {
         value[match[1]] = match[2];
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
-      value[match[1]] = {};
-      section = match[1];
+      if (match) {
+        value[match[1]] = {};
+        section = match[1];
+      }
     } else if (line.length == 0 && section) {
       section = null;
     }
   });
   return value;
+};
+
+/* Pretty much just reverse the above function */
+export const unparseIni = (data: SchemeIni) => {
+  let output = "";
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      if (typeof data[key] === "object") {
+        output += `[${key}]\n`;
+        for (const subKey in data[key]) {
+          if (Object.prototype.hasOwnProperty.call(data[key], subKey)) {
+            output += `${subKey}=${data[key][subKey]}\n`;
+          }
+        }
+      } else {
+        output += `${key}=${data[key]}\n`;
+      }
+    }
+  }
+  return output;
 };
 
 /**
@@ -113,6 +135,19 @@ export const initializeSnippets = (snippets: Snippet[]) => {
   document.head.appendChild(style);
 };
 
+export const fileToBase64 = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
+
 /**
  * Format an array of authors, given the data from the manifest and the repo owner.
  * @param authors Array of authors
@@ -123,7 +158,12 @@ export const processAuthors = (authors: Author[], user: string) => {
   let parsedAuthors: Author[] = [];
 
   if (authors && authors.length > 0) {
-    parsedAuthors = authors;
+    parsedAuthors = authors.map((author) => ({
+      name: author.name,
+      url: author.url.startsWith("javascript:")
+        ? ""
+        : author.url,
+    }));
   } else {
     parsedAuthors.push({
       name: user,
@@ -300,17 +340,17 @@ export const getParamsFromGithubRaw = (url: string) => {
   // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
   const obj = {
-    user: regex_result ? regex_result?.groups?.user : null,
-    repo: regex_result ? regex_result?.groups?.repo : null,
-    branch: regex_result ? regex_result?.groups?.branch : null,
-    filePath: regex_result ? regex_result?.groups?.filePath : null,
+    user: regex_result ? regex_result.groups?.user : null,
+    repo: regex_result ? regex_result.groups?.repo : null,
+    branch: regex_result ? regex_result.groups?.branch : null,
+    filePath: regex_result ? regex_result.groups?.filePath : null,
   };
 
   return obj;
 };
 
 export function addToSessionStorage(items, key?) {
-  if (!items || items == null) return;
+  if (!items) return;
   items.forEach(item => {
     if (!key) key = `${items.user}-${items.repo}`;
     // If the key already exists, it will append to it instead of overwriting it
@@ -320,8 +360,56 @@ export function addToSessionStorage(items, key?) {
     window.sessionStorage.setItem(key, JSON.stringify(parsed));
   });
 }
+export function getInvalidCSS(): string[] {
+  const unparsedCSS = document.querySelector("head > style.marketplaceCSS.marketplaceUserCSS");
+  const classNameList = unparsedCSS?.innerHTML;
+  const regex = new RegExp (`.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*{`, "g");
+  if (!classNameList) return ["Error: Class name list not found; please create an issue"];
+  const matches = classNameList.matchAll(regex);
+  const invalidCssClassName: string[] = [];
+  for (const match of matches) {
+    // Check if match is the same class name as an html element
+    const className = match[0].replace("{", "").trim();
+    const classesArr = className.split(" ");
+    let element;
+    for (let i = 0; i < classesArr.length; i++) {
+      try {
+        element = document.querySelector(`${classesArr[i]}`);
+      }
+      catch (e) {
+        element = document.getElementsByClassName(`${className}`);
+      }
+      if (!element) {
+        invalidCssClassName.push(className);
+      }
+    }
+  }
+  return invalidCssClassName;
+}
+
+export async function getMarkdownHTML(markdown: string, user: string, repo: string) {
+  try {
+    const postBody = {
+      text: markdown,
+      context: `${user}/${repo}`,
+      mode: "gfm",
+    };
+
+    const response = await fetch("https://api.github.com/markdown", {
+      method: "POST",
+      body: JSON.stringify(postBody),
+    });
+    if (!response.ok) throw Spicetify.showNotification(`Error parsing markdown (HTTP ${response.status})`);
+
+    const html = await response.text();
+
+    return html;
+  } catch (err) {
+    return null;
+  }
+}
 
 // This function is used to sleep for a certain amount of time
-export function sleep(ms) {
+export function sleep(ms: number | undefined) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

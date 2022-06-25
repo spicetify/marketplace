@@ -1,5 +1,8 @@
 import { TabItemConfig } from "./types/marketplace-types";
 
+import { version } from "../package.json";
+export const MARKETPLACE_VERSION = version;
+
 export const LOCALSTORAGE_KEYS = {
   "installedExtensions": "marketplace:installed-extensions",
   "installedSnippets": "marketplace:installed-snippets",
@@ -18,6 +21,7 @@ export const ALL_TABS: TabItemConfig[] = [
   { name: "Extensions", enabled: true },
   { name: "Themes", enabled: true },
   { name: "Snippets", enabled: true },
+  { name: "Apps", enabled: true },
   { name: "Installed", enabled: true },
 ];
 
@@ -30,6 +34,12 @@ export const CUSTOM_APP_PATH = "/marketplace";
 // Used in Card.tsx
 export const MAX_TAGS = 4;
 
-export const SNIPPETS_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/snippets.json";
 export const THEMES_URL = "https://raw.githubusercontent.com/spicetify/spicetify-themes/generated-manifest/manifest.json";
+
+export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/spicetify-marketplace/blob/main/resources/snippets.ts";
+
 export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
+
+export const LATEST_RELEASE = "https://api.github.com/repos/spicetify/spicetify-marketplace/releases";
+
+export const RELEASE_CHANGELOG = `https://api.github.com/repos/spicetify/spicetify-marketplace/releases/tags/v${MARKETPLACE_VERSION}`;

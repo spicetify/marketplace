@@ -40,6 +40,7 @@ button.arrow-btn {
   &.disabled,
   &[disabled] {
     color: rgba(var(--spice-rgb-text), .3);
+    cursor: not-allowed;
   }
 }
 

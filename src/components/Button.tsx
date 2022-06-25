@@ -12,6 +12,7 @@ const Button = (props: {
   label?: string;
   type?: ButtonType;
   children: React.ReactNode;
+  disabled?: boolean;
 }) => {
   const buttonType = props.type || "round";
 
@@ -20,7 +21,7 @@ const Button = (props: {
   if (props.classes) classList.push(...props.classes);
 
   return (
-    <button className={classList.join(" ")} onClick={props.onClick} aria-label={props.label}>
+    <button className={classList.join(" ")} onClick={props.onClick} aria-label={props.label} disabled={props.disabled}>
       {props.children}
     </button>
   );

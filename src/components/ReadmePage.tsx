@@ -1,4 +1,6 @@
 import React from "react";
+import { getMarkdownHTML } from "../logic/Utils";
+import LoadingIcon from "./Icons/LoadingIcon";
 
 class ReadmePage extends React.Component<
 {
@@ -21,39 +23,25 @@ class ReadmePage extends React.Component<
 }
 > {
   state = {
-    // TODO: use <Suspense> or show a better loading indicator
     html: "<p>Loading...</p>",
   }
 
-  async getReadmeHTML() {
-    try {
-      const readmeTextRes = await fetch(this.props.data.readmeURL);
-      if (!readmeTextRes.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${readmeTextRes.status})`);
-
-      const readmeText = await readmeTextRes.text();
-
-      const postBody = {
-        text: readmeText,
-        context: `${this.props.data.user}/${this.props.data.repo}`,
-        mode: "gfm",
-      };
-
-      const readmeHtmlRes = await fetch("https://api.github.com/markdown", {
-        method: "POST",
-        body: JSON.stringify(postBody),
-      });
-      if (!readmeHtmlRes.ok) throw Spicetify.showNotification(`Error parsing README (HTTP ${readmeHtmlRes.status})`);
-
-      const readmeHtml = await readmeHtmlRes.text();
-
-      if (readmeHtml == null) {
+  getReadmeHTML = async () => {
+    return fetch(this.props.data.readmeURL)
+      .then((res) => {
+        if (!res.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${res.status})`);
+        return res.text();
+      })
+      .then((readmeText) => getMarkdownHTML(readmeText, this.props.data.user, this.props.data.repo))
+      .then((html) => {
+        if (!html) Spicetify.Platform.History.goBack();
+        return html;
+      })
+      .catch((err) => {
+        console.error(err);
         Spicetify.Platform.History.goBack();
-      }
-      return readmeHtml;
-    } catch (err) {
-      Spicetify.Platform.History.goBack();
-      return null;
-    }
+        return null;
+      });
   }
 
   componentDidMount() {
@@ -66,6 +54,16 @@ class ReadmePage extends React.Component<
   }
 
   componentDidUpdate() {
+
+    // Make the page scrollable
+    const main = document.querySelector("#marketplace-readme")?.closest("main");
+    if (main) {
+      setTimeout(() => {
+        // TODO: see if it's possible to use some load event or mutation observer to do this
+        main.style.overflowY = "auto";
+      }, 1000);
+    }
+
     // Add error handler in attempt to fix broken image urls
     // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
@@ -83,10 +81,12 @@ class ReadmePage extends React.Component<
   render() {
     return (
       <section className="contentSpacing">
-        <div className="marketplace-header">
+        <div className="marketplace-header" style={ { flexDirection: "row" } }>
           <h1>{this.props.title}</h1>
         </div>
-        <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        {this.state.html === "<p>Loading...</p>"
+          ? <footer className="marketplace-footer"><LoadingIcon /></footer>
+          : <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>}
       </section>
     );
   }

@@ -1,33 +1,23 @@
-name: Push new version to dist branch
+name: Build
+
 on:
-  push:
+  # Run build tests on pull requests
+  pull_request:
     branches:
       - main
-  # pull_request:
-    # branches:
-      # - main
 
 jobs:
-  deploy:
-    name: Push new version to dist branch
+  build:
+    name: build
     runs-on: ubuntu-latest
     steps:
-    - name: Check out Git repository
-      uses: actions/checkout@v2.4.0
-    - name: Use Node.js
-      uses: actions/setup-node@v2.5.1
-      with:
-        node-version: 16.x
-    - name: yarn install and build
-      run: |
-        yarn install --immutable --immutable-cache --check-cache
-        yarn build:prod
-
-    - name: Push new version
-      uses: s0/git-publish-subdir-action@develop
-      env:
-        REPO: self
-        BRANCH: dist
-        FOLDER: dist
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SKIP_EMPTY_COMMITS: true
+      - name: Checkout Project
+        uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3.1.0
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build:local
