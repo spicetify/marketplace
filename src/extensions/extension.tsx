@@ -19,8 +19,6 @@ import {
 } from "../logic/Utils";
 import {
   fetchBlacklist,
-  buildThemeCardData,
-  fetchExtensionManifest,
 } from "../logic/FetchRemotes";
 import {
   fetchThemeManifestFromTopic,
