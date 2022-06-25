@@ -23,6 +23,7 @@ import Card from "./Card/Card";
 import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
+import { fetchThemeManifestFromTopic, fetchExtensionManifestFromTopic, getTaggedReposFromTopic } from "../logic/FetchTopicRemotes";
 
 export default class Grid extends React.Component<
 {
@@ -181,7 +182,13 @@ export default class Grid extends React.Component<
   async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
     case "Extensions": {
-      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
+      let pageOfRepos;
+      if (this.CONFIG.visual.githubTopics) {
+        pageOfRepos = await getTaggedReposFromTopic("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
+      } else {
+        pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
+      }
+
       for (const repo of pageOfRepos.items) {
         const extensions = await fetchExtensionManifest(
           repo.contents_url,
@@ -200,6 +207,7 @@ export default class Grid extends React.Component<
           // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
           extensions.forEach((extension) => {
             Object.assign(extension, { lastUpdated: repo.pushed_at });
+            console.log(extension);
             this.appendCard(extension, "extension");
           });
         }
@@ -243,11 +251,22 @@ export default class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } case "Themes": {
-      const allThemes = await getThemesMonoManifest();
-      console.log(allThemes);
+      let allThemes;
+      if (this.CONFIG.visual.githubTopics) {
+        const topicResponse = await getTaggedReposFromTopic("spicetify-themes", this.requestPage, this.BLACKLIST, query);
+        allThemes= topicResponse.items;
+      } else {
+        allThemes = await getThemesMonoManifest();
+      }
 
       for (const theme of allThemes) {
-        const cardData = await buildThemeCardData(theme);
+        let cardData;
+
+        if (this.CONFIG.visual.githubTopics) {
+          cardData = await fetchThemeManifestFromTopic(theme.contents_url, theme.default_branch, theme.stargazers_count);
+        } else {
+          cardData = await buildThemeCardData(theme);
+        }
 
         // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
@@ -256,10 +275,14 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        if (cardData) this.appendCard(cardData, "theme");
+        if (cardData && !this.CONFIG.visual.githubTopics) this.appendCard(cardData, "theme");
+        if (cardData && this.CONFIG.visual.githubTopics) {
+          Object.assign(cardData[0], { lastUpdated: theme.pushed_at });
+          this.appendCard(cardData[0], "extension");
+        }
       }
-
       console.log("Parsed themes");
+
       break;
     } case "Apps": {
       const allApps = await getAppsMonoManifest();

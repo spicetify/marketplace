@@ -13,7 +13,7 @@ import { ITEMS_PER_REQUEST } from "../constants";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
+export async function getTaggedReposFromTopic(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
   // www is needed or it will block with "cross-origin" error.
   let url = query
     ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`
@@ -62,7 +62,6 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
     () => addToSessionStorage([url], "noManifests"),
   );
   if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
-
   return manifest;
 }
 
@@ -151,9 +150,7 @@ export async function fetchThemeManifestFromTopic(contents_url: string, branch: 
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
-
     manifests = await getRepoManifest(user, repo, branch);
-
     // If the manifest returned is not an array, initialize it as one
     if (!Array.isArray(manifests)) manifests = [manifests];
 
@@ -198,7 +195,7 @@ export async function fetchThemeManifestFromTopic(contents_url: string, branch: 
     return parsedManifests;
   }
   catch (err) {
-    // console.warn(contents_url, err);
+    console.warn(contents_url, err);
     return null;
   }
 }

@@ -80,6 +80,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
         // of stargazers, and the subscribers_count isn't returned in the main API call we make
         // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
         followers: JSON.parse(getLocalStorageDataFromKey("marketplace:followers", false)),
+        githubTopics: JSON.parse(getLocalStorageDataFromKey("marketplace:githubTopics", false)),
       },
       tabs,
       activeTab: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.activeTab, tabs[0]),

@@ -175,13 +175,11 @@ async function queryRepos(type: RepoType, pageNum = 1) {
  */
 async function loadPageRecursive(type: RepoType, pageNum: number) {
   const pageOfRepos = await queryRepos(type, pageNum);
-  console.log(pageOfRepos);
   // TODO: Once we migrate to the mono-manifest repo, implement the option for enabling topics search here
   appendInformationToLocalStorage(pageOfRepos, type);
 
   // Sets the amount of items that have thus been fetched
   const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
-  console.log({ pageOfRepos });
   const remainingResults = pageOfRepos.total_count - soFarResults;
 
   // If still have more results, recursively fetch next page
@@ -220,13 +218,15 @@ async function appendInformationToLocalStorage(array, type: RepoType) {
           await sleep(5000);
         }
       }
+    } else {
+      const data = (type === "theme")
+        ? await buildThemeCardData(repo.contents_url, repo.default_branch, repo.stargazers_count)
+        : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+      if (data) {
+        addToSessionStorage(data);
+        await sleep(5000);
+      }
     }
-    const data = (type === "theme")
-      ? await buildThemeCardData(repo.contents_url, repo.default_branch, repo.stargazers_count)
-      : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-    if (data) {
-      addToSessionStorage(data);
-      await sleep(5000);
-    }
+
   }
 }
