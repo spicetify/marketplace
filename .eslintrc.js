@@ -60,4 +60,10 @@ module.exports = {
       "error", { "beforeColon": false, "afterColon": true },
     ],
   },
+  "settings": {
+    "react": {
+      // This is what Spotify uses
+      "version": "17",
+    },
+  },
 };

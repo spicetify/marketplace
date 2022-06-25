@@ -115,7 +115,7 @@ interface TabBarProps {
 }
 const TabBar = React.memo<TabBarProps>(
   function TabBar({ links, activeLink, switchCallback, windowSize = Infinity } : TabBarProps) {
-    const tabBarRef = React.useRef(null);
+    const tabBarRef = React.useRef<HTMLUListElement | null>(null);
     const [childrenSizes, setChildrenSizes] = useState([] as number[]);
     const [availableSpace, setAvailableSpace] = useState(0);
     const [droplistItem, setDroplistItems] = useState([] as number[]);
