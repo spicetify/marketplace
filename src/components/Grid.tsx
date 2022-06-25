@@ -223,16 +223,16 @@ export default class Grid extends React.Component<
 
       for (const type in installedStuff) {
         if (installedStuff[type].length) {
-          installedStuff[type].forEach(async (itemKey) => {
-            // TODO: err handling
-            const extension = getLocalStorageDataFromKey(itemKey);
+          installedStuff[type].forEach(async (itemKey: string) => {
+            const item = await getLocalStorageDataFromKey(itemKey);
+            // console.log(`${item.title} is installed`);
             // I believe this stops the requests when switching tabs?
             if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
               // Stop this queue from continuing to fetch and append to cards list
               return -1;
             }
 
-            this.appendCard(extension, type as CardType);
+            this.appendCard(item, type as CardType);
           });
         }
       }

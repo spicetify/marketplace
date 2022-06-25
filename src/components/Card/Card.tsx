@@ -423,7 +423,7 @@ export default class Card extends React.Component<CardProps, {
 
     // Kill the card if it has been uninstalled on the "Installed" tab
     if (this.props.CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
-      console.log("Card item not installed");
+      console.log(`${this.localStorageKey} is not installed, killing card`);
       return null;
     }
 
