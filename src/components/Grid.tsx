@@ -207,7 +207,6 @@ export default class Grid extends React.Component<
           // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
           extensions.forEach((extension) => {
             Object.assign(extension, { lastUpdated: repo.pushed_at });
-            console.log(extension);
             this.appendCard(extension, "extension");
           });
         }
@@ -278,7 +277,7 @@ export default class Grid extends React.Component<
         if (cardData && !this.CONFIG.visual.githubTopics) this.appendCard(cardData, "theme");
         if (cardData && this.CONFIG.visual.githubTopics) {
           Object.assign(cardData[0], { lastUpdated: theme.pushed_at });
-          this.appendCard(cardData[0], "extension");
+          this.appendCard(cardData[0], "theme");
         }
       }
       console.log("Parsed themes");
@@ -286,7 +285,6 @@ export default class Grid extends React.Component<
       break;
     } case "Apps": {
       const allApps = await getAppsMonoManifest();
-      console.log(allApps);
 
       for (const app of allApps) {
         const cardData = await buildAppCardData(app);
