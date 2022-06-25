@@ -169,7 +169,7 @@ export async function buildThemeCardData(manifest: Manifest) {
         ? manifest.readme
         : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
       stars: 0, // TODO: get stars working
-      tags: manifest.tags,
+      tags: manifest.tags || [],
       // theme stuff
       cssURL: manifest.usercss.startsWith("http")
         ? manifest.usercss
@@ -179,7 +179,7 @@ export async function buildThemeCardData(manifest: Manifest) {
         ? (
           manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
         )
-        : null,
+        : undefined,
       include: manifest.include,
     };
 
@@ -226,7 +226,7 @@ export async function buildAppCardData(manifest: Manifest) {
         ? manifest.readme
         : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
       stars: 0, // TODO: get stars working
-      tags: manifest.tags,
+      tags: manifest.tags || [],
     };
 
     return parsedManifest;

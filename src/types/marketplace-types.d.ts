@@ -69,8 +69,8 @@ export type Manifest = {
 
   // TODO: split these into different types?
   tags?: string[];
-  usercss?: string;
-  schemes?: string[];
+  usercss?: string; // URL for usercss
+  schemes?: string; // URL for schemes
   include?: string[];
 };
 
@@ -85,7 +85,7 @@ export type CardItem = {
   repo: string;
   branch: string;
   imageURL: string;
-  extensionURL: string;
+  extensionURL?: string;
   readmeURL: string;
   stars: number;
   tags: string[];
@@ -99,8 +99,8 @@ export type CardItem = {
   // TODO: clean this up somehow
   // It complains bitterly in Card.tsx
   // if I don't have all the same properties as CardItem
-  code: undefined;
-  description: undefined;
+  code?: undefined;
+  description?: undefined;
 };
 
 // TODO: use this in `fetchThemeManifest()`
