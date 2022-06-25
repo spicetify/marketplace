@@ -8,8 +8,8 @@ import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEA
 import { openModal } from "../logic/LaunchModals";
 import {
   getTaggedRepos,
-  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
-  fetchCssSnippets, getBlacklist, 
+  fetchExtensionManifest, fetchAppManifest,
+  fetchCssSnippets, fetchBlacklist,
   getThemesMonoManifest, buildThemeCardData,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
@@ -429,7 +429,7 @@ export default class Grid extends React.Component<
     }
 
     // Load blacklist
-    this.BLACKLIST = await getBlacklist();
+    this.BLACKLIST = await fetchBlacklist();
     this.newRequest(ITEMS_PER_REQUEST);
   }
 

@@ -18,7 +18,7 @@ import {
   sleep,
 } from "../logic/Utils";
 import {
-  getBlacklist,
+  fetchBlacklist,
   buildThemeCardData,
   fetchExtensionManifest,
 } from "../logic/FetchRemotes";
@@ -187,7 +187,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 (async function initializePreload() {
   console.log("Preloading extensions and themes...");
   window.sessionStorage.clear();
-  const BLACKLIST = await getBlacklist();
+  const BLACKLIST = await fetchBlacklist();
   window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
 
   // TODO: does this work?

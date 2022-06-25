@@ -265,7 +265,7 @@ export const getThemesMonoManifest = async () => {
 * It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.
 * @returns String array of blacklisted repos
 */
-export const getBlacklist = async () => {
+export const fetchBlacklist = async () => {
   const json = await fetch(BLACKLIST_URL).then(res => res.json()).catch(() => ({}));
   return json.repos as string[] | undefined;
 };
