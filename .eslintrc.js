@@ -63,7 +63,7 @@ module.exports = {
   "settings": {
     "react": {
       // This is what Spotify uses
-      "version": "16.0",
+      "version": "17",
     },
   },
 };
