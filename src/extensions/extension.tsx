@@ -19,7 +19,7 @@ import {
 } from "../logic/Utils";
 import {
   getBlacklist,
-  fetchThemeManifest,
+  buildThemeCardData,
   fetchExtensionManifest,
 } from "../logic/FetchRemotes";
 
@@ -187,24 +187,11 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   // TODO: does this work?
   // The recursion isn't super clean...
 
-  // Begin by getting the themes and extensions from github
-  // const [extensionReposArray, themeReposArray] = await Promise.all([
-  await Promise.all([
-    loadPageRecursive("extension", 1),
-    loadPageRecursive("theme", 1),
-  ]);
-
-  // let extensionsNextPage = 1;
-  // let themesNextPage = 1;
-  // do {
-  //     extensionReposArray = await loadPage("extension", extensionsNextPage);
-  //     appendInformationToLocalStorage(extensionReposArray, "extension");
-  // } while (extensionsNextPage);
-
-  // do {
-  //     themeReposArray = await loadPage("theme", themesNextPage);
-  //     appendInformationToLocalStorage(themeReposArray, "theme");
-  // } while (themesNextPage);
+  // TODO: re-enable this once everything works with mono-manifest...
+  // await Promise.all([
+  //   loadPageRecursive("extension", 1),
+  //   loadPageRecursive("theme", 1),
+  // ]);
 })();
 
 async function appendInformationToLocalStorage(array, type: RepoType) {
@@ -212,7 +199,7 @@ async function appendInformationToLocalStorage(array, type: RepoType) {
   for (const repo of array.items) {
     // console.log(repo);
     const data = (type === "theme")
-      ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
+      ? await buildThemeCardData(repo.contents_url, repo.default_branch, repo.stargazers_count)
       : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
     if (data) {
       addToSessionStorage(data);

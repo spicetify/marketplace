@@ -1,6 +1,6 @@
 import { CardItem, Snippet } from "../types/marketplace-types";
 import { processAuthors, addToSessionStorage } from "./Utils";
-import { ITEMS_PER_REQUEST, BLACKLIST_URL, SNIPPETS_URL } from "../constants";
+import { ITEMS_PER_REQUEST, BLACKLIST_URL, SNIPPETS_URL, THEMES_URL } from "../constants";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -131,6 +131,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 }
 
 // TODO: can we add a return type here?
+// TODO: Update these docs
 /**
 * Fetch themes from a repo and format data for generating cards
 * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
@@ -138,58 +139,42 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
+export async function buildThemeCardData(manifest: any) { // TODO: add type
   try {
-    let manifests;
-    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
-    // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
-    const { user, repo } = regex_result.groups;
-
-    manifests = await getRepoManifest(user, repo, branch);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    // TODO: figure this out...
+    const [ user, repo, selectedBranch ] = ["spicetify", "spicetify-themes", "generated-manifest"];
 
     // Manifest is initially parsed
-    // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
-    const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-      const selectedBranch = manifest.branch || branch;
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags,
-        // theme stuff
-        cssURL: manifest.usercss.startsWith("http")
-          ? manifest.usercss
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-        // TODO: clean up indentation etc
-        schemesURL: manifest.schemes
-          ? (
-            manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-          )
-          : null,
-        include: manifest.include,
-      };
-      // If manifest is valid, add it to the list
-      if (manifest?.name && manifest?.usercss && manifest?.description) {
-        accum.push(item);
-      }
-      return accum;
-    }, []);
-    return parsedManifests;
+    const parsedManifest: CardItem[] = {
+      manifest,
+      title: manifest.name,
+      subtitle: manifest.description,
+      authors: processAuthors(manifest.authors, "user..."), // TODO: do we need a fallback?
+      // TODO: do we need these?
+      user,
+      repo,
+      branch: selectedBranch,
+      imageURL: manifest.preview && manifest.preview.startsWith("http")
+        ? manifest.preview
+        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+      readmeURL: manifest.readme && manifest.readme.startsWith("http")
+        ? manifest.readme
+        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+      stars: 0, // TODO: get stars working
+      tags: manifest.tags,
+      // theme stuff
+      cssURL: manifest.usercss.startsWith("http")
+        ? manifest.usercss
+        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+      // TODO: clean up indentation etc
+      schemesURL: manifest.schemes
+        ? (
+          manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+        )
+        : null,
+      include: manifest.include,
+    };
+    return parsedManifest;
   }
   catch (err) {
     // console.warn(contents_url, err);
@@ -226,6 +211,11 @@ export async function getThemeRepos(page = 1, BLACKLIST:string[] = [], query?: s
 
   return filteredResults;
 }
+
+export const getThemesMonoManifest = async () => {
+  const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
+  return manifest;
+};
 
 /**
 * It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.

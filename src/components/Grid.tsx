@@ -5,8 +5,8 @@ import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
   getExtensionRepos, fetchExtensionManifest,
-  getThemeRepos, fetchThemeManifest,
-  fetchCssSnippets, getBlacklist,
+  getThemeRepos, buildThemeCardData,
+  fetchCssSnippets, getBlacklist, getThemesMonoManifest,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
@@ -224,30 +224,24 @@ export default class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } case "Themes": {
-      const pageOfRepos = await getThemeRepos(this.requestPage, this.BLACKLIST, query);
-      for (const repo of pageOfRepos.items) {
+      const allThemes = await getThemesMonoManifest();
+      console.log(allThemes);
 
-        const themes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+      for (const theme of allThemes) {
+        const themeCardData = await buildThemeCardData(theme);
+
+        // TODO: do we need this queue stuff any more
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
           return -1;
         }
 
-        if (themes && themes.length) {
-          themes.forEach((theme) => this.appendCard(theme, "theme"));
-        }
+        // TODO: it's complaining about the argument type here...
+        this.appendCard(themeCardData, "theme");
       }
 
-      // First request is null, so coerces to 1
-      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-      // -1 because the page number is 1-indexed
-      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-      const remainingResults = pageOfRepos.total_count - soFarResults;
-
-      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
-      if (remainingResults > 0) return currentPage + 1;
-      else console.log("No more theme results");
+      console.log("Parsed themes");
       break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
