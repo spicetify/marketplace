@@ -210,26 +210,14 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
-    if (LOCALSTORAGE_KEYS.githubTopics) {
-      for (const repo of array.items) {
-        // console.log(repo);
-        const data = (type === "theme")
-          ? await fetchThemeManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count)
-          : await fetchExtensionManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count);
-        if (data) {
-          addToSessionStorage(data);
-          await sleep(5000);
-        }
-      }
-    } else {
-      const data = (type === "theme")
-        ? await buildThemeCardData(repo.contents_url, repo.default_branch, repo.stargazers_count)
-        : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-      if (data) {
-        addToSessionStorage(data);
-        await sleep(5000);
-      }
+    // console.log(repo);
+    const data = (type === "theme")
+      ? await fetchThemeManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count)
+      : await fetchExtensionManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    if (data) {
+      addToSessionStorage(data);
+      await sleep(5000);
     }
-
   }
+
 }
