@@ -1,4 +1,4 @@
-import { CardItem, Manifest, Snippet } from "../types/marketplace-types";
+import { CardItem, Manifest, RepoType, Snippet } from "../types/marketplace-types";
 import { processAuthors } from "./Utils";
 import { BLACKLIST_URL, THEMES_URL } from "../constants";
 import snippetsJSON from "../../resources/snippets";
@@ -114,15 +114,16 @@ export function buildAppCardData(manifest: Manifest, user?: string, repo?: strin
   }
 }
 
-export const getThemesMonoManifest = async () => {
-  const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
-  return manifest;
-};
-
-export const getAppsMonoManifest = async () => {
-  // const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
-  const manifest = appsManifest;
-  return manifest;
+export const fetchMonoManifest = async (type: RepoType) => {
+  // TODO: clean this up to use a lookup map or something...
+  if (type === "theme") {
+    const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
+    return manifest;
+  } else if (type === "app") {
+    // const manifest = await fetch(APPS_URL).then(res => res.json()).catch(() => null);
+    const manifest = appsManifest;
+    return manifest;
+  }
 };
 
 /**

@@ -17,14 +17,12 @@ import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
 import {
-  fetchCssSnippets, fetchBlacklist,
-  getThemesMonoManifest, buildThemeCardData,
-  getAppsMonoManifest, buildAppCardData,
+  fetchBlacklist, fetchCssSnippets, fetchMonoManifest,
+  buildThemeCardData, buildAppCardData,
 } from "../logic/FetchRemotes";
 import {
   getTaggedRepos,
-  fetchExtensionManifest,
-  fetchThemeManifest,
+  fetchExtensionManifest, fetchThemeManifest,
 } from "../logic/FetchTopicRemotes";
 
 export default class Grid extends React.Component<
@@ -259,7 +257,7 @@ export default class Grid extends React.Component<
         const topicResponse = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, query);
         allThemes= topicResponse.items;
       } else {
-        allThemes = await getThemesMonoManifest();
+        allThemes = await fetchMonoManifest("theme");
       }
 
       for (const theme of allThemes) {
@@ -292,7 +290,7 @@ export default class Grid extends React.Component<
 
       break;
     } case "Apps": {
-      const allApps = await getAppsMonoManifest();
+      const allApps = await fetchMonoManifest("app");
 
       for (const app of allApps) {
         const cardData = buildAppCardData(app);
