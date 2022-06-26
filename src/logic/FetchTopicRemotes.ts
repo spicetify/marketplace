@@ -1,8 +1,8 @@
 
-import { processAuthors, addToSessionStorage } from "./Utils";
+import { addToSessionStorage } from "./Utils";
 import { CardItem, RepoTopic } from "../types/marketplace-types";
 import { ITEMS_PER_REQUEST } from "../constants";
-import { buildThemeCardData, buildAppCardData } from "./FetchRemotes";
+import { buildThemeCardData, buildExtensionCardData, buildAppCardData } from "./FetchRemotes";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -79,7 +79,7 @@ export async function fetchExtensionManifest(
   contents_url: string,
   branch: string,
   stars: number,
-  hideInstalled = false,
+  hideInstalled = false, // TODO: we may want to add support for hideInstalled in the other tabs...
 ) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
@@ -97,39 +97,17 @@ export async function fetchExtensionManifest(
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
       const selectedBranch = manifest.branch || branch;
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
-
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        extensionURL: manifest.main.startsWith("http")
-          ? manifest.main
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags,
-      };
 
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description && manifest.main
-      ) {
+      if (manifest && manifest.name && manifest.description && manifest.main) {
         // Add to list unless we're hiding installed items and it's installed
         if (!(hideInstalled
           && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
-        ) accum.push(item);
+        ) {
+          const item = buildExtensionCardData(manifest, user, repo, selectedBranch, stars);
+          if (item) accum.push(item);
+        }
       }
-      // else {
-      //     console.error("Invalid manifest:", manifest);
-      // }
 
       return accum;
     }, []);
@@ -223,4 +201,3 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     return null;
   }
 }
-
