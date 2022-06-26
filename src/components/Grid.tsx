@@ -295,7 +295,7 @@ export default class Grid extends React.Component<
       const allApps = await getAppsMonoManifest();
 
       for (const app of allApps) {
-        const cardData = await buildAppCardData(app);
+        const cardData = buildAppCardData(app);
 
         // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
