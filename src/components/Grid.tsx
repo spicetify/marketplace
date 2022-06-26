@@ -267,7 +267,7 @@ export default class Grid extends React.Component<
         if (this.CONFIG.visual.githubTopics) {
           cardData = await fetchThemeManifest(theme.contents_url, theme.default_branch, theme.stargazers_count);
         } else {
-          cardData = await buildThemeCardData(theme);
+          cardData = buildThemeCardData(theme);
         }
 
         // TODO: do we need this queue stuff any more?

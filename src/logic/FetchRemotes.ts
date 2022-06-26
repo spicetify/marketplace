@@ -17,37 +17,40 @@ import appsManifest from "../../resources/manifests/apps";
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function buildThemeCardData(manifest: Manifest) {
+// The optional params are only used when using github topics
+export function buildThemeCardData(manifest: Manifest, user?: string, repo?: string, branch?: string, stars?: number) {
   try {
     // TODO: figure this out...
-    const [ user, repo, selectedBranch ] = ["spicetify", "spicetify-themes", "generated-manifest"];
+    if (!user) user = "spicetify";
+    if (!repo) repo = "spicetify-themes";
+    if (!branch) branch = "generated-manifest";
 
     // Manifest is initially parsed
     const parsedManifest: CardItem = {
       manifest,
       title: manifest.name,
       subtitle: manifest.description,
-      authors: processAuthors(manifest.authors, "user..."), // TODO: do we need a fallback?
+      authors: processAuthors(manifest.authors, user === "spicetify" ? "user..." : user), // TODO: we need a fallback...
       // TODO: do we need these?
       user,
       repo,
-      branch: selectedBranch,
+      branch,
       imageURL: manifest.preview && manifest.preview.startsWith("http")
         ? manifest.preview
-        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
       readmeURL: manifest.readme && manifest.readme.startsWith("http")
         ? manifest.readme
-        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-      stars: 0, // TODO: get stars working
+        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+      stars: stars ?? 0, // TODO: get stars working
       tags: manifest.tags || [],
       // theme stuff
       cssURL: manifest.usercss?.startsWith("http")
         ? manifest.usercss
-        : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.usercss}`,
       // TODO: clean up indentation etc
       schemesURL: manifest.schemes
         ? (
-          manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+          manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.schemes}`
         )
         : undefined,
       include: manifest.include,

@@ -2,6 +2,7 @@
 import { processAuthors, addToSessionStorage } from "./Utils";
 import { CardItem, RepoTopic } from "../types/marketplace-types";
 import { ITEMS_PER_REQUEST } from "../constants";
+import { buildThemeCardData } from "./FetchRemotes";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -74,7 +75,12 @@ export async function getRepoManifest(user: string, repo: string, branch: string
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
+export async function fetchExtensionManifest(
+  contents_url: string,
+  branch: string,
+  stars: number,
+  hideInstalled = false,
+) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     let manifests;
@@ -156,41 +162,15 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     if (!Array.isArray(manifests)) manifests = [manifests];
 
     // Manifest is initially parsed
-    // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
       const selectedBranch = manifest.branch || branch;
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags,
-        // theme stuff
-        cssURL: manifest.usercss.startsWith("http")
-          ? manifest.usercss
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-        // TODO: clean up indentation etc
-        schemesURL: manifest.schemes
-          ? (
-            manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-          )
-          : null,
-        include: manifest.include,
-      };
+
       // If manifest is valid, add it to the list
       if (manifest?.name && manifest?.usercss && manifest?.description) {
-        accum.push(item);
+        const item = buildThemeCardData(manifest, user, repo, selectedBranch, stars);
+        if (item) accum.push(item);
       }
+
       return accum;
     }, []);
     return parsedManifests;
