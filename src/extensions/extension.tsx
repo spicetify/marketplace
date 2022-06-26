@@ -21,8 +21,8 @@ import {
   fetchBlacklist,
 } from "../logic/FetchRemotes";
 import {
-  fetchThemeManifestFromTopic,
-  fetchExtensionManifestFromTopic,
+  fetchThemeManifest,
+  fetchExtensionManifest,
 } from "../logic/FetchTopicRemotes";
 
 (async () => {
@@ -210,8 +210,8 @@ async function appendInformationToLocalStorage(array, type: RepoType) {
   for (const repo of array.items) {
     console.log(repo);
     const data = (type === "theme")
-      ? await fetchThemeManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count)
-      : await fetchExtensionManifestFromTopic(repo.contents_url, repo.default_branch, repo.stargazers_count);
+      ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
+      : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
     if (data) {
       addToSessionStorage(data);
       await sleep(5000);

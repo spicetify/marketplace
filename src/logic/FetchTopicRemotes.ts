@@ -13,7 +13,7 @@ import { ITEMS_PER_REQUEST } from "../constants";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedReposFromTopic(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
   // www is needed or it will block with "cross-origin" error.
   let url = query
     ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`
@@ -50,7 +50,7 @@ export async function getTaggedReposFromTopic(tag: RepoTopic, page = 1, BLACKLIS
 * @param branch Default branch name (e.g. main or master)
 * @returns The manifest object
 */
-async function getRepoManifest(user: string, repo: string, branch: string) {
+export async function getRepoManifest(user: string, repo: string, branch: string) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
   const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
   if (sessionStorageItem) return JSON.parse(sessionStorageItem);
@@ -62,6 +62,7 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
     () => addToSessionStorage([url], "noManifests"),
   );
   if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+
   return manifest;
 }
 
@@ -73,7 +74,7 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchExtensionManifestFromTopic(contents_url: string, branch: string, stars: number, hideInstalled = false) {
+export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     let manifests;
@@ -143,7 +144,7 @@ export async function fetchExtensionManifestFromTopic(contents_url: string, bran
 * @param stars The number of stars the repo has
 * @returns Extension info for card (or null)
 */
-export async function fetchThemeManifestFromTopic(contents_url: string, branch: string, stars: number) {
+export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
   try {
     let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);

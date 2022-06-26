@@ -6,13 +6,6 @@ import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from ".
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
-import {
-  getTaggedRepos,
-  fetchExtensionManifest,
-  fetchCssSnippets, fetchBlacklist,
-  getThemesMonoManifest, buildThemeCardData,
-  getAppsMonoManifest, buildAppCardData,
-} from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
@@ -23,7 +16,16 @@ import Card from "./Card/Card";
 import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
-import { fetchThemeManifestFromTopic, fetchExtensionManifestFromTopic, getTaggedReposFromTopic } from "../logic/FetchTopicRemotes";
+import {
+  fetchCssSnippets, fetchBlacklist,
+  getThemesMonoManifest, buildThemeCardData,
+  getAppsMonoManifest, buildAppCardData,
+} from "../logic/FetchRemotes";
+import {
+  getTaggedRepos,
+  fetchExtensionManifest,
+  fetchThemeManifest,
+} from "../logic/FetchTopicRemotes";
 
 export default class Grid extends React.Component<
 {
@@ -184,9 +186,10 @@ export default class Grid extends React.Component<
     case "Extensions": {
       let pageOfRepos;
       if (this.CONFIG.visual.githubTopics) {
-        pageOfRepos = await getTaggedReposFromTopic("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
+        pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       } else {
         // Do whatever you need to here for the monomanifest system
+        // Whoch should be nothing, since it won't have to load multiple pages...
         pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
       }
 
@@ -253,7 +256,7 @@ export default class Grid extends React.Component<
     } case "Themes": {
       let allThemes;
       if (this.CONFIG.visual.githubTopics) {
-        const topicResponse = await getTaggedReposFromTopic("spicetify-themes", this.requestPage, this.BLACKLIST, query);
+        const topicResponse = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, query);
         allThemes= topicResponse.items;
       } else {
         allThemes = await getThemesMonoManifest();
@@ -262,7 +265,7 @@ export default class Grid extends React.Component<
       for (const theme of allThemes) {
         let cardData;
         if (this.CONFIG.visual.githubTopics) {
-          cardData = await fetchThemeManifestFromTopic(theme.contents_url, theme.default_branch, theme.stargazers_count);
+          cardData = await fetchThemeManifest(theme.contents_url, theme.default_branch, theme.stargazers_count);
         } else {
           cardData = await buildThemeCardData(theme);
         }
@@ -274,12 +277,14 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        if (cardData && !this.CONFIG.visual.githubTopics) this.appendCard(cardData, "theme");
-        if (cardData && this.CONFIG.visual.githubTopics) {
-          for (const item of cardData) {
-
-            Object.assign(item, { lastUpdated: theme.pushed_at });
-            this.appendCard(item, "theme");
+        if (cardData) {
+          if (this.CONFIG.visual.githubTopics) {
+            for (const item of cardData) {
+              Object.assign(item, { lastUpdated: theme.pushed_at });
+              this.appendCard(item, "theme");
+            }
+          } else {
+            this.appendCard(cardData, "theme");
           }
         }
       }
