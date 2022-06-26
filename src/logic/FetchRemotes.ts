@@ -2,7 +2,10 @@ import { CardItem, Manifest, RepoType, Snippet } from "../types/marketplace-type
 import { processAuthors } from "./Utils";
 import { BLACKLIST_URL, THEMES_URL } from "../constants";
 import snippetsJSON from "../../resources/snippets";
+
+// TODO: Remove these once there are repos for them
 import appsManifest from "../../resources/manifests/apps";
+import extensionsManifest from "../../resources/manifests/extensions";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -173,10 +176,16 @@ export const fetchMonoManifest = async (type: RepoType) => {
   if (type === "theme") {
     const manifest = await fetch(THEMES_URL).then(res => res.json()).catch(() => null);
     return manifest;
+  } else if (type === "extension") {
+    // const manifest = await fetch(EXTENSIONS_URL).then(res => res.json()).catch(() => null);
+    const manifest = extensionsManifest;
+    return manifest;
   } else if (type === "app") {
     // const manifest = await fetch(APPS_URL).then(res => res.json()).catch(() => null);
     const manifest = appsManifest;
     return manifest;
+  } else {
+    return [];
   }
 };
 
