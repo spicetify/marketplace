@@ -22,7 +22,7 @@ import {
 } from "../logic/FetchRemotes";
 import {
   getTaggedRepos,
-  fetchExtensionManifest, fetchThemeManifest,
+  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
 } from "../logic/FetchTopicRemotes";
 
 export default class Grid extends React.Component<
@@ -287,13 +287,24 @@ export default class Grid extends React.Component<
         }
       }
       console.log("Parsed themes");
-
       break;
     } case "Apps": {
-      const allApps = await fetchMonoManifest("app");
+      let allApps;
+      if (this.CONFIG.visual.githubTopics) {
+        const topicResponse = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
+        allApps = topicResponse.items;
+      }
+      else {
+        allApps = await fetchMonoManifest("app");
+      }
 
       for (const app of allApps) {
-        const cardData = buildAppCardData(app);
+        let cardData;
+        if (this.CONFIG.visual.githubTopics) {
+          cardData = await fetchAppManifest(app.contents_url, app.default_branch, app.stargazers_count);
+        } else {
+          cardData = buildAppCardData(app);
+        }
 
         // TODO: do we need this queue stuff any more?
         // I believe this stops the requests when switching tabs?
@@ -302,9 +313,17 @@ export default class Grid extends React.Component<
           return -1;
         }
 
-        if (cardData) this.appendCard(cardData, "app");
+        if (cardData) {
+          if (this.CONFIG.visual.githubTopics) {
+            for (const item of cardData as CardItem[]) {
+              Object.assign(item, { lastUpdated: app.pushed_at });
+              this.appendCard(item, "app");
+            }
+          } else {
+            this.appendCard(cardData as CardItem, "app");
+          }
+        }
       }
-
       console.log("Parsed apps");
       break;
     } case "Snippets": {
