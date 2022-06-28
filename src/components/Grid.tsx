@@ -18,7 +18,7 @@ import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
 import {
   fetchBlacklist, fetchCssSnippets, fetchMonoManifest,
-  buildThemeCardData, buildAppCardData, buildExtensionCardData,
+  buildExtensionCardData, buildThemeCardData, buildAppCardData,
 } from "../logic/FetchRemotes";
 import {
   getTaggedRepos,

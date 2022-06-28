@@ -14,6 +14,60 @@ import extensionsManifest from "../../resources/manifests/extensions";
 // TODO: can we add a return type here?
 // TODO: Update these docs
 /**
+* Fetch extensions from a repo and format data for generating cards
+* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+* @param branch The repo's default branch (e.g. main or master)
+* @param stars The number of stars the repo has
+* @returns Extension info for card (or null)
+*/
+// The optional params are only used when using github topics
+export async function buildExtensionCardData(
+  manifest: Manifest,
+  user?: string,
+  repo?: string,
+  branch?: string,
+  stars?: number,
+) {
+  try {
+    // TODO: figure this out...
+    if (!user) user = "spicetify";
+    if (!repo) repo = "spicetify-themes";
+    if (!branch) branch = "generated-manifest";
+
+    // Manifest is initially parsed
+    const parsedManifest: CardItem = {
+      manifest,
+      title: manifest.name,
+      subtitle: manifest.description,
+      authors: processAuthors(manifest.authors, user === "spicetify" ? "user..." : user), // TODO: we need a fallback...
+      user,
+      repo,
+      branch,
+      imageURL: manifest.preview && manifest.preview.startsWith("http")
+        ? manifest.preview
+        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
+      extensionURL: manifest.main.startsWith("http")
+        ? manifest.main
+        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
+      readmeURL: manifest.readme && manifest.readme.startsWith("http")
+        ? manifest.readme
+        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
+      stars: stars ?? 0, // TODO: get stars working
+      tags: manifest.tags || [],
+      lastUpdated: "",
+    };
+
+    return parsedManifest;
+  }
+  catch (err) {
+    // console.warn(contents_url, err);
+    return null;
+  }
+}
+
+// TODO: can we add a return type here?
+// TODO: Update these docs
+/**
 * Fetch themes from a repo and format data for generating cards
 * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
 * @param branch The repo's default branch (e.g. main or master)
@@ -57,60 +111,6 @@ export function buildThemeCardData(manifest: Manifest, user?: string, repo?: str
         )
         : undefined,
       include: manifest.include,
-      lastUpdated: "",
-    };
-
-    return parsedManifest;
-  }
-  catch (err) {
-    // console.warn(contents_url, err);
-    return null;
-  }
-}
-
-// TODO: can we add a return type here?
-// TODO: Update these docs
-/**
-* Fetch extensions from a repo and format data for generating cards
-* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
-* @param branch The repo's default branch (e.g. main or master)
-* @param stars The number of stars the repo has
-* @returns Extension info for card (or null)
-*/
-// The optional params are only used when using github topics
-export async function buildExtensionCardData(
-  manifest: Manifest,
-  user?: string,
-  repo?: string,
-  branch?: string,
-  stars?: number,
-) {
-  try {
-    // TODO: figure this out...
-    if (!user) user = "spicetify";
-    if (!repo) repo = "spicetify-themes";
-    if (!branch) branch = "generated-manifest";
-
-    // Manifest is initially parsed
-    const parsedManifest: CardItem = {
-      manifest,
-      title: manifest.name,
-      subtitle: manifest.description,
-      authors: processAuthors(manifest.authors, user === "spicetify" ? "user..." : user), // TODO: we need a fallback...
-      user,
-      repo,
-      branch,
-      imageURL: manifest.preview && manifest.preview.startsWith("http")
-        ? manifest.preview
-        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.preview}`,
-      extensionURL: manifest.main.startsWith("http")
-        ? manifest.main
-        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.main}`,
-      readmeURL: manifest.readme && manifest.readme.startsWith("http")
-        ? manifest.readme
-        : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${manifest.readme}`,
-      stars: stars ?? 0, // TODO: get stars working
-      tags: manifest.tags || [],
       lastUpdated: "",
     };
 
