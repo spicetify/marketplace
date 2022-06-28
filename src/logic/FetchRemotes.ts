@@ -1,6 +1,6 @@
 import { CardItem, Manifest, RepoType, Snippet } from "../types/marketplace-types";
 import { processAuthors } from "./Utils";
-import { BLACKLIST_URL, THEMES_URL } from "../constants";
+import { BLACKLIST_URL, EXTENSIONS_URL, THEMES_URL, APPS_URL } from "../constants";
 import snippetsJSON from "../../resources/snippets";
 
 // TODO: Remove these once there are repos for them
@@ -172,14 +172,25 @@ export function buildAppCardData(manifest: Manifest, user?: string, repo?: strin
 }
 
 export const fetchMonoManifest = async (type: RepoType) => {
-  const manifest = {
-    theme: await fetch(THEMES_URL).then(res => res.json()).catch((err) => {console.error(err); return [];}),
-    // extension: await fetch(EXTENSIONS_URL).then(res => res.json()).catch(console.error(err); return [];),
-    extension: extensionsManifest as Manifest[],
-    // app: await fetch(APPS_URL).then(res => res.json()).catch(console.error(err); return [];),
-    app: appsManifest as Manifest[],
+  /* TODO: swap this in place when we have URLs for everything
+  const urls = {
+    extension: EXTENSIONS_URL,
+    theme: THEMES_URL,
+    app: APPS_URL,
   };
-  return manifest[type] || [];
+
+  const manifest = await fetch(urls[type]).then(res => res.json()).catch((err) => {console.error(err); return [];});
+  return manifest;
+  */
+
+  switch (type) {
+  case "theme":
+    return await fetch(THEMES_URL).then(res => res.json()).catch((err) => {console.error(err); return [];});
+  case "extension":
+    return extensionsManifest as Manifest[];
+  case "app":
+    return appsManifest as Manifest[];
+  }
 };
 
 /**
