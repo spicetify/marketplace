@@ -261,7 +261,7 @@ export default class Grid extends React.Component<
       }
 
       for (const theme of allThemes) {
-        let cardData;
+        let cardData: CardItem | Snippet | CardItem[] | null;
         if (this.CONFIG.visual.githubTopics) {
           cardData = await fetchThemeManifest(theme.contents_url, theme.default_branch, theme.stargazers_count);
         } else {
@@ -277,12 +277,12 @@ export default class Grid extends React.Component<
 
         if (cardData) {
           if (this.CONFIG.visual.githubTopics) {
-            for (const item of cardData) {
+            for (const item of cardData as CardItem[]) {
               Object.assign(item, { lastUpdated: theme.pushed_at });
               this.appendCard(item, "theme");
             }
           } else {
-            this.appendCard(cardData, "theme");
+            this.appendCard(cardData as CardItem, "theme");
           }
         }
       }
