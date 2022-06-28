@@ -2,7 +2,7 @@ import React from "react";
 import semver from "semver";
 import { Option } from "react-dropdown";
 
-import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
+import { CardItem, CardType, Config, RepoTopic, RepoType, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
@@ -18,7 +18,7 @@ import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
 import {
   fetchBlacklist, fetchCssSnippets, fetchMonoManifest,
-  buildThemeCardData, buildAppCardData,
+  buildThemeCardData, buildAppCardData, buildExtensionCardData,
 } from "../logic/FetchRemotes";
 import {
   getTaggedRepos,
@@ -181,51 +181,7 @@ export default class Grid extends React.Component<
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
   async loadPage(queue: never[], query?: string) {
     switch (this.CONFIG.activeTab) {
-    case "Extensions": {
-      let pageOfRepos;
-      if (this.CONFIG.visual.githubTopics) {
-        pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
-      } else {
-        // Do whatever you need to here for the monomanifest system
-        // Whoch should be nothing, since it won't have to load multiple pages...
-        pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
-      }
-
-      for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(
-          repo.contents_url,
-          repo.default_branch,
-          repo.stargazers_count,
-          this.CONFIG.visual.hideInstalled,
-        );
-
-        // I believe this stops the requests when switching tabs?
-        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-          // Stop this queue from continuing to fetch and append to cards list
-          return -1;
-        }
-
-        if (extensions && extensions.length) {
-          // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
-          extensions.forEach((extension) => {
-            Object.assign(extension, { lastUpdated: repo.pushed_at });
-            this.appendCard(extension, "extension");
-          });
-        }
-      }
-
-      // First result is null or -1 so it coerces to 1
-      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-      // Sets the amount of items that have thus been fetched
-      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-      const remainingResults = pageOfRepos.total_count - soFarResults;
-
-      // If still have more results, return next page number to fetch
-      console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
-      if (remainingResults > 0) return currentPage + 1;
-      else console.log("No more extension results");
-      break;
-    } case "Installed": {
+    case "Installed": {
       const installedStuff = {
         theme: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []),
         extension: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []),
@@ -251,59 +207,46 @@ export default class Grid extends React.Component<
 
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
-    } case "Themes": {
-      let allThemes;
+    } case "Themes":
+    case "Extensions":
+    case "Apps": {
+      const type = this.CONFIG.activeTab.slice(0, -1).toLowerCase() as Omit<CardType, "snippet">;
+      let allRepos;
       if (this.CONFIG.visual.githubTopics) {
-        const topicResponse = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, query);
-        allThemes= topicResponse.items;
+        const topicResponse = await getTaggedRepos(`spicetify-${type}s` as RepoTopic, this.requestPage, this.BLACKLIST, query);
+        allRepos = topicResponse.items;
       } else {
-        allThemes = await fetchMonoManifest("theme");
+        allRepos = await fetchMonoManifest(type as RepoType);
       }
 
-      for (const theme of allThemes) {
-        let cardData: CardItem | Snippet | CardItem[] | null;
-        if (this.CONFIG.visual.githubTopics) {
-          cardData = await fetchThemeManifest(theme.contents_url, theme.default_branch, theme.stargazers_count);
-        } else {
-          cardData = buildThemeCardData(theme);
-        }
-
-        // TODO: do we need this queue stuff any more?
-        // I believe this stops the requests when switching tabs?
-        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-          // Stop this queue from continuing to fetch and append to cards list
-          return -1;
-        }
-
-        if (cardData) {
-          if (this.CONFIG.visual.githubTopics) {
-            for (const item of cardData as CardItem[]) {
-              Object.assign(item, { lastUpdated: theme.pushed_at });
-              this.appendCard(item, "theme");
-            }
-          } else {
-            this.appendCard(cardData as CardItem, "theme");
-          }
-        }
-      }
-      console.log("Parsed themes");
-      break;
-    } case "Apps": {
-      let allApps;
-      if (this.CONFIG.visual.githubTopics) {
-        const topicResponse = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
-        allApps = topicResponse.items;
-      }
-      else {
-        allApps = await fetchMonoManifest("app");
-      }
-
-      for (const app of allApps) {
+      for (const repo of allRepos) {
         let cardData;
         if (this.CONFIG.visual.githubTopics) {
-          cardData = await fetchAppManifest(app.contents_url, app.default_branch, app.stargazers_count);
+          switch (type) {
+          case "theme":
+            cardData = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+            break;
+          case "extension":
+            cardData = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+            break;
+          case "app":
+            cardData = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+            break;
+          }
         } else {
-          cardData = buildAppCardData(app);
+          switch (type) {
+          case "theme":
+            cardData = buildThemeCardData(repo);
+            break;
+          case "extension":
+            cardData = buildExtensionCardData(repo);
+            break;
+          case "app":
+            cardData = buildAppCardData(repo);
+            break;
+          default:
+            throw new Error(`Unknown type: ${type}`);
+          }
         }
 
         // TODO: do we need this queue stuff any more?
@@ -314,17 +257,18 @@ export default class Grid extends React.Component<
         }
 
         if (cardData) {
+          console.log(cardData);
           if (this.CONFIG.visual.githubTopics) {
             for (const item of cardData as CardItem[]) {
-              Object.assign(item, { lastUpdated: app.pushed_at });
-              this.appendCard(item, "app");
+              Object.assign(item, { lastUpdated: repo.pushed_at });
+              this.appendCard(item, type as CardType);
             }
           } else {
-            this.appendCard(cardData as CardItem, "app");
+            this.appendCard(cardData as CardItem, type as CardType);
           }
         }
       }
-      console.log("Parsed apps");
+      console.log(`Parsed ${this.CONFIG.activeTab.toLowerCase()}`);
       break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
