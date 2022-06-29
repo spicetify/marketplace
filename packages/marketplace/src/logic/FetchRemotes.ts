@@ -15,20 +15,11 @@ import snippetsJSON from "../resources/snippets";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedRepos(
-	tag: RepoTopic,
-	page = 1,
-	BLACKLIST: string[] = [],
-	query?: string
-) {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string[] = [], query?: string) {
 	// www is needed or it will block with "cross-origin" error.
 	let url = query
-		? `https://api.github.com/search/repositories?q=${encodeURIComponent(
-				`${query}+topic:${tag}`
-		  )}&per_page=${ITEMS_PER_REQUEST}`
-		: `https://api.github.com/search/repositories?q=${encodeURIComponent(
-				`topic:${tag}`
-		  )}&per_page=${ITEMS_PER_REQUEST}`;
+		? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`
+		: `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
 
 	// We can test multiple pages with this URL (58 results), as well as broken iamges etc.
 	// let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
@@ -37,7 +28,7 @@ export async function getTaggedRepos(
 	// if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
 	//     url += `&t=${sortConfig.time}`
 	const allRepos = await fetch(url)
-		.then(res => res.json())
+		.then((res) => res.json())
 		.catch(() => []);
 	if (!allRepos.items) {
 		Spicetify.showNotification("Too Many Requests, Cool Down.");
@@ -48,7 +39,7 @@ export async function getTaggedRepos(
 		// Include count of all items on the page, since we're filtering the blacklist below,
 		// which can mess up the paging logic
 		page_count: allRepos.items.length,
-		items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url))
+		items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url)),
 	};
 
 	return filteredResults;
@@ -65,18 +56,16 @@ export async function getTaggedRepos(
  */
 async function getRepoManifest(user: string, repo: string, branch: string) {
 	const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
-	const failedSessionStorageItems =
-		window.sessionStorage.getItem("noManifests");
+	const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
 	if (sessionStorageItem) return JSON.parse(sessionStorageItem);
 
 	const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
 	if (failedSessionStorageItems?.includes(url)) return null;
 
 	const manifest = await fetch(url)
-		.then(res => res.json())
+		.then((res) => res.json())
 		.catch(() => addToSessionStorage([url], "noManifests"));
-	if (manifest)
-		window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+	if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
 
 	return manifest;
 }
@@ -89,18 +78,11 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
  * @param stars The number of stars the repo has
  * @returns Extension info for card (or null)
  */
-export async function fetchExtensionManifest(
-	contents_url: string,
-	branch: string,
-	stars: number,
-	hideInstalled = false
-) {
+export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
 	try {
 		// TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
 		let manifests;
-		const regex_result = contents_url.match(
-			/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/
-		);
+		const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
 		// TODO: err handling?
 		if (!regex_result || !regex_result.groups) return null;
 		const { user, repo } = regex_result.groups;
@@ -134,21 +116,13 @@ export async function fetchExtensionManifest(
 						? manifest.readme
 						: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
 				stars,
-				tags: manifest.tags
+				tags: manifest.tags,
 			};
 
 			// If manifest is valid, add it to the list
 			if (manifest && manifest.name && manifest.description && manifest.main) {
 				// Add to list unless we're hiding installed items and it's installed
-				if (
-					!(
-						hideInstalled &&
-						localStorage.getItem(
-							"marketplace:installed:" + `${user}/${repo}/${manifest.main}`
-						)
-					)
-				)
-					accum.push(item);
+				if (!(hideInstalled && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))) accum.push(item);
 			}
 			// else {
 			//     console.error("Invalid manifest:", manifest);
@@ -172,16 +146,10 @@ export async function fetchExtensionManifest(
  * @param stars The number of stars the repo has
  * @returns Extension info for card (or null)
  */
-export async function fetchThemeManifest(
-	contents_url: string,
-	branch: string,
-	stars: number
-) {
+export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
 	try {
 		let manifests;
-		const regex_result = contents_url.match(
-			/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/
-		);
+		const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
 		// TODO: err handling?
 		if (!regex_result || !regex_result.groups) return null;
 		const { user, repo } = regex_result.groups;
@@ -223,7 +191,7 @@ export async function fetchThemeManifest(
 						? manifest.schemes
 						: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
 					: null,
-				include: manifest.include
+				include: manifest.include,
 			};
 			// If manifest is valid, add it to the list
 			if (manifest?.name && manifest?.usercss && manifest?.description) {
@@ -245,17 +213,11 @@ export async function fetchThemeManifest(
  * @param stars The number of stars the repo has
  * @returns Extension info for card (or null)
  */
-export async function fetchAppManifest(
-	contents_url: string,
-	branch: string,
-	stars: number
-) {
+export async function fetchAppManifest(contents_url: string, branch: string, stars: number) {
 	try {
 		// TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
 		let manifests;
-		const regex_result = contents_url.match(
-			/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/
-		);
+		const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
 		// TODO: err handling?
 		if (!regex_result || !regex_result.groups) return null;
 		const { user, repo } = regex_result.groups;
@@ -291,7 +253,7 @@ export async function fetchAppManifest(
 						? manifest.readme
 						: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
 				stars,
-				tags: manifest.tags
+				tags: manifest.tags,
 			};
 
 			// If manifest is valid, add it to the list
@@ -318,7 +280,7 @@ export async function fetchAppManifest(
  */
 export const getBlacklist = async () => {
 	const json = await fetch(BLACKLIST_URL)
-		.then(res => res.json())
+		.then((res) => res.json())
 		.catch(() => ({}));
 	return json.repos as string[] | undefined;
 };
