@@ -13,5 +13,5 @@
 		"noImplicitAny": false,
 		"lib": ["ES2021.String", "dom"]
 	},
-	"include": ["workspaces/marketplace/src/**/*.*"]
+	"include": ["src/**/*"]
 }
