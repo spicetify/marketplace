@@ -130,7 +130,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
           Snippet Preview { props.type !== "VIEW_SNIPPET" && "(optional)" }
         </label>
         {imageURL &&
-          <label htmlFor={PREVIEW_IMAGE_ID} style={{ textAlign: "center" }}>
+          <label htmlFor={PREVIEW_IMAGE_ID} className="marketplace-customCSS-image-label">
             <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview" />
           </label>
         }

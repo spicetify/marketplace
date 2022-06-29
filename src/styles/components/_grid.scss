@@ -146,3 +146,16 @@ option {
   bottom: 32px;
   left: 100%;
 }
+
+// Load more icon
+.MarketplaceIcon {
+  &--loadMore {
+    p {
+      font-size: 100px;
+      line-height: 65px,
+    }
+    span {
+      font-size: 20px;
+    }
+  }
+}
