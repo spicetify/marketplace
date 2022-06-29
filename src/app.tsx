@@ -40,7 +40,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
         throw new Error("Could not parse marketplace tabs key");
       } else if (tabs.length === 0) {
         throw new Error("Empty marketplace tabs key");
-      } else if (tabs.filter(tab => !tab).length > 0) {
+      } else if (tabs.filter((tab) => !tab).length > 0) {
         throw new Error("Falsey marketplace tabs key");
       }
     } catch {
@@ -91,7 +91,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
       },
     };
 
-    if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter(tab => tab.name === this.CONFIG.activeTab).length) {
+    if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter((tab) => tab.name === this.CONFIG.activeTab).length) {
       this.CONFIG.activeTab = this.CONFIG.tabs[0].name;
     }
   }
