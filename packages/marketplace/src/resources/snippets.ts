@@ -69,6 +69,6 @@ export default [
     "title": "Fix progress bar displacement",
     "description": "Fixes the progress bar displacement for a few themes. Better version of @CharlieS1103 Snippet",
     "code": ".main-connectBar-connectBar {\n  overflow: visible !important;\n  position: absolute !important;\n  display: flex !important;\n  align-items: unset !important;\n  left: 80% !important;\n  height: 20px !important;\n  bottom: 1% !important;\n  padding: 2px !important;\n  background-color: transparent !important;\n  color: var(--spice-text) !important;\n}\n.control-button::after {\n  display: none !important;\n}",
-    "preview": "resources/assets/snippets/fix-progress-bar.png"
+    "preview": "resources/assets/snippets/fix-progress-bar.png",
   },
 ];
