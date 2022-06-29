@@ -39,7 +39,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
 		// Include count of all items on the page, since we're filtering the blacklist below,
 		// which can mess up the paging logic
 		page_count: allRepos.items.length,
-		items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url)),
+		items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url))
 	};
 
 	return filteredResults;
@@ -116,7 +116,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 						? manifest.readme
 						: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
 				stars,
-				tags: manifest.tags,
+				tags: manifest.tags
 			};
 
 			// If manifest is valid, add it to the list
@@ -191,7 +191,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
 						? manifest.schemes
 						: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
 					: null,
-				include: manifest.include,
+				include: manifest.include
 			};
 			// If manifest is valid, add it to the list
 			if (manifest?.name && manifest?.usercss && manifest?.description) {
@@ -253,7 +253,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 						? manifest.readme
 						: `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
 				stars,
-				tags: manifest.tags,
+				tags: manifest.tags
 			};
 
 			// If manifest is valid, add it to the list
