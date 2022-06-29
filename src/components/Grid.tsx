@@ -207,17 +207,17 @@ export default class Grid extends React.Component<
     case "Extensions":
     case "Themes":
     case "Apps": {
-      const type = this.CONFIG.activeTab.slice(0, -1).toLowerCase() as Omit<CardType, "snippet">;
+      const type = this.CONFIG.activeTab.slice(0, -1).toLowerCase() as RepoType;
       let allRepos;
       if (this.CONFIG.visual.githubTopics) {
         const topicResponse = await getTaggedRepos(`spicetify-${type}s` as RepoTopic, this.requestPage, this.BLACKLIST, query);
         allRepos = topicResponse.items;
       } else {
-        allRepos = await fetchMonoManifest(type as RepoType);
+        allRepos = await fetchMonoManifest(type);
       }
 
       for (const repo of allRepos) {
-        let cardData;
+        let cardData: CardItem | CardItem[] | null;
         if (this.CONFIG.visual.githubTopics) {
           switch (type) {
           case "extension":
@@ -258,10 +258,10 @@ export default class Grid extends React.Component<
           if (this.CONFIG.visual.githubTopics) {
             for (const item of cardData as CardItem[]) {
               Object.assign(item, { lastUpdated: repo.pushed_at });
-              this.appendCard(item, type as CardType);
+              this.appendCard(item, type);
             }
           } else {
-            this.appendCard(cardData as CardItem, type as CardType);
+            this.appendCard(cardData as CardItem, type);
           }
         }
       }

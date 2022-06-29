@@ -21,7 +21,7 @@ import extensionsManifest from "../../resources/manifests/extensions";
 * @returns Extension info for card (or null)
 */
 // The optional params are only used when using github topics
-export async function buildExtensionCardData(
+export function buildExtensionCardData(
   manifest: Manifest,
   user?: string,
   repo?: string,
