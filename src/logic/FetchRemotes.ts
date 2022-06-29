@@ -75,7 +75,13 @@ export async function buildExtensionCardData(
 * @returns Extension info for card (or null)
 */
 // The optional params are only used when using github topics
-export function buildThemeCardData(manifest: Manifest, user?: string, repo?: string, branch?: string, stars?: number) {
+export function buildThemeCardData(
+  manifest: Manifest,
+  user?: string,
+  repo?: string,
+  branch?: string,
+  stars?: number,
+) {
   try {
     // TODO: figure this out...
     if (!user) user = "spicetify";
@@ -131,7 +137,13 @@ export function buildThemeCardData(manifest: Manifest, user?: string, repo?: str
 * @returns Extension info for card (or null)
 */
 // The optional params are only used when using github topics
-export function buildAppCardData(manifest: Manifest, user?: string, repo?: string, branch?: string, stars?: number) {
+export function buildAppCardData(
+  manifest: Manifest,
+  user?: string,
+  repo?: string,
+  branch?: string,
+  stars?: number,
+) {
   try {
     // TODO: figure this out...
     // TODO: Update these once we get a repo for apps

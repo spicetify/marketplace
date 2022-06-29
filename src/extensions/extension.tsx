@@ -27,7 +27,7 @@ import {
 
 (async () => {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   // https://github.com/satya164/react-simple-code-editor/issues/86
@@ -151,7 +151,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+  const allRepos = await fetch(url).then((res) => res.json()).catch(() => []);
   if (!allRepos.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.");
   }
@@ -159,7 +159,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   const filteredResults = {
     ...allRepos,
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST?.includes(item.html_url)),
+    items: allRepos.items.filter((item) => !BLACKLIST?.includes(item.html_url)),
   };
 
   return filteredResults;

@@ -113,7 +113,7 @@ export default class Card extends React.Component<CardProps, {
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
-      const repoData = await fetch(url).then(res => res.json());
+      const repoData = await fetch(url).then((res) => res.json());
       const { stargazers_count, pushed_at } = repoData;
 
       const stateUpdate = { stars: 0, lastUpdated: undefined };

@@ -28,8 +28,8 @@ const ThemeDevToolsModal = () => {
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={code}
-            onValueChange={code => setCode(code)}
-            highlight={code => highlight(code, languages.ini)}
+            onValueChange={(code) => setCode(code)}
+            highlight={(code) => highlight(code, languages.ini)}
             textareaId="color-ini-editor"
             textareaClassName="color-ini-editor"
             readOnly={!themeManifest}

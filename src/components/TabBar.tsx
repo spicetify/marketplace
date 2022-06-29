@@ -135,7 +135,7 @@ const TabBar = React.memo<TabBarProps>(
       if (!tabBarRef.current) return;
 
       const children = Array.from(tabBarRef.current.children);
-      const tabbarItemSizes = children.map(child => child.clientWidth);
+      const tabbarItemSizes = children.map((child) => child.clientWidth);
 
       setChildrenSizes(tabbarItemSizes);
     }, [links]);
@@ -177,7 +177,7 @@ const TabBar = React.memo<TabBarProps>(
         <ul className="marketplace-tabBar-header" ref={tabBarRef}>
           {options
             .filter((_, id) => !droplistItem.includes(id))
-            .map(item => (
+            .map((item) => (
               <TabBarItem
                 key={item.value}
                 item={item}
@@ -186,7 +186,7 @@ const TabBar = React.memo<TabBarProps>(
             ))}
           {droplistItem.length || childrenSizes.length === 0 ? (
             <TabBarMore
-              items={droplistItem.map(i => options[i]).filter(i => i)}
+              items={droplistItem.map((i) => options[i]).filter((i) => i)}
               switchTo={switchCallback}
             />
           ) : null}

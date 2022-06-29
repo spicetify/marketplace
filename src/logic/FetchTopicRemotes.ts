@@ -26,7 +26,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+  const allRepos = await fetch(url).then((res) => res.json()).catch(() => []);
   if (!allRepos.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.");
     return;
@@ -36,7 +36,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url)),
   };
 
   return filteredResults;
@@ -59,7 +59,7 @@ export async function getRepoManifest(user: string, repo: string, branch: string
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
   if (failedSessionStorageItems?.includes(url)) return null;
 
-  const manifest = await fetch(url).then(res => res.json()).catch(
+  const manifest = await fetch(url).then((res) => res.json()).catch(
     () => addToSessionStorage([url], "noManifests"),
   );
   if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));

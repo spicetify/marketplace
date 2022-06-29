@@ -90,8 +90,8 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={code}
-            onValueChange={code => setCode(code)}
-            highlight={code => highlight(code, languages.css)}
+            onValueChange={(code) => setCode(code)}
+            highlight={(code) => highlight(code, languages.css)}
             textareaId="marketplace-custom-css"
             textareaClassName="snippet-code-editor"
             readOnly={props.type === "VIEW_SNIPPET"}
