@@ -2,7 +2,7 @@ import React from "react";
 import semver from "semver";
 import { Option } from "react-dropdown";
 
-import { CardItem, CardType, Config, RepoTopic, RepoType, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
+import { CardItem, CardType, Config, RepoType, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { DownloadIcon, LoadingIcon, LoadMoreIcon, SettingsIcon, ThemeDeveloperToolsIcon } from "./Icons";
@@ -210,7 +210,7 @@ export default class Grid extends React.Component<
       const type = this.CONFIG.activeTab.slice(0, -1).toLowerCase() as RepoType;
       let allRepos;
       if (this.CONFIG.visual.githubTopics) {
-        const topicResponse = await getTaggedRepos(`spicetify-${type}s` as RepoTopic, this.requestPage, this.BLACKLIST, query);
+        const topicResponse = await getTaggedRepos(`spicetify-${type}s`, this.requestPage, this.BLACKLIST, query);
         allRepos = topicResponse.items;
       } else {
         allRepos = await fetchMonoManifest(type);
