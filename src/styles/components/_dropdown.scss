@@ -1,7 +1,7 @@
 @use '../constants.scss';
 
 $dropdown-text: var(--spice-text);
-$dropdown-text-hover: rgb(var(--spice-rgb-text));
+$dropdown-text-hover: var(--spice-text);
 $dropdown-bg: var(--spice-sidebar);
 $dropdown-radius: constants.$btn-radius;
 
