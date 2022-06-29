@@ -9,9 +9,7 @@ import {
   parseCSS,
   injectUserCSS,
 } from "../../logic/Utils";
-import TrashIcon from "../Icons/TrashIcon";
-import DownloadIcon from "../Icons/DownloadIcon";
-import GitHubIcon from "../Icons/GitHubIcon";
+import { DownloadIcon, GitHubIcon, TrashIcon } from "../Icons";
 import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";

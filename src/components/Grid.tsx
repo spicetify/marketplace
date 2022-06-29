@@ -5,16 +5,12 @@ import { Option } from "react-dropdown";
 import { CardItem, CardType, Config, RepoTopic, RepoType, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
+import { DownloadIcon, LoadingIcon, LoadMoreIcon, SettingsIcon, ThemeDeveloperToolsIcon } from "./Icons";
 import { openModal } from "../logic/LaunchModals";
-import LoadMoreIcon from "./Icons/LoadMoreIcon";
-import LoadingIcon from "./Icons/LoadingIcon";
-import SettingsIcon from "./Icons/SettingsIcon";
-import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
 import Button from "./Button";
-import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
 import {
   fetchBlacklist, fetchCssSnippets, fetchMonoManifest,

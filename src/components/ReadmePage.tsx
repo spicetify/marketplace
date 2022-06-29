@@ -1,6 +1,6 @@
 import React from "react";
 import { getMarkdownHTML } from "../logic/Utils";
-import LoadingIcon from "./Icons/LoadingIcon";
+import { LoadingIcon } from "./Icons";
 
 class ReadmePage extends React.Component<
 {
