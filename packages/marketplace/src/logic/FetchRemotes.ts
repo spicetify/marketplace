@@ -1,9 +1,9 @@
+import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
 import { CardItem, Snippet } from "../types/marketplace-types";
-import { processAuthors, addToSessionStorage } from "./Utils";
-import { ITEMS_PER_REQUEST, BLACKLIST_URL } from "../constants";
-import { RepoTopic } from "../types/marketplace-types";
+import { addToSessionStorage, processAuthors } from "./Utils";
 
-import snippetsJSON from "../../resources/snippets";
+import { RepoTopic } from "../types/marketplace-types";
+import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
