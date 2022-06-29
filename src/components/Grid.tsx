@@ -207,8 +207,9 @@ export default class Grid extends React.Component<
 
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
-    } case "Themes":
+    }
     case "Extensions":
+    case "Themes":
     case "Apps": {
       const type = this.CONFIG.activeTab.slice(0, -1).toLowerCase() as Omit<CardType, "snippet">;
       let allRepos;
@@ -223,11 +224,11 @@ export default class Grid extends React.Component<
         let cardData;
         if (this.CONFIG.visual.githubTopics) {
           switch (type) {
-          case "theme":
-            cardData = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-            break;
           case "extension":
             cardData = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+            break;
+          case "theme":
+            cardData = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
             break;
           case "app":
             cardData = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -235,11 +236,11 @@ export default class Grid extends React.Component<
           }
         } else {
           switch (type) {
-          case "theme":
-            cardData = buildThemeCardData(repo);
-            break;
           case "extension":
             cardData = buildExtensionCardData(repo);
+            break;
+          case "theme":
+            cardData = buildThemeCardData(repo);
             break;
           case "app":
             cardData = buildAppCardData(repo);
@@ -257,7 +258,7 @@ export default class Grid extends React.Component<
         }
 
         if (cardData) {
-          console.log(cardData);
+          // console.log(cardData);
           if (this.CONFIG.visual.githubTopics) {
             for (const item of cardData as CardItem[]) {
               Object.assign(item, { lastUpdated: repo.pushed_at });
@@ -308,7 +309,7 @@ export default class Grid extends React.Component<
     }
 
     if (this.requestPage === -1) {
-      this.requestQueue = this.requestQueue.filter(a => a !== queue);
+      this.requestQueue = this.requestQueue.filter((a) => a !== queue);
       return;
     }
 
@@ -370,8 +371,8 @@ export default class Grid extends React.Component<
   */
   async componentDidMount() {
     // Checks for new Marketplace updates
-    fetch(LATEST_RELEASE).then(res => res.json()).then(
-      result => {
+    fetch(LATEST_RELEASE).then((res) => res.json()).then(
+      (result) => {
         this.setState({
           version: result[0].name,
         });
@@ -382,7 +383,7 @@ export default class Grid extends React.Component<
           console.error(err);
         }
       },
-      error => {
+      (error) => {
         console.error("Failed to check for updates", error);
       },
     );

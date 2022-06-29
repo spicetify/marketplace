@@ -185,7 +185,7 @@ export const fetchMonoManifest = async (type: RepoType) => {
 
   switch (type) {
   case "theme":
-    return await fetch(THEMES_URL).then(res => res.json()).catch((err) => {console.error(err); return [];});
+    return await fetch(THEMES_URL).then((res) => res.json()).catch((err) => {console.error(err); return [];});
   case "extension":
     return extensionsManifest as Manifest[];
   case "app":
@@ -198,7 +198,7 @@ export const fetchMonoManifest = async (type: RepoType) => {
 * @returns String array of blacklisted repos
 */
 export const fetchBlacklist = async () => {
-  const json = await fetch(BLACKLIST_URL).then(res => res.json()).catch(() => ({}));
+  const json = await fetch(BLACKLIST_URL).then((res) => res.json()).catch(() => ({}));
   return json.repos as string[] | undefined;
 };
 
