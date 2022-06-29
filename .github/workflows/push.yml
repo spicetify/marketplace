@@ -21,7 +21,7 @@ jobs:
       - name: yarn install and build
         run: |
           yarn --immutable --immutable-cache --check-cache
-          yarn workspace @spotify/marketplace build:prod
+          yarn workspace @spicetify/marketplace build:prod
 
       - name: Push new version
         uses: s0/git-publish-subdir-action@develop
