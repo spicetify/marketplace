@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"target": "ESNEXT",
+		"module": "commonjs",
+		"outDir": "dist",
+		"rootDir": "src",
+		"strict": true,
+		"moduleResolution": "node",
+		"baseUrl": "src",
+		"paths": {
+			"@/controllers/*": ["server/controllers/*"],
+			"@/interfaces/*": ["server/interfaces/*"],
+			"@/routes/*": ["server/routes/*"]
+		},
+		"typeRoots": ["@types"],
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["src/*", "@types/*"]
+}
