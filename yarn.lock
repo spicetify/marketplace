@@ -5185,8 +5185,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "spicetify-marketplace@workspace:."
   dependencies:
-    eslint: 7.32.0
-    eslint-plugin-react: ^7.30.0
     husky: ^8.0.1
   languageName: unknown
   linkType: soft
