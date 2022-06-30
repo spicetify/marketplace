@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ES2017",
+		"jsx": "react",
+		"module": "commonjs",
+		"resolveJsonModule": true,
+		"outDir": "dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"strictPropertyInitialization": false,
+		"skipLibCheck": true,
+		"noImplicitAny": false,
+		"lib": ["ES2021.String", "dom"]
+	},
+	"include": ["src/**/*"]
+}

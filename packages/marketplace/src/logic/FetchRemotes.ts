@@ -1,11 +1,11 @@
 import { CardItem, Manifest, RepoType, Snippet } from "../types/marketplace-types";
 import { processAuthors } from "./Utils";
 import { BLACKLIST_URL, EXTENSIONS_URL, THEMES_URL, APPS_URL } from "../constants";
-import snippetsJSON from "../../resources/snippets";
+import snippetsJSON from "../../../../resources/snippets";
 
 // TODO: Remove these once there are repos for them
-import appsManifest from "../../resources/manifests/apps";
-import extensionsManifest from "../../resources/manifests/extensions";
+import appsManifest from "../../../../resources/manifests/apps";
+import extensionsManifest from "../../../../resources/manifests/extensions";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic

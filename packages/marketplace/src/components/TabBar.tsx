@@ -63,7 +63,7 @@ const TabBarMore = React.memo<TabBarMoreProps>(
 );
 
 const TabBarContext = ({ children }) => {
-  if (!children) return null;
+  if (!children || !document.querySelector(".main-topBar-topbarContentWrapper") ) return null;
   return ReactDOM.createPortal(
     <div className="main-topBar-topbarContent">
       {children}

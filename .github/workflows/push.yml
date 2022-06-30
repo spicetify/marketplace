@@ -4,30 +4,30 @@ on:
     branches:
       - main
   # pull_request:
-    # branches:
-      # - main
+  # branches:
+  # - main
 
 jobs:
   deploy:
     name: Push
     runs-on: ubuntu-latest
     steps:
-    - name: Check out Git repository
-      uses: actions/checkout@v2.4.0
-    - name: Use Node.js
-      uses: actions/setup-node@v2.5.1
-      with:
-        node-version: 16.x
-    - name: yarn install and build
-      run: |
-        yarn install --immutable --immutable-cache --check-cache
-        yarn build:prod
+      - name: Check out Git repository
+        uses: actions/checkout@v2.4.0
+      - name: Use Node.js
+        uses: actions/setup-node@v2.5.1
+        with:
+          node-version: 16.x
+      - name: yarn install and build
+        run: |
+          yarn --immutable --immutable-cache --check-cache
+          yarn workspace @spicetify/marketplace build:prod
 
-    - name: Push new version
-      uses: s0/git-publish-subdir-action@develop
-      env:
-        REPO: self
-        BRANCH: dist
-        FOLDER: dist
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SKIP_EMPTY_COMMITS: true
+      - name: Push new version
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: dist
+          FOLDER: packages/marketplace/dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SKIP_EMPTY_COMMITS: true
