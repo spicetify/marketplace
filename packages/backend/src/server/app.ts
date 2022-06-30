@@ -31,7 +31,7 @@ export default class App {
 
   private initControllers(controllers: Controller[]): void {
     this.logger("Initializing controllers");
-    controllers.forEach(async controller => {
+    controllers.forEach(async (controller) => {
       this.logger(`Loading controller ${controller.name}`);
       await this.express.use(controller.path, controller.router);
     });
