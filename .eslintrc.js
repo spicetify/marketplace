@@ -53,6 +53,9 @@ module.exports = {
       "error", "always",
     ],
     "no-trailing-spaces": "error",
+    "eol-last": [
+      "error", "always",
+    ],
     "keyword-spacing": "error",
     "no-multiple-empty-lines": [
       "error", { "max": 1 },
