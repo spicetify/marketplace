@@ -20,7 +20,7 @@ jobs:
           node-version: 16.x
       - name: yarn install and build
         run: |
-          yarn --immutable --immutable-cache --check-cache
+          yarn
           yarn workspace @spicetify/marketplace build:prod
 
       - name: Push new version
