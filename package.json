@@ -9,11 +9,16 @@
 	"scripts": {
 		"build": "yarn workspaces foreach run build",
 		"start": "yarn workspaces foreach run start",
-		"dev": "yarn workspaces foreach run dev"
+		"dev": "yarn workspaces foreach run dev",
+		"lint:ci": "yarn eslint packages",
+		"lint": "yarn eslint --fix packages",
+		"prepare": "husky install"
 	},
 	"private": true,
 	"packageManager": "yarn@3.2.1",
 	"devDependencies": {
+		"eslint": "7.32.0",
+		"eslint-plugin-react": "^7.30.0",
 		"husky": "^8.0.1"
 	}
 }
