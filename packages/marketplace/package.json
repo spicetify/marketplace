@@ -24,21 +24,21 @@
 		"node": ">=16"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.12",
-		"@types/react-dom": "^18.0.2",
-		"@types/semver": "^7.3.9",
-		"@typescript-eslint/eslint-plugin": "^5.27.1",
-		"@typescript-eslint/parser": "^5.27.1",
+		"@types/react": "^17.0.2",
+		"@types/react-dom": "^17.0.2",
+		"@types/semver": "^7.3.10",
+		"@typescript-eslint/eslint-plugin": "^5.30.0",
+		"@typescript-eslint/parser": "^5.30.0",
 		"copyfiles": "^2.4.1",
-		"eslint": "7.32.0",
-		"eslint-plugin-react": "^7.30.0",
+		"eslint": "^8.18.0",
+		"eslint-plugin-react": "^7.30.1",
 		"prismjs": "^1.28.0",
 		"react-dropdown": "^1.10.0",
 		"react-simple-code-editor": "^0.11.2",
 		"semver": "^7.3.7",
 		"spcr-whats-new": "^1.0.1",
-		"spicetify-creator": "^1.0.10",
-		"typescript": "^4.7.3"
+		"spicetify-creator": "^1.0.11",
+		"typescript": "^4.7.4"
 	},
 	"private": true
 }

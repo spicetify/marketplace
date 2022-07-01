@@ -101,7 +101,7 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
     this.setState({
       CONFIG: { ...config },
     });
-  }
+  };
 
   render() {
     const { location } = Spicetify.Platform.History;

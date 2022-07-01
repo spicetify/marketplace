@@ -24,7 +24,7 @@ class ReadmePage extends React.Component<
 > {
   state = {
     html: "<p>Loading...</p>",
-  }
+  };
 
   getReadmeHTML = async () => {
     return fetch(this.props.data.readmeURL)
@@ -42,7 +42,7 @@ class ReadmePage extends React.Component<
         Spicetify.Platform.History.goBack();
         return null;
       });
-  }
+  };
 
   componentDidMount() {
     // Get and set readme html once loaded
