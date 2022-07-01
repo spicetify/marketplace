@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "yarn workspaces foreach run build",
 		"start": "yarn workspaces foreach run start",
-		"marketplace:lint": "yarn workspace @spicetify/marketplace lint"
+		"lint:marketplace": "yarn workspace @spicetify/marketplace lint"
 	},
 	"private": true,
 	"packageManager": "yarn@3.2.1",
