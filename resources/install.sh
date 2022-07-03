@@ -5,6 +5,7 @@
 set -e
 
     download_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip"
+    default_color_uri="https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini"
 
 SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"
@@ -39,7 +40,15 @@ spicetify config inject_css 1
 spicetify config replace_colors 1
 
 current_theme=$(spicetify config current_theme)
-if [ ${#current_theme} -le 3 ]; then spicetify config current_theme SpicetifyDefault; fi
+if [ ${#current_theme} -le 3 ]; then
+    echo "No theme selected, using placeholder theme"
+    if [ ! -d "$SPICETIFY_CONFIG_DIR/Themes/Marketplace" ]; then
+        echo "MAKING FOLDER  $SPICETIFY_CONFIG_DIR/Themes/Marketplace";
+        mkdir -p "$SPICETIFY_CONFIG_DIR/Themes/Marketplace"
+    fi
+    curl --fail --location --progress-bar --output "$SPICETIFY_CONFIG_DIR/Themes/Marketplace/color.ini" "$default_color_uri"
+    spicetify config current_theme Marketplace;
+fi
 
 if spicetify config custom_apps marketplace ; then
     echo "Added to config!"
