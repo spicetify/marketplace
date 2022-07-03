@@ -37,12 +37,12 @@ spicetify config replace_colors 1
 $currentTheme = spicetify config current_theme | Out-String
 if ($currentTheme.Length -lt 3) {
   Write-Host -ForegroundColor Red "No theme is found, applying placeholder theme..."
-  if (-not (Test-Path "$spicePath\Themes\Marketplace")) {
+  if (-not (Test-Path "$spicePath\Themes\marketplace")) {
     Write-Host "Making placeholder theme folder..." -ForegroundColor "Cyan"
-    New-Item -Path "$spicePath\Themes\Marketplace" -ItemType Directory | Out-Null
+    New-Item -Path "$spicePath\Themes\marketplace" -ItemType Directory | Out-Null
   }
-  Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini" -OutFile "$spicePath\Themes\Marketplace"
-  spicetify config current_theme Marketplace
+  Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini" -OutFile "$spicePath\Themes\marketplace\color.ini"
+  spicetify config current_theme marketplace
 }
 
 spicetify backup
