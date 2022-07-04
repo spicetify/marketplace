@@ -42,12 +42,12 @@ spicetify config replace_colors 1
 current_theme=$(spicetify config current_theme)
 if [ ${#current_theme} -le 3 ]; then
     echo "No theme selected, using placeholder theme"
-    if [ ! -d "$SPICETIFY_CONFIG_DIR/Themes/Marketplace" ]; then
-        echo "MAKING FOLDER  $SPICETIFY_CONFIG_DIR/Themes/Marketplace";
-        mkdir -p "$SPICETIFY_CONFIG_DIR/Themes/Marketplace"
+    if [ ! -d "$SPICETIFY_CONFIG_DIR/Themes/marketplace" ]; then
+        echo "MAKING FOLDER  $SPICETIFY_CONFIG_DIR/Themes/marketplace";
+        mkdir -p "$SPICETIFY_CONFIG_DIR/Themes/marketplace"
     fi
-    curl --fail --location --progress-bar --output "$SPICETIFY_CONFIG_DIR/Themes/Marketplace/color.ini" "$default_color_uri"
-    spicetify config current_theme Marketplace;
+    curl --fail --location --progress-bar --output "$SPICETIFY_CONFIG_DIR/Themes/marketplace/color.ini" "$default_color_uri"
+    spicetify config current_theme marketplace;
 fi
 
 if spicetify config custom_apps marketplace ; then
