@@ -1,4 +1,4 @@
-import { Author, CardItem, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -6,7 +6,7 @@ import { Author, CardItem, SchemeIni, Snippet, SortBoxOption } from "../types/ma
  * @param fallback Fallback value if the key is not found
  * @returns The data stored in localStorage, or the fallback value if not found
  */
-export const getLocalStorageDataFromKey = (key: string, fallback?) => {
+export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
   const data = localStorage.getItem(key);
 
   if (data) {
@@ -76,9 +76,9 @@ export const parseIni = (data: string) => {
       // }
 
       if (section) {
-        value[section][match?.[1]] = match?.[2];
+        value[section][match?.[1]] = match?.[2].split(";")[0].trim();
       } else if (match) {
-        value[match[1]] = match[2];
+        value[match[1]] = match[2].split(";")[0].trim();
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
@@ -204,7 +204,7 @@ export const resetMarketplace = () => {
 };
 
 // NOTE: Keep in sync with extension.js
-export const injectColourScheme = (scheme) => {
+export const injectColourScheme = (scheme: ColourScheme | null) => {
   // Remove any existing Spicetify scheme
   const existingColorsCSS = document.querySelector("link[href='colors.css']");
   if (existingColorsCSS) existingColorsCSS.remove();
