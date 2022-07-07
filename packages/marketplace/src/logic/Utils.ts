@@ -1,4 +1,4 @@
-import { Author, CardItem, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -6,7 +6,7 @@ import { Author, CardItem, SchemeIni, Snippet, SortBoxOption } from "../types/ma
  * @param fallback Fallback value if the key is not found
  * @returns The data stored in localStorage, or the fallback value if not found
  */
-export const getLocalStorageDataFromKey = (key: string, fallback?) => {
+export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
   const data = localStorage.getItem(key);
 
   if (data) {
@@ -204,7 +204,7 @@ export const resetMarketplace = () => {
 };
 
 // NOTE: Keep in sync with extension.js
-export const injectColourScheme = (scheme) => {
+export const injectColourScheme = (scheme: ColourScheme | null) => {
   // Remove any existing Spicetify scheme
   const existingColorsCSS = document.querySelector("link[href='colors.css']");
   if (existingColorsCSS) existingColorsCSS.remove();
@@ -222,8 +222,8 @@ export const injectColourScheme = (scheme) => {
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
     themeIniKeys.forEach((key) => {
-      injectStr += `--spice-${key}: #${scheme[key]};`;
-      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+      injectStr += `--spice-${key}: #${scheme[key].split(";")[0].trim()};`;
+      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key].split(";")[0].trim())};`;
     });
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
