@@ -76,9 +76,9 @@ export const parseIni = (data: string) => {
       // }
 
       if (section) {
-        value[section][match?.[1]] = match?.[2];
+        value[section][match?.[1]] = match?.[2].split(";")[0].trim();
       } else if (match) {
-        value[match[1]] = match[2];
+        value[match[1]] = match[2].split(";")[0].trim();
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
@@ -222,8 +222,8 @@ export const injectColourScheme = (scheme: ColourScheme | null) => {
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
     themeIniKeys.forEach((key) => {
-      injectStr += `--spice-${key}: #${scheme[key].split(";")[0].trim()};`;
-      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key].split(";")[0].trim())};`;
+      injectStr += `--spice-${key}: #${scheme[key]};`;
+      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
     });
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
