@@ -125,20 +125,6 @@ export default class Card extends React.Component<CardProps, {
         stateUpdate.lastUpdated = pushed_at;
         console.log(`New update pushed at: ${pushed_at}`);
       }
-
-      if (stateUpdate.stars || stateUpdate.lastUpdated) {
-        this.setState(stateUpdate, () => {
-          console.log("Card updated; updating localstorage.");
-          switch (this.props.type) {
-          case "extension":
-            this.installExtension();
-            break;
-          case "theme":
-            this.installTheme();
-            break;
-          }
-        });
-      }
     }
   }
 
