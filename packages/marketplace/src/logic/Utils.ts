@@ -68,15 +68,15 @@ export const parseIni = (data: string) => {
     if (regex.comment.test(line)) {
       return;
     } else if (regex.param.test(line)) {
-      const match: string[] | null = line.match(regex.param);
+      const match = line.match(regex.param);
 
       // TODO: github copilot made this part, but I have no idea what it does
       // if (match?.length !== 3) {
       //   throw "Could not parse INI file.";
       // }
 
-      if (section) {
-        value[section][match?.[1]] = match?.[2].split(";")[0].trim();
+      if (section && match) {
+        value[section][match[1]] = match[2].split(";")[0].trim();
       } else if (match) {
         value[match[1]] = match[2].split(";")[0].trim();
       }
