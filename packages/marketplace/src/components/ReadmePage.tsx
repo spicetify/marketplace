@@ -87,6 +87,25 @@ class ReadmePage extends React.Component<
     });
   }
 
+  buttonContent() {
+    if (this.props.data.type === "app") {
+      return {
+        icon: <GitHubIcon />,
+        text: "GitHub",
+      };
+    } else if (this.state.isInstalled) {
+      return {
+        icon: <TrashIcon />,
+        text: "Remove",
+      };
+    } else {
+      return {
+        icon: <DownloadIcon />,
+        text: "Install",
+      };
+    }
+  }
+
   render() {
     this.props.data.isInstalled();
     return (
@@ -103,11 +122,11 @@ class ReadmePage extends React.Component<
                 this.props.data.install();
                 this.setState({ isInstalled: !this.state.isInstalled });
               }}
-              label={this.props.data.type === "app" ? "GitHub" : this.state.isInstalled ? "Remove" : "Install"}
+              label={this.buttonContent().text}
             >
-              {this.props.data.type === "app" ? <GitHubIcon /> : this.state.isInstalled ? <TrashIcon /> : <DownloadIcon />}
+              {this.buttonContent().icon}
               {" "}
-              {this.props.data.type === "app" ? "GitHub" : this.state.isInstalled ? "Remove" : "Install"}
+              {this.buttonContent().text}
             </Button>
           </div>
         </div>
