@@ -104,10 +104,10 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
   };
 
   render() {
-    const { location } = Spicetify.Platform.History;
+    const { location, length } = Spicetify.Platform.History;
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
-    if (location.pathname === `${CUSTOM_APP_PATH}/readme`) {
+    if (location.pathname === `${CUSTOM_APP_PATH}/readme` && length > 1) {
       return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {

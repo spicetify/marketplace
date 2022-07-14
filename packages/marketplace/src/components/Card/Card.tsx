@@ -394,6 +394,9 @@ export default class Card extends React.Component<CardProps, {
             repo: this.props.item.repo,
             branch: this.props.item.branch,
             readmeURL: this.props.item.readmeURL,
+            type: this.props.type,
+            install: this.buttonClicked.bind(this),
+            isInstalled: this.isInstalled.bind(this),
           },
         },
       });
