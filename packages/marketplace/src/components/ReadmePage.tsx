@@ -1,6 +1,11 @@
 import React from "react";
 import { getMarkdownHTML } from "../logic/Utils";
+import { CardType } from "../types/marketplace-types";
+import Button from "./Button";
+import DownloadIcon from "./Icons/DownloadIcon";
+import GitHubIcon from "./Icons/GitHubIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
+import TrashIcon from "./Icons/TrashIcon";
 
 class ReadmePage extends React.Component<
 {
@@ -14,15 +19,20 @@ class ReadmePage extends React.Component<
     branch: string;
     readmeURL: string;
     readmeDir: string;
+    type: CardType;
+    install: () => void;
+    isInstalled: () => boolean;
   },
   title: string,
 },
 {
+  isInstalled: boolean,
   // state
   html: string,
 }
 > {
   state = {
+    isInstalled: this.props.data.isInstalled(),
     html: "<p>Loading...</p>",
   };
 
@@ -54,7 +64,6 @@ class ReadmePage extends React.Component<
   }
 
   componentDidUpdate() {
-
     // Make the page scrollable
     const main = document.querySelector("#marketplace-readme")?.closest("main");
     if (main) {
@@ -79,10 +88,28 @@ class ReadmePage extends React.Component<
   }
 
   render() {
+    this.props.data.isInstalled();
     return (
       <section className="contentSpacing">
-        <div className="marketplace-header" style={ { flexDirection: "row" } }>
-          <h1>{this.props.title}</h1>
+        <div className="marketplace-header">
+          <div className="marketplace-header__left">
+            <h1>{this.props.title}</h1>
+          </div>
+          <div className="marketplace-header__right">
+            <Button
+              classes={["marketplace-header__button"]}
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.data.install();
+                this.setState({ isInstalled: !this.state.isInstalled });
+              }}
+              label={this.props.data.type === "app" ? "GitHub" : this.state.isInstalled ? "Remove" : "Install"}
+            >
+              {this.props.data.type === "app" ? <GitHubIcon /> : this.state.isInstalled ? <TrashIcon /> : <DownloadIcon />}
+              {" "}
+              {this.props.data.type === "app" ? "GitHub" : this.state.isInstalled ? "Remove" : "Install"}
+            </Button>
+          </div>
         </div>
         {this.state.html === "<p>Loading...</p>"
           ? <footer className="marketplace-footer"><LoadingIcon /></footer>
