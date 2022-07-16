@@ -124,7 +124,8 @@
   flex-grow: 1;
 }
 .searchbar-bar {
-  border: unset;
+  border-style: solid;
+  border-color: var(--spice-sidebar);
   background-color: var(--spice-sidebar) !important;
   border-radius: constants.$btn-radius;
   padding: 10px 12px;
