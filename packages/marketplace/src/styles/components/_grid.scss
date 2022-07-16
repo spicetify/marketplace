@@ -19,6 +19,9 @@
 
 .marketplace-header__right, .marketplace-header__left {
   display: flex;
+  & > div {
+    margin-left: 8px;
+  }
 }
 
 .marketplace-header__left {
@@ -99,7 +102,6 @@
   color: var(--spice-text);
   display: inline-block;
   padding: 10px 14px 6px;
-  margin-left: 8px;
   font-weight: bold;
   position: relative;
   text-decoration: none !important;
@@ -116,14 +118,14 @@
 
 // Search bar
 .searchbar--bar__wrapper {
-  margin-left: 8px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   flex-grow: 1;
 }
 .searchbar-bar {
-  border: unset;
+  border-style: solid;
+  border-color: var(--spice-sidebar);
   background-color: var(--spice-sidebar) !important;
   border-radius: constants.$btn-radius;
   padding: 10px 12px;
