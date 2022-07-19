@@ -71,4 +71,10 @@ export default [
     "code": ".main-connectBar-connectBar {\n  overflow: visible !important;\n  position: absolute !important;\n  display: flex !important;\n  align-items: unset !important;\n  left: 80% !important;\n  height: 20px !important;\n  bottom: 1% !important;\n  padding: 2px !important;\n  background-color: transparent !important;\n  color: var(--spice-text) !important;\n}\n.control-button::after {\n  display: none !important;\n}",
     "preview": "resources/assets/snippets/fix-progress-bar.png",
   },
+  {
+    "title": "Fix playlist hover effect",
+    "description": "Fixes the hover effect on the playlist titles in some themes",
+    "code": ".main-rootlist-rootlistItemOverlay {\n  display: none;\n}",
+    "preview:": "resources/assets/snippets/fix-playlist-hover.png",
+  },
 ];
