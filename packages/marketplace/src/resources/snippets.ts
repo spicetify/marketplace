@@ -75,6 +75,6 @@ export default [
     "title": "Fix playlist hover effect",
     "description": "Fixes the hover effect on the playlist titles in some themes",
     "code": ".main-rootlist-rootlistItemOverlay {\n  display: none;\n}",
-    "preview:": "resources/assets/snippets/fix-playlist-hover.png",
+    "preview": "resources/assets/snippets/fix-playlist-hover.png",
   },
 ];
