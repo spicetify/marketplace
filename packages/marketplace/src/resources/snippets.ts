@@ -80,7 +80,7 @@ export default [
   {
     "title": "Disable Homepage Recommendation",
     "description": "Disable Homepage Recommendation charts",
-    "code": "section[data-testid='home-page'] .main-shelf-shelf:not([aria-label='Recently played'], [aria-label='Your playlists']) { display: none !important; }",
+    "code": "section[data-testid="home-page"] .main-shelf-shelf:not([aria-label="Recently played"], [aria-label="Your playlists"]) {\n	display: none !important;\n}",
     "preview": "resources/assets/snippets/disable-recommendation.png",
   },
 ];
