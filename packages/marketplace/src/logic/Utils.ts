@@ -205,9 +205,6 @@ export const resetMarketplace = () => {
 
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
-  // Remove any existing Spicetify scheme
-  const existingColorsCSS = document.querySelector("link[href='colors.css']");
-  if (existingColorsCSS) existingColorsCSS.remove();
 
   // Remove any existing marketplace scheme
   const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
@@ -222,8 +219,8 @@ export const injectColourScheme = (scheme: ColourScheme | null) => {
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
     themeIniKeys.forEach((key) => {
-      injectStr += `--spice-${key}: #${scheme[key]};`;
-      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
+      injectStr += `--spice-${key}: #${scheme[key]} !important;`;
+      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])} !important;`;
     });
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
