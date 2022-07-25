@@ -560,10 +560,8 @@ export default class Grid extends React.Component<
                 user?.toLowerCase().includes(searchValue.trim().toLowerCase()))
                 return card;
             })
-            .map((card, index) => {
+            .map((card) => {
               // Clone the cards and update the prop to trigger re-render
-              // TODO: is it possible to only re-render the theme cards whose status have changed?
-              card.key = index;
               const cardElement = React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
               });
