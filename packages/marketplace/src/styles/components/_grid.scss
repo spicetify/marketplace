@@ -19,7 +19,7 @@
 
 .marketplace-header__right, .marketplace-header__left {
   display: flex;
-  & > div {
+  & > :is(div, button) {
     margin-left: 8px;
   }
 }
