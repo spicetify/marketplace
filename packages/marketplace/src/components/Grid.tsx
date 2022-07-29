@@ -562,10 +562,11 @@ export default class Grid extends React.Component<
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
-              const cardElement = React.cloneElement(card, {
+
+              return React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
+                key: `${card.props.item.title}-${card.props.item.user}`,
               });
-              return cardElement;
             });
 
           if (cardsOfType.length) {
