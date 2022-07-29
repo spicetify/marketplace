@@ -62,20 +62,6 @@ const TabBarMore = React.memo<TabBarMoreProps>(
   },
 );
 
-const TabBarContext = ({ children }) => {
-  if (!children || !document.querySelector(".main-topBar-topbarContentWrapper") ) return null;
-  return ReactDOM.createPortal(
-    <div className="main-topBar-topbarContent">
-      {children}
-    </div>,
-    document.querySelector(".main-topBar-topbarContentWrapper") as Element,
-  );
-};
-
-TabBarContext.propTypes = {
-  children: PropTypes.element,
-};
-
 export const TopBarContent = (props: {
   links: TabItemConfig[];
   activeLink: string;
@@ -86,7 +72,16 @@ export const TopBarContent = (props: {
 
   const [windowSize, setWindowSize] = useState(resizeHost.clientWidth);
   const resizeHandler = () => setWindowSize(resizeHost.clientWidth);
+  const contextHandler = () => {
+    // Move the marketplace-tabBar item to the main-topBar-topbarContent div
+    const tabBar = document.querySelector(".marketplace-tabBar");
+    const topBarContent = document.querySelector(".main-topBar-container");
+    console.log(tabBar, topBarContent);
+    if (tabBar && topBarContent) {
+      topBarContent.appendChild(tabBar);
+    }
 
+  };
   useEffect(() => {
     const observer = new ResizeObserver(resizeHandler);
     observer.observe(resizeHost);
@@ -94,16 +89,18 @@ export const TopBarContent = (props: {
       observer.disconnect();
     };
   }, [resizeHandler]);
-
+  useEffect(()=>{
+    contextHandler();
+  });
   return (
-    <TabBarContext>
-      <TabBar
-        windowSize={windowSize}
-        links={props.links}
-        activeLink={props.activeLink}
-        switchCallback={props.switchCallback}
-      />
-    </TabBarContext>
+
+    <TabBar
+      windowSize={windowSize}
+      links={props.links}
+      activeLink={props.activeLink}
+      switchCallback={props.switchCallback}
+    />
+
   );
 };
 
