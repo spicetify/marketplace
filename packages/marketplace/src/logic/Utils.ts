@@ -1,3 +1,4 @@
+import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 
 /**
@@ -409,4 +410,26 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
 // This function is used to sleep for a certain amount of time
 export function sleep(ms: number | undefined) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function generateKey(props: CardProps) {
+  const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
+
+  let cardId: string;
+  switch (props.type) {
+  case "snippet":
+    cardId = props.item.title.replaceAll(" ", "-");
+    break;
+  case "theme":
+    cardId = props.item.manifest?.usercss || "";
+    break;
+  case "extension":
+    cardId = props.item.manifest?.main || "";
+    break;
+  case "app":
+    cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
+    break;
+  }
+
+  return `marketplace:installed:${prefix}${cardId}`;
 }

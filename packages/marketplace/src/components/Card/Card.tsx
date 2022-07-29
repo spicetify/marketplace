@@ -8,6 +8,7 @@ import {
   initializeSnippets,
   parseCSS,
   injectUserCSS,
+  generateKey,
 } from "../../logic/Utils";
 import TrashIcon from "../Icons/TrashIcon";
 import DownloadIcon from "../Icons/DownloadIcon";
@@ -26,7 +27,6 @@ export type CardProps = {
   updateActiveTheme: (string) => void;
   type: CardType;
   visual: VisualConfig;
-  key: string;
   activeThemeKey?: string;
 };
 
@@ -60,25 +60,7 @@ export default class Card extends React.Component<CardProps, {
     // this.menuType = Spicetify.ReactComponent.Menu | "div";
     this.menuType = Spicetify.ReactComponent.Menu;
 
-    const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
-
-    let cardId: string;
-    switch (props.type) {
-    case "snippet":
-      cardId = props.item.title.replaceAll(" ", "-");
-      break;
-    case "theme":
-      cardId = props.item.manifest?.usercss || "";
-      break;
-    case "extension":
-      cardId = props.item.manifest?.main || "";
-      break;
-    case "app":
-      cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
-      break;
-    }
-
-    this.localStorageKey = `marketplace:installed:${prefix}${cardId}`;
+    this.localStorageKey = generateKey(props);
 
     Object.assign(this, props);
 

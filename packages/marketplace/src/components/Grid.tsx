@@ -3,7 +3,7 @@ import semver from "semver";
 import { Option } from "react-dropdown";
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
+import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateKey } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
@@ -562,10 +562,9 @@ export default class Grid extends React.Component<
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
-
               return React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
-                key: `${card.props.item.title}-${card.props.item.user}`,
+                key: generateKey(card.props),
               });
             });
 
