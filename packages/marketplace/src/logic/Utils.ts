@@ -204,6 +204,30 @@ export const resetMarketplace = () => {
   location.reload();
 };
 
+export const exportMarketplace = () => {
+  // TODO: Export settings, extensions, snippets, themes, colour scheme
+  const data = {};
+
+  Object.keys(localStorage).forEach((key) => {
+    console.log(`${key}: ${localStorage.getItem(key)}`);
+    if (key.startsWith("marketplace:")) {
+      console.log("Found marketplace key");
+      data[key] = localStorage.getItem(key);
+      // localStorage.removeItem(key);
+    }
+  });
+
+  console.log(data);
+
+  // TODO: THis doesn't seem to work in Spotify...
+  navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+    if (result.state == "granted" || result.state == "prompt") {
+      /* write to the clipboard now */
+      navigator.clipboard.writeText(JSON.stringify(data));
+    }
+  });
+};
+
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
 
