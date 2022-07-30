@@ -84,3 +84,4 @@ export const openModal = (
   triggerModal();
   return;
 };
+

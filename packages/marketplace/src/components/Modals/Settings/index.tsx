@@ -1,7 +1,7 @@
 import React from "react";
 import { Config } from "../../../types/marketplace-types";
 
-import { resetMarketplace } from "../../../logic/Utils";
+import { resetMarketplace, sleep } from "../../../logic/Utils";
 
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
@@ -64,11 +64,16 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <div className="setting-row">
         <label className="col description">Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.</label>
         <div className="col action">
-          <Button onClick={() => openModal("IMPORT_EXPORT")}>Back up/Restore</Button>
+          <Button onClick={() => onBackupClick()}>Back up/Restore</Button>
         </div>
       </div>
     </div>
   );
 };
-
+const onBackupClick = async () => {
+  Spicetify.PopupModal.hide();
+  await sleep(300);
+  console.log("Test test test");
+  openModal("IMPORT_EXPORT");
+};
 export default SettingsModal;

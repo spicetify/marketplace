@@ -218,13 +218,7 @@ export const exportMarketplace = () => {
   console.log(data);
 
   // TODO: THis doesn't seem to work in Spotify...
-  navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-    if (result.state == "granted" || result.state == "prompt") {
-      /* write to the clipboard now */
-      navigator.clipboard.writeText(JSON.stringify(data));
-    }
-  });
-
+  Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(data));
   return data;
 };
 
