@@ -537,7 +537,9 @@ export default class Grid extends React.Component<
                 onKeyDown={this.handleSearch.bind(this)} />
             </div>
             <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
-              onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
+              // TODO: change this back to settings modal; I couldn't get the settings modal to launch another modal 🤷
+              // onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
+              onClick={() => openModal("IMPORT_EXPORT")}
             >
               <SettingsIcon />
             </button>

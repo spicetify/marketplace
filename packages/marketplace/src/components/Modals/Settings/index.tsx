@@ -6,6 +6,7 @@ import { resetMarketplace } from "../../../logic/Utils";
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
 import TabRow from "./TabRow";
+import { openModal } from "../../../logic/LaunchModals";
 
 interface Props {
   CONFIG: Config;
@@ -57,6 +58,13 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
         <label className="col description">Uninstall all extensions and themes, and reset preferences</label>
         <div className="col action">
           <Button onClick={resetMarketplace}>Reset</Button>
+        </div>
+      </div>
+      <h2>Back up/Restore</h2>
+      <div className="setting-row">
+        <label className="col description">Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.</label>
+        <div className="col action">
+          <Button onClick={() => openModal("IMPORT_EXPORT")}>Back up/Restore</Button>
         </div>
       </div>
     </div>

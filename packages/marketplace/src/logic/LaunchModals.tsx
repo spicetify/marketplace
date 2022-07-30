@@ -5,9 +5,10 @@ import SnippetModal from "../components/Modals/Snippet";
 import ReloadModal from "../components/Modals/Reload";
 import SettingsModal from "../components/Modals/Settings";
 import ThemeDevToolsModal from "../components/Modals/ThemeDevTools";
+import ImportExportModal from "../components/Modals/ImportExport";
 import { CardProps } from "../components/Card/Card";
 
-export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS";
+export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS" | "IMPORT_EXPORT";
 
 const getModalSettings = (
   modalType: ModalType,
@@ -51,6 +52,12 @@ const getModalSettings = (
     return {
       title: "Theme Dev Tools",
       content: <ThemeDevToolsModal />,
+      isLarge: true,
+    };
+  case "IMPORT_EXPORT":
+    return {
+      title: "Import/Export",
+      content: <ImportExportModal />,
       isLarge: true,
     };
 

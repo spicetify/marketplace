@@ -209,11 +209,9 @@ export const exportMarketplace = () => {
   const data = {};
 
   Object.keys(localStorage).forEach((key) => {
-    console.log(`${key}: ${localStorage.getItem(key)}`);
+    // console.log(`${key}: ${localStorage.getItem(key)}`);
     if (key.startsWith("marketplace:")) {
-      console.log("Found marketplace key");
       data[key] = localStorage.getItem(key);
-      // localStorage.removeItem(key);
     }
   });
 
@@ -226,6 +224,8 @@ export const exportMarketplace = () => {
       navigator.clipboard.writeText(JSON.stringify(data));
     }
   });
+
+  return data;
 };
 
 // NOTE: Keep in sync with extension.js
