@@ -64,16 +64,33 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <div className="setting-row">
         <label className="col description">Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.</label>
         <div className="col action">
-          <Button onClick={() => onBackupClick()}>Back up/Restore</Button>
+          <Button onClick={onBackupClick}>Back up/Restore</Button>
         </div>
       </div>
     </div>
   );
 };
-const onBackupClick = async () => {
+
+const onBackupClick = () => {
   Spicetify.PopupModal.hide();
-  await sleep(300);
-  console.log("Test test test");
-  openModal("IMPORT_EXPORT");
+
+  // Make a new mutation observer to make sure the modal is gone
+  const observer = new MutationObserver(() => {
+    const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
+    if (!settingsModal) {
+      console.log("Settings modal closed");
+      openModal("IMPORT_EXPORT");
+      observer.disconnect();
+    } else {
+      console.log("Settings modal still open");
+    }
+  });
+
+  // TODO: does it still work if I just attach to the settings modal itself?
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 };
+
 export default SettingsModal;
