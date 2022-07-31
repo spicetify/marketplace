@@ -10,6 +10,7 @@ import Button from "../../Button";
 
 const ImportExportModal = () => {
   const [code, setCode] = React.useState("");
+  const [href, setHref] = React.useState("");
 
   // const processCode = () => code.replace(/\n/g, "\\n");
 
@@ -23,6 +24,11 @@ const ImportExportModal = () => {
 
     // Spicetify.PopupModal.hide();
     // if (props.type === "EDIT_SNIPPET") location.reload();
+
+    // https://code.tutsplus.com/tutorials/how-to-save-a-file-with-javascript--cms-41105
+    const text = "My name in Bob. and I love writing tutorials.";
+    const textBlob = new Blob([text], { type: "text/plain" });
+    setHref(URL.createObjectURL(textBlob));
   };
 
   return (
@@ -47,6 +53,9 @@ const ImportExportModal = () => {
         </div>
       </div>
       <>
+        <a href={href} className="download" download="marketplace-export.json">
+          Download
+        </a>
         <Button onClick={exportSettings}>
           Export
         </Button>
