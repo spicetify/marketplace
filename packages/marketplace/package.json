@@ -24,7 +24,7 @@
 		"node": ">=16"
 	},
 	"devDependencies": {
-		"@types/react": "^17.0.2",
+		"@types/react": "^18.0.15",
 		"@types/react-dom": "^17.0.2",
 		"@types/semver": "^7.3.10",
 		"@typescript-eslint/eslint-plugin": "^5.30.0",
