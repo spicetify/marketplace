@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
 import Dropdown, { Option } from "react-dropdown";
 import { TabItemConfig } from "../types/marketplace-types";
-import PropTypes from "prop-types";
 
 // NOTE: The label and value are the same (e.g. "Extensions")
 type TabOptionConfig = Option & {
