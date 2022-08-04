@@ -104,7 +104,6 @@ class ReadmePage extends React.Component<
   }
 
   render() {
-    this.props.data.isInstalled();
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
