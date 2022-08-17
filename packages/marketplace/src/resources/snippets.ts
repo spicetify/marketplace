@@ -83,4 +83,10 @@ export default [
     "code": "section[data-testid='home-page'] .main-shelf-shelf:not([aria-label='Recently played'], [aria-label='Your playlists']) {\n	display: none !important;\n}",
     "preview": "resources/assets/snippets/disable-recommendation.png",
   },
+  {
+    "title": "Circular Album Art",
+    "description": "Makes the now playing album art be circular (like a vinyl)",
+    "code": ".cover-art .cover-art-image {\n    border-radius: 100% !important;\n}",
+    "preview": "resources/assets/snippets/circular-album-art.png",
+  },
 ];
