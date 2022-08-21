@@ -89,4 +89,10 @@ export default [
     "code": ".cover-art .cover-art-image {\n    border-radius: 100% !important;\n}",
     "preview": "resources/assets/snippets/circular-album-art.png",
   },
+  {
+    "title": "Always show forward button",
+    "description": "The navigate forward button hides itself when the window width is smaller. This snipppet makes it so that it is always shown.",
+    "code": ".main-topBar-historyButtons .main-topBar-forward {\n    display: inline-flex !important;\n}",
+    "preview": "resources/assets/snippets/always-show-forward.png",
+  },
 ];
