@@ -74,14 +74,12 @@ export const TopBarContent = (props: {
     // Move the marketplace-tabBar item to the main-topBar-topbarContent div
     const tabBar = document.querySelector(".marketplace-tabBar");
     const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
-    console.log(tabBar, topBarContent);
     if (tabBar && topBarContent && Spicetify.Platform.History.location.pathname == "/marketplace") {
       topBarContent.appendChild(tabBar);
     }
     Spicetify.Platform.History.listen(({ pathname }) => {
       if (pathname != "/marketplace") {
       // Delete tabBar from the dom
-        console.log("Removing tabbar");
         document.querySelector(".marketplace-tabBar")?.remove();
       }
     });
