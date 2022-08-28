@@ -99,6 +99,6 @@ export default [
     "title": "Fancy Lyrics",
     "description": "Patches Spotify's lyrics feature to make it look fancier, and prettier.",
     "code": ".Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4.H2J92dVdr0ykdOX5azL1 { color: var(--lyrics-color-active); opacity: .7; filter: blur(2px); padding-top: 15px; padding-bottom: 15px; -webkit-transition: all .3s ease-out; transition: all .2s ease-out; font-size: 120%; } .Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4.TDPh45khCfG51fNwNIiw { color: var(--lyrics-color-active); padding-top: 15px; padding-bottom: 15px; filter: blur(0px); -webkit-transition: all .3s ease-out; transition: all .2s ease-out; font-size: 130% } .Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4 { color: rgb(0 0 0 / 50%) cursor: pointer; -webkit-transition: all .3s ease-out; transition: all .2s ease-out; padding-top: 15px; padding-bottom: 15px; filter: blur(2px); font-size: 120% }",
-    "preview": "https://i.imgur.com/I91TWuG.png"
+    "preview": "resources/assets/snippets/fancylyrics.png",
   },
 ];
