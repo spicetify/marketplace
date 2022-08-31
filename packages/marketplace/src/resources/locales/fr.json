@@ -1,0 +1,39 @@
+{
+  "translation": {
+    "settings": {
+      "optionsHeading": "Options",
+      "starCountLabel": "Nombre d’étoiles",
+      "tagsLabel": "Tags",
+      "devToolsLabel": "Outils de développeur de thèmes",
+      "hideInstalledLabel": "Masquer ceux étant installés lors de la navigation",
+      "colourShiftLabel": "Changer de couleure toutes les minutes",
+      "tabsHeading": "Onglets",
+      "resetHeading": "Réinitialiser",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Désinstaller toutes les extensions et les thèmes, et réinitialiser les réglages"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Thèmes",
+      "Snippets": "Extraits",
+      "Apps": "Applications",
+      "Installed": "Installé"
+    },
+    "modals": {
+      "addSnippet": "Ajouter Extrait",
+      "editSnippet": "Éditer Extrait",
+      "viewSnippet": "Voir Extrait",
+      "reload": {
+        "title": "Recharger",
+        "description": "Un rechargement de la page est requis pour terminer cette opération.",
+        "reloadNow": "Recharger maintenant",
+        "reloadLater": "Recharger plus tard"
+      },
+      "settings": "Réglages",
+      "devTools": "Outils de développeurs de thèmes"
+    },
+    "colour_one": "couleure",
+    "colour_other": "couleures",
+    "favourite": "favoris"
+  }
+}
