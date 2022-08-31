@@ -19,6 +19,14 @@
       "Apps": "Applications",
       "Installed": "Installé"
     },
+    "modals": {
+      "addSnippet": "Ajouter un snippet",
+      "editSnippet": "Modifier le snippet",
+      "viewSnippet": "Voir le snippet",
+      "reload": "Recharger",
+      "settings": "Paramètres",
+      "devTools": "Outils de développement de thèmes"
+    },
     "colour_one": "couleur",
     "colour_other": "couleurs",
     "favourite": "favorite"

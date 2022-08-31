@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "i18next";
 import { Config } from "../types/marketplace-types";
 
 import SnippetModal from "../components/Modals/Snippet";
@@ -18,38 +19,38 @@ const getModalSettings = (
   switch (modalType) {
   case "ADD_SNIPPET":
     return {
-      title: "Add Snippet",
+      title: t("modals.addSnippet"),
       content: <SnippetModal type={modalType} />,
       isLarge: true,
     };
   case "EDIT_SNIPPET":
     return {
-      title: "Edit Snippet",
+      title: t("modals.editSnippet"),
       content: <SnippetModal type={modalType} content={props as CardProps} />,
       isLarge: true,
     };
   case "VIEW_SNIPPET":
     return {
-      title: "View Snippet",
+      title: t("modals.viewSnippet"),
       content: <SnippetModal type={modalType} content={props as CardProps} />,
       isLarge: true,
     };
   case "RELOAD":
     return {
-      title: "Reload",
+      title: t("modals.reload"),
       content: <ReloadModal />,
       isLarge: false,
     };
   case "SETTINGS":
     return {
-      title: "Settings",
+      title: t("modals.settings"),
       // TODO: If I just use {CONFIG}, it nests it inside another object...
       content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
       isLarge: true,
     };
   case "THEME_DEV_TOOLS":
     return {
-      title: "Theme Dev Tools",
+      title: t("modals.devTools"),
       content: <ThemeDevToolsModal />,
       isLarge: true,
     };
