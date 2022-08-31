@@ -5,7 +5,7 @@ import { Config, TabItemConfig } from "./types/marketplace-types";
 import i18n from "i18next";
 import en from "./resources/locales/en.json";
 import enUS from "./resources/locales/en-US.json";
-import frCA from "./resources/locales/fr-CA.json";
+import fr from "./resources/locales/fr.json";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
@@ -17,7 +17,7 @@ i18n
     resources: {
       en,
       "en-US": enUS,
-      "fr-CA": frCA,
+      fr,
     },
     detection: {
       order: [ "navigator", "htmlTag" ],
