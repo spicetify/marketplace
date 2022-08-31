@@ -2,7 +2,7 @@
   "translation": {
     "settings": {
       "optionsHeading": "Options",
-      "starCountLabel": "Nombre d'étoiles",
+      "starCountLabel": "Nombre d\’étoiles",
       "tagsLabel": "Tags",
       "devToolsLabel": "Outils de développeur de thèmes",
       "hideInstalledLabel": "Masquer ceux étant installés lors de la navigation",
