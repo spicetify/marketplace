@@ -23,7 +23,12 @@
       "addSnippet": "Ajouter un snippet",
       "editSnippet": "Modifier le snippet",
       "viewSnippet": "Voir le snippet",
-      "reload": "Recharger",
+      "reload": {
+        "title": "Recharger",
+        "description": "Une rechargement de page est nécessaire pour compléter cette opération.",
+        "reloadNow": "Recharger maintenant",
+        "reloadLater": "Recharger plus tard"
+      },
       "settings": "Paramètres",
       "devTools": "Outils de développement de thèmes"
     },

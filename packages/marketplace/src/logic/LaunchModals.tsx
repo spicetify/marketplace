@@ -37,7 +37,7 @@ const getModalSettings = (
     };
   case "RELOAD":
     return {
-      title: t("modals.reload"),
+      title: t("modals.reload.title"),
       content: <ReloadModal />,
       isLarge: false,
     };

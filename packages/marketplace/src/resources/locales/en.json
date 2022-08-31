@@ -23,7 +23,12 @@
       "addSnippet": "Add Snippet",
       "editSnippet": "Edit Snippet",
       "viewSnippet": "View Snippet",
-      "reload": "Reload",
+      "reload": {
+        "title": "Reload",
+        "description": "A page reload is required to complete this operation.",
+        "reloadNow": "Reload now",
+        "reloadLater": "Reload later"
+      },
       "settings": "Settings",
       "devTools": "Theme Dev Tools"
     },
