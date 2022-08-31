@@ -1,0 +1,26 @@
+{
+  "translation": {
+    "settings": {
+      "optionsHeading": "Options",
+      "starCountLabel": "Les étoiles comptent",
+      "tagsLabel": "Mots clés",
+      "devToolsLabel": "Outils de développement de thèmes",
+      "hideInstalledLabel": "Masquer installé lors de la navigation",
+      "colourShiftLabel": "Changer les couleurs à chaque minute",
+      "tabsHeading": "Onglets",
+      "resetHeading": "Réinitialiser",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Désinstallez toutes les extensions et tous les thèmes, et réinitialisez les préférences"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Thèmes",
+      "Snippets": "Snippets",
+      "Apps": "Applications",
+      "Installed": "Installé"
+    },
+    "colour_one": "couleur",
+    "colour_other": "couleurs",
+    "favourite": "favorite"
+  }
+}

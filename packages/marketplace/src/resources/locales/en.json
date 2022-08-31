@@ -1,0 +1,26 @@
+{
+  "translation": {
+    "settings": {
+      "optionsHeading": "Options",
+      "starCountLabel": "Stars count",
+      "tagsLabel": "Tags",
+      "devToolsLabel": "Theme developer tools",
+      "hideInstalledLabel": "Hide installed when browsing",
+      "colourShiftLabel": "Shift colours every minute",
+      "tabsHeading": "Tabs",
+      "resetHeading": "Reset",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Uninstall all extensions and themes, and reset preferences"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Themes",
+      "Snippets": "Snippets",
+      "Apps": "Apps",
+      "Installed": "Installed"
+    },
+    "colour_one": "colour",
+    "colour_other": "colours",
+    "favourite": "favourite"
+  }
+}
