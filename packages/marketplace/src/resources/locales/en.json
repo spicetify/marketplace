@@ -43,8 +43,14 @@
       "reloadLater": "Reload later"
     },
     "devTools": {
-      "title": "Theme Dev Tools"
+      "title": "Theme Dev Tools",
+      "noThemeInstalled": "Error: No marketplace theme installed",
+      "noThemeManifest": "Error: No theme manifest found",
+      "colorIniEditor": "Color.ini Editor",
+      "colorIniEditorPlaceholder": "[your-color-scheme-name]",
+      "invalidCSS": "Invalid CSS"
     },
+    "save": "Save",
     "colour_one": "colour",
     "colour_other": "colours",
     "favourite": "favourite"

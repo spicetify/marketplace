@@ -43,8 +43,14 @@
       "reloadLater": "Recharger plus tard"
     },
     "devTools": {
-      "title": "Outils de développeurs de thèmes"
+      "title": "Outils de développeurs de thèmes",
+      "noThemeInstalled": "(Error: No marketplace theme installed)",
+      "noThemeManifest": "(Error: No theme manifest found)",
+      "colorIniEditor": "(Color.ini Editor)",
+      "colorIniEditorPlaceholder": "([your-color-scheme-name])",
+      "invalidCSS": "(Invalid CSS)"
     },
+    "save": "(Save)",
     "colour_one": "couleure",
     "colour_other": "couleures",
     "favourite": "favoris"
