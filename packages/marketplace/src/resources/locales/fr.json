@@ -24,17 +24,17 @@
       "addTitle": "Ajouter Extrait",
       "editTitle": "Éditer Extrait",
       "viewTitle": "Voir Extrait",
-      "customCSS": "(CSS personnalisé)",
-      "customCSSPlaceholder": "(Insérez votre propre CSS personnalisé ici! Vous pouvez les retrouver dans l'onglet Installé pour les gérrer.)",
-      "snippetName": "(Nom de l'extrait)",
-      "snippetNamePlaceholder": "(Entrer un nom pour votre extrait personnalisé)",
-      "snippetDesc": "(Description de l’extrait)",
-      "snippetDescPlaceholder": "(Entrez une description pour votre extrait personnalisé)",
-      "snippetPreview": "(Prévisualiser l’extrait)",
-      "optional": "(Optionnel)",
-      "addImage": "(Ajouter une image)",
-      "changeImage": "(Changer l’image)",
-      "saveCSS": "(Enregistrer le CSS)"
+      "customCSS": "CSS personnalisé",
+      "customCSSPlaceholder": "Insérez votre propre CSS personnalisé ici! Vous pouvez les retrouver dans l'onglet Installé pour les gérrer.",
+      "snippetName": "Nom de l'extrait",
+      "snippetNamePlaceholder": "Entrer un nom pour votre extrait personnalisé",
+      "snippetDesc": "Description de l’extrait",
+      "snippetDescPlaceholder": "Entrez une description pour votre extrait personnalisé",
+      "snippetPreview": "Prévisualiser l’extrait",
+      "optional": "Optionnel",
+      "addImage": "Ajouter une image",
+      "changeImage": "Changer l’image",
+      "saveCSS": "Enregistrer le CSS"
     },
     "reloadModal": {
       "title": "Recharger",
@@ -44,24 +44,24 @@
     },
     "devTools": {
       "title": "Outils de développeurs de thèmes",
-      "noThemeInstalled": "(Erreur: Aucun thème du marché n’est installé)",
-      "noThemeManifest": "(Erreur: Aucun manifeste de thème trouvé)",
-      "colorIniEditor": "(Éditeur Color.ini)",
-      "colorIniEditorPlaceholder": "([your-color-scheme-name])",
-      "invalidCSS": "(CSS invalide)"
+      "noThemeInstalled": "Erreur: Aucun thème du marché n’est installé",
+      "noThemeManifest": "Erreur: Aucun manifeste de thème trouvé",
+      "colorIniEditor": "Éditeur Color.ini",
+      "colorIniEditorPlaceholder": "[your-color-scheme-name]",
+      "invalidCSS": "CSS invalide"
     },
     "grid": {
-      "addCSS": "(Ajouter CSS)",
-      "search": "(Rechercher)"
+      "addCSS": "Ajouter CSS",
+      "search": "Rechercher"
     },
     "readmePage": {
-      "loading": "(Chargement...)",
-      "errorLoading": "(Erreur lors du chargement du README)",
-      "github": "(GitHub)",
-      "remove": "(Supprimer)",
-      "install": "(Installer)"
+      "loading": "Chargement...",
+      "errorLoading": "Erreur lors du chargement du README",
+      "github": "GitHub",
+      "remove": "Supprimer)",
+      "install": "Installer"
     },
-    "save": "(Enregistrer)",
+    "save": "Enregistrer",
     "colour_one": "couleure",
     "colour_other": "couleures",
     "favourite": "favoris"
