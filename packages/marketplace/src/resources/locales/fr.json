@@ -58,7 +58,7 @@
       "loading": "Chargement...",
       "errorLoading": "Erreur lors du chargement du README",
       "github": "GitHub",
-      "remove": "Supprimer)",
+      "remove": "Supprimer",
       "install": "Installer"
     },
     "save": "Enregistrer",
