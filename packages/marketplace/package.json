@@ -34,7 +34,7 @@
 		"eslint-plugin-react": "^7.30.1",
 		"prismjs": "^1.28.0",
 		"react-dropdown": "^1.10.0",
-		"react-simple-code-editor": "^0.11.2",
+		"react-simple-code-editor": "^0.13.0",
 		"semver": "^7.3.7",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.11",
