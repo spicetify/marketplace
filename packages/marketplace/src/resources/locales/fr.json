@@ -50,6 +50,17 @@
       "colorIniEditorPlaceholder": "([your-color-scheme-name])",
       "invalidCSS": "(Invalid CSS)"
     },
+    "grid": {
+      "addCSS": "(Add CSS)",
+      "search": "(Search)"
+    },
+    "readmePage": {
+      "loading": "(Loading...)",
+      "errorLoading": "(Error loading README)",
+      "github": "(GitHub)",
+      "remove": "(Remove)",
+      "install": "(Install)"
+    },
     "save": "(Save)",
     "colour_one": "couleure",
     "colour_other": "couleures",

@@ -1,4 +1,5 @@
 import React from "react";
+import { withTranslation } from "react-i18next";
 import semver from "semver";
 import { Option } from "react-dropdown";
 
@@ -22,11 +23,13 @@ import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
 
-export default class Grid extends React.Component<
+class Grid extends React.Component<
 {
   title: string,
   CONFIG: Config,
   updateAppConfig: (CONFIG: Config) => void,
+  // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
+  t: (key: string) => string,
 },
 {
   version: string,
@@ -497,6 +500,7 @@ export default class Grid extends React.Component<
   }
 
   render() {
+    const { t } = this.props;
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
@@ -529,7 +533,7 @@ export default class Grid extends React.Component<
               <input
                 className="searchbar-bar"
                 type="text"
-                placeholder={`Search ${this.CONFIG.activeTab}...`}
+                placeholder={`${t("grid.search")} ${this.CONFIG.activeTab}...`}
                 value={this.state.searchValue}
                 onChange={(event) => {
                   this.setState({ searchValue: event.target.value });
@@ -588,7 +592,7 @@ export default class Grid extends React.Component<
         })}
         {/* Add snippets button if on snippets tab */}
         {this.CONFIG.activeTab === "Snippets"
-          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+Add CSS</Button>
+          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+{t("grid.addCSS")}</Button>
           : null}
         <footer className="marketplace-footer">
           {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
@@ -601,3 +605,5 @@ export default class Grid extends React.Component<
     );
   }
 }
+
+export default withTranslation()(Grid);
