@@ -26,19 +26,19 @@
 	"devDependencies": {
 		"@types/react": "^17.0.2",
 		"@types/react-dom": "^17.0.2",
-		"@types/semver": "^7.3.10",
-		"@typescript-eslint/eslint-plugin": "^5.31.0",
-		"@typescript-eslint/parser": "^5.31.0",
+		"@types/semver": "^7.3.12",
+		"@typescript-eslint/eslint-plugin": "^5.36.1",
+		"@typescript-eslint/parser": "^5.36.1",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.20.0",
-		"eslint-plugin-react": "^7.30.1",
-		"prismjs": "^1.28.0",
+		"eslint": "^8.23.0",
+		"eslint-plugin-react": "^7.31.1",
+		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.10.0",
-		"react-simple-code-editor": "^0.11.2",
+		"react-simple-code-editor": "^0.13.0",
 		"semver": "^7.3.7",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.11",
-		"typescript": "^4.7.4"
+		"typescript": "^4.8.2"
 	},
 	"private": true
 }
