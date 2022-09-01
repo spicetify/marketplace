@@ -1,6 +1,7 @@
 {
   "translation": {
     "settings": {
+      "title": "Settings",
       "optionsHeading": "Options",
       "starCountLabel": "Stars count",
       "tagsLabel": "Tags",
@@ -19,18 +20,30 @@
       "Apps": "Apps",
       "Installed": "Installed"
     },
-    "modals": {
-      "addSnippet": "Add Snippet",
-      "editSnippet": "Edit Snippet",
-      "viewSnippet": "View Snippet",
-      "reload": {
-        "title": "Reload",
-        "description": "A page reload is required to complete this operation.",
-        "reloadNow": "Reload now",
-        "reloadLater": "Reload later"
-      },
-      "settings": "Settings",
-      "devTools": "Theme Dev Tools"
+    "snippets": {
+      "addTitle": "Add Snippet",
+      "editTitle": "Edit Snippet",
+      "viewTitle": "View Snippet",
+      "customCSS": "Custom CSS",
+      "customCSSPlaceholder": "Input your own custom CSS here! You can find them in the installed tab for management.",
+      "snippetName": "Snippet Name",
+      "snippetNamePlaceholder": "Enter a name for your custom snippet",
+      "snippetDesc": "Snippet Description",
+      "snippetDescPlaceholder": "Enter a description for your custom snippet",
+      "snippetPreview": "Snippet Preview",
+      "optional": "Optional",
+      "addImage": "Add image",
+      "changeImage": "Change image",
+      "saveCSS": "Save CSS"
+    },
+    "reloadModal": {
+      "title": "Reload",
+      "description": "A page reload is required to complete this operation.",
+      "reloadNow": "Reload now",
+      "reloadLater": "Reload later"
+    },
+    "devTools": {
+      "title": "Theme Dev Tools"
     },
     "colour_one": "colour",
     "colour_other": "colours",

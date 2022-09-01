@@ -19,38 +19,38 @@ const getModalSettings = (
   switch (modalType) {
   case "ADD_SNIPPET":
     return {
-      title: t("modals.addSnippet"),
+      title: t("snippets.addTitle"),
       content: <SnippetModal type={modalType} />,
       isLarge: true,
     };
   case "EDIT_SNIPPET":
     return {
-      title: t("modals.editSnippet"),
+      title: t("snippets.editTitle"),
       content: <SnippetModal type={modalType} content={props as CardProps} />,
       isLarge: true,
     };
   case "VIEW_SNIPPET":
     return {
-      title: t("modals.viewSnippet"),
+      title: t("snippets.viewTitle"),
       content: <SnippetModal type={modalType} content={props as CardProps} />,
       isLarge: true,
     };
   case "RELOAD":
     return {
-      title: t("modals.reload.title"),
+      title: t("reloadModal.title"),
       content: <ReloadModal />,
       isLarge: false,
     };
   case "SETTINGS":
     return {
-      title: t("modals.settings"),
+      title: t("settings.title"),
       // TODO: If I just use {CONFIG}, it nests it inside another object...
       content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
       isLarge: true,
     };
   case "THEME_DEV_TOOLS":
     return {
-      title: t("modals.devTools"),
+      title: t("devTools.title"),
       content: <ThemeDevToolsModal />,
       isLarge: true,
     };

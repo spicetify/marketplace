@@ -1,6 +1,7 @@
 {
   "translation": {
     "settings": {
+      "title": "Réglages",
       "optionsHeading": "Options",
       "starCountLabel": "Nombre d’étoiles",
       "tagsLabel": "Tags",
@@ -19,18 +20,30 @@
       "Apps": "Applications",
       "Installed": "Installé"
     },
-    "modals": {
-      "addSnippet": "Ajouter Extrait",
-      "editSnippet": "Éditer Extrait",
-      "viewSnippet": "Voir Extrait",
-      "reload": {
-        "title": "Recharger",
-        "description": "Un rechargement de la page est requis pour terminer cette opération.",
-        "reloadNow": "Recharger maintenant",
-        "reloadLater": "Recharger plus tard"
-      },
-      "settings": "Réglages",
-      "devTools": "Outils de développeurs de thèmes"
+    "snippets": {
+      "addTitle": "Ajouter Extrait",
+      "editTitle": "Éditer Extrait",
+      "viewTitle": "Voir Extrait",
+      "customCSS": "(Custom CSS)",
+      "customCSSPlaceholder": "(Input your own custom CSS here! You can find them in the installed tab for management.)",
+      "snippetName": "(Snippet Name)",
+      "snippetNamePlaceholder": "(Enter a name for your custom snippet)",
+      "snippetDesc": "(Snippet Description)",
+      "snippetDescPlaceholder": "(Enter a description for your custom snippet)",
+      "snippetPreview": "(Snippet Preview)",
+      "optional": "(Optional)",
+      "addImage": "(Add image)",
+      "changeImage": "(Change image)",
+      "saveCSS": "(Save CSS)"
+    },
+    "reloadModal": {
+      "title": "Recharger",
+      "description": "Un rechargement de la page est requis pour terminer cette opération.",
+      "reloadNow": "Recharger maintenant",
+      "reloadLater": "Recharger plus tard"
+    },
+    "devTools": {
+      "title": "Outils de développeurs de thèmes"
     },
     "colour_one": "couleure",
     "colour_other": "couleures",

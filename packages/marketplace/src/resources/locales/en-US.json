@@ -1,39 +1,10 @@
 {
   "translation": {
     "settings": {
-      "optionsHeading": "Options",
-      "starCountLabel": "Stars count",
-      "tagsLabel": "Tags",
-      "devToolsLabel": "Theme developer tools",
-      "hideInstalledLabel": "Hide installed when browsing",
-      "colourShiftLabel": "Shift colors every minute",
-      "tabsHeading": "Tabs",
-      "resetHeading": "Reset",
-      "resetBtn": "$t(settings.resetHeading)",
-      "resetDescription": "Uninstall all extensions and themes, and reset preferences"
+      "colourShiftLabel": "Shift colors every minute"
     },
-    "tabs": {
-      "Extensions": "Extensions",
-      "Themes": "Themes",
-      "Snippets": "Snippets",
-      "Apps": "Apps",
-      "Installed": "Installed"
-    },
-    "modals": {
-      "addSnippet": "Add Snippet",
-      "editSnippet": "Edit Snippet",
-      "viewSnippet": "View Snippet",
-      "reload": {
-        "title": "Reload",
-        "description": "A page reload is required to complete this operation.",
-        "reloadNow": "Reload now",
-        "reloadLater": "Reload later"
-      },
-      "settings": "Settings",
-      "devTools": "Theme Dev Tools"
-    },
-    "colour_one": "color",
-    "colour_other": "colors",
-    "favourite": "favorite"
+    "colour_one": "colour",
+    "colour_other": "colours",
+    "favourite": "favourite"
   }
 }
