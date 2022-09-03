@@ -1,0 +1,13 @@
+{
+  "translation": {
+    "settings": {
+      "colourShiftLabel": "Shift colors every minute"
+    },
+    "devTools": {
+      "colorIniEditorPlaceholder": "[your-color-scheme-name]"
+    },
+    "colour_one": "color",
+    "colour_other": "colors",
+    "favourite": "favorite"
+  }
+}

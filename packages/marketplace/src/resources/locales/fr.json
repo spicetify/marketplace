@@ -1,0 +1,75 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Réglages",
+      "optionsHeading": "Options",
+      "starCountLabel": "Nombre d’étoiles",
+      "tagsLabel": "Tags",
+      "devToolsLabel": "Outils de développeur de thèmes",
+      "hideInstalledLabel": "Masquer ceux étant installés lors de la navigation",
+      "colourShiftLabel": "Changer de couleure toutes les minutes",
+      "tabsHeading": "Onglets",
+      "resetHeading": "Réinitialiser",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Désinstaller toutes les extensions et les thèmes, et réinitialiser les réglages"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Thèmes",
+      "Snippets": "Extraits",
+      "Apps": "Applications",
+      "Installed": "Installé"
+    },
+    "snippets": {
+      "addTitle": "Ajouter Extrait",
+      "editTitle": "Éditer Extrait",
+      "viewTitle": "Voir Extrait",
+      "customCSS": "CSS personnalisé",
+      "customCSSPlaceholder": "Insérez votre propre CSS personnalisé ici! Vous pouvez les retrouver dans l'onglet Installé pour les gérrer.",
+      "snippetName": "Nom de l'extrait",
+      "snippetNamePlaceholder": "Entrer un nom pour votre extrait personnalisé",
+      "snippetDesc": "Description de l’extrait",
+      "snippetDescPlaceholder": "Entrez une description pour votre extrait personnalisé",
+      "snippetPreview": "Prévisualiser l’extrait",
+      "optional": "Optionnel",
+      "addImage": "Ajouter une image",
+      "changeImage": "Changer l’image",
+      "saveCSS": "Enregistrer le CSS"
+    },
+    "reloadModal": {
+      "title": "Recharger",
+      "description": "Un rechargement de la page est requis pour terminer cette opération.",
+      "reloadNow": "Recharger maintenant",
+      "reloadLater": "Recharger plus tard"
+    },
+    "devTools": {
+      "title": "Outils de développeurs de thèmes",
+      "noThemeInstalled": "Erreur: Aucun thème du marché n’est installé",
+      "noThemeManifest": "Erreur: Aucun manifeste de thème trouvé",
+      "colorIniEditor": "Éditeur Color.ini",
+      "colorIniEditorPlaceholder": "[nom-de-votre-schéma-de-couleur]",
+      "invalidCSS": "CSS invalide"
+    },
+    "grid": {
+      "newUpdate": "Nouvelle mise à jour",
+      "addCSS": "Ajouter CSS",
+      "search": "Rechercher",
+      "installed": "Installé",
+      "lastUpdated": "Dernière mise à jour {{val, datetime}}",
+      "externalJS": "JS externe",
+      "dark": "sombre",
+      "light": "clair"
+    },
+    "readmePage": {
+      "loading": "Chargement...",
+      "errorLoading": "Erreur lors du chargement du README"
+    },
+    "github": "GitHub",
+    "install": "Installer",
+    "remove": "Supprimer",
+    "save": "Enregistrer",
+    "colour_one": "couleure",
+    "colour_other": "couleures",
+    "favourite": "favoris"
+  }
+}

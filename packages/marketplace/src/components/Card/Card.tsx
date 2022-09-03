@@ -1,4 +1,5 @@
 import React, { Key } from "react";
+import { withTranslation } from "react-i18next";
 import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
@@ -17,6 +18,7 @@ import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
+import { t } from "i18next";
 
 export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
@@ -30,7 +32,7 @@ export type CardProps = {
   activeThemeKey?: string;
 };
 
-export default class Card extends React.Component<CardProps, {
+class Card extends React.Component<CardProps, {
   installed: boolean
   // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
   stars: number;
@@ -66,7 +68,7 @@ export default class Card extends React.Component<CardProps, {
 
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
     this.tags = props.item.tags || [];
-    if (props.item.include) this.tags.push("external JS");
+    if (props.item.include) this.tags.push(t("grid.externalJS"));
 
     this.state = {
       // Initial value. Used to trigger a re-render.
@@ -469,14 +471,14 @@ export default class Card extends React.Component<CardProps, {
               {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
             </p>
             {this.props.item.lastUpdated &&
-            <p className="marketplace-card-desc">Last updated:{" "}
-              {new Date(
-                this.props.item.lastUpdated,
-              ).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
+            <p className="marketplace-card-desc">
+              {t("grid.lastUpdated",
+                { val: new Date(this.props.item.lastUpdated),
+                  formatParams: {
+                    val: { year: "numeric", month: "long", day: "numeric" },
+                  },
+                })
+              }
             </p>}
             {this.tags.length ? (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
@@ -485,7 +487,7 @@ export default class Card extends React.Component<CardProps, {
             ) : null}
             {IS_INSTALLED && (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
-                ✓ Installed
+                ✓ {t("grid.installed")}
               </div>
             )}
             <div className="main-card-PlayButtonContainer">
@@ -493,7 +495,7 @@ export default class Card extends React.Component<CardProps, {
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
                 // TODO: Refactor this using lookups or sth similar
-                label={this.props.type === "app" ? "GitHub" : IS_INSTALLED ? "Remove" : "Install"}
+                label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();
@@ -510,3 +512,5 @@ export default class Card extends React.Component<CardProps, {
     );
   }
 }
+
+export default withTranslation()(Card);

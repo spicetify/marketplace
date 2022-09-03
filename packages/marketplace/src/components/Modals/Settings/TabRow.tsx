@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "i18next";
 import { Config } from "../../../types/marketplace-types";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 
@@ -48,7 +49,7 @@ const TabRow = (props: {
 
   return (
     <div className="setting-row">
-      <label htmlFor={toggleId} className='col description'>{props.name}</label>
+      <label htmlFor={toggleId} className='col description'>{t(`tabs.${props.name}`)}</label>
       <div className="col action">
         <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"

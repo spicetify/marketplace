@@ -1,4 +1,5 @@
 import React from "react";
+import { withTranslation } from "react-i18next";
 import semver from "semver";
 import { Option } from "react-dropdown";
 
@@ -22,11 +23,13 @@ import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
 import Changelog from "./Modals/Changelog";
 
-export default class Grid extends React.Component<
+class Grid extends React.Component<
 {
   title: string,
   CONFIG: Config,
   updateAppConfig: (CONFIG: Config) => void,
+  // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
+  t: (key: string) => string,
 },
 {
   version: string,
@@ -497,13 +500,14 @@ export default class Grid extends React.Component<
   }
 
   render() {
+    const { t } = this.props;
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
             {this.state.newUpdate
-              ? <button type="button" title="New update" className="marketplace-header-icon-button" id="marketplace-update"
+              ? <button type="button" title={t("grid.newUpdate")} className="marketplace-header-icon-button" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
               >
                 <DownloadIcon />
@@ -514,7 +518,7 @@ export default class Grid extends React.Component<
           <div className="marketplace-header__right">
             {/* Show theme developer tools button if themeDevTools is enabled */}
             {this.CONFIG.visual.themeDevTools
-              ? <button type="button" title="ThemeDevTools" className="marketplace-header-icon-button"
+              ? <button type="button" title={t("devTools.title")} className="marketplace-header-icon-button"
                 onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
               : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
@@ -529,14 +533,14 @@ export default class Grid extends React.Component<
               <input
                 className="searchbar-bar"
                 type="text"
-                placeholder={`Search ${this.CONFIG.activeTab}...`}
+                placeholder={`${t("grid.search")} ${t(`tabs.${this.CONFIG.activeTab}`)}...`}
                 value={this.state.searchValue}
                 onChange={(event) => {
                   this.setState({ searchValue: event.target.value });
                 }}
                 onKeyDown={this.handleSearch.bind(this)} />
             </div>
-            <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
+            <button type="button" title={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
@@ -573,11 +577,11 @@ export default class Grid extends React.Component<
               // Add a header for the card type
               <>
                 {/* Add a header for the card type */}
-                <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
+                <h2 className="marketplace-card-type-heading">{t(`tabs.${cardType.name}`)}</h2>
                 {/* Add the grid and cards */}
                 <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth"
                   data-tab={this.CONFIG.activeTab}
-                  data-card-type={cardType.name}
+                  data-card-type={t(`tabs.${cardType.name}`)} // This is used for the "no installed x" in css
                 >
                   {cardsOfType}
                 </div>
@@ -588,7 +592,7 @@ export default class Grid extends React.Component<
         })}
         {/* Add snippets button if on snippets tab */}
         {this.CONFIG.activeTab === "Snippets"
-          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+Add CSS</Button>
+          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+{t("grid.addCSS")}</Button>
           : null}
         <footer className="marketplace-footer">
           {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
@@ -601,3 +605,5 @@ export default class Grid extends React.Component<
     );
   }
 }
+
+export default withTranslation()(Grid);
