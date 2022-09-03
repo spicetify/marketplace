@@ -51,6 +51,7 @@
       "invalidCSS": "CSS invalide"
     },
     "grid": {
+      "newUpdate": "Nouvelle mise à jour",
       "addCSS": "Ajouter CSS",
       "search": "Rechercher",
       "installed": "Installé",

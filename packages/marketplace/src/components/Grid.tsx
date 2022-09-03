@@ -507,7 +507,7 @@ class Grid extends React.Component<
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
             {this.state.newUpdate
-              ? <button type="button" title="New update" className="marketplace-header-icon-button" id="marketplace-update"
+              ? <button type="button" title={t("grid.newUpdate")} className="marketplace-header-icon-button" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
               >
                 <DownloadIcon />
@@ -518,7 +518,7 @@ class Grid extends React.Component<
           <div className="marketplace-header__right">
             {/* Show theme developer tools button if themeDevTools is enabled */}
             {this.CONFIG.visual.themeDevTools
-              ? <button type="button" title="ThemeDevTools" className="marketplace-header-icon-button"
+              ? <button type="button" title={t("devTools.title")} className="marketplace-header-icon-button"
                 onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
               : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
@@ -533,14 +533,14 @@ class Grid extends React.Component<
               <input
                 className="searchbar-bar"
                 type="text"
-                placeholder={`${t("grid.search")} ${this.CONFIG.activeTab}...`}
+                placeholder={`${t("grid.search")} ${t(`tabs.${this.CONFIG.activeTab}`)}...`}
                 value={this.state.searchValue}
                 onChange={(event) => {
                   this.setState({ searchValue: event.target.value });
                 }}
                 onKeyDown={this.handleSearch.bind(this)} />
             </div>
-            <button type="button" title="Settings" className="marketplace-header-icon-button" id="marketplace-settings-button"
+            <button type="button" title={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
               onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
             >
               <SettingsIcon />
@@ -577,11 +577,11 @@ class Grid extends React.Component<
               // Add a header for the card type
               <>
                 {/* Add a header for the card type */}
-                <h2 className="marketplace-card-type-heading">{cardType.name}</h2>
+                <h2 className="marketplace-card-type-heading">{t(`tabs.${cardType.name}`)}</h2>
                 {/* Add the grid and cards */}
                 <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth"
                   data-tab={this.CONFIG.activeTab}
-                  data-card-type={cardType.name}
+                  data-card-type={t(`tabs.${cardType.name}`)} // This is used for the "no installed x" in css
                 >
                   {cardsOfType}
                 </div>
