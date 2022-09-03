@@ -47,20 +47,22 @@
       "noThemeInstalled": "Erreur: Aucun thème du marché n’est installé",
       "noThemeManifest": "Erreur: Aucun manifeste de thème trouvé",
       "colorIniEditor": "Éditeur Color.ini",
-      "colorIniEditorPlaceholder": "[your-color-scheme-name]",
+      "colorIniEditorPlaceholder": "[nom-de-votre-schéma-de-couleur]",
       "invalidCSS": "CSS invalide"
     },
     "grid": {
       "addCSS": "Ajouter CSS",
-      "search": "Rechercher"
+      "search": "Rechercher",
+      "installed": "Installé",
+      "lastUpdated": "Dernière mise à jour {{val, datetime}}"
     },
     "readmePage": {
       "loading": "Chargement...",
-      "errorLoading": "Erreur lors du chargement du README",
-      "github": "GitHub",
-      "remove": "Supprimer",
-      "install": "Installer"
+      "errorLoading": "Erreur lors du chargement du README"
     },
+    "github": "GitHub",
+    "install": "Installer",
+    "remove": "Supprimer",
     "save": "Enregistrer",
     "colour_one": "couleure",
     "colour_other": "couleures",

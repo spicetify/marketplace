@@ -52,15 +52,17 @@
     },
     "grid": {
       "addCSS": "Add CSS",
-      "search": "Search"
+      "search": "Search",
+      "installed": "Installed",
+      "lastUpdated": "Last updated {{val, datetime}}"
     },
     "readmePage": {
       "loading": "Loading...",
-      "errorLoading": "Error loading README",
-      "github": "GitHub",
-      "remove": "Remove",
-      "install": "Install"
+      "errorLoading": "Error loading README"
     },
+    "github": "GitHub",
+    "install": "Install",
+    "remove": "Remove",
     "save": "Save",
     "colour_one": "colour",
     "colour_other": "colours",

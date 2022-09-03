@@ -94,17 +94,17 @@ class ReadmePage extends React.Component<
     if (this.props.data.type === "app") {
       return {
         icon: <GitHubIcon />,
-        text: this.props.t("readmePage.github"),
+        text: this.props.t("github"),
       };
     } else if (this.state.isInstalled) {
       return {
         icon: <TrashIcon />,
-        text: this.props.t("readmePage.remove"),
+        text: this.props.t("remove"),
       };
     } else {
       return {
         icon: <DownloadIcon />,
-        text: this.props.t("readmePage.install"),
+        text: this.props.t("install"),
       };
     }
   }
