@@ -22,6 +22,15 @@ Head to the [wiki](https://github.com/spicetify/spicetify-marketplace/wiki) to g
 
 ---
 
+## Translations
+
+You can participate in this project by translating this Spotify custom-apps to your language!
+
+Add your one in the proper localization:
+<br>spicetify-marketplace/packages/marketplace/src/resources/locales/localization.json
+<br>=> [here](https://github.com/spicetify/spicetify-marketplace/compare).
+
+
 ## Links
 - [Overview](https://github.com/spicetify/spicetify-marketplace/wiki)
 - [Installation](https://github.com/spicetify/spicetify-marketplace/wiki/Installation)
