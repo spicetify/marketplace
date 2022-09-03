@@ -68,7 +68,7 @@ class Card extends React.Component<CardProps, {
 
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
     this.tags = props.item.tags || [];
-    if (props.item.include) this.tags.push("external JS");
+    if (props.item.include) this.tags.push(t("grid.externalJS"));
 
     this.state = {
       // Initial value. Used to trigger a re-render.

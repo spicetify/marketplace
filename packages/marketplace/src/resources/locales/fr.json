@@ -54,7 +54,10 @@
       "addCSS": "Ajouter CSS",
       "search": "Rechercher",
       "installed": "Installé",
-      "lastUpdated": "Dernière mise à jour {{val, datetime}}"
+      "lastUpdated": "Dernière mise à jour {{val, datetime}}",
+      "externalJS": "JS externe",
+      "dark": "(dark)",
+      "light": "(light)"
     },
     "readmePage": {
       "loading": "Chargement...",

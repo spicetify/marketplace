@@ -54,7 +54,10 @@
       "addCSS": "Add CSS",
       "search": "Search",
       "installed": "Installed",
-      "lastUpdated": "Last updated {{val, datetime}}"
+      "lastUpdated": "Last updated {{val, datetime}}",
+      "externalJS": "external JS",
+      "dark": "dark",
+      "light": "light"
     },
     "readmePage": {
       "loading": "Loading...",
