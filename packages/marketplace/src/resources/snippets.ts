@@ -98,7 +98,7 @@ export default [
   {
     "title": "Better lyrics style",
     "description": "Spotify lyrics are focused and beautified",
-    "code": ".Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4.H2J92dVdr0ykdOX5azL1 { filter: blur(1.5px); padding: 15px; font-size: 110%; } .Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4.TDPh45khCfG51fNwNIiw { filter: none; padding: 20px; font-size: 130%; } .Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4 { filter: blur(1.5px); padding: 15px; font-size: 110%; } .Q2RPoHcoxygOoPLXLMww .NHVfxGs2HwmI_fly2JC4.E64X_eoy6xsJmDdKKHja { filter: none; padding: 10px; font-size: 100%; }",
+    "code": ".lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight { filter: blur(1.5px); padding: 15px; font-size: 110%; } .lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric.lyrics-lyricsContent-active { filter: none; padding: 20px; font-size: 130%; } .lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric { filter: blur(1.5px); padding: 15px; font-size: 110%; } .lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric.lyrics-lyricsContent-unsynced { filter: none; padding: 10px; font-size: 100%; }",
     "preview": "resources/assets/snippets/better-lyrics-style.png",
   },
 ];
