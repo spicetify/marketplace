@@ -3,8 +3,8 @@
     "settings": {
       "colourShiftLabel": "Shift colors every minute"
     },
-    "colour_one": "colour",
-    "colour_other": "colours",
-    "favourite": "favourite"
+    "colour_one": "color",
+    "colour_other": "colors",
+    "favourite": "favorite"
   }
 }
