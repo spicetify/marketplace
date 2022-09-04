@@ -25,7 +25,7 @@ Head to the [wiki](https://github.com/spicetify/spicetify-marketplace/wiki) to g
 ## Links
 - [Overview](https://github.com/spicetify/spicetify-marketplace/wiki)
 - [Installation](https://github.com/spicetify/spicetify-marketplace/wiki/Installation)
-- [Publising to Marketplace](https://github.com/spicetify/spicetify-marketplace/wiki/Publishing-to-Marketplace)
+- [Publishing to Marketplace](https://github.com/spicetify/spicetify-marketplace/wiki/Publishing-to-Marketplace)
 - [Contributions](https://github.com/spicetify/spicetify-marketplace/wiki/Contributions)
 - [Development](https://github.com/spicetify/spicetify-marketplace/wiki/Development)
 - [Translating/Localizing Marketplace](https://github.com/spicetify/spicetify-marketplace/wiki/Localizing-Marketplace)
