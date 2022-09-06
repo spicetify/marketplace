@@ -2,6 +2,33 @@
 import React from "react";
 import { Config, TabItemConfig } from "./types/marketplace-types";
 
+import i18n from "i18next";
+import en from "./resources/locales/en.json";
+import enUS from "./resources/locales/en-US.json";
+import fr from "./resources/locales/fr.json";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+
+i18n
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(LanguageDetector)
+  .init({
+    // the translations
+    resources: {
+      en,
+      "en-US": enUS,
+      fr,
+    },
+    detection: {
+      order: [ "navigator", "htmlTag" ],
+    },
+    // lng: "en", // if you're using a language detector, do not define the lng option
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    },
+  });
+
 // TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
 import "./styles/components/_grid.scss";

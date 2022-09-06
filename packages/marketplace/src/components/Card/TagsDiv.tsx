@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React, { DetailedReactHTMLElement } from "react";
 
 import { MAX_TAGS } from "../../constants";
@@ -8,6 +9,13 @@ const TagsDiv = (props: {
 }) => {
   const [expanded, setExpanded] = React.useState(false);
 
+  // Map of english names for tags so that the css can identify them for colouring
+  const englishTagMap = {
+    [t("grid.externalJS")]: "external JS",
+    [t("grid.dark")]: "dark",
+    [t("grid.light")]: "light",
+  };
+
   const generateTags = (tags: string[]) => {
     // Stop duplicate tags from appearing
     const uniqueTags = tags.filter((item, pos, arr) => arr.indexOf(item) === pos);
@@ -17,13 +25,14 @@ const TagsDiv = (props: {
       draggable: false;
       "data-tag": string;
     }, HTMLElement>[]>((accum, tag) => {
+      const englishTag = englishTagMap[tag] || tag;
       // Render tags if enabled. Always render external JS tag
-      if (props.showTags || tag === "external JS") {
+      if (props.showTags || tag === t("grid.externalJS")) {
         accum.push(
           React.createElement("li", {
             className: "marketplace-card__tag",
             draggable: false,
-            "data-tag": tag,
+            "data-tag": englishTag,
           }, tag),
         );
       }

@@ -1,0 +1,75 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Settings",
+      "optionsHeading": "Options",
+      "starCountLabel": "Stars count",
+      "tagsLabel": "Tags",
+      "devToolsLabel": "Theme developer tools",
+      "hideInstalledLabel": "Hide installed when browsing",
+      "colourShiftLabel": "Shift colours every minute",
+      "tabsHeading": "Tabs",
+      "resetHeading": "Reset",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Uninstall all extensions and themes, and reset preferences"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Themes",
+      "Snippets": "Snippets",
+      "Apps": "Apps",
+      "Installed": "Installed"
+    },
+    "snippets": {
+      "addTitle": "Add Snippet",
+      "editTitle": "Edit Snippet",
+      "viewTitle": "View Snippet",
+      "customCSS": "Custom CSS",
+      "customCSSPlaceholder": "Input your own custom CSS here! You can find them in the installed tab for management.",
+      "snippetName": "Snippet Name",
+      "snippetNamePlaceholder": "Enter a name for your custom snippet",
+      "snippetDesc": "Snippet Description",
+      "snippetDescPlaceholder": "Enter a description for your custom snippet",
+      "snippetPreview": "Snippet Preview",
+      "optional": "Optional",
+      "addImage": "Add image",
+      "changeImage": "Change image",
+      "saveCSS": "Save CSS"
+    },
+    "reloadModal": {
+      "title": "Reload",
+      "description": "A page reload is required to complete this operation.",
+      "reloadNow": "Reload now",
+      "reloadLater": "Reload later"
+    },
+    "devTools": {
+      "title": "Theme Dev Tools",
+      "noThemeInstalled": "Error: No marketplace theme installed",
+      "noThemeManifest": "Error: No theme manifest found",
+      "colorIniEditor": "Color.ini Editor",
+      "colorIniEditorPlaceholder": "[your-colour-scheme-name]",
+      "invalidCSS": "Invalid CSS"
+    },
+    "grid": {
+      "newUpdate": "New update",
+      "addCSS": "Add CSS",
+      "search": "Search",
+      "installed": "Installed",
+      "lastUpdated": "Last updated {{val, datetime}}",
+      "externalJS": "external JS",
+      "dark": "dark",
+      "light": "light"
+    },
+    "readmePage": {
+      "loading": "Loading...",
+      "errorLoading": "Error loading README"
+    },
+    "github": "GitHub",
+    "install": "Install",
+    "remove": "Remove",
+    "save": "Save",
+    "colour_one": "colour",
+    "colour_other": "colours",
+    "favourite": "favourite"
+  }
+}

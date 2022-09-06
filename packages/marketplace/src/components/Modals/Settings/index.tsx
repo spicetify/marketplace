@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "i18next";
 import { Config } from "../../../types/marketplace-types";
 
 import { resetMarketplace } from "../../../logic/Utils";
@@ -40,23 +41,23 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 
   return (
     <div id="marketplace-config-container">
-      <h2>Options</h2>
-      <ConfigRow name='Stars count' storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name='Tags' storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name='Theme developer tools' storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name='Hide installed when browsing' storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name='Shift colors every minute' storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
-      <h2>Tabs</h2>
+      <h2>{t("settings.optionsHeading")}</h2>
+      <ConfigRow name={t("settings.starCountLabel")} storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow name={t("settings.tagsLabel")} storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow name={t("settings.devToolsLabel")} storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow name={t("settings.hideInstalledLabel")} storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow name={t("settings.colourShiftLabel")} storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <h2>{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {
           return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
         })}
       </div>
-      <h2>Reset</h2>
+      <h2>{t("settings.resetHeading")}</h2>
       <div className="setting-row">
-        <label className="col description">Uninstall all extensions and themes, and reset preferences</label>
+        <label className="col description">{t("settings.resetDescription")}</label>
         <div className="col action">
-          <Button onClick={resetMarketplace}>Reset</Button>
+          <Button onClick={resetMarketplace}>{t("settings.resetBtn")}</Button>
         </div>
       </div>
     </div>
