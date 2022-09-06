@@ -94,7 +94,7 @@ export default [
     "description": "The navigate forward button hides itself when the window width is smaller. This snipppet makes it so that it is always shown.",
     "code": ".main-topBar-historyButtons .main-topBar-forward {\n    display: inline-flex !important;\n}",
     "preview": "resources/assets/snippets/always-show-forward.png",
-  }
+  },
   {
     "title": "Right Side Cover Art",
     "description": "Cover art on right side with animation",
