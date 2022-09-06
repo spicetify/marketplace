@@ -103,7 +103,7 @@ export default [
   },
   {
     "title": "Hide playing gif",
-    "description": "Hides the gif playing as it can have be CPU heavy [redd.it/x6pvw0}",
+    "description": "Hides the gif that shows the music playing",
     "code":".main-trackList-playingIcon{display: none}",
     "preview":"resources/assets/snippets/hide-playing-gif.png"
   },
