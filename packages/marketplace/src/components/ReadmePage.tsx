@@ -70,9 +70,12 @@ class ReadmePage extends React.Component<
     // Make the page scrollable
     const main = document.querySelector("#marketplace-readme")?.closest("main");
     if (main) {
-      setTimeout(() => {
+      const callScrollbar = setInterval(() => {
         // TODO: see if it's possible to use some load event or mutation observer to do this
+        main.style.overflowY = "visible";
         main.style.overflowY = "auto";
+        if (!document.querySelector(".os-scrollbar-vertical.os-scrollbar-unusable") || !main)
+          clearInterval(callScrollbar);
       }, 1000);
     }
 
