@@ -107,4 +107,10 @@ export default [
     "code": ".lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight { filter: blur(1.5px); padding: 15px; font-size: 110%; } .lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric.lyrics-lyricsContent-active { filter: none; padding: 20px; font-size: 130%; } .lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric { filter: blur(1.5px); padding: 15px; font-size: 110%; } .lyrics-lyrics-contentContainer .lyrics-lyricsContent-lyric.lyrics-lyricsContent-unsynced { filter: none; padding: 10px; font-size: 100%; }",
     "preview": "resources/assets/snippets/better-lyrics-style.png",
   },
+  {
+    "title": "Hide playing gif",
+    "description": "Hides the gif that shows the music playing",
+    "code":".main-trackList-playingIcon{display: none}",
+    "preview":"resources/assets/snippets/hide-playing-gif.png"
+  },
 ];
