@@ -2,11 +2,12 @@
 import React from "react";
 import { Config, TabItemConfig } from "./types/marketplace-types";
 
-import i18n from "i18next";
+import i18n, { t } from "i18next";
 import en from "./resources/locales/en.json";
 import enUS from "./resources/locales/en-US.json";
 import fr from "./resources/locales/fr.json";
 import { initReactI18next } from "react-i18next";
+import { withTranslation } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 i18n
@@ -48,7 +49,12 @@ import ReadmePage from "./components/ReadmePage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";
 import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
-class App extends React.Component<null, {count: number, CONFIG: Config}> {
+class App extends React.Component<{
+  t: (key: string) => string,
+}, {
+  count: number,
+  CONFIG: Config,
+}> {
   state = {
     count: 0,
     CONFIG: {} as Config,
@@ -135,12 +141,12 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
     if (location.pathname === `${CUSTOM_APP_PATH}/readme` && location.state.data) {
-      return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
+      return <ReadmePage title={t("readmePage.title")} data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {
-      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
+      return <Grid title={t("grid.spicetifyMarketplace")} CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
     }
   }
 }
 
-export default App;
+export default withTranslation()(App);

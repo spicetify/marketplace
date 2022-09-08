@@ -51,6 +51,7 @@
       "invalidCSS": "Invalid CSS"
     },
     "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
       "newUpdate": "New update",
       "addCSS": "Add CSS",
       "search": "Search",
@@ -61,6 +62,7 @@
       "light": "light"
     },
     "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
       "loading": "Loading...",
       "errorLoading": "Error loading README"
     },

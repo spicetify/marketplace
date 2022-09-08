@@ -592,7 +592,7 @@ class Grid extends React.Component<
         })}
         {/* Add snippets button if on snippets tab */}
         {this.CONFIG.activeTab === "Snippets"
-          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+{t("grid.addCSS")}</Button>
+          ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+ {t("grid.addCSS")}</Button>
           : null}
         <footer className="marketplace-footer">
           {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
