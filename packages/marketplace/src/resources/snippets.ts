@@ -137,4 +137,10 @@ export default [
     "code": `#_R_G *:not([fill="none"]) { fill: var(--spice-button) !important; } #_R_G *:not([stroke="none"]) { stroke: var(--spice-button); } .main-addButton-button[aria-checked="false"] { color: rgba(var(--spice-rgb-selected-row), 0.7); } .control-button-heart[aria-checked="true"], .main-addButton-button, .main-addButton-active:focus, .main-addButton-active:hover { color: var(--spice-button); }`,
     "preview": "resources/assets/snippets/fix-liked-button.png",
   },
+  {
+    "title": "Hide Sidebar ScrollBar",
+    "description": "Hides Sidebar ScrollBar near playlist section",
+    "code": ".os-scrollbar:nth-child(6) .os-scrollbar-handle { visibility: hidden; }",
+    "preview": "resources/assets/snippets/hide-sidebar-scrollbar.png",
+  },
 ];
