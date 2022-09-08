@@ -131,4 +131,10 @@ export default [
     "code": ".main-entityHeader-backgroundColor { display: none !important; } .main-actionBarBackground-background { display: none !important; } .main-home-homeHeader { display: none !important; }",
     "preview": "resources/assets/snippets/remove-gradient.png",
   },
+  {
+    "title": "Fix Liked Button",
+    "description": "Fixes Liked Button colors",
+    "code": `#_R_G *:not([fill="none"]) { fill: var(--spice-button) !important; } #_R_G *:not([stroke="none"]) { stroke: var(--spice-button); } .main-addButton-button[aria-checked="false"] { color: rgba(var(--spice-rgb-selected-row), 0.7); } .control-button-heart[aria-checked="true"], .main-addButton-button, .main-addButton-active:focus, .main-addButton-active:hover { color: var(--spice-button); }`,
+    "preview": "resources/assets/snippets/fix-liked-button.png",
+  },
 ];
