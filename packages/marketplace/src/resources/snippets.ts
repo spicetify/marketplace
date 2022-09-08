@@ -143,4 +143,10 @@ export default [
     "code": ".os-scrollbar:nth-child(6) .os-scrollbar-handle { visibility: hidden; }",
     "preview": "resources/assets/snippets/hide-sidebar-scrollbar.png",
   },
+  {
+    "title": "Modern ScrollBar",
+    "description": "Thin rounded modern scrollbar",
+    "code": ".os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle { border-radius: 4px; width: 6px; background-color: var(--spice-button-disabled); } .os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track { width: 6px; }",
+    "preview": "resources/assets/snippets/modern-scrollbar.png",
+  },
 ];
