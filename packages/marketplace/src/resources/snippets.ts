@@ -110,7 +110,7 @@ export default [
   {
     "title": "Hide playing gif",
     "description": "Hides the gif that shows the music playing",
-    "code":".main-trackList-playingIcon{display: none}",
-    "preview":"resources/assets/snippets/hide-playing-gif.png"
+    "code": ".main-trackList-playingIcon{display: none}",
+    "preview": "resources/assets/snippets/hide-playing-gif.png",
   },
 ];
