@@ -1,0 +1,77 @@
+{
+  "translation": {
+    "settings": {
+      "title": "設定",
+      "optionsHeading": "選項",
+      "starCountLabel": "收藏數",
+      "tagsLabel": "標籤",
+      "devToolsLabel": "主題開發者工具",
+      "hideInstalledLabel": "瀏覽時隱藏已安裝項目",
+      "colourShiftLabel": "每分鐘進行色調偏移",
+      "tabsHeading": "分頁",
+      "resetHeading": "重設",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "解除安裝所有擴充套件和主題， 並重設偏好設定"
+    },
+    "tabs": {
+      "Extensions": "擴充套件",
+      "Themes": "主題",
+      "Snippets": "微調片段",
+      "Apps": "功能模組",
+      "Installed": "已安裝項目"
+    },
+    "snippets": {
+      "addTitle": "加入微調片段",
+      "editTitle": "編輯微調片段",
+      "viewTitle": "檢視微調片段",
+      "customCSS": "自訂 CSS",
+      "customCSSPlaceholder": "這裡可以輸入您的自訂 CSS！您可以在「已安裝項目」分頁中看到這些片段，進而進行管理。",
+      "snippetName": "微調片段名稱",
+      "snippetNamePlaceholder": "輸入自訂微調片段的名稱",
+      "snippetDesc": "微調片段描述",
+      "snippetDescPlaceholder": "輸入自訂微調片段的描述",
+      "snippetPreview": "微調片段預覽圖",
+      "optional": "非必須",
+      "addImage": "加入影像",
+      "changeImage": "更改影像",
+      "saveCSS": "儲存 CSS"
+    },
+    "reloadModal": {
+      "title": "重新載入",
+      "description": "需要重新載入頁面，才能完成這個操作。",
+      "reloadNow": "立即重新載入",
+      "reloadLater": "稍後重新載入"
+    },
+    "devTools": {
+      "title": "主題開發者工具",
+      "noThemeInstalled": "錯誤：未安裝商場主題",
+      "noThemeManifest": "錯誤：找不到主題資訊清單",
+      "colorIniEditor": "Color.ini 編輯器",
+      "colorIniEditorPlaceholder": "[您的色彩配置名稱]",
+      "invalidCSS": "CSS 無效"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify 商場",
+      "newUpdate": "有更新",
+      "addCSS": "加入 CSS",
+      "search": "搜尋",
+      "installed": "已經安裝",
+      "lastUpdated": "上次更新於 {{val, datetime}}",
+      "externalJS": "有外部 JS",
+      "dark": "暗色",
+      "light": "亮色"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) – 說明",
+      "loading": "正在載入……",
+      "errorLoading": "載入 README 時發生錯誤"
+    },
+    "github": "GitHub",
+    "install": "安裝",
+    "remove": "移除",
+    "save": "儲存",
+    "colour_one": "色彩",
+    "colour_other": "色彩",
+    "favourite": "收藏"
+  }
+}

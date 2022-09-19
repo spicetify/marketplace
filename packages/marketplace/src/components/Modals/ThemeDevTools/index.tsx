@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "i18next";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-ini";
@@ -15,7 +16,7 @@ const themeManifest = themeKey
 const ThemeDevToolsModal = () => {
   const [code, setCode] = React.useState(themeManifest
     ? unparseIni(themeManifest.schemes)
-    : "Error: No marketplace theme installed",
+    : t("devTools.noThemeInstalled"),
   );
 
   return (
@@ -23,7 +24,7 @@ const ThemeDevToolsModal = () => {
 
       <div className="devtools-column">
         <label htmlFor="color-ini-editor">
-          <h2 className="devtools-heading">Color.ini Editor</h2>
+          <h2 className="devtools-heading">{t("devTools.colorIniEditor")}</h2>
         </label>
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
@@ -33,7 +34,7 @@ const ThemeDevToolsModal = () => {
             textareaId="color-ini-editor"
             textareaClassName="color-ini-editor"
             readOnly={!themeManifest}
-            placeholder="[your-color-scheme-name]"
+            placeholder={t("devTools.colorIniEditorPlaceholder")}
             style={{
               fontFamily: "monospace",
               resize: "none",
@@ -41,13 +42,13 @@ const ThemeDevToolsModal = () => {
           />
         </div>
         <Button onClick={() => saveColorIni(code)}>
-          Save
+          {t("save")}
         </Button>
       </div>
 
       {/* Create a box containing the invalid css classnames fetched from "getInvalidCSS()"*/}
       <div className="devtools-column">
-        <h2 className="devtools-heading">Invalid CSS</h2>
+        <h2 className="devtools-heading">{t("devTools.invalidCSS")}</h2>
 
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           {getInvalidCSS().map((cssClass, index) => {
@@ -66,7 +67,7 @@ const saveColorIni = (code: string) => {
     themeManifest.schemes = colorIniParsed;
     localStorage.setItem(themeKey, JSON.stringify(themeManifest));
   } else {
-    Spicetify.showNotification("Error: No theme manifest found");
+    Spicetify.showNotification(t("devTools.noThemeManifest"));
   }
 };
 

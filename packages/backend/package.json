@@ -19,7 +19,7 @@
 		"debug": "^4.3.4",
 		"dotenv": "^16.0.1",
 		"tscpaths": "^0.0.9",
-		"typescript": "^4.7.4"
+		"typescript": "^4.8.2"
 	},
 	"private": true
 }

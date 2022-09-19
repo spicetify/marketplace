@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { withTranslation } from "react-i18next";
 import Dropdown, { Option } from "react-dropdown";
 import { TabItemConfig } from "../types/marketplace-types";
 
@@ -11,12 +12,15 @@ type TabOptionConfig = Option & {
 class TabBarItem extends React.Component<{
   item: TabOptionConfig;
   switchTo: (option: Option) => void;
+  // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
+  t: (key: string) => string,
 }> {
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { t } = this.props;
     if (!this.props.item.enabled) return null;
 
     return (
@@ -36,12 +40,14 @@ class TabBarItem extends React.Component<{
           draggable="false"
           href=""
         >
-          <span className="main-type-mestoBold">{this.props.item.value}</span>
+          <span className="main-type-mestoBold">{t(`tabs.${this.props.item.value}`)}</span>
         </a>
       </li>
     );
   }
 }
+
+const TabBarItemWithTranslation = withTranslation()(TabBarItem);
 
 interface TabBarMoreProps {
   items: TabOptionConfig[];
@@ -177,7 +183,7 @@ const TabBar = React.memo<TabBarProps>(
           {options
             .filter((_, id) => !droplistItem.includes(id))
             .map(item => (
-              <TabBarItem
+              <TabBarItemWithTranslation
                 key={item.value}
                 item={item}
                 switchTo={switchCallback}
