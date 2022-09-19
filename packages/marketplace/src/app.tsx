@@ -7,6 +7,7 @@ import en from "./resources/locales/en.json";
 import enUS from "./resources/locales/en-US.json";
 import fr from "./resources/locales/fr.json";
 import zhTW from "./resources/locales/zh-TW.json";
+import zhCN from "./resources/locales/zh-CN.json";
 import { initReactI18next } from "react-i18next";
 import { withTranslation } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -21,6 +22,7 @@ i18n
       "en-US": enUS,
       fr,
       "zh-TW": zhTW,
+      "zh-CN": zhCN,
     },
     detection: {
       order: [ "navigator", "htmlTag" ],
