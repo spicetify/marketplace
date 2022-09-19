@@ -9,7 +9,7 @@ if ($null -eq $checkSpice) {
   Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.ps1" | Invoke-Expression
 }
 
-$spicePath = spicetify -c | Split-Path
+$spicePath = "$env:APPDATA\spicetify"
 $sp_dot_dir = "$spicePath\CustomApps"
 if (-not (Test-Path $sp_dot_dir)) {
   Write-Host "Making a CustomApps folder..." -ForegroundColor "Cyan"
