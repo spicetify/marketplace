@@ -161,9 +161,7 @@ export const processAuthors = (authors: Author[], user: string) => {
   if (authors && authors.length > 0) {
     parsedAuthors = authors.map((author) => ({
       name: author.name,
-      url: author.url.startsWith("javascript:")
-        ? ""
-        : author.url,
+      url: sanitizeUrl(author.url),
     }));
   } else {
     parsedAuthors.push({
@@ -433,3 +431,10 @@ export function generateKey(props: CardProps) {
 
   return `marketplace:installed:${prefix}${cardId}`;
 }
+
+export const sanitizeUrl = (url: string) => {
+  const u = decodeURI(url).trim().toLowerCase();
+  if (u.startsWith("javascript:") || u.startsWith("data:") || u.startsWith("vbscript:"))
+    return "about:blank";
+  return url;
+};
