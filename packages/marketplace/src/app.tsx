@@ -22,6 +22,7 @@ i18n
       "en-US": enUS,
       fr,
       "zh-TW": zhTW,
+      "zh-CN": zhCN,
     },
     detection: {
       order: [ "navigator", "htmlTag" ],
