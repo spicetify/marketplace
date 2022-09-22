@@ -113,4 +113,10 @@ export default [
     "code": ".main-trackList-playingIcon{display: none}",
     "preview": "resources/assets/snippets/hide-playing-gif.png",
   },
+  {
+    "title": "Remove liked and Episodes icon",
+    "description": "Removes the liked and episodes icon from the sidebar",
+    "code": `.main-collectionLinkButton-collectionLinkButton[href="/collection/tracks"], .main-collectionLinkButton-collectionLinkButton[href="collection/episodes"] {display: none;}`,
+    "preview": "resources/assets/snippets/remove-ep-likes.png",
+  },
 ];
