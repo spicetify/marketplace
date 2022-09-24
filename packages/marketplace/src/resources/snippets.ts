@@ -149,4 +149,10 @@ export default [
     "code": ".os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle { border-radius: 4px; width: 6px; background-color: var(--spice-button-disabled); } .os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track { width: 6px; }",
     "preview": "resources/assets/snippets/modern-scrollbar.png",
   },
+  {
+    "title": "Remove liked and Episodes icon",
+    "description": "Removes the liked and episodes icon from the sidebar",
+    "code": `.main-collectionLinkButton-collectionLinkButton[href="/collection/tracks"], .main-collectionLinkButton-collectionLinkButton[href="/collection/episodes"] {display: none;}`,
+    "preview": "resources/assets/snippets/remove-ep-likes.png",
+  },
 ];
