@@ -326,6 +326,13 @@ export const parseCSS = async (themeData: CardItem) => {
   return css;
 };
 
+export const isGithubRawUrl = (url: string) => {
+  const parsedUrl = new URL(url);
+  parsedUrl.host;
+
+  return (parsedUrl.host === "raw.githubusercontent.com");
+};
+
 /**
  * Get user, repo, and branch from a GitHub raw URL
  * @param url Github Raw URL
