@@ -111,7 +111,7 @@ import {
         let src = script;
 
         // If it's a github raw script, use jsdelivr
-        if (script.indexOf("raw.githubusercontent.com") > -1) {
+        if (isGithubRawUrl(script)) {
           const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
           src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
         }

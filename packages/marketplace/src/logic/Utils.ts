@@ -296,7 +296,7 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 export const parseCSS = async (themeData: CardItem) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
 
-  const userCssUrl = themeData.cssURL.indexOf("raw.githubusercontent.com") > -1
+  const userCssUrl = isGithubRawUrl(themeData.cssURL)
   // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
     ? `https://cdn.jsdelivr.net/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
     : themeData.cssURL;
