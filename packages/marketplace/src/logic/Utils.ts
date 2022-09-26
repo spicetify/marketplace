@@ -161,9 +161,7 @@ export const processAuthors = (authors: Author[], user: string) => {
   if (authors && authors.length > 0) {
     parsedAuthors = authors.map((author) => ({
       name: author.name,
-      url: author.url.startsWith("javascript:")
-        ? ""
-        : author.url,
+      url: sanitizeUrl(author.url),
     }));
   } else {
     parsedAuthors.push({
@@ -298,7 +296,7 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 export const parseCSS = async (themeData: CardItem) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
 
-  const userCssUrl = themeData.cssURL.indexOf("raw.githubusercontent.com") > -1
+  const userCssUrl = isGithubRawUrl(themeData.cssURL)
   // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
     ? `https://cdn.jsdelivr.net/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
     : themeData.cssURL;
@@ -326,6 +324,13 @@ export const parseCSS = async (themeData: CardItem) => {
   // console.log("New CSS: ", css);
 
   return css;
+};
+
+export const isGithubRawUrl = (url: string) => {
+  const parsedUrl = new URL(url);
+  parsedUrl.host;
+
+  return (parsedUrl.host === "raw.githubusercontent.com");
 };
 
 /**
@@ -367,7 +372,7 @@ export function getInvalidCSS(): string[] {
   const invalidCssClassName: string[] = [];
   for (const match of matches) {
     // Check if match is the same class name as an html element
-    const className = match[0].replace("{", "").trim();
+    const className = match[0].replace(/{/g, "").trim();
     const classesArr = className.split(" ");
     let element;
     for (let i = 0; i < classesArr.length; i++) {
@@ -433,3 +438,10 @@ export function generateKey(props: CardProps) {
 
   return `marketplace:installed:${prefix}${cardId}`;
 }
+
+export const sanitizeUrl = (url: string) => {
+  const u = decodeURI(url).trim().toLowerCase();
+  if (u.startsWith("javascript:") || u.startsWith("data:") || u.startsWith("vbscript:"))
+    return "about:blank";
+  return url;
+};

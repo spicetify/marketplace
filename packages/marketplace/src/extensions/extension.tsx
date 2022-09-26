@@ -7,6 +7,7 @@ import { RepoType } from "../types/marketplace-types";
 import {
   getLocalStorageDataFromKey,
   resetMarketplace,
+  isGithubRawUrl,
   getParamsFromGithubRaw,
   initializeSnippets,
   injectColourScheme,
@@ -55,7 +56,7 @@ import {
     script.src = extensionManifest.extensionURL;
 
     // If it's a github raw script, use jsdelivr
-    if (script.src.indexOf("raw.githubusercontent.com") > -1) {
+    if (isGithubRawUrl(script.src)) {
       const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
       if (!user || !repo || !branch || !filePath) return;
       script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
@@ -110,7 +111,7 @@ import {
         let src = script;
 
         // If it's a github raw script, use jsdelivr
-        if (script.indexOf("raw.githubusercontent.com") > -1) {
+        if (isGithubRawUrl(script)) {
           const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
           src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
         }
