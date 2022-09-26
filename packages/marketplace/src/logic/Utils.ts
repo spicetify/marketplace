@@ -372,7 +372,7 @@ export function getInvalidCSS(): string[] {
   const invalidCssClassName: string[] = [];
   for (const match of matches) {
     // Check if match is the same class name as an html element
-    const className = match[0].replace("{", "").trim();
+    const className = match[0].replace(/{/g, "").trim();
     const classesArr = className.split(" ");
     let element;
     for (let i = 0; i < classesArr.length; i++) {
