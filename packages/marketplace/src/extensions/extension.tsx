@@ -152,7 +152,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
 
   const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
   if (!allRepos.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.");
+    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
   }
 
   const filteredResults = {

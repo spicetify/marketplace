@@ -402,7 +402,7 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
       method: "POST",
       body: JSON.stringify(postBody),
     });
-    if (!response.ok) throw Spicetify.showNotification(`Error parsing markdown (HTTP ${response.status})`);
+    if (!response.ok) throw Spicetify.showNotification(`Error parsing markdown (HTTP ${response.status})`, true);
 
     const html = await response.text();
 

@@ -42,7 +42,7 @@ class ReadmePage extends React.Component<
   getReadmeHTML = async () => {
     return fetch(this.props.data.readmeURL)
       .then((res) => {
-        if (!res.ok) throw Spicetify.showNotification(`${this.props.t("readmePage.errorLoading")} (HTTP ${res.status})`);
+        if (!res.ok) throw Spicetify.showNotification(`${this.props.t("readmePage.errorLoading")} (HTTP ${res.status})`, true);
         return res.text();
       })
       .then((readmeText) => getMarkdownHTML(readmeText, this.props.data.user, this.props.data.repo))
