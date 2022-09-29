@@ -1,6 +1,6 @@
 {
 	"name": "@spicetify/marketplace",
-	"version": "0.8.0",
+	"version": "0.8.1",
 	"homepage": "https://github.com/spicetify/spicetify-marketplace",
 	"repository": {
 		"type": "git",
@@ -27,21 +27,21 @@
 		"@types/react": "^17.0.2",
 		"@types/react-dom": "^17.0.2",
 		"@types/semver": "^7.3.12",
-		"@typescript-eslint/eslint-plugin": "^5.36.2",
-		"@typescript-eslint/parser": "^5.36.2",
+		"@typescript-eslint/eslint-plugin": "^5.38.1",
+		"@typescript-eslint/parser": "^5.38.1",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.23.0",
-		"eslint-plugin-react": "^7.31.7",
-		"i18next": "^21.9.1",
+		"eslint": "^8.24.0",
+		"eslint-plugin-react": "^7.31.8",
+		"i18next": "^21.9.2",
 		"i18next-browser-languagedetector": "^6.1.5",
 		"prismjs": "^1.29.0",
-		"react-dropdown": "^1.10.0",
-		"react-i18next": "^11.18.5",
-		"react-simple-code-editor": "^0.13.0",
+		"react-dropdown": "^1.11.0",
+		"react-i18next": "^11.18.6",
+		"react-simple-code-editor": "^0.13.1",
 		"semver": "^7.3.7",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.11",
-		"typescript": "^4.8.2"
+		"typescript": "^4.8.4"
 	},
 	"private": true
 }
