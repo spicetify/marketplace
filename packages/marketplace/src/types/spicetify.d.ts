@@ -27,7 +27,7 @@ declare namespace Spicetify {
         next_page_url?: string;
         restrictions?: Record<string, string[]>;
         referrer?: string;
-    }
+    };
     type PlayerState = {
         timestamp: number;
         context_uri: string;
@@ -185,7 +185,7 @@ declare namespace Spicetify {
          * @param context
          * @param options
          */
-        async function playUri(uri: string, context: any = {}, options: Options = {});
+        async function playUri(uri: string, context: any, options: any): Promise<void>;
         /**
          * Unregister added event listener `type`.
          * @param type
@@ -284,13 +284,13 @@ declare namespace Spicetify {
         }
 
         function head(url: string, headers?: Headers): Promise<Headers>;
-        function get(url: string, body?: Body, headers?: Headers): Promise<Response.body>;
-        function post(url: string, body?: Body, headers?: Headers): Promise<Response.body>;
-        function put(url: string, body?: Body, headers?: Headers): Promise<Response.body>;
-        function del(url: string, body?: Body, headers?: Headers): Promise<Response.body>;
-        function patch(url: string, body?: Body, headers?: Headers): Promise<Response.body>;
-        function sub(url: string, callback: ((b: Response.body) => void), onError?: ((e: Error) => void), body?: Body, headers?: Headers): Promise<Response.body>;
-        function postSub(url: string, body?: Body, callback: ((b: Response.body) => void), onError?: ((e: Error) => void)): Promise<Response.body>;
+        function get(url: string, body?: Body, headers?: Headers): Promise<Response["body"]>;
+        function post(url: string, body?: Body, headers?: Headers): Promise<Response["body"]>;
+        function put(url: string, body?: Body, headers?: Headers): Promise<Response["body"]>;
+        function del(url: string, body?: Body, headers?: Headers): Promise<Response["body"]>;
+        function patch(url: string, body?: Body, headers?: Headers): Promise<Response["body"]>;
+        function sub(url: string, callback: ((b: Response["body"]) => void), onError?: ((e: Error) => void), body?: Body, headers?: Headers): Promise<Response["body"]>;
+        function postSub(url: string, body: Body | null, callback: ((b: Response["body"]) => void), onError?: ((e: Error) => void)): Promise<Response["body"]>;
         function request(method: Method, url: string, body?: Body, headers?: Headers): Promise<Response>;
         function resolve(method: Method, url: string, body?: Body, headers?: Headers): Promise<Response>;
     }
@@ -329,12 +329,13 @@ declare namespace Spicetify {
             meta?: boolean;
         };
         const KEYS: Record<ValidKey, string>;
-        function registerShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void);
-        function registerIsolatedShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void);
-        function registerImportantShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void);
-        function _deregisterShortcut(keys: KeysDefine);
-        function deregisterImportantShortcut(keys: KeysDefine);
-    }
+        function registerShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void): void;
+        function registerIsolatedShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void): void;
+        function registerImportantShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void): void;
+        function _deregisterShortcut(keys: KeysDefine): void;
+        function deregisterImportantShortcut(keys: KeysDefine): void;
+        function changeShortcut(keys: KeysDefine, newKeys: KeysDefine): void;
+    };
 
     /**
      * @deprecated
@@ -367,7 +368,7 @@ declare namespace Spicetify {
          * Create a single toggle.
          */
         class Item {
-          constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void);
+            constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void);
             name: string;
             isEnabled: boolean;
             /**
@@ -394,7 +395,7 @@ declare namespace Spicetify {
          * `Item`s in `subItems` array shouldn't be registered.
          */
         class SubMenu {
-          constructor(name: string, subItems: Item[]);
+            constructor(name: string, subItems: Item[]);
             name: string;
             /**
              * Change SubMenu name
@@ -450,13 +451,15 @@ declare namespace Spicetify {
     function removeFromQueue(uri: string | string[]): Promise<void>;
     /**
      * Display a bubble of notification. Useful for a visual feedback.
+     * @param message Message to display
+     * @param isError If true, bubble will be red. Defaults to false.
      */
-    function showNotification(text: string): void;
+    function showNotification(text: string, isError?: boolean): void;
     /**
      * Set of APIs method to parse and validate URIs.
      */
     class URI {
-      constructor(type: string, props: any);
+        constructor(type: string, props: any);
         public type: string;
         public id: string;
 
@@ -1088,9 +1091,9 @@ declare namespace Spicetify {
          * @param id The token needed to join a social session.
          * @return The socialsession URI.
          */
-        static socialSessionURI(id: string): URI;
+         static socialSessionURI(id: string): URI;
 
-        /**
+         /**
          * Creates a new 'interruption' type URI.
          *
          * @param id The id of the interruption.
@@ -1169,7 +1172,7 @@ declare namespace Spicetify {
          * `Item`s in `subItems` array shouldn't be registered.
          */
         class SubMenu {
-          constructor(name: string, subItems: Iterable<Item>, shouldAdd?: ShouldAddCallback, disabled?: boolean);
+            constructor(name: string, subItems: Iterable<Item>, shouldAdd?: ShouldAddCallback, disabled?: boolean);
             name: string;
             disabled: boolean;
             /**
@@ -1227,16 +1230,16 @@ declare namespace Spicetify {
             /**
              * Determins what will trigger the context menu. For example, a click, or a right-click
              */
-            trigger?: "click" | "right-click";
+            trigger?: 'click' | 'right-click';
             /**
              * Determins is the context menu should open or toggle when triggered
              */
-            action?: "toggle" | "open";
+            action?: 'toggle' | 'open';
             /**
              * The preferred placement of the context menu when it opens.
              * Relative to trigger element.
              */
-            placement?: "top" | "top-start" | "top-end" | "right" | "right-start" | "right-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end";
+            placement?: 'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end';
             /**
              * The x and y offset distances at which the context menu should open.
              * Relative to trigger element and `position`.
@@ -1286,7 +1289,7 @@ declare namespace Spicetify {
             /**
              * Indicate that a divider line should be added `before` or `after` this `MenuItem`
              */
-            divider?: "before" | "after" | "both";
+            divider?: 'before' | 'after' | 'both';
             /**
              * React component icon that will be rendered at the end of the `MenuItem`
              */
@@ -1333,14 +1336,14 @@ declare namespace Spicetify {
         const PodcastShowMenu: any;
         const ArtistMenu: any;
         const PlaylistMenu: any;
-    }
+    };
 
     /**
      * Add button in top bar next to navigation buttons
      */
     namespace Topbar {
         class Button {
-          constructor(label: string, icon: string, onClick: (self: Button) => void, disabled = false);
+            constructor(label: string, icon: string, onClick: (self: Button) => void, disabled = false);
             label: string;
             icon: string;
             onClick: (self: Button) => void;
@@ -1354,5 +1357,23 @@ declare namespace Spicetify {
      */
     namespace SVGIcons {
         const check: string;
+    }
+
+    /**
+     * Return font styling used by Spotify.
+     * @param font Name of the font.
+     * Can match any of the fonts listed in `Spicetify._fontStyle` or returns a generic style otherwise.
+     */
+    function getFontStyle(font: string): string;
+
+    /**
+     * A filtered copy of user's `config-xpui` file.
+     */
+    namespace Config {
+        const version: string;
+        const current_theme: string;
+        const color_scheme: string;
+        const extensions: string[];
+        const custom_apps: string[];
     }
 }
