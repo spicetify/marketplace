@@ -67,7 +67,7 @@ const saveColorIni = (code: string) => {
     themeManifest.schemes = colorIniParsed;
     localStorage.setItem(themeKey, JSON.stringify(themeManifest));
   } else {
-    Spicetify.showNotification(t("devTools.noThemeManifest"));
+    Spicetify.showNotification(t("devTools.noThemeManifest"), true);
   }
 };
 
