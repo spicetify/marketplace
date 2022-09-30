@@ -280,6 +280,11 @@ class Card extends React.Component<CardProps, {
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
       this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
+
+      // Add to Spicetify.Config
+      const name = this.props.item.manifest?.name;
+      if (name) Spicetify.Config.current_theme = name;
+      if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
     }
 
     this.setState({ installed: true });
@@ -313,6 +318,10 @@ class Card extends React.Component<CardProps, {
       this.props.updateActiveTheme(null);
       // Removes the current colour scheme
       this.props.updateColourSchemes(null, null);
+
+      // Restore Spicetify.Config
+      Spicetify.Config.current_theme = Spicetify.Config.local_theme;
+      Spicetify.Config.color_scheme = Spicetify.Config.local_color_scheme;
 
       this.setState({ installed: false });
     }

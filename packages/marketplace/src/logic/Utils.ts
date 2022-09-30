@@ -445,3 +445,12 @@ export const sanitizeUrl = (url: string) => {
     return "about:blank";
   return url;
 };
+
+export const addExtensionToSpicetifyConfig = (main?: string) => {
+  if (!main) return;
+
+  const name = main.split("/").pop();
+  if (name && Spicetify.Config.extensions.indexOf(name) === -1) {
+    Spicetify.Config.extensions.push(name);
+  }
+};

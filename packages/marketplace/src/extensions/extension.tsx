@@ -17,6 +17,7 @@ import {
   injectUserCSS,
   addToSessionStorage,
   sleep,
+  addExtensionToSpicetifyConfig,
 } from "../logic/Utils";
 import {
   getBlacklist,
@@ -65,6 +66,9 @@ import {
     script.src = `${script.src}?time=${Date.now()}`;
 
     document.body.appendChild(script);
+
+    // Add to Spicetify.Config
+    addExtensionToSpicetifyConfig(extensionManifest.manifest?.main);
   };
 
   const initializeTheme = async (themeKey: string) => {
@@ -81,6 +85,9 @@ import {
     if (themeManifest.schemes) {
       const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
       injectColourScheme(activeScheme);
+
+      // Add to Spicetify.Config
+      Spicetify.Config.color_scheme = themeManifest.activeScheme;
 
       if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
         initColorShiftLoop(themeManifest.schemes);
@@ -102,6 +109,9 @@ import {
     const userCSS = await parseCSS(themeManifest);
     injectUserCSS(userCSS);
 
+    // Add to Spicetify.Config
+    Spicetify.Config.current_theme = themeManifest.manifest?.name;
+
     // Inject any included js
     if (themeManifest.include && themeManifest.include.length) {
       // console.log("Including js", installedThemeData.include);
@@ -119,12 +129,18 @@ import {
         newScript.src = `${src}?time=${Date.now()}`;
         newScript.classList.add("marketplaceScript");
         document.body.appendChild(newScript);
+
+        // Add to Spicetify.Config
+        addExtensionToSpicetifyConfig(script);
       });
     }
   };
 
   console.log("Loaded Marketplace extension");
 
+  // Save to Spicetify.Config for use when removing a theme
+  Spicetify.Config.local_theme = Spicetify.Config.current_theme;
+  Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedThemeKey) initializeTheme(installedThemeKey);
 
