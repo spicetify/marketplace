@@ -449,9 +449,8 @@ export const sanitizeUrl = (url: string) => {
 export const addExtensionToSpicetifyConfig = (main?: string) => {
   if (!main) return;
 
-  const name = main.split("/").pop() as string;
-
-  if (Spicetify.Config.extensions.indexOf(name) === -1) {
+  const name = main.split("/").pop();
+  if (name && Spicetify.Config.extensions.indexOf(name) === -1) {
     Spicetify.Config.extensions.push(name);
   }
 };
