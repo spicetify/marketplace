@@ -138,6 +138,9 @@ import {
 
   console.log("Loaded Marketplace extension");
 
+  // Save to Spicetify.Config for use when removing a theme
+  Spicetify.Config.local_theme = Spicetify.Config.current_theme;
+  Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedThemeKey) initializeTheme(installedThemeKey);
 

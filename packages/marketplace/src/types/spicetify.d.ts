@@ -1375,5 +1375,9 @@ declare namespace Spicetify {
         let color_scheme: string;
         let extensions: string[];
         const custom_apps: string[];
+
+        // These two are just added by Marketplace so we can save and restore them when removing a theme
+        let local_theme: string;
+        let local_color_scheme: string;
     }
 }

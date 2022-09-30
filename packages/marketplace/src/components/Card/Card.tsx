@@ -281,7 +281,7 @@ class Card extends React.Component<CardProps, {
       // Update schemes in Grid, triggers state change and re-render
       this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
 
-      // Add tp Spicetify.Config
+      // Add to Spicetify.Config
       const name = this.props.item.manifest?.name;
       if (name) Spicetify.Config.current_theme = name;
       if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
@@ -319,8 +319,9 @@ class Card extends React.Component<CardProps, {
       // Removes the current colour scheme
       this.props.updateColourSchemes(null, null);
 
-      // TODO: Is it possible to reset the Spiceify.Config to what it was before?
-      // It would only matter if they removed a theme and didn't install another on top, since installing one on top would set it again.
+      // Restore Spicetify.Config
+      Spicetify.Config.current_theme = Spicetify.Config.local_theme;
+      Spicetify.Config.color_scheme = Spicetify.Config.local_color_scheme;
 
       this.setState({ installed: false });
     }
