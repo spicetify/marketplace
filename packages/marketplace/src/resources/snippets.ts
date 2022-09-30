@@ -20,7 +20,7 @@ export default [
   {
     "title": "Hide Upgrade Button",
     "description": "Makes the upgrade button hidden",
-    "code": ".main-topBar-UpgradeButton {\n  display: none !important;\n}",
+    "code": ".Button-y0gtbx-0 {\n  display: none !important;\n}",
     "preview": "resources/assets/snippets/hide-upgrade-button.png",
   },
   {
