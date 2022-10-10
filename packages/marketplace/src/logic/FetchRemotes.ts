@@ -29,7 +29,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   //     url += `&t=${sortConfig.time}`
   const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
   if (!allRepos.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.");
+    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
     return;
   }
   const filteredResults = {

@@ -31,7 +31,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
 
     const localStorageKey = `marketplace:installed:snippet:${processedName}`;
     if (getLocalStorageDataFromKey(localStorageKey) && props.type !== "EDIT_SNIPPET") {
-      Spicetify.showNotification("That name is already taken!");
+      Spicetify.showNotification("That name is already taken!", true);
       return;
     }
 

@@ -158,7 +158,7 @@ class Card extends React.Component<CardProps, {
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
     if (!this.props.item) {
-      Spicetify.showNotification("There was an error installing extension");
+      Spicetify.showNotification("There was an error installing extension", true);
       return;
     }
     const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated } = this.props.item;
@@ -211,7 +211,7 @@ class Card extends React.Component<CardProps, {
   async installTheme() {
     const { item } = this.props;
     if (!item) {
-      Spicetify.showNotification("There was an error installing theme");
+      Spicetify.showNotification("There was an error installing theme", true);
       return;
     }
     console.log(`Installing theme ${this.localStorageKey}`);
@@ -280,6 +280,11 @@ class Card extends React.Component<CardProps, {
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
       this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
+
+      // Add to Spicetify.Config
+      const name = this.props.item.manifest?.name;
+      if (name) Spicetify.Config.current_theme = name;
+      if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
     }
 
     this.setState({ installed: true });
@@ -313,6 +318,10 @@ class Card extends React.Component<CardProps, {
       this.props.updateActiveTheme(null);
       // Removes the current colour scheme
       this.props.updateColourSchemes(null, null);
+
+      // Restore Spicetify.Config
+      Spicetify.Config.current_theme = Spicetify.Config.local_theme;
+      Spicetify.Config.color_scheme = Spicetify.Config.local_color_scheme;
 
       this.setState({ installed: false });
     }
@@ -385,7 +394,7 @@ class Card extends React.Component<CardProps, {
         },
       });
     } else {
-      Spicetify.showNotification("No page was found");
+      Spicetify.showNotification("No page was found", true);
     }
   }
 

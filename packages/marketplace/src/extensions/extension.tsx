@@ -8,6 +8,7 @@ import {
   getLocalStorageDataFromKey,
   resetMarketplace,
   exportMarketplace,
+  isGithubRawUrl,
   getParamsFromGithubRaw,
   initializeSnippets,
   injectColourScheme,
@@ -17,6 +18,7 @@ import {
   injectUserCSS,
   addToSessionStorage,
   sleep,
+  addExtensionToSpicetifyConfig,
 } from "../logic/Utils";
 import {
   getBlacklist,
@@ -58,7 +60,7 @@ import {
     script.src = extensionManifest.extensionURL;
 
     // If it's a github raw script, use jsdelivr
-    if (script.src.indexOf("raw.githubusercontent.com") > -1) {
+    if (isGithubRawUrl(script.src)) {
       const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
       if (!user || !repo || !branch || !filePath) return;
       script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
@@ -67,6 +69,9 @@ import {
     script.src = `${script.src}?time=${Date.now()}`;
 
     document.body.appendChild(script);
+
+    // Add to Spicetify.Config
+    addExtensionToSpicetifyConfig(extensionManifest.manifest?.main);
   };
 
   const initializeTheme = async (themeKey: string) => {
@@ -83,6 +88,9 @@ import {
     if (themeManifest.schemes) {
       const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
       injectColourScheme(activeScheme);
+
+      // Add to Spicetify.Config
+      Spicetify.Config.color_scheme = themeManifest.activeScheme;
 
       if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
         initColorShiftLoop(themeManifest.schemes);
@@ -104,6 +112,9 @@ import {
     const userCSS = await parseCSS(themeManifest);
     injectUserCSS(userCSS);
 
+    // Add to Spicetify.Config
+    Spicetify.Config.current_theme = themeManifest.manifest?.name;
+
     // Inject any included js
     if (themeManifest.include && themeManifest.include.length) {
       // console.log("Including js", installedThemeData.include);
@@ -113,7 +124,7 @@ import {
         let src = script;
 
         // If it's a github raw script, use jsdelivr
-        if (script.indexOf("raw.githubusercontent.com") > -1) {
+        if (isGithubRawUrl(script)) {
           const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
           src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
         }
@@ -121,12 +132,18 @@ import {
         newScript.src = `${src}?time=${Date.now()}`;
         newScript.classList.add("marketplaceScript");
         document.body.appendChild(newScript);
+
+        // Add to Spicetify.Config
+        addExtensionToSpicetifyConfig(script);
       });
     }
   };
 
   console.log("Loaded Marketplace extension");
 
+  // Save to Spicetify.Config for use when removing a theme
+  Spicetify.Config.local_theme = Spicetify.Config.current_theme;
+  Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedThemeKey) initializeTheme(installedThemeKey);
 
@@ -154,7 +171,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
 
   const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
   if (!allRepos.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.");
+    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
   }
 
   const filteredResults = {
