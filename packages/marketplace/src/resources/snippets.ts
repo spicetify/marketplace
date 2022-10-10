@@ -155,4 +155,10 @@ export default [
     "code": `.main-collectionLinkButton-collectionLinkButton[href="/collection/tracks"], .main-collectionLinkButton-collectionLinkButton[href="/collection/episodes"] {display: none;}`,
     "preview": "resources/assets/snippets/remove-ep-likes.png",
   },
+  {
+    "title": "Rotating Cover Art",
+    "description": "Adds circular mask to cover art and rotation",
+    "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 2s linear infinite; clip-path: circle(50% at 50% 50%);}`,
+    "preview": "resources/assets/snippets/rotating-coverart",
+  },
 ];
