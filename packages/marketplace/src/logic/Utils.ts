@@ -214,14 +214,21 @@ export const exportMarketplace = () => {
       data[key] = localStorage.getItem(key);
     }
   });
-
-  console.log(data);
-
-  // TODO: THis doesn't seem to work in Spotify...
   Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(data));
   return data;
 };
+export const importMarketplace = (data : string) => {
+  console.log("Importing Marketplace");
+  // First reset the marketplace
+  resetMarketplace();
+  // Then import the data
+  Object.keys(data).forEach((key) => {
+    localStorage.setItem(key, data[key]);
+    console.log(`Imported ${key}`);
+  });
+  location.reload();
 
+};
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
 

@@ -5,6 +5,7 @@ import "prismjs/components/prism-json";
 
 import {
   exportMarketplace,
+  importMarketplace,
 } from "../../../logic/Utils";
 import Button from "../../Button";
 
@@ -30,6 +31,23 @@ const ImportExportModal = () => {
     const textBlob = new Blob([text], { type: "text/plain" });
     setHref(URL.createObjectURL(textBlob));
   };
+  const importSettings = () => {
+    // get pastedData from marketplace-code-editor-textarea
+    console.log("Importing settings");
+    const pastedData = code;
+    // Check if pastedData exists, if not return an error message and exit
+    if (!pastedData) {
+      Spicetify.showNotification("No data pasted");
+      console.log("No data pasted");
+      return;
+    }
+
+    const settings : string = JSON.parse(pastedData);
+    console.log(settings);
+    importMarketplace(settings);
+    Spicetify.PopupModal.hide();
+    location.reload();
+  };
 
   return (
     // TODO: remove "add-snippet" and "customCSS" references
@@ -44,6 +62,7 @@ const ImportExportModal = () => {
             textareaId="marketplace-custom-css"
             textareaClassName="snippet-code-editor"
             readOnly={false}
+            className="marketplace-code-editor-textarea"
             placeholder="Copy/paste your settings here"
             style={{
               // fontFamily: "'Fira code', 'Fira Mono', monospace'",
@@ -53,11 +72,11 @@ const ImportExportModal = () => {
         </div>
       </div>
       <>
-        <a href={href} className="download" download="marketplace-export.json">
-          Download
-        </a>
         <Button onClick={exportSettings}>
           Export
+        </Button>
+        <Button onClick={importSettings}>
+          Import
         </Button>
       </>
     </div>

@@ -72,13 +72,13 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
   );
 };
 
-const onBackupClick = () => {
-  Spicetify.PopupModal.hide();
+const onBackupClick = async () => {
 
   // Make a new mutation observer to make sure the modal is gone
-  const observer = new MutationObserver(() => {
+  const observer = new MutationObserver(async () => {
     const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
     if (!settingsModal) {
+      await sleep(100);
       console.log("Settings modal closed");
       openModal("IMPORT_EXPORT");
       observer.disconnect();
@@ -92,6 +92,8 @@ const onBackupClick = () => {
     childList: true,
     subtree: true,
   });
+  console.log("test");
+  Spicetify.PopupModal.hide();
 };
 
 export default SettingsModal;
