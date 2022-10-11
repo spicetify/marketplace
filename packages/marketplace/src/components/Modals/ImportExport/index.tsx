@@ -19,7 +19,7 @@ const ImportExportModal = () => {
     // const processedCode = processCode();
 
     const settings = exportMarketplace();
-    setCode("Settings...");
+    setCode("Settings copied to clipboard.");
     // TODO: This freezes Spotify if you have a lot of data (e.g. 3.9MB snippet images)
     // setCode(JSON.stringify(settings, null, 2));
 
@@ -31,6 +31,7 @@ const ImportExportModal = () => {
     const textBlob = new Blob([text], { type: "text/plain" });
     setHref(URL.createObjectURL(textBlob));
   };
+
   const importSettings = () => {
     // get pastedData from marketplace-code-editor-textarea
     console.log("Importing settings");
@@ -42,7 +43,7 @@ const ImportExportModal = () => {
       return;
     }
 
-    const settings : string = JSON.parse(pastedData);
+    const settings: string = JSON.parse(pastedData);
     console.log(settings);
     importMarketplace(settings);
     Spicetify.PopupModal.hide();
@@ -72,6 +73,9 @@ const ImportExportModal = () => {
         </div>
       </div>
       <>
+        {/* <a href={href} className="download" download="marketplace-export.json">
+          Download
+        </a> */}
         <Button onClick={exportSettings}>
           Export
         </Button>
