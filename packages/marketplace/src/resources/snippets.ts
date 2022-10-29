@@ -164,6 +164,6 @@ export default [
   {
     "title": "Custom Background",
     "description": "Adds a custom background to your Spicetify, you can Change the Image with replacing the url in the body.",
-    "code": "body { background-image: url('https://imgur.com/gallery/848rL'); }",
+    "code": "body { background-image: url('https://i.imgur.com/ztoFEP5.jpeg'); }",
   },
 ];
