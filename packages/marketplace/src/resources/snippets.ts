@@ -161,4 +161,9 @@ export default [
     "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 2s linear infinite; clip-path: circle(50% at 50% 50%);}`,
     "preview": "resources/assets/snippets/rotating-coverart",
   },
+  {
+    "title": "Custom Background",
+    "description": "Adds a custom background to your Spicetify, you can Change the Image with replacing the url in the body.",
+    "code": "body { background-image: url('https://imgur.com/gallery/848rL'); }",
+  },
 ];
