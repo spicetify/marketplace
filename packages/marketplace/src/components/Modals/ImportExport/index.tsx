@@ -8,6 +8,7 @@ import {
   importMarketplace,
 } from "../../../logic/Utils";
 import Button from "../../Button";
+import { json } from "express";
 
 const ImportExportModal = () => {
   const [code, setCode] = React.useState("");
@@ -42,6 +43,28 @@ const ImportExportModal = () => {
     Spicetify.PopupModal.hide();
     location.reload();
   };
+  const importSettingsFromFile = async () => {
+    // Prompt user to select a file to import and then run importMarketplace
+    const fileHandle = await window.showOpenFilePicker();
+    const file = await fileHandle[0].getFile();
+    const text = await file.text();
+    let settings : JSON;
+    // Check if the text exists, if not return an error message and exit
+    if (!text) {
+      Spicetify.showNotification("No data pasted");
+      return;
+    }
+    //Load the text into settings as a json
+    try {
+      settings = JSON.parse(text);
+    }
+    catch (e) {
+      Spicetify.showNotification("Invalid JSON");
+      return;
+    }
+    importMarketplace(settings);
+
+  };
 
   return (
     // TODO: remove "add-snippet" and "customCSS" references
@@ -74,6 +97,10 @@ const ImportExportModal = () => {
         </Button>
         <Button onClick={importSettings}>
           Import
+        </Button>
+
+        <Button onClick={importSettingsFromFile}>
+          Import from file
         </Button>
       </>
     </div>
