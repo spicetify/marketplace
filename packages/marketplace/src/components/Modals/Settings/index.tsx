@@ -79,11 +79,8 @@ const onBackupClick = async () => {
     const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
     if (!settingsModal) {
       await sleep(100);
-      console.log("Settings modal closed");
       openModal("IMPORT_EXPORT");
       observer.disconnect();
-    } else {
-      console.log("Settings modal still open");
     }
   });
 
@@ -92,7 +89,6 @@ const onBackupClick = async () => {
     childList: true,
     subtree: true,
   });
-  console.log("test");
   Spicetify.PopupModal.hide();
 };
 
