@@ -212,10 +212,9 @@ export const exportMarketplace = () => {
       data[key] = localStorage.getItem(key);
     }
   });
-  Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(data));
-  return data;
+  return data as JSON;
 };
-export const importMarketplace = (data : string) => {
+export const importMarketplace = (data : JSON) => {
   console.log("Importing Marketplace");
   // First reset the marketplace
   resetMarketplace();

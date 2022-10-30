@@ -11,7 +11,6 @@ import Button from "../../Button";
 
 const ImportExportModal = () => {
   const [code, setCode] = React.useState("");
-  const [href, setHref] = React.useState("");
 
   // const processCode = () => code.replace(/\n/g, "\\n");
 
@@ -19,32 +18,26 @@ const ImportExportModal = () => {
     // const processedCode = processCode();
 
     const settings = exportMarketplace();
-    setCode("Settings copied to clipboard.");
-    // TODO: This freezes Spotify if you have a lot of data (e.g. 3.9MB snippet images)
-    // setCode(JSON.stringify(settings, null, 2));
-
-    // Spicetify.PopupModal.hide();
-    // if (props.type === "EDIT_SNIPPET") location.reload();
-
-    // https://code.tutsplus.com/tutorials/how-to-save-a-file-with-javascript--cms-41105
-    const text = "My name in Bob. and I love writing tutorials.";
-    const textBlob = new Blob([text], { type: "text/plain" });
-    setHref(URL.createObjectURL(textBlob));
+    Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(settings));
+    Spicetify.showNotification("Settings copied to clipboard.");
+    Spicetify.PopupModal.hide();
   };
 
   const importSettings = () => {
-    // get pastedData from marketplace-code-editor-textarea
-    console.log("Importing settings");
-    const pastedData = code;
+    const pastedData : string = code;
+    let settings : JSON;
     // Check if pastedData exists, if not return an error message and exit
     if (!pastedData) {
       Spicetify.showNotification("No data pasted");
-      console.log("No data pasted");
       return;
     }
-
-    const settings: string = JSON.parse(pastedData);
-    console.log(settings);
+    // Check if pastedData is valid JSON, if not return an error message and exit
+    try {
+      settings = JSON.parse(pastedData);
+    } catch (e) {
+      Spicetify.showNotification("Invalid JSON");
+      return;
+    }
     importMarketplace(settings);
     Spicetify.PopupModal.hide();
     location.reload();
