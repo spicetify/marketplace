@@ -45,6 +45,7 @@
 	},
 	"private": true,
 	"dependencies": {
+		"@types/filesystem": "^0.0.32",
 		"@types/wicg-file-system-access": "^2020.9.5"
 	}
 }
