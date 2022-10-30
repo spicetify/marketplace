@@ -10,7 +10,7 @@ import {
 import Button from "../../Button";
 
 const ImportExportModal = () => {
-  const [code, setCode] = React.useState("");
+  const [importText, setImportText] = React.useState("");
 
   // const processCode = () => code.replace(/\n/g, "\\n");
 
@@ -24,7 +24,7 @@ const ImportExportModal = () => {
   };
 
   const importSettings = () => {
-    const pastedData : string = code;
+    const pastedData: string = importText;
     let settings : JSON;
     // Check if pastedData exists, if not return an error message and exit
     if (!pastedData) {
@@ -66,17 +66,16 @@ const ImportExportModal = () => {
   };
 
   return (
-    // TODO: remove "add-snippet" and "customCSS" references
-    <div id="marketplace-add-snippet-container">
-      <div className="marketplace-customCSS-input-container">
-        <label htmlFor="marketplace-custom-css">Marketplace Settings</label>
+    <div id="marketplace-import-export-container">
+      <div className="marketplace-import-export-input-container">
+        <label htmlFor="marketplace-import-export">Marketplace Settings</label>
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
-            value={code}
-            onValueChange={code => setCode(code)}
-            highlight={code => highlight(code, languages.css)}
-            textareaId="marketplace-custom-css"
-            textareaClassName="snippet-code-editor"
+            value={importText}
+            onValueChange={text => setImportText(text)}
+            highlight={text => highlight(text, languages.css)}
+            textareaId="marketplace-import-text"
+            textareaClassName="import-textarea"
             readOnly={false}
             className="marketplace-code-editor-textarea"
             placeholder="Copy/paste your settings here"
@@ -88,17 +87,14 @@ const ImportExportModal = () => {
         </div>
       </div>
       <>
-        {/* <a href={href} className="download" download="marketplace-export.json">
-          Download
-        </a> */}
-        <Button onClick={exportSettings}>
+        <Button classes={["marketplace-import-export-button"]} onClick={exportSettings} >
           Export
         </Button>
-        <Button onClick={importSettings}>
+        <Button classes={["marketplace-import-export-button"]} onClick={importSettings}>
           Import
         </Button>
 
-        <Button onClick={importSettingsFromFile}>
+        <Button classes={["marketplace-import-export-button"]} onClick={importSettingsFromFile}>
           Import from file
         </Button>
       </>
