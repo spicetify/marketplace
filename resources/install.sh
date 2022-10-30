@@ -4,7 +4,23 @@
 
 set -e
 
-    download_uri="https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip"
+   
+# download uri
+releases_uri=https://github.com/spicetify/spicetify-marketplace/releases
+if [ $# -gt 0 ]; then
+	tag=$1
+else
+	tag=$(curl -LsH 'Accept: application/json' $releases_uri/latest)
+	tag=${tag%\,\"update_url*}
+	tag=${tag##*tag_name\":\"}
+	tag=${tag%\"}
+fi
+
+tag=${tag#v}
+
+echo "FETCHING Version $tag"
+
+download_uri=$releases_uri/download/v$tag/spicetify-marketplace.zip
     default_color_uri="https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini"
 
 SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
