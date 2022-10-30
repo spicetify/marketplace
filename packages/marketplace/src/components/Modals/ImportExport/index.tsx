@@ -24,7 +24,7 @@ const ImportExportModal = () => {
   };
 
   const importSettings = () => {
-    const pastedData : string = importText;
+    const pastedData: string = importText;
     let settings : JSON;
     // Check if pastedData exists, if not return an error message and exit
     if (!pastedData) {
