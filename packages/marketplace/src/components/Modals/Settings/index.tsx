@@ -2,11 +2,12 @@ import React from "react";
 import { t } from "i18next";
 import { Config } from "../../../types/marketplace-types";
 
-import { resetMarketplace } from "../../../logic/Utils";
+import { resetMarketplace, sleep } from "../../../logic/Utils";
 
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
 import TabRow from "./TabRow";
+import { openModal } from "../../../logic/LaunchModals";
 
 interface Props {
   CONFIG: Config;
@@ -60,8 +61,39 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
           <Button onClick={resetMarketplace}>{t("settings.resetBtn")}</Button>
         </div>
       </div>
+      <h2>Back up/Restore</h2>
+      <div className="setting-row">
+        <label className="col description">Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.</label>
+        <div className="col action">
+          <Button onClick={onBackupClick}>Back up/Restore</Button>
+        </div>
+      </div>
     </div>
   );
+};
+
+const onBackupClick = async () => {
+
+  // Make a new mutation observer to make sure the modal is gone
+  const observer = new MutationObserver(async () => {
+    const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
+    if (!settingsModal) {
+      await sleep(100);
+      console.log("Settings modal closed");
+      openModal("IMPORT_EXPORT");
+      observer.disconnect();
+    } else {
+      console.log("Settings modal still open");
+    }
+  });
+
+  // TODO: does it still work if I just attach to the settings modal itself?
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+  console.log("test");
+  Spicetify.PopupModal.hide();
 };
 
 export default SettingsModal;

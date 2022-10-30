@@ -218,9 +218,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@spicetify/marketplace@workspace:packages/marketplace"
   dependencies:
+    "@types/filesystem": ^0.0.32
     "@types/react": ^17.0.2
     "@types/react-dom": ^17.0.2
     "@types/semver": ^7.3.12
+    "@types/wicg-file-system-access": ^2020.9.5
     "@typescript-eslint/eslint-plugin": ^5.38.1
     "@typescript-eslint/parser": ^5.38.1
     copyfiles: ^2.4.1
@@ -304,6 +306,22 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 15c1af46d02de834e4a225eccaa9d85c0370fdbb3ed4e1bc2d323d24872309961542b993ae236335aeb3e278630224a6ea002078d39e651d78a3b0356b1eaa79
+  languageName: node
+  linkType: hard
+
+"@types/filesystem@npm:^0.0.32":
+  version: 0.0.32
+  resolution: "@types/filesystem@npm:0.0.32"
+  dependencies:
+    "@types/filewriter": "*"
+  checksum: 4b9079d200a3b241722b90e1c5806c4b32c4dac87d42a1c7ef76a2c0dafdbe7d5f1a379b873ad5de73622b44de6599e1522908f67b938d54e785bd1c36e302a0
+  languageName: node
+  linkType: hard
+
+"@types/filewriter@npm:*":
+  version: 0.0.29
+  resolution: "@types/filewriter@npm:0.0.29"
+  checksum: 0c58aa875c2c245be7dbc42b20212f3203e13d11ec013a4a5cd0febf0e8b87214be5882c05ff9d7bdf0398f145a4fdbc24b7e6cf7b094e134a3b4c7a0598502f
   languageName: node
   linkType: hard
 
@@ -448,6 +466,13 @@ __metadata:
   dependencies:
     source-map: ^0.6.1
   checksum: 931bc580083dccc5c5792422aebfc5f18454ce820b0eb9771b9d8a206f47718a77fe1fcdae59903d32a9fae5ef6c8974f6f0903c462a2c51d0ad34f2743083e2
+  languageName: node
+  linkType: hard
+
+"@types/wicg-file-system-access@npm:^2020.9.5":
+  version: 2020.9.5
+  resolution: "@types/wicg-file-system-access@npm:2020.9.5"
+  checksum: 56243705df43fd3b18049adcf5cb639dfbec5a033a33991f4050d0f6e09ebc94a70f426fde1926b7b0fb493d75ea7064eba95e06852eccd8d9cff4b1fde47e35
   languageName: node
   linkType: hard
 

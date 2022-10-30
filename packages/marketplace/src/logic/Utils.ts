@@ -202,6 +202,30 @@ export const resetMarketplace = () => {
   location.reload();
 };
 
+export const exportMarketplace = () => {
+  // TODO: Export settings, extensions, snippets, themes, colour scheme
+  const data = {};
+
+  Object.keys(localStorage).forEach((key) => {
+    // console.log(`${key}: ${localStorage.getItem(key)}`);
+    if (key.startsWith("marketplace:")) {
+      data[key] = localStorage.getItem(key);
+    }
+  });
+  return data as JSON;
+};
+export const importMarketplace = (data : JSON) => {
+  console.log("Importing Marketplace");
+  // First reset the marketplace
+  resetMarketplace();
+  // Then import the data
+  Object.keys(data).forEach((key) => {
+    localStorage.setItem(key, data[key]);
+    console.log(`Imported ${key}`);
+  });
+  location.reload();
+
+};
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
 

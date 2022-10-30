@@ -7,6 +7,7 @@ import { RepoType } from "../types/marketplace-types";
 import {
   getLocalStorageDataFromKey,
   resetMarketplace,
+  exportMarketplace,
   isGithubRawUrl,
   getParamsFromGithubRaw,
   initializeSnippets,
@@ -42,6 +43,8 @@ import {
   window.Marketplace = {
     // Should allow you to reset Marketplace from the dev console if it's b0rked
     reset: resetMarketplace,
+    // Export all marketplace localstorage keys
+    export: exportMarketplace,
     version: MARKETPLACE_VERSION,
   };
 
