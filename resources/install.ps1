@@ -17,7 +17,15 @@ if (-not (Test-Path $sp_dot_dir)) {
 }
 
 Write-Host "Downloading..." -ForegroundColor "Green"
-Invoke-WebRequest -Uri "https://github.com/spicetify/spicetify-marketplace/archive/refs/heads/dist.zip" -UseBasicParsing -OutFile "$sp_dot_dir\marketplace.zip"
+
+$latest_release_uri =
+"https://api.github.com/repos/spicetify/spicetify-marketplace/releases/latest"
+$latest_release_json = Invoke-WebRequest -Uri $latest_release_uri -UseBasicParsing
+$version = ($latest_release_json | ConvertFrom-Json).tag_name -replace "v", ""
+$download_uri = "https://github.com/spicetify/spicetify-marketplace/releases/download/" +
+"v$version/spicetify-marketplace.zip"
+
+Invoke-WebRequest -Uri $download_uri -UseBasicParsing -OutFile "$sp_dot_dir\marketplace.zip"
 
 Write-Host "Unzipping and installing..." -ForegroundColor "Green"
 Expand-Archive -Path "$sp_dot_dir\marketplace.zip" -DestinationPath $sp_dot_dir -Force
