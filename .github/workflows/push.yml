@@ -23,11 +23,19 @@ jobs:
           yarn
           yarn workspace @spicetify/marketplace build:prod
 
+      - run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+
       - name: Push new version
-        uses: s0/git-publish-subdir-action@develop
         env:
-          REPO: self
-          BRANCH: dist
-          FOLDER: packages/marketplace/dist
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SKIP_EMPTY_COMMITS: true
+          SRC_FOLDER: "packages/marketplace/dist"
+          TARGET_BRANCH: "dist"
+        run: |
+          files=$(find $SRC_FOLDER -type f)
+          git config --global user.name "Github Actions"
+          git config --global user.email "actions@users.noreply.github.com"
+          git fetch
+          git checkout $TARGET_BRANCH
+          git checkout ${GITHUB_REF##*/} -- $files
+          git add -A
+          git diff-index --quiet HEAD || git commit -am "Update dist to output generated at $SHORT_SHA"
+          git push origin $TARGET_BRANCH
