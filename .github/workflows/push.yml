@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-node@v2.5.1
         with:
           node-version: 16.x
+
+      - name: Add dist folder to worktree
+        run: git worktree add -B dist packages/marketplace/dist origin/dist
+
       - name: yarn install and build
         run: |
           yarn
@@ -27,15 +31,11 @@ jobs:
 
       - name: Push new version
         env:
-          SRC_FOLDER: "packages/marketplace/dist"
           TARGET_BRANCH: "dist"
         run: |
-          files=$(find $SRC_FOLDER -type f)
+          cd packages/marketplace/dist
           git config --global user.name "Github Actions"
-          git config --global user.email "actions@users.noreply.github.com"
-          git fetch
-          git checkout $TARGET_BRANCH
-          git checkout ${GITHUB_REF##*/} -- $files
-          git add -A
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
           git diff-index --quiet HEAD || git commit -am "Update dist to output generated at $SHORT_SHA"
           git push origin $TARGET_BRANCH
