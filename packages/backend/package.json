@@ -11,7 +11,7 @@
 		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist"
 	},
 	"dependencies": {
-		"express": "^4.18.1"
+		"express": "^4.18.2"
 	},
 	"devDependencies": {
 		"@types/debug": "^4.1.7",
