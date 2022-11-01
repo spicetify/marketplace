@@ -35,7 +35,7 @@
 		"eslint": "^8.26.0",
 		"eslint-plugin-react": "^7.31.10",
 		"i18next": "^21.10.0",
-		"i18next-browser-languagedetector": "^6.1.8",
+		"i18next-browser-languagedetector": "^7.0.0",
 		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.11.0",
 		"react-i18next": "^11.18.6",

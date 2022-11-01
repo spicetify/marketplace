@@ -21,7 +21,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.19.0":
+"@babel/runtime@npm:^7.19.4":
   version: 7.20.1
   resolution: "@babel/runtime@npm:7.20.1"
   dependencies:
@@ -231,7 +231,7 @@ __metadata:
     eslint: ^8.26.0
     eslint-plugin-react: ^7.31.10
     i18next: ^21.10.0
-    i18next-browser-languagedetector: ^6.1.8
+    i18next-browser-languagedetector: ^7.0.0
     prismjs: ^1.29.0
     react-dropdown: ^1.11.0
     react-i18next: ^11.18.6
@@ -2744,12 +2744,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^6.1.8":
-  version: 6.1.8
-  resolution: "i18next-browser-languagedetector@npm:6.1.8"
+"i18next-browser-languagedetector@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "i18next-browser-languagedetector@npm:7.0.0"
   dependencies:
-    "@babel/runtime": ^7.19.0
-  checksum: dd84d3c9cb693a70662436b06f5554898815df33b7641249a64876c74c38960f11ef17b4d7f49ee2da7262abe0f3ae73abe7f3a3b435a344d0d07e4ca7cb24c6
+    "@babel/runtime": ^7.19.4
+  checksum: 4430a0bab327ce4f7370c75b54cde67da1368c028b3b2972d796c42913b4f4ae20e9b493041fa2860a8572694fd3b302465a4dfec6e19873c5188b1a88155ea8
   languageName: node
   linkType: hard
 
