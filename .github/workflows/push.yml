@@ -27,10 +27,10 @@ jobs:
 
       - name: Push new version
         env:
-          SRC_FOLDER_PATH: 'packages/marketplace/dist'
-          TARGET_BRANCH: 'dist'
+          SRC_FOLDER: "packages/marketplace/dist"
+          TARGET_BRANCH: "dist"
         run: |
-          files=$(find $SRC_FOLDER_PATH -type f)
+          files=$(find $SRC_FOLDER -type f)
           git config --global user.name "Github Actions"
           git config --global user.email "actions@users.noreply.github.com"
           git fetch
