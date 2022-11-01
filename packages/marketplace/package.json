@@ -34,7 +34,7 @@
 		"copyfiles": "^2.4.1",
 		"eslint": "^8.26.0",
 		"eslint-plugin-react": "^7.31.10",
-		"i18next": "^21.10.0",
+		"i18next": "^22.0.4",
 		"i18next-browser-languagedetector": "^6.1.8",
 		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.11.0",
