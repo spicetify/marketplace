@@ -46,7 +46,7 @@
       "reloadLater": "Recharger plus tard"
     },
     "backupModal": {
-      "title": "Importer/Exporter",
+      "title": "Sauvegarder/restaurer",
       "settingsCopied": "Réglages copiés dans le presse-papier",
       "noDataPasted": "Aucune donnée collée",
       "invalidJSON": "JSON invalide",
