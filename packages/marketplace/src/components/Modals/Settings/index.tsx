@@ -78,7 +78,7 @@ const onBackupClick = async () => {
     const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
     if (!settingsModal) {
       await sleep(100);
-      openModal("IMPORT_EXPORT");
+      openModal("BACKUP");
       observer.disconnect();
     }
   });
