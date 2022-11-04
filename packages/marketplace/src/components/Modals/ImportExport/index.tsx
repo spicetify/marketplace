@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "i18next";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-json";
@@ -12,14 +13,10 @@ import Button from "../../Button";
 const ImportExportModal = () => {
   const [importText, setImportText] = React.useState("");
 
-  // const processCode = () => code.replace(/\n/g, "\\n");
-
   const exportSettings = () => {
-    // const processedCode = processCode();
-
     const settings = exportMarketplace();
     Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(settings));
-    Spicetify.showNotification("Settings copied to clipboard.");
+    Spicetify.showNotification(t("importExport.settingsCopied"));
     Spicetify.PopupModal.hide();
   };
 
@@ -28,14 +25,14 @@ const ImportExportModal = () => {
     let settings : JSON;
     // Check if pastedData exists, if not return an error message and exit
     if (!pastedData) {
-      Spicetify.showNotification("No data pasted");
+      Spicetify.showNotification(t("importExport.noDataPasted"));
       return;
     }
     // Check if pastedData is valid JSON, if not return an error message and exit
     try {
       settings = JSON.parse(pastedData);
     } catch (e) {
-      Spicetify.showNotification("Invalid JSON");
+      Spicetify.showNotification(t("importExport.invalidJSON"));
       return;
     }
     importMarketplace(settings);
@@ -50,7 +47,7 @@ const ImportExportModal = () => {
     let settings : JSON;
     // Check if the text exists, if not return an error message and exit
     if (!text) {
-      Spicetify.showNotification("No data pasted");
+      Spicetify.showNotification(t("importExport.noDataPasted"));
       return;
     }
     //Load the text into settings as a json
@@ -58,7 +55,7 @@ const ImportExportModal = () => {
       settings = JSON.parse(text);
     }
     catch (e) {
-      Spicetify.showNotification("Invalid JSON");
+      Spicetify.showNotification(t("importExport.invalidJSON"));
       return;
     }
     importMarketplace(settings);
@@ -68,7 +65,7 @@ const ImportExportModal = () => {
   return (
     <div id="marketplace-import-export-container">
       <div className="marketplace-import-export-input-container">
-        <label htmlFor="marketplace-import-export">Marketplace Settings</label>
+        <label htmlFor="marketplace-import-export">{t("importExport.inputLabel")}</label>
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={importText}
@@ -78,7 +75,7 @@ const ImportExportModal = () => {
             textareaClassName="import-textarea"
             readOnly={false}
             className="marketplace-code-editor-textarea"
-            placeholder="Copy/paste your settings here"
+            placeholder={t("importExport.inputPlaceholder")}
             style={{
               // fontFamily: "'Fira code', 'Fira Mono', monospace'",
               // fontSize: 12,
@@ -88,14 +85,14 @@ const ImportExportModal = () => {
       </div>
       <>
         <Button classes={["marketplace-import-export-button"]} onClick={exportSettings} >
-          Export
+          {t("importExport.exportBtn")}
         </Button>
         <Button classes={["marketplace-import-export-button"]} onClick={importSettings}>
-          Import
+          {t("importExport.importBtn")}
         </Button>
 
         <Button classes={["marketplace-import-export-button"]} onClick={importSettingsFromFile}>
-          Import from file
+          {t("importExport.fileImportBtn")}
         </Button>
       </>
     </div>
