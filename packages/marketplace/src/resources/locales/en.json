@@ -14,7 +14,7 @@
       "resetDescription": "Uninstall all extensions and themes, and reset preferences",
       "backupHeading": "Back up/Restore",
       "backupLabel": "Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.",
-      "backupBtn": "$t(settings.backupHeading)"
+      "backupBtn": "Open"
     },
     "tabs": {
       "Extensions": "Extensions",
@@ -46,7 +46,7 @@
       "reloadLater": "Reload later"
     },
     "backupModal": {
-      "title": "Import/Export",
+      "title": "$t(settings.backupHeading)",
       "settingsCopied": "Settings copied to clipboard",
       "noDataPasted": "No data pasted",
       "invalidJSON": "Invalid JSON",
