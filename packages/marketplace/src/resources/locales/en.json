@@ -45,7 +45,7 @@
       "reloadNow": "Reload now",
       "reloadLater": "Reload later"
     },
-    "importExport": {
+    "backupModal": {
       "title": "Import/Export",
       "settingsCopied": "Settings copied to clipboard",
       "noDataPasted": "No data pasted",
