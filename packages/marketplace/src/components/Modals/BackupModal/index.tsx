@@ -63,9 +63,9 @@ const BackupModal = () => {
   };
 
   return (
-    <div id="marketplace-import-export-container">
-      <div className="marketplace-import-export-input-container">
-        <label htmlFor="marketplace-import-export">{t("backupModal.inputLabel")}</label>
+    <div id="marketplace-backup-container">
+      <div className="marketplace-backup-input-container">
+        <label htmlFor="marketplace-backup">{t("backupModal.inputLabel")}</label>
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={importText}
@@ -84,14 +84,14 @@ const BackupModal = () => {
         </div>
       </div>
       <>
-        <Button classes={["marketplace-import-export-button"]} onClick={exportSettings} >
+        <Button classes={["marketplace-backup-button"]} onClick={exportSettings} >
           {t("backupModal.exportBtn")}
         </Button>
-        <Button classes={["marketplace-import-export-button"]} onClick={importSettings}>
+        <Button classes={["marketplace-backup-button"]} onClick={importSettings}>
           {t("backupModal.importBtn")}
         </Button>
 
-        <Button classes={["marketplace-import-export-button"]} onClick={importSettingsFromFile}>
+        <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromFile}>
           {t("backupModal.fileImportBtn")}
         </Button>
       </>
