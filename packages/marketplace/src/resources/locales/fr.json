@@ -11,7 +11,7 @@
       "tabsHeading": "Onglets",
       "resetHeading": "Réinitialiser",
       "resetBtn": "$t(settings.resetHeading)",
-      "resetDescription": "Désinstaller toutes les extensions et tous les thèmes, ainsi que l’ensemble des réglages"
+      "resetDescription": "Désinstaller toutes les extensions et tous les thèmes, ainsi que l’ensemble des réglages",
       "backupHeading": "Sauvegarde/Restauration",
       "backupLabel": "Sauvegarder ou restaurer toutes les données du Marché. Celà n'inclue pas les réglages pour quoi que ce soit installé depuis le Marché.",
       "backupBtn": "Ouvrir"
@@ -55,7 +55,7 @@
       "exportBtn": "Exporter",
       "importBtn": "Importer",
       "fileImportBtn": "Importer depuis un fichier"
-    }
+    },
     "devTools": {
       "title": "Outils de développeurs de thèmes",
       "noThemeInstalled": "Erreur: Aucun thème du marché n’est installé",
