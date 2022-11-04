@@ -57,7 +57,7 @@ const getModalSettings = (
     };
   case "BACKUP":
     return {
-      title: "Import/Export",
+      title: t("backupModal.title"),
       content: <BackupModal />,
       isLarge: true,
     };
