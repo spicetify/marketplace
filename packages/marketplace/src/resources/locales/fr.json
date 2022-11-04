@@ -7,7 +7,7 @@
       "tagsLabel": "Tags",
       "devToolsLabel": "Outils pour les développeurs de thèmes",
       "hideInstalledLabel": "Masquer ceux étant installés lors de la navigation",
-      "colourShiftLabel": "Changer de couleure chaque minutes",
+      "colourShiftLabel": "Changer de couleure à chaque minutes",
       "tabsHeading": "Onglets",
       "resetHeading": "Réinitialiser",
       "resetBtn": "$t(settings.resetHeading)",
@@ -65,6 +65,10 @@
       "title": "$t(grid.spicetifyMarketplace) - Readme",
       "loading": "Chargement…",
       "errorLoading": "Erreur lors du chargement du README"
+    },
+    "backup-restore": {
+      "col description": "Sauvegarder et restaurer toutes les données du Marché. Celà n’inclue pas les réglages ou toutes autres choses ayant été installées via le Marché."
+      "col action": "Sauvegarder / Restaurer"
     },
     "github": "GitHub",
     "install": "Installer",
