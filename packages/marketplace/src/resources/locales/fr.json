@@ -7,7 +7,7 @@
       "tagsLabel": "Tags",
       "devToolsLabel": "Outils pour les développeurs de thèmes",
       "hideInstalledLabel": "Masquer ceux étant installés lors de la navigation",
-      "colourShiftLabel": "Changer de couleure à chaque minutes",
+      "colourShiftLabel": "Changer de couleure à chaque minute",
       "tabsHeading": "Onglets",
       "resetHeading": "Réinitialiser",
       "resetBtn": "$t(settings.resetHeading)",
