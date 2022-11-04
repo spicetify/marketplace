@@ -20,46 +20,47 @@ const BackupModal = () => {
     Spicetify.PopupModal.hide();
   };
 
-  const importSettings = () => {
-    const pastedData: string = importText;
-    let settings : JSON;
-    // Check if pastedData exists, if not return an error message and exit
-    if (!pastedData) {
+  /**
+   * Load in settings from a JSON string, then reload the page.
+   * If the string is empty or the JSON is invalid, show an error.
+   * @param settingsString JSON string of settings to import
+   */
+  const importSettings = (settingsString: string) => {
+    // Check if the settings data exists, if not return an error message and exit
+    if (!settingsString) {
       Spicetify.showNotification(t("backupModal.noDataPasted"));
       return;
     }
-    // Check if pastedData is valid JSON, if not return an error message and exit
+
+    // Check if settings string is valid JSON, if not return an error message and exit
+    let settings: JSON;
     try {
-      settings = JSON.parse(pastedData);
+      settings = JSON.parse(settingsString);
     } catch (e) {
       Spicetify.showNotification(t("backupModal.invalidJSON"));
       return;
     }
+
     importMarketplace(settings);
-    Spicetify.PopupModal.hide();
     location.reload();
   };
+
+  /**
+   * Import settings from the text input
+   */
+  const importSettingsFromInput = () => {
+    importSettings(importText);
+  };
+
+  /**
+   * Prompt user to select a file to import and then run importMarketplace
+   */
   const importSettingsFromFile = async () => {
-    // Prompt user to select a file to import and then run importMarketplace
     const fileHandle = await window.showOpenFilePicker();
     const file = await fileHandle[0].getFile();
     const text = await file.text();
-    let settings : JSON;
-    // Check if the text exists, if not return an error message and exit
-    if (!text) {
-      Spicetify.showNotification(t("backupModal.noDataPasted"));
-      return;
-    }
-    //Load the text into settings as a json
-    try {
-      settings = JSON.parse(text);
-    }
-    catch (e) {
-      Spicetify.showNotification(t("backupModal.invalidJSON"));
-      return;
-    }
-    importMarketplace(settings);
 
+    importSettings(text);
   };
 
   return (
@@ -87,7 +88,7 @@ const BackupModal = () => {
         <Button classes={["marketplace-backup-button"]} onClick={exportSettings} >
           {t("backupModal.exportBtn")}
         </Button>
-        <Button classes={["marketplace-backup-button"]} onClick={importSettings}>
+        <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromInput}>
           {t("backupModal.importBtn")}
         </Button>
 

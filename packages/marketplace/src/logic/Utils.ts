@@ -214,6 +214,7 @@ export const exportMarketplace = () => {
   });
   return data as JSON;
 };
+
 export const importMarketplace = (data : JSON) => {
   console.log("Importing Marketplace");
   // First reset the marketplace
@@ -223,9 +224,8 @@ export const importMarketplace = (data : JSON) => {
     localStorage.setItem(key, data[key]);
     console.log(`Imported ${key}`);
   });
-  location.reload();
-
 };
+
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
 
