@@ -164,7 +164,7 @@ export default [
   {
     "title": "Hide liked songs card",
     "description": "Hides the sometimes unfitting liked Songs card in the Your Libary tab",
-    "code":".main-heroCard-card{ display: none; }",
+    "code":".collection-collectionEntityHeroCard-likedSongs{ display: none; }",
     "preview":"resources/assets/snippets/hide-likedSongs-card.png"
   }
 ];
