@@ -169,8 +169,8 @@ export default [
   },
   {
     "title": "Fix playlist and folder position",
-    "description": "Replaces the playlists section in the left side bar to align with all the other category icons for the new UI. Screenshot includes "Playlist icons" snippet",
-    "code": ".playlist-item__img { margin-right: 0; } .main-rootlist-rootlistItem { height: 40px; } .gJFKvJ { font-weight: 700!important; } .playlist-item__img { margin-right: 16px!important; }",
+    "description": "Replaces the playlists section in the left side bar to align with all the other category icons for the new UI. Screenshot includes 'Playlist icons' snippet",
+    "code": "{} .main-rootlist-rootlistItem { height: 40px; } .gJFKvJ { font-weight: 700!important; } .playlist-item__img { margin-right: 16px!important; }",
     "preview": "https://imgur.com/a/eCCHDZ9",
   },
 ];
