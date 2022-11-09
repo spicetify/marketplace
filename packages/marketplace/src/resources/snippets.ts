@@ -173,4 +173,10 @@ export default [
     "code": "{} .main-rootlist-rootlistItem { height: 40px; } .gJFKvJ { font-weight: 700!important; } .playlist-item__img { margin-right: 16px!important; }",
     "preview": "resources/assets/snippets/fix-playlist-and-folder-position.png",
   },
+  {
+    "title": "Remove recently played from homepage",
+    "description": "Removes the recently played shelf from the home page",
+    "code": "section.main-shelf-shelf[aria-label='Recently played'] { visibility: hidden; position: absolute; }",
+    "preview": "resources/assets/snippets/remove-recently-played.png",
+  },
 ];
