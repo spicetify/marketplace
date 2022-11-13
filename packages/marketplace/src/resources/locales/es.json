@@ -47,7 +47,7 @@
       "noThemeInstalled": "Error: No tema de marketplace instalado",
       "noThemeManifest": "Error: No manifiesto de tema encontrado",
       "colorIniEditor": "Editor de Color.ini",
-      "colorIniEditorPlaceholder": "[your-colour-scheme-name]",
+      "colorIniEditorPlaceholder": "[nombre-de-esquema-de-color]",
       "invalidCSS": "CSS invalido"
     },
     "grid": {
