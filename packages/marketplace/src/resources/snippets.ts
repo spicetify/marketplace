@@ -161,4 +161,10 @@ export default [
     "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 2s linear infinite; clip-path: circle(50% at 50% 50%);}`,
     "preview": "resources/assets/snippets/rotating-coverart",
   },
+  {
+    "title": "Hide liked songs card",
+    "description": "Hides the sometimes unfitting liked Songs card in the Your Libary tab",
+    "code": ".collection-collectionEntityHeroCard-likedSongs{ display: none; }",
+    "preview": "resources/assets/snippets/hide-likedSongs-card.png",
+  },
 ];
