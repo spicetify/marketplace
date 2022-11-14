@@ -11,7 +11,10 @@
       "tabsHeading": "Tabs",
       "resetHeading": "Reset",
       "resetBtn": "$t(settings.resetHeading)",
-      "resetDescription": "Uninstall all extensions and themes, and reset preferences"
+      "resetDescription": "Uninstall all extensions and themes, and reset preferences",
+      "backupHeading": "Back up/Restore",
+      "backupLabel": "Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.",
+      "backupBtn": "Open"
     },
     "tabs": {
       "Extensions": "Extensions",
@@ -41,6 +44,17 @@
       "description": "A page reload is required to complete this operation.",
       "reloadNow": "Reload now",
       "reloadLater": "Reload later"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Settings copied to clipboard",
+      "noDataPasted": "No data pasted",
+      "invalidJSON": "Invalid JSON",
+      "inputLabel": "Marketplace Settings",
+      "inputPlaceholder": "Copy/paste your settings here",
+      "exportBtn": "Export",
+      "importBtn": "Import",
+      "fileImportBtn": "Import from file"
     },
     "devTools": {
       "title": "Theme Dev Tools",

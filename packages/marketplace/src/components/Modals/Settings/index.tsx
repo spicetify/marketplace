@@ -61,11 +61,11 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
           <Button onClick={resetMarketplace}>{t("settings.resetBtn")}</Button>
         </div>
       </div>
-      <h2>Back up/Restore</h2>
+      <h2>{t("settings.backupHeading")}</h2>
       <div className="setting-row">
-        <label className="col description">Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.</label>
+        <label className="col description">{t("settings.backupLabel")}</label>
         <div className="col action">
-          <Button onClick={onBackupClick}>Back up/Restore</Button>
+          <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
         </div>
       </div>
     </div>
@@ -73,13 +73,12 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 };
 
 const onBackupClick = async () => {
-
   // Make a new mutation observer to make sure the modal is gone
   const observer = new MutationObserver(async () => {
     const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
     if (!settingsModal) {
       await sleep(100);
-      openModal("IMPORT_EXPORT");
+      openModal("BACKUP");
       observer.disconnect();
     }
   });
@@ -89,6 +88,7 @@ const onBackupClick = async () => {
     childList: true,
     subtree: true,
   });
+
   Spicetify.PopupModal.hide();
 };
 
