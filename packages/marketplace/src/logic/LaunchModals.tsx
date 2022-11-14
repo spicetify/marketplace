@@ -6,10 +6,10 @@ import SnippetModal from "../components/Modals/Snippet";
 import ReloadModal from "../components/Modals/Reload";
 import SettingsModal from "../components/Modals/Settings";
 import ThemeDevToolsModal from "../components/Modals/ThemeDevTools";
-import ImportExportModal from "../components/Modals/ImportExport";
+import BackupModal from "../components/Modals/BackupModal";
 import { CardProps } from "../components/Card/Card";
 
-export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS" | "IMPORT_EXPORT";
+export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS" | "BACKUP";
 
 const getModalSettings = (
   modalType: ModalType,
@@ -55,10 +55,10 @@ const getModalSettings = (
       content: <ThemeDevToolsModal />,
       isLarge: true,
     };
-  case "IMPORT_EXPORT":
+  case "BACKUP":
     return {
-      title: "Import/Export",
-      content: <ImportExportModal />,
+      title: t("backupModal.title"),
+      content: <BackupModal />,
       isLarge: true,
     };
 
