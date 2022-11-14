@@ -11,7 +11,10 @@
       "tabsHeading": "分頁",
       "resetHeading": "重設",
       "resetBtn": "$t(settings.resetHeading)",
-      "resetDescription": "解除安裝所有擴充套件和主題， 並重設偏好設定"
+      "resetDescription": "解除安裝所有擴充套件和主題， 並重設偏好設定",
+      "backupHeading": "備份與還原",
+      "backupLabel": "備份或還原所有 Marketplace 中的資料（不包含從 Marketplace 安裝的擴充元件的設定）。",
+      "backupBtn": "開啟"
     },
     "tabs": {
       "Extensions": "擴充套件",
@@ -42,16 +45,27 @@
       "reloadNow": "立即重新載入",
       "reloadLater": "稍後重新載入"
     },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "已將設定複製至剪貼簿",
+      "noDataPasted": "沒有貼上資料",
+      "invalidJSON": "JSON 無效",
+      "inputLabel": "Marketplace 設定",
+      "inputPlaceholder": "在此複製或貼上設定",
+      "exportBtn": "匯出",
+      "importBtn": "匯入",
+      "fileImportBtn": "從檔案匯入"
+    },
     "devTools": {
       "title": "主題開發者工具",
-      "noThemeInstalled": "錯誤：未安裝商場主題",
+      "noThemeInstalled": "錯誤：沒有安裝 Marketplace 主題",
       "noThemeManifest": "錯誤：找不到主題資訊清單",
       "colorIniEditor": "Color.ini 編輯器",
       "colorIniEditorPlaceholder": "[您的色彩配置名稱]",
       "invalidCSS": "CSS 無效"
     },
     "grid": {
-      "spicetifyMarketplace": "Spicetify 商場",
+      "spicetifyMarketplace": "Spicetify Marketplace",
       "newUpdate": "有更新",
       "addCSS": "加入 CSS",
       "search": "搜尋",
