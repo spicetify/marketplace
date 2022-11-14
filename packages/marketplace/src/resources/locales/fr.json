@@ -11,7 +11,10 @@
       "tabsHeading": "Onglets",
       "resetHeading": "Réinitialiser",
       "resetBtn": "$t(settings.resetHeading)",
-      "resetDescription": "Désinstaller toutes les extensions et tous les thèmes, ainsi que l’ensemble des réglages"
+      "resetDescription": "Désinstaller toutes les extensions et tous les thèmes, ainsi que l’ensemble des réglages",
+      "backupHeading": "Sauvegarde/Restauration",
+      "backupLabel": "Sauvegarder ou restaurer toutes les données du Marché. Celà n'inclue pas les réglages pour quoi que ce soit installé depuis le Marché.",
+      "backupBtn": "Ouvrir"
     },
     "tabs": {
       "Extensions": "Extensions",
@@ -41,6 +44,17 @@
       "description": "Un rechargement de la page est requis pour finaliser cette opération.",
       "reloadNow": "Recharger maintenant",
       "reloadLater": "Recharger plus tard"
+    },
+    "backupModal": {
+      "title": "Sauvegarder/Restaurer",
+      "settingsCopied": "Réglages copiés dans le presse-papier",
+      "noDataPasted": "Aucune donnée collée",
+      "invalidJSON": "JSON invalide",
+      "inputLabel": "Réglages du Marché",
+      "inputPlaceholder": "Copier/coller vos réglages ici",
+      "exportBtn": "Exporter",
+      "importBtn": "Importer",
+      "fileImportBtn": "Importer depuis un fichier"
     },
     "devTools": {
       "title": "Outils de développeurs de thèmes",
