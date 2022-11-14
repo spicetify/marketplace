@@ -9,9 +9,12 @@
       "hideInstalledLabel": "Esconder instalado cuando buscando",
       "colourShiftLabel": "Cambiar colores cada minuto",
       "tabsHeading": "Pestañas",
-      "resetHeading": "Reajustar",
+      "resetHeading": "Reestablecer",
       "resetBtn": "$t(settings.resetHeading)",
-      "resetDescription": "Borrar todas estensiones and temas, y borrar preferencias"
+      "resetDescription": "Borrar todas estensiones and temas, y borrar preferencias",
+      "backupHeading": "Haz una copia/Reestablecer desde una copia",
+      "backupLabel": "Haz una copia o reestablece todos los datos de Marketplace desde una copia. Esto no incluye ajustes para las cosas instaladas con Marketplace.",
+      "backupBtn": "Abrir"
     },
     "tabs": {
       "Extensions": "Extensiónes",
@@ -25,7 +28,7 @@
       "editTitle": "Editar Codigo",
       "viewTitle": "Ver Codigo",
       "customCSS": "Custom CSS",
-      "customCSSPlaceholder": "Crea tu propio CSS aqui! Puedes encontrarlos en la pestaña de instalados para administrarlos.",
+      "customCSSPlaceholder": "¡Crea tu propio CSS aqui! Puedes encontrarlos en la pestaña de instalados para administrarlos.",
       "snippetName": "Nombre del codigo",
       "snippetNamePlaceholder": "Asignale un nombre para tu codigo personalizado",
       "snippetDesc": "Descripcion del codigo",
@@ -41,6 +44,17 @@
       "description": "Una recarga de ventada es necesaria para completar esta operación.",
       "reloadNow": "Recargar ahora",
       "reloadLater": "Recargar después"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Ajustes copiados al portapapeles",
+      "noDataPasted": "No data pegado",
+      "invalidJSON": "JSON invalido",
+      "inputLabel": "Ajustes de Marketplace",
+      "inputPlaceholder": "Copia/pega tus ajustes aqui",
+      "exportBtn": "Exportar",
+      "importBtn": "Importar",
+      "fileImportBtn": "Importar desde un archivo"
     },
     "devTools": {
       "title": "Herramientas de desarrollador de temas",
