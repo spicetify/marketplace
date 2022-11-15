@@ -5,6 +5,7 @@ import { Config, TabItemConfig } from "./types/marketplace-types";
 import i18n, { t } from "i18next";
 import en from "./resources/locales/en.json";
 import enUS from "./resources/locales/en-US.json";
+import es from "./resources/locales/es.json";
 import fr from "./resources/locales/fr.json";
 import zhTW from "./resources/locales/zh-TW.json";
 import zhCN from "./resources/locales/zh-CN.json";
@@ -20,6 +21,7 @@ i18n
     resources: {
       en,
       "en-US": enUS,
+      es,
       fr,
       "zh-TW": zhTW,
       "zh-CN": zhCN,
