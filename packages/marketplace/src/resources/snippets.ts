@@ -167,4 +167,16 @@ export default [
     "code": ".collection-collectionEntityHeroCard-likedSongs{ display: none; }",
     "preview": "resources/assets/snippets/hide-likedSongs-card.png",
   },
+  {
+    "title": "Fix playlist and folder position",
+    "description": "Replaces the playlists section in the left side bar to align with all the other category icons for the new UI. Screenshot includes 'Playlist icons' snippet",
+    "code": ".main-rootlist-rootlistItem { height: 40px; } .playlist-item__img.folder, .playlist-item__img { margin-right: 16px!important; } .main-rootlist-textWrapper { font-weight: 700!important; }",
+    "preview": "resources/assets/snippets/fix-playlist-and-folder-position.png",
+  },
+  {
+    "title": "Remove recently played from homepage",
+    "description": "Removes the recently played shelf from the home page",
+    "code": "section.main-shelf-shelf[aria-label='Recently played'] { visibility: hidden; position: absolute; }",
+    "preview": "resources/assets/snippets/remove-recently-played.png",
+  },
 ];
