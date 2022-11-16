@@ -426,7 +426,7 @@ class Card extends React.Component<CardProps, {
           if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
             return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
 
-          openModal("VIEW_SNIPPET", undefined, undefined, this.props);
+          openModal("VIEW_SNIPPET", undefined, undefined, this.props, this.buttonClicked.bind(this));
         } else this.openReadme();
       }
       }>

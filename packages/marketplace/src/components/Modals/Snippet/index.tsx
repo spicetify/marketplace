@@ -14,7 +14,7 @@ import Button from "../../Button";
 import { CardProps } from "../../Card/Card";
 import { ModalType } from "../../../logic/LaunchModals";
 
-const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
+const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: () => void }) => {
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
   const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
   const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
@@ -24,13 +24,15 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
   const processName = () => name.replace(/\n/g, "").replaceAll(" ", "-");
   const processCode = () => code.replace(/\n/g, "\\n");
 
+  const localStorageKey = `marketplace:installed:snippet:${processName()}`;
+  const [isInstalled, setInstalled] = React.useState(!!getLocalStorageDataFromKey(localStorageKey));
+
   const saveSnippet = () => {
     // const processedCode = processCode();
     const processedName = processName();
     const processedDescription = description.trim();
 
-    const localStorageKey = `marketplace:installed:snippet:${processedName}`;
-    if (getLocalStorageDataFromKey(localStorageKey) && props.type !== "EDIT_SNIPPET") {
+    if (isInstalled && props.type !== "EDIT_SNIPPET") {
       Spicetify.showNotification("That name is already taken!", true);
       return;
     }
@@ -166,6 +168,13 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType }) => {
               {t("snippets.saveCSS")}
             </Button>
           </>
+      }
+      {
+        props.type === "VIEW_SNIPPET"
+          &&
+          <Button onClick={() => {props.callback && props.callback(); setInstalled(!isInstalled);}}>
+            {isInstalled ? t("remove") : t("install")}
+          </Button>
       }
     </div>
   );

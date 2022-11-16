@@ -16,6 +16,7 @@ const getModalSettings = (
   CONFIG?: Config,
   updateAppConfig?: (CONFIG: Config) => void,
   props?: CardProps,
+  callback?: () => void,
 ) => {
   switch (modalType) {
   case "ADD_SNIPPET":
@@ -33,7 +34,7 @@ const getModalSettings = (
   case "VIEW_SNIPPET":
     return {
       title: t("snippets.viewTitle"),
-      content: <SnippetModal type={modalType} content={props as CardProps} />,
+      content: <SnippetModal type={modalType} content={props as CardProps} callback={callback} />,
       isLarge: true,
     };
   case "RELOAD":
@@ -76,9 +77,10 @@ export const openModal = (
   CONFIG?: Config,
   updateAppConfig?: (CONFIG: Config) => void,
   props?: CardProps,
+  callback?: () => void,
 ) => {
   const triggerModal = () => {
-    const modalSettings = getModalSettings(modal, CONFIG, updateAppConfig, props);
+    const modalSettings = getModalSettings(modal, CONFIG, updateAppConfig, props, callback);
     Spicetify.PopupModal.display(modalSettings);
   };
 
