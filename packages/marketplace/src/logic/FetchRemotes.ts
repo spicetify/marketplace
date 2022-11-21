@@ -1,6 +1,6 @@
-import { CardItem, Manifest, RepoType, Snippet } from "../types/marketplace-types";
+import { CardItem, Manifest, RepoTopic, RepoType, Snippet } from "../types/marketplace-types";
 import { processAuthors } from "./Utils";
-import { BLACKLIST_URL, EXTENSIONS_URL, THEMES_URL, APPS_URL } from "../constants";
+import { BLACKLIST_URL, EXTENSIONS_URL, THEMES_URL, APPS_URL, ITEMS_PER_REQUEST } from "../constants";
 import snippetsJSON from "../../../../resources/snippets";
 
 // TODO: Remove these once there are repos for them
@@ -29,7 +29,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+  const allRepos = await fetch(url).then((res) => res.json()).catch(() => []);
   if (!allRepos.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);
     return;
@@ -39,7 +39,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url)),
   };
 
   return filteredResults;
