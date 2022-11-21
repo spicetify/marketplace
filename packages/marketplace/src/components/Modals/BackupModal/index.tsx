@@ -70,8 +70,8 @@ const BackupModal = () => {
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={importText}
-            onValueChange={text => setImportText(text)}
-            highlight={text => highlight(text, languages.css)}
+            onValueChange={(text) => setImportText(text)}
+            highlight={(text) => highlight(text, languages.css)}
             textareaId="marketplace-import-text"
             textareaClassName="import-textarea"
             readOnly={false}
