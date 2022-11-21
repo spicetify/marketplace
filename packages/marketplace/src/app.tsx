@@ -2,6 +2,40 @@
 import React from "react";
 import { Config, TabItemConfig } from "./types/marketplace-types";
 
+import i18n, { t } from "i18next";
+import en from "./resources/locales/en.json";
+import enUS from "./resources/locales/en-US.json";
+import es from "./resources/locales/es.json";
+import fr from "./resources/locales/fr.json";
+import zhTW from "./resources/locales/zh-TW.json";
+import zhCN from "./resources/locales/zh-CN.json";
+import { initReactI18next } from "react-i18next";
+import { withTranslation } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+
+i18n
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(LanguageDetector)
+  .init({
+    // the translations
+    resources: {
+      en,
+      "en-US": enUS,
+      es,
+      fr,
+      "zh-TW": zhTW,
+      "zh-CN": zhCN,
+    },
+    detection: {
+      order: [ "navigator", "htmlTag" ],
+    },
+    // lng: "en", // if you're using a language detector, do not define the lng option
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    },
+  });
+
 // TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
 // import './styles/styles.scss';
 import "./styles/components/_grid.scss";
@@ -15,13 +49,19 @@ import "./styles/components/_fixes.scss";
 import "./styles/components/prismjs-themes/prism-tomorrow.scss";
 import "./styles/components/_devtools.scss";
 import "./styles/components/_code-editors.scss";
+import "./styles/components/_backup.scss";
 
 import Grid from "./components/Grid";
 import ReadmePage from "./components/ReadmePage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";
 import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
-class App extends React.Component<null, {count: number, CONFIG: Config}> {
+class App extends React.Component<{
+  t: (key: string) => string,
+}, {
+  count: number,
+  CONFIG: Config,
+}> {
   state = {
     count: 0,
     CONFIG: {} as Config,
@@ -109,12 +149,12 @@ class App extends React.Component<null, {count: number, CONFIG: Config}> {
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())
     if (location.pathname === `${CUSTOM_APP_PATH}/readme` && location.state.data) {
-      return <ReadmePage title='Spicetify Marketplace - Readme' data={location.state.data} />;
+      return <ReadmePage title={t("readmePage.title")} data={location.state.data} />;
     } // Otherwise, render the main Grid
     else {
-      return <Grid title="Spicetify Marketplace" CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
+      return <Grid title={t("grid.spicetifyMarketplace")} CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
     }
   }
 }
 
-export default App;
+export default withTranslation()(App);

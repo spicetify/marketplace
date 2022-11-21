@@ -1,4 +1,9 @@
-@use '../constants.scss';
+@use "../constants.scss";
+
+// Compatibility with new Spotify layout
+.Root__fixed-top-bar ~ .Root__main-view .marketplace-header {
+  padding-top: 64px;
+}
 
 .marketplace-header {
   -webkit-box-pack: justify;
@@ -17,7 +22,8 @@
   z-index: 1;
 }
 
-.marketplace-header__right, .marketplace-header__left {
+.marketplace-header__right,
+.marketplace-header__left {
   display: flex;
   & > :is(div, button) {
     margin-left: 8px;
@@ -35,7 +41,7 @@
 
 .marketplace-grid {
   --minimumColumnWidth: 180px;
-  --column-width: minmax(var(--minimumColumnWidth),1fr);
+  --column-width: minmax(var(--minimumColumnWidth), 1fr);
   --column-count: auto-fill;
   --grid-gap: 24px;
 }
@@ -98,7 +104,7 @@
 }
 
 .marketplace-header-icon-button {
-  border-radius: constants.$btn-radius;;
+  border-radius: constants.$btn-radius;
   color: var(--spice-text);
   display: inline-block;
   padding: 10px 14px 6px;

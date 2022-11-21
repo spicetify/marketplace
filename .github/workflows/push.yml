@@ -14,20 +14,31 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0
+
       - name: Use Node.js
         uses: actions/setup-node@v2.5.1
         with:
           node-version: 16.x
+
+      - name: Add dist folder to worktree
+        run: git worktree add -B dist packages/marketplace/dist origin/dist
+
       - name: yarn install and build
         run: |
           yarn
           yarn workspace @spicetify/marketplace build:prod
 
+      - run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+
       - name: Push new version
-        uses: s0/git-publish-subdir-action@develop
         env:
-          REPO: self
-          BRANCH: dist
-          FOLDER: packages/marketplace/dist
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SKIP_EMPTY_COMMITS: true
+          TARGET_BRANCH: "dist"
+        run: |
+          cd packages/marketplace/dist
+          git config --global user.name "Github Actions"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff-index --quiet HEAD || git commit -am "Update dist to output generated at $SHORT_SHA"
+          git push origin $TARGET_BRANCH

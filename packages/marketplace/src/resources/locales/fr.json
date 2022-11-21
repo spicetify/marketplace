@@ -1,0 +1,91 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Réglages",
+      "optionsHeading": "Options",
+      "starCountLabel": "Nombres d’étoiles",
+      "tagsLabel": "Tags",
+      "devToolsLabel": "Outils pour les développeurs de thèmes",
+      "hideInstalledLabel": "Masquer ceux étant installés lors de la navigation",
+      "colourShiftLabel": "Changer de couleure chaque minutes",
+      "tabsHeading": "Onglets",
+      "resetHeading": "Réinitialiser",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Désinstaller toutes les extensions et tous les thèmes, ainsi que l’ensemble des réglages",
+      "backupHeading": "Sauvegarde/Restauration",
+      "backupLabel": "Sauvegarder ou restaurer toutes les données du Marché. Celà n'inclue pas les réglages pour quoi que ce soit installé depuis le Marché.",
+      "backupBtn": "Ouvrir"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Thèmes",
+      "Snippets": "Bribes",
+      "Apps": "Applications",
+      "Installed": "Installé(s)"
+    },
+    "snippets": {
+      "addTitle": "Ajouter Bribe",
+      "editTitle": "Éditer Bribe",
+      "viewTitle": "Voir Bribe",
+      "customCSS": "CSS personnalisé",
+      "customCSSPlaceholder": "Insérez votre propre CSS personnalisé ici! Vous pouvez les retrouver dans l’onglet Installé pour les gérrer.",
+      "snippetName": "Nom de la bribe",
+      "snippetNamePlaceholder": "Entrer un nom pour votre bribe personnalisée",
+      "snippetDesc": "Description de la bribe",
+      "snippetDescPlaceholder": "Entrez une description pour votre bribe personnalisée",
+      "snippetPreview": "Prévisualiser la bribe",
+      "optional": "Optionnel",
+      "addImage": "Ajouter une image",
+      "changeImage": "Changer l’image",
+      "saveCSS": "Enregistrer le CSS"
+    },
+    "reloadModal": {
+      "title": "Recharger",
+      "description": "Un rechargement de la page est requis pour finaliser cette opération.",
+      "reloadNow": "Recharger maintenant",
+      "reloadLater": "Recharger plus tard"
+    },
+    "backupModal": {
+      "title": "Sauvegarder/Restaurer",
+      "settingsCopied": "Réglages copiés dans le presse-papier",
+      "noDataPasted": "Aucune donnée collée",
+      "invalidJSON": "JSON invalide",
+      "inputLabel": "Réglages du Marché",
+      "inputPlaceholder": "Copier/coller vos réglages ici",
+      "exportBtn": "Exporter",
+      "importBtn": "Importer",
+      "fileImportBtn": "Importer depuis un fichier"
+    },
+    "devTools": {
+      "title": "Outils de développeurs de thèmes",
+      "noThemeInstalled": "Erreur: Aucun thème du marché n’est installé",
+      "noThemeManifest": "Erreur: Aucun manifeste de thème trouvé",
+      "colorIniEditor": "Éditeur Color.ini",
+      "colorIniEditorPlaceholder": "[nom-de-votre-schéma-de-couleur]",
+      "invalidCSS": "CSS invalide"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Marché Spicetify",
+      "newUpdate": "Nouvelle mise à jour",
+      "addCSS": "Ajouter CSS",
+      "search": "Rechercher",
+      "installed": "Installé",
+      "lastUpdated": "Dernière mise à jour {{val, datetime}}",
+      "externalJS": "JS externe",
+      "dark": "sombre",
+      "light": "clair"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Chargement…",
+      "errorLoading": "Erreur lors du chargement du README"
+    },
+    "github": "GitHub",
+    "install": "Installer",
+    "remove": "Supprimer",
+    "save": "Enregistrer",
+    "colour_one": "couleure",
+    "colour_other": "couleures",
+    "favourite": "favoris"
+  }
+}

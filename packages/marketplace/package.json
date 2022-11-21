@@ -1,10 +1,10 @@
 {
 	"name": "@spicetify/marketplace",
-	"version": "0.7.1",
+	"version": "0.8.2",
 	"homepage": "https://github.com/spicetify/spicetify-marketplace",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/spicetify/spicetify-marketplace.git"
+		"url": "git@github.com:spicetify/spicetify-marketplace.git"
 	},
 	"bugs": {
 		"url": "https://github.com/spicetify/spicetify-marketplace/issues"
@@ -24,21 +24,26 @@
 		"node": ">=16"
 	},
 	"devDependencies": {
+		"@types/filesystem": "^0.0.32",
 		"@types/react": "^17.0.2",
 		"@types/react-dom": "^17.0.2",
-		"@types/semver": "^7.3.10",
-		"@typescript-eslint/eslint-plugin": "^5.31.0",
-		"@typescript-eslint/parser": "^5.31.0",
+		"@types/semver": "^7.3.13",
+		"@types/wicg-file-system-access": "^2020.9.5",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.20.0",
-		"eslint-plugin-react": "^7.30.1",
-		"prismjs": "^1.28.0",
-		"react-dropdown": "^1.10.0",
-		"react-simple-code-editor": "^0.11.2",
-		"semver": "^7.3.7",
+		"eslint": "^8.26.0",
+		"eslint-plugin-react": "^7.31.10",
+		"i18next": "^22.0.4",
+		"i18next-browser-languagedetector": "^7.0.0",
+		"prismjs": "^1.29.0",
+		"react-dropdown": "^1.11.0",
+		"react-i18next": "^12.0.0",
+		"react-simple-code-editor": "^0.13.1",
+		"semver": "^7.3.8",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.11",
-		"typescript": "^4.7.4"
+		"typescript": "^4.8.4"
 	},
 	"private": true
 }

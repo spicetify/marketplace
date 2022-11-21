@@ -1,4 +1,5 @@
 import React from "react";
+import { withTranslation } from "react-i18next";
 import { getMarkdownHTML } from "../logic/Utils";
 import { DownloadIcon, GitHubIcon, LoadingIcon, TrashIcon } from "./Icons";
 import { CardType } from "../types/marketplace-types";
@@ -21,6 +22,8 @@ class ReadmePage extends React.Component<
     isInstalled: () => boolean;
   },
   title: string,
+  // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
+  t: (key: string) => string,
 },
 {
   isInstalled: boolean,
@@ -30,13 +33,13 @@ class ReadmePage extends React.Component<
 > {
   state = {
     isInstalled: this.props.data.isInstalled(),
-    html: "<p>Loading...</p>",
+    html: `<p>${this.props.t("readmePage.loading")}</p>`,
   };
 
   getReadmeHTML = async () => {
     return fetch(this.props.data.readmeURL)
       .then((res) => {
-        if (!res.ok) throw Spicetify.showNotification(`Error loading README (HTTP ${res.status})`);
+        if (!res.ok) throw Spicetify.showNotification(`${this.props.t("readmePage.errorLoading")} (HTTP ${res.status})`, true);
         return res.text();
       })
       .then((readmeText) => getMarkdownHTML(readmeText, this.props.data.user, this.props.data.repo))
@@ -64,9 +67,12 @@ class ReadmePage extends React.Component<
     // Make the page scrollable
     const main = document.querySelector("#marketplace-readme")?.closest("main");
     if (main) {
-      setTimeout(() => {
+      const callScrollbar = setInterval(() => {
         // TODO: see if it's possible to use some load event or mutation observer to do this
+        main.style.overflowY = "visible";
         main.style.overflowY = "auto";
+        if (!document.querySelector(".os-scrollbar-vertical.os-scrollbar-unusable") || !main)
+          clearInterval(callScrollbar);
       }, 1000);
     }
 
@@ -88,17 +94,17 @@ class ReadmePage extends React.Component<
     if (this.props.data.type === "app") {
       return {
         icon: <GitHubIcon />,
-        text: "GitHub",
+        text: this.props.t("github"),
       };
     } else if (this.state.isInstalled) {
       return {
         icon: <TrashIcon />,
-        text: "Remove",
+        text: this.props.t("remove"),
       };
     } else {
       return {
         icon: <DownloadIcon />,
-        text: "Install",
+        text: this.props.t("install"),
       };
     }
   }
@@ -134,4 +140,4 @@ class ReadmePage extends React.Component<
   }
 }
 
-export default ReadmePage;
+export default withTranslation()(ReadmePage);

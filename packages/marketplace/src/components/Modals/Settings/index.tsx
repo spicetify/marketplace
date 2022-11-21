@@ -1,11 +1,13 @@
 import React from "react";
+import { t } from "i18next";
 import { Config } from "../../../types/marketplace-types";
 
-import { resetMarketplace } from "../../../logic/Utils";
+import { resetMarketplace, sleep } from "../../../logic/Utils";
 
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
 import TabRow from "./TabRow";
+import { openModal } from "../../../logic/LaunchModals";
 
 interface Props {
   CONFIG: Config;
@@ -40,7 +42,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 
   return (
     <div id="marketplace-config-container">
-      <h2>Options</h2>
+      <h2>{t("settings.optionsHeading")}</h2>
       <ConfigRow name='Stars count' storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name='Tags' storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name='Theme developer tools' storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig} />
@@ -53,15 +55,42 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
           return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
         })}
       </div>
-      <h2>Reset</h2>
+      <h2>{t("settings.resetHeading")}</h2>
       <div className="setting-row">
-        <label className="col description">Uninstall all extensions and themes, and reset preferences</label>
+        <label className="col description">{t("settings.resetDescription")}</label>
         <div className="col action">
-          <Button onClick={resetMarketplace}>Reset</Button>
+          <Button onClick={resetMarketplace}>{t("settings.resetBtn")}</Button>
+        </div>
+      </div>
+      <h2>{t("settings.backupHeading")}</h2>
+      <div className="setting-row">
+        <label className="col description">{t("settings.backupLabel")}</label>
+        <div className="col action">
+          <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
         </div>
       </div>
     </div>
   );
+};
+
+const onBackupClick = async () => {
+  // Make a new mutation observer to make sure the modal is gone
+  const observer = new MutationObserver(async () => {
+    const settingsModal = document.querySelector(".GenericModal[aria-label='Settings']");
+    if (!settingsModal) {
+      await sleep(100);
+      openModal("BACKUP");
+      observer.disconnect();
+    }
+  });
+
+  // TODO: does it still work if I just attach to the settings modal itself?
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  Spicetify.PopupModal.hide();
 };
 
 export default SettingsModal;

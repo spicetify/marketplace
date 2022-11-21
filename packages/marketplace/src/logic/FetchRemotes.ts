@@ -11,6 +11,41 @@ import extensionsManifest from "../../../../resources/manifests/extensions";
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
 
+/**
+ * Query GitHub for all repos with the requested topic
+ * @param tag The tag ("topic") to search for
+ * @param page The query page number
+ * @returns Array of search results (filtered through the blacklist)
+ */
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
+  // www is needed or it will block with "cross-origin" error.
+  let url = query
+    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`
+    : `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
+
+  // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
+  // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
+  if (page) url += `&page=${page}`;
+  // Sorting params (not implemented for Marketplace yet)
+  // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
+  //     url += `&t=${sortConfig.time}`
+  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
+  if (!allRepos.items) {
+    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
+    return;
+  }
+  const filteredResults = {
+    ...allRepos,
+    // Include count of all items on the page, since we're filtering the blacklist below,
+    // which can mess up the paging logic
+    page_count: allRepos.items.length,
+    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+  };
+
+  return filteredResults;
+}
+
+// TODO: add try/catch here?
 // TODO: can we add a return type here?
 // TODO: Update these docs
 /**

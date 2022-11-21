@@ -1,4 +1,5 @@
 import React, { Key } from "react";
+import { withTranslation } from "react-i18next";
 import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
@@ -15,6 +16,7 @@ import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
+import { t } from "i18next";
 
 export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
@@ -28,7 +30,7 @@ export type CardProps = {
   activeThemeKey?: string;
 };
 
-export default class Card extends React.Component<CardProps, {
+class Card extends React.Component<CardProps, {
   installed: boolean
   // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
   stars: number;
@@ -64,7 +66,7 @@ export default class Card extends React.Component<CardProps, {
 
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
     this.tags = props.item.tags || [];
-    if (props.item.include) this.tags.push("external JS");
+    if (props.item.include) this.tags.push(t("grid.externalJS"));
 
     this.state = {
       // Initial value. Used to trigger a re-render.
@@ -154,7 +156,7 @@ export default class Card extends React.Component<CardProps, {
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
     if (!this.props.item) {
-      Spicetify.showNotification("There was an error installing extension");
+      Spicetify.showNotification("There was an error installing extension", true);
       return;
     }
     const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated } = this.props.item;
@@ -207,7 +209,7 @@ export default class Card extends React.Component<CardProps, {
   async installTheme() {
     const { item } = this.props;
     if (!item) {
-      Spicetify.showNotification("There was an error installing theme");
+      Spicetify.showNotification("There was an error installing theme", true);
       return;
     }
     console.log(`Installing theme ${this.localStorageKey}`);
@@ -276,6 +278,11 @@ export default class Card extends React.Component<CardProps, {
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
       this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
+
+      // Add to Spicetify.Config
+      const name = this.props.item.manifest?.name;
+      if (name) Spicetify.Config.current_theme = name;
+      if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
     }
 
     this.setState({ installed: true });
@@ -309,6 +316,10 @@ export default class Card extends React.Component<CardProps, {
       this.props.updateActiveTheme(null);
       // Removes the current colour scheme
       this.props.updateColourSchemes(null, null);
+
+      // Restore Spicetify.Config
+      Spicetify.Config.current_theme = Spicetify.Config.local_theme;
+      Spicetify.Config.color_scheme = Spicetify.Config.local_color_scheme;
 
       this.setState({ installed: false });
     }
@@ -381,7 +392,7 @@ export default class Card extends React.Component<CardProps, {
         },
       });
     } else {
-      Spicetify.showNotification("No page was found");
+      Spicetify.showNotification("No page was found", true);
     }
   }
 
@@ -413,7 +424,7 @@ export default class Card extends React.Component<CardProps, {
           if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
             return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
 
-          openModal("VIEW_SNIPPET", undefined, undefined, this.props);
+          openModal("VIEW_SNIPPET", undefined, undefined, this.props, this.buttonClicked.bind(this));
         } else this.openReadme();
       }
       }>
@@ -467,14 +478,14 @@ export default class Card extends React.Component<CardProps, {
               {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
             </p>
             {this.props.item.lastUpdated &&
-            <p className="marketplace-card-desc">Last updated:{" "}
-              {new Date(
-                this.props.item.lastUpdated,
-              ).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
+            <p className="marketplace-card-desc">
+              {t("grid.lastUpdated",
+                { val: new Date(this.props.item.lastUpdated),
+                  formatParams: {
+                    val: { year: "numeric", month: "long", day: "numeric" },
+                  },
+                })
+              }
             </p>}
             {this.tags.length ? (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
@@ -483,7 +494,7 @@ export default class Card extends React.Component<CardProps, {
             ) : null}
             {IS_INSTALLED && (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
-                ✓ Installed
+                ✓ {t("grid.installed")}
               </div>
             )}
             <div className="main-card-PlayButtonContainer">
@@ -491,7 +502,7 @@ export default class Card extends React.Component<CardProps, {
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
                 // TODO: Refactor this using lookups or sth similar
-                label={this.props.type === "app" ? "GitHub" : IS_INSTALLED ? "Remove" : "Install"}
+                label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();
@@ -508,3 +519,5 @@ export default class Card extends React.Component<CardProps, {
     );
   }
 }
+
+export default withTranslation()(Card);

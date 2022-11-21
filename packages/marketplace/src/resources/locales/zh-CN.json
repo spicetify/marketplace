@@ -1,0 +1,77 @@
+{
+  "translation": {
+    "settings": {
+      "title": "设置",
+      "optionsHeading": "选项",
+      "starCountLabel": "收藏数",
+      "tagsLabel": "标签",
+      "devToolsLabel": "主題开发者工具",
+      "hideInstalledLabel": "浏览时隐藏已安装项目",
+      "colourShiftLabel": "每分钟进行色调偏移",
+      "tabsHeading": "分页",
+      "resetHeading": "重置",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "卸载所有扩展插件和主题，并重置设置"
+    },
+    "tabs": {
+      "Extensions": "扩展插件",
+      "Themes": "主题",
+      "Snippets": "微调片段",
+      "Apps": "功能模组",
+      "Installed": "已安裝项目"
+    },
+    "snippets": {
+      "addTitle": "加入微调片段",
+      "editTitle": "编辑微调片段",
+      "viewTitle": "检视微调片段",
+      "customCSS": "自定义 CSS",
+      "customCSSPlaceholder": "这里可以输入您的自定义 CSS！您可以在「已安裝项目」标签页中看到这些片段，进而进行管理。",
+      "snippetName": "微调片段名称",
+      "snippetNamePlaceholder": "输入自定义微调片段的名称",
+      "snippetDesc": "微调片段描述",
+      "snippetDescPlaceholder": "输入自定义微调片段的描述",
+      "snippetPreview": "微调片段预览图",
+      "optional": "非必要",
+      "addImage": "加入影像",
+      "changeImage": "更改影像",
+      "saveCSS": "保存 CSS"
+    },
+    "reloadModal": {
+      "title": "重新加载",
+      "description": "需要重新加载页面，才能完成这个操作。",
+      "reloadNow": "立即重新加载",
+      "reloadLater": "稍后重新加载"
+    },
+    "devTools": {
+      "title": "主題开发者工具",
+      "noThemeInstalled": "错误：未安装商场主题",
+      "noThemeManifest": "错误：找不到主题内容清单",
+      "colorIniEditor": "Color.ini 编辑器",
+      "colorIniEditorPlaceholder": "[您的色彩配置名称]",
+      "invalidCSS": "CSS 无效"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify 商场",
+      "newUpdate": "有更新",
+      "addCSS": "加入 CSS",
+      "search": "搜索",
+      "installed": "已安装",
+      "lastUpdated": "上次更新于 {{val, datetime}}",
+      "externalJS": "有外部 JS",
+      "dark": "暗色模式",
+      "light": "亮色模式"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) – 说明",
+      "loading": "正在加载……",
+      "errorLoading": "加载 README 时发生错误"
+    },
+    "github": "GitHub",
+    "install": "安裝",
+    "remove": "移除",
+    "save": "保存",
+    "colour_one": "色彩",
+    "colour_other": "色彩",
+    "favourite": "收藏"
+  }
+}
