@@ -128,7 +128,7 @@ export default [
   {
     "title": "Remove Top gradient",
     "description": "Removes gradient from home page and playlist page",
-    "code": ".main-entityHeader-backgroundColor { display: none !important; } .main-actionBarBackground-background { display: none !important; } .main-home-homeHeader { display: none !important; }",
+    "code": ".main-entityHeader-backgroundColor { display: none !important; } .main-actionBarBackground-background { display: none !important; } .main-home-homeHeader { display: none !important; } .main-topBar-background { background-color: var(--spice-main) !important; }",
     "preview": "resources/assets/snippets/remove-gradient.png",
   },
   {
