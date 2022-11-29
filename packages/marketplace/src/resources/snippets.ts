@@ -159,7 +159,7 @@ export default [
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
     "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 2s linear infinite; clip-path: circle(50% at 50% 50%);}`,
-    "preview": "resources/assets/snippets/rotating-coverart",
+    "preview": "resources/assets/snippets/rotating-coverart.png",
   },
   {
     "title": "Hide liked songs card",
