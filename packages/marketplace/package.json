@@ -29,13 +29,13 @@
 		"@types/react-dom": "^17.0.2",
 		"@types/semver": "^7.3.13",
 		"@types/wicg-file-system-access": "^2020.9.5",
-		"@typescript-eslint/eslint-plugin": "^5.42.0",
-		"@typescript-eslint/parser": "^5.42.0",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.26.0",
-		"eslint-plugin-react": "^7.31.10",
-		"i18next": "^22.0.4",
-		"i18next-browser-languagedetector": "^7.0.0",
+		"eslint": "^8.28.0",
+		"eslint-plugin-react": "^7.31.11",
+		"i18next": "^22.0.6",
+		"i18next-browser-languagedetector": "^7.0.1",
 		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.11.0",
 		"react-i18next": "^12.0.0",
@@ -43,7 +43,7 @@
 		"semver": "^7.3.8",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.11",
-		"typescript": "^4.8.4"
+		"typescript": "^4.9.3"
 	},
 	"private": true
 }
