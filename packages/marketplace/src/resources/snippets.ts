@@ -179,4 +179,10 @@ export default [
     "code": "section.main-shelf-shelf[aria-label='Recently played'] { visibility: hidden; position: absolute; }",
     "preview": "resources/assets/snippets/remove-recently-played.png",
   },
+  {
+    "title": "Make custom app icons thicker",
+    "description": "Gives icons from the sticky list a thicker border",
+    "code": "#spicetify-sticky-list>li:nth-child(1n+1)>a>div.icon.collection-icon>svg { stroke: currentcolor; stroke-width: 11px; } .collection-icon { color: unset; }",
+    "preview": "resources/assets/snippets/thicker-sticky-list-icons.png",
+  },
 ];
