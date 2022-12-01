@@ -32,7 +32,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.26.0",
+		"eslint": "^8.28.0",
 		"eslint-plugin-react": "^7.31.10",
 		"i18next": "^22.0.4",
 		"i18next-browser-languagedetector": "^7.0.0",
