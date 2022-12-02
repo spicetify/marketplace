@@ -1,6 +1,7 @@
 import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
-
+import Vibrant from "node-vibrant";
+import Chroma from "chroma-js";
 /**
  * Get localStorage data (or fallback value), given a key
  * @param key The localStorage key
@@ -311,10 +312,121 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
     }`;
 
     document.body.appendChild(style);
+    console.log(Object.values(schemes)[i]);
     injectColourScheme(Object.values(schemes)[i]);
     i++;
     style.remove();
   }, 60 * 1000);
+};
+
+export const getColorFromImage = async (image: HTMLImageElement, numColors : number) => {
+  const swatches = await Vibrant.from(image).maxColorCount(numColors).getPalette((err, palette) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+  });
+  if (swatches.Vibrant) {
+    console.log(swatches.Vibrant.hex);
+    // remove the # from the hex
+    return swatches.Vibrant.hex.substring(1);
+
+  }
+  return "null";
+
+};
+
+export const generateColorPalette = async (mainColor : string, numColors : number) => {
+  // Generate a palette from https://www.thecolorapi.com/id?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=html
+  console.log(`Generating color palette for ${mainColor}`);
+  const palette = await fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=monochrome-light&count=${numColors}`);
+  const paletteJSON = await palette.json();
+  console.log(paletteJSON);
+  // create an array of the hex values for the colors while also removing the #
+  const colorArray = paletteJSON.colors.map((color) => color.hex.value.substring(1));
+  return colorArray;
+};
+
+async function waitForAlbumArt() : Promise<HTMLImageElement | null> {
+  // Only return when the album art is loaded
+  return new Promise((resolve) => {
+    setInterval(() => {
+      const albumArt : HTMLImageElement | null  = document.querySelector(".main-image-image.cover-art-image");
+      if (albumArt) {
+        resolve(albumArt);
+      }
+    }, 50);
+  });
+}
+
+export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
+  const style = document.createElement("style");
+  style.className = "colorShift-style";
+  style.innerHTML = `* {
+    transition-duration: 400ms;
+  }
+  main-type-bass {
+    transition-duration: unset !important;
+  }`;
+  // Add a listener for the album art changing
+  // and update the color scheme accordingly
+  document.body.appendChild(style);
+  Spicetify.Player.addEventListener("songchange", async () => {
+    await sleep(2000);
+    console.log("Triggering color change");
+    let albumArt : HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+    console.log(albumArt);
+
+    // If it doesn't exist, wait for it to load
+    if (albumArt == null || !albumArt.complete) {
+      console.log("Waiting for album art to load");
+      albumArt = await waitForAlbumArt();
+    }
+
+    if (albumArt) {
+      const numColors = new Set(Object.values(scheme)).size;
+      console.log(numColors);
+      const mainColor = await getColorFromImage(albumArt, numColors);
+      const newColors = await generateColorPalette(mainColor, numColors);
+      /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
+      i.e.
+      { "color1": "#000000", "color2": "#000000", "color3": "#FFFFFF" } ->
+      { "#000000": ["color1", "color2"], "#FFFFFF": ["color3"]}
+      */
+      console.log("New colors: ", newColors);
+      let colorMap = new Map();
+      for (const [key, value] of Object.entries(scheme)) {
+        if (colorMap.has(value)) {
+          colorMap.get(value).push(key);
+        } else {
+          colorMap.set(value, [key]);
+        }
+      }
+      // Order the color map by how similar the colors are to eachother
+      const orderedColorMap = new Map([...colorMap.entries()].sort((a, b) => {
+
+        const aColor = Chroma(a[0]);
+        const bColor = Chroma(b[0]);
+        return aColor.get("lab.l") - bColor.get("lab.l");
+      }));
+      console.log("Ordered color map: ", orderedColorMap);
+      colorMap=orderedColorMap;
+      // replace the keys in the color map with the new colors
+      const newScheme = {};
+      for (const [key, value] of colorMap.entries()) {
+        const newColor = newColors.shift();
+        if (newColor) {
+          for (const key of value) {
+            newScheme[key] = newColor;
+          }
+        }
+      }
+      console.log(newScheme);
+      injectColourScheme(newScheme);
+
+    }
+
+  });
 };
 
 export const parseCSS = async (themeData: CardItem) => {
@@ -378,7 +490,7 @@ export const getParamsFromGithubRaw = (url: string) => {
 
 export function addToSessionStorage(items, key?) {
   if (!items) return;
-  items.forEach(item => {
+  items.forEach((item: any) => {
     if (!key) key = `${items.user}-${items.repo}`;
     // If the key already exists, it will append to it instead of overwriting it
     const existing = window.sessionStorage.getItem(key);
@@ -478,3 +590,8 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
     Spicetify.Config.extensions.push(name);
   }
 };
+
+function resolve(albumArt: Element) {
+  throw new Error("Function not implemented.");
+}
+

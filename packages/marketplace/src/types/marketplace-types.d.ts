@@ -1,3 +1,4 @@
+
 declare global {
   interface Window {
     Marketplace: Record<string, unknown>;
@@ -116,6 +117,7 @@ export type VisualConfig = {
   hideInstalled: boolean;
   colorShift: boolean;
   themeDevTools: boolean;
+  albumArtBasedColors: boolean;
   // Legacy from reddit app
   type: boolean;
   // I was considering adding watchers as "followers" but it looks like the value is a duplicate

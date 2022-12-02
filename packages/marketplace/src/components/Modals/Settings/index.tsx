@@ -48,6 +48,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <ConfigRow name={t("settings.devToolsLabel")} storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name={t("settings.hideInstalledLabel")} storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig} />
       <ConfigRow name={t("settings.colourShiftLabel")} storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig} />
+      <ConfigRow name={t("settings.albumArtBasedColors")} storageKey='albumArtBasedColors' modalConfig={modalConfig} updateConfig={updateConfig} />
       <h2>{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {

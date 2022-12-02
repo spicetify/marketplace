@@ -15,5 +15,9 @@
 	"packageManager": "yarn@3.2.1",
 	"devDependencies": {
 		"husky": "^8.0.2"
+	},
+	"dependencies": {
+		"@types/chroma-js": "^2.1.4",
+		"chroma-js": "^2.4.2"
 	}
 }
