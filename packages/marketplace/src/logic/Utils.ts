@@ -312,7 +312,6 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
     }`;
 
     document.body.appendChild(style);
-    console.log(Object.values(schemes)[i]);
     injectColourScheme(Object.values(schemes)[i]);
     i++;
     style.remove();
@@ -327,7 +326,6 @@ export const getColorFromImage = async (image: HTMLImageElement, numColors : num
     }
   });
   if (swatches.Vibrant) {
-    console.log(swatches.Vibrant.hex);
     // remove the # from the hex
     return swatches.Vibrant.hex.substring(1);
 
@@ -341,7 +339,6 @@ export const generateColorPalette = async (mainColor : string, numColors : numbe
   console.log(`Generating color palette for ${mainColor}`);
   const palette = await fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=monochrome-light&count=${numColors}`);
   const paletteJSON = await palette.json();
-  console.log(paletteJSON);
   // create an array of the hex values for the colors while also removing the #
   const colorArray = paletteJSON.colors.map((color) => color.hex.value.substring(1));
   return colorArray;
@@ -372,20 +369,16 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   document.body.appendChild(style);
   Spicetify.Player.addEventListener("songchange", async () => {
-    await sleep(2000);
-    console.log("Triggering color change");
+    await sleep(1000);
     let albumArt : HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
-    console.log(albumArt);
 
     // If it doesn't exist, wait for it to load
     if (albumArt == null || !albumArt.complete) {
-      console.log("Waiting for album art to load");
       albumArt = await waitForAlbumArt();
     }
 
     if (albumArt) {
       const numColors = new Set(Object.values(scheme)).size;
-      console.log(numColors);
       const mainColor = await getColorFromImage(albumArt, numColors);
       const newColors = await generateColorPalette(mainColor, numColors);
       /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
@@ -393,7 +386,6 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
       { "color1": "#000000", "color2": "#000000", "color3": "#FFFFFF" } ->
       { "#000000": ["color1", "color2"], "#FFFFFF": ["color3"]}
       */
-      console.log("New colors: ", newColors);
       let colorMap = new Map();
       for (const [key, value] of Object.entries(scheme)) {
         if (colorMap.has(value)) {
@@ -409,7 +401,6 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
         const bColor = Chroma(b[0]);
         return aColor.get("lab.l") - bColor.get("lab.l");
       }));
-      console.log("Ordered color map: ", orderedColorMap);
       colorMap=orderedColorMap;
       // replace the keys in the color map with the new colors
       const newScheme = {};
@@ -421,7 +412,6 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
           }
         }
       }
-      console.log(newScheme);
       injectColourScheme(newScheme);
 
     }
