@@ -339,7 +339,9 @@ export const generateColorPalette = async (mainColor : string, numColors : numbe
   const mode = getLocalStorageDataFromKey("marketplace:albumArtBasedColorsMode");
   // Add a hyphen before any uppercase characters
   const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
-  const palette = await Spicetify.CosmosAsync.get(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`);
+  //fetch `https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`
+  const palette = await  fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`)
+    .then((response) => response.json());
   // create an array of the hex values for the colors while also removing the #
   const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
   return colorArray;
