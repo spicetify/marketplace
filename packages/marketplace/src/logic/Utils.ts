@@ -328,7 +328,6 @@ export const getColorFromImage = async (image: HTMLImageElement, numColors : num
   if (swatches.Vibrant) {
     // remove the # from the hex
     return swatches.Vibrant.hex.substring(1);
-
   }
   return "null";
 
