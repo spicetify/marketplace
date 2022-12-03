@@ -324,6 +324,7 @@ export const getColorFromImage = async (image: HTMLImageElement, numColors : num
       console.error(err);
       return;
     }
+    return palette;
   });
   if (swatches.Vibrant) {
     // remove the # from the hex
@@ -404,7 +405,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
       colorMap=orderedColorMap;
       // replace the keys in the color map with the new colors
       const newScheme = {};
-      for (const [key, value] of colorMap.entries()) {
+      for (const [, value] of colorMap.entries()) {
         const newColor = newColors.shift();
         if (newColor) {
           for (const key of value) {
@@ -580,8 +581,4 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
     Spicetify.Config.extensions.push(name);
   }
 };
-
-function resolve(albumArt: Element) {
-  throw new Error("Function not implemented.");
-}
 
