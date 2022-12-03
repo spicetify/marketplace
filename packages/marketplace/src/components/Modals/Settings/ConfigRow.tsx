@@ -35,10 +35,9 @@ const ConfigRow = (props: {
     props.updateConfig(props.modalConfig);
   };
 
-  if (type == "dropdown" && props.options != null) {
+  if (type === "dropdown" && props.options) {
     return (
       <SortBox
-
         sortBoxOptions={props.options.map((option) => {
           return {
             key: option,
