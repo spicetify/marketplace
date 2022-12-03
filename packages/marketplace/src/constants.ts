@@ -15,7 +15,6 @@ export const LOCALSTORAGE_KEYS = {
   albumArtBasedColor: "marketplace:albumArtBasedColors",
   albumArtBasedColorMode: "marketplace:albumArtBasedColorsMode",
   colorShift: "marketplace:colorShift",
-
 };
 
 // Initalize topbar tabs

@@ -19,7 +19,6 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
       return data;
     }
   } else {
-    console.log(fallback);
     return fallback;
   }
 };
@@ -361,10 +360,11 @@ async function waitForAlbumArt() : Promise<HTMLImageElement | null> {
 export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   const style = document.createElement("style");
   style.className = "colorShift-style";
-  style.innerHTML = `* {
+  style.innerHTML = `
+  * {
     transition-duration: 400ms;
   }
-  main-type-bass {
+  .main-type-bass {
     transition-duration: unset !important;
   }`;
   // Add a listener for the album art changing
@@ -482,7 +482,7 @@ export const getParamsFromGithubRaw = (url: string) => {
 
 export function addToSessionStorage(items, key?) {
   if (!items) return;
-  items.forEach((item: any) => {
+  items.forEach((item) => {
     if (!key) key = `${items.user}-${items.repo}`;
     // If the key already exists, it will append to it instead of overwriting it
     const existing = window.sessionStorage.getItem(key);
