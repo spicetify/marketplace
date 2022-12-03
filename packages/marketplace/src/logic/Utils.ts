@@ -10,7 +10,6 @@ import Chroma from "chroma-js";
  */
 export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
   const data = localStorage.getItem(key);
-
   if (data) {
     try {
       // If it's json parse it
@@ -20,6 +19,7 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
       return data;
     }
   } else {
+    console.log(fallback);
     return fallback;
   }
 };
@@ -337,8 +337,10 @@ export const getColorFromImage = async (image: HTMLImageElement, numColors : num
 
 export const generateColorPalette = async (mainColor : string, numColors : number) => {
   // Generate a palette from https://www.thecolorapi.com/id?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=html
-  console.log(`Generating color palette for ${mainColor}`);
-  const palette = await Spicetify.CosmosAsync.get(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=monochrome-light&count=${numColors}`);
+  const mode = getLocalStorageDataFromKey("marketplace:albumArtBasedColorsMode");
+  // Add a hyphen before any uppercase characters
+  const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
+  const palette = await Spicetify.CosmosAsync.get(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`);
   // create an array of the hex values for the colors while also removing the #
   const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
   return colorArray;

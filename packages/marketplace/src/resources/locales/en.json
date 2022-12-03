@@ -9,6 +9,7 @@
       "hideInstalledLabel": "Hide installed when browsing",
       "colourShiftLabel": "Shift colours every minute",
       "albumArtBasedColors": "Change colours based on album art",
+      "albumArtBasedColorsMode": "The mode that the colorapi uses to generate color schemes",
       "tabsHeading": "Tabs",
       "resetHeading": "Reset",
       "resetBtn": "$t(settings.resetHeading)",
