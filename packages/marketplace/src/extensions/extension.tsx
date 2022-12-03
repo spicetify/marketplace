@@ -94,8 +94,7 @@ import {
       Spicetify.Config.color_scheme = themeManifest.activeScheme;
       if (localStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
         initAlbumArtBasedColor(activeScheme);
-      }
-      else if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
+      } else if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
         initColorShiftLoop(themeManifest.schemes);
       }
     } else {
