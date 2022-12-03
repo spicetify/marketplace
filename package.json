@@ -15,5 +15,8 @@
 	"packageManager": "yarn@3.2.1",
 	"devDependencies": {
 		"husky": "^8.0.1"
+	},
+	"dependencies": {
+		"node-fetch": "^3.3.0"
 	}
 }
