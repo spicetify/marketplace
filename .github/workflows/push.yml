@@ -23,12 +23,12 @@ jobs:
           node-version: 16.x
 
       - name: Add dist folder to worktree
-        run: git worktree add -B dist packages/marketplace/dist origin/dist
+        run: git worktree add -B dist dist origin/dist
 
       - name: yarn install and build
         run: |
           yarn
-          yarn workspace @spicetify/marketplace build:prod
+          yarn build:prod
 
       - run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_ENV
 
@@ -36,7 +36,7 @@ jobs:
         env:
           TARGET_BRANCH: "dist"
         run: |
-          cd packages/marketplace/dist
+          cd dist
           git config --global user.name "Github Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
