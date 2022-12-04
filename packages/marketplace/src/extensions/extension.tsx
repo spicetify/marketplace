@@ -19,6 +19,7 @@ import {
   addToSessionStorage,
   sleep,
   addExtensionToSpicetifyConfig,
+  initAlbumArtBasedColor,
 } from "../logic/Utils";
 import {
   getBlacklist,
@@ -91,8 +92,9 @@ import {
 
       // Add to Spicetify.Config
       Spicetify.Config.color_scheme = themeManifest.activeScheme;
-
-      if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
+      if (localStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
+        initAlbumArtBasedColor(activeScheme);
+      } else if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
         initColorShiftLoop(themeManifest.schemes);
       }
     } else {

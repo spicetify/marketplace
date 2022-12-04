@@ -1,6 +1,8 @@
 import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
-
+import Vibrant from "node-vibrant";
+import Chroma from "chroma-js";
+import { LOCALSTORAGE_KEYS } from "../constants";
 /**
  * Get localStorage data (or fallback value), given a key
  * @param key The localStorage key
@@ -9,7 +11,6 @@ import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } fro
  */
 export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
   const data = localStorage.getItem(key);
-
   if (data) {
     try {
       // If it's json parse it
@@ -317,6 +318,109 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   }, 60 * 1000);
 };
 
+export const getColorFromImage = async (image: HTMLImageElement, numColors: number) => {
+  const swatches = await Vibrant.from(image).maxColorCount(numColors).getPalette((err, palette) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    return palette;
+  });
+
+  if (swatches.Vibrant) {
+    // remove the # from the hex
+    return swatches.Vibrant.hex.substring(1);
+  }
+
+  return "null";
+};
+
+export const generateColorPalette = async (mainColor: string, numColors: number) => {
+  // Generate a palette from https://www.thecolorapi.com/id?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=html
+  const mode = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorMode);
+  // Add a hyphen before any uppercase characters
+  const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
+  //fetch `https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`
+  const palette = await  fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`)
+    .then((response) => response.json());
+  // create an array of the hex values for the colors while also removing the #
+  const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
+  return colorArray;
+};
+
+async function waitForAlbumArt(): Promise<HTMLImageElement | null> {
+  // Only return when the album art is loaded
+  return new Promise((resolve) => {
+    setInterval(() => {
+      const albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+      if (albumArt) {
+        resolve(albumArt);
+      }
+    }, 50);
+  });
+}
+
+export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
+  const style = document.createElement("style");
+  style.className = "colorShift-style";
+  style.innerHTML = `
+  * {
+    transition-duration: 400ms;
+  }
+  .main-type-bass {
+    transition-duration: unset !important;
+  }`;
+  // Add a listener for the album art changing
+  // and update the color scheme accordingly
+  document.body.appendChild(style);
+  Spicetify.Player.addEventListener("songchange", async () => {
+    await sleep(1000);
+    let albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+
+    // If it doesn't exist, wait for it to load
+    if (albumArt == null || !albumArt.complete) {
+      albumArt = await waitForAlbumArt();
+    }
+
+    if (albumArt) {
+      const numColors = new Set(Object.values(scheme)).size;
+      const mainColor = await getColorFromImage(albumArt, numColors);
+      const newColors = await generateColorPalette(mainColor, numColors);
+      /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
+      i.e.
+      { "color1": "#000000", "color2": "#000000", "color3": "#FFFFFF" } ->
+      { "#000000": ["color1", "color2"], "#FFFFFF": ["color3"]}
+      */
+      let colorMap = new Map();
+      for (const [key, value] of Object.entries(scheme)) {
+        if (colorMap.has(value)) {
+          colorMap.get(value).push(key);
+        } else {
+          colorMap.set(value, [key]);
+        }
+      }
+      // Order the color map by how similar the colors are to eachother
+      const orderedColorMap = new Map([...colorMap.entries()].sort((a, b) => {
+        const aColor = Chroma(a[0]);
+        const bColor = Chroma(b[0]);
+        return aColor.get("lab.l") - bColor.get("lab.l");
+      }));
+      colorMap = orderedColorMap;
+      // replace the keys in the color map with the new colors
+      const newScheme = {};
+      for (const [, value] of colorMap.entries()) {
+        const newColor = newColors.shift();
+        if (newColor) {
+          for (const key of value) {
+            newScheme[key] = newColor;
+          }
+        }
+      }
+      injectColourScheme(newScheme);
+    }
+  });
+};
+
 export const parseCSS = async (themeData: CardItem) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
 
@@ -378,7 +482,7 @@ export const getParamsFromGithubRaw = (url: string) => {
 
 export function addToSessionStorage(items, key?) {
   if (!items) return;
-  items.forEach(item => {
+  items.forEach((item) => {
     if (!key) key = `${items.user}-${items.repo}`;
     // If the key already exists, it will append to it instead of overwriting it
     const existing = window.sessionStorage.getItem(key);
@@ -478,3 +582,4 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
     Spicetify.Config.extensions.push(name);
   }
 };
+

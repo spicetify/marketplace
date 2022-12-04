@@ -114,6 +114,8 @@ class App extends React.Component<{
         hideInstalled: JSON.parse(getLocalStorageDataFromKey("marketplace:hideInstalled", false)),
         colorShift: JSON.parse(getLocalStorageDataFromKey("marketplace:colorShift", false)),
         themeDevTools: JSON.parse(getLocalStorageDataFromKey("marketplace:themeDevTools", false)),
+        albumArtBasedColors: JSON.parse(getLocalStorageDataFromKey("marketplace:albumArtBasedColors", false)),
+        albumArtBasedColorsMode: getLocalStorageDataFromKey("marketplace:albumArtBasedColorsMode") || "monochrome-light",
         // Legacy from reddit app
         type: JSON.parse(getLocalStorageDataFromKey("marketplace:type", false)),
         // I was considering adding watchers as "followers" but it looks like the value is a duplicate

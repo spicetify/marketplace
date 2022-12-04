@@ -24,6 +24,7 @@
 		"node": ">=16"
 	},
 	"devDependencies": {
+		"@types/chroma-js": "^2.1.4",
 		"@types/filesystem": "^0.0.32",
 		"@types/react": "^17.0.2",
 		"@types/react-dom": "^17.0.2",
@@ -31,11 +32,13 @@
 		"@types/wicg-file-system-access": "^2020.9.5",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
+		"chroma-js": "^2.4.2",
 		"copyfiles": "^2.4.1",
 		"eslint": "^8.28.0",
 		"eslint-plugin-react": "^7.31.11",
 		"i18next": "^22.0.6",
 		"i18next-browser-languagedetector": "^7.0.1",
+		"node-vibrant": "3.1.4",
 		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.11.0",
 		"react-i18next": "^12.0.0",
