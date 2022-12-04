@@ -25,11 +25,9 @@
 	},
 	"devDependencies": {
 		"@types/chroma-js": "^2.1.4",
-		"@types/filesystem": "^0.0.32",
 		"@types/react": "^17.0.2",
 		"@types/react-dom": "^17.0.2",
 		"@types/semver": "^7.3.13",
-		"@types/wicg-file-system-access": "^2020.9.5",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"chroma-js": "^2.4.2",
