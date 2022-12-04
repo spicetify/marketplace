@@ -176,7 +176,7 @@ export default [
   {
     "title": "Remove recently played from homepage",
     "description": "Removes the recently played shelf from the home page",
-    "code": "section.main-shelf-shelf[aria-label='Recently played'] { visibility: hidden; position: absolute; }",
+    "code": "section[data-testid='home-page'] .main-shelf-shelf[aria-label='Recently played'] { display: none !important; }",
     "preview": "resources/assets/snippets/remove-recently-played.png",
   },
   {
