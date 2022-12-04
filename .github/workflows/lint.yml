@@ -24,4 +24,4 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Lint checks
-        run: yarn workspace @spicetify/marketplace lint:ci
+        run: yarn lint:ci
