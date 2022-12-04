@@ -23,6 +23,7 @@
 	"engines": {
 		"node": ">=16"
 	},
+	"packageManager": "yarn@3.2.1",
 	"devDependencies": {
 		"@types/chroma-js": "^2.1.4",
 		"@types/react": "^17.0.2",
@@ -34,6 +35,7 @@
 		"copyfiles": "^2.4.1",
 		"eslint": "^8.28.0",
 		"eslint-plugin-react": "^7.31.11",
+		"husky": "^8.0.2",
 		"i18next": "^22.0.6",
 		"i18next-browser-languagedetector": "^7.0.1",
 		"node-vibrant": "3.1.4",

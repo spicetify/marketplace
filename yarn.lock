@@ -2543,6 +2543,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"husky@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "husky@npm:8.0.2"
+  bin:
+    husky: lib/bin.js
+  checksum: e101656fcb56163d610488f186448c78b132626aa427094489d886ce9374955a90274912b0f3a34af3326eaa74977883b032e5f701d7aaf4554daa5a7931be43
+  languageName: node
+  linkType: hard
+
 "i18next-browser-languagedetector@npm:^7.0.1":
   version: 7.0.1
   resolution: "i18next-browser-languagedetector@npm:7.0.1"
@@ -4437,6 +4446,7 @@ __metadata:
     copyfiles: ^2.4.1
     eslint: ^8.28.0
     eslint-plugin-react: ^7.31.11
+    husky: ^8.0.2
     i18next: ^22.0.6
     i18next-browser-languagedetector: ^7.0.1
     node-vibrant: 3.1.4
