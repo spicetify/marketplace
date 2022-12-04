@@ -2,6 +2,7 @@ import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 import Vibrant from "node-vibrant";
 import Chroma from "chroma-js";
+import { LOCALSTORAGE_KEYS } from "../constants";
 /**
  * Get localStorage data (or fallback value), given a key
  * @param key The localStorage key
@@ -317,7 +318,7 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   }, 60 * 1000);
 };
 
-export const getColorFromImage = async (image: HTMLImageElement, numColors : number) => {
+export const getColorFromImage = async (image: HTMLImageElement, numColors: number) => {
   const swatches = await Vibrant.from(image).maxColorCount(numColors).getPalette((err, palette) => {
     if (err) {
       console.error(err);
@@ -325,17 +326,18 @@ export const getColorFromImage = async (image: HTMLImageElement, numColors : num
     }
     return palette;
   });
+
   if (swatches.Vibrant) {
     // remove the # from the hex
     return swatches.Vibrant.hex.substring(1);
   }
-  return "null";
 
+  return "null";
 };
 
-export const generateColorPalette = async (mainColor : string, numColors : number) => {
+export const generateColorPalette = async (mainColor: string, numColors: number) => {
   // Generate a palette from https://www.thecolorapi.com/id?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=html
-  const mode = getLocalStorageDataFromKey("marketplace:albumArtBasedColorsMode");
+  const mode = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorMode);
   // Add a hyphen before any uppercase characters
   const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
   //fetch `https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`
@@ -346,11 +348,11 @@ export const generateColorPalette = async (mainColor : string, numColors : numbe
   return colorArray;
 };
 
-async function waitForAlbumArt() : Promise<HTMLImageElement | null> {
+async function waitForAlbumArt(): Promise<HTMLImageElement | null> {
   // Only return when the album art is loaded
   return new Promise((resolve) => {
     setInterval(() => {
-      const albumArt : HTMLImageElement | null  = document.querySelector(".main-image-image.cover-art-image");
+      const albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
       if (albumArt) {
         resolve(albumArt);
       }
@@ -373,7 +375,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   document.body.appendChild(style);
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    let albumArt : HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+    let albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
 
     // If it doesn't exist, wait for it to load
     if (albumArt == null || !albumArt.complete) {
@@ -399,12 +401,11 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
       }
       // Order the color map by how similar the colors are to eachother
       const orderedColorMap = new Map([...colorMap.entries()].sort((a, b) => {
-
         const aColor = Chroma(a[0]);
         const bColor = Chroma(b[0]);
         return aColor.get("lab.l") - bColor.get("lab.l");
       }));
-      colorMap=orderedColorMap;
+      colorMap = orderedColorMap;
       // replace the keys in the color map with the new colors
       const newScheme = {};
       for (const [, value] of colorMap.entries()) {
@@ -416,9 +417,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
         }
       }
       injectColourScheme(newScheme);
-
     }
-
   });
 };
 

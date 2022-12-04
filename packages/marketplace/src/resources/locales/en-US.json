@@ -1,7 +1,9 @@
 {
   "translation": {
     "settings": {
-      "colourShiftLabel": "Shift colors every minute"
+      "colourShiftLabel": "Shift colors every minute",
+      "albumArtBasedColors": "Change colors based on album art",
+      "albumArtBasedColorsMode": "The mode that the colorapi uses to generate color schemes"
     },
     "devTools": {
       "colorIniEditorPlaceholder": "[your-color-scheme-name]"

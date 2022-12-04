@@ -13,7 +13,9 @@ const ConfigRow = (props: {
   options?: string[];
 }) => {
   const type = props.type;
-  const componentId = type === "dropdown" ? "dropdown:" + props.storageKey : "toggle:" + props.storageKey;
+  const componentId = (type === "dropdown")
+    ? "dropdown:" + props.storageKey
+    : "toggle:" + props.storageKey;
   const enabled = !!props.modalConfig.visual[props.storageKey];
 
   const settingsToggleChange = (e) => {
