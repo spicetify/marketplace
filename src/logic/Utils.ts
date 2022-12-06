@@ -302,19 +302,8 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   setInterval(() => {
     // Resets to zero when passes the last scheme
     i = i % NUM_SCHEMES;
-    const style = document.createElement("style");
-    style.className = "colorShift-style";
-    style.innerHTML = `* {
-      transition-duration: 400ms;
-    }
-    main-type-bass {
-      transition-duration: unset !important;
-    }`;
-
-    document.body.appendChild(style);
     injectColourScheme(Object.values(schemes)[i]);
     i++;
-    style.remove();
   }, 60 * 1000);
 };
 
