@@ -361,18 +361,8 @@ async function waitForAlbumArt(): Promise<HTMLImageElement | null> {
 }
 
 export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
-  const style = document.createElement("style");
-  style.className = "colorShift-style";
-  style.innerHTML = `
-  * {
-    transition-duration: 400ms;
-  }
-  .main-type-bass {
-    transition-duration: unset !important;
-  }`;
   // Add a listener for the album art changing
   // and update the color scheme accordingly
-  document.body.appendChild(style);
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
     let albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
