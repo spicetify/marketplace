@@ -1,6 +1,5 @@
 import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
-import Vibrant from "node-vibrant";
 import Chroma from "chroma-js";
 import { LOCALSTORAGE_KEYS } from "../constants";
 /**
@@ -307,25 +306,14 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   }, 60 * 1000);
 };
 
-export const getColorFromImage = async (image: HTMLImageElement, numColors: number) => {
-  const swatches = await Vibrant.from(image).maxColorCount(numColors).getPalette((err, palette) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    return palette;
-  });
-
-  if (swatches.Vibrant) {
-    // remove the # from the hex
-    return swatches.Vibrant.hex.substring(1);
-  }
-
-  return "null";
+export const getColorFromImage = async (image: string) => {
+  const color = await (await Spicetify.colorExtractor(image)).VIBRANT_NON_ALARMING;
+  return color.substring(1);
 };
 
 export const generateColorPalette = async (mainColor: string, numColors: number) => {
   // Generate a palette from https://www.thecolorapi.com/id?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=html
+  console.log(mainColor);
   const mode = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorMode);
   // Add a hyphen before any uppercase characters
   const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
@@ -333,17 +321,19 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
   const palette = await  fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`)
     .then((response) => response.json());
   // create an array of the hex values for the colors while also removing the #
+  console.log(palette);
   const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
   return colorArray;
 };
 
-async function waitForAlbumArt(): Promise<HTMLImageElement | null> {
+async function waitForAlbumArt(): Promise<string | undefined> {
   // Only return when the album art is loaded
   return new Promise((resolve) => {
     setInterval(() => {
       const albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+      const albumArtSrc: string | undefined = albumArt?.src;
       if (albumArt) {
-        resolve(albumArt);
+        resolve(albumArtSrc);
       }
     }, 50);
   });
@@ -354,16 +344,17 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    let albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+    const albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
+    let albumArtSrc: string | undefined = albumArt?.src;
 
     // If it doesn't exist, wait for it to load
-    if (albumArt == null || !albumArt.complete) {
-      albumArt = await waitForAlbumArt();
+    if (albumArtSrc == null || albumArt == null ||!albumArt.complete) {
+      albumArtSrc = await waitForAlbumArt();
     }
 
-    if (albumArt) {
+    if (albumArtSrc) {
       const numColors = new Set(Object.values(scheme)).size;
-      const mainColor = await getColorFromImage(albumArt, numColors);
+      const mainColor : string = await getColorFromImage(albumArtSrc);
       const newColors = await generateColorPalette(mainColor, numColors);
       /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
       i.e.
