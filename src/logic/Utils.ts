@@ -343,8 +343,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    const albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
-    let albumArtSrc: string | undefined = albumArt?.src;
+    const albumArt = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
 
     // If it doesn't exist, wait for it to load
     if (albumArtSrc == null || albumArt == null ||!albumArt.complete) {
