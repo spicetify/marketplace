@@ -307,13 +307,11 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 };
 
 export const getColorFromImage = async (image: string) => {
-  const color = await (await Spicetify.colorExtractor(image)).VIBRANT_NON_ALARMING;
+  const color = (await Spicetify.colorExtractor(image)).VIBRANT_NON_ALARMING;
   return color.substring(1);
 };
 
 export const generateColorPalette = async (mainColor: string, numColors: number) => {
-  // Generate a palette from https://www.thecolorapi.com/id?hex=0047AB&rgb=0,71,171&hsl=215,100%,34%&cmyk=100,58,0,33&format=html
-  console.log(mainColor);
   const mode = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorMode);
   // Add a hyphen before any uppercase characters
   const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
@@ -321,7 +319,6 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
   const palette = await  fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`)
     .then((response) => response.json());
   // create an array of the hex values for the colors while also removing the #
-  console.log(palette);
   const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
   return colorArray;
 };
@@ -330,8 +327,8 @@ async function waitForAlbumArt(): Promise<string | undefined> {
   // Only return when the album art is loaded
   return new Promise((resolve) => {
     setInterval(() => {
-      const albumArt = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
-      if (albumArt) {
+      const albumArtSrc = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
+      if (albumArtSrc) {
         resolve(albumArtSrc);
       }
     }, 50);
@@ -343,10 +340,10 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    const albumArt = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
+    let albumArtSrc = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
 
     // If it doesn't exist, wait for it to load
-    if (albumArtSrc == null || albumArt == null ||!albumArt.complete) {
+    if (albumArtSrc == null) {
       albumArtSrc = await waitForAlbumArt();
     }
 
