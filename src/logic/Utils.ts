@@ -352,7 +352,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
 
     if (albumArtSrc) {
       const numColors = new Set(Object.values(scheme)).size;
-      const mainColor : string = await getColorFromImage(albumArtSrc);
+      const mainColor: string = await getColorFromImage(albumArtSrc);
       const newColors = await generateColorPalette(mainColor, numColors);
       /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
       i.e.
