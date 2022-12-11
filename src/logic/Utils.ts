@@ -330,8 +330,7 @@ async function waitForAlbumArt(): Promise<string | undefined> {
   // Only return when the album art is loaded
   return new Promise((resolve) => {
     setInterval(() => {
-      const albumArt: HTMLImageElement | null = document.querySelector(".main-image-image.cover-art-image");
-      const albumArtSrc: string | undefined = albumArt?.src;
+      const albumArt = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
       if (albumArt) {
         resolve(albumArtSrc);
       }
