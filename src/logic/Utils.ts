@@ -307,7 +307,11 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 };
 
 export const getColorFromImage = async (image: string) => {
-  const color = (await Spicetify.colorExtractor(image)).VIBRANT_NON_ALARMING;
+  let vibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy);
+  // Add a underscore before any uppercase characters, then make the whole string uppercase
+  vibrancy = vibrancy.replace(/([A-Z])/g, "_$1").toUpperCase();
+  const colorOptions = (await Spicetify.colorExtractor(image));
+  const color = colorOptions[vibrancy];
   return color.substring(1);
 };
 

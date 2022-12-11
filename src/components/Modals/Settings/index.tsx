@@ -52,6 +52,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       {/* Make options monochrome-dark ,monochrome-light ,analogic complement ,analogic-complement ,triad ,quad*/}
       <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig=
         {modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} />
+      <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant", "vibrantNonAlarming"]}/>
       <h2>{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {

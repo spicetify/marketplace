@@ -119,6 +119,7 @@ export type VisualConfig = {
   themeDevTools: boolean;
   albumArtBasedColors: boolean;
   albumArtBasedColorsMode: "monochromeLight" | "monochromeDark" | "quad" | "triad" | "analogic" | "analogicComplement";
+  albumArtBasedColorsVibrancy: "DESATURATED" | "LIGHT_VIBRANT" | "PROMINENT" | "VIBRANT" | "VIBRANT_NON_ALARMING";
   // Legacy from reddit app
   type: boolean;
   // I was considering adding watchers as "followers" but it looks like the value is a duplicate
