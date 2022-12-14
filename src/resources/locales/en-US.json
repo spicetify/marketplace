@@ -3,7 +3,8 @@
     "settings": {
       "colourShiftLabel": "Shift colors every minute",
       "albumArtBasedColors": "Change colors based on album art",
-      "albumArtBasedColorsMode": "The mode that the colorapi uses to generate color schemes"
+      "albumArtBasedColorsMode": "The mode that ColorApi uses to generate color schemes",
+      "albumArtBasedColorsVibrancy": "The color of the album art used to generate a palette"
     },
     "devTools": {
       "colorIniEditorPlaceholder": "[your-color-scheme-name]"
