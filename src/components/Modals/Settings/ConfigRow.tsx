@@ -13,7 +13,7 @@ const ConfigRow = (props: {
   updateConfig: (CONFIG: Config) => void;
   type?: string;
   options?: string[];
-  description?: string;
+  description?: string | null;
 }) => {
   const type = props.type;
   const componentId = (type === "dropdown")
