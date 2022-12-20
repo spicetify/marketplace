@@ -1415,10 +1415,12 @@ declare namespace Spicetify {
      * A filtered copy of user's `config-xpui` file.
      */
     namespace Config {
-        const version: string;
-        const current_theme: string;
-        const color_scheme: string;
-        const extensions: string[];
+        let version: string;
+        let current_theme: string;
+        let color_scheme: string;
+        let extensions: string[];
+        let local_theme: string;
+        let local_color_scheme: string;
         const custom_apps: string[];
     }
 }
