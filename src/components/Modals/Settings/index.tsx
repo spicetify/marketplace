@@ -52,8 +52,8 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <ConfigRow name={t("settings.albumArtBasedColors")} storageKey='albumArtBasedColors' modalConfig={modalConfig} updateConfig={updateConfig}/>
       {/* Make options monochrome-dark ,monochrome-light ,analogic complement ,analogic-complement ,triad ,quad*/}
       <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig=
-        {modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description="Test" />
-      <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={`Desaturated: The color that is the most prominent but with much less brightness \n Light Vibrant: The most Vibrant color but with the brightness amped up a tad \n Prominent: The color that pops the most in the album art \n Vibrant: The most vibrant color in the album art`}/>
+        {modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description={t("settings.almbumArtColorsModeToolTip")} />
+      <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={t("settings.albumArtBasedColorsVibrancyToolTip")}/>
       <h2>{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {

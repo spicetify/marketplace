@@ -12,7 +12,7 @@ const ConfigRow = (props: {
   updateConfig: (CONFIG: Config) => void;
   type?: string;
   options?: string[];
-  description?: string;
+  description?: string | null;
 }) => {
   const type = props.type;
   const componentId = (type === "dropdown")
@@ -38,8 +38,8 @@ const ConfigRow = (props: {
     localStorage.setItem(`marketplace:${storageKey}`, String(state));
     props.updateConfig(props.modalConfig);
   };
-  if (props.description === undefined) {
-    props.description = "";
+  if (props.description === undefined || props.description === null) {
+    props.description = "" as string;
   }
 
   if (type === "dropdown" && props.options) {
@@ -61,7 +61,12 @@ const ConfigRow = (props: {
         />
 
         {/*eslint-disable-next-line react/no-children-prop, react/jsx-no-undef*/}
-        <Spicetify.ReactComponent.TooltipWrapper children={<div><TooltipIcon></TooltipIcon></div>}  label={<span>{props.description}</span>} renderInline={true} showDelay={10} placement="top" labelClassName="marketplace-settings-tooltip" disabled={false}></Spicetify.ReactComponent.TooltipWrapper>
+        <Spicetify.ReactComponent.TooltipWrapper children={<div><TooltipIcon></TooltipIcon></div>}  label={
+          <div>
+            {props.description.split("\n").map(line => {
+              return <>{line}<br /></>;
+            })}
+          </div>} renderInline={true} showDelay={10} placement="top" labelClassName="marketplace-settings-tooltip" disabled={false}></Spicetify.ReactComponent.TooltipWrapper>
       </div>
 
     );
