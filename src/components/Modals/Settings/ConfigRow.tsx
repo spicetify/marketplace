@@ -46,27 +46,28 @@ const ConfigRow = (props: {
     return (
       <div className='setting-row'>
         <label htmlFor={componentId} className='col description'>{props.name}</label>
-        <div className='col action'></div>
-        <SortBox
-          sortBoxOptions={props.options.map((option) => {
-            return {
-              key: option,
-              value: option,
-            };
-          })}
-          onChange={(value) => settingsDropdownChange(value)}
-          sortBySelectedFn={(item) => {
-            return item.key == props.modalConfig.visual[props.storageKey];
-          }}
-        />
-
-        {/*eslint-disable-next-line react/no-children-prop, react/jsx-no-undef*/}
-        <Spicetify.ReactComponent.TooltipWrapper children={<div><TooltipIcon></TooltipIcon></div>}  label={
-          <div>
-            {props.description.split("\n").map(line => {
-              return <>{line}<br /></>;
+        <div className='col action'>
+          <SortBox
+            sortBoxOptions={props.options.map((option) => {
+              return {
+                key: option,
+                value: option,
+              };
             })}
-          </div>} renderInline={true} showDelay={10} placement="top" labelClassName="marketplace-settings-tooltip" disabled={false}></Spicetify.ReactComponent.TooltipWrapper>
+            onChange={(value) => settingsDropdownChange(value)}
+            sortBySelectedFn={(item) => {
+              return item.key == props.modalConfig.visual[props.storageKey];
+            }}
+          />
+
+          {/*eslint-disable-next-line react/no-children-prop, react/jsx-no-undef*/}
+          <Spicetify.ReactComponent.TooltipWrapper children={<div><TooltipIcon></TooltipIcon></div>}  label={
+            <div>
+              {props.description.split("\n").map(line => {
+                return <>{line}<br /></>;
+              })}
+            </div>} renderInline={true} showDelay={10} placement="top" labelClassName="marketplace-settings-tooltip" disabled={false}></Spicetify.ReactComponent.TooltipWrapper>
+        </div>
       </div>
 
     );
