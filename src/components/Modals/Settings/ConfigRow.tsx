@@ -60,13 +60,25 @@ const ConfigRow = (props: {
             }}
           />
 
-          {/*eslint-disable-next-line react/no-children-prop, react/jsx-no-undef*/}
-          <Spicetify.ReactComponent.TooltipWrapper children={<div><TooltipIcon></TooltipIcon></div>}  label={
-            <div>
-              {props.description.split("\n").map(line => {
-                return <>{line}<br /></>;
-              })}
-            </div>} renderInline={true} showDelay={10} placement="top" labelClassName="marketplace-settings-tooltip" disabled={false}></Spicetify.ReactComponent.TooltipWrapper>
+          {/*eslint-disable-next-line react/jsx-no-undef*/}
+          <Spicetify.ReactComponent.TooltipWrapper
+            label={
+              <>
+                {props.description.split("\n").map(line => {
+                  return <>{line}<br /></>;
+                })}
+              </>
+            }
+            renderInline={true}
+            showDelay={10}
+            placement="top"
+            labelClassName="marketplace-settings-tooltip"
+            disabled={false}
+          >
+            <div className="marketplace-tooltip-icon">
+              <TooltipIcon />
+            </div>
+          </Spicetify.ReactComponent.TooltipWrapper>
         </div>
       </div>
 
