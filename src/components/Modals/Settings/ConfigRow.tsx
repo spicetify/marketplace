@@ -3,6 +3,7 @@ import { Config } from "../../../types/marketplace-types";
 import Toggle from "../../Toggle";
 import SortBox from "../../Sortbox";
 import TooltipIcon from "../../Icons/TooltipIcon";
+const Spicetify = window.Spicetify;
 
 const ConfigRow = (props: {
   name: string;
@@ -12,7 +13,7 @@ const ConfigRow = (props: {
   updateConfig: (CONFIG: Config) => void;
   type?: string;
   options?: string[];
-  description?: string | null;
+  description?: string;
 }) => {
   const type = props.type;
   const componentId = (type === "dropdown")
@@ -59,8 +60,6 @@ const ConfigRow = (props: {
               return item.key == props.modalConfig.visual[props.storageKey];
             }}
           />
-
-          {/*eslint-disable-next-line react/jsx-no-undef*/}
           <Spicetify.ReactComponent.TooltipWrapper
             label={
               <>

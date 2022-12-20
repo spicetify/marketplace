@@ -504,7 +504,7 @@ class Card extends React.Component<CardProps, {
                 type="circle"
                 // If it is installed, it will remove it when button is clicked, if not it will save
                 // TODO: Refactor this using lookups or sth similar
-                label={(this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")) as string | undefined}
+                label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
                 onClick={(e) => {
                   e.stopPropagation();
                   this.buttonClicked();
