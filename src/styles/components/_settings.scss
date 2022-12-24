@@ -15,7 +15,26 @@
     &.action {
       // float: right;
       text-align: right;
+
+      // The tooltip icon
+      & .marketplace-sortBox + .marketplace-tooltip-icon {
+        margin-inline-start: 8px;
+      }
     }
+  }
+}
+
+// The tooltip icon
+.marketplace-tooltip-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  // The tooltips themselves
+  & + [data-tippy-root] {
+    text-align: start;
   }
 }
 

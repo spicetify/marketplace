@@ -2,12 +2,14 @@ import React from "react";
 import { t } from "i18next";
 import { Config } from "../../../types/marketplace-types";
 
-import { resetMarketplace, sleep } from "../../../logic/Utils";
+import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "../../../logic/Utils";
 
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
 import TabRow from "./TabRow";
+
 import { openModal } from "../../../logic/LaunchModals";
+import { LOCALSTORAGE_KEYS } from "../../../constants";
 
 interface Props {
   CONFIG: Config;
@@ -39,6 +41,9 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       }
     };
   }
+  const AlbumArtColorDropDowns = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColor) ? <>
+    <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description={t("settings.almbumArtColorsModeToolTip")} />
+    <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={t("settings.albumArtBasedColorsVibrancyToolTip")} /></> : null;
 
   return (
     <div id="marketplace-config-container">
@@ -49,9 +54,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <ConfigRow name={t("settings.hideInstalledLabel")} storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.colourShiftLabel")} storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.albumArtBasedColors")} storageKey='albumArtBasedColors' modalConfig={modalConfig} updateConfig={updateConfig}/>
-      {/* Make options monochrome-dark ,monochrome-light ,analogic complement ,analogic-complement ,triad ,quad*/}
-      <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig=
-        {modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} />
+      {AlbumArtColorDropDowns}
       <h2>{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {

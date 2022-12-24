@@ -1,8 +1,10 @@
 import React from "react";
 import { Config } from "../../../types/marketplace-types";
-
 import Toggle from "../../Toggle";
 import SortBox from "../../Sortbox";
+import TooltipIcon from "../../Icons/TooltipIcon";
+const Spicetify = window.Spicetify;
+
 const ConfigRow = (props: {
   name: string;
   storageKey: string;
@@ -11,6 +13,7 @@ const ConfigRow = (props: {
   updateConfig: (CONFIG: Config) => void;
   type?: string;
   options?: string[];
+  description?: string | null;
 }) => {
   const type = props.type;
   const componentId = (type === "dropdown")
@@ -36,21 +39,47 @@ const ConfigRow = (props: {
     localStorage.setItem(`marketplace:${storageKey}`, String(state));
     props.updateConfig(props.modalConfig);
   };
+  if (props.description === undefined || props.description === null) {
+    props.description = "" as string;
+  }
 
   if (type === "dropdown" && props.options) {
     return (
-      <SortBox
-        sortBoxOptions={props.options.map((option) => {
-          return {
-            key: option,
-            value: option,
-          };
-        })}
-        onChange={(value) => settingsDropdownChange(value)}
-        sortBySelectedFn={(item) => {
-          return item.key == props.modalConfig.visual[props.storageKey];
-        }}
-      />
+      <div className='setting-row'>
+        <label htmlFor={componentId} className='col description'>{props.name}</label>
+        <div className='col action'>
+          <SortBox
+            sortBoxOptions={props.options.map((option) => {
+              return {
+                key: option,
+                value: option,
+              };
+            })}
+            onChange={(value) => settingsDropdownChange(value)}
+            sortBySelectedFn={(item) => {
+              return item.key == props.modalConfig.visual[props.storageKey];
+            }}
+          />
+          <Spicetify.ReactComponent.TooltipWrapper
+            label={
+              <>
+                {props.description.split("\n").map(line => {
+                  return <>{line}<br /></>;
+                })}
+              </>
+            }
+            renderInline={true}
+            showDelay={10}
+            placement="top"
+            labelClassName="marketplace-settings-tooltip"
+            disabled={false}
+          >
+            <div className="marketplace-tooltip-icon">
+              <TooltipIcon />
+            </div>
+          </Spicetify.ReactComponent.TooltipWrapper>
+        </div>
+      </div>
 
     );
   }

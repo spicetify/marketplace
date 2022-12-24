@@ -12,7 +12,7 @@ declare namespace Spicetify {
         blocked?: string[];
         provider?: string;
     };
-    interface ContextOption {
+    type ContextOption = {
         contextURI?: string;
         index?: number;
         trackUri?: string;
@@ -185,7 +185,7 @@ declare namespace Spicetify {
          * @param context
          * @param options
          */
-        async function playUri(uri: string, context: any, options: any): Promise<void>;
+        function playUri(uri: string, context?: any, options?: any): Promise<void>;
         /**
          * Unregister added event listener `type`.
          * @param type
@@ -280,7 +280,7 @@ declare namespace Spicetify {
             headers: Headers;
             status: number;
             uri: string;
-            static isSuccessStatus(status: number): boolean;
+            isSuccessStatus(status: number): boolean;
         }
 
         function head(url: string, headers?: Headers): Promise<Headers>;
@@ -991,6 +991,7 @@ declare namespace Spicetify {
          */
         static imageURI(id: string): URI;
 
+
         /**
          * Creates a new 'mosaic' type URI.
          *
@@ -1135,7 +1136,7 @@ declare namespace Spicetify {
      * Create custom menu item and prepend to right click context menu
      */
     namespace ContextMenu {
-        type Icon = "album" | "artist" | "block" | "chart-down" | "chart-up" | "check" | "check-alt-fill" | "chevron-left" | "chevron-right" | "chromecast-disconnected" | "copy" | "download" | "downloaded" | "edit" | "exclamation-circle" | "external-link" | "facebook" | "follow" | "fullscreen" | "grid-view" | "heart" | "heart-active" | "instagram" | "list-view" | "locked" | "locked-active" | "lyrics" | "minimize" | "more" | "new-spotify-connect" | "offline" | "pause" | "play" | "playlist" | "playlist-folder" | "plus2px" | "plus-alt" | "podcasts" | "repeat" | "repeat-once" | "search" | "search-active" | "shuffle" | "skip-back" | "skip-back15" | "skip-forward" | "skip-forward15" | "soundbetter" | "subtitles" | "twitter" | "volume" | "volume-off" | "volume-one-wave" | "volume-two-wave" | "x";
+        type Icon = "album" | "artist" | "block" | "brightness" | "car" | "chart-down" | "chart-up" | "check" | "check-alt-fill" | "chevron-left" | "chevron-right" | "chromecast-disconnected" | "clock" | "collaborative" | "computer" | "copy" | "download" | "downloaded" | "edit" | "enhance" | "exclamation-circle" | "external-link" | "facebook" | "follow" | "fullscreen" | "gamepad" | "grid-view" | "heart" | "heart-active" | "instagram" | "laptop" | "library" | "list-view" | "location" | "locked" | "locked-active" | "lyrics" | "menu" | "minimize" | "minus" | "more" | "new-spotify-connect" | "offline" | "pause" | "phone" | "play" | "playlist" | "playlist-folder" | "plus-alt" | "plus2px" | "podcasts" | "projector" | "queue" | "repeat" | "repeat-once" | "search" | "search-active" | "shuffle" | "skip-back" | "skip-back15" | "skip-forward" | "skip-forward15" | "soundbetter" | "speaker" | "spotify" | "subtitles" | "tablet" | "ticket" | "twitter" | "visualizer" | "voice" | "volume" | "volume-off" | "volume-one-wave" | "volume-two-wave" | "watch" | "x";
         type OnClickCallback = (uris: string[], uids?: string[], contextUri?: string) => void;
         type ShouldAddCallback = (uris: string[], uids?: string[], contextUri?: string) => boolean;
 
@@ -1202,7 +1203,7 @@ declare namespace Spicetify {
              * You can specify a string for simple text display
              * or a HTML element for interactive config/setting menu
              */
-            content: string | Element | JSXElement;
+            content: string | Element;
             /**
              * Bigger window
              */
@@ -1252,18 +1253,18 @@ declare namespace Spicetify {
             /**
              * The menu UI to render inside of the context menu.
              */
-            menu: Spicetify.ReactComponent.Menu |
-                Spicetify.ReactComponent.AlbumMenu |
-                Spicetify.ReactComponent.PodcastShowMenu |
-                Spicetify.ReactComponent.ArtistMenu |
-                Spicetify.ReactComponent.PlaylistMenu;
+            menu: typeof Spicetify.ReactComponent.Menu |
+                typeof Spicetify.ReactComponent.AlbumMenu |
+                typeof Spicetify.ReactComponent.PodcastShowMenu |
+                typeof Spicetify.ReactComponent.ArtistMenu |
+                typeof Spicetify.ReactComponent.PlaylistMenu;
             /**
              * A child of the context menu. Should be `<button>`, `<a>`,
              * a custom react component that forwards a ref to a `<button>` or `<a>`,
              * or a function. If a function is passed it will be called with
              * (`isOpen`, `handleContextMenu`, `ref`) as arguments.
              */
-            children: ContextMenuChildren;
+            children: Element | ((isOpen?: boolean, handleContextMenu?: (e: MouseEvent) => void, ref?: (e: Element) => void) => Element);
         };
         type MenuProps = {
             /**
@@ -1294,6 +1295,42 @@ declare namespace Spicetify {
              * React component icon that will be rendered at the end of the `MenuItem`
              */
             icon?: React.ReactNode;
+        };
+        type TooltipProps = {
+            /**
+             * Label to display in the tooltip
+             */
+            label: string;
+            /**
+             * The child element that the tooltip will be attached to
+             * and will display when hovered over
+             */
+            children: React.ReactNode;
+            /**
+             * Decide whether to use the global singleton tooltip (rendered in `<body>`)
+             * or a new inline tooltip (rendered in a sibling
+             * element to `children`)
+             */
+            renderInline?: boolean;
+            /**
+             * Delay in milliseconds before the tooltip is displayed
+             * after the user hovers over the child element
+             */
+            showDelay?: number;
+            /**
+             * Determine whether the tooltip should be displayed
+             */
+            disabled?: boolean;
+            /**
+             * The preferred placement of the context menu when it opens.
+             * Relative to trigger element.
+             * @default 'top'
+             */
+            placement?: 'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end';
+            /**
+             * Class name to apply to the tooltip
+             */
+            labelClassName?: string;
         };
         /**
          * Generic context menu provider
@@ -1336,6 +1373,14 @@ declare namespace Spicetify {
         const PodcastShowMenu: any;
         const ArtistMenu: any;
         const PlaylistMenu: any;
+        /**
+         * Component to display tooltip when hovering over element
+         * Useful for accessibility
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.TooltipProps
+         */
+        const TooltipWrapper: any;
     };
 
     /**
@@ -1343,7 +1388,7 @@ declare namespace Spicetify {
      */
     namespace Topbar {
         class Button {
-            constructor(label: string, icon: string, onClick: (self: Button) => void, disabled = false);
+            constructor(label: string, icon: string, onClick: (self: Button) => void, disabled?: boolean);
             label: string;
             icon: string;
             onClick: (self: Button) => void;
@@ -1370,14 +1415,12 @@ declare namespace Spicetify {
      * A filtered copy of user's `config-xpui` file.
      */
     namespace Config {
-        const version: string;
+        let version: string;
         let current_theme: string;
         let color_scheme: string;
         let extensions: string[];
-        const custom_apps: string[];
-
-        // These two are just added by Marketplace so we can save and restore them when removing a theme
         let local_theme: string;
         let local_color_scheme: string;
+        const custom_apps: string[];
     }
 }

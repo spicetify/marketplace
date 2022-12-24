@@ -14,6 +14,7 @@ export const LOCALSTORAGE_KEYS = {
   themeInstalled: "marketplace:theme-installed",
   albumArtBasedColor: "marketplace:albumArtBasedColors",
   albumArtBasedColorMode: "marketplace:albumArtBasedColorsMode",
+  albumArtBasedColorVibrancy: "marketplace:albumArtBasedColorsVibrancy",
   colorShift: "marketplace:colorShift",
 };
 
