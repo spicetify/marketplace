@@ -2,6 +2,7 @@ import React from "react";
 import { withTranslation } from "react-i18next";
 import semver from "semver";
 import { Option } from "react-dropdown";
+const Spicetify = window.Spicetify;
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateKey } from "../logic/Utils";
@@ -519,8 +520,12 @@ class Grid extends React.Component<
           <div className="marketplace-header__right">
             {/* Show theme developer tools button if themeDevTools is enabled */}
             {this.CONFIG.visual.themeDevTools
-              ? <button type="button" title={t("devTools.title")} className="marketplace-header-icon-button"
-                onClick={() => openModal("THEME_DEV_TOOLS")}><ThemeDeveloperToolsIcon/></button>
+              ? <Spicetify.ReactComponent.TooltipWrapper label={t("devTools.title")} renderInline={true} placement="bottom">
+                <button type="button" aria-label={t("devTools.title")} className="marketplace-header-icon-button"
+                  onClick={() => openModal("THEME_DEV_TOOLS")}>
+                  <ThemeDeveloperToolsIcon/>
+                </button>
+              </Spicetify.ReactComponent.TooltipWrapper>
               : null}
             {/* Show colour scheme dropdown if there is a theme with schemes installed */}
             {this.state.activeScheme ? <SortBox
@@ -541,11 +546,13 @@ class Grid extends React.Component<
                 }}
                 onKeyDown={this.handleSearch.bind(this)} />
             </div>
-            <button type="button" title={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
-              onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
-            >
-              <SettingsIcon />
-            </button>
+            <Spicetify.ReactComponent.TooltipWrapper label={t("settings.title")} renderInline={true} placement="bottom">
+              <button type="button" aria-label={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
+                onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}
+              >
+                <SettingsIcon />
+              </button>
+            </Spicetify.ReactComponent.TooltipWrapper>
           </div>
         </div>
         {/* Add a header and grid for each card type if it has any cards */}
