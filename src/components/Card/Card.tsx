@@ -19,6 +19,7 @@ import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
 import { t } from "i18next";
+const Spicetify = window.Spicetify;
 
 export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
@@ -499,22 +500,28 @@ class Card extends React.Component<CardProps, {
                 ✓ {t("grid.installed")}
               </div>
             )}
-            <div className="main-card-PlayButtonContainer">
-              <Button classes={["marketplace-installButton"]}
-                type="circle"
-                // If it is installed, it will remove it when button is clicked, if not it will save
-                // TODO: Refactor this using lookups or sth similar
-                label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  this.buttonClicked();
-                }}
-              >
-                {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
-                {/* TODO: Refactor this using lookups or sth similar */}
-                {this.props.type === "app" ? <GitHubIcon /> : IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
-              </Button>
-            </div>
+            <Spicetify.ReactComponent.TooltipWrapper
+              label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
+              showDelay={100}
+              renderInline={true}
+            >
+              <div className="main-card-PlayButtonContainer">
+                <Button classes={["marketplace-installButton"]}
+                  type="circle"
+                  // If it is installed, it will remove it when button is clicked, if not it will save
+                  // TODO: Refactor this using lookups or sth similar
+                  label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    this.buttonClicked();
+                  }}
+                >
+                  {/*If the extension, theme, or snippet is already installed, it will display trash, otherwise it displays download*/}
+                  {/* TODO: Refactor this using lookups or sth similar */}
+                  {this.props.type === "app" ? <GitHubIcon /> : IS_INSTALLED ? <TrashIcon /> : <DownloadIcon />}
+                </Button>
+              </div>
+            </Spicetify.ReactComponent.TooltipWrapper>
           </div>
         </div>
       </div>
