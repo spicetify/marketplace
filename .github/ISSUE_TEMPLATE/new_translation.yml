@@ -1,0 +1,21 @@
+name: 🌎 New translation
+description: Add a new translation
+labels: [🌎 i18n]
+body:
+  - type: input
+    id: language
+    attributes:
+      label: What language are you adding?
+      description: What it's called in the Spotify settings
+      placeholder: e.g. Latin American Spanish
+    validations:
+      required: true
+
+  - type: textarea
+    id: translation-json
+    attributes:
+      label: Translation JSON
+      placeholder: Copy src/resources/locales/en.json and paste updated version here
+      value: "```json\nCopy src/resources/locales/en.json and paste updated version here\n```"
+    validations:
+      required: true
