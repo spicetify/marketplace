@@ -228,10 +228,6 @@ export const importMarketplace = (data : JSON) => {
 
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
-  // Remove any existing Spicetify scheme
-  const existingColorsCSS = document.querySelector("link[href='colors.css']");
-  if (existingColorsCSS) existingColorsCSS.remove();
-
   // Remove any existing marketplace scheme
   const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
   if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
@@ -251,13 +247,6 @@ export const injectColourScheme = (scheme: ColourScheme | null) => {
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
     document.body.appendChild(schemeTag);
-  } else {
-    // Re-add default user.css
-    const originalColorsCSS = document.createElement("link");
-    originalColorsCSS.setAttribute("rel", "stylesheet");
-    originalColorsCSS.setAttribute("href", "colors.css");
-    originalColorsCSS.classList.add("userCSS");
-    document.body.appendChild(originalColorsCSS);
   }
 };
 
