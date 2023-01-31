@@ -37,10 +37,10 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
       return;
     }
 
-    console.log(`Installing snippet: ${processedName}`);
+    // console.log(`Installing snippet: ${processedName}`);
     if (props.content && props.content.item.title !== processedName) {
       // Remove from installed list
-      console.log(`Deleting outdated snippet: ${props.content.item.title}`);
+    //   console.log(`Deleting outdated snippet: ${props.content.item.title}`);
 
       localStorage.removeItem(`marketplace:installed:snippet:${props.content.item.title}`);
       const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
@@ -66,7 +66,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
     );
     if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
       installedSnippetKeys.push(localStorageKey);
-      console.log(installedSnippetKeys);
+    //   console.log(installedSnippetKeys);
       localStorage.setItem(
         LOCALSTORAGE_KEYS.installedSnippets,
         JSON.stringify(installedSnippetKeys),
@@ -154,7 +154,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
                     try {
                       const b64 = await fileToBase64(event.target.files?.[0]);
                       if (b64) {
-                        console.log(b64);
+                        // console.log(b64);
                         setimageURL(b64 as string);
                       }
                     } catch (err) {
