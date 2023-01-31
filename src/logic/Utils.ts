@@ -242,8 +242,8 @@ export const injectColourScheme = (scheme: ColourScheme | null) => {
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
     themeIniKeys.forEach((key) => {
-      injectStr += `--spice-${key}: #${scheme[key]} !important;`;
-      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])} !important;`;
+      injectStr += `--spice-${key}: #${scheme[key]};`;
+      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
     });
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
@@ -267,6 +267,8 @@ export const injectUserCSS = (userCSS?: string) => {
     // Remove any existing Spicetify user.css
     const existingUserThemeCSS = document.querySelector("link[href='user.css']");
     if (existingUserThemeCSS) existingUserThemeCSS.remove();
+    const existingUserColorScheme = document.querySelector("link[href='colors.css']");
+    if (existingUserColorScheme) existingUserColorScheme.remove();
 
     // Remove any existing marketplace scheme
     const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
