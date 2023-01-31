@@ -125,8 +125,8 @@ class Card extends React.Component<CardProps, {
     } else if (this.props.type === "theme") {
       const themeKey = localStorage.getItem("marketplace:theme-installed");
       const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
-    //   console.log(previousTheme);
-    //   console.log(themeKey);
+      // console.log(previousTheme);
+      // console.log(themeKey);
 
       if (this.isInstalled()) {
         // console.log("Theme already installed, removing");
@@ -195,7 +195,7 @@ class Card extends React.Component<CardProps, {
     const extValue = localStorage.getItem(this.localStorageKey);
     // console.log(JSON.parse(extValue));
     if (extValue) {
-    //   console.log(`Removing extension ${this.localStorageKey}`);
+      //   console.log(`Removing extension ${this.localStorageKey}`);
       // Remove from localstorage
       localStorage.removeItem(this.localStorageKey);
 
@@ -204,7 +204,7 @@ class Card extends React.Component<CardProps, {
       const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
       localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
-    //   console.log("Removed");
+      // console.log("Removed");
       this.setState({ installed: false });
     }
   }
@@ -311,7 +311,7 @@ class Card extends React.Component<CardProps, {
       const remainingInstalledThemes = installedThemes.filter((key) => key !== themeKey);
       localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
 
-    //   console.log("Removed");
+      // console.log("Removed");
 
       // Removes the current theme CSS
       this.fetchAndInjectUserCSS(null);
@@ -406,7 +406,7 @@ class Card extends React.Component<CardProps, {
 
     // Kill the card if it has been uninstalled on the "Installed" tab
     if (this.props.CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
-    //   console.log("Card item not installed");
+      // console.log("Card item not installed");
       return null;
     }
 

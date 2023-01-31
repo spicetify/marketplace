@@ -214,9 +214,9 @@ class Grid extends React.Component<
       const remainingResults = pageOfRepos.total_count - soFarResults;
 
       // If still have more results, return next page number to fetch
-    //   console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
+      // console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
       if (remainingResults > 0) return currentPage + 1;
-    //   else console.log("No more extension results");
+      // else console.log("No more extension results");
       break;
     } case "Installed": {
       const installedStuff = {
@@ -273,9 +273,9 @@ class Grid extends React.Component<
       const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
       const remainingResults = pageOfRepos.total_count - soFarResults;
 
-    //   console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
+      // console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
       if (remainingResults > 0) return currentPage + 1;
-    //   else console.log("No more theme results");
+      // else console.log("No more theme results");
       break;
     } case "Apps": {
       const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
@@ -306,9 +306,9 @@ class Grid extends React.Component<
       const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
       const remainingResults = pageOfRepos.total_count - soFarResults;
 
-    //   console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
+      // console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
       if (remainingResults > 0) return currentPage + 1;
-    //   else console.log("No more app results");
+      // else console.log("No more app results");
       break;
     } case "Snippets": {
       const snippets = await fetchCssSnippets();
@@ -390,10 +390,10 @@ class Grid extends React.Component<
     const installedThemeData = getLocalStorageDataFromKey(installedThemeKey);
     if (installedThemeData) {
       installedThemeData.activeScheme = activeScheme;
-    //   console.log(installedThemeData);
+      // console.log(installedThemeData);
       localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
     } else {
-    //   console.log("No installed theme data");
+      // console.log("No installed theme data");
     }
 
     this.setState({
