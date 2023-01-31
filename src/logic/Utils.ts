@@ -228,6 +228,9 @@ export const importMarketplace = (data : JSON) => {
 
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
+  // Remove any existing Spicetify scheme
+  const existingColorsCSS = document.querySelector("link[href='colors.css']");
+  if (existingColorsCSS) existingColorsCSS.remove();
 
   // Remove any existing marketplace scheme
   const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
@@ -267,8 +270,6 @@ export const injectUserCSS = (userCSS?: string) => {
     // Remove any existing Spicetify user.css
     const existingUserThemeCSS = document.querySelector("link[href='user.css']");
     if (existingUserThemeCSS) existingUserThemeCSS.remove();
-    const existingUserColorScheme = document.querySelector("link[href='colors.css']");
-    if (existingUserColorScheme) existingUserColorScheme.remove();
 
     // Remove any existing marketplace scheme
     const existingMarketplaceUserCSS = document.querySelector("style.marketplaceCSS.marketplaceUserCSS");
