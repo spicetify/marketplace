@@ -34,7 +34,7 @@
 		"chroma-js": "^2.4.2",
 		"copyfiles": "^2.4.1",
 		"eslint": "^8.31.0",
-		"eslint-plugin-react": "^7.31.11",
+		"eslint-plugin-react": "^7.32.2",
 		"husky": "^8.0.2",
 		"i18next": "^22.4.6",
 		"i18next-browser-languagedetector": "^7.0.1",
