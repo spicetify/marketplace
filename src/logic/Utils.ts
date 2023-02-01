@@ -188,17 +188,17 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
 export const resetMarketplace = () => {
-  // console.log("Resetting Marketplace");
+  console.debug("Resetting Marketplace");
 
   // Loop through and reset marketplace keys
   Object.keys(localStorage).forEach((key) => {
     if (key.startsWith("marketplace:")) {
       localStorage.removeItem(key);
-      // console.log(`Removed ${key}`);
+      console.debug(`Removed ${key}`);
     }
   });
 
-  // console.log("Marketplace has been reset");
+  console.debug("Marketplace has been reset");
   location.reload();
 };
 
@@ -216,13 +216,13 @@ export const exportMarketplace = () => {
 };
 
 export const importMarketplace = (data : JSON) => {
-  // console.log("Importing Marketplace");
+  console.debug("Importing Marketplace");
   // First reset the marketplace
   resetMarketplace();
   // Then import the data
   Object.keys(data).forEach((key) => {
     localStorage.setItem(key, data[key]);
-    // console.log(`Imported ${key}`);
+    console.debug(`Imported ${key}`);
   });
 };
 
@@ -392,7 +392,7 @@ export const parseCSS = async (themeData: CardItem) => {
   // TODO: Make this more versatile
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
-  //   console.log("Parsing CSS: ", userCssUrl);
+  console.debug("Parsing CSS: ", userCssUrl);
   let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
   // console.log("Parsed CSS: ", css);
 
