@@ -35,7 +35,7 @@ import {
   // https://github.com/satya164/react-simple-code-editor/issues/86
   const reactSimpleCodeEditorFix = document.createElement("script");
   reactSimpleCodeEditorFix.innerHTML = "const global = globalThis;";
-  document.head.appendChild(reactSimpleCodeEditorFix);
+  document.body.appendChild(reactSimpleCodeEditorFix);
 
   // Show message on start.
   console.log(`Initializing Spicetify Marketplace v${MARKETPLACE_VERSION}`);
@@ -54,7 +54,7 @@ import {
     // Abort if no manifest found or no extension URL (i.e. a theme)
     if (!extensionManifest || !extensionManifest.extensionURL) return;
 
-    console.log("Initializing extension: ", extensionManifest);
+    console.debug("Initializing extension: ", extensionManifest);
 
     const script = document.createElement("script");
     script.defer = true;
@@ -79,11 +79,11 @@ import {
     const themeManifest = getLocalStorageDataFromKey(themeKey);
     // Abort if no manifest found
     if (!themeManifest) {
-      console.log("No theme manifest found");
+      console.debug("No theme manifest found");
       return;
     }
 
-    console.log("Initializing theme: ", themeManifest);
+    console.debug("Initializing theme: ", themeManifest);
 
     // Inject colour scheme if found
     if (themeManifest.schemes) {
@@ -197,17 +197,17 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 
   // Sets the amount of items that have thus been fetched
   const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
-  console.log({ pageOfRepos });
+  console.debug({ pageOfRepos });
   const remainingResults = pageOfRepos.total_count - soFarResults;
 
   // If still have more results, recursively fetch next page
-  console.log(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
+  console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
   if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
-  else console.log(`No more ${type} results`);
+  else console.debug(`No more ${type} results`);
 }
 
 (async function initializePreload() {
-  console.log("Preloading extensions and themes...");
+  console.debug("Preloading extensions and themes...");
   window.sessionStorage.clear();
   const BLACKLIST = await getBlacklist();
   window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));

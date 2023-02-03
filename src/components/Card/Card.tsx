@@ -104,11 +104,11 @@ class Card extends React.Component<CardProps, {
       const stateUpdate = { stars: 0, lastUpdated: undefined };
       if ((this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars)) {
         stateUpdate.stars = stargazers_count;
-        console.log(`Stars updated to: ${stargazers_count}`);
+        console.debug(`Stars updated to: ${stargazers_count}`);
       }
       if (this.state.lastUpdated !== pushed_at) {
         stateUpdate.lastUpdated = pushed_at;
-        console.log(`New update pushed at: ${pushed_at}`);
+        console.debug(`New update pushed at: ${pushed_at}`);
       }
     }
   }
@@ -116,7 +116,7 @@ class Card extends React.Component<CardProps, {
   buttonClicked() {
     if (this.props.type === "extension") {
       if (this.isInstalled()) {
-        console.log("Extension already installed, removing");
+        console.debug("Extension already installed, removing");
         this.removeExtension();
       } else {
         this.installExtension();
@@ -125,11 +125,9 @@ class Card extends React.Component<CardProps, {
     } else if (this.props.type === "theme") {
       const themeKey = localStorage.getItem("marketplace:theme-installed");
       const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
-      console.log(previousTheme);
-      console.log(themeKey);
 
       if (this.isInstalled()) {
-        console.log("Theme already installed, removing");
+        console.debug("Theme already installed, removing");
         this.removeTheme(this.localStorageKey);
       } else {
         // Remove theme if already installed, then install the new theme
@@ -144,7 +142,7 @@ class Card extends React.Component<CardProps, {
       window.open(this.state.externalUrl, "_blank");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
-        console.log("Snippet already installed, removing");
+        console.debug("Snippet already installed, removing");
         this.removeSnippet();
       } else {
         this.installSnippet();
@@ -155,7 +153,7 @@ class Card extends React.Component<CardProps, {
   }
 
   installExtension() {
-    console.log(`Installing extension ${this.localStorageKey}`);
+    console.debug(`Installing extension ${this.localStorageKey}`);
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
     if (!this.props.item) {
@@ -186,16 +184,14 @@ class Card extends React.Component<CardProps, {
       localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
     }
 
-    console.log("Installed");
+    console.debug("Installed");
     this.setState({ installed: true });
-    // console.log(JSON.parse(localStorage.getItem(this.localStorageKey)));
   }
 
   removeExtension() {
     const extValue = localStorage.getItem(this.localStorageKey);
-    // console.log(JSON.parse(extValue));
     if (extValue) {
-      console.log(`Removing extension ${this.localStorageKey}`);
+      console.debug(`Removing extension ${this.localStorageKey}`);
       // Remove from localstorage
       localStorage.removeItem(this.localStorageKey);
 
@@ -204,7 +200,7 @@ class Card extends React.Component<CardProps, {
       const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
       localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
-      console.log("Removed");
+      console.debug("Removed");
       this.setState({ installed: false });
     }
   }
@@ -215,7 +211,7 @@ class Card extends React.Component<CardProps, {
       Spicetify.showNotification("There was an error installing theme", true);
       return;
     }
-    console.log(`Installing theme ${this.localStorageKey}`);
+    console.debug(`Installing theme ${this.localStorageKey}`);
 
     let parsedSchemes: SchemeIni = {};
     if (item.schemesURL) {
@@ -225,7 +221,7 @@ class Card extends React.Component<CardProps, {
     }
 
     const firstSchemeName = Object.keys(parsedSchemes)[0];
-    console.log(parsedSchemes, firstSchemeName);
+    console.debug(parsedSchemes, firstSchemeName);
     const activeScheme = firstSchemeName || null;
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
@@ -269,7 +265,7 @@ class Card extends React.Component<CardProps, {
       localStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
     }
 
-    console.log("Installed");
+    console.debug("Installed");
 
     // TODO: We'll also need to actually update the usercss etc, not just the colour scheme
     // e.g. the stuff from extension.js, like injectUserCSS() etc.
@@ -298,7 +294,7 @@ class Card extends React.Component<CardProps, {
     const themeValue = themeKey && localStorage.getItem(themeKey);
 
     if (themeKey && themeValue) {
-      console.log(`Removing theme ${themeKey}`);
+      console.debug(`Removing theme ${themeKey}`);
 
       // Remove from localstorage
       localStorage.removeItem(themeKey);
@@ -311,7 +307,7 @@ class Card extends React.Component<CardProps, {
       const remainingInstalledThemes = installedThemes.filter((key) => key !== themeKey);
       localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
 
-      console.log("Removed");
+      console.debug("Removed");
 
       // Removes the current theme CSS
       this.fetchAndInjectUserCSS(null);
@@ -329,7 +325,7 @@ class Card extends React.Component<CardProps, {
   }
 
   installSnippet() {
-    console.log(`Installing snippet ${this.localStorageKey}`);
+    console.debug(`Installing snippet ${this.localStorageKey}`);
     localStorage.setItem(this.localStorageKey, JSON.stringify({
       code: this.props.item.code,
       title: this.props.item.title,
@@ -406,7 +402,7 @@ class Card extends React.Component<CardProps, {
 
     // Kill the card if it has been uninstalled on the "Installed" tab
     if (this.props.CONFIG.activeTab === "Installed" && !IS_INSTALLED) {
-      console.log("Card item not installed");
+      console.debug("Card item not installed");
       return null;
     }
 

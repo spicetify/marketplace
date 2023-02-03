@@ -100,7 +100,7 @@ class App extends React.Component<{
         schemes = installedTheme.schemes;
         activeScheme = installedTheme.activeScheme;
       } else {
-        console.log("No theme set as installed");
+        console.debug("No theme set as installed");
       }
     } catch (err) {
       console.error(err);
@@ -140,7 +140,7 @@ class App extends React.Component<{
 
   updateConfig = (config: Config) => {
     this.CONFIG = { ...config };
-    console.log("updated config", this.CONFIG);
+    console.debug("updated config", this.CONFIG);
     this.setState({
       CONFIG: { ...config },
     });

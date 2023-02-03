@@ -133,7 +133,7 @@ export const initializeSnippets = (snippets: Snippet[]) => {
 
   style.innerHTML = styleContent;
   style.classList.add("marketplaceSnippets");
-  document.head.appendChild(style);
+  document.body.appendChild(style);
 };
 
 export const fileToBase64 = (file: File) => {
@@ -188,17 +188,17 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
 
 // Reset any Marketplace localStorage keys (effectively resetting it completely)
 export const resetMarketplace = () => {
-  console.log("Resetting Marketplace");
+  console.debug("Resetting Marketplace");
 
   // Loop through and reset marketplace keys
   Object.keys(localStorage).forEach((key) => {
     if (key.startsWith("marketplace:")) {
       localStorage.removeItem(key);
-      console.log(`Removed ${key}`);
+      console.debug(`Removed ${key}`);
     }
   });
 
-  console.log("Marketplace has been reset");
+  console.debug("Marketplace has been reset");
   location.reload();
 };
 
@@ -216,19 +216,18 @@ export const exportMarketplace = () => {
 };
 
 export const importMarketplace = (data : JSON) => {
-  console.log("Importing Marketplace");
+  console.debug("Importing Marketplace");
   // First reset the marketplace
   resetMarketplace();
   // Then import the data
   Object.keys(data).forEach((key) => {
     localStorage.setItem(key, data[key]);
-    console.log(`Imported ${key}`);
+    console.debug(`Imported ${key}`);
   });
 };
 
 // NOTE: Keep in sync with extension.js
 export const injectColourScheme = (scheme: ColourScheme | null) => {
-
   // Remove any existing marketplace scheme
   const existingMarketplaceSchemeCSS = document.querySelector("style.marketplaceCSS.marketplaceScheme");
   if (existingMarketplaceSchemeCSS) existingMarketplaceSchemeCSS.remove();
@@ -242,19 +241,12 @@ export const injectColourScheme = (scheme: ColourScheme | null) => {
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
     themeIniKeys.forEach((key) => {
-      injectStr += `--spice-${key}: #${scheme[key]} !important;`;
-      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])} !important;`;
+      injectStr += `--spice-${key}: #${scheme[key]};`;
+      injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
     });
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
-    document.head.appendChild(schemeTag);
-  } else {
-    // Re-add default user.css
-    const originalColorsCSS = document.createElement("link");
-    originalColorsCSS.setAttribute("rel", "stylesheet");
-    originalColorsCSS.setAttribute("href", "colors.css");
-    originalColorsCSS.classList.add("userCSS");
-    document.head.appendChild(originalColorsCSS);
+    document.body.appendChild(schemeTag);
   }
 };
 
@@ -278,14 +270,14 @@ export const injectUserCSS = (userCSS?: string) => {
       userCssTag.classList.add("marketplaceCSS");
       userCssTag.classList.add("marketplaceUserCSS");
       userCssTag.innerHTML = userCSS;
-      document.head.appendChild(userCssTag);
+      document.body.appendChild(userCssTag);
     } else {
       // Re-add default user.css
       const originalUserThemeCSS = document.createElement("link");
       originalUserThemeCSS.setAttribute("rel", "stylesheet");
       originalUserThemeCSS.setAttribute("href", "user.css");
       originalUserThemeCSS.classList.add("userCSS");
-      document.head.appendChild(originalUserThemeCSS);
+      document.body.appendChild(originalUserThemeCSS);
     }
   } catch (error) {
     console.warn(error);
@@ -400,7 +392,7 @@ export const parseCSS = async (themeData: CardItem) => {
   // TODO: Make this more versatile
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
-  console.log("Parsing CSS: ", userCssUrl);
+  console.debug("Parsing CSS: ", userCssUrl);
   let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
   // console.log("Parsed CSS: ", css);
 
@@ -461,7 +453,7 @@ export function addToSessionStorage(items, key?) {
   });
 }
 export function getInvalidCSS(): string[] {
-  const unparsedCSS = document.querySelector("head > style.marketplaceCSS.marketplaceUserCSS");
+  const unparsedCSS = document.querySelector("body > style.marketplaceCSS.marketplaceUserCSS");
   const classNameList = unparsedCSS?.innerHTML;
   const regex = new RegExp (`.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*{`, "g");
   if (!classNameList) return ["Error: Class name list not found; please create an issue"];

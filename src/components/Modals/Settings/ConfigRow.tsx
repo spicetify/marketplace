@@ -25,7 +25,7 @@ const ConfigRow = (props: {
     const state = e.target.checked;
     const storageKey = e.target.dataset.storageKey;
     props.modalConfig.visual[storageKey] = state;
-    console.log(`toggling ${storageKey} to ${state}`);
+    console.debug(`toggling ${storageKey} to ${state}`);
     localStorage.setItem(`marketplace:${storageKey}`, String(state));
 
     // Saves the config settings to app as well as SettingsModal state

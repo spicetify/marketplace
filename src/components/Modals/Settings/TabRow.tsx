@@ -20,7 +20,6 @@ const TabRow = (props: {
   const { enabled } = props.modalConfig.tabs[index];
 
   const clickToggle = (e) => {
-    console.log({ e });
     props.modalConfig.tabs[index].enabled = e.target.checked;
 
     // Persist the new enabled tabs
@@ -30,8 +29,6 @@ const TabRow = (props: {
   };
 
   function moveTab(currPos, dir) {
-    console.log({ currPos, dir });
-
     const newPos = currPos + dir;
 
     const temp = props.modalConfig.tabs[newPos];
