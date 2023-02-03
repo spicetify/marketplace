@@ -42,12 +42,6 @@ export default [
     "preview": "resources/assets/snippets/remove-connect-bar.png",
   },
   {
-    "title": "Fix playlist arrows",
-    "description": "Fixes the opened and closed orientation of the playlist folder arrows",
-    "code": ".main-rootlist-expandArrow {\n  -webkit-transform: rotate(-90deg) !important;\n  transform: rotate(-90deg) !important;\n}\n.main-rootlist-expandArrow:hover {\n  -webkit-transform: rotate(-90deg) !important;\n  transform: rotate(-90deg) !important;\n}\n.qAAhQw9dXNB7DbPgDDxy {\n  -webkit-transform: rotate(0deg) !important;\n  transform: rotate(0deg) !important;\n}\n.qAAhQw9dXNB7DbPgDDxy:hover {\n  -webkit-transform: rotate(0deg) !important;\n  transform: rotate(0deg) !important;\n}",
-    "preview": "resources/assets/snippets/fix-playlist-arrows.png",
-  },
-  {
     "title": "Fix main view width",
     "description": "Makes main view fill up all available space",
     "code": ".contentSpacing {\n  max-width: 100% !important;\n}",
