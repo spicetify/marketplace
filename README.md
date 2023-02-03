@@ -4,6 +4,9 @@
   <a href="https://github.com/spicetify/spicetify-marketplace/releases/latest">
     <img src="https://img.shields.io/github/v/release/spicetify/spicetify-marketplace?include_prereleases">
   </a>
+  <a href="https://github.com/spicetify/spicetify-marketplace/releases">
+    <img src="https://img.shields.io/github/downloads/spicetify/spicetify-marketplace/total.svg">
+  </a>
   <a href="https://github.com/spicetify/spicetify-marketplace/issues?q=is%3Aissue+is%3Aclosed">
     <img src="https://img.shields.io/github/issues-closed/spicetify/spicetify-marketplace">
   </a>
