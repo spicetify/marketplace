@@ -38,7 +38,7 @@ export default [
   {
     "title": "Remove connect bar",
     "description": "Remove connect bar that causes progress bar displacement when listening on different devices",
-    "code": ".main-connectBar-connectBar {\n  color: transparent !important;\n  overflow: visible !important;\n  --triangle-position: 147px !important;\n  align-items: unset !important;\n  height: 0px !important;\n  position: absolute !important;\n  left: 80% !important;\n  display: flex !important;\n  bottom: 2% !important;\n  padding: unset !important;\n}",
+    "code": ".main-connectBar-connectBar {\n  display: none !important;}",
     "preview": "resources/assets/snippets/remove-connect-bar.png",
   },
   {
