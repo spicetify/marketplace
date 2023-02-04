@@ -38,14 +38,8 @@ export default [
   {
     "title": "Remove connect bar",
     "description": "Remove connect bar that causes progress bar displacement when listening on different devices",
-    "code": ".main-connectBar-connectBar {\n  color: transparent !important;\n  overflow: visible !important;\n  --triangle-position: 147px !important;\n  align-items: unset !important;\n  height: 0px !important;\n  position: absolute !important;\n  left: 80% !important;\n  display: flex !important;\n  bottom: 2% !important;\n  padding: unset !important;\n}",
+    "code": ".main-connectBar-connectBar {\n  display: none !important;}",
     "preview": "resources/assets/snippets/remove-connect-bar.png",
-  },
-  {
-    "title": "Fix playlist arrows",
-    "description": "Fixes the opened and closed orientation of the playlist folder arrows",
-    "code": ".main-rootlist-expandArrow {\n  -webkit-transform: rotate(-90deg) !important;\n  transform: rotate(-90deg) !important;\n}\n.main-rootlist-expandArrow:hover {\n  -webkit-transform: rotate(-90deg) !important;\n  transform: rotate(-90deg) !important;\n}\n.qAAhQw9dXNB7DbPgDDxy {\n  -webkit-transform: rotate(0deg) !important;\n  transform: rotate(0deg) !important;\n}\n.qAAhQw9dXNB7DbPgDDxy:hover {\n  -webkit-transform: rotate(0deg) !important;\n  transform: rotate(0deg) !important;\n}",
-    "preview": "resources/assets/snippets/fix-playlist-arrows.png",
   },
   {
     "title": "Fix main view width",
@@ -61,8 +55,8 @@ export default [
   },
   {
     "title": "Hover Panels",
-    "description": "Have your playlist, friend activity, and controls bar be hoverable.",
-    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 40px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 1;\n}\nnav.Root__nav-bar:hover {\n  position: inherit;\n  width: 225px;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\naside.main-buddyFeed-buddyFeedRoot:hover {\n  position: inherit;\n  width: var(--buddy-feed-width);\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n  left: 0;\n}\naside.main-buddyFeed-buddyFeedRoot {\n  position: absolute;\n  width: 65px;\n  opacity: 0;\n  bottom: 0;\n  left: -30px;\n  top: 0;\n  z-index: 1;\n}",
+    "description": "Have your playlist, right sidebar, and controls bar be hoverable.",
+    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 40px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 1;\n}\nnav.Root__nav-bar:hover {\n  position: inherit;\n  width: 225px;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\naside.Root__right-sidebar:hover {\n  position: inherit;\n  width: var(--panel-width);\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n  left: 0;\n}\naside.Root__right-sidebar {\n  position: absolute;\n  width: 65px;\n  opacity: 0;\n  bottom: 0;\n  left: -30px;\n  top: 0;\n  z-index: 1;\n}",
     "preview": "resources/assets/snippets/hover-panels.png",
   },
   {
