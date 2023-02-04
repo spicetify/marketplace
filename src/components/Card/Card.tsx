@@ -498,7 +498,6 @@ class Card extends React.Component<CardProps, {
             )}
             <Spicetify.ReactComponent.TooltipWrapper
               label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
-              showDelay={100}
               renderInline={true}
             >
               <div className="main-card-PlayButtonContainer">
