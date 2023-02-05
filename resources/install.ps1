@@ -6,7 +6,7 @@ Write-Host "Setting up..." -ForegroundColor "Green"
 $checkSpice = Get-Command spicetify -ErrorAction Silent
 if ($null -eq $checkSpice) {
   Write-Host -ForegroundColor Red "Spicetify not found. Installing that for you..."
-  Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.ps1" | Invoke-Expression
+  Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.ps1" | Invoke-Expression
 }
 
 $spicePath = "$env:APPDATA\spicetify"
