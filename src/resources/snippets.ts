@@ -164,7 +164,7 @@ export default [
   {
     "title": "Fix playlist and folder position",
     "description": "Replaces the playlists section in the left side bar to align with all the other category icons for the new UI. Screenshot includes 'Playlist icons' snippet",
-    "code": "img.playlist-item__img.folder, img.playlist-item__img { margin-right: 16px; } div.main-rootlist-rootlist { --left-sidebar-item-height: 32px; --left-sidebar-item-indentation-width: 10px; } div.GlueDropTarget.personal-library > * { height: 32px !important; }",
+    "code": "div.playlist-item__img.folder, img.playlist-item__img { margin-right: 16px; } div.main-rootlist-rootlist { --left-sidebar-item-height: 32px; --left-sidebar-item-indentation-width: 10px; } div.GlueDropTarget.personal-library > * { height: 32px !important; }",
     "preview": "resources/assets/snippets/fix-playlist-and-folder-position.png",
   },
   {
