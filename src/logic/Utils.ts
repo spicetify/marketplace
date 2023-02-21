@@ -186,16 +186,46 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
   ));
 };
 
-// Reset any Marketplace localStorage keys (effectively resetting it completely)
-export const resetMarketplace = () => {
+/**
+ * Reset Marketplace localStorage keys
+ * @param categories The categories to reset. If none provided, reset everything.
+ */
+export const resetMarketplace = (...categories: ("extensions" | "snippets" | "theme")[]) => {
   console.debug("Resetting Marketplace");
 
-  // Loop through and reset marketplace keys
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith("marketplace:")) {
-      localStorage.removeItem(key);
-      console.debug(`Removed ${key}`);
+  const keysToRemove: string[] = [];
+
+  // If no categories provided, reset everything
+  if (categories.length === 0) {
+    // Loop through all marketplace keys.
+    // This includes extensions, themes, and snippets, as well as the Marketplace settings.
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith("marketplace:")) {
+        keysToRemove.push(key);
+      }
+    });
+  }
+
+  // If have categories, reset only those
+  categories.forEach((category) => {
+    if (category === "extensions") {
+      // Remove the extensions themselves
+      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
+      // Remove the list of extension keys
+      keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
+    } else if (category === "snippets") {
+      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
+      keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
+    } else if (category === "theme") {
+      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
+      keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
+      keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
     }
+  });
+
+  keysToRemove.forEach((key) => {
+    localStorage.removeItem(key);
+    console.debug(`Removed ${key}`);
   });
 
   console.debug("Marketplace has been reset");
