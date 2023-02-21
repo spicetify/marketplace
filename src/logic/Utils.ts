@@ -188,28 +188,17 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
 
 /**
  * Reset Marketplace localStorage keys
- * @param category The category to reset. If not provided, reset all categories.
+ * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (category: "extensions" | "snippets" | "theme" | "all" = "all") => {
+export const resetMarketplace = (...categories: ("extensions" | "snippets" | "theme" | "all")[]) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
 
-  // If have category, just reset that category
-  if (category === "extensions") {
-    // Remove the extensions themselves
-    keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
-    // Remove the list of extension keys
-    keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
-  } else if (category === "snippets") {
-    keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
-    keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
-  } else if (category === "theme") {
-    keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
-    keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
-    keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
-  } else {
-    // Loop through all marketplace keys
+  // If no categories provided, reset everything
+  if (categories.length === 0) {
+    // Loop through all marketplace keys.
+    // This includes extensions, themes, and snippets, as well as the Marketplace settings.
     Object.keys(localStorage).forEach((key) => {
       if (key.startsWith("marketplace:")) {
         keysToRemove.push(key);
@@ -217,7 +206,23 @@ export const resetMarketplace = (category: "extensions" | "snippets" | "theme" |
     });
   }
 
-  console.debug(`Removing ${category} from Marketplace (${keysToRemove.length} keys)`);
+  // If have categories, reset only those
+  categories.forEach((category) => {
+    if (category === "extensions") {
+      // Remove the extensions themselves
+      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
+      // Remove the list of extension keys
+      keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
+    } else if (category === "snippets") {
+      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
+      keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
+    } else if (category === "theme") {
+      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
+      keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
+      keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
+    }
+  });
+
   keysToRemove.forEach((key) => {
     localStorage.removeItem(key);
     console.debug(`Removed ${key}`);
