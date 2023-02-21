@@ -186,16 +186,41 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
   ));
 };
 
-// Reset any Marketplace localStorage keys (effectively resetting it completely)
-export const resetMarketplace = () => {
+/**
+ * Reset Marketplace localStorage keys
+ * @param category The category to reset. If not provided, reset all categories.
+ */
+export const resetMarketplace = (category: "extensions" | "snippets" | "theme" | "all" = "all") => {
   console.debug("Resetting Marketplace");
 
-  // Loop through and reset marketplace keys
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith("marketplace:")) {
-      localStorage.removeItem(key);
-      console.debug(`Removed ${key}`);
-    }
+  const keysToRemove: string[] = [];
+
+  // If have category, just reset that category
+  if (category === "extensions") {
+    // Remove the extensions themselves
+    keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
+    // Remove the list of extension keys
+    keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
+  } else if (category === "snippets") {
+    keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
+    keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
+  } else if (category === "theme") {
+    keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
+    keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
+    keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
+  } else {
+    // Loop through all marketplace keys
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith("marketplace:")) {
+        keysToRemove.push(key);
+      }
+    });
+  }
+
+  console.debug(`Removing ${category} from Marketplace (${keysToRemove.length} keys)`);
+  keysToRemove.forEach((key) => {
+    localStorage.removeItem(key);
+    console.debug(`Removed ${key}`);
   });
 
   console.debug("Marketplace has been reset");
