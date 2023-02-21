@@ -190,7 +190,7 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (...categories: ("extensions" | "snippets" | "theme" | "all")[]) => {
+export const resetMarketplace = (...categories: ("extensions" | "snippets" | "theme")[]) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
