@@ -179,4 +179,10 @@ export default [
     "code": "#spicetify-sticky-list>li:nth-child(1n+1)>a>div.icon.collection-icon>svg { stroke: currentcolor; stroke-width: 11px; } .collection-icon { color: unset; }",
     "preview": "resources/assets/snippets/thicker-sticky-list-icons.png",
   },
+  {
+    "title": "Pretty Lyrics",
+    "description": "Gets rid of the ugly background colour on the lyrics page and makes it consistent with themes. Works best with dark themes.",
+    "code": ".lyrics-lyrics-background { display: none; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced) { color: #FFFFFF4D !important; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced):hover { color: #FFFFFF !important; } .lyrics-lyricsContent-highlight { color: #FFFFFF66; } .lyrics-lyricsContent-unsynced { color: #FFFFFF !important; } .lyrics-lyricsContent-unsynced:hover { color: #FFFFFF !important; } .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description { color: #FFFFFFB6 !important; }",
+    "preview": "resources/assets/snippets/pretty-lyrics.png",
+  },
 ];
