@@ -25,7 +25,7 @@
 	},
 	"packageManager": "yarn@3.2.1",
 	"devDependencies": {
-		"@types/chroma-js": "^2.1.4",
+		"@types/chroma-js": "^2.4.0",
 		"@types/react": "^17.0.53",
 		"@types/react-dom": "^17.0.18",
 		"@types/semver": "^7.3.13",
