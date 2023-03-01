@@ -199,10 +199,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chroma-js@npm:^2.1.4":
-  version: 2.1.4
-  resolution: "@types/chroma-js@npm:2.1.4"
-  checksum: 24f1a1dd1c7b21548299c320bfa01e6407acb70193e567af16c28f742571fe56bb1eea0aedc41281478a175c70772a4627d5a9bf5b9cd854a7b455c38a3a5645
+"@types/chroma-js@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@types/chroma-js@npm:2.4.0"
+  checksum: aa91adf61a5dee8469c1e6b298d3496041d1baa8bd9938865a61050b5e392adc3425718c7c29b09a3d8dfe0d2e8a1301e98d4b458135e53c2ecb3ecca8cb7d21
   languageName: node
   linkType: hard
 
@@ -3810,7 +3810,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "spicetify-marketplace@workspace:."
   dependencies:
-    "@types/chroma-js": ^2.1.4
+    "@types/chroma-js": ^2.4.0
     "@types/react": ^17.0.53
     "@types/react-dom": ^17.0.19
     "@types/semver": ^7.3.13
