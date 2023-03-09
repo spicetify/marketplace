@@ -123,7 +123,7 @@ class Card extends React.Component<CardProps, {
       }
       openModal("RELOAD");
     } else if (this.props.type === "theme") {
-      const themeKey = localStorage.getItem("marketplace:theme-installed");
+      const themeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
       const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
 
       if (this.isInstalled()) {
