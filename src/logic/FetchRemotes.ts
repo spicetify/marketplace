@@ -15,11 +15,9 @@ import snippetsJSON from "../resources/snippets";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], query?: string) {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = []) {
   // www is needed or it will block with "cross-origin" error.
-  let url = query
-    ? `https://api.github.com/search/repositories?q=${encodeURIComponent(`${query}+topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`
-    : `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
+  let url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
 
   // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
   // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
