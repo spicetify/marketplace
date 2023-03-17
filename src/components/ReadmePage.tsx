@@ -87,7 +87,9 @@ class ReadmePage extends React.Component<
       img.addEventListener("error", (e) => {
         const element = e.target as HTMLImageElement;
         const originalSrc = element.getAttribute("src");
-        const fixedSrc = `${this.props.data.readmeURL.substring(0, this.props.data.readmeURL.lastIndexOf("/"))}/${originalSrc}`;
+        const fixedSrc = originalSrc?.charAt(0) === "/"
+          ? `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc?.slice(1)}`
+          : `${this.props.data.readmeURL.substring(0, this.props.data.readmeURL.lastIndexOf("/"))}/${originalSrc}`;
         element.setAttribute("src", fixedSrc);
       }, { once: true });
     });
