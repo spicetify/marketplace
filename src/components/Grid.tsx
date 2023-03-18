@@ -97,11 +97,11 @@ class Grid extends React.Component<
     return installedTheme;
   }
 
-  newRequest(amount: number | undefined, query?: string) {
+  newRequest(amount: number | undefined) {
     this.cardList = [];
     const queue = [];
     this.requestQueue.unshift(queue);
-    this.loadAmount(queue, amount, query);
+    this.loadAmount(queue, amount);
   }
 
   /**
@@ -180,10 +180,10 @@ class Grid extends React.Component<
   // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
   // Returns the next page number to fetch, or null if at end
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
-  async loadPage(queue: never[], query?: string) {
+  async loadPage(queue: never[]) {
     switch (this.CONFIG.activeTab) {
     case "Extensions": {
-      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
         const extensions = await fetchExtensionManifest(
           repo.contents_url,
@@ -245,7 +245,7 @@ class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } case "Themes": {
-      const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
 
         const themes = await fetchThemeManifest(
@@ -278,7 +278,7 @@ class Grid extends React.Component<
       else console.debug("No more theme results");
       break;
     } case "Apps": {
-      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, query);
+      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
 
         const apps = await fetchAppManifest(
@@ -332,11 +332,11 @@ class Grid extends React.Component<
    * @param {any} queue An array of the extensions to be loaded
    * @param {number} [quantity] Amount of extensions to be loaded per page. (Defaults to ITEMS_PER_REQUEST constant)
    */
-  async loadAmount(queue: never[], quantity: number = ITEMS_PER_REQUEST, query?: string) {
+  async loadAmount(queue: never[], quantity: number = ITEMS_PER_REQUEST) {
     this.setState({ rest: false });
     quantity += this.cardList.length;
 
-    this.requestPage = await this.loadPage(queue, query);
+    this.requestPage = await this.loadPage(queue);
 
     while (
       this.requestPage &&
@@ -344,7 +344,7 @@ class Grid extends React.Component<
       this.cardList.length < quantity &&
       !this.state.endOfList
     ) {
-      this.requestPage = await this.loadPage(queue, query);
+      this.requestPage = await this.loadPage(queue);
     }
 
     if (this.requestPage === -1) {
@@ -486,21 +486,6 @@ class Grid extends React.Component<
     return this.state.activeScheme;
   }
 
-  handleSearch(event: React.KeyboardEvent) {
-    if (event.key === "Enter") {
-      this.setState({ endOfList: false });
-      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-      this.searchRequested = true;
-    } else if ( // Refreshes result when user deletes all queries
-      ((event.key === "Backspace") || (event.key === "Delete")) &&
-        this.searchRequested &&
-        this.state.searchValue.trim() === "") {
-      this.setState({ endOfList: false });
-      this.newRequest(ITEMS_PER_REQUEST, this.state.searchValue.trim().toLowerCase());
-      this.searchRequested = false;
-    }
-  }
-
   render() {
     const { t } = this.props;
     return (
@@ -543,8 +528,7 @@ class Grid extends React.Component<
                 value={this.state.searchValue}
                 onChange={(event) => {
                   this.setState({ searchValue: event.target.value });
-                }}
-                onKeyDown={this.handleSearch.bind(this)} />
+                }} />
             </div>
             <Spicetify.ReactComponent.TooltipWrapper label={t("settings.title")} renderInline={true} placement="bottom">
               <button type="button" aria-label={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
@@ -567,12 +551,10 @@ class Grid extends React.Component<
               const searchValue = this.state.searchValue.trim().toLowerCase();
               const { title, user, authors } = card.props.item;
 
-              if (!searchValue) return card;
-
-              if (title.toLowerCase().includes(searchValue) ||
+              return !searchValue ||
+                title.toLowerCase().includes(searchValue) ||
                 user?.toLowerCase().includes(searchValue) ||
-                authors?.some((author) => author.name.toLowerCase().includes(searchValue))
-              ) return card;
+                authors?.some((author) => author.name.toLowerCase().includes(searchValue));
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render

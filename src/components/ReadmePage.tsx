@@ -82,12 +82,14 @@ class ReadmePage extends React.Component<
     // Add error handler in attempt to fix broken image urls
     // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
-    // This works for urls relative to the repo root
+    // This works for urls relative to the repo readme
     document.querySelectorAll("#marketplace-readme img").forEach((img) => {
       img.addEventListener("error", (e) => {
         const element = e.target as HTMLImageElement;
         const originalSrc = element.getAttribute("src");
-        const fixedSrc = `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc}`;
+        const fixedSrc = originalSrc?.charAt(0) === "/"
+          ? `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc?.slice(1)}`
+          : `${this.props.data.readmeURL.substring(0, this.props.data.readmeURL.lastIndexOf("/"))}/${originalSrc}`;
         element.setAttribute("src", fixedSrc);
       }, { once: true });
     });
