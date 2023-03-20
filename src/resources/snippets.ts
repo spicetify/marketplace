@@ -1,4 +1,10 @@
 export default [
+  {
+    "title": "Rounded Images",
+    "description": "Adds rounded corners to the cover art, playlist covers, and other images",
+    "code": "/* Cover Art Image (+ position fix) */\n .Foyk_HJx16yh22JYmQ56 {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image {\n border-radius: 4px;\n }\n \n /* Playlist Header */\n /* Search Category Card + Image*/\n /* Local Files Card */\n .main-entityHeader-shadow,\n .tV9cjMpTPaykKsn2OVsw,\n .x-categoryCard-CategoryCard,\n .tlNAdRNP5lIeiD85nMcL {\n border-radius: 6px;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }\n",
+    "preview": "resources/assets/snippets/rounded-images.png",
+  },
   // {
   //   "title": "Fix 'Episodes' Icon",
   //   "description": "Fix the color of the Episodes icon",
