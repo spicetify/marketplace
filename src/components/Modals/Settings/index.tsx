@@ -47,7 +47,8 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 
   return (
     <div id="marketplace-config-container">
-      <h2>{t("settings.optionsHeading")}</h2>
+
+      <h2 className="settings-heading">{t("settings.optionsHeading")}</h2>
       <ConfigRow name={t("settings.starCountLabel")} storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.tagsLabel")} storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.devToolsLabel")} storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig}/>
@@ -55,26 +56,30 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <ConfigRow name={t("settings.colourShiftLabel")} storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.albumArtBasedColors")} storageKey='albumArtBasedColors' modalConfig={modalConfig} updateConfig={updateConfig}/>
       {AlbumArtColorDropDowns}
-      <h2>{t("settings.tabsHeading")}</h2>
+
+      <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
         {modalConfig.tabs.map(({ name }, index) => {
           return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
         })}
       </div>
-      <h2>{t("settings.resetHeading")}</h2>
-      <div className="setting-row">
+
+      <h2 className="settings-heading">{t("settings.resetHeading")}</h2>
+      <div className="settings-row">
         <label className="col description">{t("settings.resetDescription")}</label>
         <div className="col action">
           <Button onClick={resetMarketplace}>{t("settings.resetBtn")}</Button>
         </div>
       </div>
-      <h2>{t("settings.backupHeading")}</h2>
-      <div className="setting-row">
+
+      <h2 className="settings-heading">{t("settings.backupHeading")}</h2>
+      <div className="settings-row">
         <label className="col description">{t("settings.backupLabel")}</label>
         <div className="col action">
           <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
         </div>
       </div>
+
     </div>
   );
 };

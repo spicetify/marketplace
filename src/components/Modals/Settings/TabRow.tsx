@@ -45,7 +45,7 @@ const TabRow = (props: {
   }
 
   return (
-    <div className="setting-row">
+    <div className="settings-row">
       <label htmlFor={toggleId} className='col description'>{t(`tabs.${props.name}`)}</label>
       <div className="col action">
         <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>

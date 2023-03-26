@@ -45,7 +45,7 @@ const ConfigRow = (props: {
 
   if (type === "dropdown" && props.options) {
     return (
-      <div className='setting-row'>
+      <div className='settings-row'>
         <label htmlFor={componentId} className='col description'>{props.name}</label>
         <div className='col action'>
           <SortBox
@@ -84,7 +84,7 @@ const ConfigRow = (props: {
     );
   }
   return (
-    <div className='setting-row'>
+    <div className='settings-row'>
       <label htmlFor={componentId} className='col description'>{props.name}</label>
       <div className='col action'>
         <Toggle name={props.name} storageKey={props.storageKey} enabled={enabled} onChange={settingsToggleChange} />
