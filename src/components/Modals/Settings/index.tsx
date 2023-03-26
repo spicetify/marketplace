@@ -9,7 +9,7 @@ import Button from "../../Button";
 import TabRow from "./TabRow";
 
 import { openModal } from "../../../logic/LaunchModals";
-import { LOCALSTORAGE_KEYS } from "../../../constants";
+import { LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../../../constants";
 
 interface Props {
   CONFIG: Config;
@@ -75,8 +75,23 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
           <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
         </div>
       </div>
+      <h2>{t("settings.versionHeading")}</h2>
+      <div className="setting-row">
+        <label className="col description">
+          {t("grid.spicetifyMarketplace")} {MARKETPLACE_VERSION}
+        </label>
+        <div className="col action">
+          <Button onClick={copyVersion}>{t("settings.versionBtn")}</Button>
+        </div>
+      </div>
     </div>
   );
+};
+
+const copyVersion = () => {
+  Spicetify.Platform.ClipboardAPI.copy(MARKETPLACE_VERSION);
+  // TODO: It looks like the notification is underneath the modal, so is not visible
+  Spicetify.showNotification(t("settings.versionCopied"));
 };
 
 const onBackupClick = async () => {
