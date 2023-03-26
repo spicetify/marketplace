@@ -22,10 +22,18 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
   // then when updating anything in the main state, also updates the SettingsModal state
 
   const [modalConfig, setModalConfig] = React.useState({ ...CONFIG });
+  const [versionButtonText, setVersionButtonText] = React.useState(t("settings.versionBtn"));
   // TODO: use React.useCallback?
   const updateConfig = (CONFIG: Config) => {
     updateAppConfig({ ...CONFIG });
     setModalConfig({ ...CONFIG });
+  };
+
+  /** Copy Marketplace version to clipboard and update button text */
+  const copyVersion = () => {
+    Spicetify.Platform.ClipboardAPI.copy(MARKETPLACE_VERSION);
+    setVersionButtonText(t("settings.versionCopied"));
+    setTimeout(() => setVersionButtonText(t("settings.versionBtn")), 3000);
   };
 
   // Can't use proper event listener here because it's just the DOM outside the component
@@ -41,6 +49,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       }
     };
   }
+
   const AlbumArtColorDropDowns = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColor) ? <>
     <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description={t("settings.almbumArtColorsModeToolTip")} />
     <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={t("settings.albumArtBasedColorsVibrancyToolTip")} /></> : null;
@@ -81,17 +90,11 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
           {t("grid.spicetifyMarketplace")} {MARKETPLACE_VERSION}
         </label>
         <div className="col action">
-          <Button onClick={copyVersion}>{t("settings.versionBtn")}</Button>
+          <Button onClick={copyVersion}>{versionButtonText}</Button>
         </div>
       </div>
     </div>
   );
-};
-
-const copyVersion = () => {
-  Spicetify.Platform.ClipboardAPI.copy(MARKETPLACE_VERSION);
-  // TODO: It looks like the notification is underneath the modal, so is not visible
-  Spicetify.showNotification(t("settings.versionCopied"));
 };
 
 const onBackupClick = async () => {
