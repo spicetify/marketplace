@@ -19,7 +19,10 @@
       "resetDescription": "Uninstall all extensions and themes, and reset preferences",
       "backupHeading": "Back up/Restore",
       "backupLabel": "Back up or restore all Marketplace data. This does not include settings for anything installed via Marketplace.",
-      "backupBtn": "Open"
+      "backupBtn": "Open",
+      "versionHeading": "Version",
+      "versionBtn": "Copy",
+      "versionCopied": "Copied"
     },
     "tabs": {
       "Extensions": "Extensions",
