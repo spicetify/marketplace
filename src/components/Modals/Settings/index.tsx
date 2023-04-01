@@ -1,5 +1,8 @@
 import React from "react";
 import { t } from "i18next";
+// import { Draggable } from "react-drag-reorder";
+import Draggable from "./Draggable";
+import DragContainer from "./DragContainer";
 import { Config } from "../../../types/marketplace-types";
 
 import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "../../../logic/Utils";
@@ -54,6 +57,26 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
     <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description={t("settings.almbumArtColorsModeToolTip")} />
     <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={t("settings.albumArtBasedColorsVibrancyToolTip")} /></> : null;
 
+  const onTabMove = (currentPos, newPos) => {
+    console.log({ currentPos, newPos });
+
+    return;
+
+    // Take the current position and the new position and swap them in the array
+    const temp = modalConfig.tabs[currentPos];
+    modalConfig.tabs[currentPos] = modalConfig.tabs[newPos];
+    modalConfig.tabs[newPos] = temp;
+    console.log("1 - modalConfig.tabs", modalConfig.tabs);
+
+    localStorage.setItem(
+      LOCALSTORAGE_KEYS.tabs,
+      JSON.stringify(modalConfig.tabs),
+    );
+
+    updateConfig(modalConfig);
+    console.log("2 - modalConfig.tabs", modalConfig.tabs);
+  };
+
   return (
     <div id="marketplace-config-container">
 
@@ -68,9 +91,13 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
 
       <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
       <div className="tabs-container">
-        {modalConfig.tabs.map(({ name }, index) => {
-          return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
-        })}
+        {/* <DragContainer> */}
+        <Draggable onDragEnd={onTabMove}>
+          {modalConfig.tabs.map(({ name }, index) => {
+            return <TabRow key={index} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
+          })}
+        </Draggable>
+        {/* </DragContainer> */}
       </div>
 
       <h2 className="settings-heading">{t("settings.resetHeading")}</h2>

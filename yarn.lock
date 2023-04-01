@@ -3316,6 +3316,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-drag-reorder@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "react-drag-reorder@npm:1.2.0"
+  checksum: 24642ad94c92c4e6ec5e1e7cf4d8fef0ad67d56b1b24c9d84c24084f0e24b45f12e364197b00b94c5f12e2bfc7162821b3da8008136a66e01fd06bb51831cedb
+  languageName: node
+  linkType: hard
+
 "react-dropdown@npm:^1.11.0":
   version: 1.11.0
   resolution: "react-dropdown@npm:1.11.0"
@@ -3817,6 +3824,7 @@ __metadata:
     i18next: ^22.4.12
     i18next-browser-languagedetector: ^7.0.1
     prismjs: ^1.29.0
+    react-drag-reorder: ^1.2.0
     react-dropdown: ^1.11.0
     react-i18next: ^12.2.0
     react-simple-code-editor: ^0.13.1
