@@ -1,0 +1,91 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Configuració",
+      "optionsHeading": "Opcions",
+      "starCountLabel": "Número d'estrelles",
+      "tagsLabel": "Etiquetes",
+      "devToolsLabel": "Eines per a desenvolupadors de temes",
+      "hideInstalledLabel": "Amagar instal·lats",
+      "colourShiftLabel": "Canviar colors cada minut",
+      "tabsHeading": "Pestanyes",
+      "resetHeading": "Restablir",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Borrar totes les extensions, temes i preferències",
+      "backupHeading": "Fer una còpia/Reestablir des d'una còpia",
+      "backupLabel": "Fer una còpia o restablir totes les dades de Marketplace des d'una còpia. Això no inclou la configuració per els elements instal·lats amb Marketplace.",
+      "backupBtn": "Obrir"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Temes",
+      "Snippets": "Fragments",
+      "Apps": "Aplicacions",
+      "Installed": "Instal·lats"
+    },
+    "snippets": {
+      "addTitle": "Afegir Codi",
+      "editTitle": "Editar Codi",
+      "viewTitle": "Veure Codi",
+      "customCSS": "CSS personalitzat",
+      "customCSSPlaceholder": "Crea el teu propi CSS aqui! Pots trobar-los a la pestanya d'instal·lats per administrar-los.",
+      "snippetName": "Nom del fragment de codi",
+      "snippetNamePlaceholder": "Afegeix un nom al teu codi personalitzat",
+      "snippetDesc": "Descripció del codi",
+      "snippetDescPlaceholder": "Crea una descripció per al teu codi personalitzat",
+      "snippetPreview": "Codi",
+      "optional": "Opcional",
+      "addImage": "Afegir imatge",
+      "changeImage": "Canviar imatge",
+      "saveCSS": "Guardar CSS"
+    },
+    "reloadModal": {
+      "title": "Recarregar",
+      "description": "És necessari recarregar la finestra per completar aquesta operació.",
+      "reloadNow": "Fes-ho ara",
+      "reloadLater": "Després"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Configuració copiada al portapapers",
+      "noDataPasted": "No s'han enganxat dades",
+      "invalidJSON": "JSON invàlid",
+      "inputLabel": "Configuració de Marketplace",
+      "inputPlaceholder": "Còpia/enganxa la teva configuració aquí",
+      "exportBtn": "Exportar",
+      "importBtn": "Importar",
+      "fileImportBtn": "Importar des d'un arxiu"
+    },
+    "devTools": {
+      "title": "Eines de desenvolupador de temes",
+      "noThemeInstalled": "Error: No tema de marketplace instalado",
+      "noThemeManifest": "Error: No s'ha trobat el manifest",
+      "colorIniEditor": "Editor de Color.ini",
+      "colorIniEditorPlaceholder": "[nom-de-esquema-de-color]",
+      "invalidCSS": "CSS invàlid"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Marketplace de Spicetify",
+      "newUpdate": "Nova Actualització",
+      "addCSS": "Afegir CSS",
+      "search": "Buscar",
+      "installed": "Instal·lat",
+      "lastUpdated": "Última actualizació {{val, datetime}}",
+      "externalJS": "JS extern",
+      "dark": "fosc",
+      "light": "clar"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Carregant...",
+      "errorLoading": "Error carregant el README"
+    },
+    "github": "GitHub",
+    "install": "Instal·lar",
+    "remove": "Borrar",
+    "save": "Guardar",
+    "colour_one": "color",
+    "colour_other": "colors",
+    "favourite": "preferit"
+  }
+}
