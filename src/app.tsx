@@ -3,6 +3,7 @@ import React from "react";
 import { Config, TabItemConfig } from "./types/marketplace-types";
 
 import i18n, { t } from "i18next";
+import ca from "./resources/locales/ca.json";
 import en from "./resources/locales/en.json";
 import enUS from "./resources/locales/en-US.json";
 import es from "./resources/locales/es.json";
@@ -19,6 +20,7 @@ i18n
   .init({
     // the translations
     resources: {
+      ca,
       en,
       "en-US": enUS,
       es,
