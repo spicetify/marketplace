@@ -195,24 +195,24 @@ export default [
     "title": "Fix artist text glitch",
     "description": "Fix the problem with new stable relase on linux di spotify",
     "code": ".eSMjmiD29Ox35O95waw6 { -webkit-mask-image: linear-gradient(90deg,transparent 0,var(--spice-sidebar) 6px,,transparent); }",
-    "preview": "https://i.imgur.com/r5RMEOk.png"
+    "preview": "resources/assets/snippets/fix-linux-glitch.png"
 }
   {
     "title": "Reduce top padding",
     "description": "Reduce top padding on new home structure in linux",
     "code": ".spotify__container--is-desktop .nav-ylx .Root__top-container { padding-top: 10px; }",
-    "preview": "https://i.imgur.com/NNE54T6.png"
+    "preview": "resources/assets/snippets/padding-top.png"
 },
   {
     "title": "Make song info bigger",
     "description": "increse size of song info on play bar and bold song name",
     "code": ".main-trackInfo-name { font-size: 17px; font-weight: bold; } .main-trackInfo-artists a:link, .main-trackInfo-artists a:visited { font-size: 15px; }",
-    "preview": "https://i.imgur.com/gNap1O4.png"
+    "preview": "resources/assets/snippets/bigger-info.png"
 },
   {
     "title": "Playlist on libx make better",
     "description": "allign icon and text on libx playlist sidebar for better consistency ",
     "code": ".vreceNX3ABcxyddeS83B { background-color: transparent; } .vreceNX3ABcxyddeS83B div { justify-content: left; stroke: currentcolor; margin-left: 3px; } .HeaderArea { margin-left: -13px; } .iJp40IxKg6emF6KYJ414 { height:60%; width: 60%; position: relative; bottom: 13px; } .Ozitxbqs1vcOukDz3GDw { background-color: transparent; }",
-    "preview": "https://i.imgur.com/MLAPyZw.png"
+    "preview": "resources/assets/snippets/better-sidebar.png"
 },
 ];
