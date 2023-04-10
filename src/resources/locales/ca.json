@@ -19,7 +19,7 @@
       "resetDescription": "Borrar totes les extensions, temes i preferències",
       "backupHeading": "Fer una còpia/Reestablir des d'una còpia",
       "backupLabel": "Fer una còpia o restablir totes les dades de Marketplace des d'una còpia. Això no inclou la configuració per els elements instal·lats amb Marketplace.",
-      "backupBtn": "Obrir"
+      "backupBtn": "Obrir",
       "versionHeading": "Versió",
       "versionBtn": "Copiar",
       "versionCopied": "Copiat",
