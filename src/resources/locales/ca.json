@@ -1,0 +1,99 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Configuració",
+      "optionsHeading": "Opcions",
+      "starCountLabel": "Número d'estrelles",
+      "tagsLabel": "Etiquetes",
+      "devToolsLabel": "Eines per a desenvolupadors de temes",
+      "hideInstalledLabel": "Amagar instal·lats",
+      "colourShiftLabel": "Canviar colors cada minut",
+      "albumArtBasedColors": "Canviar colors a partir de la portada de l'àlbum",
+      "albumArtBasedColorsMode": "Mode esquema de colors (ColorApi)",
+      "albumArtBasedColorsVibrancy": "Colors agafats de la portada de l'àlbum",
+      "albumArtBasedColorsVibrancyToolTip": "Desaturat:El color més destacat però amb molta menys bror \n Vibrant Clar: El color més villantibrant amb la brillantor augmentada una mica \n Prominent: El color més destacat a la portada de l'Àlbum \n Vibrant: El color més vibrant a la portada de l'Àlbum",
+      "almbumArtColorsModeToolTip": "Monochrome Dark: Un esquema de colors basat en el color principal seleccionat, emprant diferentes tonalitats i barrejant tons grisos per crear l'esquema de colors, aquest és l'invers de Monochrome Light. \n Monochrome Light: Un esquema de colors basat en el color principal seleccionat, emprant diferentes tonalitats i barrejant tons grisos per crear l'esquema de colors. El colors del fins de Monochrome light seria el color de primer pla en Monochrome Dark i viceversa. \n Analògic: Un esquema de colors basat en el color principal seleccionat, emprant els colors adjacents en la roda de colors. \n Analògic Complementari: Un esquema de colors basat en el color principal seleccionat, emprant els colors adjacents en la roda de colors i el color complementari. \n Tríada: Un esquema de colors basat en el color principal seleccionat, emprant els colors de la roda de colors que estan separats de manera equidistant del color principal. \n Quad: Un esquema de colors basat en el color principal seleccionat, emprant els colors que es troben separats 90 graus entre si en la roda de colors.",
+      "tabsHeading": "Pestanyes",
+      "resetHeading": "Restablir",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Borrar totes les extensions, temes i preferències",
+      "backupHeading": "Fer una còpia/Reestablir des d'una còpia",
+      "backupLabel": "Fer una còpia o restablir totes les dades de Marketplace des d'una còpia. Això no inclou la configuració per els elements instal·lats amb Marketplace.",
+      "backupBtn": "Obrir",
+      "versionHeading": "Versió",
+      "versionBtn": "Copiar",
+      "versionCopied": "Copiat"
+    },
+    "tabs": {
+      "Extensions": "Extensions",
+      "Themes": "Temes",
+      "Snippets": "Fragments",
+      "Apps": "Aplicacions",
+      "Installed": "Instal·lats"
+    },
+    "snippets": {
+      "addTitle": "Afegir fragment",
+      "editTitle": "Editar fragment",
+      "viewTitle": "Veure fragment",
+      "customCSS": "CSS personalitzat",
+      "customCSSPlaceholder": "Crea el teu propi CSS aqui! Pots trobar-los a la pestanya d'instal·lats per administrar-los.",
+      "snippetName": "Nom del fragment de codi",
+      "snippetNamePlaceholder": "Afegeix un nom al teu codi personalitzat",
+      "snippetDesc": "Descripció del codi",
+      "snippetDescPlaceholder": "Crea una descripció per al teu codi personalitzat",
+      "snippetPreview": "Vista prèvia del fragment",
+      "optional": "Opcional",
+      "addImage": "Afegir imatge",
+      "changeImage": "Canviar imatge",
+      "saveCSS": "Guardar CSS"
+    },
+    "reloadModal": {
+      "title": "Recarregar",
+      "description": "És necessari recarregar la finestra per completar aquesta operació.",
+      "reloadNow": "Fes-ho ara",
+      "reloadLater": "Després"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Configuració copiada al portapapers",
+      "noDataPasted": "No s'han enganxat dades",
+      "invalidJSON": "JSON invàlid",
+      "inputLabel": "Configuració de Marketplace",
+      "inputPlaceholder": "Còpia/enganxa la teva configuració aquí",
+      "exportBtn": "Exportar",
+      "importBtn": "Importar",
+      "fileImportBtn": "Importar des d'un arxiu"
+    },
+    "devTools": {
+      "title": "Eines de desenvolupador de temes",
+      "noThemeInstalled": "Error: No hi ha cap tema de Marketplace instal·lat",
+      "noThemeManifest": "Error: No s'ha trobat el manifest",
+      "colorIniEditor": "Editor de Color.ini",
+      "colorIniEditorPlaceholder": "[nom-de-esquema-de-color]",
+      "invalidCSS": "CSS invàlid"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Marketplace de Spicetify",
+      "newUpdate": "Nova Actualització",
+      "addCSS": "Afegir CSS",
+      "search": "Buscar",
+      "installed": "Instal·lat",
+      "lastUpdated": "Última actualizació {{val, datetime}}",
+      "externalJS": "JS extern",
+      "dark": "fosc",
+      "light": "clar"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Carregant...",
+      "errorLoading": "Error carregant el README"
+    },
+    "github": "GitHub",
+    "install": "Instal·lar",
+    "remove": "Borrar",
+    "save": "Guardar",
+    "colour_one": "color",
+    "colour_other": "colors",
+    "favourite": "preferit"
+  }
+}
