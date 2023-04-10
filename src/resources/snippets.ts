@@ -196,7 +196,7 @@ export default [
     "description": "Fix the problem with new stable relase on linux di spotify",
     "code": ".eSMjmiD29Ox35O95waw6 { -webkit-mask-image: linear-gradient(90deg,transparent 0,var(--spice-sidebar) 6px,,transparent); }",
     "preview": "resources/assets/snippets/fix-linux-glitch.png"
-}
+},
   {
     "title": "Reduce top padding",
     "description": "Reduce top padding on new home structure in linux",
