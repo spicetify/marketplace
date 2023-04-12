@@ -205,7 +205,7 @@ export default [
 },
   {
     "title": "Make song info bigger",
-    "description": "increse size of song info on play bar and bold song name",
+    "description": "Increase size of song info on play bar and bold song name",
     "code": ".main-trackInfo-name { font-size: 17px; font-weight: bold; } .main-trackInfo-artists a:link, .main-trackInfo-artists a:visited { font-size: 15px; }",
     "preview": "resources/assets/snippets/bigger-info.png"
 },
