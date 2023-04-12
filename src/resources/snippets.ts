@@ -192,7 +192,7 @@ export default [
     "preview": "resources/assets/snippets/pretty-lyrics.png",
   },
   {
-    "title": "Fix artist text glitch",
+    "title": "Fix artist text glitch on Linux",
     "description": "Fix the problem with Spotify 1.2.8 on Linux",
     "code": ".eSMjmiD29Ox35O95waw6 { -webkit-mask-image: linear-gradient(90deg,transparent 0,var(--spice-sidebar) 6px,,transparent); }",
     "preview": "resources/assets/snippets/fix-linux-glitch.png"
