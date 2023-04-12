@@ -193,7 +193,7 @@ export default [
   },
   {
     "title": "Fix artist text glitch",
-    "description": "Fix the problem with new stable relase on linux di spotify",
+    "description": "Fix the problem with Spotify 1.2.8 on Linux",
     "code": ".eSMjmiD29Ox35O95waw6 { -webkit-mask-image: linear-gradient(90deg,transparent 0,var(--spice-sidebar) 6px,,transparent); }",
     "preview": "resources/assets/snippets/fix-linux-glitch.png"
 },
