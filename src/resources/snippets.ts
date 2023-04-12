@@ -198,7 +198,7 @@ export default [
     "preview": "resources/assets/snippets/fix-linux-glitch.png"
 },
   {
-    "title": "Reduce top padding",
+    "title": "Reduce new home top padding",
     "description": "Reduce top padding on new home structure in linux",
     "code": ".spotify__container--is-desktop .nav-ylx .Root__top-container { padding-top: 10px; }",
     "preview": "resources/assets/snippets/padding-top.png"
