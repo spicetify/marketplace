@@ -211,7 +211,7 @@ export default [
 },
   {
     "title": "Playlist on libx make better",
-    "description": "allign icon and text on libx playlist sidebar for better consistency ",
+    "description": "Align icon and text on libx playlist sidebar for better consistency ",
     "code": ".vreceNX3ABcxyddeS83B { background-color: transparent; } .vreceNX3ABcxyddeS83B div { justify-content: left; stroke: currentcolor; margin-left: 3px; } .HeaderArea { margin-left: -13px; } .iJp40IxKg6emF6KYJ414 { height:60%; width: 60%; position: relative; bottom: 13px; } .Ozitxbqs1vcOukDz3GDw { background-color: transparent; }",
     "preview": "resources/assets/snippets/better-sidebar.png"
 },
