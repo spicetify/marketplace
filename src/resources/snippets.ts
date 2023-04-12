@@ -199,7 +199,7 @@ export default [
 },
   {
     "title": "Reduce new home top padding",
-    "description": "Reduce top padding on new home structure in linux",
+    "description": "Reduce top padding on new home structure in Linux",
     "code": ".spotify__container--is-desktop .nav-ylx .Root__top-container { padding-top: 10px; }",
     "preview": "resources/assets/snippets/padding-top.png"
 },
