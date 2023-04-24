@@ -11,12 +11,12 @@ export default [
     "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
     "preview": "resources/assets/snippets/rounded-images.png",
   },
-  // {
-  //   "title": "Fix 'Episodes' Icon",
-  //   "description": "Fix the color of the Episodes icon",
-  //   "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }",
-  //   "preview": "https://i.imgur.com/n3EwrTL.png",
-  // },
+  {
+    "title": "Fix 'Episodes' Icon",
+    "description": "Makes the 'Your Episodes' button icon monochromatic like the rest of the icons.",
+    "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); color: var(--spice-sidebar); }",
+    "preview": "resources/assets/snippets/fixed-episodes-icon.png",
+  },
   // {
   //   "title": "Fix 'Made For You' Icon",
   //   "description": "Fix the colours of the Made For You icon",
