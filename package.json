@@ -42,7 +42,7 @@
 		"react-dropdown": "^1.11.0",
 		"react-i18next": "^12.2.0",
 		"react-simple-code-editor": "^0.13.1",
-		"semver": "^7.3.8",
+		"semver": "^7.5.0",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.13",
 		"typescript": "^5.0.3"
