@@ -30,7 +30,7 @@
 		"@types/react-dom": "^17.0.19",
 		"@types/semver": "^7.3.13",
 		"@typescript-eslint/eslint-plugin": "^5.59.1",
-		"@typescript-eslint/parser": "^5.57.0",
+		"@typescript-eslint/parser": "^5.59.1",
 		"chroma-js": "^2.4.2",
 		"copyfiles": "^2.4.1",
 		"eslint": "^8.39.0",
