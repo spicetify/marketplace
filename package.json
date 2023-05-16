@@ -45,7 +45,8 @@
 		"semver": "^7.3.8",
 		"spcr-whats-new": "^1.0.1",
 		"spicetify-creator": "^1.0.13",
-		"typescript": "^5.0.3"
+		"typescript": "^5.0.3",
+		"util": "^0.12.5"
 	},
 	"private": true
 }
