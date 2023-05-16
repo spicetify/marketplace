@@ -197,4 +197,10 @@ export default [
     "code": ".lyrics-lyrics-background { display: none; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced) { color: #FFFFFF4D !important; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced):hover { color: #FFFFFF !important; } .lyrics-lyricsContent-highlight { color: #FFFFFF66; } .lyrics-lyricsContent-unsynced { color: #FFFFFF !important; } .lyrics-lyricsContent-unsynced:hover { color: #FFFFFF !important; } .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description { color: #FFFFFFB6 !important; }",
     "preview": "resources/assets/snippets/pretty-lyrics.png",
   },
+  {
+    "title": "Remove Popular sections from homepage",
+    "description": "Thanks Spotify, but I have a music taste",
+    "code": ".main-shelf-shelf.Shelf:has(> div > div > .main-shelf-seeAll[href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'],[href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
+    "preview": "resources/assets/snippets/remove-popular.png",
+  },
 ];
