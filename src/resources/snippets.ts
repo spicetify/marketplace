@@ -197,4 +197,10 @@ export default [
     "code": ".lyrics-lyrics-background { display: none; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced) { color: #FFFFFF4D !important; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced):hover { color: #FFFFFF !important; } .lyrics-lyricsContent-highlight { color: #FFFFFF66; } .lyrics-lyricsContent-unsynced { color: #FFFFFF !important; } .lyrics-lyricsContent-unsynced:hover { color: #FFFFFF !important; } .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description { color: #FFFFFFB6 !important; }",
     "preview": "resources/assets/snippets/pretty-lyrics.png",
   },
+  {
+    "title": "Rotating Song Cover (Fix)",
+    "description": "The Old one doesn't work. This one does (At least for now).",
+    "code": "@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .FqmFsMhuF4D0s35Z62Js, .zmOtW0vqqn1qpZrtQ_w9 { animation: rotating 10s linear infinite; border-radius: 100% } .H0HbpIM3UrcupWIAjLWu { background: none; } .main-coverSlotCollapsed-container { padding-right: 10px !important; }",
+    "preview": "resources/assets/snippets/rotating-song-cover.png",
+  },
 ];
