@@ -165,7 +165,7 @@ export default [
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
     "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .FqmFsMhuF4D0s35Z62Js, .zmOtW0vqqn1qpZrtQ_w9 { animation: rotating 10s linear infinite; clip-path: circle(50% at 50% 50%);} .H0HbpIM3UrcupWIAjLWu { background: none; } .H0HbpIM3UrcupWIAjLWu { background: none; } .main-coverSlotCollapsed-container { padding-right: 10px !important; }`,
-    "preview": "resources/assets/snippets/rotating-coverart.png",
+    "preview": "resources/assets/snippets/rotating-song-cover.png",
   },
   {
     "title": "Hide liked songs card",
