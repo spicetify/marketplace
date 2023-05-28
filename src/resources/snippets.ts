@@ -197,4 +197,10 @@ export default [
     "code": ".lyrics-lyrics-background { display: none; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced) { color: #FFFFFF4D !important; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced):hover { color: #FFFFFF !important; } .lyrics-lyricsContent-highlight { color: #FFFFFF66; } .lyrics-lyricsContent-unsynced { color: #FFFFFF !important; } .lyrics-lyricsContent-unsynced:hover { color: #FFFFFF !important; } .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description { color: #FFFFFFB6 !important; }",
     "preview": "resources/assets/snippets/pretty-lyrics.png",
   },
+  {
+    "title": "Oneko",
+    "description": "Adds Oneko onto your playback bar!",
+    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-image: url('https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif'); animation: oneko 1s infinite; } @keyframes oneko { 0%, 50% { background-position: -64px 0; } 50.0001%, 100% { background-position: -64px -32px; } }",
+    "preview": "Preview image of the snippet"
+  },
 ];
