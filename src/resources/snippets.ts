@@ -30,6 +30,12 @@ export default [
     "preview": "resources/assets/snippets/fix-liked-icon.png",
   },
   {
+    "title": "Fix 'DJ' Icon",
+    "description": "Makes the DJ icon match themes better",
+    "code": ".main-collectionLinkButton-icon > div { background: var(--spice-text); color: var(--spice-sidebar); }",
+    "preview": "resources/assets/snippets/fix-DJ-icon.png",
+  },
+  {
     "title": "Hide Upgrade Button",
     "description": "Makes the upgrade button hidden",
     "code": ".main-topBar-UpgradeButton {\n  display: none !important;\n}",
