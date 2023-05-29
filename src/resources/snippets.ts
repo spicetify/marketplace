@@ -32,7 +32,7 @@ export default [
   {
     "title": "Fix 'DJ' Icon",
     "description": "Makes the DJ icon match themes better",
-    "code": ".GGx57b6ZwGgzUeTpynUw { background: var(--spice-text); color: var(--spice-sidebar); }",
+    "code": ".main-collectionLinkButton-icon > div { background: var(--spice-text); color: var(--spice-sidebar); }",
     "preview": "resources/assets/snippets/fix-DJ-icon.png",
   },
   {
