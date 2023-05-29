@@ -200,7 +200,7 @@ export default [
   {
     "title": "Thicker Bars",
     "description": "Makes the song progress and volume bar thicker",
-    "code": ".NoOAOv6U6vtqj_ybS1Cd { height: 100% !important; } .w699O0LgQRghXyl3bs9u { height: 100% !important; } .epWhU7hHGktzlO_dop6z { height: 100% !important; } .x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/thicker-bars.png",
   },
 ];
