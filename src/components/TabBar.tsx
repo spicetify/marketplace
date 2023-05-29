@@ -96,12 +96,11 @@ export const TopBarContent = (props: {
     return () => {
       observer.disconnect();
     };
-  }, [resizeHandler]);
+  });
   useEffect(()=>{
     contextHandler();
   });
   return (
-
     <TabBar
       windowSize={windowSize}
       links={props.links}
@@ -134,7 +133,7 @@ const TabBar = React.memo<TabBarProps>(
     useEffect(() => {
       if (!tabBarRef.current) return;
       setAvailableSpace(tabBarRef.current.clientWidth);
-    }, [windowSize]);
+    }, [windowSize, tabBarRef.current?.clientWidth]);
 
     useEffect(() => {
       if (!tabBarRef.current) return;
