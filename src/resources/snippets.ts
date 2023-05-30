@@ -30,6 +30,12 @@ export default [
     "preview": "resources/assets/snippets/fix-liked-icon.png",
   },
   {
+    "title": "Fix 'DJ' Icon",
+    "description": "Makes the DJ icon match themes better",
+    "code": ".main-collectionLinkButton-icon > div { background: var(--spice-text); color: var(--spice-sidebar); }",
+    "preview": "resources/assets/snippets/fix-DJ-icon.png",
+  },
+  {
     "title": "Hide Upgrade Button",
     "description": "Makes the upgrade button hidden",
     "code": ".main-topBar-UpgradeButton {\n  display: none !important;\n}",
@@ -164,7 +170,7 @@ export default [
   {
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
-    "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 2s linear infinite; clip-path: circle(50% at 50% 50%);}`,
+    "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 10s linear infinite; clip-path: circle(50% at 50% 50%);}`,
     "preview": "resources/assets/snippets/rotating-coverart.png",
   },
   {
@@ -202,5 +208,16 @@ export default [
     "description": "Thanks Spotify, but I have a music taste",
     "code": ".main-shelf-shelf.Shelf:has(> div > div > .main-shelf-seeAll[href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'],[href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-popular.png",
+  },
+    "title": "Dark Lyrics",
+    "description": "Replaces the highly saturated lyrics backgrounds with a very subtle dark gradient",
+    "code": ".lyrics-lyrics-background { background-image: linear-gradient(315deg,var(--lyrics-color-background),black); background-size: 500%; } .lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight { color: white; } .lyrics-lyricsContent-lyric { color: #424242; }",
+    "preview": "resources/assets/snippets/dark-lyrics.png",
+  },
+  {
+    "title": "Thicker Bars",
+    "description": "Makes the song progress and volume bar thicker",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "preview": "resources/assets/snippets/thicker-bars.png",
   },
 ];
