@@ -209,6 +209,7 @@ export default [
     "code": ".main-shelf-shelf.Shelf:has(> div > div > .main-shelf-seeAll[href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'],[href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-popular.png",
   },
+  {
     "title": "Dark Lyrics",
     "description": "Replaces the highly saturated lyrics backgrounds with a very subtle dark gradient",
     "code": ".lyrics-lyrics-background { background-image: linear-gradient(315deg,var(--lyrics-color-background),black); background-size: 500%; } .lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight { color: white; } .lyrics-lyricsContent-lyric { color: #424242; }",
