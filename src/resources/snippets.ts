@@ -204,6 +204,12 @@ export default [
     "preview": "resources/assets/snippets/pretty-lyrics.png",
   },
   {
+    "title": "Dark Lyrics",
+    "description": "Replaces the highly saturated lyrics backgrounds with a very subtle dark gradient",
+    "code": ".lyrics-lyrics-background { background-image: linear-gradient(315deg,var(--lyrics-color-background),black); background-size: 500%; } .lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight { color: white; } .lyrics-lyricsContent-lyric { color: #424242; }",
+    "preview": "resources/assets/snippets/dark-lyrics.png",
+  },
+  {
     "title": "Thicker Bars",
     "description": "Makes the song progress and volume bar thicker",
     "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
