@@ -74,7 +74,7 @@ export default [
   {
     "title": "Hover Panels",
     "description": "Have your playlist, right sidebar, and controls bar be hoverable.",
-    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 40px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 1;\n}\n.Root__nav-bar:hover {\n  position: inherit;\n  width: 225px;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\naside.Root__right-sidebar:hover {\n  position: inherit;\n  width: var(--panel-width);\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n  left: 0;\n}\naside.Root__right-sidebar {\n  position: absolute;\n  width: 65px;\n  opacity: 0;\n  bottom: 0;\n  left: -30px;\n  top: 0;\n  z-index: 1;\n}",
+    "code" : ".Root__nav-bar {\n  position: absolute;\n  width: 40px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 1;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints{\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms , opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: var(--panel-width) !important;\n  opacity: 1 !important;\n  transition: width 250ms , opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position:absolute;\n  right: -5px;\n  top:0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader{\ntop: 0px !important;}",
     "preview": "resources/assets/snippets/hover-panels.png",
   },
   {
@@ -226,11 +226,5 @@ export default [
     "description": "Makes the song progress and volume bar thicker",
     "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/thicker-bars.png",
-  },
-  {
-    "title": "Hover Sidebars",
-    "description": "Hover your sidebars to show them",
-    "code": ".Root__nav-bar {position: absolute;width: 40px;opacity: 0;bottom: 0;left: 0;top: 0;z-index: 1;transition: width 400ms, opacity 250ms ease-out;}.main-yourLibraryX-entryPoints{background: var(--spice-sidebar);}.Root__nav-bar:hover {width: 250px;opacity: 1;transition: width 250ms , opacity 400ms ease-in;}.LayoutResizer__resize-bar {cursor: none;}.Root__top-bar {opacity: 0;transition: visibility 5s, opacity 1s linear;}.Root__top-bar:hover {transition-delay: 0.5s;opacity: 1;transition: visibility 5s, opacity 0.5s linear;}.main-topBar-container {-webkit-padding-end: 32px;padding: 16px 85px;padding-inline-end: 32px;max-width: none;}.main-buddyFeed-container:hover {width: var(--panel-width) !important;opacity: 1 !important;transition: width 250ms , opacity 400ms ease-in;}.main-buddyFeed-container {position:absolute;right: -5px;top:0;bottom: 84px;width: 50px !important;opacity: 0 !important;transition: width 400ms, opacity 250ms ease-out;}.main-trackList-trackListHeader{top: 0px !important;}",
-    "preview": "resources/assets/snippets/drawer-sidebar.gif",
   }
 ];
