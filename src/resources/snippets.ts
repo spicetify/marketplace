@@ -227,4 +227,10 @@ export default [
     "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/thicker-bars.png",
   },
+  {
+    "title": "Hover Sidebars",
+    "description": "Hover your sidebars to show them",
+    "code": ".Root__nav-bar {position: absolute;width: 40px;opacity: 0;bottom: 0;left: 0;top: 0;z-index: 1;transition: width 400ms, opacity 250ms ease-out;}.main-yourLibraryX-entryPoints{background: var(--spice-sidebar);}.Root__nav-bar:hover {width: 250px;opacity: 1;transition: width 250ms , opacity 400ms ease-in;}.LayoutResizer__resize-bar {cursor: none;}.Root__top-bar {opacity: 0;transition: visibility 5s, opacity 1s linear;}.Root__top-bar:hover {transition-delay: 0.5s;opacity: 1;transition: visibility 5s, opacity 0.5s linear;}.main-topBar-container {-webkit-padding-end: 32px;padding: 16px 85px;padding-inline-end: 32px;max-width: none;}.main-buddyFeed-container:hover {width: var(--panel-width) !important;opacity: 1 !important;transition: width 250ms , opacity 400ms ease-in;}.main-buddyFeed-container {position:absolute;right: -5px;top:0;bottom: 84px;width: 50px !important;opacity: 0 !important;transition: width 400ms, opacity 250ms ease-out;}.main-trackList-trackListHeader{top: 0px !important;}",
+    "preview": "resources/assets/snippets/drawer-sidebar.gif",
+  }
 ];
