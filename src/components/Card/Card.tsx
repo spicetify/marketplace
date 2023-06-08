@@ -109,6 +109,14 @@ class Card extends React.Component<CardProps, {
       if (this.state.lastUpdated !== pushed_at) {
         stateUpdate.lastUpdated = pushed_at;
         console.debug(`New update pushed at: ${pushed_at}`);
+        switch (this.props.type) {
+        case "extension":
+          this.installExtension();
+          break;
+        case "theme":
+          this.installTheme(true);
+          break;
+        }
       }
     }
   }
@@ -205,7 +213,7 @@ class Card extends React.Component<CardProps, {
     }
   }
 
-  async installTheme() {
+  async installTheme(update = false) {
     const { item } = this.props;
     if (!item) {
       Spicetify.showNotification("There was an error installing theme", true);
@@ -220,9 +228,10 @@ class Card extends React.Component<CardProps, {
       parsedSchemes = parseIni(colourSchemes);
     }
 
+    const currentScheme = Spicetify.Config.color_scheme;
     const firstSchemeName = Object.keys(parsedSchemes)[0];
-    console.debug(parsedSchemes, firstSchemeName);
-    const activeScheme = firstSchemeName || null;
+    const activeScheme = update ? currentScheme : firstSchemeName || null;
+    console.debug(parsedSchemes, activeScheme);
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
