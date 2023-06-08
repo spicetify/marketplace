@@ -114,7 +114,7 @@ class Grid extends React.Component<
     const card = <Card
       item={item}
       // Set key prop so items don't get stuck when switching tabs
-      key={`${this.props.CONFIG.activeTab}:${item.title}`}
+      key={`${this.props.CONFIG.activeTab}:${item.user}:${item.title}`}
       CONFIG={this.CONFIG}
       visual={this.props.CONFIG.visual}
       type={type}
@@ -564,9 +564,11 @@ class Grid extends React.Component<
               // Clone the cards and update the prop to trigger re-render
               return React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
-                key: generateKey(card.props),
+                key: card.key,
               });
-            });
+            }).filter((card, index, cards) => // Filter out duplicates to prevent spamming
+              cards.findIndex((c) => c.key === card.key) === index,
+            );
 
           if (cardsOfType.length) {
             return (
