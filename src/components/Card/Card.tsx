@@ -264,7 +264,7 @@ class Card extends React.Component<CardProps, {
       // Installed theme localstorage item has schemes, nothing else does
       schemes: parsedSchemes,
       activeScheme,
-      lastUpdated: Date.now() - 999999999,
+      lastUpdated,
     }));
 
     // TODO: handle this differently?
