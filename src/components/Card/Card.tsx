@@ -222,15 +222,20 @@ class Card extends React.Component<CardProps, {
     console.debug(`Installing theme ${this.localStorageKey}`);
 
     let parsedSchemes: SchemeIni = {};
-    if (item.schemesURL) {
+    let currentScheme: string | null = null;
+
+    if (update) {
+      // Preserve color schemes from localstorage
+      const { schemes, activeScheme } = getLocalStorageDataFromKey(this.localStorageKey, {});
+      parsedSchemes = schemes;
+      currentScheme = activeScheme;
+    } else if (item.schemesURL) {
       const schemesResponse = await fetch(item.schemesURL);
       const colourSchemes = await schemesResponse.text();
       parsedSchemes = parseIni(colourSchemes);
     }
 
-    const currentScheme = Spicetify.Config.color_scheme;
-    const firstSchemeName = Object.keys(parsedSchemes)[0];
-    const activeScheme = update ? currentScheme : firstSchemeName || null;
+    const activeScheme = currentScheme || Object.keys(parsedSchemes)[0] || null;
     console.debug(parsedSchemes, activeScheme);
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
@@ -259,7 +264,7 @@ class Card extends React.Component<CardProps, {
       // Installed theme localstorage item has schemes, nothing else does
       schemes: parsedSchemes,
       activeScheme,
-      lastUpdated,
+      lastUpdated: Date.now() - 999999999,
     }));
 
     // TODO: handle this differently?
