@@ -109,6 +109,14 @@ class Card extends React.Component<CardProps, {
       if (this.state.lastUpdated !== pushed_at) {
         stateUpdate.lastUpdated = pushed_at;
         console.debug(`New update pushed at: ${pushed_at}`);
+        switch (this.props.type) {
+        case "extension":
+          this.installExtension();
+          break;
+        case "theme":
+          this.installTheme(true);
+          break;
+        }
       }
     }
   }
@@ -205,7 +213,7 @@ class Card extends React.Component<CardProps, {
     }
   }
 
-  async installTheme() {
+  async installTheme(update = false) {
     const { item } = this.props;
     if (!item) {
       Spicetify.showNotification("There was an error installing theme", true);
@@ -214,15 +222,21 @@ class Card extends React.Component<CardProps, {
     console.debug(`Installing theme ${this.localStorageKey}`);
 
     let parsedSchemes: SchemeIni = {};
-    if (item.schemesURL) {
+    let currentScheme: string | null = null;
+
+    if (update) {
+      // Preserve color schemes from localstorage
+      const { schemes, activeScheme } = getLocalStorageDataFromKey(this.localStorageKey, {});
+      parsedSchemes = schemes;
+      currentScheme = activeScheme;
+    } else if (item.schemesURL) {
       const schemesResponse = await fetch(item.schemesURL);
       const colourSchemes = await schemesResponse.text();
       parsedSchemes = parseIni(colourSchemes);
     }
 
-    const firstSchemeName = Object.keys(parsedSchemes)[0];
-    console.debug(parsedSchemes, firstSchemeName);
-    const activeScheme = firstSchemeName || null;
+    const activeScheme = currentScheme || Object.keys(parsedSchemes)[0] || null;
+    console.debug(parsedSchemes, activeScheme);
 
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
