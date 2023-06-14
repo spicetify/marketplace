@@ -69,6 +69,13 @@ export const parseIni = (data: string) => {
     if (regex.comment.test(line)) {
       return;
     } else if (regex.param.test(line)) {
+      // Discard color scheme if it contains xrdb
+      if (line.includes("xrdb")) {
+        delete value[section ?? ""];
+        section = null;
+        return;
+      }
+
       const match: string[] | null = line.match(regex.param);
 
       // TODO: github copilot made this part, but I have no idea what it does
@@ -76,10 +83,8 @@ export const parseIni = (data: string) => {
       //   throw "Could not parse INI file.";
       // }
 
-      if (section) {
-        value[section][match?.[1]] = match?.[2].split(";")[0].trim();
-      } else if (match) {
-        value[match[1]] = match[2].split(";")[0].trim();
+      if (section && match) {
+        value[section][match[1]] = match[2].split(";")[0].trim();
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
