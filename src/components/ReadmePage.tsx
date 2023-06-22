@@ -73,7 +73,7 @@ class ReadmePage extends React.Component<
       const callScrollbar = setInterval(() => {
         if (!document.querySelector(".os-scrollbar-vertical.os-scrollbar-unusable") || !document.querySelector("#marketplace-readme")) {
           clearInterval(callScrollbar);
-          main.style.removeProperty("overflow-y");
+          document.querySelector("main").style.removeProperty("overflow-y");
         }
         // TODO: see if it's possible to use some load event or mutation observer to do this
         main.style.overflowY = "visible";
