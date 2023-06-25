@@ -5,7 +5,7 @@ import { Option } from "react-dropdown";
 const Spicetify = window.Spicetify;
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateKey } from "../logic/Utils";
+import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
@@ -108,11 +108,13 @@ class Grid extends React.Component<
    * @param {CardItem} item
    * @param type The type of card
    */
-  appendCard(item: CardItem | Snippet, type: CardType) {
+  appendCard(item: CardItem | Snippet, type: CardType, activeTab: string) {
+    if (activeTab !== this.props.CONFIG.activeTab) return;
+
     const card = <Card
       item={item}
       // Set key prop so items don't get stuck when switching tabs
-      key={`${this.props.CONFIG.activeTab}:${item.title}`}
+      key={`${this.props.CONFIG.activeTab}:${item.user}:${item.title}`}
       CONFIG={this.CONFIG}
       visual={this.props.CONFIG.visual}
       type={type}
@@ -181,7 +183,9 @@ class Grid extends React.Component<
   // Returns the next page number to fetch, or null if at end
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
   async loadPage(queue: never[]) {
-    switch (this.CONFIG.activeTab) {
+    // Store value for comparison later
+    const activeTab = this.CONFIG.activeTab;
+    switch (activeTab) {
     case "Extensions": {
       const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
@@ -202,7 +206,7 @@ class Grid extends React.Component<
           // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
           extensions.forEach((extension) => {
             Object.assign(extension, { lastUpdated: repo.pushed_at });
-            this.appendCard(extension, "extension");
+            this.appendCard(extension, "extension", activeTab);
           });
         }
       }
@@ -236,7 +240,7 @@ class Grid extends React.Component<
               return -1;
             }
 
-            this.appendCard(extension, type as CardType);
+            this.appendCard(extension, type as CardType, activeTab);
           });
         }
       }
@@ -262,7 +266,7 @@ class Grid extends React.Component<
         if (themes && themes.length) {
           themes.forEach((theme) => {
             Object.assign(theme, { lastUpdated: repo.pushed_at });
-            this.appendCard(theme, "theme");
+            this.appendCard(theme, "theme", activeTab);
           });
         }
       }
@@ -295,7 +299,7 @@ class Grid extends React.Component<
         if (apps && apps.length) {
           apps.forEach((app) => {
             Object.assign(app, { lastUpdated: repo.pushed_at });
-            this.appendCard(app, "app");
+            this.appendCard(app, "app", activeTab);
           });
         }
       }
@@ -318,7 +322,7 @@ class Grid extends React.Component<
         return -1;
       }
       if (snippets && snippets.length) {
-        snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
+        snippets.forEach((snippet) => this.appendCard(snippet, "snippet", activeTab));
       }
     }}
 
@@ -495,7 +499,7 @@ class Grid extends React.Component<
             <h1>{this.props.title}</h1>
             {this.state.newUpdate
               ? <button type="button" title={t("grid.newUpdate")} className="marketplace-header-icon-button" id="marketplace-update"
-                onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace"}
+                onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace/releases/latest"}
               >
                 <DownloadIcon />
                 &nbsp;{this.state.version}
@@ -560,9 +564,11 @@ class Grid extends React.Component<
               // Clone the cards and update the prop to trigger re-render
               return React.cloneElement(card, {
                 activeThemeKey: this.state.activeThemeKey,
-                key: generateKey(card.props),
+                key: card.key,
               });
-            });
+            }).filter((card, index, cards) => // Filter out duplicates to prevent spamming
+              cards.findIndex((c) => c.key === card.key) === index,
+            );
 
           if (cardsOfType.length) {
             return (

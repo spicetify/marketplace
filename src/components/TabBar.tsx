@@ -80,7 +80,11 @@ export const TopBarContent = (props: {
     // Move the marketplace-tabBar item to the main-topBar-topbarContent div
     const tabBar = document.querySelector(".marketplace-tabBar");
     const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
-    if (tabBar && topBarContent && Spicetify.Platform.History.location.pathname == "/marketplace") {
+    if (!tabBar || !topBarContent) {
+      setTimeout(contextHandler, 100);
+      return;
+    }
+    if (tabBar && topBarContent && Spicetify.Platform.History.location.pathname === "/marketplace") {
       topBarContent.appendChild(tabBar);
     }
     Spicetify.Platform.History.listen(({ pathname }) => {
@@ -96,12 +100,11 @@ export const TopBarContent = (props: {
     return () => {
       observer.disconnect();
     };
-  }, [resizeHandler]);
+  });
   useEffect(()=>{
     contextHandler();
   });
   return (
-
     <TabBar
       windowSize={windowSize}
       links={props.links}
@@ -134,7 +137,7 @@ const TabBar = React.memo<TabBarProps>(
     useEffect(() => {
       if (!tabBarRef.current) return;
       setAvailableSpace(tabBarRef.current.clientWidth);
-    }, [windowSize]);
+    }, [windowSize, tabBarRef.current?.clientWidth]);
 
     useEffect(() => {
       if (!tabBarRef.current) return;

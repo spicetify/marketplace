@@ -1,16 +1,22 @@
 export default [
   {
+    "title": "Rounded 'Now Playing' Bar",
+    "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
+    "code": ":root{ --border-radius-1: 8px; } .Root__now-playing-bar, .Root__now-playing-bar footer { border-radius: var(--border-radius-1) !important; }",
+    "preview": "resources/assets/snippets/rounded-now-playing.png",
+  },
+  {
     "title": "Rounded Images",
     "description": "Adds rounded corners to the cover art, playlist covers, cards and other images",
-    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div {\n border-radius: 6px;\n }\n \n /* Circled Artist Cards (force) */\n .main-cardImage-circular {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
+    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
     "preview": "resources/assets/snippets/rounded-images.png",
   },
-  // {
-  //   "title": "Fix 'Episodes' Icon",
-  //   "description": "Fix the color of the Episodes icon",
-  //   "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); } .main-yourEpisodesButton-yourEpisodesIcon path { fill: var(--spice-player); opacity: 0.7; }",
-  //   "preview": "https://i.imgur.com/n3EwrTL.png",
-  // },
+  {
+    "title": "Fix 'Episodes' Icon",
+    "description": "Makes the 'Your Episodes' button icon monochromatic like the rest of the icons.",
+    "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); color: var(--spice-sidebar); }",
+    "preview": "resources/assets/snippets/fixed-episodes-icon.png",
+  },
   // {
   //   "title": "Fix 'Made For You' Icon",
   //   "description": "Fix the colours of the Made For You icon",
@@ -22,6 +28,12 @@ export default [
     "description": "Fix the colours of the Liked icon in sidebar",
     "code": ".main-likedSongsButton-likedSongsIcon {\n  color: var(--spice-sidebar);\n  background: var(--spice-text);\n}",
     "preview": "resources/assets/snippets/fix-liked-icon.png",
+  },
+  {
+    "title": "Fix 'DJ' Icon",
+    "description": "Makes the DJ icon match themes better",
+    "code": ".main-collectionLinkButton-icon > div { background: var(--spice-text); color: var(--spice-sidebar); }",
+    "preview": "resources/assets/snippets/fix-DJ-icon.png",
   },
   {
     "title": "Hide Upgrade Button",
@@ -62,7 +74,7 @@ export default [
   {
     "title": "Hover Panels",
     "description": "Have your playlist, right sidebar, and controls bar be hoverable.",
-    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 40px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 1;\n}\nnav.Root__nav-bar:hover {\n  position: inherit;\n  width: 225px;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\naside.Root__right-sidebar:hover {\n  position: inherit;\n  width: var(--panel-width);\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n  left: 0;\n}\naside.Root__right-sidebar {\n  position: absolute;\n  width: 65px;\n  opacity: 0;\n  bottom: 0;\n  left: -30px;\n  top: 0;\n  z-index: 1;\n}",
+    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints{\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms , opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: var(--panel-width) !important;\n  opacity: 1 !important;\n  transition: width 250ms , opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position:absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader{\ntop: 0px !important;\n}\n.main-yourLibraryX-navItem{\noverflow: hidden\n}\n.main-coverSlotCollapsed-navAltContainer{\noverflow: visible \n}\n.LayoutResizer__resize-bar{\n	display: none;\n}",
     "preview": "resources/assets/snippets/hover-panels.png",
   },
   {
@@ -158,7 +170,7 @@ export default [
   {
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
-    "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 2s linear infinite; clip-path: circle(50% at 50% 50%);}`,
+    "code": `@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 10s linear infinite; clip-path: circle(50% at 50% 50%);}`,
     "preview": "resources/assets/snippets/rotating-coverart.png",
   },
   {
@@ -190,5 +202,29 @@ export default [
     "description": "Gets rid of the ugly background colour on the lyrics page and makes it consistent with themes. Works best with dark themes.",
     "code": ".lyrics-lyrics-background { display: none; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced) { color: #FFFFFF4D !important; } .lyrics-lyrics-contentWrapper>*:not(.lyrics-lyricsContent-active, .lyrics-lyricsContent-highlight, .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description, .lyrics-lyricsContent-unsynced):hover { color: #FFFFFF !important; } .lyrics-lyricsContent-highlight { color: #FFFFFF66; } .lyrics-lyricsContent-unsynced { color: #FFFFFF !important; } .lyrics-lyricsContent-unsynced:hover { color: #FFFFFF !important; } .lyrics-lyricsContent-provider, .lyrics-lyricsContent-description { color: #FFFFFFB6 !important; }",
     "preview": "resources/assets/snippets/pretty-lyrics.png",
+  },
+  {
+    "title": "Oneko",
+    "description": "Adds Oneko onto your playback bar!",
+    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-image: url('https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif'); animation: oneko 1s infinite; } @keyframes oneko { 0%, 50% { background-position: -64px 0; } 50.0001%, 100% { background-position: -64px -32px; } }",
+    "preview": "resources/assets/snippets/oneko.png",
+  },
+  {
+    "title": "Remove Popular sections from homepage",
+    "description": "Thanks Spotify, but I have a music taste",
+    "code": ".main-shelf-shelf.Shelf:has(> div > div > .main-shelf-seeAll[href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'],[href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
+    "preview": "resources/assets/snippets/remove-popular.png",
+  },
+  {
+    "title": "Dark Lyrics",
+    "description": "Replaces the highly saturated lyrics backgrounds with a very subtle dark gradient",
+    "code": ".lyrics-lyrics-background { background-image: linear-gradient(315deg,var(--lyrics-color-background),black); background-size: 500%; } .lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight { color: white; } .lyrics-lyricsContent-lyric { color: #424242; }",
+    "preview": "resources/assets/snippets/dark-lyrics.png",
+  },
+  {
+    "title": "Thicker Bars",
+    "description": "Makes the song progress and volume bar thicker",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "preview": "resources/assets/snippets/thicker-bars.png",
   },
 ];
