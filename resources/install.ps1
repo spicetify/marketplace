@@ -27,6 +27,10 @@ $download_uri = "https://github.com/spicetify/spicetify-marketplace/releases/dow
 
 Invoke-WebRequest -Uri $download_uri -UseBasicParsing -OutFile "$sp_dot_dir\marketplace.zip"
 
+$isMarketplaceInstalled = (
+  ((spicetify config custom_apps) -contains "marketplace") -and (Test-Path -Path "$sp_dot_dir\marketplace" -PathType Container)
+)
+
 Write-Host "Unzipping and installing..." -ForegroundColor "Green"
 Expand-Archive -Path "$sp_dot_dir\marketplace.zip" -DestinationPath $sp_dot_dir -Force
 Remove-Item -Path "$sp_dot_dir\marketplace.zip" -Force
@@ -46,7 +50,10 @@ Write-Host "Applying placeholder theme..." -ForegroundColor "Cyan"
 Remove-Item -Recurse -Force "$spicePath\Themes\marketplace" -ErrorAction Ignore
 New-Item -Path "$spicePath\Themes\marketplace" -ItemType Directory | Out-Null
 Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/color.ini" -OutFile "$spicePath\Themes\marketplace\color.ini"
-spicetify config current_theme marketplace
+
+if (-not $isMarketplaceInstalled) {
+  spicetify config current_theme marketplace
+}
 
 spicetify backup
 spicetify apply
