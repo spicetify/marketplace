@@ -24,7 +24,7 @@ Write-Host -Object 'Removing and creating Marketplace folders...' -ForegroundCol
 Remove-Item -Path $marketAppPath, $marketThemePath -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
 New-Item -Path $marketAppPath, $marketThemePath -ItemType Directory -Force | Out-Null
 
-Write-Host 'Downloading marketplace...' -ForegroundColor Cyan
+Write-Host 'Downloading Marketplace...' -ForegroundColor Cyan
 $marketArchivePath = "$marketAppPath\marketplace.zip"
 $unpackedFolderPath = "$marketAppPath\spicetify-marketplace-dist"
 $Parameters = @{
