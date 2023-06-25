@@ -45,12 +45,10 @@ const TabRow = (props: {
   }
 
   return (
-    <div className="settings-row"
-      // draggable={true}
-    >
+    <div className="settings-row">
       <label htmlFor={toggleId} className='col description'>{t(`tabs.${props.name}`)}</label>
       <div className="col action">
-        {/* <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
+        <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
             dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-up"]) }}>
           </svg>
@@ -59,7 +57,7 @@ const TabRow = (props: {
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
             dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-down"]) }}>
           </svg>
-        </button> */}
+        </button>
         <Toggle name={props.name} storageKey={`tab:${props.name}`}
           clickable={props.name !== "Extensions"}
           enabled={enabled}
