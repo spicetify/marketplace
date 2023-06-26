@@ -51,8 +51,8 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
   }
 
   const AlbumArtColorDropDowns = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColor) ? <>
-    <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey='albumArtBasedColorsMode' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description={t("settings.almbumArtColorsModeToolTip")} />
-    <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey='albumArtBasedColorsVibrancy' modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={t("settings.albumArtBasedColorsVibrancyToolTip")} /></> : null;
+    <ConfigRow name={t("settings.albumArtBasedColorsMode")} storageKey="albumArtBasedColorsMode" modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]} description={t("settings.almbumArtColorsModeToolTip")} />
+    <ConfigRow name={t("settings.albumArtBasedColorsVibrancy")} storageKey="albumArtBasedColorsVibrancy" modalConfig={modalConfig} updateConfig={updateConfig} type="dropdown" options={["desaturated", "lightVibrant", "prominent", "vibrant"]} description={t("settings.albumArtBasedColorsVibrancyToolTip")} /></> : null;
 
   return (
     <div id="marketplace-config-container">
