@@ -12,7 +12,7 @@ if (-not (Get-Command -Name spicetify -ErrorAction SilentlyContinue)) {
   Invoke-WebRequest @Parameters | Invoke-Expression
 }
 
-spicetify path userdata | Out-Null
+spicetify | Out-Null
 $spiceUserDataPath = (spicetify path userdata)
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
@@ -54,7 +54,7 @@ Write-Host -Object 'Applying...' -ForegroundColor Cyan
 if (-not $isMarketplaceInstalled) {
   spicetify config current_theme marketplace
 }
-if (-not (Test-Path -Path "$spiceUserDataPath\Backup" -PathType Container)) {
+if (-not (Test-Path -Path "$spiceUserDataPath\Backup\*")) {
   spicetify backup 
 }
 spicetify apply
