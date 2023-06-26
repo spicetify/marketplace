@@ -1,26 +1,30 @@
-#marketplace-config-container .setting-row {
-  display: flex;
-  justify-content: space-between;
-
-  .col {
+#marketplace-config-container {
+  .settings-row {
     display: flex;
-    padding: 10px 0;
-    align-items: center;
+    justify-content: space-between;
 
-    // &.description {
-    //   float: left;
-    //   padding-right: 15px;
-    //   cursor: default;
-    // }
-    &.action {
-      // float: right;
-      text-align: right;
+    .col {
+      display: flex;
+      padding: 10px 0;
+      align-items: center;
 
-      // The tooltip icon
-      & .marketplace-sortBox + .marketplace-tooltip-icon {
+      &.action {
+        text-align: right;
         margin-inline-start: 8px;
+
+        // The tooltip icon
+        & .marketplace-sortBox + .marketplace-tooltip-icon {
+          margin-inline-start: 8px;
+        }
       }
     }
+  }
+
+  .settings-heading {
+    position: relative;
+    border-bottom: 2px solid var(--spice-button-disabled);;
+    padding: 0 0 4px;
+    margin: 0 0 4px;
   }
 }
 

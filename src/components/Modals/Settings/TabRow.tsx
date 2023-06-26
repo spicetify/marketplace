@@ -45,8 +45,8 @@ const TabRow = (props: {
   }
 
   return (
-    <div className="setting-row">
-      <label htmlFor={toggleId} className='col description'>{t(`tabs.${props.name}`)}</label>
+    <div className="settings-row">
+      <label htmlFor={toggleId} className="col description">{t(`tabs.${props.name}`)}</label>
       <div className="col action">
         <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
