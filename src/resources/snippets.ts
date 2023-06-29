@@ -227,4 +227,10 @@ export default [
     "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/thicker-bars.png",
   },
+  {
+    "title": "Hide friends activity button",
+    "description": "Hides the friends activity button next to your profile picture",
+    "code": "button.encore-over-media-set.main-topBar-buddyFeed {display: none;}",
+    "preview": "resources/assets/snippets/hide-friends-activity-button.png",
+  },
 ];
