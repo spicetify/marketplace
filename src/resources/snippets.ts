@@ -233,4 +233,10 @@ export default [
     "code": "button.encore-over-media-set.main-topBar-buddyFeed {display: none;}",
     "preview": "resources/assets/snippets/hide-friends-activity-button.png",
   },
+  {
+    "title": "Fullscreen hide playing from",
+    "description": "Hides the playing from card while in fullscreen view",
+    "code": ".npv-header.npv-header {display: none;}",
+    "preview": "resources/assets/snippets/fullscreen-hide-playing-from.png",
+  },
 ];
