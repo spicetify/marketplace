@@ -239,4 +239,10 @@ export default [
     "code": ".npv-header.npv-header {display: none;}",
     "preview": "resources/assets/snippets/fullscreen-hide-playing-from.png",
   },
+  {
+    "title": "Fullscreen hide next up",
+    "description": "Hides the next up card while in fullscreen view (appears shortly before switching to the next song)",
+    "code": ".npv-up-next.fade-in-and-out-transition-enter-done {display: none;}",
+    "preview": "resources/assets/snippets/fullscreen-hide-next-up.png",
+  },
 ];
