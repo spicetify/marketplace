@@ -37,7 +37,7 @@
 		"eslint-plugin-react": "^7.32.2",
 		"husky": "^8.0.3",
 		"i18next": "^23.2.6",
-		"i18next-browser-languagedetector": "^7.0.1",
+		"i18next-browser-languagedetector": "^7.1.0",
 		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.11.0",
 		"react-i18next": "^12.3.1",
