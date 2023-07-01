@@ -2148,12 +2148,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "i18next-browser-languagedetector@npm:7.0.1"
+"i18next-browser-languagedetector@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "i18next-browser-languagedetector@npm:7.1.0"
   dependencies:
     "@babel/runtime": ^7.19.4
-  checksum: 03129614be8761988df59b630359ded4f7c989eec4553781b5968139fd898de1eb09128c4c69c1365b547649ad829ff9abe1f60161658f8789668bcc623adcf0
+  checksum: 36981b9a9995ed66387f3735cceffe107ed3cdb6ca278d45fa243fabc65669c0eca095ed4a55a93dac046ca1eb23fd986ec0079723be7ebb8505e6ba25f379bb
   languageName: node
   linkType: hard
 
@@ -3879,7 +3879,7 @@ __metadata:
     eslint-plugin-react: ^7.32.2
     husky: ^8.0.3
     i18next: ^23.2.6
-    i18next-browser-languagedetector: ^7.0.1
+    i18next-browser-languagedetector: ^7.1.0
     prismjs: ^1.29.0
     react-dropdown: ^1.11.0
     react-i18next: ^12.3.1
