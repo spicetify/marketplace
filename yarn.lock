@@ -28,6 +28,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/runtime@npm:7.22.5"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 12a50b7de2531beef38840d17af50c55a094253697600cee255311222390c68eed704829308d4fd305e1b3dfbce113272e428e9d9d45b1730e0fede997eaceb1
+  languageName: node
+  linkType: hard
+
 "@esbuild/linux-loong64@npm:0.14.54":
   version: 0.14.54
   resolution: "@esbuild/linux-loong64@npm:0.14.54"
@@ -2148,12 +2157,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^22.5.0":
-  version: 22.5.0
-  resolution: "i18next@npm:22.5.0"
+"i18next@npm:^23.2.6":
+  version: 23.2.6
+  resolution: "i18next@npm:23.2.6"
   dependencies:
-    "@babel/runtime": ^7.20.6
-  checksum: 291c0e02fda20bd1827b6529dad74c01867892c7ac000befe0f69e10ad97ab074a2ae5b4ce1e0638c28ae1a6f59d1ed8503ea05bd1c324d731a44dd94c43a49a
+    "@babel/runtime": ^7.22.5
+  checksum: 9a1f9d6b2233bb3b0f2d24fae620d532d437eb28768e7cd51bc3fed15148d683ca817b787c128b6d2c98e0eb43c8cd61c4d125db09386e54732c870b5469e371
   languageName: node
   linkType: hard
 
@@ -3869,7 +3878,7 @@ __metadata:
     eslint: ^8.44.0
     eslint-plugin-react: ^7.32.2
     husky: ^8.0.3
-    i18next: ^22.5.0
+    i18next: ^23.2.6
     i18next-browser-languagedetector: ^7.0.1
     prismjs: ^1.29.0
     react-dropdown: ^1.11.0
