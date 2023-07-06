@@ -191,6 +191,15 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
   ));
 };
 
+export const generateSortOptions = () => {
+  return [
+    { key: "newest", value: "Newest" },
+    { key: "stars", value: "Stars" },
+    { key: "a-z", value: "A-Z" },
+    { key: "oldest", value: "Oldest" },
+    { key: "z-a", value: "Z-A" },
+  ];
+};
 /**
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.

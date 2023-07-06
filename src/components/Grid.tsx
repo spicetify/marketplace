@@ -5,7 +5,7 @@ import { Option } from "react-dropdown";
 const Spicetify = window.Spicetify;
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
+import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateSortOptions } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
@@ -534,6 +534,11 @@ class Grid extends React.Component<
                   this.setState({ searchValue: event.target.value });
                 }} />
             </div>
+            {/* Generate a new box for sorting options, the options should be newest, stars, a-z, oldest, and z-a*/}
+            <SortBox
+              onChange={(value) => this.updateSort(value)}
+              sortBoxOptions={generateSortOptions()}
+              sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
             <Spicetify.ReactComponent.TooltipWrapper label={t("settings.title")} renderInline={true} placement="bottom">
               <button type="button" aria-label={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
                 onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}

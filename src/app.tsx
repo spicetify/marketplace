@@ -133,6 +133,7 @@ class App extends React.Component<{
         schemes,
         activeScheme,
       },
+      sort: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sortBy, "stars"),
     };
 
     if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter(tab => tab.name === this.CONFIG.activeTab).length) {

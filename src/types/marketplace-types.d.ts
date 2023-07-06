@@ -161,4 +161,5 @@ export type Config = {
     schemes?: SchemeIni;
     activeScheme?: string | null;
   },
+  sort: string;
 };
