@@ -12,6 +12,7 @@ import {
   getTaggedRepos,
   fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
   fetchCssSnippets, getBlacklist,
+  sortExtensions,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
@@ -52,7 +53,7 @@ class Grid extends React.Component<
 
     // Fetches the sorting options, fetched from SortBox.js
     this.sortConfig = {
-      by: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sortBy, "top"),
+      by: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sort, "top"),
     };
 
     this.state = {
@@ -133,7 +134,7 @@ class Grid extends React.Component<
   updateSort(sortByValue) {
     if (sortByValue) {
       this.sortConfig.by = sortByValue;
-      localStorage.setItem(LOCALSTORAGE_KEYS.sortBy, sortByValue);
+      localStorage.setItem(LOCALSTORAGE_KEYS.sort, sortByValue);
     }
 
     // this.requestPage = null;
@@ -188,27 +189,26 @@ class Grid extends React.Component<
     switch (activeTab) {
     case "Extensions": {
       const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST);
+      const extensions: CardItem[] = [];
       for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(
+        const repoExtensions = await fetchExtensionManifest(
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
-          this.CONFIG.visual.hideInstalled,
+          true,
         );
 
-        // I believe this stops the requests when switching tabs?
-        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-          // Stop this queue from continuing to fetch and append to cards list
-          return -1;
+        if (repoExtensions && repoExtensions.length) {
+          extensions.push(...repoExtensions.map((extension) => ({
+            ...extension, lastUpdated: repo.pushed_at,
+          })));
         }
+      }
 
-        if (extensions && extensions.length) {
-          // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
-          extensions.forEach((extension) => {
-            Object.assign(extension, { lastUpdated: repo.pushed_at });
-            this.appendCard(extension, "extension", activeTab);
-          });
-        }
+      sortExtensions(extensions, localStorage.getItem("marketplace:sort") || "stars");
+
+      for (const extension of extensions) {
+        this.appendCard(extension, "extension", activeTab);
       }
 
       // First result is null or -1 so it coerces to 1
@@ -534,11 +534,12 @@ class Grid extends React.Component<
                   this.setState({ searchValue: event.target.value });
                 }} />
             </div>
-            {/* Generate a new box for sorting options, the options should be newest, stars, a-z, oldest, and z-a*/}
+            {/* Generate a new box for sorting options */}
             <SortBox
               onChange={(value) => this.updateSort(value)}
               sortBoxOptions={generateSortOptions()}
               sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
+
             <Spicetify.ReactComponent.TooltipWrapper label={t("settings.title")} renderInline={true} placement="bottom">
               <button type="button" aria-label={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
                 onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}

@@ -9,7 +9,7 @@ export const LOCALSTORAGE_KEYS = {
   installedThemes: "marketplace:installed-themes",
   activeTab: "marketplace:active-tab",
   tabs: "marketplace:tabs",
-  sortBy: "marketplace:sort-by",
+  sort: "marketplace:sort",
   // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
   themeInstalled: "marketplace:theme-installed",
   albumArtBasedColor: "marketplace:albumArtBasedColors",

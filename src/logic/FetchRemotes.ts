@@ -1,8 +1,8 @@
 import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { CardItem, Snippet } from "../types/marketplace-types";
+import { CardItem, Manifest, Snippet } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
 
-import { RepoTopic } from "../types/marketplace-types";
+import { RepoTopic, Extension } from "../types/marketplace-types";
 import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
@@ -299,4 +299,25 @@ export const fetchCssSnippets = async () => {
     return accum;
   }, []);
   return snippets;
+};
+
+export const sortExtensions = (extensions: Extension[], sortOption: string) => {
+  switch (sortOption) {
+  case "a-z":
+    extensions.sort((a, b) => a.manifest.name.localeCompare(b.manifest.name));
+    break;
+  case "z-a":
+    extensions.sort((a, b) => b.manifest.name.localeCompare(a.manifest.name));
+    break;
+  case "newest":
+    extensions.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+    break;
+  case "oldest":
+    extensions.sort((a, b) => new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime());
+    break;
+  case "stars":
+  default:
+    extensions.sort((a, b) => b.stars - a.stars);
+    break;
+  }
 };

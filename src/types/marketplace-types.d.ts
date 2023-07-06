@@ -91,7 +91,9 @@ export type CardItem = {
   stars: number;
   tags: string[];
   lastUpdated: string;
-
+  name: string;
+  lastUpdated: string;
+   stargazers_count: number;
   // For themes only
   cssURL?: string;
   schemesURL?: string;
@@ -102,6 +104,27 @@ export type CardItem = {
   // if I don't have all the same properties as CardItem
   code: undefined;
   description: undefined;
+};
+
+export type Extension = {
+  manifest: {
+    name: string;
+    description: string;
+    preview: string;
+    main: string;
+    readme: string;
+  };
+  title: string;
+  subtitle: string;
+  authors: { name: string; url: string }[];
+  user: string;
+  repo: string;
+  branch: string;
+  imageURL: string;
+  extensionURL: string;
+  readmeURL: string;
+  stars: number;
+  lastUpdated: string;
 };
 
 // TODO: use this in `fetchThemeManifest()`
