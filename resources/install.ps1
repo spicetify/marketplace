@@ -12,8 +12,7 @@ if (-not (Get-Command -Name spicetify -ErrorAction SilentlyContinue)) {
   Invoke-WebRequest @Parameters | Invoke-Expression
 }
 
-spicetify | Out-Null
-$spiceUserDataPath = (spicetify path userdata)
+$spiceUserDataPath = "$env:APPDATA\spicetify"
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
 $isMarketplaceInstalled = (
