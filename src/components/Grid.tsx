@@ -5,14 +5,13 @@ import { Option } from "react-dropdown";
 const Spicetify = window.Spicetify;
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateSortOptions } from "../logic/Utils";
+import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateSortOptions, sortExtensions, sortThemes } from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
   getTaggedRepos,
   fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
   fetchCssSnippets, getBlacklist,
-  sortExtensions,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
@@ -250,30 +249,28 @@ class Grid extends React.Component<
       // installed extension do them all in one go, since it's local
     } case "Themes": {
       const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST);
+      const themes: CardItem[] = [];
       for (const repo of pageOfRepos.items) {
-
-        const themes = await fetchThemeManifest(
+        const repoThemes = await fetchThemeManifest(
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
         );
-        // I believe this stops the requests when switching tabs?
-        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-          // Stop this queue from continuing to fetch and append to cards list
-          return -1;
-        }
 
-        if (themes && themes.length) {
-          themes.forEach((theme) => {
-            Object.assign(theme, { lastUpdated: repo.pushed_at });
-            this.appendCard(theme, "theme", activeTab);
-          });
+        if (repoThemes && repoThemes.length) {
+          themes.push(...repoThemes.map((theme) => ({
+            ...theme, lastUpdated: repo.pushed_at,
+          })));
         }
       }
 
-      // First request is null, so coerces to 1
+      sortThemes(themes, localStorage.getItem("marketplace:sort") || "stars");
+
+      for (const theme of themes) {
+        this.appendCard(theme, "theme", activeTab);
+      }
+
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-      // -1 because the page number is 1-indexed
       const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
       const remainingResults = pageOfRepos.total_count - soFarResults;
 
@@ -281,7 +278,8 @@ class Grid extends React.Component<
       if (remainingResults > 0) return currentPage + 1;
       else console.debug("No more theme results");
       break;
-    } case "Apps": {
+    }
+    case "Apps": {
       const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST);
       for (const repo of pageOfRepos.items) {
 

@@ -1,5 +1,5 @@
 import { CardProps } from "../components/Card/Card";
-import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, ColourScheme, Extension, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 import Chroma from "chroma-js";
 import { LOCALSTORAGE_KEYS } from "../constants";
 /**
@@ -588,3 +588,44 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
   }
 };
 
+export const sortExtensions = (extensions: Extension[], sortOption: string) => {
+  switch (sortOption) {
+  case "a-z":
+    extensions.sort((a, b) => a.manifest.name.localeCompare(b.manifest.name));
+    break;
+  case "z-a":
+    extensions.sort((a, b) => b.manifest.name.localeCompare(a.manifest.name));
+    break;
+  case "newest":
+    extensions.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+    break;
+  case "oldest":
+    extensions.sort((a, b) => new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime());
+    break;
+  case "stars":
+  default:
+    extensions.sort((a, b) => b.stars - a.stars);
+    break;
+  }
+};
+// TODO: Create theme type
+export const sortThemes = (themes: CardItem[], sortOption: string) => {
+  switch (sortOption) {
+  case "a-z":
+    themes.sort((a, b) => a.manifest.name.localeCompare(b.manifest.name));
+    break;
+  case "z-a":
+    themes.sort((a, b) => b.manifest.name.localeCompare(a.manifest.name));
+    break;
+  case "newest":
+    themes.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+    break;
+  case "oldest":
+    themes.sort((a, b) => new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime());
+    break;
+  case "stars":
+  default:
+    themes.sort((a, b) => b.stars - a.stars);
+    break;
+  }
+};
