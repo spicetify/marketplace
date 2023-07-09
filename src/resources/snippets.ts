@@ -227,4 +227,40 @@ export default [
     "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/thicker-bars.png",
   },
+  {
+    "title": "Hide friends activity button",
+    "description": "Hides the friends activity button next to your profile picture",
+    "code": "button.encore-over-media-set.main-topBar-buddyFeed {display: none;}",
+    "preview": "resources/assets/snippets/hide-friends-activity-button.png",
+  },
+  {
+    "title": "Fullscreen hide playing from",
+    "description": "Hides the playing from card while in fullscreen view",
+    "code": ".npv-header.npv-header {display: none;}",
+    "preview": "resources/assets/snippets/fullscreen-hide-playing-from.png",
+  },
+  {
+    "title": "Fullscreen hide next up",
+    "description": "Hides the next up card while in fullscreen view (appears shortly before switching to the next song)",
+    "code": ".npv-up-next.fade-in-and-out-transition-enter-done {display: none;}",
+    "preview": "resources/assets/snippets/fullscreen-hide-next-up.png",
+  },
+  {
+    "title": "Hide podcast tab",
+    "description": "Hides the podcast tab in Your Library",
+    "code": "[href='/collection/podcasts'] {display: none;}",
+    "preview": "resources/assets/snippets/hide-podcast-tab.png",
+  },
+  {
+    "title": "Hide profile username",
+    "description": "Hides your username next to your profile picture",
+    "code": "span.Type__TypeElement-sc-goli3j-0.TypeElement-mestoBold-type.main-userWidget-displayName {display: none !important;}",
+    "preview": "resources/assets/snippets/hide-profile-username.png",
+  },
+  {
+    "title": "Hide now playing view button",
+    "description": "Hides the now playing view button in the playbar (only triggers after you click somewhere/do something)",
+    "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button:has(span):has(svg):has(path[d='M11.196 8 6 5v6l5.196-3z']) {display: none;}",
+    "preview": "resources/assets/snippets/hide-now-playing-view-button.png",
+  },
 ];
