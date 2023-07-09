@@ -269,4 +269,10 @@ export default [
     "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount {display: none}",
     "preview": "resources/assets/snippets/hide-play-count.png",
   },
+  {
+    "title": "Hide recent searches",
+    "description": "Hides the recent searches section on the search page",
+    "code": ".search-searchBrowse-SearchBrowse > section {display: none;}",
+    "preview": "resources/assets/snippets/hide-recent-searches.png",
+  },
 ];
