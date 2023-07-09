@@ -245,4 +245,10 @@ export default [
     "code": ".npv-up-next.fade-in-and-out-transition-enter-done {display: none;}",
     "preview": "resources/assets/snippets/fullscreen-hide-next-up.png",
   },
+  {
+    "title": "Hide podcast tab",
+    "description": "Hides the podcast tab in Your Library",
+    "code": "[href='/collection/podcasts'] {display: none;}",
+    "preview": "resources/assets/snippets/hide-podcast-tab.png",
+  },
 ];
