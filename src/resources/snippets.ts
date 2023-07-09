@@ -251,4 +251,10 @@ export default [
     "code": "[href='/collection/podcasts'] {display: none;}",
     "preview": "resources/assets/snippets/hide-podcast-tab.png",
   },
+  {
+    "title": "Hide profile username",
+    "description": "Hides your username next to your profile picture",
+    "code": "span.Type__TypeElement-sc-goli3j-0.TypeElement-mestoBold-type.main-userWidget-displayName {display: none !important;}",
+    "preview": "resources/assets/snippets/hide-profile-username.png",
+  },
 ];
