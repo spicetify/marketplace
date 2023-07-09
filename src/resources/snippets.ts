@@ -257,4 +257,10 @@ export default [
     "code": "span.Type__TypeElement-sc-goli3j-0.TypeElement-mestoBold-type.main-userWidget-displayName {display: none !important;}",
     "preview": "resources/assets/snippets/hide-profile-username.png",
   },
+  {
+    "title": "Hide now playing view button",
+    "description": "Hides the now playing view button in the playbar (only triggers after you click somewhere/do something)",
+    "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button:has(span):has(svg):has(path[d='M11.196 8 6 5v6l5.196-3z']) {display: none;}",
+    "preview": "resources/assets/snippets/hide-now-playing-view-button.png",
+  },
 ];
