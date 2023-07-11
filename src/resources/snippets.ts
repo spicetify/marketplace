@@ -263,4 +263,16 @@ export default [
     "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button:has(span):has(svg):has(path[d='M11.196 8 6 5v6l5.196-3z']) {display: none;}",
     "preview": "resources/assets/snippets/hide-now-playing-view-button.png",
   },
+  {
+    "title": "Hide play count",
+    "description": "Hides the play count on songs/albums etc so you can give each songs its chance without thinking about numbers",
+    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount {display: none}",
+    "preview": "resources/assets/snippets/hide-play-count.png",
+  },
+  {
+    "title": "Hide recent searches",
+    "description": "Hides the recent searches section on the search page",
+    "code": ".search-searchBrowse-SearchBrowse > section {display: none;}",
+    "preview": "resources/assets/snippets/hide-recent-searches.png",
+  },
 ];
