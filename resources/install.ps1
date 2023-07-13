@@ -60,4 +60,5 @@ if (-not $isMarketplaceInstalled) {
 spicetify backup -q
 spicetify apply
 
-Write-Host -Object 'Done! If nothing has happened, do spicetify apply' -ForegroundColor Green
+Write-Host -Object 'Done!' -ForegroundColor Green
+Write-Host -Object 'If nothing has happened, check the messages above for errors'
