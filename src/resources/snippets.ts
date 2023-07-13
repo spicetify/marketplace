@@ -275,4 +275,10 @@ export default [
     "code": ".search-searchBrowse-SearchBrowse > section {display: none;}",
     "preview": "resources/assets/snippets/hide-recent-searches.png",
   },
+  {
+    "title": "Duck",
+    "description": "Adds dancing duck onto your playback bar!",
+    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzdsM2Y2aHh3cTQ2Z3JzbXAzMXJrZjdiM3IwMXhnaTFnc295ZnRkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cCOVfFwDI3awdse5A3/giphy.gif'); }",
+    "preview": "resources/assets/snippets/duck.png",
+  },
 ];
