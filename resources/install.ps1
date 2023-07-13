@@ -54,8 +54,6 @@ if (-not $isMarketplaceInstalled) {
   spicetify config current_theme marketplace
 }
 spicetify backup
-spicetify restore
-spicetify backup
 spicetify apply
 
 Write-Host -Object 'Done! If nothing has happened, do spicetify apply' -ForegroundColor Green
