@@ -12,7 +12,11 @@ if (-not (Get-Command -Name spicetify -ErrorAction SilentlyContinue)) {
   Invoke-WebRequest @Parameters | Invoke-Expression
 }
 
-$spiceUserDataPath = "$env:APPDATA\spicetify"
+$spiceUserDataPath = spicetify path userdata
+if ($LASTEXITCODE) {
+  Write-Host -Object "Something is wrong with your Spicetify installation. Check the message below." -ForegroundColor Red
+  throw $spiceUserDataPath
+}
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
 $isMarketplaceInstalled = (
