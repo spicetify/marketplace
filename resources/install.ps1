@@ -12,11 +12,16 @@ if (-not (Get-Command -Name spicetify -ErrorAction SilentlyContinue)) {
   Invoke-WebRequest @Parameters | Invoke-Expression
 }
 
-$spiceUserDataPath = "$env:APPDATA\spicetify"
+$spiceUserDataPath = spicetify path userdata
+if ($LASTEXITCODE) {
+  Write-Host -Object "Something is wrong with your Spicetify installation. Check the message below." -ForegroundColor Red
+  throw $spiceUserDataPath
+}
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
-$isMarketplaceInstalled = (
-  ((spicetify config custom_apps) -contains 'marketplace') -and (Test-Path -Path $marketAppPath -PathType Container)
+$isThemeInstalled = $(
+  spicetify path -s | Out-Null
+  -not $LASTEXITCODE
 )
 
 Write-Host -Object 'Removing and creating Marketplace folders...' -ForegroundColor Cyan
@@ -50,12 +55,11 @@ $Parameters = @{
 Invoke-WebRequest @Parameters
 
 Write-Host -Object 'Applying...' -ForegroundColor Cyan
-if (-not $isMarketplaceInstalled) {
+if (-not $isThemeInstalled) {
   spicetify config current_theme marketplace
 }
-spicetify backup
-spicetify restore
-spicetify backup
+spicetify backup -q
 spicetify apply
 
-Write-Host -Object 'Done! If nothing has happened, do spicetify apply' -ForegroundColor Green
+Write-Host -Object 'Done!' -ForegroundColor Green
+Write-Host -Object 'If nothing has happened, check the messages above for errors'
