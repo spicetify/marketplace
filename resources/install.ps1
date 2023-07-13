@@ -19,8 +19,9 @@ if ($LASTEXITCODE) {
 }
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
-$isMarketplaceInstalled = (
-  ((spicetify config custom_apps) -contains 'marketplace') -and (Test-Path -Path $marketAppPath -PathType Container)
+$isThemeInstalled = $(
+  spicetify path -s | Out-Null
+  -not $LASTEXITCODE
 )
 
 Write-Host -Object 'Removing and creating Marketplace folders...' -ForegroundColor Cyan
@@ -54,7 +55,7 @@ $Parameters = @{
 Invoke-WebRequest @Parameters
 
 Write-Host -Object 'Applying...' -ForegroundColor Cyan
-if (-not $isMarketplaceInstalled) {
+if (-not $isThemeInstalled) {
   spicetify config current_theme marketplace
 }
 spicetify backup -q
