@@ -57,7 +57,7 @@ Write-Host -Object 'Applying...' -ForegroundColor Cyan
 if (-not $isMarketplaceInstalled) {
   spicetify config current_theme marketplace
 }
-spicetify backup
+spicetify backup -q
 spicetify apply
 
 Write-Host -Object 'Done! If nothing has happened, do spicetify apply' -ForegroundColor Green
