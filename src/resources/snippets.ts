@@ -281,4 +281,10 @@ export default [
     "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzdsM2Y2aHh3cTQ2Z3JzbXAzMXJrZjdiM3IwMXhnaTFnc295ZnRkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cCOVfFwDI3awdse5A3/giphy.gif'); }",
     "preview": "resources/assets/snippets/duck.png",
   },
+  {
+    "title": "Duotone Album Art",
+    "description": "Changes the album art into a duotone version with two colors of your choice",
+    "code": ":root{--gmaa-base:#191414;--gmaa-bg-blend:lighten;--gmaa-blur:0;--gmaa-fg-blend:multiply;--gmaa-foreground:#1cb955;--gmaa-opacity:.74;--gmaa-spacing:0}.cover-art{background-color:var(--gmaa-base);display:flex;flex:1 1 100%;height:100%;overflow:hidden;position:relative}.cover-art img{filter:grayscale(100%) contrast(1) blur(var(--gmaa-blur));flex:1 0 100%;height:100%;max-width:100%;mix-blend-mode:var(--gmaa-bg-blend);object-fit:cover;opacity:var(--gmaa-opacity);position:relative;width:100%}.cover-art::before{background-color:var(--gmaa-foreground);bottom:0;content:'';height:100%;left:0;mix-blend-mode:var(--gmaa-fg-blend);position:absolute;right:0;top:0;width:100%;z-index:1}.cover-art-icon{display:none;visibility:hidden}",
+    "preview": "resources/assets/snippets/duotone-album-art.png",
+  },
 ];
