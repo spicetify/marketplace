@@ -258,9 +258,12 @@ class Grid extends React.Component<
         );
 
         if (repoThemes && repoThemes.length) {
-          themes.push(...repoThemes.map((theme) => ({
-            ...theme, lastUpdated: repo.pushed_at,
-          })));
+          themes.push(...repoThemes.map(
+            (theme) => ({
+              ...theme, 
+              lastUpdated: repo.pushed_at,
+            })
+          ));
         }
       }
 
