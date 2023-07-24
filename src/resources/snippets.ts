@@ -290,7 +290,7 @@ export default [
   {
     "title": "Thin Library Sidebar Rows",
     "description": "Single-line rows in the library sidebar, like the pre-2023 UI",
-    "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;}.main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem {[role=\"group\"] {min-block-size: 0 !important;}.HeaderArea .Column {flex-direction: row;gap: 0.5em;}.HeaderArea * {padding-top: 0 !important;padding-bottom: 0 !important;}.x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important;height: 1.6em !important;}}.main-yourLibraryX-listRowTitleLink {}.main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
+    "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;} .main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem [role=\"group\"] {min-block-size: 0 !important;} .main-yourLibraryX-listItem .HeaderArea .Column {flex-direction: row; gap: 0.5em;} .main-yourLibraryX-listItem .HeaderArea * {padding-top: 0 !important; padding-bottom: 0 !important;} .main-yourLibraryX-listItem .x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important; height: 1.6em !important;} .main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
     "preview": "resources/assets/snippets/thin-library-sidebar-rows.png",
   },
 ];
