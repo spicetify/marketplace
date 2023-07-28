@@ -287,4 +287,10 @@ export default [
     "code": ":root{--gmaa-base:#191414;--gmaa-bg-blend:lighten;--gmaa-blur:0;--gmaa-fg-blend:multiply;--gmaa-foreground:#1cb955;--gmaa-opacity:.74;--gmaa-spacing:0}.cover-art{background-color:var(--gmaa-base);display:flex;flex:1 1 100%;height:100%;overflow:hidden;position:relative}.cover-art img{filter:grayscale(100%) contrast(1) blur(var(--gmaa-blur));flex:1 0 100%;height:100%;max-width:100%;mix-blend-mode:var(--gmaa-bg-blend);object-fit:cover;opacity:var(--gmaa-opacity);position:relative;width:100%}.cover-art::before{background-color:var(--gmaa-foreground);bottom:0;content:'';height:100%;left:0;mix-blend-mode:var(--gmaa-fg-blend);position:absolute;right:0;top:0;width:100%;z-index:1}.cover-art-icon{display:none;visibility:hidden}",
     "preview": "resources/assets/snippets/duotone-album-art.png",
   },
+  {
+    "title": "Thin Library Sidebar Rows",
+    "description": "Single-line rows in the library sidebar, like the pre-2023 UI",
+    "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;} .main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem [role=\"group\"] {min-block-size: 0 !important;} .main-yourLibraryX-listItem .HeaderArea .Column {flex-direction: row; gap: 0.5em;} .main-yourLibraryX-listItem .HeaderArea * {padding-top: 0 !important; padding-bottom: 0 !important;} .main-yourLibraryX-listItem .x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important; height: 1.6em !important;} .main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
+    "preview": "resources/assets/snippets/thin-library-sidebar-rows.png",
+  },
 ];
