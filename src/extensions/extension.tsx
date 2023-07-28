@@ -64,7 +64,7 @@ import {
     if (isGithubRawUrl(script.src)) {
       const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
       if (!user || !repo || !branch || !filePath) return;
-      script.src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+      script.src = `https://cdn.jsdelivr.xyz/gh/${user}/${repo}@${branch}/${filePath}`;
     }
 
     script.src = `${script.src}?time=${Date.now()}`;
@@ -128,7 +128,7 @@ import {
         // If it's a github raw script, use jsdelivr
         if (isGithubRawUrl(script)) {
           const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
-          src = `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${filePath}`;
+          src = `https://cdn.jsdelivr.xyz/gh/${user}/${repo}@${branch}/${filePath}`;
         }
         // console.log({src});
         newScript.src = `${src}?time=${Date.now()}`;
