@@ -98,7 +98,7 @@ export default [
   {
     "title": "Circular Album Art",
     "description": "Makes the now playing album art be circular (like a vinyl)",
-    "code": ".cover-art .cover-art-image {\n    border-radius: 100% !important;\n}",
+    "code": ".cover-art { clip-path: circle(50% at 50% 50%);}",
     "preview": "resources/assets/snippets/circular-album-art.png",
   },
   {
