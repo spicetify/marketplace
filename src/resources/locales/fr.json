@@ -1,7 +1,7 @@
 {
   "translation": {
     "settings": {
-      "title": "Réglages",
+      "title": "Réglages Marché Spicetify",
       "optionsHeading": "Options",
       "starCountLabel": "Nombres d’étoiles",
       "tagsLabel": "Tags",
@@ -14,7 +14,10 @@
       "resetDescription": "Désinstaller toutes les extensions et tous les thèmes, ainsi que l’ensemble des réglages",
       "backupHeading": "Sauvegarde/Restauration",
       "backupLabel": "Sauvegarder ou restaurer toutes les données du Marché. Celà n'inclue pas les réglages pour quoi que ce soit installé depuis le Marché.",
-      "backupBtn": "Ouvrir"
+      "backupBtn": "Ouvrir",
+      "versionHeading": "Version",
+      "versionBtn": "Copier",
+      "versionCopied": "Copié"
     },
     "tabs": {
       "Extensions": "Extensions",
