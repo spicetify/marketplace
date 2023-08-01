@@ -2203,12 +2203,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^23.2.6":
-  version: 23.2.6
-  resolution: "i18next@npm:23.2.6"
+"i18next@npm:^23.4.1":
+  version: 23.4.1
+  resolution: "i18next@npm:23.4.1"
   dependencies:
     "@babel/runtime": ^7.22.5
-  checksum: 9a1f9d6b2233bb3b0f2d24fae620d532d437eb28768e7cd51bc3fed15148d683ca817b787c128b6d2c98e0eb43c8cd61c4d125db09386e54732c870b5469e371
+  checksum: d9283d3de5e4ea2e55f61bd8ada98b5aef1b7db35a69c8ccf193367c5cbee6f795a67c5cd8a7af511e56c12b021b91d97253863b6c2336726925d20518fb02cc
   languageName: node
   linkType: hard
 
@@ -3935,7 +3935,7 @@ __metadata:
     eslint: ^8.44.0
     eslint-plugin-react: ^7.32.2
     husky: ^8.0.3
-    i18next: ^23.2.6
+    i18next: ^23.4.1
     i18next-browser-languagedetector: ^7.1.0
     prismjs: ^1.29.0
     react-dropdown: ^1.11.0
