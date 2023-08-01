@@ -33,7 +33,7 @@
 		"@typescript-eslint/parser": "^6.2.1",
 		"chroma-js": "^2.4.2",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.44.0",
+		"eslint": "^8.46.0",
 		"eslint-plugin-react": "^7.32.2",
 		"husky": "^8.0.3",
 		"i18next": "^23.4.1",
