@@ -293,4 +293,10 @@ export default [
     "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;} .main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem [role=\"group\"] {min-block-size: 0 !important;} .main-yourLibraryX-listItem .HeaderArea .Column {flex-direction: row; gap: 0.5em;} .main-yourLibraryX-listItem .HeaderArea * {padding-top: 0 !important; padding-bottom: 0 !important;} .main-yourLibraryX-listItem .x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important; height: 1.6em !important;} .main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
     "preview": "resources/assets/snippets/thin-library-sidebar-rows.png",
   },
+  {
+    "title": "Hide all play counts and popular tracks",
+    "description": "Hides all play counts and popular tracks",
+    "code": "/* NoPlayCount*/.main-trackList-rowPlayCount, .main-trackList-playsHeader {display: none;}/* NoArtistPopularTracks*/.artist-artistOverview-popularTracksBlock {display: none;}.artist-artistOverview-popularTracks {display: none;}/* NoArtistListenerCount*/.main-entityHeader-detailsText {display: none;}",
+    "preview": "resources/assets/snippets/hide-play-counts-popular-tracks.png",
+  }
 ];
