@@ -298,5 +298,5 @@ export default [
     "description": "Hides all play counts and popular tracks",
     "code": "/* NoPlayCount*/.main-trackList-rowPlayCount, .main-trackList-playsHeader {display: none;}/* NoArtistPopularTracks*/.artist-artistOverview-popularTracksBlock {display: none;}.artist-artistOverview-popularTracks {display: none;}/* NoArtistListenerCount*/.main-entityHeader-detailsText {display: none;}",
     "preview": "resources/assets/snippets/hide-play-counts-popular-tracks.png",
-  }
+  },
 ];
