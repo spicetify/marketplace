@@ -20,6 +20,7 @@ import {
   sleep,
   addExtensionToSpicetifyConfig,
   initAlbumArtBasedColor,
+  getAvailableTLD,
 } from "../logic/Utils";
 import {
   getBlacklist,
@@ -31,6 +32,8 @@ import {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
+
+  const tld = await getAvailableTLD();
 
   // https://github.com/satya164/react-simple-code-editor/issues/86
   const reactSimpleCodeEditorFix = document.createElement("script");
@@ -64,7 +67,7 @@ import {
     if (isGithubRawUrl(script.src)) {
       const { user, repo, branch, filePath } = getParamsFromGithubRaw(extensionManifest.extensionURL);
       if (!user || !repo || !branch || !filePath) return;
-      script.src = `https://cdn.jsdelivr.xyz/gh/${user}/${repo}@${branch}/${filePath}`;
+      script.src = `https://cdn.jsdelivr.${tld}/gh/${user}/${repo}@${branch}/${filePath}`;
     }
 
     script.src = `${script.src}?time=${Date.now()}`;
@@ -111,7 +114,7 @@ import {
     if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
     // Add theme css
-    const userCSS = await parseCSS(themeManifest);
+    const userCSS = await parseCSS(themeManifest, tld);
     injectUserCSS(userCSS);
 
     // Add to Spicetify.Config
@@ -128,7 +131,7 @@ import {
         // If it's a github raw script, use jsdelivr
         if (isGithubRawUrl(script)) {
           const { user, repo, branch, filePath } = getParamsFromGithubRaw(script);
-          src = `https://cdn.jsdelivr.xyz/gh/${user}/${repo}@${branch}/${filePath}`;
+          src = `https://cdn.jsdelivr.${tld}/gh/${user}/${repo}@${branch}/${filePath}`;
         }
         // console.log({src});
         newScript.src = `${src}?time=${Date.now()}`;
