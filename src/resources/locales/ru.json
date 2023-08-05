@@ -1,0 +1,99 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Настройки",
+      "optionsHeading": "Основные",
+      "starCountLabel": "Отображать количество звезд",
+      "tagsLabel": "Отображать теги",
+      "devToolsLabel": "Включить инструменты разработчика тем",
+      "hideInstalledLabel": "Скрывать установленное в других вкладках",
+      "colourShiftLabel": "Менять цвета каждую минуту",
+      "albumArtBasedColors": "Использовать цвета на основе обложки альбома",
+      "albumArtBasedColorsMode": "Тип цвета",
+      "albumArtBasedColorsVibrancy": "Тип цветовой схемы на основе обложки альбома",
+      "albumArtBasedColorsVibrancyToolTip": "Desaturated: наиболее часто встречаемый в обложке цвет с малой яркостью \n Light Vibrant: самый насыщенный цвет с повышенной яркостью \n Prominent: наиболее часто встречаемый цвет в обложке альбома \n Vibrant: самый насыщенный цвет в обложке альбома",
+      "almbumArtColorsModeToolTip": "Monochrome Dark, Monochrome Light: основаны иcключительно на выбранном цвете, дополнительные цвета создаются путем изменения яркости основого. Противоположны друг другу: цвет, являющийся фоновым в Monochrome Light, в Monochrome Dark будет цветом переднего плана и наоборот. \n Analogic: палитра определяется выбранным и цветами, смежными с ним на цветовом круге. \n Analogic Complementary: схожа c Analogic, но сожержит также дополнительный цвет. \n Triad: палитра определяется основным цветом и цветами, равноудаленными от него. \n Quad: палитра определяется выбранным цветом и цветами, расположенных под углом 90 градусов к нему.",
+      "tabsHeading": "Вкладки",
+      "resetHeading": "Сброс",
+      "resetBtn": "Сбросить",
+      "resetDescription": "Удалить все и сбросить настройки",
+      "backupHeading": "Резервное копирование и восстановление",
+      "backupLabel": "Сохранить или восстановить все данные Маркетплейса, за исключением настроек установленных тем и расширений.",
+      "backupBtn": "Открыть",
+      "versionHeading": "Версия",
+      "versionBtn": "Копировать",
+      "versionCopied": "Скопировано"
+    },
+    "tabs": {
+      "Extensions": "Расширения",
+      "Themes": "Темы",
+      "Snippets": "Сниппеты",
+      "Apps": "Приложения",
+      "Installed": "Установленное"
+    },
+    "snippets": {
+      "addTitle": "Добавление сниппета",
+      "editTitle": "Редактирование сниппета",
+      "viewTitle": "Просмотр сниппета",
+      "customCSS": "CSS",
+      "customCSSPlaceholder": "Вставьте сюда CSS вашего сниппета",
+      "snippetName": "Название",
+      "snippetNamePlaceholder": "Введите название для вашего сниппета",
+      "snippetDesc": "Описание",
+      "snippetDescPlaceholder": "Введите описание для вашего сниппета",
+      "snippetPreview": "Превью",
+      "optional": "необязательно",
+      "addImage": "Добавить изображение",
+      "changeImage": "Изменить изображение",
+      "saveCSS": "Сохранить"
+    },
+    "reloadModal": {
+      "title": "Перезагрузка",
+      "description": "Необходима перезагрузка страницы для применения изменений",
+      "reloadNow": "Перезагрузить сейчас",
+      "reloadLater": "Перезагрузить позже"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Настройки скопированы в буфер обмена",
+      "noDataPasted": "Ничего не вставлено",
+      "invalidJSON": "Неверный JSON",
+      "inputLabel": "Настройки Маркетплейса",
+      "inputPlaceholder": "Вставьте ваши настройки сюда",
+      "exportBtn": "Экспортировать",
+      "importBtn": "Импортировать",
+      "fileImportBtn": "Импортировать из файла"
+    },
+    "devTools": {
+      "title": "Инструменты разработчика тем",
+      "noThemeInstalled": "Ошибка: Не установлена тема из Маркетплейса",
+      "noThemeManifest": "Ошибка: Не найден манифест темы",
+      "colorIniEditor": "Редактор color.ini",
+      "colorIniEditorPlaceholder": "[название-вашей-цветовой-схемы]",
+      "invalidCSS": "Неверный CSS"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Маркетплейс Spicetify",
+      "newUpdate": "Доступно обновление",
+      "addCSS": "Добавить CSS",
+      "search": "Искать",
+      "installed": "Установлено",
+      "lastUpdated": "Обновлено: {{val, datetime}}",
+      "externalJS": "содержит JS",
+      "dark": "темный",
+      "light": "светлый"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Загрузка...",
+      "errorLoading": "Ошибка загрузки README"
+    },
+    "github": "GitHub",
+    "install": "Установить",
+    "remove": "Удалить",
+    "save": "Сохранить",
+    "colour_one": "цвет",
+    "colour_other": "цвета",
+    "favourite": "избранное"
+  }
+}
