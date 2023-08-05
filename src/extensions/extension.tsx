@@ -176,7 +176,6 @@ async function queryRepos(type: RepoType, pageNum = 1) {
 
   const allRepos = JSON.parse(window.sessionStorage.getItem(`${type}-page-${pageNum}`) || "null") || await fetch(url)
     .then(res => res.json())
-    .then(res => !!res.items?.length && res)
     .catch(() => null);
 
   if (!allRepos?.items) {

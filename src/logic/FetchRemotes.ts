@@ -27,7 +27,6 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   //     url += `&t=${sortConfig.time}`
   const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${tag}s-page-${page}`) || "null") || await fetch(url)
     .then(res => res.json())
-    .then(res => !!res.items?.length && res)
     .catch(() => null);
 
   if (!allRepos?.items) {
