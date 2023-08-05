@@ -174,9 +174,16 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-  if (!allRepos.items) {
+  const allRepos = await fetch(url)
+    .then(res => res.json())
+    .then(res => !!res.items?.length && res)
+    .catch(() => null) || JSON.parse(window.sessionStorage.getItem(`${type}-page-${pageNum}`) || "null");
+
+  if (!allRepos?.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);
+    return { items: [] };
+  } else {
+    window.sessionStorage.setItem(`${type}-page-${pageNum}`, JSON.stringify(allRepos));
   }
 
   const filteredResults = {
