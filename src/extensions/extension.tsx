@@ -253,7 +253,7 @@ async function appendInformationToLocalStorage(array, type: RepoType) {
     }
   } catch (err: any) {
     if (err.message.includes("API rate limit exceeded")) return Spicetify.showNotification("Too Many Requests, Cool Down.", true);
-    
+
     Spicetify.showNotification("Error loading themes and extensions", true);
     console.error(err);
   }
