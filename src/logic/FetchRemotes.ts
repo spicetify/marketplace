@@ -145,8 +145,8 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 
     return parsedManifests;
   }
-  catch (err: any) {
-    if (err.message.includes("API rate limit exceeded")) throw err;
+  catch (err) {
+    if (err instanceof Error && err.message.includes("API rate limit exceeded")) throw err;
     return null;
   }
 }
@@ -212,8 +212,8 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     }, []);
     return parsedManifests;
   }
-  catch (err: any) {
-    if (err.message.includes("API rate limit exceeded")) throw err;
+  catch (err) {
+    if (err instanceof Error && err.message.includes("API rate limit exceeded")) throw err;
     return null;
   }
 }
@@ -279,8 +279,8 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 
     return parsedManifests;
   }
-  catch (err: any) {
-    if (err.message.includes("API rate limit exceeded")) throw err;
+  catch (err) {
+    if (err instanceof Error && err.message.includes("API rate limit exceeded")) throw err;
     return null;
   }
 }
