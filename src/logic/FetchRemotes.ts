@@ -44,7 +44,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
 async function fetchRepoManifest(contents: GithubContents[] | GithubMessage) {
   if (Array.isArray(contents)) {
     const manifest = contents.find(item => item.name === "manifest.json");
-    if (!manifest) return null;
+    if (!manifest) throw new Error("No manifest");
 
     const manifestContents = await fetch(manifest.download_url).then(res => res.json()).catch(() => null);
     if (!manifestContents) return null;
