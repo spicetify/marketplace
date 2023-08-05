@@ -162,3 +162,25 @@ export type Config = {
     activeScheme?: string | null;
   },
 };
+
+export type GithubContents = {
+  name: string;
+  path: string;
+  sha: string;
+  size: number;
+  url: string;
+  html_url: string;
+  git_url: string;
+  download_url: string;
+  type: "file" | "dir" | "symlink";
+  _links: {
+    self: string;
+    git: string;
+    html: string;
+  };
+};
+
+export type GithubMessage = {
+  message: string;
+  documentation_url: string;
+};

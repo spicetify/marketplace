@@ -1,5 +1,5 @@
 import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { CardItem, Snippet } from "../types/marketplace-types";
+import { CardItem, GithubContents, GithubMessage, Snippet } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
 
 import { RepoTopic } from "../types/marketplace-types";
@@ -28,7 +28,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
   if (!allRepos.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);
-    return;
+    return { items: [] };
   }
   const filteredResults = {
     ...allRepos,
@@ -41,6 +41,20 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   return filteredResults;
 }
 
+async function fetchRepoManifest(contents: GithubContents[] | GithubMessage) {
+  if (Array.isArray(contents)) {
+    const manifest = contents.find(item => item.name === "manifest.json");
+    if (!manifest) return null;
+
+    const manifestContents = await fetch(manifest.download_url).then(res => res.json()).catch(() => null);
+    if (!manifestContents) return null;
+
+    return manifestContents;
+  } else {
+    return contents.message;
+  }
+}
+
 // TODO: add try/catch here?
 // TODO: can we add a return type here?
 /**
@@ -50,17 +64,18 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
 * @param branch Default branch name (e.g. main or master)
 * @returns The manifest object
 */
-async function getRepoManifest(user: string, repo: string, branch: string) {
+async function getRepoManifest(user: string, repo: string, contentsUrl: string) {
   const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
   const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
   if (sessionStorageItem) return JSON.parse(sessionStorageItem);
+  if (failedSessionStorageItems?.includes(contentsUrl)) return null;
 
-  const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (failedSessionStorageItems?.includes(url)) return null;
+  const manifest = await fetch(contentsUrl)
+    .then(res => res.json())
+    .then(fetchRepoManifest)
+    .catch(() => addToSessionStorage([contentsUrl], "noManifests"));
 
-  const manifest = await fetch(url).then(res => res.json()).catch(
-    () => addToSessionStorage([url], "noManifests"),
-  );
+  if (typeof manifest === "string") throw new Error(manifest);
   if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
 
   return manifest;
@@ -83,7 +98,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, branch);
+    manifests = await getRepoManifest(user, repo, regex_result[0]);
 
     // If the manifest returned is not an array, initialize it as one
     if (!Array.isArray(manifests)) manifests = [manifests];
@@ -152,7 +167,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, branch);
+    manifests = await getRepoManifest(user, repo, regex_result[0]);
 
     // If the manifest returned is not an array, initialize it as one
     if (!Array.isArray(manifests)) manifests = [manifests];
@@ -219,7 +234,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, branch);
+    manifests = await getRepoManifest(user, repo, regex_result[0]);
 
     // If the manifest returned is not an array, initialize it as one
     if (!Array.isArray(manifests)) manifests = [manifests];
