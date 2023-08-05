@@ -25,11 +25,10 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  console.log(JSON.parse(window.sessionStorage.getItem(`spicetify-${tag}s-page-${page}`) || "null"));
-  const allRepos = await fetch(url)
+  const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${tag}s-page-${page}`) || "null") || await fetch(url)
     .then(res => res.json())
     .then(res => !!res.items?.length && res)
-    .catch(() => null) || JSON.parse(window.sessionStorage.getItem(`spicetify-${tag}s-page-${page}`) || "null");
+    .catch(() => null);
 
   if (!allRepos?.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);

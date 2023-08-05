@@ -174,10 +174,10 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = await fetch(url)
+  const allRepos = JSON.parse(window.sessionStorage.getItem(`${type}-page-${pageNum}`) || "null") || await fetch(url)
     .then(res => res.json())
     .then(res => !!res.items?.length && res)
-    .catch(() => null) || JSON.parse(window.sessionStorage.getItem(`${type}-page-${pageNum}`) || "null");
+    .catch(() => null);
 
   if (!allRepos?.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);
@@ -258,8 +258,8 @@ async function appendInformationToLocalStorage(array, type: RepoType) {
         await sleep(5000);
       }
     }
-  } catch (err: any) {
-    if (err.message.includes("API rate limit exceeded")) return Spicetify.showNotification("Too Many Requests, Cool Down.", true);
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("API rate limit exceeded")) return Spicetify.showNotification("Too Many Requests, Cool Down.", true);
 
     Spicetify.showNotification("Error loading themes and extensions", true);
     console.error(err);
