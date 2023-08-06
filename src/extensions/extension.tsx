@@ -183,9 +183,7 @@ import {
 async function queryRepos(type: RepoType, pageNum = 1) {
   const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
 
-  let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
-  if (type === "extension") url += `&q=${encodeURIComponent("topic:spicetify-extensions")}`;
-  else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
+  let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}&q=${encodeURIComponent(`topic:spicetify-${type}s`)}`;
   if (pageNum) url += `&page=${pageNum}`;
 
   const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${type}s-page-${pageNum}`) || "null") || await fetch(url)
