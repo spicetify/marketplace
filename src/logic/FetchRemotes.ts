@@ -82,9 +82,8 @@ async function getRepoManifest(user: string, repo: string, contentsUrl: string) 
     .catch(() => addToSessionStorage([contentsUrl], "noManifests"));
 
   if (typeof manifest === "string") throw new Error(manifest);
-  if (!manifest) return null;
+  if (manifest && !Array.isArray(manifest)) manifest = [manifest];
 
-  if (!Array.isArray(manifest)) manifest = [manifest];
   addToSessionStorage(manifest, `${user}-${repo}`);
 
   return manifest;
