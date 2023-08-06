@@ -1530,10 +1530,12 @@ declare namespace Spicetify {
      */
     namespace Config {
         const version: string;
-        const current_theme: string;
-        const color_scheme: string;
-        const extensions: string[];
+        let current_theme: string;
+        let color_scheme: string;
+        let extensions: string[];
         const custom_apps: string[];
+        let local_theme: string;
+        let local_color_scheme: string;
     }
 
     /**

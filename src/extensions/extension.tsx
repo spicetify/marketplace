@@ -28,7 +28,7 @@ import {
   fetchExtensionManifest,
 } from "../logic/FetchRemotes";
 
-(async () => {
+(async function init() {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
     await new Promise(resolve => setTimeout(resolve, 10));
   }
@@ -51,13 +51,6 @@ import {
   };
 
   const tld = await getAvailableTLD();
-  if (!tld) {
-    console.error(new Error("Unable to connect to the CDN, please check your Internet configuration."));
-    Spicetify.showNotification("Marketplace is unable to connect to the CDN. Please check your Internet configuration.", true, 5000);
-    return;
-  }
-
-  window.sessionStorage.setItem("tld", tld);
 
   const initializeExtension = (extensionKey: string) => {
     const extensionManifest = getLocalStorageDataFromKey(extensionKey);
@@ -154,14 +147,28 @@ import {
   console.log("Loaded Marketplace extension");
 
   // Save to Spicetify.Config for use when removing a theme
+  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+  initializeSnippets(installedSnippets);
+
+  if (!tld) {
+    if (window.navigator.onLine) {
+      console.error(new Error("Unable to connect to the CDN, please check your Internet configuration."));
+      Spicetify.showNotification("Marketplace is unable to connect to the CDN. Please check your Internet configuration.", true, 5000);
+    } else {
+      // Reload Marketplace extension in case the user couldn't connect to the CDN because they were offline
+      window.addEventListener("online", init, { once: true });
+    }
+
+    return;
+  }
+
+  window.sessionStorage.setItem("tld", tld);
+
   Spicetify.Config.local_theme = Spicetify.Config.current_theme;
   Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedThemeKey) initializeTheme(installedThemeKey);
-
-  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-  initializeSnippets(installedSnippets);
 
   const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
   installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
@@ -186,11 +193,11 @@ async function queryRepos(type: RepoType, pageNum = 1) {
     .catch(() => null);
 
   if (!allRepos?.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
+    Spicetify.showNotification?.("Too Many Requests, Cool Down.", true);
     return { items: [] };
-  } else {
-    window.sessionStorage.setItem(`${type}-page-${pageNum}`, JSON.stringify(allRepos));
   }
+
+  window.sessionStorage.setItem(`${type}-page-${pageNum}`, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,

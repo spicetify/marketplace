@@ -587,7 +587,7 @@ export async function getAvailableTLD() {
 
   for (const tld of tlds) {
     try {
-      const response = await fetch(`https://cdn.jsdelivr.${tld}`, { redirect: "manual" });
+      const response = await fetch(`https://cdn.jsdelivr.${tld}`, { redirect: "manual", cache: "no-cache" });
       if (response.type === "opaqueredirect") return tld;
     } catch (err) {
       console.error(err);
