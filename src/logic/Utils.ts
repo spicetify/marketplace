@@ -482,7 +482,7 @@ export function addToSessionStorage(items, key?) {
   if (!items) return;
   items.forEach((item) => {
     const itemKey = key || `${item.user}-${item.repo}`;
-    console.log(itemKey, item);
+
     // If the key already exists, it will append to it instead of overwriting it
     const existing = window.sessionStorage.getItem(itemKey);
     const parsed = existing ? JSON.parse(existing) : [];
