@@ -57,11 +57,16 @@ const script = `
   });
 `;
 const blob = new Blob([script], { type: "application/javascript" });
-const url = URL.createObjectURL(blob);
-const worker = new Worker(url);
+const workerURL = URL.createObjectURL(blob);
 
 async function fetchRepoManifest(url: string) {
-  return new Promise((resolve) => {
+  const worker = new Worker(workerURL);
+  return new Promise((resolver) => {
+    const resolve = (data) => {
+      worker.terminate();
+      resolver(data);
+    };
+
     worker.postMessage(url);
     worker.addEventListener("message", (event) => resolve(event.data), { once: true });
     worker.addEventListener("error", () => resolve(null), { once: true });
