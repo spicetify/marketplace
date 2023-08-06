@@ -481,12 +481,13 @@ export const getParamsFromGithubRaw = (url: string) => {
 export function addToSessionStorage(items, key?) {
   if (!items) return;
   items.forEach((item) => {
-    if (!key) key = `${items.user}-${items.repo}`;
+    const itemKey = key || `${item.user}-${item.repo}`;
+    console.log(itemKey, item);
     // If the key already exists, it will append to it instead of overwriting it
-    const existing = window.sessionStorage.getItem(key);
+    const existing = window.sessionStorage.getItem(itemKey);
     const parsed = existing ? JSON.parse(existing) : [];
     parsed.push(item);
-    window.sessionStorage.setItem(key, JSON.stringify(parsed));
+    window.sessionStorage.setItem(itemKey, JSON.stringify(parsed));
   });
 }
 export function getInvalidCSS(): string[] {

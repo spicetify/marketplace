@@ -76,13 +76,16 @@ async function getRepoManifest(user: string, repo: string, contentsUrl: string) 
   if (sessionStorageItem) return JSON.parse(sessionStorageItem);
   if (failedSessionStorageItems?.includes(contentsUrl)) return null;
 
-  const manifest = await fetch(contentsUrl)
+  let manifest = await fetch(contentsUrl)
     .then(res => res.json())
     .then(fetchRepoManifest)
     .catch(() => addToSessionStorage([contentsUrl], "noManifests"));
 
   if (typeof manifest === "string") throw new Error(manifest);
-  if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+  if (!manifest) return null;
+
+  if (!Array.isArray(manifest)) manifest = [manifest];
+  addToSessionStorage(manifest, `${user}-${repo}`);
 
   return manifest;
 }
@@ -98,16 +101,12 @@ async function getRepoManifest(user: string, repo: string, contentsUrl: string) 
 export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
-    let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, regex_result[0]);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    const manifests = await getRepoManifest(user, repo, regex_result[0]);
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -167,16 +166,12 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 */
 export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
   try {
-    let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, regex_result[0]);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    const manifests = await getRepoManifest(user, repo, regex_result[0]);
 
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
@@ -234,16 +229,12 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
 export async function fetchAppManifest(contents_url: string, branch: string, stars: number) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
-    let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, regex_result[0]);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    const manifests = await getRepoManifest(user, repo, regex_result[0]);
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {

@@ -16,7 +16,6 @@ import {
   parseCSS,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
-  addToSessionStorage,
   sleep,
   addExtensionToSpicetifyConfig,
   initAlbumArtBasedColor,
@@ -26,6 +25,7 @@ import {
   getBlacklist,
   fetchThemeManifest,
   fetchExtensionManifest,
+  fetchAppManifest,
 } from "../logic/FetchRemotes";
 
 (async function init() {
@@ -217,7 +217,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   appendInformationToLocalStorage(pageOfRepos, type);
 
   // Sets the amount of items that have thus been fetched
-  const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
+  const soFarResults = ITEMS_PER_REQUEST * pageNum + pageOfRepos.page_count;
   console.debug({ pageOfRepos });
   const remainingResults = pageOfRepos.total_count - soFarResults;
 
@@ -241,6 +241,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   await Promise.all([
     loadPageRecursive("extension", 0),
     loadPageRecursive("theme", 0),
+    loadPageRecursive("app", 0),
   ]);
 
   // let extensionsNextPage = 1;
@@ -257,17 +258,17 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 })();
 
 async function appendInformationToLocalStorage(array, type: RepoType) {
+  console.log(array);
   try {
     // This system should make it so themes and extensions are stored concurrently
     for (const repo of array.items) {
       // console.log(repo);
-      const data = (type === "theme")
-        ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
-        : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-      if (data) {
-        addToSessionStorage(data);
-        await sleep(5000);
-      }
+      let data;
+      if (type === "theme") data = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+      else if (type === "extension") data = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+      else if (type === "app") data = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+
+      if (data) await sleep(5000);
     }
   } catch (err) {
     if (err instanceof Error && err.message.includes("API rate limit exceeded")) return Spicetify.showNotification("Too Many Requests, Cool Down.", true);
