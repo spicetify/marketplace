@@ -47,20 +47,6 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   return filteredResults;
 }
 
-async function fetchRepoManifest(contents: GithubContents[] | GithubMessage) {
-  if (Array.isArray(contents)) {
-    const manifest = contents.find(item => item.name === "manifest.json");
-    if (!manifest) throw new Error("No manifest");
-
-    const manifestContents = await fetch(manifest.download_url).then(res => res.json()).catch(() => null);
-    if (!manifestContents) return null;
-
-    return manifestContents;
-  } else {
-    return contents.message;
-  }
-}
-
 // TODO: add try/catch here?
 // TODO: can we add a return type here?
 /**
@@ -70,21 +56,23 @@ async function fetchRepoManifest(contents: GithubContents[] | GithubMessage) {
 * @param branch Default branch name (e.g. main or master)
 * @returns The manifest object
 */
-async function getRepoManifest(user: string, repo: string, contentsUrl: string) {
-  const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
-  const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
+async function getRepoManifest(user: string, repo: string, branch: string) {
+  const key = `${user}-${repo}`;
+  const sessionStorageItem = window.sessionStorage.getItem(key);
+  const failedSessionStorageItems = JSON.parse(window.sessionStorage.getItem("noManifests") || "[]");
   if (sessionStorageItem) return JSON.parse(sessionStorageItem);
-  if (failedSessionStorageItems?.includes(contentsUrl)) return null;
 
-  let manifest = await fetch(contentsUrl)
-    .then(res => res.json())
-    .then(fetchRepoManifest)
-    .catch(() => addToSessionStorage([contentsUrl], "noManifests"));
+  const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+  if (failedSessionStorageItems.includes(url)) return null;
 
-  if (typeof manifest === "string") throw new Error(manifest);
-  if (manifest && !Array.isArray(manifest)) manifest = [manifest];
+  let manifest = await fetch(url).then(res => res.json()).catch(() => {
+    addToSessionStorage([url], "noManifests");
+  });
 
-  addToSessionStorage(manifest, `${user}-${repo}`);
+  if (!manifest) return null;
+  if (!Array.isArray(manifest)) manifest = [manifest];
+
+  addToSessionStorage(manifest, key);
 
   return manifest;
 }
@@ -105,7 +93,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    const manifests = await getRepoManifest(user, repo, regex_result[0]);
+    const manifests = await getRepoManifest(user, repo, branch);
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -148,9 +136,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     }, []);
 
     return parsedManifests;
-  }
-  catch (err) {
-    if (err instanceof Error && err.message.includes("API rate limit exceeded")) throw err;
+  } catch {
     return null;
   }
 }
@@ -170,7 +156,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    const manifests = await getRepoManifest(user, repo, regex_result[0]);
+    const manifests = await getRepoManifest(user, repo, branch);
 
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
@@ -211,9 +197,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
       return accum;
     }, []);
     return parsedManifests;
-  }
-  catch (err) {
-    if (err instanceof Error && err.message.includes("API rate limit exceeded")) throw err;
+  } catch {
     return null;
   }
 }
@@ -233,7 +217,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    const manifests = await getRepoManifest(user, repo, regex_result[0]);
+    const manifests = await getRepoManifest(user, repo, branch);
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -274,9 +258,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     }, []);
 
     return parsedManifests;
-  }
-  catch (err) {
-    if (err instanceof Error && err.message.includes("API rate limit exceeded")) throw err;
+  } catch {
     return null;
   }
 }

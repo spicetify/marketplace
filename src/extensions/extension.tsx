@@ -258,22 +258,10 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 })();
 
 async function appendInformationToLocalStorage(array, type: RepoType) {
-  console.log(array);
-  try {
-    // This system should make it so themes and extensions are stored concurrently
-    for (const repo of array.items) {
-      // console.log(repo);
-      let data;
-      if (type === "theme") data = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-      else if (type === "extension") data = await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-      else if (type === "app") data = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-
-      if (data) await sleep(5000);
-    }
-  } catch (err) {
-    if (err instanceof Error && err.message.includes("API rate limit exceeded")) return Spicetify.showNotification("Too Many Requests, Cool Down.", true);
-
-    Spicetify.showNotification("Error loading themes and extensions", true);
-    console.error(err);
+  // This system should make it so themes and extensions are stored concurrently
+  for (const repo of array.items) {
+    if (type === "theme") await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    else if (type === "extension") await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    else if (type === "app") await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
   }
 }
