@@ -47,6 +47,27 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   return filteredResults;
 }
 
+// Workaround for not spamming console with 404s
+const script = `
+  self.addEventListener('message', async (event) => {
+    const url = event.data;
+    const response = await fetch(url);
+    const data = await response.json().catch(() => null);
+    self.postMessage(data);
+  });
+`;
+const blob = new Blob([script], { type: "application/javascript" });
+const url = URL.createObjectURL(blob);
+const worker = new Worker(url);
+
+async function fetchRepoManifest(url: string) {
+  return new Promise((resolve) => {
+    worker.postMessage(url);
+    worker.addEventListener("message", (event) => resolve(event.data), { once: true });
+    worker.addEventListener("error", () => resolve(null), { once: true });
+  });
+}
+
 // TODO: add try/catch here?
 // TODO: can we add a return type here?
 /**
@@ -65,11 +86,9 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
   if (failedSessionStorageItems.includes(url)) return null;
 
-  let manifest = await fetch(url).then(res => res.json()).catch(() => {
-    addToSessionStorage([url], "noManifests");
-  });
+  let manifest = await fetchRepoManifest(url);
 
-  if (!manifest) return null;
+  if (!manifest) return addToSessionStorage([url], "noManifests");
   if (!Array.isArray(manifest)) manifest = [manifest];
 
   addToSessionStorage(manifest, key);
