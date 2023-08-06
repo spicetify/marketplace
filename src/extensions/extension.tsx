@@ -30,10 +30,8 @@ import {
 
 (async () => {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
-
-  const tld = await getAvailableTLD();
 
   // https://github.com/satya164/react-simple-code-editor/issues/86
   const reactSimpleCodeEditorFix = document.createElement("script");
@@ -51,6 +49,15 @@ import {
     export: exportMarketplace,
     version: MARKETPLACE_VERSION,
   };
+
+  const tld = await getAvailableTLD();
+  if (!tld) {
+    console.error(new Error("Unable to connect to the CDN, please check your Internet configuration."));
+    Spicetify.showNotification("Marketplace is unable to connect to the CDN. Please check your Internet configuration.", true, 5000);
+    return;
+  }
+
+  window.sessionStorage.setItem("tld", tld);
 
   const initializeExtension = (extensionKey: string) => {
     const extensionManifest = getLocalStorageDataFromKey(extensionKey);

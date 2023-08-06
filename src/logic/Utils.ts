@@ -417,8 +417,10 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   });
 };
 
-export const parseCSS = async (themeData: CardItem, tld = "net") => {
+export const parseCSS = async (themeData: CardItem, tld?: string) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
+
+  tld ||= await getAvailableTLD();
 
   const userCssUrl = isGithubRawUrl(themeData.cssURL)
   // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
@@ -581,11 +583,15 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
 
 // Make a ping to the jsdelivr CDN to check if the user has an internet connection
 export async function getAvailableTLD() {
-  try {
-    const response = await fetch("https://cdn.jsdelivr.net", { redirect: "manual" });
-    if (response.type === "opaqueredirect") return "net";
-    return "xyz";
-  } catch (err) {
-    return "xyz";
+  const tlds = ["net", "xyz"];
+
+  for (const tld of tlds) {
+    try {
+      const response = await fetch(`https://cdn.jsdelivr.${tld}`, { redirect: "manual" });
+      if (response.type === "opaqueredirect") return tld;
+    } catch (err) {
+      console.error(err);
+      continue;
+    }
   }
 }
