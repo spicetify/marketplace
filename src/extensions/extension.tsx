@@ -146,7 +146,6 @@ import {
 
   console.log("Loaded Marketplace extension");
 
-  // Save to Spicetify.Config for use when removing a theme
   const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
   const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
   initializeSnippets(installedSnippets);
@@ -165,6 +164,7 @@ import {
 
   window.sessionStorage.setItem("tld", tld);
 
+  // Save to Spicetify.Config for use when removing a theme
   Spicetify.Config.local_theme = Spicetify.Config.current_theme;
   Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
