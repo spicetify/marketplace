@@ -340,12 +340,7 @@ class Grid extends React.Component<
     this.setState({ rest: false });
     quantity += this.cardList.length;
 
-    try {
-      this.requestPage = await this.loadPage(queue);
-    } catch (e) {
-      console.error(e);
-      this.requestPage = -1;
-    }
+    this.requestPage = await this.loadPage(queue);
 
     while (
       this.requestPage &&
@@ -353,12 +348,7 @@ class Grid extends React.Component<
       this.cardList.length < quantity &&
       !this.state.endOfList
     ) {
-      try {
-        this.requestPage = await this.loadPage(queue);
-      } catch (e) {
-        console.error(e);
-        this.requestPage = -1;
-      }
+      this.requestPage = await this.loadPage(queue);
     }
 
     if (this.requestPage === -1) {
