@@ -188,7 +188,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = JSON.parse(window.sessionStorage.getItem(`${type}-page-${pageNum}`) || "null") || await fetch(url)
+  const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${type}s-page-${pageNum}`) || "null") || await fetch(url)
     .then(res => res.json())
     .catch(() => null);
 
@@ -197,7 +197,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
     return { items: [] };
   }
 
-  window.sessionStorage.setItem(`${type}-page-${pageNum}`, JSON.stringify(allRepos));
+  window.sessionStorage.setItem(`spicetify-${type}s-page-${pageNum}`, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,
@@ -241,8 +241,8 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   // Begin by getting the themes and extensions from github
   // const [extensionReposArray, themeReposArray] = await Promise.all([
   await Promise.all([
-    loadPageRecursive("extension", 1),
-    loadPageRecursive("theme", 1),
+    loadPageRecursive("extension", 0),
+    loadPageRecursive("theme", 0),
   ]);
 
   // let extensionsNextPage = 1;

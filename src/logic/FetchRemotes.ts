@@ -25,16 +25,16 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${tag}s-page-${page}`) || "null") || await fetch(url)
+  const allRepos = JSON.parse(window.sessionStorage.getItem(`${tag}-page-${page}`) || "null") || await fetch(url)
     .then(res => res.json())
     .catch(() => null);
 
   if (!allRepos?.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);
     return { items: [] };
-  } else {
-    window.sessionStorage.setItem(`spicetify-${tag}s-page-${page}`, JSON.stringify(allRepos));
   }
+
+  window.sessionStorage.setItem(`${tag}-page-${page}`, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,
