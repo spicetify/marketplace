@@ -16,7 +16,6 @@ import {
   parseCSS,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
-  sleep,
   addExtensionToSpicetifyConfig,
   initAlbumArtBasedColor,
   getAvailableTLD,
