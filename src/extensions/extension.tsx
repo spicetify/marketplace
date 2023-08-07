@@ -161,7 +161,7 @@ import {
     return;
   }
 
-  window.sessionStorage.setItem("tld", tld);
+  window.sessionStorage.setItem("marketplace-request-tld", tld);
 
   // Save to Spicetify.Config for use when removing a theme
   Spicetify.Config.local_theme = Spicetify.Config.current_theme;
