@@ -10,7 +10,6 @@ import {
   parseCSS,
   injectUserCSS,
   generateKey,
-  getAvailableTLD,
 } from "../../logic/Utils";
 import TrashIcon from "../Icons/TrashIcon";
 import DownloadIcon from "../Icons/DownloadIcon";
@@ -379,7 +378,7 @@ class Card extends React.Component<CardProps, {
    */
   async fetchAndInjectUserCSS(theme) {
     try {
-      const tld = await getAvailableTLD();
+      const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
       const userCSS = theme
         ? await parseCSS(this.props.item as CardItem, tld)
         : undefined;

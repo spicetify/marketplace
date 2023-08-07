@@ -417,6 +417,7 @@ class Grid extends React.Component<
     // Checks for new Marketplace updates
     fetch(LATEST_RELEASE).then(res => res.json()).then(
       result => {
+        if (result.message) throw result;
         this.setState({
           version: result[0].name,
         });

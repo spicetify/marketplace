@@ -417,8 +417,10 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   });
 };
 
-export const parseCSS = async (themeData: CardItem, tld = "net") => {
+export const parseCSS = async (themeData: CardItem, tld?: string) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
+
+  tld ||= await getAvailableTLD();
 
   const userCssUrl = isGithubRawUrl(themeData.cssURL)
   // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
@@ -479,12 +481,13 @@ export const getParamsFromGithubRaw = (url: string) => {
 export function addToSessionStorage(items, key?) {
   if (!items) return;
   items.forEach((item) => {
-    if (!key) key = `${items.user}-${items.repo}`;
+    const itemKey = key || `${item.user}-${item.repo}`;
+
     // If the key already exists, it will append to it instead of overwriting it
-    const existing = window.sessionStorage.getItem(key);
+    const existing = window.sessionStorage.getItem(itemKey);
     const parsed = existing ? JSON.parse(existing) : [];
     parsed.push(item);
-    window.sessionStorage.setItem(key, JSON.stringify(parsed));
+    window.sessionStorage.setItem(itemKey, JSON.stringify(parsed));
   });
 }
 export function getInvalidCSS(): string[] {
@@ -581,11 +584,15 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
 
 // Make a ping to the jsdelivr CDN to check if the user has an internet connection
 export async function getAvailableTLD() {
-  try {
-    const response = await fetch("https://cdn.jsdelivr.net", { redirect: "manual" });
-    if (response.type === "opaqueredirect") return "net";
-    return "xyz";
-  } catch (err) {
-    return "xyz";
+  const tlds = ["net", "xyz"];
+
+  for (const tld of tlds) {
+    try {
+      const response = await fetch(`https://cdn.jsdelivr.${tld}`, { redirect: "manual", cache: "no-cache" });
+      if (response.type === "opaqueredirect") return tld;
+    } catch (err) {
+      console.error(err);
+      continue;
+    }
   }
 }

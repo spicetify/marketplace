@@ -16,8 +16,6 @@ import {
   parseCSS,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
-  addToSessionStorage,
-  sleep,
   addExtensionToSpicetifyConfig,
   initAlbumArtBasedColor,
   getAvailableTLD,
@@ -26,14 +24,13 @@ import {
   getBlacklist,
   fetchThemeManifest,
   fetchExtensionManifest,
+  fetchAppManifest,
 } from "../logic/FetchRemotes";
 
-(async () => {
+(async function init() {
   while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
-
-  const tld = await getAvailableTLD();
 
   // https://github.com/satya164/react-simple-code-editor/issues/86
   const reactSimpleCodeEditorFix = document.createElement("script");
@@ -51,6 +48,8 @@ import {
     export: exportMarketplace,
     version: MARKETPLACE_VERSION,
   };
+
+  const tld = await getAvailableTLD();
 
   const initializeExtension = (extensionKey: string) => {
     const extensionManifest = getLocalStorageDataFromKey(extensionKey);
@@ -146,15 +145,29 @@ import {
 
   console.log("Loaded Marketplace extension");
 
+  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+  initializeSnippets(installedSnippets);
+
+  if (!tld) {
+    if (window.navigator.onLine) {
+      console.error(new Error("Unable to connect to the CDN, please check your Internet configuration."));
+      Spicetify.showNotification("Marketplace is unable to connect to the CDN. Please check your Internet configuration.", true, 5000);
+    } else {
+      // Reload Marketplace extension in case the user couldn't connect to the CDN because they were offline
+      window.addEventListener("online", init, { once: true });
+    }
+
+    return;
+  }
+
+  window.sessionStorage.setItem("marketplace-request-tld", tld);
+
   // Save to Spicetify.Config for use when removing a theme
   Spicetify.Config.local_theme = Spicetify.Config.current_theme;
   Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedThemeKey) initializeTheme(installedThemeKey);
-
-  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-  initializeSnippets(installedSnippets);
 
   const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
   installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
@@ -169,15 +182,19 @@ import {
 async function queryRepos(type: RepoType, pageNum = 1) {
   const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
 
-  let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}`;
-  if (type === "extension") url += `&q=${encodeURIComponent("topic:spicetify-extensions")}`;
-  else if (type === "theme") url += `&q=${encodeURIComponent("topic:spicetify-themes")}`;
+  let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}&q=${encodeURIComponent(`topic:spicetify-${type}s`)}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-  if (!allRepos.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
+  const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${type}s-page-${pageNum}`) || "null") || await fetch(url)
+    .then(res => res.json())
+    .catch(() => null);
+
+  if (!allRepos?.items) {
+    Spicetify.showNotification?.("Too Many Requests, Cool Down.", true);
+    return { items: [] };
   }
+
+  window.sessionStorage.setItem(`spicetify-${type}s-page-${pageNum}`, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,
@@ -199,7 +216,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   appendInformationToLocalStorage(pageOfRepos, type);
 
   // Sets the amount of items that have thus been fetched
-  const soFarResults = ITEMS_PER_REQUEST * (pageNum - 1) + pageOfRepos.page_count;
+  const soFarResults = ITEMS_PER_REQUEST * pageNum + pageOfRepos.page_count;
   console.debug({ pageOfRepos });
   const remainingResults = pageOfRepos.total_count - soFarResults;
 
@@ -221,8 +238,9 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   // Begin by getting the themes and extensions from github
   // const [extensionReposArray, themeReposArray] = await Promise.all([
   await Promise.all([
-    loadPageRecursive("extension", 1),
-    loadPageRecursive("theme", 1),
+    loadPageRecursive("extension", 0),
+    loadPageRecursive("theme", 0),
+    loadPageRecursive("app", 0),
   ]);
 
   // let extensionsNextPage = 1;
@@ -241,13 +259,8 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 async function appendInformationToLocalStorage(array, type: RepoType) {
   // This system should make it so themes and extensions are stored concurrently
   for (const repo of array.items) {
-    // console.log(repo);
-    const data = (type === "theme")
-      ? await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count)
-      : await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-    if (data) {
-      addToSessionStorage(data);
-      await sleep(5000);
-    }
+    if (type === "theme") await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    else if (type === "extension") await fetchExtensionManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+    else if (type === "app") await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
   }
 }

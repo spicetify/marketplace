@@ -1,6 +1,9 @@
 /* eslint-disable */
 
 declare namespace Spicetify {
+    type Icon = "album" | "artist" | "block" | "brightness" | "car" | "chart-down" | "chart-up" | "check" | "check-alt-fill" | "chevron-left" | "chevron-right" | "chromecast-disconnected" | "clock" | "collaborative" | "computer" | "copy" | "download" | "downloaded" | "edit" | "enhance" | "exclamation-circle" | "external-link" | "facebook" | "follow" | "fullscreen" | "gamepad" | "grid-view" | "heart" | "heart-active" | "instagram" | "laptop" | "library" | "list-view" | "location" | "locked" | "locked-active" | "lyrics" | "menu" | "minimize" | "minus" | "more" | "new-spotify-connect" | "offline" | "pause" | "phone" | "play" | "playlist" | "playlist-folder" | "plus-alt" | "plus2px" | "podcasts" | "projector" | "queue" | "repeat" | "repeat-once" | "search" | "search-active" | "shuffle" | "skip-back" | "skip-back15" | "skip-forward" | "skip-forward15" | "soundbetter" | "speaker" | "spotify" | "subtitles" | "tablet" | "ticket" | "twitter" | "visualizer" | "voice" | "volume" | "volume-off" | "volume-one-wave" | "volume-two-wave" | "watch" | "x";
+    type Variant = "bass" | "forte" | "brio" | "altoBrio" | "alto" | "canon" | "celloCanon" | "cello" | "ballad" | "balladBold" | "viola" | "violaBold" | "mesto" | "mestoBold" | "metronome" | "finale" | "finaleBold" | "minuet" | "minuetBold";
+    type SemanticColor = "textBase" | "textSubdued" | "textBrightAccent" | "textNegative" | "textWarning" | "textPositive" | "textAnnouncement" | "essentialBase" | "essentialSubdued" | "essentialBrightAccent" | "essentialNegative" | "essentialWarning" | "essentialPositive" | "essentialAnnouncement" | "decorativeBase" | "decorativeSubdued" | "backgroundBase" | "backgroundHighlight" | "backgroundPress" | "backgroundElevatedBase" | "backgroundElevatedHighlight" | "backgroundElevatedPress" | "backgroundTintedBase" | "backgroundTintedHighlight" | "backgroundTintedPress" | "backgroundUnsafeForSmallTextBase" | "backgroundUnsafeForSmallTextHighlight" | "backgroundUnsafeForSmallTextPress";
     type Metadata = Partial<Record<string, string>>;
     type ContextTrack = {
         uri: string;
@@ -249,9 +252,9 @@ declare namespace Spicetify {
         function toggleShuffle(): void;
     }
     /**
-     * Adds a track/album or array of tracks/albums to prioritized queue.
+     * Adds a track or array of tracks to prioritized queue.
      */
-    function addToQueue(uri: string | string[]): Promise<void>;
+    function addToQueue(uri: ContextTrack[]): Promise<void>;
     /**
      * @deprecated
      */
@@ -279,8 +282,7 @@ declare namespace Spicetify {
             body: any;
             headers: Headers;
             status: number;
-            uri: string;
-            isSuccessStatus(status: number): boolean;
+            uri?: string;
         }
 
         function head(url: string, headers?: Headers): Promise<Headers>;
@@ -335,7 +337,7 @@ declare namespace Spicetify {
         function _deregisterShortcut(keys: KeysDefine): void;
         function deregisterImportantShortcut(keys: KeysDefine): void;
         function changeShortcut(keys: KeysDefine, newKeys: KeysDefine): void;
-    };
+    }
 
     /**
      * @deprecated
@@ -368,7 +370,7 @@ declare namespace Spicetify {
          * Create a single toggle.
          */
         class Item {
-            constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void);
+            constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void, icon?: Icon | string);
             name: string;
             isEnabled: boolean;
             /**
@@ -380,6 +382,10 @@ declare namespace Spicetify {
              * Visually, item would has a tick next to it if its state is enabled.
              */
             setState(isEnabled: boolean): void;
+            /**
+             * Change icon
+             */
+            setIcon(icon: Icon | string): void;
             /**
              * Item is only available in Profile menu when method "register" is called.
              */
@@ -446,40 +452,40 @@ declare namespace Spicetify {
         track: any;
     };
     /**
-     * Remove a track/album or array of tracks/albums from current queue.
+     * Remove a track or array of tracks from current queue.
      */
-    function removeFromQueue(uri: string | string[]): Promise<void>;
+    function removeFromQueue(uri: ContextTrack[]): Promise<void>;
     /**
      * Display a bubble of notification. Useful for a visual feedback.
-     * @param message Message to display
+     * @param message Message to display. Can use inline HTML for styling.
      * @param isError If true, bubble will be red. Defaults to false.
+     * @param msTimeout Time in milliseconds to display the bubble. Defaults to Spotify's value.
      */
-    function showNotification(text: string, isError?: boolean): void;
+    function showNotification(message: React.ReactNode, isError?: boolean, msTimeout?: number): void;
     /**
      * Set of APIs method to parse and validate URIs.
      */
     class URI {
         constructor(type: string, props: any);
         public type: string;
-        public id: string;
+        public hasBase62Id: boolean;
 
-        /**
-         * Creates an application URI object from the current URI object.
-         *
-         * If the current URI object is already an application type, a copy is made.
-         *
-         * @return The current URI as an application URI.
-         */
-        toAppType(): URI;
-
-        /**
-         * Creates a URI object from an application URI object.
-         *
-         * If the current URI object is not an application type, a copy is made.
-         *
-         * @return The current URI as a real typed URI.
-         */
-        toRealType(): URI;
+        public id?: string;
+        public disc?: any;
+        public args?: any;
+        public category?: string;
+        public username?: string;
+        public track?: string;
+        public artist?: string;
+        public album?: string;
+        public duration?: number;
+        public query?: string;
+        public country?: string;
+        public global?: boolean;
+        public context?: string | typeof URI | null;
+        public anchor?: string;
+        public play?: any;
+        public toplist?: any;
 
         /**
          *
@@ -503,63 +509,24 @@ declare namespace Spicetify {
 
         /**
          *
-         * @return The Play URL string for the uri.
-         */
-        toPlayURL(): string;
-
-        /**
-         *
+         * @param origin The origin to use for the URL.
          * @return The URL string for the uri.
          */
-        toURL(): string;
+        toURL(origin?: string): string;
 
         /**
+         * Clones a given SpotifyURI instance.
          *
-         * @return The Open URL string for the uri.
+         * @return An instance of URI.
          */
-        toOpenURL(): string;
+        clone(): URI | null;
 
         /**
+         * Gets the path of the URI object by removing all hash and query parameters.
          *
-         * @return The Play HTTPS URL string for the uri.
+         * @return The path of the URI object.
          */
-        toSecurePlayURL(): string;
-
-        /**
-         *
-         * @return The HTTPS URL string for the uri.
-         */
-        toSecureURL(): string;
-
-        /**
-         *
-         * @return The Open HTTPS URL string for the uri.
-         */
-        toSecureOpenURL(): string;
-
-        /**
-         *
-         * @return The id of the uri as a bytestring.
-         */
-        idToByteString(): string;
-
         getPath(): string;
-
-        getBase62Id(): string;
-
-        /**
-        * Checks whether two URI:s refer to the same thing even though they might
-        * not necessarily be equal.
-        *
-        * These two Playlist URIs, for example, refer to the same playlist:
-        *
-        *   spotify:user:napstersean:playlist:3vxotOnOGDlZXyzJPLFnm2
-        *   spotify:playlist:3vxotOnOGDlZXyzJPLFnm2
-        *
-        * @param uri The uri to compare identity for.
-        * @return Whether they shared idenitity
-        */
-        isSameIdentity(uri: any): boolean;
 
         /**
          * The various URI Types.
@@ -569,62 +536,66 @@ declare namespace Spicetify {
          *
          */
         static Type: {
-            EMPTY: string;
-            ALBUM: string;
             AD: string;
-            /** URI particle; not an actual URI. */
-            APP: string;
+            ALBUM: string;
+            GENRE: string;
+            QUEUE: string;
             APPLICATION: string;
             ARTIST: string;
             ARTIST_TOPLIST: string;
+            ARTIST_CONCERTS: string;
             AUDIO_FILE: string;
             COLLECTION: string;
             COLLECTION_ALBUM: string;
-            COLLECTION_MISSING_ALBUM: string;
             COLLECTION_ARTIST: string;
+            COLLECTION_MISSING_ALBUM: string;
+            COLLECTION_TRACK_LIST: string;
+            CONCERT: string;
             CONTEXT_GROUP: string;
             DAILY_MIX: string;
+            EMPTY: string;
             EPISODE: string;
             /** URI particle; not an actual URI. */
             FACEBOOK: string;
             FOLDER: string;
             FOLLOWERS: string;
             FOLLOWING: string;
-            /** URI particle; not an actual URI. */
-            GLOBAL: string;
             IMAGE: string;
             INBOX: string;
             INTERRUPTION: string;
-            LOCAL_ARTIST: string;
-            LOCAL_ALBUM: string;
-            LOCAL: string;
             LIBRARY: string;
+            LIVE: string;
+            ROOM: string;
+            EXPRESSION: string;
+            LOCAL: string;
+            LOCAL_TRACK: string;
+            LOCAL_ALBUM: string;
+            LOCAL_ARTIST: string;
+            MERCH: string;
             MOSAIC: string;
             PLAYLIST: string;
-            /** Only used for URI classification. Not a valid URI fragment. */
             PLAYLIST_V2: string;
+            PRERELEASE: string;
             PROFILE: string;
             PUBLISHED_ROOTLIST: string;
             RADIO: string;
             ROOTLIST: string;
-            COLLECTION_TRACK_LIST: string;
             SEARCH: string;
             SHOW: string;
-            SOCIAL_SESSION: string,
-            CONCERT: string;
+            SOCIAL_SESSION: string;
             SPECIAL: string;
             STARRED: string;
             STATION: string;
             TEMP_PLAYLIST: string;
-            /** URI particle; not an actual URI. */
-            TOP: string;
             TOPLIST: string;
             TRACK: string;
             TRACKSET: string;
-            /** URI particle; not an actual URI. */
-            USER: string;
             USER_TOPLIST: string;
             USER_TOP_TRACKS: string;
+            UNKNOWN: string;
+            MEDIA: string;
+            QUESTION: string;
+            POLL: string;
         };
 
         /**
@@ -654,38 +625,19 @@ declare namespace Spicetify {
         static from(value: any): URI | null;
 
         /**
-        * Creates a new URI from a bytestring.
+        * Checks whether two URI:s refer to the same thing even though they might
+        * not necessarily be equal.
         *
-        * @param type The type of the URI.
-        * @param idByteString The ID of the URI as a bytestring.
-        * @param opt_args Optional arguments to the URI constructor.
-        * @return The URI object created.
+        * These two Playlist URIs, for example, refer to the same playlist:
+        *
+        *   spotify:user:napstersean:playlist:3vxotOnOGDlZXyzJPLFnm2
+        *   spotify:playlist:3vxotOnOGDlZXyzJPLFnm2
+        *
+        * @param baseUri The first URI to compare.
+        * @param refUri The second URI to compare.
+        * @return Whether they shared idenitity
         */
-        static fromByteString(type: string, idByteString: string, opt_args?: any): URI;
-
-        /**
-         * Clones a given SpotifyURI instance.
-         *
-         * @param uri The uri to clone.
-         * @return An instance of URI.
-         */
-        static clone(uri: URI): URI | null;
-
-        /**
-         * Returns the canonical representation of a username.
-         *
-         * @param username The username to encode.
-         * @return The encoded canonical representation of the username.
-         */
-        static getCanonicalUsername(username: string): string;
-
-        /**
-         * Returns the non-canonical representation of a username.
-         *
-         * @param username The username to encode.
-         * @return The unencoded canonical representation of the username.
-         */
-        static getDisplayUsername(username: string): string;
+        static isSameIdentity(baseUri: URI | string, refUri: URI | string): boolean;
 
         /**
          * Returns the hex representation of a Base62 encoded id.
@@ -704,13 +656,6 @@ declare namespace Spicetify {
         static hexToId(hex: string): string;
 
         /**
-         * Creates a new empty URI.
-         *
-         * @return The empty URI.
-         */
-        static emptyURI(): URI;
-
-        /**
          * Creates a new 'album' type URI.
          *
          * @param id The id of the album.
@@ -718,311 +663,6 @@ declare namespace Spicetify {
          * @return The album URI.
          */
         static albumURI(id: string, disc: number): URI;
-
-        /**
-         * Creates a new 'ad' type URI.
-         *
-         * @param id The id of the ad.
-         * @return The ad URI.
-         */
-        static adURI(id: string): URI;
-
-        /**
-         * Creates a new 'audiofile' type URI.
-         *
-         * @param extension The extension of the audiofile.
-         * @param id The id of the extension.
-         * @return The audiofile URI.
-         */
-        static audioFileURI(extension: string, id: string): URI;
-
-        /**
-         * Creates a new 'artist' type URI.
-         *
-         * @param id The id of the artist.
-         * @return The artist URI.
-         */
-        static artistURI(id: string): URI;
-
-        /**
-         * Creates a new 'artist-toplist' type URI.
-         *
-         * @param id The id of the artist.
-         * @param toplist The toplist type.
-         * @return The artist-toplist URI.
-         */
-        static artistToplistURI(id: string, toplist: string): URI;
-
-        /**
-         * Creates a new 'dailymix' type URI.
-         *
-         * @param args An array of arguments for the dailymix.
-         * @return The dailymix URI.
-         */
-        static dailyMixURI(args: string[]): URI;
-
-        /**
-         * Creates a new 'search' type URI.
-         *
-         * @param query The unencoded search query.
-         * @return The search URI
-         */
-        static searchURI(query: string): URI;
-
-        /**
-         * Creates a new 'track' type URI.
-         *
-         * @param id The id of the track.
-         * @param anchor The point in the track formatted as mm:ss
-         * @param context An optional context URI
-         * @param play Toggles autoplay
-         * @return The track URI.
-         */
-        static trackURI(id: string, anchor: string, context: string, play: boolean): URI;
-
-        /**
-         * Creates a new 'trackset' type URI.
-         *
-         * @param tracks An array of 'track' type URIs.
-         * @param name The name of the trackset.
-         * @param index The index in the trackset.
-         * @return The trackset URI.
-         */
-        static tracksetURI(tracks: URI[], name: string, index: number): URI;
-
-        /**
-         * Creates a new 'facebook' type URI.
-         *
-         * @param uid The user id.
-         * @return The facebook URI.
-         */
-        static facebookURI(uid: string): URI;
-
-        /**
-         * Creates a new 'followers' type URI.
-         *
-         * @param username The non-canonical username.
-         * @return The followers URI.
-         */
-        static followersURI(username: string): URI;
-
-        /**
-         * Creates a new 'following' type URI.
-         *
-         * @param username The non-canonical username.
-         * @return The following URI.
-         */
-        static followingURI(username: string): URI;
-
-        /**
-         * Creates a new 'playlist' type URI.
-         *
-         * @param username The non-canonical username of the playlist owner.
-         * @param id The id of the playlist.
-         * @return The playlist URI.
-         */
-        static playlistURI(username: string, id: string): URI;
-
-        /**
-         * Creates a new 'playlist-v2' type URI.
-         *
-         * @param id The id of the playlist.
-         * @return The playlist URI.
-         */
-        static playlistV2URI(id: string): URI;
-
-        /**
-         * Creates a new 'folder' type URI.
-         *
-         * @param username The non-canonical username of the folder owner.
-         * @param id The id of the folder.
-         * @return The folder URI.
-         */
-        static folderURI(username: string, id: string): URI;
-
-        /**
-         * Creates a new 'collectiontracklist' type URI.
-         *
-         * @param username The non-canonical username of the collection owner.
-         * @param id The id of the tracklist.
-         * @return The collectiontracklist URI.
-         */
-        static collectionTrackList(username: string, id: string): URI;
-
-        /**
-         * Creates a new 'starred' type URI.
-         *
-         * @param username The non-canonical username of the starred list owner.
-         * @return The starred URI.
-         */
-        static starredURI(username: string): URI;
-
-        /**
-         * Creates a new 'user-toplist' type URI.
-         *
-         * @param username The non-canonical username of the toplist owner.
-         * @param toplist The toplist type.
-         * @return The user-toplist URI.
-         */
-        static userToplistURI(username: string, toplist: string): URI;
-
-        /**
-         * Creates a new 'user-top-tracks' type URI.
-         *
-         * @deprecated
-         * @param username The non-canonical username of the toplist owner.
-         * @return The user-top-tracks URI.
-         */
-        static userTopTracksURI(username: string): URI;
-
-        /**
-         * Creates a new 'toplist' type URI.
-         *
-         * @param toplist The toplist type.
-         * @param country The country code for the toplist.
-         * @param global True if this is a global rather than a country list.
-         * @return The toplist URI.
-         */
-        static toplistURI(toplist: string, country: string, global: boolean): URI;
-
-        /**
-         * Creates a new 'inbox' type URI.
-         *
-         * @param username The non-canonical username of the inbox owner.
-         * @return The inbox URI.
-         */
-        static inboxURI(username: string): URI;
-
-        /**
-         * Creates a new 'rootlist' type URI.
-         *
-         * @param username The non-canonical username of the rootlist owner.
-         * @return The rootlist URI.
-         */
-        static rootlistURI(username: string): URI;
-
-        /**
-         * Creates a new 'published-rootlist' type URI.
-         *
-         * @param username The non-canonical username of the published-rootlist owner.
-         * @return The published-rootlist URI.
-         */
-        static publishedRootlistURI(username: string): URI;
-
-        /**
-         * Creates a new 'local-artist' type URI.
-         *
-         * @param artist The artist name.
-         * @return The local-artist URI.
-         */
-        static localArtistURI(artist: string): URI;
-
-        /**
-         * Creates a new 'local-album' type URI.
-         *
-         * @param artist The artist name.
-         * @param album The album name.
-         * @return The local-album URI.
-         */
-        static localAlbumURI(artist: string, album: string): URI;
-
-        /**
-         * Creates a new 'local' type URI.
-         *
-         * @param artist The artist name.
-         * @param album The album name.
-         * @param track The track name.
-         * @param duration The track duration in ms.
-         * @return The local URI.
-         */
-        static localURI(artist: string, album: string, track: string, duration: number): URI;
-
-        /**
-         * Creates a new 'library' type URI.
-         *
-         * @param username The non-canonical username of the rootlist owner.
-         * @param category The category of the library.
-         * @return The library URI.
-         */
-        static libraryURI(username: string, category: string): URI;
-
-        /**
-         * Creates a new 'collection' type URI.
-         *
-         * @param username The non-canonical username of the rootlist owner.
-         * @param category The category of the collection.
-         * @return The collection URI.
-         */
-        static collectionURI(username: string, category: string): URI;
-
-        /**
-         * Creates a new 'temp-playlist' type URI.
-         *
-         * @param origin The origin of the temporary playlist.
-         * @param data Additional data for the playlist.
-         * @return The temp-playlist URI.
-         */
-        static temporaryPlaylistURI(origin: string, data: string): URI;
-
-        /**
-         * Creates a new 'context-group' type URI.
-         *
-         * @deprecated
-         * @param origin The origin of the temporary playlist.
-         * @param name The name of the context group.
-         * @return The context-group URI.
-         */
-        static contextGroupURI(origin: string, name: string): URI;
-
-        /**
-         * Creates a new 'profile' type URI.
-         *
-         * @param username The non-canonical username of the rootlist owner.
-         * @param args A list of arguments.
-         * @return The profile URI.
-         */
-        static profileURI(username: string, args: string[]): URI;
-
-        /**
-         * Creates a new 'image' type URI.
-         *
-         * @param id The id of the image.
-         * @return The image URI.
-         */
-        static imageURI(id: string): URI;
-
-
-        /**
-         * Creates a new 'mosaic' type URI.
-         *
-         * @param ids The ids of the mosaic immages.
-         * @return The mosaic URI.
-         */
-        static mosaicURI(ids: string[]): URI;
-
-        /**
-         * Creates a new 'radio' type URI.
-         *
-         * @param args The radio seed arguments.
-         * @return The radio URI.
-         */
-        static radioURI(args: string): URI;
-
-        /**
-         * Creates a new 'special' type URI.
-         *
-         * @param args An array containing the other arguments.
-         * @return The special URI.
-         */
-        static specialURI(args: string[]): URI;
-
-        /**
-         * Creates a new 'station' type URI.
-         *
-         * @param args An array of arguments for the station.
-         * @return The station URI.
-         */
-        static stationURI(args: string[]): URI;
 
         /**
          * Creates a new 'application' type URI.
@@ -1034,41 +674,113 @@ declare namespace Spicetify {
         static applicationURI(id: string, args: string[]): URI;
 
         /**
+         * Creates a new 'artist' type URI.
+         *
+         * @param id The id of the artist.
+         * @return The artist URI.
+         */
+        static artistURI(id: string): URI;
+
+        /**
+         * Creates a new 'collection' type URI.
+         *
+         * @param username The non-canonical username of the rootlist owner.
+         * @param category The category of the collection.
+         * @return The collection URI.
+         */
+        static collectionURI(username: string, category: string): URI;
+
+        /**
          * Creates a new 'collection-album' type URI.
          *
          * @param username The non-canonical username of the rootlist owner.
          * @param id The id of the album.
-         * @return The collection-album URI.
+         * @return The collection album URI.
          */
         static collectionAlbumURI(username: string, id: string): URI;
-
-        /**
-         * Creates a new 'collection-album-missing' type URI.
-         *
-         * @param username The non-canonical username of the rootlist owner.
-         * @param id The id of the album.
-         * @return The collection-album-missing URI.
-         */
-        static collectionMissingAlbumURI(username: string, id: string): URI;
 
         /**
          * Creates a new 'collection-artist' type URI.
          *
          * @param username The non-canonical username of the rootlist owner.
          * @param id The id of the artist.
-         * @return The collection-artist URI.
+         * @return The collection artist URI.
          */
-        static collectionArtistURI(username: string, id: string): URI;
+        static collectionAlbumURI(username: string, id: string): URI;
+
+        /**
+         * Creates a new 'concert' type URI.
+         * 
+         * @param id The id of the concert.
+         * @return The concert URI.
+         */
+        static concertURI(id: string): URI;
 
         /**
          * Creates a new 'episode' type URI.
-         *
+         * 
          * @param id The id of the episode.
-         * @param context An optional context URI
-         * @param play Toggles autoplay in the episode URI
          * @return The episode URI.
          */
-        static episodeURI(id: string, context: string, play: boolean): URI;
+        static episodeURI(id: string): URI;
+
+        /**
+         * Creates a new 'folder' type URI.
+         * 
+         * @param id The id of the folder.
+         * @return The folder URI.
+         */
+        static folderURI(id: string): URI;
+
+        /**
+         * Creates a new 'local-album' type URI.
+         * 
+         * @param artist The artist of the album.
+         * @param album The name of the album.
+         * @return The local album URI.
+         */
+        static localAlbumURI(artist: string, album: string): URI;
+
+        /**
+         * Creates a new 'local-artist' type URI.
+         * 
+         * @param artist The name of the artist.
+         * @return The local artist URI.
+         */
+        static localArtistURI(artist: string): URI;
+
+        /**
+         * Creates a new 'playlist-v2' type URI.
+         *
+         * @param id The id of the playlist.
+         * @return The playlist URI.
+         */
+        static playlistV2URI(id: string): URI;
+
+        /**
+         * Creates a new 'prerelease' type URI.
+         * 
+         * @param id The id of the prerelease.
+         * @return The prerelease URI.
+         */
+        static prereleaseURI(id: string): URI;
+
+        /**
+         * Creates a new 'profile' type URI.
+         *
+         * @param username The non-canonical username of the rootlist owner.
+         * @param args A list of arguments.
+         * @return The profile URI.
+         */
+        static profileURI(username: string, args: string[]): URI;
+
+        /**
+         * Creates a new 'search' type URI.
+         *
+         * @param query The unencoded search query.
+         * @return The search URI
+         */
+        static searchURI(query: string): URI;
 
         /**
          * Creates a new 'show' type URI.
@@ -1079,64 +791,99 @@ declare namespace Spicetify {
         static showURI(id: string): URI;
 
         /**
-         * Creates a new 'concert' type URI.
+         * Creates a new 'station' type URI.
          *
-         * @param id The id of the concert.
-         * @return The concert URI.
+         * @param args An array of arguments for the station.
+         * @return The station URI.
          */
-        static concertURI(id: string): URI;
+        static stationURI(args: string[]): URI;
 
         /**
-         * Creates a new 'socialsession' type URI.
+         * Creates a new 'track' type URI.
          *
-         * @param id The token needed to join a social session.
-         * @return The socialsession URI.
+         * @param id The id of the track.
+         * @param anchor The point in the track formatted as mm:ss
+         * @param context An optional context URI
+         * @param play Toggles autoplay
+         * @return The track URI.
          */
-         static socialSessionURI(id: string): URI;
+        static trackURI(id: string, anchor: string, context?: string, play: boolean): URI;
 
-         /**
-         * Creates a new 'interruption' type URI.
+        /**
+         * Creates a new 'user-toplist' type URI.
          *
-         * @param id The id of the interruption.
-         * @return The ad URI.
+         * @param username The non-canonical username of the toplist owner.
+         * @param toplist The toplist type.
+         * @return The user-toplist URI.
          */
-        static interruptionURI(id: string): URI;
+        static userToplistURI(username: string, toplist: string): URI;
 
-        static isAlbum(uri: any): boolean;
-        static isAd(uri: any): boolean;
-        static isApplication(uri: any): boolean;
-        static isArtist(uri: any): boolean;
-        static isCollection(uri: any): boolean;
-        static isCollectionAlbum(uri: any): boolean;
-        static isCollectionArtist(uri: any): boolean;
-        static isDailyMix(uri: any): boolean;
-        static isEpisode(uri: any): boolean;
-        static isFacebook(uri: any): boolean;
-        static isFolder(uri: any): boolean;
-        static isLocalArtist(uri: any): boolean;
-        static isLocalAlbum(uri: any): boolean;
-        static isLocalTrack(uri: any): boolean;
-        static isMosaic(uri: any): boolean;
-        static isPlaylistV1(uri: any): boolean;
-        static isPlaylistV2(uri: any): boolean;
-        static isRadio(uri: any): boolean;
-        static isRootlist(uri: any): boolean;
-        static isSearch(uri: any): boolean;
-        static isShow(uri: any): boolean;
-        static isConcert(uri: any): boolean;
-        static isStation(uri: any): boolean;
-        static isTrack(uri: any): boolean;
-        static isProfile(uri: any): boolean;
-        static isPlaylistV1OrV2(uri: any): boolean;
-        static isSocialSession(uri: any): boolean;
-        static isInterruption(uri: any): boolean;
+        static isAd(uri: URI | string): boolean;
+        static isAlbum(uri: URI | string): boolean;
+        static isGenre(uri: URI | string): boolean;
+        static isQueue(uri: URI | string): boolean;
+        static isApplication(uri: URI | string): boolean;
+        static isArtist(uri: URI | string): boolean;
+        static isArtistToplist(uri: URI | string): boolean;
+        static isArtistConcerts(uri: URI | string): boolean;
+        static isAudioFile(uri: URI | string): boolean;
+        static isCollection(uri: URI | string): boolean;
+        static isCollectionAlbum(uri: URI | string): boolean;
+        static isCollectionArtist(uri: URI | string): boolean;
+        static isCollectionMissingAlbum(uri: URI | string): boolean;
+        static isCollectionTrackList(uri: URI | string): boolean;
+        static isConcert(uri: URI | string): boolean;
+        static isContextGroup(uri: URI | string): boolean;
+        static isDailyMix(uri: URI | string): boolean;
+        static isEmpty(uri: URI | string): boolean;
+        static isEpisode(uri: URI | string): boolean;
+        static isFacebook(uri: URI | string): boolean;
+        static isFolder(uri: URI | string): boolean;
+        static isFollowers(uri: URI | string): boolean;
+        static isFollowing(uri: URI | string): boolean;
+        static isImage(uri: URI | string): boolean;
+        static isInbox(uri: URI | string): boolean;
+        static isInterruption(uri: URI | string): boolean;
+        static isLibrary(uri: URI | string): boolean;
+        static isLive(uri: URI | string): boolean;
+        static isRoom(uri: URI | string): boolean;
+        static isExpression(uri: URI | string): boolean;
+        static isLocal(uri: URI | string): boolean;
+        static isLocalTrack(uri: URI | string): boolean;
+        static isLocalAlbum(uri: URI | string): boolean;
+        static isLocalArtist(uri: URI | string): boolean;
+        static isMerch(uri: URI | string): boolean;
+        static isMosaic(uri: URI | string): boolean;
+        static isPlaylist(uri: URI | string): boolean;
+        static isPlaylistV2(uri: URI | string): boolean;
+        static isPrerelease(uri: URI | string): boolean;
+        static isProfile(uri: URI | string): boolean;
+        static isPublishedRootlist(uri: URI | string): boolean;
+        static isRadio(uri: URI | string): boolean;
+        static isRootlist(uri: URI | string): boolean;
+        static isSearch(uri: URI | string): boolean;
+        static isShow(uri: URI | string): boolean;
+        static isSocialSession(uri: URI | string): boolean;
+        static isSpecial(uri: URI | string): boolean;
+        static isStarred(uri: URI | string): boolean;
+        static isStation(uri: URI | string): boolean;
+        static isTempPlaylist(uri: URI | string): boolean;
+        static isToplist(uri: URI | string): boolean;
+        static isTrack(uri: URI | string): boolean;
+        static isTrackset(uri: URI | string): boolean;
+        static isUserToplist(uri: URI | string): boolean;
+        static isUserTopTracks(uri: URI | string): boolean;
+        static isUnknown(uri: URI | string): boolean;
+        static isMedia(uri: URI | string): boolean;
+        static isQuestion(uri: URI | string): boolean;
+        static isPoll(uri: URI | string): boolean;
+        static isPlaylistV1OrV2(uri: URI | string): boolean;
     }
 
     /**
      * Create custom menu item and prepend to right click context menu
      */
     namespace ContextMenu {
-        type Icon = "album" | "artist" | "block" | "brightness" | "car" | "chart-down" | "chart-up" | "check" | "check-alt-fill" | "chevron-left" | "chevron-right" | "chromecast-disconnected" | "clock" | "collaborative" | "computer" | "copy" | "download" | "downloaded" | "edit" | "enhance" | "exclamation-circle" | "external-link" | "facebook" | "follow" | "fullscreen" | "gamepad" | "grid-view" | "heart" | "heart-active" | "instagram" | "laptop" | "library" | "list-view" | "location" | "locked" | "locked-active" | "lyrics" | "menu" | "minimize" | "minus" | "more" | "new-spotify-connect" | "offline" | "pause" | "phone" | "play" | "playlist" | "playlist-folder" | "plus-alt" | "plus2px" | "podcasts" | "projector" | "queue" | "repeat" | "repeat-once" | "search" | "search-active" | "shuffle" | "skip-back" | "skip-back15" | "skip-forward" | "skip-forward15" | "soundbetter" | "speaker" | "spotify" | "subtitles" | "tablet" | "ticket" | "twitter" | "visualizer" | "voice" | "volume" | "volume-off" | "volume-one-wave" | "volume-two-wave" | "watch" | "x";
         type OnClickCallback = (uris: string[], uids?: string[], contextUri?: string) => void;
         type ShouldAddCallback = (uris: string[], uids?: string[], contextUri?: string) => boolean;
 
@@ -1218,6 +965,8 @@ declare namespace Spicetify {
     const React: any;
     /** React DOM instance to render and mount components */
     const ReactDOM: any;
+    /** React DOM Server instance to render components to string */
+    const ReactDOMServer: any;
 
     /** Stock React components exposed from Spotify library */
     namespace ReactComponent {
@@ -1293,8 +1042,19 @@ declare namespace Spicetify {
             divider?: 'before' | 'after' | 'both';
             /**
              * React component icon that will be rendered at the end of the `MenuItem`
+             * @deprecated Since Spotify `1.2.8`. Use `leadingIcon` or `trailingIcon` instead
              */
             icon?: React.ReactNode;
+            /**
+             * React component icon that will be rendered at the start of the `MenuItem`
+             * @since Spotify `1.2.8`
+             */
+            leadingIcon?: React.ReactNode;
+            /**
+             * React component icon that will be rendered at the end of the `MenuItem`
+             * @since Spotify `1.2.8`
+             */
+            trailingIcon?: React.ReactNode;
         };
         type TooltipProps = {
             /**
@@ -1332,6 +1092,270 @@ declare namespace Spicetify {
              */
             labelClassName?: string;
         };
+        type IconComponentProps = {
+            /**
+             * Icon size
+             * @default 24
+             */
+            iconSize?: number;
+            /**
+             * Icon color
+             * Might not be used by component
+             * @default 'currentColor'
+             */
+            color?: string;
+            /**
+             * Semantic color name
+             * Matches color variables used in xpui
+             * @default Inherit from parent
+             */
+            semanticColor?: SemanticColor;
+            /**
+             * Icon title
+             * @default ''
+             */
+            title?: string;
+            /**
+             * Title ID (internal)
+             */
+            titleId?: string;
+            /**
+             * Icon description
+             */
+            desc?: string;
+            /**
+             * Description ID (internal)
+             */
+            descId?: string;
+            /**
+             * Auto mirror icon
+             * @default false
+             */
+            autoMirror?: boolean;
+        }
+        type TextComponentProps = {
+            /**
+             * Text color
+             * Might not be used by component
+             * @default 'currentColor'
+             */
+            color?: string;
+            /**
+             * Semantic color name
+             * Matches color variables used in xpui
+             * @default Inherit from parent
+             */
+            semanticColor?: SemanticColor;
+            /**
+             * Text style variant
+             * @default 'viola'
+             */
+            variant?: Variant;
+            /**
+             * Bottom padding size
+             */
+            paddingBottom?: string;
+            /**
+             * Font weight
+             */
+            weight?: "book" | "bold" | "black";
+        }
+        type ConfirmDialogProps = {
+            /**
+             * Boolean to determine if the dialog should be opened
+             * @default true
+             */
+            isOpen?: boolean;
+            /**
+             * Whether to allow inline HTML in component text
+             * @default false
+             */
+            allowHTML?: boolean;
+            /**
+             * Dialog title. Can be inline HTML if `allowHTML` is true
+             */
+            titleText: string;
+            /**
+             * Dialog description. Can be inline HTML if `allowHTML` is true
+             */
+            descriptionText?: string;
+            /**
+             * Confirm button text
+             */
+            confirmText?: string;
+            /**
+             * Cancel button text
+             */
+            cancelText?: string;
+            /**
+             * Confirm button aria-label
+             */
+            confirmLabel?: string;
+            /**
+             * Function to run when confirm button is clicked
+             * The dialog does not close automatically, a handler must be included.
+             * @param {React.MouseEvent<HTMLButtonElement>} event
+             */
+            onConfirm?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+            /**
+             * Function to run when cancel button is clicked.
+             * The dialog does not close automatically, a handler must be included.
+             * @param {React.MouseEvent<HTMLButtonElement>} event
+             */
+            onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+            /**
+             * Function to run when dialog is clicked outside of.
+             * By default, this will run `onClose`.
+             * A handler must be included to close the dialog.
+             * @param {React.MouseEvent<HTMLButtonElement>} event
+             */
+            onOutside?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+        }
+        type PanelSkeletonProps = {
+            /**
+             * Aria label for the panel. Does not set the panel header content.
+             */
+            label?: string;
+            /**
+             * Item URI of the panel. Used as reference for Spotify's internal Event Factory.
+             */
+            itemUri?: string;
+            /**
+             * Additional class name to apply to the panel.
+             * @deprecated Spotify `1.2.12`
+             */
+            className?: string;
+            /**
+             * Additional styles to apply to the panel.
+             */
+            style?: React.CSSProperties;
+            /**
+             * Children to render inside the panel.
+             */
+            children?: React.ReactNode;
+        }
+        type PanelContentProps = {
+            /**
+             * Additional class name to apply to the panel.
+             */
+            className?: string;
+            /**
+             * Children to render inside the panel.
+             */
+            children?: React.ReactNode;
+        }
+        type PanelHeaderProps = {
+            /**
+             * Href for the header link.
+             * Can be either a URI for a path within the app, or a URL for an external link.
+             */
+            link?: string;
+            /**
+             * Title of the header.
+             */
+            title?: string;
+            /**
+             * Panel ID. Used to toggle panel open/closed state.
+             */
+            panel: number;
+            /**
+             * Whether or not the panel contains advertisements.
+             * @default false
+             */
+            isAdvert?: boolean;
+            /**
+             * Actions to render in the header.
+             */
+            actions?: React.ReactNode | React.ReactNode[];
+            /**
+             * Function to call when clicking on the close button.
+             * Called before the panel is closed.
+             */
+            onClose?: () => void;
+            /**
+             * Prevent the panel from closing when clicking on the header close button.
+             * @default false
+             */
+            preventDefaultClose?: boolean;
+            /**
+             * Function to call when clicking on the header back button.
+             * If not provided, the back button will not be rendered.
+             */
+            onBack?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+            /**
+             * Font variant for the header title.
+             * @default "balladBold"
+             */
+            titleVariant?: Variant;
+            /**
+             * Semantic color name for the header title.
+             * @default "textBase"
+             */
+            titleSemanticColor?: SemanticColor;
+        }
+        type SliderProps = {
+            /**
+             * Label for the slider.
+             */
+            labelText?: string;
+            /**
+             * The current value of the slider.
+             */
+            value: number;
+            /**
+             * The minimum value of the slider.
+             */
+            min: number;
+            /**
+             * The maximum value of the slider.
+             */
+            max: number;
+            /**
+             * The step value of the slider.
+             */
+            step: number;
+            /**
+             * Whether or not the slider is disabled/can be interacted with.
+             * @default true
+             */
+            isInteractive?: boolean;
+            /**
+             * Whether or not the active style of the slider should be shown.
+             * This is equivalent to the slider being focused/hovered.
+             * @default false
+             */
+            forceActiveStyles?: boolean;
+            /**
+             * Callback function that is called when the slider starts being dragged.
+             *
+             * @param {number} value The current value of the slider in percent.
+             */
+            onDragStart: (value: number) => void;
+            /**
+             * Callback function that is called when the slider is being dragged.
+             *
+             * @param {number} value The current value of the slider in percent.
+             */
+            onDragMove: (value: number) => void;
+            /**
+             * Callback function that is called when the slider stops being dragged.
+             *
+             * @param {number} value The current value of the slider in percent.
+             */
+            onDragEnd: (value: number) => void;
+            /**
+             * Callback function that is called when the slider incremented a step.
+             *
+             * @deprecated Use `onDrag` props instead.
+             */
+            onStepForward?: () => void;
+            /**
+             * Callback function that is called when the slider decremented a step.
+             *
+             * @deprecated Use `onDrag` props instead.
+             */
+            onStepBackward?: () => void;
+        }
         /**
          * Generic context menu provider
          *
@@ -1373,6 +1397,7 @@ declare namespace Spicetify {
         const PodcastShowMenu: any;
         const ArtistMenu: any;
         const PlaylistMenu: any;
+        const TrackMenu: any;
         /**
          * Component to display tooltip when hovering over element
          * Useful for accessibility
@@ -1381,46 +1406,544 @@ declare namespace Spicetify {
          * @see Spicetify.ReactComponent.TooltipProps
          */
         const TooltipWrapper: any;
-    };
+        /**
+         * Component to render Spotify-style icon
+         * @since Spotify `1.1.95`
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.IconComponentProps
+         */
+        const IconComponent: any;
+        /**
+         * Component to render Spotify-style text
+         * @since Spotify `1.1.95`
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.TextComponentProps
+         */
+        const TextComponent: any;
+        /**
+         * Component to render Spotify-style confirm dialog
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.ConfirmDialogProps
+         */
+        const ConfirmDialog: any;
+        /**
+         * Component to render Spotify-style panel skeleton
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.PanelSkeletonProps
+         */
+        const PanelSkeleton: any;
+        /**
+         * Component to render Spotify-style panel content
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.PanelContentProps
+         */
+        const PanelContent: any;
+        /**
+         * Component to render Spotify-style panel header
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.PanelHeaderProps
+         */
+        const PanelHeader: any;
+        /**
+         * Component to render Spotify slider
+         *
+         * Used in progress bar, volume slider, crossfade settings, etc.
+         *
+         * Props:
+         * @see Spicetify.ReactComponent.SliderProps
+         */
+        const Slider: any;
+    }
 
     /**
      * Add button in top bar next to navigation buttons
      */
     namespace Topbar {
         class Button {
-            constructor(label: string, icon: string, onClick: (self: Button) => void, disabled?: boolean);
+            constructor(label: string, icon: Icon | string, onClick: (self: Button) => void, disabled?: boolean);
             label: string;
             icon: string;
             onClick: (self: Button) => void;
             disabled: boolean;
             element: HTMLButtonElement;
+            tippy: any;
+        }
+    }
+
+    /**
+     * Add button in player controls
+     */
+    namespace Playbar {
+        /**
+         * Create a button on the right side of the playbar
+         */
+        class Button {
+            constructor(label: string, icon: Icon | string, onClick?: (self: Button) => void, disabled?: boolean, active?: boolean, registerOnCreate?: boolean);
+            label: string;
+            icon: string;
+            onClick: (self: Button) => void;
+            disabled: boolean;
+            active: boolean;
+            element: HTMLButtonElement;
+            tippy: any;
+            register: () => void;
+            deregister: () => void;
+        }
+
+        /**
+         * Create a widget next to track info
+         */
+        class Widget {
+            constructor(label: string, icon: Icon | string, onClick?: (self: Widget) => void, disabled?: boolean, active?: boolean, registerOnCreate?: boolean);
+            label: string;
+            icon: string;
+            onClick: (self: Widget) => void;
+            disabled: boolean;
+            active: boolean;
+            element: HTMLButtonElement;
+            tippy: any;
+            register: () => void;
+            deregister: () => void;
         }
     }
 
     /**
      * SVG icons
      */
-    namespace SVGIcons {
-        const check: string;
-    }
+    const SVGIcons: Record<Icon, string>;
 
     /**
      * Return font styling used by Spotify.
      * @param font Name of the font.
      * Can match any of the fonts listed in `Spicetify._fontStyle` or returns a generic style otherwise.
      */
-    function getFontStyle(font: string): string;
+    function getFontStyle(font: Variant): string;
 
     /**
      * A filtered copy of user's `config-xpui` file.
      */
     namespace Config {
-        let version: string;
+        const version: string;
         let current_theme: string;
         let color_scheme: string;
         let extensions: string[];
+        const custom_apps: string[];
         let local_theme: string;
         let local_color_scheme: string;
-        const custom_apps: string[];
+    }
+
+    /**
+     * Tippy.js instance used by Spotify
+     */
+    const Tippy: any;
+    /**
+     * Spicetify's predefined props for Tippy.js
+     * Used to mimic Spotify's tooltip behavior
+     */
+    const TippyProps: any;
+
+    /**
+     * Interface for interacting with Spotify client's app title
+     */
+    namespace AppTitle {
+        /**
+         * Set default app title. This has no effect if the player is running.
+         * Will override any previous forced title.
+         * @param title Title to set
+         * @return Promise that resolves to a function to cancel forced title. This doesn't reset the title.
+         */
+        function set(title: string): Promise<{ clear: () => void }>;
+        /**
+         * Reset app title to default
+         */
+        function reset(): Promise<void>;
+        /**
+         * Get current default app title
+         * @return Current default app title
+         */
+        function get(): Promise<string>;
+        /**
+         * Subscribe to title changes.
+         * This event is not fired when the player changes app title.
+         * @param callback Callback to call when title changes
+         * @return Object with method to unsubscribe
+         */
+        function sub(callback: (title: string) => void): { clear: () => void };
+    }
+
+    /**
+     * Spicetify's QraphQL wrapper for Spotify's GraphQL API endpoints
+     */
+    namespace GraphQL {
+        /**
+         * Possible types of entities.
+         *
+         * This list is dynamic and may change in the future.
+         */
+        type Query = "decorateItemsForEnhance" | "imageURLAndSize" | "imageSources" | "audioItems" | "creator" | "extractedColors" | "extractedColorsAndImageSources" | "fetchExtractedColorAndImageForAlbumEntity" | "fetchExtractedColorAndImageForArtistEntity" | "fetchExtractedColorAndImageForEpisodeEntity" | "fetchExtractedColorAndImageForPlaylistEntity" | "fetchExtractedColorAndImageForPodcastEntity" | "fetchExtractedColorAndImageForTrackEntity" | "fetchExtractedColorForAlbumEntity" | "fetchExtractedColorForArtistEntity" | "fetchExtractedColorForEpisodeEntity" | "fetchExtractedColorForPlaylistEntity" | "fetchExtractedColorForPodcastEntity" | "fetchExtractedColorForTrackEntity" | "getAlbumNameAndTracks" | "getEpisodeName" | "getTrackName" | "queryAlbumTrackUris" | "queryTrackArtists" | "decorateContextEpisodesOrChapters" | "decorateContextTracks" | "fetchTracksForRadioStation" | "decoratePlaylists" | "playlistUser" | "FetchPlaylistMetadata" | "playlistContentsItemTrackArtist" | "playlistContentsItemTrackAlbum" | "playlistContentsItemTrack" | "playlistContentsItemLocalTrack" | "playlistContentsItemEpisodeShow" | "playlistContentsItemEpisode" | "playlistContentsItemResponse" | "playlistContentsItem" | "FetchPlaylistContents" | "episodeTrailerUri" | "podcastEpisode" | "podcastMetadataV2" | "minimalAudiobook" | "audiobookChapter" | "audiobookMetadataV2" | "fetchExtractedColors" | "queryFullscreenMode" | "queryNpvEpisode" | "queryNpvArtist" | "albumTrack" | "getAlbum" | "queryAlbumTracks" | "queryArtistOverview" | "queryArtistAppearsOn" | "discographyAlbum" | "albumMetadataReleases" | "albumMetadata" | "queryArtistDiscographyAlbums" | "queryArtistDiscographySingles" | "queryArtistDiscographyCompilations" | "queryArtistDiscographyAll" | "queryArtistDiscographyOverview" | "artistPlaylist" | "queryArtistPlaylists" | "queryArtistDiscoveredOn" | "queryArtistFeaturing" | "queryArtistRelated" | "queryArtistMinimal" | "searchModalResults" | "queryWhatsNewFeed" | "whatsNewFeedNewItems" | "SetItemsStateInWhatsNewFeed" | "browseImageURLAndSize" | "browseImageSources" | "browseAlbum" | "browseArtist" | "browseEpisode" | "browseChapter" | "browsePlaylist" | "browsePodcast" | "browseAudiobook" | "browseTrack" | "browseUser" | "browseMerch" | "browseArtistConcerts" | "browseContent" | "browseSectionContainer" | "browseClientFeature" | "browseItem" | "browseAll" | "browsePage";
+        /**
+         * Collection of GraphQL definitions.
+         */
+        const Definitions: Record<Query | string, any>;
+        /**
+         * GraphQL query definitions. Subset of `Definitions` that are used as query requests.
+         */
+        const QueryDefinitions: Record<Query | string, any>;
+        /**
+         * GraphQL mutation definitions. Subset of `Definitions` that are used as mutation requests.
+         */
+        const MutationDefinitions: Record<Query | string, any>;
+        /**
+         * GraphQL response definitions. Subset of `Definitions` that are used as response types.
+         */
+        const ResponseDefinitions: Record<Query | string, any>;
+        /**
+         * Sends a GraphQL query to Spotify.
+         * @description A preinitialized version of `Spicetify.GraphQL.Handler` using current context.
+         * @param query Query to send
+         * @param variables Variables to use
+         * @param context Context to use
+         * @return Promise that resolves to the response
+         */
+        function Request(query: typeof Definitions[Query | string], variables?: Record<string, any>, context?: Record<string, any>): Promise<any>;
+        /**
+         * Context for GraphQL queries.
+         * @description Used to set context for the handler and initialze it.
+         */
+        const Context: Record<string, any>;
+        /**
+         * Handler for GraphQL queries.
+         * @param context Context to use
+         * @return Function to handle GraphQL queries
+         */
+        function Handler(context: Record<string, any>): (query: typeof Definitions[Query | string], variables?: Record<string, any>, context?: Record<string, any>) => Promise<any>;
+    }
+
+    namespace ReactHook {
+        /**
+         * React Hook to create interactive drag-and-drop element
+         * @description Used to create a draggable element that can be dropped into Spotify's components (e.g. Playlist, Folder, Sidebar, Queue)
+         * @param uris List of URIs to be dragged
+         * @param label Label to be displayed when dragging
+         * @param contextUri Context URI of the element from which the drag originated (e.g. Playlist URI)
+         * @param sectionIndex Index of the section in which the drag originated
+         * @param dropOriginUri URI of the desired drop target. Leave empty to allow drop anywhere
+         * @return Function to handle drag event. Should be passed to `onDragStart` prop of the element. All parameters passed onto the hook will be passed onto the handler unless declared otherwise.
+         *
+         */
+        function DragHandler(
+            uris?: string[],
+            label?: string,
+            contextUri?: string,
+            sectionIndex?: number,
+            dropOriginUri?: string
+        ): (event: React.DragEvent, uris?: string[], label?: string, contextUri?: string, sectionIndex?: number) => void;
+
+        /**
+         * React Hook to use panel state
+         * @param id ID of the panel to use
+         * @return Object with methods of the panel
+         */
+        function usePanelState(id: number): { toggle: () => void, isActive: boolean };
+
+        /**
+         * React Hook to use extracted color from GraphQL
+         * 
+         * @note This is a wrapper of ReactQuery's `useQuery` hook. 
+         * The component using this hook must be wrapped in a `QueryClientProvider` component.
+         * 
+         * @see https://tanstack.com/query/v3/docs/react/reference/QueryClientProvider
+         * 
+         * @param uri URI of the Spotify image to extract color from.
+         * @param fallbackColor Fallback color to use if the image is not available. Defaults to `#535353`.
+         * @param variant Variant of the color to use. Defaults to `colorRaw`.
+         * 
+         * @return Extracted color hex code.
+         */
+        function useExtractedColor(uri: string, fallbackColor?: string, variant?: "colorRaw" | "colorLight" | "colorDark"): string;
+    }
+
+    /**
+     * An API wrapper to interact with Spotify's Panel/right sidebar.
+     */
+    namespace Panel {
+        /**
+         * Properties that are used by the `registerPanel` function.
+         */
+        type PanelProps = {
+            /**
+             * Label of the Panel.
+             */
+            label?: string;
+            /**
+             * Children to render inside the Panel.
+             * Must be a React Component.
+             * Will be passed a `panel` prop with the Panel ID.
+             */
+            children: React.ReactNode;
+            /**
+             * Determine if the children passed is a custom Panel.
+             * If true, the children will be rendered as is.
+             * Note: All passed props except `children` will be ignored if enabled.
+             *
+             * @default false
+             */
+            isCustom?: boolean;
+            /**
+             * Inline styles to apply to the Panel skeleton.
+             */
+            style?: React.CSSProperties;
+            /**
+             * Additional class name to apply to the Panel content wrapper.
+             */
+            wrapperClassname?: string;
+            /**
+             * Additional class name to apply to the Panel header.
+             */
+            headerClassname?: string;
+            /**
+             * Font variant for the Panel header title.
+             * @default "balladBold"
+             */
+            headerVariant?: Variant;
+            /**
+             * Semantic color name for the Panel header title.
+             * @default "textBase"
+             */
+            headerSemanticColor?: SemanticColor;
+            /**
+             * Href for the header link.
+             * Can be either a URI for a path within the app, or a URL for an external link.
+             */
+            headerLink?: string;
+            /**
+             * Additional actions to render in the header.
+             * Will be rendered next to the close button.
+             */
+            headerActions?: React.ReactNode | React.ReactNode[];
+            /**
+             * Function to call when clicking on the header close button.
+             * Called before the panel is closed.
+             */
+            headerOnClose?: () => void;
+            /**
+             * Prevent the panel from closing when clicking on the header close button.
+             * @default false
+             */
+            headerPreventDefaultClose?: boolean;
+            /**
+             * Function to call when clicking on the header back button.
+             * If not provided, the back button will not be rendered.
+             * @param event Event object
+             */
+            headerOnBack?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+        };
+
+        /**
+         * An object of reserved panel IDs used by Spotify.
+         */
+        const reservedPanelIds: Record<string | number, string | number>;
+        /**
+         * Collection of React Components used by Spotify in the Panel.
+         */
+        const Components: {
+            /**
+             * React Component for the Panel's skeleton.
+             *
+             * Props:
+             * @see Spicetify.ReactComponent.PanelSkeletonProps
+             */
+            PanelSkeleton: any;
+            /**
+             * React Component for the Panel's content.
+             *
+             * Props:
+             * @see Spicetify.ReactComponent.PanelContentProps
+             */
+            PanelContent: any;
+            /**
+             * React Component for the Panel's header.
+             *
+             * Props:
+             * @see Spicetify.ReactComponent.PanelHeaderProps
+             */
+            PanelHeader: any;
+        }
+        /**
+         * Check whether or not a Panel with the provided ID is registered.
+         * @param id Panel ID to check
+         * @return Whether or not a Panel with the provided ID is registered
+         */
+        function hasPanel(id: number): boolean;
+        /**
+         * Get the Panel with the provided ID.
+         * @param id Panel ID to get
+         * @return Panel with the provided ID
+         */
+        function getPanel(id: number): React.ReactNode | undefined;
+        /**
+         * Set the Panel with the provided ID.
+         * If the ID is not registered, it will be set to `0`.
+         * @param id Panel ID to set
+         */
+        function setPanel(id: number): Promise<void>;
+        /**
+         * Subscribe to Panel changes.
+         * @param callback Callback to call when Panel changes
+         */
+        function subPanelState(callback: (id: number) => void): void;
+        /**
+         * Register a new Panel.
+         * An ID will be automatically assigned to the Panel.
+         *
+         * To make it easier and convenient for developers to use the Panel API, this method by default wraps the children passed into a Panel skeleton and content wrapper.
+         *
+         * If you wish to customize the Panel, you can pass `isCustom` as `true` to disable the default wrapper.
+         *
+         * @param props Properties of the Panel
+         * @return Methods and properties of the Panel
+         */
+        function registerPanel(props: PanelProps): {
+            /**
+             * Assigned ID of the Panel.
+             */
+            id: number;
+            /**
+             * Function to toggle the Panel open/closed state.
+             */
+            toggle: () => Promise<void>;
+            /**
+             * Method to subscribe to the related Panel state.
+             * Only fires when the related Panel open/closed state changes.
+             */
+            onStateChange: (callback: (isActive: boolean) => void) => void;
+            /**
+             * Boolean to determine if the Panel is open.
+             */
+            isActive: boolean;
+        };
+        /**
+         * Function to render a Panel of the current ID.
+         * If the ID is not registered or is reserved by Spotify, the function will return `null`.
+         *
+         * Used as a hook for Spotify internal component.
+         * @return Panel of the current ID
+         */
+        function render(): React.ReactNode | null;
+        /**
+         * ID of the current Panel.
+         * @return ID of the current Panel
+         */
+        const currentPanel: number;
+    }
+
+    /**
+     * react-flip-toolkit
+     * @description A lightweight magic-move library for configurable layout transitions.
+     * @link https://github.com/aholachek/react-flip-toolkit
+     */
+    namespace ReactFlipToolkit {
+        const Flipper: any;
+        const Flipped: any;
+        const spring: any;
+    }
+
+    /**
+     * classnames
+     * @description A simple JavaScript utility for conditionally joining classNames together.
+     * @link https://github.com/JedWatson/classnames
+     */
+    function classnames(...args: any[]): string;
+
+    /**
+     * React Query v3
+     * @description A hook for fetching, caching and updating asynchronous data in React.
+     * @link https://github.com/TanStack/query/tree/v3
+     */
+    const ReactQuery: any;
+
+    /**
+     * Analyse and extract color presets from an image. Works for any valid image URL/URI.
+     * @param image Spotify URI to an image, or an image URL.
+     */
+    function extractColorPresets(image: string | string[]): Promise<{
+        colorRaw: Color;
+        colorLight: Color;
+        colorDark: Color;
+        isFallback: boolean;
+    }[]>;
+
+    interface hsl {
+        h: number;
+        s: number;
+        l: number;
+    };
+    interface hsv {
+        h: number;
+        s: number;
+        v: number;
+    };
+    interface rgb {
+        r: number;
+        g: number;
+        b: number;
+    };
+    type CSSColors = "HEX" | "HEXA" | "HSL" | "HSLA" | "RGB" | "RGBA";
+    /**
+     * Spotify's internal color class
+     */
+    class Color {
+        constructor(rgb: rgb, hsl: hsl, hsv: hsv, alpha?: number);
+
+        static BLACK: Color;
+        static WHITE: Color;
+        static CSSFormat: Record<CSSColors, number> & Record<number, CSSColors>;
+
+        a: number;
+        hsl: hsl;
+        hsv: hsv;
+        rgb: rgb;
+
+        /**
+         * Convert CSS representation to Color
+         * @param cssColor CSS representation of the color. Must not contain spaces.
+         * @param alpha Alpha value of the color. Defaults to 1.
+         * @return Color object
+         * @throws {Error} If the CSS color is invalid or unsupported
+         */
+        static fromCSS(cssColor: string, alpha?: number): Color;
+        static fromHSL(hsl: hsl, alpha?: number): Color;
+        static fromHSV(hsv: hsv, alpha?: number): Color;
+        static fromRGB(rgb: rgb, alpha?: number): Color;
+        static fromHex(hex: string, alpha?: number): Color;
+
+        /**
+         * Change the contrast of the color against another so that
+         * the contrast between them is at least `strength`.
+         */
+        contrastAdjust(against: Color, strength?: number): Color;
+
+        /**
+         * Stringify JSON result
+         */
+        stringify(): string;
+
+        /**
+         * Convert to CSS representation
+         * @param colorFormat CSS color format to convert to
+         * @return CSS representation of the color
+         */
+        toCSS(colorFormat: number): string;
+
+        /**
+         * Return RGBA representation of the color
+         */
+        toString(): string;
     }
 }
