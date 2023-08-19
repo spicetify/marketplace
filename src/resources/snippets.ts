@@ -293,4 +293,9 @@ export default [
     "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;} .main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem [role=\"group\"] {min-block-size: 0 !important;} .main-yourLibraryX-listItem .HeaderArea .Column {flex-direction: row; gap: 0.5em;} .main-yourLibraryX-listItem .HeaderArea * {padding-top: 0 !important; padding-bottom: 0 !important;} .main-yourLibraryX-listItem .x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important; height: 1.6em !important;} .main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
     "preview": "resources/assets/snippets/thin-library-sidebar-rows.png",
   },
+  {
+    "title": "Smaller Now Playing Bar",
+    "description": "Makes the now playing bar at the bottom smaller",
+    "code": ".main-nowPlayingBar-nowPlayingBar {height: auto}",
+    "preview": "resources/assets/snippets/smaller-now-playing-bar.png",
 ];
