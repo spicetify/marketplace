@@ -298,4 +298,5 @@ export default [
     "description": "Makes the now playing bar at the bottom smaller",
     "code": ".main-nowPlayingBar-nowPlayingBar {height: auto}",
     "preview": "resources/assets/snippets/smaller-now-playing-bar.png",
+  },
 ];
