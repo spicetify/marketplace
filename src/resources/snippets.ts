@@ -293,4 +293,16 @@ export default [
     "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;} .main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem [role=\"group\"] {min-block-size: 0 !important;} .main-yourLibraryX-listItem .HeaderArea .Column {flex-direction: row; gap: 0.5em;} .main-yourLibraryX-listItem .HeaderArea * {padding-top: 0 !important; padding-bottom: 0 !important;} .main-yourLibraryX-listItem .x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important; height: 1.6em !important;} .main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
     "preview": "resources/assets/snippets/thin-library-sidebar-rows.png",
   },
+  {
+    "title": "Default Progress Bar",
+    "description": "Return progress bar to default size and location on themes that change it",
+    "code": ".playback-bar {position: relative !important; display: block !important; --playback-bar-grid-gap: 8px !important; -webkit-box-orient: horizontal !important; -webkit-box-direction: normal !important; -webkit-box-pack: justify !important; -ms-flex-pack: justify !important; -webkit-box-align: center !important; -ms-flex-align: center !important; align-items: center !important; display: -webkit-box !important; display: -ms-flexbox !important; display: flex !important; -ms-flex-direction: row !important; flex-direction: row !important; gap: var(--playback-bar-grid-gap) !important; justify-content: space-between !important; height: 12px !important;} .x-progressBar-progressBarBg {--progress-bar-height: 6px !important; --progress-bar-radius: 10px !important;} :root .Root__now-playing-bar .playback-bar > div {height: 17.59px !important;} .player-controls__buttons--new-icons { margin-bottom: 12px !importan;} .main-nowPlayingBar-nowPlayingBar {padding-bottom: 0px !important;}",
+    "preview": "resources/assets/snippets/default-progress-bar.png",
+  },
+  {
+    "title": "Fix Listening On",
+    "description": "Fix listening on for some themes that move it up or make the text not visible",
+    "code": ".Svg-presentation-essentialBase-small-icon-autoMirror {fill: var(--spice-text);} .TypeElement-mesto-textBase-type {color: var(--spice-text) !important;} .main-devicePicker-indicator {display: none !important;} .main-nowPlayingBar-container {height: 72px !important;} .main-connectBar-connectBar {position: absolute !important; align-items: center !important; top: 42px !important; height: 32px !important; align-self: center !important; background-color: transparent !important; width: 30% !important;}",
+    "preview": "resources/assets/snippets/fix-listening-on.png",
+  },
 ];
