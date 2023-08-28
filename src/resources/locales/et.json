@@ -1,0 +1,99 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Turu seaded",
+      "optionsHeading": "Seaded",
+      "starCountLabel": "Tähtede arv",
+      "tagsLabel": "Sildid",
+      "devToolsLabel": "Teema arendaja tööriistad",
+      "hideInstalledLabel": "Peida sirvimisel paigaldatud",
+      "colourShiftLabel": "Muutke värve iga minut",
+      "albumArtBasedColors": "Muutke värve albumipildi põhjal",
+      "albumArtBasedColorsMode": "Värviskeemi (ColorApi) režiim",
+      "albumArtBasedColorsVibrancy": "Albumipildilt haaratud värv",
+      "albumArtBasedColorsVibrancyToolTip": "Desaturated: Värv, mis on kõige silmatorkavam, kuid palju väiksema heledusega \n Light vibrant: Kõige erksam värv, kuid veidi suurendatud heledusega \n Prominent: Värv, mis ilmub albumi kujunduses kõige rohkem \n Vibrant: Albumipildi kõige elavam värv",
+      "almbumArtColorsModeToolTip": "Monochrome dark: Värvilahendus, mis põhineb otse valitud põhivärvil, kasutades põhivärvi erinevaid toone ja segades värviskeemi loomiseks halle, see on ühevärvlise heleda pöördväärtus. \n Monochrome light: Värvilahendus, mis põhineb otse valitud põhivärvil, kasutades põhivärvi erinevaid toone ja segades värviskeemi loomiseks halle. Ühevärvilise valguse taust oleks ühevärvilise tumeda esiplaani või teksti värv ja vastupidi. \n Analogic: Valitud põhivärvil põhinev värviskeem, kasutades värviratta põhivärviga külgnevaid värve. \n Analogic complement: Valitud põhivärvil põhinev värviskeem, kasutades värviratta põhivärviga külgnevaid värve ja lisavärvi. \n Triad: Valitud põhivärvil põhinev värviskeem, kasutades põhivärvist võrdsel kaugusel asuvaid värviratta värve. \n Quad: Valitud põhivärvil põhinev värviskeem, kasutades värvirattal olevaid värve, mis on põhivärvist 90 kraadi.",
+      "tabsHeading": "Vahekaardid",
+      "resetHeading": "Reset",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Uninstall all extensions and themes, and reset preferences",
+      "backupHeading": "Varunda/Taasta",
+      "backupLabel": "Varunda või taasta kõik turu andmed. See ei hõlma turu kaudu paigaldatud elementide seadeid.",
+      "backupBtn": "Ava",
+      "versionHeading": "Versioon",
+      "versionBtn": "Kopeeri",
+      "versionCopied": "Kopeeritud"
+    },
+    "tabs": {
+      "Extensions": "Lisad",
+      "Themes": "Teemad",
+      "Snippets": "Katked",
+      "Apps": "Rakendused",
+      "Installed": "Paigaldatud"
+    },
+    "snippets": {
+      "addTitle": "Lisa katkend",
+      "editTitle": "Muuda katkendit",
+      "viewTitle": "Vaata katkendit",
+      "customCSS": "Kohandatud CSS",
+      "customCSSPlaceholder": "Paigalda Kohandatud CSS siia! Haldamiseks leiate need paigaldatud vahekaardilt.",
+      "snippetName": "Katkendi nimi",
+      "snippetNamePlaceholder": "Lisa kohandatud katkendi nimi",
+      "snippetDesc": "Katkendi kirjeldus",
+      "snippetDescPlaceholder": "Lisa kohandatud katkendi kirjeldus",
+      "snippetPreview": "Katkendi eelvaade",
+      "optional": "valikuline",
+      "addImage": "Lisa pilt",
+      "changeImage": "Muuda pilti",
+      "saveCSS": "Salvesta CSS"
+    },
+    "reloadModal": {
+      "title": "Laadi uuesti",
+      "description": "Selle toimingu lõpuleviimiseks on vaja leht uuesti laadida.",
+      "reloadNow": "Laadige kohe uuesti",
+      "reloadLater": "Laadige hiljem uuesti"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Seaded kopeeriti lõikelauale",
+      "noDataPasted": "Andmeid pole kleebitud",
+      "invalidJSON": "Vale JSON",
+      "inputLabel": "Turu Seaded",
+      "inputPlaceholder": "Kopeeri/kleebi enda seaded siia",
+      "exportBtn": "Ekspordi",
+      "importBtn": "Impordi",
+      "fileImportBtn": "Impordi failist"
+    },
+    "devTools": {
+      "title": "Teema arendustööriistad",
+      "noThemeInstalled": "Viga: Turu teemat pole installitud",
+      "noThemeManifest": "Viga: Teema manifesti ei leitud",
+      "colorIniEditor": "Color.ini redaktor",
+      "colorIniEditorPlaceholder": "[teie-värviskeemi-nimi]",
+      "invalidCSS": "Vigane CSS"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Turg",
+      "newUpdate": "Uus värskendus",
+      "addCSS": "Lisa CSS",
+      "search": "Otsi",
+      "installed": "Paigaldatud",
+      "lastUpdated": "Viimati uuendatud {{val, datetime}}",
+      "externalJS": "väline JS",
+      "dark": "tume",
+      "light": "hele"
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Laadimine...",
+      "errorLoading": "Viga README laadimisel"
+    },
+    "github": "GitHub",
+    "install": "Paigalda",
+    "remove": "Eemalda",
+    "save": "Salvesta",
+    "colour_one": "värv",
+    "colour_other": "värvid",
+    "favourite": "lemmik"
+  }
+}
