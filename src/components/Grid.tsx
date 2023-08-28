@@ -126,7 +126,6 @@ class Grid extends React.Component<
     />;
 
     this.cardList.push(card as unknown as Card);
-    this.setState({ cards: this.cardList });
   }
 
   // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
@@ -210,6 +209,7 @@ class Grid extends React.Component<
           });
         }
       }
+      this.setState({ cards: this.cardList });
 
       // First result is null or -1 so it coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -244,6 +244,7 @@ class Grid extends React.Component<
           });
         }
       }
+      this.setState({ cards: this.cardList });
       break;
 
       // Don't need to return a page number because
@@ -270,6 +271,7 @@ class Grid extends React.Component<
           });
         }
       }
+      this.setState({ cards: this.cardList });
 
       // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -303,6 +305,7 @@ class Grid extends React.Component<
           });
         }
       }
+      this.setState({ cards: this.cardList });
 
       // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -323,6 +326,7 @@ class Grid extends React.Component<
       }
       if (snippets && snippets.length) {
         snippets.forEach((snippet) => this.appendCard(snippet, "snippet", activeTab));
+        this.setState({ cards: this.cardList });
       }
     }}
 
