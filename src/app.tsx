@@ -31,7 +31,6 @@ i18n
       "zh-TW": zhTW,
       "zh-CN": zhCN,
       et,
-      "et-EE": et,
     },
     detection: {
       order: [ "navigator", "htmlTag" ],
