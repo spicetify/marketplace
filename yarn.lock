@@ -3446,9 +3446,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^13.0.3":
-  version: 13.0.3
-  resolution: "react-i18next@npm:13.0.3"
+"react-i18next@npm:^13.2.1":
+  version: 13.2.1
+  resolution: "react-i18next@npm:13.2.1"
   dependencies:
     "@babel/runtime": ^7.22.5
     html-parse-stringify: ^3.0.1
@@ -3460,7 +3460,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 5b23c517204ac7ce66191368b185bb278c34e75778714ffdae84dd4672fdaf8c500c7965cb87508c686de55ac7c8853f05134ee61aa21add1b8c8e02bcc0a0a4
+  checksum: aa3bd7b0f9f3d794e756a7fe087471c20c13dc2fbf5e53400403a356973d87a1b76f0204720081914bd06cb94d92bf987ebbf33c3de3c67a0cc9b32dde8972f1
   languageName: node
   linkType: hard
 
@@ -3937,7 +3937,7 @@ __metadata:
     i18next-browser-languagedetector: ^7.1.0
     prismjs: ^1.29.0
     react-dropdown: ^1.11.0
-    react-i18next: ^13.0.3
+    react-i18next: ^13.2.1
     react-simple-code-editor: ^0.13.1
     semver: ^7.5.4
     spcr-whats-new: ^1.0.1
