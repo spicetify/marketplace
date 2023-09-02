@@ -558,12 +558,13 @@ class Grid extends React.Component<
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
             .filter((card) => {
               const searchValue = this.state.searchValue.trim().toLowerCase();
-              const { title, user, authors } = card.props.item;
+              const { title, user, authors, tags } = card.props.item;
 
               return !searchValue ||
                 title.toLowerCase().includes(searchValue) ||
                 user?.toLowerCase().includes(searchValue) ||
-                authors?.some((author) => author.name.toLowerCase().includes(searchValue));
+                authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
+                tags?.some((tag) => tag.toLowerCase().includes(searchValue));
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
