@@ -305,4 +305,10 @@ export default [
     "code": ".Svg-presentation-essentialBase-small-icon-autoMirror {fill: var(--spice-text);} .TypeElement-mesto-textBase-type {color: var(--spice-text) !important;} .main-devicePicker-indicator {display: none !important;} .main-nowPlayingBar-container {height: 72px !important;} .main-connectBar-connectBar {position: absolute !important; align-items: center !important; top: 42px !important; height: 32px !important; align-self: center !important; background-color: transparent !important; width: 30% !important;}",
     "preview": "resources/assets/snippets/fix-listening-on.png",
   },
+  {
+    "title": "Smooth Progress/Volume bar",
+    "description": "Makes the Progress/Volume bar glide",
+    "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
+    "preview": "resources/assets/snippets/smooth-progress-bar.png",
+  },
 ];
