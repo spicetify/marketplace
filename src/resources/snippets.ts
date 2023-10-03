@@ -311,11 +311,13 @@ export default [
     "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
   },
+  {
     "title": "Centered Lyrics",
     "description": "Centers the lyrics on the lyrics page",
     "code": ".lyrics-lyrics-contentWrapper { text-align: center; }",
     "preview": "resources/assets/snippets/centered-lyrics.png",
   },
+  {
     "title": "Hide lyrics button",
     "description": "Hides the lyrics button in the playbar",
     "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button:has(span):has(svg):has(path[d='M13.426 2.574a2.831 2.831 0 0 0-4.797 1.55l3.247 3.247a2.831 2.831 0 0 0 1.55-4.797zM10.5 8.118l-2.619-2.62A63303.13 63303.13 0 0 0 4.74 9.075L2.065 12.12a1.287 1.287 0 0 0 1.816 1.816l3.06-2.688 3.56-3.129zM7.12 4.094a4.331 4.331 0 1 1 4.786 4.786l-3.974 3.493-3.06 2.689a2.787 2.787 0 0 1-3.933-3.933l2.676-3.045 3.505-3.99z']) {display: none;}",
