@@ -68,7 +68,7 @@ export default [
   {
     "title": "Left aligned heart icons",
     "description": "Moves the heart icon to the left side of the track title in track views",
-    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-addButton-button.main-trackList-rowHeartButton,\n.main-addButton-button.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
+    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
     "preview": "resources/assets/snippets/left-aligned-heart-icons.png",
   },
   {
