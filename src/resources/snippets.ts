@@ -68,7 +68,7 @@ export default [
   {
     "title": "Left aligned heart icons",
     "description": "Moves the heart icon to the left side of the track title in track views",
-    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-addButton-button.main-trackList-rowHeartButton,\n.main-addButton-button.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
+    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
     "preview": "resources/assets/snippets/left-aligned-heart-icons.png",
   },
   {
@@ -206,7 +206,7 @@ export default [
   {
     "title": "Oneko",
     "description": "Adds Oneko onto your playback bar!",
-    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-image: url('https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif'); animation: oneko 1s infinite; } @keyframes oneko { 0%, 50% { background-position: -64px 0; } 50.0001%, 100% { background-position: -64px -32px; } }",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-image: url('https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif'); animation: oneko 1s infinite; } @keyframes oneko { 0%, 50% { background-position: -64px 0; } 50.0001%, 100% { background-position: -64px -32px; } }",
     "preview": "resources/assets/snippets/oneko.png",
   },
   {
@@ -278,7 +278,7 @@ export default [
   {
     "title": "Duck",
     "description": "Adds dancing duck onto your playback bar!",
-    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzdsM2Y2aHh3cTQ2Z3JzbXAzMXJrZjdiM3IwMXhnaTFnc295ZnRkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cCOVfFwDI3awdse5A3/giphy.gif'); }",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzdsM2Y2aHh3cTQ2Z3JzbXAzMXJrZjdiM3IwMXhnaTFnc295ZnRkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cCOVfFwDI3awdse5A3/giphy.gif'); }",
     "preview": "resources/assets/snippets/duck.png",
   },
   {
@@ -311,7 +311,11 @@ export default [
     "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
   },
-  {
+    "title": "Centered Lyrics",
+    "description": "Centers the lyrics on the lyrics page",
+    "code": ".lyrics-lyrics-contentWrapper { text-align: center; }",
+    "preview": "resources/assets/snippets/centered-lyrics.png",
+  },
     "title": "Hide lyrics button",
     "description": "Hides the lyrics button in the playbar",
     "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button:has(span):has(svg):has(path[d='M13.426 2.574a2.831 2.831 0 0 0-4.797 1.55l3.247 3.247a2.831 2.831 0 0 0 1.55-4.797zM10.5 8.118l-2.619-2.62A63303.13 63303.13 0 0 0 4.74 9.075L2.065 12.12a1.287 1.287 0 0 0 1.816 1.816l3.06-2.688 3.56-3.129zM7.12 4.094a4.331 4.331 0 1 1 4.786 4.786l-3.974 3.493-3.06 2.689a2.787 2.787 0 0 1-3.933-3.933l2.676-3.045 3.505-3.99z']) {display: none;}",
