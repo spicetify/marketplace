@@ -311,4 +311,10 @@ export default [
     "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
   },
+  {
+    "title": "Centered Lyrics",
+    "description": "Centers the lyrics on the lyrics page",
+    "code": ".lyrics-lyrics-contentWrapper { text-align: center; }",
+    "preview": "resources/assets/snippets/centered-lyrics.png",
+  },
 ];
