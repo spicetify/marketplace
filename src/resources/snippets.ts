@@ -68,7 +68,7 @@ export default [
   {
     "title": "Left aligned heart icons",
     "description": "Moves the heart icon to the left side of the track title in track views",
-    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-addButton-button.main-trackList-rowHeartButton,\n.main-addButton-button.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
+    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
     "preview": "resources/assets/snippets/left-aligned-heart-icons.png",
   },
   {
@@ -310,5 +310,11 @@ export default [
     "description": "Makes the Progress/Volume bar glide",
     "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
+  },
+  {
+    "title": "Centered Lyrics",
+    "description": "Centers the lyrics on the lyrics page",
+    "code": ".lyrics-lyrics-contentWrapper { text-align: center; }",
+    "preview": "resources/assets/snippets/centered-lyrics.png",
   },
 ];
