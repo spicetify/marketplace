@@ -317,4 +317,10 @@ export default [
     "code": ".lyrics-lyrics-contentWrapper { text-align: center; }",
     "preview": "resources/assets/snippets/centered-lyrics.png",
   },
+  {
+    "title": "Hide lyrics button",
+    "description": "Hides the lyrics button in the playbar",
+    "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button { display: none; }",
+    "preview": "resources/assets/snippets/hide-lyrics-button.png",
+  },
 ];
