@@ -1,6 +1,6 @@
 {
 	"name": "spicetify-marketplace",
-	"version": "0.8.7",
+	"version": "0.8.9",
 	"homepage": "https://github.com/spicetify/spicetify-marketplace",
 	"repository": {
 		"type": "git",
@@ -18,34 +18,35 @@
 		"lint:ci": "eslint src",
 		"type-check": "tsc --noEmit",
 		"watch": "spicetify-creator --watch",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"upgrade-deps": "yarn upgrade-interactive"
 	},
 	"engines": {
-		"node": ">=16"
+		"node": ">=20"
 	},
 	"packageManager": "yarn@3.2.1",
 	"devDependencies": {
-		"@types/chroma-js": "^2.4.0",
-		"@types/react": "^17.0.53",
-		"@types/react-dom": "^17.0.19",
-		"@types/semver": "^7.5.0",
-		"@typescript-eslint/eslint-plugin": "^5.60.1",
-		"@typescript-eslint/parser": "^5.60.1",
+		"@types/chroma-js": "^2.4.1",
+		"@types/react": "^17.0.65",
+		"@types/react-dom": "^17.0.20",
+		"@types/semver": "^7.5.1",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
 		"chroma-js": "^2.4.2",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.44.0",
-		"eslint-plugin-react": "^7.32.2",
+		"eslint": "^8.50.0",
+		"eslint-plugin-react": "^7.33.2",
 		"husky": "^8.0.3",
-		"i18next": "^23.2.6",
+		"i18next": "^23.5.1",
 		"i18next-browser-languagedetector": "^7.1.0",
 		"prismjs": "^1.29.0",
 		"react-dropdown": "^1.11.0",
-		"react-i18next": "^12.3.1",
+		"react-i18next": "^13.2.2",
 		"react-simple-code-editor": "^0.13.1",
-		"semver": "^7.5.1",
+		"semver": "^7.5.4",
 		"spcr-whats-new": "^1.0.1",
-		"spicetify-creator": "^1.0.13",
-		"typescript": "^5.0.3",
+		"spicetify-creator": "^1.0.15",
+		"typescript": "^5.2.2",
 		"util": "^0.12.5"
 	},
 	"private": true

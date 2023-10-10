@@ -126,7 +126,6 @@ class Grid extends React.Component<
     />;
 
     this.cardList.push(card as unknown as Card);
-    this.setState({ cards: this.cardList });
   }
 
   // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
@@ -209,6 +208,7 @@ class Grid extends React.Component<
       for (const extension of extensions) {
         this.appendCard(extension, "extension", activeTab);
       }
+      this.setState({ cards: this.cardList });
 
       // First result is null or -1 so it coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -243,6 +243,7 @@ class Grid extends React.Component<
           });
         }
       }
+      this.setState({ cards: this.cardList });
       break;
 
       // Don't need to return a page number because
@@ -266,6 +267,7 @@ class Grid extends React.Component<
           ));
         }
       }
+      this.setState({ cards: this.cardList });
 
       sortThemes(themes, localStorage.getItem("marketplace:sort") || "stars");
 
@@ -304,6 +306,7 @@ class Grid extends React.Component<
           });
         }
       }
+      this.setState({ cards: this.cardList });
 
       // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -324,6 +327,7 @@ class Grid extends React.Component<
       }
       if (snippets && snippets.length) {
         snippets.forEach((snippet) => this.appendCard(snippet, "snippet", activeTab));
+        this.setState({ cards: this.cardList });
       }
     }}
 
@@ -418,6 +422,7 @@ class Grid extends React.Component<
     // Checks for new Marketplace updates
     fetch(LATEST_RELEASE).then(res => res.json()).then(
       result => {
+        if (result.message) throw result;
         this.setState({
           version: result[0].name,
         });
@@ -560,12 +565,13 @@ class Grid extends React.Component<
           const cardsOfType = this.cardList.filter((card) => card.props.type === cardType.handle)
             .filter((card) => {
               const searchValue = this.state.searchValue.trim().toLowerCase();
-              const { title, user, authors } = card.props.item;
+              const { title, user, authors, tags } = card.props.item;
 
               return !searchValue ||
                 title.toLowerCase().includes(searchValue) ||
                 user?.toLowerCase().includes(searchValue) ||
-                authors?.some((author) => author.name.toLowerCase().includes(searchValue));
+                authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
+                tags?.some((tag) => tag.toLowerCase().includes(searchValue));
             })
             .map((card) => {
               // Clone the cards and update the prop to trigger re-render
@@ -600,7 +606,7 @@ class Grid extends React.Component<
           ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+ {t("grid.addCSS")}</Button>
           : null}
         <footer className="marketplace-footer">
-          {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
+          {!this.state.endOfList && (this.state.rest && this.state.cards.length > 0 ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
         </footer>
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}

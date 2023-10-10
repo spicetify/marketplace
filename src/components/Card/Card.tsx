@@ -378,8 +378,9 @@ class Card extends React.Component<CardProps, {
    */
   async fetchAndInjectUserCSS(theme) {
     try {
+      const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
       const userCSS = theme
-        ? await parseCSS(this.props.item as CardItem)
+        ? await parseCSS(this.props.item as CardItem, tld)
         : undefined;
       injectUserCSS(userCSS);
     } catch (error) {

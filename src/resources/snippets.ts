@@ -68,13 +68,13 @@ export default [
   {
     "title": "Left aligned heart icons",
     "description": "Moves the heart icon to the left side of the track title in track views",
-    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-addButton-button.main-trackList-rowHeartButton,\n.main-addButton-button.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
+    "code": ".main-trackList-rowSectionStart {\n  margin-left: 38px !important;\n}\n.main-trackList-rowHeartButton {\n  position: absolute !important;\n  left: 48px !important;\n}",
     "preview": "resources/assets/snippets/left-aligned-heart-icons.png",
   },
   {
     "title": "Hover Panels",
     "description": "Have your playlist, right sidebar, and controls bar be hoverable.",
-    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints{\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms , opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: var(--panel-width) !important;\n  opacity: 1 !important;\n  transition: width 250ms , opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position:absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader{\ntop: 0px !important;\n}\n.main-yourLibraryX-navItem{\noverflow: hidden\n}\n.main-coverSlotCollapsed-navAltContainer{\noverflow: visible \n}\n.LayoutResizer__resize-bar{\n	display: none;\n}",
+    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints {\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: 350px !important;\n  opacity: 1 !important;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position: absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader {\n  top: 0 !important;\n}\n.main-yourLibraryX-navItem {\n  overflow: hidden;\n}\n.main-coverSlotCollapsed-navAltContainer {\n  overflow: visible;\n}\n.LayoutResizer__resize-bar {\n  display: none;\n}\n:root {\n  --left-sidebar-width: 35px !important;\n  --right-sidebar-width: 50px !important;\n}",
     "preview": "resources/assets/snippets/hover-panels.png",
   },
   {
@@ -98,7 +98,7 @@ export default [
   {
     "title": "Circular Album Art",
     "description": "Makes the now playing album art be circular (like a vinyl)",
-    "code": ".cover-art .cover-art-image {\n    border-radius: 100% !important;\n}",
+    "code": ".cover-art { clip-path: circle(50% at 50% 50%);}",
     "preview": "resources/assets/snippets/circular-album-art.png",
   },
   {
@@ -206,7 +206,7 @@ export default [
   {
     "title": "Oneko",
     "description": "Adds Oneko onto your playback bar!",
-    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-image: url('https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif'); animation: oneko 1s infinite; } @keyframes oneko { 0%, 50% { background-position: -64px 0; } 50.0001%, 100% { background-position: -64px -32px; } }",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-image: url('https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif'); animation: oneko 1s infinite; } @keyframes oneko { 0%, 50% { background-position: -64px 0; } 50.0001%, 100% { background-position: -64px -32px; } }",
     "preview": "resources/assets/snippets/oneko.png",
   },
   {
@@ -278,7 +278,7 @@ export default [
   {
     "title": "Duck",
     "description": "Adds dancing duck onto your playback bar!",
-    "code": "[class^='playback-']:not(.volume-bar__slider-container > .playback-progressbar):before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzdsM2Y2aHh3cTQ2Z3JzbXAzMXJrZjdiM3IwMXhnaTFnc295ZnRkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cCOVfFwDI3awdse5A3/giphy.gif'); }",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzdsM2Y2aHh3cTQ2Z3JzbXAzMXJrZjdiM3IwMXhnaTFnc295ZnRkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cCOVfFwDI3awdse5A3/giphy.gif'); }",
     "preview": "resources/assets/snippets/duck.png",
   },
   {
@@ -292,5 +292,35 @@ export default [
     "description": "Single-line rows in the library sidebar, like the pre-2023 UI",
     "code": ".main-yourLibraryX-listItemGroup {grid-template-rows: none !important;} .main-yourLibraryX-listItemGroup * {padding-block: 0;}.main-yourLibraryX-listItem [role=\"group\"] {min-block-size: 0 !important;} .main-yourLibraryX-listItem .HeaderArea .Column {flex-direction: row; gap: 0.5em;} .main-yourLibraryX-listItem .HeaderArea * {padding-top: 0 !important; padding-bottom: 0 !important;} .main-yourLibraryX-listItem .x-entityImage-imageContainer, .main-yourLibraryX-rowCover {width: 1.6em !important; height: 1.6em !important;} .main-yourLibraryX-listRowSubtitle {padding-top: 0px;}",
     "preview": "resources/assets/snippets/thin-library-sidebar-rows.png",
+  },
+  {
+    "title": "Default Progress Bar",
+    "description": "Return progress bar to default size and location on themes that change it",
+    "code": ".playback-bar {position: relative !important; display: block !important; --playback-bar-grid-gap: 8px !important; -webkit-box-orient: horizontal !important; -webkit-box-direction: normal !important; -webkit-box-pack: justify !important; -ms-flex-pack: justify !important; -webkit-box-align: center !important; -ms-flex-align: center !important; align-items: center !important; display: -webkit-box !important; display: -ms-flexbox !important; display: flex !important; -ms-flex-direction: row !important; flex-direction: row !important; gap: var(--playback-bar-grid-gap) !important; justify-content: space-between !important; height: 12px !important;} .x-progressBar-progressBarBg {--progress-bar-height: 6px !important; --progress-bar-radius: 10px !important;} :root .Root__now-playing-bar .playback-bar > div {height: 17.59px !important;} .player-controls__buttons--new-icons { margin-bottom: 12px !importan;} .main-nowPlayingBar-nowPlayingBar {padding-bottom: 0px !important;}",
+    "preview": "resources/assets/snippets/default-progress-bar.png",
+  },
+  {
+    "title": "Fix Listening On",
+    "description": "Fix listening on for some themes that move it up or make the text not visible",
+    "code": ".Svg-presentation-essentialBase-small-icon-autoMirror {fill: var(--spice-text);} .TypeElement-mesto-textBase-type {color: var(--spice-text) !important;} .main-devicePicker-indicator {display: none !important;} .main-nowPlayingBar-container {height: 72px !important;} .main-connectBar-connectBar {position: absolute !important; align-items: center !important; top: 42px !important; height: 32px !important; align-self: center !important; background-color: transparent !important; width: 30% !important;}",
+    "preview": "resources/assets/snippets/fix-listening-on.png",
+  },
+  {
+    "title": "Smooth Progress/Volume bar",
+    "description": "Makes the Progress/Volume bar glide",
+    "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
+    "preview": "resources/assets/snippets/smooth-progress-bar.png",
+  },
+  {
+    "title": "Centered Lyrics",
+    "description": "Centers the lyrics on the lyrics page",
+    "code": ".lyrics-lyrics-contentWrapper { text-align: center; }",
+    "preview": "resources/assets/snippets/centered-lyrics.png",
+  },
+  {
+    "title": "Hide lyrics button",
+    "description": "Hides the lyrics button in the playbar",
+    "code": "button.main-nowPlayingBar-lyricsButton { display: none; }",
+    "preview": "resources/assets/snippets/hide-lyrics-button.png",
   },
 ];

@@ -31,12 +31,8 @@
 }
 
 .marketplace-header__left {
-  position: fixed;
-  left: 16px;
-
-  @media (min-width: 1024px) {
-    left: 32px;
-  }
+  position: absolute;
+  left: 0;
 }
 
 .marketplace-grid {

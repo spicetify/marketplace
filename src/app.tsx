@@ -10,6 +10,8 @@ import es from "./resources/locales/es.json";
 import fr from "./resources/locales/fr.json";
 import zhTW from "./resources/locales/zh-TW.json";
 import zhCN from "./resources/locales/zh-CN.json";
+import ru from "./resources/locales/ru.json";
+import et from "./resources/locales/et.json";
 import { initReactI18next } from "react-i18next";
 import { withTranslation } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -25,8 +27,10 @@ i18n
       "en-US": enUS,
       es,
       fr,
+      ru,
       "zh-TW": zhTW,
       "zh-CN": zhCN,
+      et,
     },
     detection: {
       order: [ "navigator", "htmlTag" ],

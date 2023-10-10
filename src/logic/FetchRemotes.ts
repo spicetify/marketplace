@@ -25,11 +25,17 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  const allRepos = await fetch(url).then(res => res.json()).catch(() => []);
-  if (!allRepos.items) {
+  const allRepos = JSON.parse(window.sessionStorage.getItem(`${tag}-page-${page}`) || "null") || await fetch(url)
+    .then(res => res.json())
+    .catch(() => null);
+
+  if (!allRepos?.items) {
     Spicetify.showNotification("Too Many Requests, Cool Down.", true);
-    return;
+    return { items: [] };
   }
+
+  window.sessionStorage.setItem(`${tag}-page-${page}`, JSON.stringify(allRepos));
+
   const filteredResults = {
     ...allRepos,
     // Include count of all items on the page, since we're filtering the blacklist below,
@@ -39,6 +45,32 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   };
 
   return filteredResults;
+}
+
+// Workaround for not spamming console with 404s
+const script = `
+  self.addEventListener('message', async (event) => {
+    const url = event.data;
+    const response = await fetch(url);
+    const data = await response.json().catch(() => null);
+    self.postMessage(data);
+  });
+`;
+const blob = new Blob([script], { type: "application/javascript" });
+const workerURL = URL.createObjectURL(blob);
+
+async function fetchRepoManifest(url: string) {
+  const worker = new Worker(workerURL);
+  return new Promise((resolver) => {
+    const resolve = (data) => {
+      worker.terminate();
+      resolver(data);
+    };
+
+    worker.postMessage(url);
+    worker.addEventListener("message", (event) => resolve(event.data), { once: true });
+    worker.addEventListener("error", () => resolve(null), { once: true });
+  });
 }
 
 // TODO: add try/catch here?
@@ -51,17 +83,20 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
 * @returns The manifest object
 */
 async function getRepoManifest(user: string, repo: string, branch: string) {
-  const sessionStorageItem = window.sessionStorage.getItem(`${user}-${repo}`);
-  const failedSessionStorageItems = window.sessionStorage.getItem("noManifests");
+  const key = `${user}-${repo}`;
+  const sessionStorageItem = window.sessionStorage.getItem(key);
+  const failedSessionStorageItems = JSON.parse(window.sessionStorage.getItem("noManifests") || "[]");
   if (sessionStorageItem) return JSON.parse(sessionStorageItem);
 
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (failedSessionStorageItems?.includes(url)) return null;
+  if (failedSessionStorageItems.includes(url)) return null;
 
-  const manifest = await fetch(url).then(res => res.json()).catch(
-    () => addToSessionStorage([url], "noManifests"),
-  );
-  if (manifest) window.sessionStorage.setItem(`${user}-${repo}`, JSON.stringify(manifest));
+  let manifest = await fetchRepoManifest(url);
+
+  if (!manifest) return addToSessionStorage([url], "noManifests");
+  if (!Array.isArray(manifest)) manifest = [manifest];
+
+  addToSessionStorage(manifest, key);
 
   return manifest;
 }
@@ -77,16 +112,12 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
 export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
-    let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, branch);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    const manifests = await getRepoManifest(user, repo, branch);
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -129,9 +160,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     }, []);
 
     return parsedManifests;
-  }
-  catch (err) {
-    // console.warn(contents_url, err);
+  } catch {
     return null;
   }
 }
@@ -146,16 +175,12 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 */
 export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
   try {
-    let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, branch);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    const manifests = await getRepoManifest(user, repo, branch);
 
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
@@ -196,9 +221,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
       return accum;
     }, []);
     return parsedManifests;
-  }
-  catch (err) {
-    // console.warn(contents_url, err);
+  } catch {
     return null;
   }
 }
@@ -213,16 +236,12 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
 export async function fetchAppManifest(contents_url: string, branch: string, stars: number) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
-    let manifests;
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
-    manifests = await getRepoManifest(user, repo, branch);
-
-    // If the manifest returned is not an array, initialize it as one
-    if (!Array.isArray(manifests)) manifests = [manifests];
+    const manifests = await getRepoManifest(user, repo, branch);
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -263,9 +282,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     }, []);
 
     return parsedManifests;
-  }
-  catch (err) {
-    // console.warn(contents_url, err);
+  } catch {
     return null;
   }
 }
