@@ -599,7 +599,7 @@ class Grid extends React.Component<
           ? <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>+ {t("grid.addCSS")}</Button>
           : null}
         <footer className="marketplace-footer">
-          {!this.state.endOfList && (this.state.rest ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
+          {!this.state.endOfList && (this.state.rest && this.state.cards.length > 0 ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
         </footer>
         <TopBarContent
           switchCallback={this.switchTo.bind(this)}
