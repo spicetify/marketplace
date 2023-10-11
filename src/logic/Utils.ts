@@ -591,19 +591,43 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
   }
 };
 
-export const sortCardItems = (cardItems: CardItem[], sortMode: string) => {
+/**
+ * Compare two card items/snippets by name.
+ * This will use `title` for snippets and `manifest.name` for everything else.
+ */
+const compareNames = (a: CardItem | Snippet, b: CardItem | Snippet) => {
+  // Snippets have a title, but no manifest
+  const aName = a.title || a?.manifest?.name || "";
+  const bName = b.title || b?.manifest?.name || "";
+  return aName.localeCompare(bName);
+};
+
+/**
+ * Compare two card items/snippets by lastUpdated.
+ * This is skipped for snippets, since they don't have a lastUpdated property.
+ */
+const compareUpdated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
+  // Abort compare if items are missing lastUpdated
+  if (a.lastUpdated === undefined || b.lastUpdated === undefined) return 0;
+
+  const aDate = new Date(a.lastUpdated);
+  const bDate = new Date(b.lastUpdated);
+  return bDate.getTime() - aDate.getTime();
+};
+
+export const sortCardItems = (cardItems: CardItem[] | Snippet[], sortMode: string) => {
   switch (sortMode) {
   case "a-z":
-    cardItems.sort((a, b) => a.manifest.name.localeCompare(b.manifest.name));
+    cardItems.sort((a, b) => compareNames(a, b));
     break;
   case "z-a":
-    cardItems.sort((a, b) => b.manifest.name.localeCompare(a.manifest.name));
+    cardItems.sort((a, b) => compareNames(b, a));
     break;
   case "newest":
-    cardItems.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+    cardItems.sort((a, b) => compareUpdated(a, b));
     break;
   case "oldest":
-    cardItems.sort((a, b) => new Date(a.lastUpdated).getTime() - new Date(b.lastUpdated).getTime());
+    cardItems.sort((a, b) => compareUpdated(b, a));
     break;
   case "stars":
   default:
