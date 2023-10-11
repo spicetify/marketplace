@@ -193,10 +193,10 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
 
 export const generateSortOptions = () => {
   return [
-    { key: "newest", value: "Newest" },
     { key: "stars", value: "Stars" },
-    { key: "a-z", value: "A-Z" },
+    { key: "newest", value: "Newest" },
     { key: "oldest", value: "Oldest" },
+    { key: "a-z", value: "A-Z" },
     { key: "z-a", value: "Z-A" },
   ];
 };
