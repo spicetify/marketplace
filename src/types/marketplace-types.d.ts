@@ -106,27 +106,6 @@ export type CardItem = {
   description: undefined;
 };
 
-export type Extension = {
-  manifest: {
-    name: string;
-    description: string;
-    preview: string;
-    main: string;
-    readme: string;
-  };
-  title: string;
-  subtitle: string;
-  authors: { name: string; url: string }[];
-  user: string;
-  repo: string;
-  branch: string;
-  imageURL: string;
-  extensionURL: string;
-  readmeURL: string;
-  stars: number;
-  lastUpdated: string;
-};
-
 // TODO: use this in `fetchThemeManifest()`
 // export type ThemeCardItem = CardItem & {
 //   cssURL?: string;
@@ -174,6 +153,8 @@ export type SchemeIni = {
   [key: string]: ColourScheme;
 };
 
+export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars";
+
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js
   visual: VisualConfig,
@@ -184,5 +165,5 @@ export type Config = {
     schemes?: SchemeIni;
     activeScheme?: string | null;
   },
-  sort: string;
+  sort: SortMode;
 };

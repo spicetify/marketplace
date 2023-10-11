@@ -5,7 +5,12 @@ import { Option } from "react-dropdown";
 const Spicetify = window.Spicetify;
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme, generateSortOptions, sortExtensions, sortThemes } from "../logic/Utils";
+import { getLocalStorageDataFromKey,
+  generateSchemesOptions,
+  injectColourScheme,
+  generateSortOptions,
+  sortCardItems,
+} from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
@@ -193,8 +198,14 @@ class Grid extends React.Component<
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
-          true,
+          this.CONFIG.visual.hideInstalled,
         );
+
+        // I believe this stops the requests when switching tabs?
+        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+          // Stop this queue from continuing to fetch and append to cards list
+          return -1;
+        }
 
         if (repoExtensions && repoExtensions.length) {
           extensions.push(...repoExtensions.map((extension) => ({
@@ -203,7 +214,7 @@ class Grid extends React.Component<
         }
       }
 
-      sortExtensions(extensions, localStorage.getItem("marketplace:sort") || "stars");
+      sortCardItems(extensions, localStorage.getItem("marketplace:sort") || "stars");
 
       for (const extension of extensions) {
         this.appendCard(extension, "extension", activeTab);
@@ -258,24 +269,32 @@ class Grid extends React.Component<
           repo.stargazers_count,
         );
 
+        // I believe this stops the requests when switching tabs?
+        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+          // Stop this queue from continuing to fetch and append to cards list
+          return -1;
+        }
+
         if (repoThemes && repoThemes.length) {
           themes.push(...repoThemes.map(
             (theme) => ({
-              ...theme, 
+              ...theme,
               lastUpdated: repo.pushed_at,
-            })
+            }),
           ));
         }
       }
       this.setState({ cards: this.cardList });
 
-      sortThemes(themes, localStorage.getItem("marketplace:sort") || "stars");
+      sortCardItems(themes, localStorage.getItem("marketplace:sort") || "stars");
 
       for (const theme of themes) {
         this.appendCard(theme, "theme", activeTab);
       }
 
+      // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+      // -1 because the page number is 1-indexed
       const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
       const remainingResults = pageOfRepos.total_count - soFarResults;
 

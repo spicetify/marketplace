@@ -1,8 +1,8 @@
 import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { CardItem, Manifest, Snippet } from "../types/marketplace-types";
+import { CardItem, Snippet } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
 
-import { RepoTopic, Extension } from "../types/marketplace-types";
+import { RepoTopic } from "../types/marketplace-types";
 import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
