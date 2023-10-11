@@ -358,7 +358,9 @@ class Grid extends React.Component<
         // Stop this queue from continuing to fetch and append to cards list
         return -1;
       }
+
       if (snippets && snippets.length) {
+        sortCardItems(snippets, localStorage.getItem("marketplace:sort") || "stars");
         snippets.forEach((snippet) => this.appendCard(snippet, "snippet", activeTab));
         this.setState({ cards: this.cardList });
       }
