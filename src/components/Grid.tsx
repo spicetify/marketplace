@@ -546,10 +546,10 @@ class Grid extends React.Component<
               </button>
               : null}
             {/* Generate a new box for sorting options */}
-            <h2 className="marketplace-header__label">Sort by:</h2>
+            <h2 className="marketplace-header__label">{t("grid.sort.label")}</h2>
             <SortBox
               onChange={(value) => this.updateSort(value)}
-              sortBoxOptions={generateSortOptions()}
+              sortBoxOptions={generateSortOptions(t)}
               sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
           </div>
           <div className="marketplace-header__right">

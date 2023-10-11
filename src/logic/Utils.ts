@@ -191,7 +191,12 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
   ));
 };
 
-export const generateSortOptions = () => {
+/**
+ * Generate a list of options for the sort dropdown
+ * @param t The string translation function
+ * @returns The sort options for the sort dropdown
+ */
+export const generateSortOptions = (t: (key: string) => string) => {
   // TODO: It would be great if I could disable the options that don't apply for snippets
   // But it looks like that's not supported by the library
   // https://github.com/fraserxu/react-dropdown/pull/176
@@ -199,11 +204,11 @@ export const generateSortOptions = () => {
   // but then the sort resets when you switch tabs and it's disruptive
 
   return [
-    { key: "stars", value: "Stars" },
-    { key: "newest", value: "Newest" },
-    { key: "oldest", value: "Oldest" },
-    { key: "a-z", value: "A-Z" },
-    { key: "z-a", value: "Z-A" },
+    { key: "stars", value: t("grid.sort.stars") },
+    { key: "newest", value: t("grid.sort.newest") },
+    { key: "oldest", value: t("grid.sort.oldest") },
+    { key: "a-z", value: t("grid.sort.aToZ") },
+    { key: "z-a", value: t("grid.sort.zToA") },
   ];
 };
 /**

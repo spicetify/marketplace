@@ -81,7 +81,15 @@
       "lastUpdated": "Last updated {{val, datetime}}",
       "externalJS": "external JS",
       "dark": "dark",
-      "light": "light"
+      "light": "light",
+      "sort": {
+        "label": "Sort by:",
+        "stars": "Stars",
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
     },
     "readmePage": {
       "title": "$t(grid.spicetifyMarketplace) - Readme",
