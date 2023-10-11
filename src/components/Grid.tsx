@@ -305,9 +305,10 @@ class Grid extends React.Component<
     }
     case "Apps": {
       const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST);
-      for (const repo of pageOfRepos.items) {
+      const apps: CardItem[] = [];
 
-        const apps = await fetchAppManifest(
+      for (const repo of pageOfRepos.items) {
+        const repoApps = await fetchAppManifest(
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
@@ -318,14 +319,20 @@ class Grid extends React.Component<
           return -1;
         }
 
-        if (apps && apps.length) {
-          apps.forEach((app) => {
-            Object.assign(app, { lastUpdated: repo.pushed_at });
-            this.appendCard(app, "app", activeTab);
-          });
+        if (repoApps && repoApps.length) {
+          apps.push(...repoApps.map((app) => ({
+            ...app,
+            lastUpdated: repo.pushed_at,
+          })));
         }
       }
       this.setState({ cards: this.cardList });
+
+      sortCardItems(apps, localStorage.getItem("marketplace:sort") || "stars");
+
+      for (const app of apps) {
+        this.appendCard(app, "app", activeTab);
+      }
 
       // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
