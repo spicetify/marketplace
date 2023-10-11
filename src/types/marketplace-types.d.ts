@@ -93,7 +93,7 @@ export type CardItem = {
   lastUpdated: string;
   name: string;
   lastUpdated: string;
-   stargazers_count: number;
+  stargazers_count: number;
   // For themes only
   cssURL?: string;
   schemesURL?: string;
