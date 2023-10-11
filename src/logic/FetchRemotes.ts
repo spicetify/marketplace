@@ -107,6 +107,7 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
 * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
 * @param branch The repo's default branch (e.g. main or master)
 * @param stars The number of stars the repo has
+* @param hideInstalled Whether to hide installed items or not (defaults to `false`)
 * @returns Extension info for card (or null)
 */
 export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
@@ -317,3 +318,4 @@ export const fetchCssSnippets = async () => {
   }, []);
   return snippets;
 };
+

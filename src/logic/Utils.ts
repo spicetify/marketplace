@@ -192,6 +192,26 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
 };
 
 /**
+ * Generate a list of options for the sort dropdown
+ * @param t The string translation function
+ * @returns The sort options for the sort dropdown
+ */
+export const generateSortOptions = (t: (key: string) => string) => {
+  // TODO: It would be great if I could disable the options that don't apply for snippets
+  // But it looks like that's not supported by the library
+  // https://github.com/fraserxu/react-dropdown/pull/176
+  // TODO: I could also just remove the options for snippets,
+  // but then the sort resets when you switch tabs and it's disruptive
+
+  return [
+    { key: "stars", value: t("grid.sort.stars") },
+    { key: "newest", value: t("grid.sort.newest") },
+    { key: "oldest", value: t("grid.sort.oldest") },
+    { key: "a-z", value: t("grid.sort.aToZ") },
+    { key: "z-a", value: t("grid.sort.zToA") },
+  ];
+};
+/**
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
@@ -579,6 +599,51 @@ export const addExtensionToSpicetifyConfig = (main?: string) => {
   const name = main.split("/").pop();
   if (name && Spicetify.Config.extensions.indexOf(name) === -1) {
     Spicetify.Config.extensions.push(name);
+  }
+};
+
+/**
+ * Compare two card items/snippets by name.
+ * This will use `title` for snippets and `manifest.name` for everything else.
+ */
+const compareNames = (a: CardItem | Snippet, b: CardItem | Snippet) => {
+  // Snippets have a title, but no manifest
+  const aName = a.title || a?.manifest?.name || "";
+  const bName = b.title || b?.manifest?.name || "";
+  return aName.localeCompare(bName);
+};
+
+/**
+ * Compare two card items/snippets by lastUpdated.
+ * This is skipped for snippets, since they don't have a lastUpdated property.
+ */
+const compareUpdated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
+  // Abort compare if items are missing lastUpdated
+  if (a.lastUpdated === undefined || b.lastUpdated === undefined) return 0;
+
+  const aDate = new Date(a.lastUpdated);
+  const bDate = new Date(b.lastUpdated);
+  return bDate.getTime() - aDate.getTime();
+};
+
+export const sortCardItems = (cardItems: CardItem[] | Snippet[], sortMode: string) => {
+  switch (sortMode) {
+  case "a-z":
+    cardItems.sort((a, b) => compareNames(a, b));
+    break;
+  case "z-a":
+    cardItems.sort((a, b) => compareNames(b, a));
+    break;
+  case "newest":
+    cardItems.sort((a, b) => compareUpdated(a, b));
+    break;
+  case "oldest":
+    cardItems.sort((a, b) => compareUpdated(b, a));
+    break;
+  case "stars":
+  default:
+    cardItems.sort((a, b) => b.stars - a.stars);
+    break;
   }
 };
 

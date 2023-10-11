@@ -5,7 +5,12 @@ import { Option } from "react-dropdown";
 const Spicetify = window.Spicetify;
 
 import { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import { getLocalStorageDataFromKey, generateSchemesOptions, injectColourScheme } from "../logic/Utils";
+import { getLocalStorageDataFromKey,
+  generateSchemesOptions,
+  injectColourScheme,
+  generateSortOptions,
+  sortCardItems,
+} from "../logic/Utils";
 import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
@@ -52,7 +57,7 @@ class Grid extends React.Component<
 
     // Fetches the sorting options, fetched from SortBox.js
     this.sortConfig = {
-      by: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sortBy, "top"),
+      by: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sort, "top"),
     };
 
     this.state = {
@@ -132,7 +137,7 @@ class Grid extends React.Component<
   updateSort(sortByValue) {
     if (sortByValue) {
       this.sortConfig.by = sortByValue;
-      localStorage.setItem(LOCALSTORAGE_KEYS.sortBy, sortByValue);
+      localStorage.setItem(LOCALSTORAGE_KEYS.sort, sortByValue);
     }
 
     // this.requestPage = null;
@@ -187,8 +192,9 @@ class Grid extends React.Component<
     switch (activeTab) {
     case "Extensions": {
       const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST);
+      const extensions: CardItem[] = [];
       for (const repo of pageOfRepos.items) {
-        const extensions = await fetchExtensionManifest(
+        const repoExtensions = await fetchExtensionManifest(
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
@@ -201,13 +207,17 @@ class Grid extends React.Component<
           return -1;
         }
 
-        if (extensions && extensions.length) {
-          // console.log(`${repo.name} has ${extensions.length} extensions:`, extensions);
-          extensions.forEach((extension) => {
-            Object.assign(extension, { lastUpdated: repo.pushed_at });
-            this.appendCard(extension, "extension", activeTab);
-          });
+        if (repoExtensions && repoExtensions.length) {
+          extensions.push(...repoExtensions.map((extension) => ({
+            ...extension, lastUpdated: repo.pushed_at,
+          })));
         }
+      }
+
+      sortCardItems(extensions, localStorage.getItem("marketplace:sort") || "stars");
+
+      for (const extension of extensions) {
+        this.appendCard(extension, "extension", activeTab);
       }
       this.setState({ cards: this.cardList });
 
@@ -231,17 +241,24 @@ class Grid extends React.Component<
 
       for (const type in installedStuff) {
         if (installedStuff[type].length) {
+          const installedOfType: CardItem[] = [];
           installedStuff[type].forEach(async (itemKey) => {
             // TODO: err handling
-            const extension = getLocalStorageDataFromKey(itemKey);
+            const installedItem = getLocalStorageDataFromKey(itemKey);
             // I believe this stops the requests when switching tabs?
             if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
               // Stop this queue from continuing to fetch and append to cards list
               return -1;
             }
 
-            this.appendCard(extension, type as CardType, activeTab);
+            installedOfType.push(installedItem);
           });
+
+          sortCardItems(installedOfType, localStorage.getItem("marketplace:sort") || "stars");
+
+          for (const item of installedOfType) {
+            this.appendCard(item, type as CardType, activeTab);
+          }
         }
       }
       this.setState({ cards: this.cardList });
@@ -251,27 +268,36 @@ class Grid extends React.Component<
       // installed extension do them all in one go, since it's local
     } case "Themes": {
       const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST);
+      const themes: CardItem[] = [];
       for (const repo of pageOfRepos.items) {
-
-        const themes = await fetchThemeManifest(
+        const repoThemes = await fetchThemeManifest(
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
         );
+
         // I believe this stops the requests when switching tabs?
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
           return -1;
         }
 
-        if (themes && themes.length) {
-          themes.forEach((theme) => {
-            Object.assign(theme, { lastUpdated: repo.pushed_at });
-            this.appendCard(theme, "theme", activeTab);
-          });
+        if (repoThemes && repoThemes.length) {
+          themes.push(...repoThemes.map(
+            (theme) => ({
+              ...theme,
+              lastUpdated: repo.pushed_at,
+            }),
+          ));
         }
       }
       this.setState({ cards: this.cardList });
+
+      sortCardItems(themes, localStorage.getItem("marketplace:sort") || "stars");
+
+      for (const theme of themes) {
+        this.appendCard(theme, "theme", activeTab);
+      }
 
       // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -283,11 +309,13 @@ class Grid extends React.Component<
       if (remainingResults > 0) return currentPage + 1;
       else console.debug("No more theme results");
       break;
-    } case "Apps": {
+    }
+    case "Apps": {
       const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST);
-      for (const repo of pageOfRepos.items) {
+      const apps: CardItem[] = [];
 
-        const apps = await fetchAppManifest(
+      for (const repo of pageOfRepos.items) {
+        const repoApps = await fetchAppManifest(
           repo.contents_url,
           repo.default_branch,
           repo.stargazers_count,
@@ -298,14 +326,20 @@ class Grid extends React.Component<
           return -1;
         }
 
-        if (apps && apps.length) {
-          apps.forEach((app) => {
-            Object.assign(app, { lastUpdated: repo.pushed_at });
-            this.appendCard(app, "app", activeTab);
-          });
+        if (repoApps && repoApps.length) {
+          apps.push(...repoApps.map((app) => ({
+            ...app,
+            lastUpdated: repo.pushed_at,
+          })));
         }
       }
       this.setState({ cards: this.cardList });
+
+      sortCardItems(apps, localStorage.getItem("marketplace:sort") || "stars");
+
+      for (const app of apps) {
+        this.appendCard(app, "app", activeTab);
+      }
 
       // First request is null, so coerces to 1
       const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -324,7 +358,9 @@ class Grid extends React.Component<
         // Stop this queue from continuing to fetch and append to cards list
         return -1;
       }
+
       if (snippets && snippets.length) {
+        sortCardItems(snippets, localStorage.getItem("marketplace:sort") || "stars");
         snippets.forEach((snippet) => this.appendCard(snippet, "snippet", activeTab));
         this.setState({ cards: this.cardList });
       }
@@ -501,7 +537,6 @@ class Grid extends React.Component<
       <section className="contentSpacing">
         <div className="marketplace-header">
           <div className="marketplace-header__left">
-            <h1>{this.props.title}</h1>
             {this.state.newUpdate
               ? <button type="button" title={t("grid.newUpdate")} className="marketplace-header-icon-button" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace/releases/latest"}
@@ -510,6 +545,12 @@ class Grid extends React.Component<
                 &nbsp;{this.state.version}
               </button>
               : null}
+            {/* Generate a new box for sorting options */}
+            <h2 className="marketplace-header__label">{t("grid.sort.label")}</h2>
+            <SortBox
+              onChange={(value) => this.updateSort(value)}
+              sortBoxOptions={generateSortOptions(t)}
+              sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
           </div>
           <div className="marketplace-header__right">
             {/* Show theme developer tools button if themeDevTools is enabled */}

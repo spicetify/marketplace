@@ -91,7 +91,9 @@ export type CardItem = {
   stars: number;
   tags: string[];
   lastUpdated: string;
-
+  name: string;
+  lastUpdated: string;
+  stargazers_count: number;
   // For themes only
   cssURL?: string;
   schemesURL?: string;
@@ -151,6 +153,8 @@ export type SchemeIni = {
   [key: string]: ColourScheme;
 };
 
+export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars";
+
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js
   visual: VisualConfig,
@@ -161,4 +165,5 @@ export type Config = {
     schemes?: SchemeIni;
     activeScheme?: string | null;
   },
+  sort: SortMode;
 };

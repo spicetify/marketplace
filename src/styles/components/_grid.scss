@@ -1,10 +1,5 @@
 @use "../constants.scss";
 
-// Compatibility with new Spotify layout
-.Root__fixed-top-bar ~ .Root__main-view .marketplace-header {
-  padding-top: 64px;
-}
-
 .marketplace-header {
   -webkit-box-pack: justify;
   -webkit-box-align: center;
@@ -18,7 +13,7 @@
   // To position the settings button + colour schemes
   position: sticky;
   flex-direction: row-reverse;
-  // top: 80px;
+  top: 80px;
   z-index: 1;
 }
 
@@ -33,6 +28,11 @@
 .marketplace-header__left {
   position: absolute;
   left: 0;
+}
+
+.marketplace-header__label {
+  display: inline-flex;
+  align-self: center;
 }
 
 .marketplace-grid {
