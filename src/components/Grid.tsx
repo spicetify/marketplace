@@ -521,7 +521,6 @@ class Grid extends React.Component<
       <section className="contentSpacing">
         <div className="marketplace-header">
           <div className="marketplace-header__left">
-            <h1>{this.props.title}</h1>
             {this.state.newUpdate
               ? <button type="button" title={t("grid.newUpdate")} className="marketplace-header-icon-button" id="marketplace-update"
                 onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace/releases/latest"}
@@ -530,6 +529,12 @@ class Grid extends React.Component<
                 &nbsp;{this.state.version}
               </button>
               : null}
+            {/* Generate a new box for sorting options */}
+            <h2 className="marketplace-header__label">Sort by:</h2>
+            <SortBox
+              onChange={(value) => this.updateSort(value)}
+              sortBoxOptions={generateSortOptions()}
+              sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
           </div>
           <div className="marketplace-header__right">
             {/* Show theme developer tools button if themeDevTools is enabled */}
@@ -559,12 +564,6 @@ class Grid extends React.Component<
                   this.setState({ searchValue: event.target.value });
                 }} />
             </div>
-            {/* Generate a new box for sorting options */}
-            <SortBox
-              onChange={(value) => this.updateSort(value)}
-              sortBoxOptions={generateSortOptions()}
-              sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
-
             <Spicetify.ReactComponent.TooltipWrapper label={t("settings.title")} renderInline={true} placement="bottom">
               <button type="button" aria-label={t("settings.title")} className="marketplace-header-icon-button" id="marketplace-settings-button"
                 onClick={() => openModal("SETTINGS", this.CONFIG, this.updateAppConfig)}

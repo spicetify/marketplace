@@ -30,6 +30,11 @@
   left: 0;
 }
 
+.marketplace-header__label {
+  display: inline-flex;
+  align-self: center;
+}
+
 .marketplace-grid {
   --minimumColumnWidth: 180px;
   --column-width: minmax(var(--minimumColumnWidth), 1fr);
