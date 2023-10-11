@@ -192,6 +192,12 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
 };
 
 export const generateSortOptions = () => {
+  // TODO: It would be great if I could disable the options that don't apply for snippets
+  // But it looks like that's not supported by the library
+  // https://github.com/fraserxu/react-dropdown/pull/176
+  // TODO: I could also just remove the options for snippets,
+  // but then the sort resets when you switch tabs and it's disruptive
+
   return [
     { key: "stars", value: "Stars" },
     { key: "newest", value: "Newest" },
