@@ -13,7 +13,7 @@
 
   // To position the settings button + colour schemes
   position: sticky;
-  flex-direction: row-reverse;
+  flex-direction: row;
   top: 64px;
   z-index: 1;
   
@@ -29,11 +29,6 @@
   & > :is(div, button) {
     margin-left: 8px;
   }
-}
-
-.marketplace-header__left {
-  position: absolute;
-  left: 0;
 }
 
 .marketplace-header__label {
