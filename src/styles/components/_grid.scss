@@ -9,16 +9,18 @@
   background-color: var(--spice-main);
   display: flex;
   justify-content: space-between;
-  height: 64px;
+  padding-bottom: 8px;
 
   // To position the settings button + colour schemes
   position: sticky;
   flex-direction: row-reverse;
   top: 64px;
   z-index: 1;
-}
-.contentSpacing:has(#marketplace-readme) .marketplace-header {
-  top: 0;
+  
+  // Fix positioning on readme pages
+  .contentSpacing:has(#marketplace-readme) & {
+    top: 0;
+  }
 }
 
 .marketplace-header__right,
