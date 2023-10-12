@@ -6,15 +6,21 @@
   align-content: space-between;
   align-items: center;
   color: var(--spice-text);
+  background-color: var(--spice-main);
   display: flex;
   justify-content: space-between;
-  margin: 16px 0;
+  padding-bottom: 8px;
 
   // To position the settings button + colour schemes
   position: sticky;
-  flex-direction: row-reverse;
-  top: 80px;
+  flex-direction: row;
+  top: 64px;
   z-index: 1;
+  
+  // Fix positioning on readme pages
+  .contentSpacing:has(#marketplace-readme) & {
+    top: 0;
+  }
 }
 
 .marketplace-header__right,
@@ -23,11 +29,6 @@
   & > :is(div, button) {
     margin-left: 8px;
   }
-}
-
-.marketplace-header__left {
-  position: absolute;
-  left: 0;
 }
 
 .marketplace-header__label {
