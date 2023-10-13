@@ -209,7 +209,7 @@ class Grid extends React.Component<
 
         if (repoExtensions && repoExtensions.length) {
           extensions.push(...repoExtensions.map((extension) => ({
-            ...extension, lastUpdated: repo.pushed_at,
+            ...extension, lastUpdated: repo.pushed_at, created: repo.created_at,
           })));
         }
       }
@@ -287,6 +287,7 @@ class Grid extends React.Component<
             (theme) => ({
               ...theme,
               lastUpdated: repo.pushed_at,
+              created: repo.created_at,
             }),
           ));
         }
@@ -330,6 +331,7 @@ class Grid extends React.Component<
           apps.push(...repoApps.map((app) => ({
             ...app,
             lastUpdated: repo.pushed_at,
+            created: repo.created_at,
           })));
         }
       }

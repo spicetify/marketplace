@@ -57,6 +57,7 @@ export type Snippet = {
   schemesURL: undefined;
   include: undefined;
   lastUpdated: undefined;
+  created: undefined;
 };
 
 // From `fetchExtensionManifest()` and `fetchThemeManifest()`
@@ -91,8 +92,8 @@ export type CardItem = {
   stars: number;
   tags: string[];
   lastUpdated: string;
+  created: string;
   name: string;
-  lastUpdated: string;
   stargazers_count: number;
   // For themes only
   cssURL?: string;
@@ -153,7 +154,7 @@ export type SchemeIni = {
   [key: string]: ColourScheme;
 };
 
-export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars";
+export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars" | "lastUpdated" | "mostStale";
 
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js

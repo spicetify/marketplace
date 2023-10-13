@@ -40,6 +40,7 @@ class Card extends React.Component<CardProps, {
   tagsExpanded: boolean;
   externalUrl: string;
   lastUpdated: string | undefined;
+  created: string | undefined;
 }> {
   // Theme stuff
   // cssURL?: string;
@@ -83,6 +84,7 @@ class Card extends React.Component<CardProps, {
         ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
         : "",
       lastUpdated: (this.props.item.user && this.props.item.repo) ? this.props.item.lastUpdated : undefined,
+      created: (this.props.item.user && this.props.item.repo) ? this.props.item.created : undefined,
     };
   }
 
@@ -168,7 +170,7 @@ class Card extends React.Component<CardProps, {
       Spicetify.showNotification("There was an error installing extension", true);
       return;
     }
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated } = this.props.item;
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
     localStorage.setItem(this.localStorageKey, JSON.stringify({
       manifest,
       type: this.props.type,
@@ -183,6 +185,7 @@ class Card extends React.Component<CardProps, {
       readmeURL,
       stars: this.state.stars,
       lastUpdated,
+      created,
     }));
 
     // Add to installed list if not there already
@@ -241,7 +244,7 @@ class Card extends React.Component<CardProps, {
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
 
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include, lastUpdated } = item;
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include, lastUpdated, created } = item;
 
     localStorage.setItem(this.localStorageKey, JSON.stringify({
       manifest,
@@ -265,6 +268,7 @@ class Card extends React.Component<CardProps, {
       schemes: parsedSchemes,
       activeScheme,
       lastUpdated,
+      created,
     }));
 
     // TODO: handle this differently?

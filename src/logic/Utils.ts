@@ -207,6 +207,8 @@ export const generateSortOptions = (t: (key: string) => string) => {
     { key: "stars", value: t("grid.sort.stars") },
     { key: "newest", value: t("grid.sort.newest") },
     { key: "oldest", value: t("grid.sort.oldest") },
+    { key: "lastUpdated", value: t("grid.sort.lastUpdated") },
+    { key: "mostStale", value: t("grid.sort.mostStale") },
     { key: "a-z", value: t("grid.sort.aToZ") },
     { key: "z-a", value: t("grid.sort.zToA") },
   ];
@@ -614,6 +616,19 @@ const compareNames = (a: CardItem | Snippet, b: CardItem | Snippet) => {
 };
 
 /**
+ * Compare two card items/snippets by created.
+ * This is skipped for snippets, since they don't have a created property.
+ */
+const compareCreated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
+  // Abort compare if items are missing created
+  if (a.created === undefined || b.created === undefined) return 0;
+
+  const aDate = new Date(a.created);
+  const bDate = new Date(b.created);
+  return bDate.getTime() - aDate.getTime();
+};
+
+/**
  * Compare two card items/snippets by lastUpdated.
  * This is skipped for snippets, since they don't have a lastUpdated property.
  */
@@ -635,9 +650,15 @@ export const sortCardItems = (cardItems: CardItem[] | Snippet[], sortMode: strin
     cardItems.sort((a, b) => compareNames(b, a));
     break;
   case "newest":
-    cardItems.sort((a, b) => compareUpdated(a, b));
+    cardItems.sort((a, b) => compareCreated(a, b));
     break;
   case "oldest":
+    cardItems.sort((a, b) => compareCreated(b, a));
+    break;
+  case "lastUpdated":
+    cardItems.sort((a, b) => compareUpdated(a, b));
+    break;
+  case "mostStale":
     cardItems.sort((a, b) => compareUpdated(b, a));
     break;
   case "stars":
