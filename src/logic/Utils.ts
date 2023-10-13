@@ -207,7 +207,7 @@ export const generateSortOptions = (t: (key: string) => string) => {
     { key: "stars", value: t("grid.sort.stars") },
     { key: "newest", value: t("grid.sort.newest") },
     { key: "oldest", value: t("grid.sort.oldest") },
-    { key: "recentlyUpdated", value: t("grid.sort.recentlyUpdated") },
+    { key: "lastUpdated", value: t("grid.sort.lastUpdated") },
     { key: "mostStale", value: t("grid.sort.mostStale") },
     { key: "a-z", value: t("grid.sort.aToZ") },
     { key: "z-a", value: t("grid.sort.zToA") },
@@ -655,7 +655,7 @@ export const sortCardItems = (cardItems: CardItem[] | Snippet[], sortMode: strin
   case "oldest":
     cardItems.sort((a, b) => compareCreated(b, a));
     break;
-  case "recentlyUpdated":
+  case "lastUpdated":
     cardItems.sort((a, b) => compareUpdated(a, b));
     break;
   case "mostStale":

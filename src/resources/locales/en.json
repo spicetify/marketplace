@@ -87,7 +87,7 @@
         "stars": "Stars",
         "newest": "Newest",
         "oldest": "Oldest",
-        "recentlyUpdated": "Recently Updated",
+        "lastUpdated": "Last Updated",
         "mostStale": "Most Stale",
         "aToZ": "A-Z",
         "zToA": "Z-A"

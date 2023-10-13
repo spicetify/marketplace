@@ -154,7 +154,7 @@ export type SchemeIni = {
   [key: string]: ColourScheme;
 };
 
-export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars" | "recentlyUpdated" | "mostStale";
+export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars" | "lastUpdated" | "mostStale";
 
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js
