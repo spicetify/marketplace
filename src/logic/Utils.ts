@@ -196,22 +196,29 @@ export const generateSchemesOptions = (schemes: SchemeIni) => {
  * @param t The string translation function
  * @returns The sort options for the sort dropdown
  */
-export const generateSortOptions = (t: (key: string) => string) => {
+export const generateSortOptions = (t: (key: string) => string, activeTab: string) => {
   // TODO: It would be great if I could disable the options that don't apply for snippets
   // But it looks like that's not supported by the library
   // https://github.com/fraserxu/react-dropdown/pull/176
   // TODO: I could also just remove the options for snippets,
   // but then the sort resets when you switch tabs and it's disruptive
 
-  return [
-    { key: "stars", value: t("grid.sort.stars") },
-    { key: "newest", value: t("grid.sort.newest") },
-    { key: "oldest", value: t("grid.sort.oldest") },
-    { key: "lastUpdated", value: t("grid.sort.lastUpdated") },
-    { key: "mostStale", value: t("grid.sort.mostStale") },
-    { key: "a-z", value: t("grid.sort.aToZ") },
-    { key: "z-a", value: t("grid.sort.zToA") },
-  ];
+  if (activeTab !== "Snippets") {
+    return [
+      { key: "stars", value: t("grid.sort.stars") },
+      { key: "newest", value: t("grid.sort.newest") },
+      { key: "oldest", value: t("grid.sort.oldest") },
+      { key: "lastUpdated", value: t("grid.sort.lastUpdated") },
+      { key: "mostStale", value: t("grid.sort.mostStale") },
+      { key: "a-z", value: t("grid.sort.aToZ") },
+      { key: "z-a", value: t("grid.sort.zToA") },
+    ];
+  } else {
+    return [
+      { key: "a-z", value: t("grid.sort.aToZ") },
+      { key: "z-a", value: t("grid.sort.zToA") },
+    ];
+  }
 };
 /**
  * Reset Marketplace localStorage keys

@@ -535,6 +535,7 @@ class Grid extends React.Component<
 
   render() {
     const { t } = this.props;
+    const { activeTab } = this.CONFIG;
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
@@ -551,7 +552,7 @@ class Grid extends React.Component<
             <h2 className="marketplace-header__label">{t("grid.sort.label")}</h2>
             <SortBox
               onChange={(value) => this.updateSort(value)}
-              sortBoxOptions={generateSortOptions(t)}
+              sortBoxOptions={generateSortOptions(t, activeTab)}
               sortBySelectedFn={(a) => a.key === this.CONFIG.sort} />
           </div>
           <div className="marketplace-header__right">
