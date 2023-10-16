@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  workflow_call:
   # pull_request:
   # branches:
   # - main
@@ -11,34 +12,39 @@ jobs:
   deploy:
     name: Push
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: dist
+    permissions:
+      contents: write
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2.4.0
+      - name: Checkout Project
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js
-        uses: actions/setup-node@v2.5.1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18
+          cache: yarn
+          cache-dependency-path: yarn.lock
 
-      - name: Add dist folder to worktree
-        run: git worktree add -B dist dist origin/dist
+      - name: Configure Git
+        run: |
+          git config --global user.name "Github Actions"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin HEAD
+          git worktree add -B $TARGET_BRANCH dist origin/$TARGET_BRANCH
 
-      - name: yarn install and build
+      - name: Install Dependencies and Build
         run: |
           yarn
           yarn build:prod
 
-      - run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_ENV
-
-      - name: Push new version
-        env:
-          TARGET_BRANCH: "dist"
+      - name: Push New Version
         run: |
+          export SHORT_SHA=$(git rev-parse --short HEAD)
           cd dist
-          git config --global user.name "Github Actions"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff-index --quiet HEAD || git commit -am "Update dist to output generated at $SHORT_SHA"
+          git diff-index --quiet HEAD || git commit -am "Update to output generated at $SHORT_SHA"
           git push origin $TARGET_BRANCH
