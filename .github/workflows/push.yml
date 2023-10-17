@@ -13,8 +13,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout Project
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
