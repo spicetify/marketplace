@@ -21,12 +21,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: yarn
-          cache-dependency-path: yarn.lock
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm.lock
 
       - name: Install Dependencies
-        run: yarn
+        run: pnpm install --frozen-lockfile
 
       - name: Run Lint Checks
-        run: yarn lint:ci
+        run: pnpm lint:ci

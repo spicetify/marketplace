@@ -25,9 +25,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: yarn
-          cache-dependency-path: yarn.lock
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm.lock
 
       - name: Configure Git
         run: |
@@ -38,8 +38,8 @@ jobs:
 
       - name: Install Dependencies and Build
         run: |
-          yarn
-          yarn build:prod
+          pnpm install --frozen-lockfile
+          pnpm build:prod
 
       - name: Push New Version
         run: |
