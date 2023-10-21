@@ -323,4 +323,10 @@ export default [
     "code": "button.main-nowPlayingBar-lyricsButton { display: none; }",
     "preview": "resources/assets/snippets/hide-lyrics-button.png",
   },
+  {
+    "title": "Home Header Color Change",
+    "description": "Change the colored home header to a fixed custom color. Replace the hex code to one of your liking.",
+    "code": ".main-home-homeHeader { background: linear-gradient(180deg, #f081b7,  var(--spice-main)) !important; }",
+    "preview": "resources/assets/snippets/preview-home-header.png"
+  }
 ];
