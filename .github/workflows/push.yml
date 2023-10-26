@@ -3,42 +3,49 @@ on:
   push:
     branches:
       - main
-  # pull_request:
-  # branches:
-  # - main
 
 jobs:
   deploy:
     name: Push
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: dist
+    permissions:
+      contents: write
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js
-        uses: actions/setup-node@v2.5.1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: 16.x
+          version: latest
+          run_install: false
 
-      - name: Add dist folder to worktree
-        run: git worktree add -B dist dist origin/dist
+      - name: Install Node.js (v20)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
 
-      - name: yarn install and build
+      - name: Configure Git
         run: |
-          yarn
-          yarn build:prod
-
-      - run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $GITHUB_ENV
-
-      - name: Push new version
-        env:
-          TARGET_BRANCH: "dist"
-        run: |
-          cd dist
           git config --global user.name "Github Actions"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin HEAD
+          git worktree add -B $TARGET_BRANCH dist origin/$TARGET_BRANCH
+
+      - name: Install Dependencies and Build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build:prod
+
+      - name: Push New Version
+        run: |
+          export SHORT_SHA=$(git rev-parse --short HEAD)
+          cd dist
           git add .
-          git diff-index --quiet HEAD || git commit -am "Update dist to output generated at $SHORT_SHA"
+          git diff-index --quiet HEAD || git commit -am "Update to output generated at $SHORT_SHA"
           git push origin $TARGET_BRANCH
