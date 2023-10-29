@@ -323,4 +323,10 @@ export default [
     "code": "button.main-nowPlayingBar-lyricsButton { display: none; }",
     "preview": "resources/assets/snippets/hide-lyrics-button.png",
   },
+  {
+    "title": "Hide download button",
+    "description": "Hide download button in EPs and albums",
+    "code": "div.x-downloadButton-DownloadButton { display: none; }",
+    "preview": "resources/assets/snippets/hide-download-button.png",
+  },
 ];
