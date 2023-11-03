@@ -24,6 +24,8 @@ $isThemeInstalled = $(
   spicetify path -s | Out-Null
   -not $LASTEXITCODE
 )
+$currentTheme = (spicetify config current_theme)
+$setTheme = $true
 
 Write-Host -Object 'Removing and creating Marketplace folders...' -ForegroundColor 'Cyan'
 Remove-Item -Path $marketAppPath, $marketThemePath -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
@@ -56,9 +58,17 @@ $Parameters = @{
 Invoke-WebRequest @Parameters
 
 Write-Host -Object 'Applying...' -ForegroundColor 'Cyan'
-if (-not $isThemeInstalled) {
-  spicetify config current_theme marketplace
+if ($isThemeInstalled -and ($currentTheme -ne 'marketplace')) {
+  $Host.UI.RawUI.Flushinputbuffer()
+  $choice = $Host.UI.PromptForChoice(
+    'Local theme found',
+    'Do you want to replace it with a placeholder to install themes from the Marketplace?',
+    ('&Yes', '&No'),
+    0
+  )
+  if ($choice = 1) { $setTheme = $false }
 }
+if ($setTheme) { spicetify config current_theme marketplace }
 spicetify backup
 spicetify apply
 
