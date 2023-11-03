@@ -151,3 +151,7 @@ dist/
 
 # vectornator files for snippet previews
 *.vectornator
+
+# package managers
+package-lock.json
+yarn.lock
