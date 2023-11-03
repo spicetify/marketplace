@@ -14,7 +14,7 @@ if (-not (Get-Command -Name spicetify -ErrorAction SilentlyContinue)) {
 
 spicetify path userdata | Out-Null
 $spiceUserDataPath = (spicetify path userdata)
-if (-not (Test-Path -Path $spiceUserDataPath -PathType Container)) {
+if (-not (Test-Path -Path $spiceUserDataPath -PathType Container -ErrorAction SilentlyContinue)) {
   $spiceUserDataPath = "$env:APPDATA\spicetify"
 }
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
