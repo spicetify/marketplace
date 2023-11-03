@@ -13,15 +13,15 @@ on:
 
 jobs:
   bump_version:
-    name: Bump Version
+    name: Bump version
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Project
+      - name: Check out the code
         uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .nvmrc
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
@@ -34,16 +34,16 @@ jobs:
           git push origin HEAD
 
   build_and_push:
-    name: Build and Push
+    name: Build and push
     needs: bump_version
     uses: ./.github/workflows/push.yml
 
   create_release:
-    name: Create Release
+    name: Create release
     needs: build_and_push
     runs-on: ubuntu-latest
     steps:
-      - name: Download "dist" Branch
+      - name: Download "dist" branch
         run: curl -s -o spicetify-marketplace.zip https://codeload.github.com/${{ github.repository }}/zip/refs/heads/dist
       - name: Publish Release
         uses: softprops/action-gh-release@master
