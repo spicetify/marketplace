@@ -43,7 +43,7 @@
 		"react-simple-code-editor": "^0.13.1",
 		"semver": "^7.5.4",
 		"spcr-whats-new": "^1.0.1",
-		"spicetify-creator": "^1.0.15",
+		"spicetify-creator": "^1.0.16",
 		"typescript": "^5.2.2",
 		"util": "^0.12.5"
 	},
