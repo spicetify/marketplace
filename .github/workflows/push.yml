@@ -13,7 +13,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out the code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -23,11 +24,11 @@ jobs:
           version: latest
           run_install: false
 
-      - name: Install Node.js (v20)
-        uses: actions/setup-node@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: "pnpm"
+          node-version-file: .nvmrc
+          cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
       - name: Configure Git
