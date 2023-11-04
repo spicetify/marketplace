@@ -48,7 +48,8 @@ jobs:
           check-name: Push
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-      - name: Download "dist" branch
+      - name: Download target branch
+
         run: curl -s -o spicetify-marketplace.zip https://codeload.github.com/${{ github.repository }}/zip/refs/heads/dist
       - name: Publish the release
         uses: softprops/action-gh-release@v1
