@@ -81,7 +81,17 @@
       "lastUpdated": "Обновлено: {{val, datetime}}",
       "externalJS": "содержит JS",
       "dark": "темный",
-      "light": "светлый"
+      "light": "светлый",
+      "sort": {
+        "label": "Сортировать:",
+        "stars": "по количеству звезд",
+        "newest": "сначала новые",
+        "oldest": "сначала старые",
+        "lastUpdated": "сначала недавно обновленные",
+        "mostStale": "сначала давно не обновлявшиеся",
+        "aToZ": "по названию (A-Z)",
+        "zToA": "по названию (Z-A)"
+      }
     },
     "readmePage": {
       "title": "$t(grid.spicetifyMarketplace) - Readme",
