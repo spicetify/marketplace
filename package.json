@@ -13,7 +13,7 @@
 	"scripts": {
 		"build": "spicetify-creator",
 		"build:local": "spicetify-creator --out=dist --minify",
-		"build:prod": "pnpm run build:local && pnpm run copy:docs",
+		"build:prod": "pnpm build:local && pnpm copy:docs",
 		"copy:docs": "copyfiles README.md dist/",
 		"lint": "eslint --fix src",
 		"lint:ci": "eslint src",
