@@ -21,7 +21,6 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: latest
           run_install: false
 
       - name: Install Node.js
