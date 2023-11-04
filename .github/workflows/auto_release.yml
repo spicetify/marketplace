@@ -1,0 +1,59 @@
+name: Auto-release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check_version:
+    name: Check the package version
+    runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.check_result.outputs.version_changed }}
+      new_version: ${{ steps.check_result.outputs.new_version }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Check the package version
+        id: check_result
+        run: |
+          latest_release_version=$(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/*")
+          current_version=$(node -p "require('./package.json').version")
+          if [[ "$latest_release_version" == "$current_version" ]]; then
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "new_version=$current_version" >> $GITHUB_OUTPUT
+          fi
+
+  create_release:
+    name: Create a release
+    needs: check_version
+    if: needs.check_version.outputs.version_changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Wait for "Push" workflow
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: ${{ github.ref }}
+          check-name: Push
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Download target branch
+
+        run: curl -s -o spicetify-marketplace.zip https://codeload.github.com/${{ github.repository }}/zip/refs/heads/dist
+      - name: Publish the release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ needs.check_version.outputs.new_version }}"
+          generate_release_notes: true
+          files: spicetify-marketplace.zip
