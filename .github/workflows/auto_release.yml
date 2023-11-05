@@ -16,7 +16,7 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v4
         with:
-          fetch-tags: true
+          fetch-depth: 0
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,7 +24,7 @@ jobs:
       - name: Check the package version
         id: check_result
         run: |
-          latest_release_version=$(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/*")
+          latest_release_version="$(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/*")"
           current_version="v$(node -p "require('./package.json').version")"
           if [[ "$latest_release_version" == "$current_version" ]]; then
             echo "version_changed=false" >> $GITHUB_OUTPUT
