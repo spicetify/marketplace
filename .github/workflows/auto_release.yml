@@ -25,7 +25,7 @@ jobs:
         id: check_result
         run: |
           latest_release_version=$(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/*")
-          current_version=$(node -p "require('./package.json').version")
+          current_version="v$(node -p "require('./package.json').version")"
           if [[ "$latest_release_version" == "$current_version" ]]; then
             echo "version_changed=false" >> $GITHUB_OUTPUT
           else
@@ -54,6 +54,6 @@ jobs:
       - name: Publish the release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v${{ needs.check_version.outputs.new_version }}"
+          tag_name: ${{ needs.check_version.outputs.new_version }}
           generate_release_notes: true
           files: spicetify-marketplace.zip
