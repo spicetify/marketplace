@@ -6,12 +6,16 @@
         so we don't interfere with other extension like reddit
 */
 
-@import url('./components/_grid.scss');
-@import url('./components/_dropdown.scss');
-@import url('./components/_card.scss');
-@import url('./components/_settings.scss');
-@import url('./components/_reload-modal.scss');
-@import url('./components/_add-snippet-modal.scss');
-@import url('./components/_readme-pages.scss');
-@import url('./components/_fixes.scss');
-@import url('./components/_import-export.scss');
+@use './components/prismjs-themes/prism-tomorrow.scss';
+@use './components/_add-snippet-modal.scss';
+@use './components/_backup.scss';
+@use './components/_card.scss';
+@use './components/_code-editors.scss';
+@use './components/_devtools.scss';
+@use './components/_dropdown.scss';
+@use './components/_fixes.scss';
+@use './components/_grid.scss';
+@use './components/_readme-pages.scss';
+@use './components/_reload-modal.scss';
+@use './components/_settings.scss';
+@use './components/_update-modal.scss';

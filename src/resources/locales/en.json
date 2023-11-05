@@ -72,6 +72,15 @@
       "colorIniEditorPlaceholder": "[your-colour-scheme-name]",
       "invalidCSS": "Invalid CSS"
     },
+    "updateModal": {
+      "title": "Update the Marketplace",
+      "description": "Update Spicetify Marketplace to receive new features and bug fixes.",
+      "currentVersion": "Current version: {{version}}",
+      "latestVersion": "Latest version: {{version}}",
+      "whatsChanged": "What's Changed",
+      "seeChangelog": "See changelog",
+      "guide": "Guide"
+    },
     "grid": {
       "spicetifyMarketplace": "Spicetify Marketplace",
       "newUpdate": "New update",

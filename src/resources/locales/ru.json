@@ -72,6 +72,15 @@
       "colorIniEditorPlaceholder": "[название-вашей-цветовой-схемы]",
       "invalidCSS": "Неверный CSS"
     },
+    "updateModal": {
+      "title": "Обновление Маркетплейса",
+      "description": "Обновите Маркетплейс для получения новых функций и исправлений.",
+      "currentVersion": "Текущая версия: {{version}}",
+      "latestVersion": "Последняя версия: {{version}}",
+      "whatsChanged": "Что нового",
+      "seeChangelog": "Посмотреть изменения",
+      "guide": "Инструкция"
+    },
     "grid": {
       "spicetifyMarketplace": "Маркетплейс Spicetify",
       "newUpdate": "Доступно обновление",

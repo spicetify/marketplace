@@ -9,11 +9,11 @@ devDependencies:
     specifier: ^2.4.2
     version: 2.4.2
   '@types/react':
-    specifier: ^17.0.65
-    version: 17.0.65
+    specifier: 17.0.2
+    version: 17.0.2
   '@types/react-dom':
-    specifier: ^17.0.20
-    version: 17.0.20
+    specifier: 17.0.2
+    version: 17.0.2
   '@types/semver':
     specifier: ^7.5.4
     version: 7.5.4
@@ -59,9 +59,6 @@ devDependencies:
   semver:
     specifier: ^7.5.4
     version: 7.5.4
-  spcr-whats-new:
-    specifier: ^1.0.1
-    version: 1.0.1
   spicetify-creator:
     specifier: ^1.0.16
     version: 1.0.16(less@4.2.0)(postcss@8.4.31)(sass@1.69.3)(stylus@0.60.0)
@@ -189,22 +186,17 @@ packages:
     resolution: {integrity: sha512-kMpQpfZKSCBqltAJwskgePRaYRFukDkm1oItcAbC3gNELR20XIBcN9VRgg4+m8DKsTfkWeA4m4Imp4DDuWy7FQ==}
     dev: true
 
-  /@types/react-dom@17.0.20:
-    resolution: {integrity: sha512-4pzIjSxDueZZ90F52mU3aPoogkHIoSIDG+oQ+wQK7Cy2B9S+MvOqY0uEA/qawKz381qrEDkvpwyt8Bm31I8sbA==}
+  /@types/react-dom@17.0.2:
+    resolution: {integrity: sha512-Icd9KEgdnFfJs39KyRyr0jQ7EKhq8U6CcHRMGAS45fp5qgUvxL3ujUCfWFttUK2UErqZNj97t9gsVPNAqcwoCg==}
     dependencies:
-      '@types/react': 17.0.65
+      '@types/react': 17.0.2
     dev: true
 
-  /@types/react@17.0.65:
-    resolution: {integrity: sha512-oxur785xZYHvnI7TRS61dXbkIhDPnGfsXKv0cNXR/0ml4SipRIFpSMzA7HMEfOywFwJ5AOnPrXYTEiTRUQeGlQ==}
+  /@types/react@17.0.2:
+    resolution: {integrity: sha512-Xt40xQsrkdvjn1EyWe1Bc0dJLcil/9x2vAuW7ya+PuQip4UYUaXyhzWmAbwRsdMgwOFHpfp7/FFZebDU6Y8VHA==}
     dependencies:
       '@types/prop-types': 15.7.8
-      '@types/scheduler': 0.16.4
       csstype: 3.1.2
-    dev: true
-
-  /@types/scheduler@0.16.4:
-    resolution: {integrity: sha512-2L9ifAGl7wmXwP4v3pN4p2FLhD0O1qsJpvKmNin5VA8+UvNVb447UDaAEV6UdrkA+m/Xs58U1RFps44x6TFsVQ==}
     dev: true
 
   /@types/semver@7.5.4:
@@ -2615,12 +2607,6 @@ packages:
   /source-map@0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
     engines: {node: '>= 8'}
-    dev: true
-
-  /spcr-whats-new@1.0.1:
-    resolution: {integrity: sha512-hLr3PvgVGVqRoDdJEfPxjdmOeJMz0uzjfELk2QBYQT0ulxPkUXEBqe7/scNTdi/Z1mwy1gIZNNjnpOORk1Xwug==}
-    dependencies:
-      semver: 7.5.4
     dev: true
 
   /spicetify-creator@1.0.16(less@4.2.0)(postcss@8.4.31)(sass@1.69.3)(stylus@0.60.0):

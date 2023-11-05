@@ -1,9 +1,9 @@
-// eslint-disable-next-line no-undef
 module.exports = {
-  "ignorePatterns": ["node_modules", "dist"],
+  "ignorePatterns": ["node_modules", "dist", ".eslintrc.js", "spicetify.d.ts"],
   "env": {
     "browser": true,
-    "es2021": true,
+    "commonjs": true,
+    "es2022": true,
   },
   "extends": [
     "eslint:recommended",
@@ -12,11 +12,9 @@ module.exports = {
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true,
-    },
-    "ecmaVersion": "latest",
+    "ecmaVersion": "2022",
     "sourceType": "module",
+    "project": ["tsconfig.json"],
   },
   "plugins": [
     "react",
@@ -64,7 +62,7 @@ module.exports = {
   "settings": {
     "react": {
       // This is what Spotify uses
-      "version": "17",
+      "version": "17.0.2",
     },
   },
 };
