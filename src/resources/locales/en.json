@@ -79,7 +79,8 @@
       "latestVersion": "Latest version: {{version}}",
       "whatsChanged": "What's Changed",
       "seeChangelog": "See changelog",
-      "guide": "Guide"
+      "howToUpgrade": "How to upgrade",
+      "viewGuide": "View install guide"
     },
     "grid": {
       "spicetifyMarketplace": "Spicetify Marketplace",

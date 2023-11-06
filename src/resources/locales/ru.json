@@ -79,7 +79,7 @@
       "latestVersion": "Последняя версия: {{version}}",
       "whatsChanged": "Что нового",
       "seeChangelog": "Посмотреть изменения",
-      "guide": "Инструкция"
+      "viewGuide": "Инструкция"
     },
     "grid": {
       "spicetifyMarketplace": "Маркетплейс Spicetify",
