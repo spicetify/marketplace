@@ -2,4 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: ✏️ Spicetify Docs
     url: https://spicetify.app/
-    about: Check out our documentation here.
+    about: Read our documentation before creating an issue.
+  - name: ⛑️ Spicetify Discord Server
+    url: https://discord.gg/spicetify-842219447716151306
+    about: Issues are not for support. If you need it - join our Discord server.
