@@ -4,7 +4,7 @@
 }
 
 #marketplace-update-description {
-  > h4 {
+  & > h4 {
     margin-bottom: 0.5rem;
   }
 
@@ -17,7 +17,7 @@
   li {
     list-style-type: disc;
 
-    ::marker {
+    &::marker {
       unicode-bidi: isolate;
       font-variant-numeric: tabular-nums;
       text-transform: none;
@@ -27,7 +27,7 @@
     }
   }
 
-  > details > ul {
+  & > details > ul {
     padding-left: 1.25rem;
   }
 }
