@@ -2,7 +2,6 @@ module.exports = {
   "ignorePatterns": ["node_modules", "dist", ".eslintrc.js", "spicetify.d.ts"],
   "env": {
     "browser": true,
-    "commonjs": true,
     "es2022": true,
   },
   "extends": [
