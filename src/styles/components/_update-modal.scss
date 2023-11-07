@@ -1,0 +1,33 @@
+#marketplace-update-container .marketplace-update-header {
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+#marketplace-update-description {
+  & > h4 {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    display: block;
+  }
+}
+
+#marketplace-update-whats-changed {
+  li {
+    list-style-type: disc;
+
+    &::marker {
+      unicode-bidi: isolate;
+      font-variant-numeric: tabular-nums;
+      text-transform: none;
+      text-indent: 0px !important;
+      text-align: start !important;
+      text-align-last: start !important;
+    }
+  }
+
+  & > details > ul {
+    padding-left: 1.25rem;
+  }
+}

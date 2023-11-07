@@ -11,7 +11,7 @@ import { getLocalStorageDataFromKey,
   generateSortOptions,
   sortCardItems,
 } from "../logic/Utils";
-import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE } from "../constants";
+import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEASE_URL } from "../constants";
 import { openModal } from "../logic/LaunchModals";
 import {
   getTaggedRepos,
@@ -27,7 +27,6 @@ import { TopBarContent } from "./TabBar";
 import Card from "./Card/Card";
 import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
-import Changelog from "./Modals/Changelog";
 
 class Grid extends React.Component<
 {
@@ -457,11 +456,11 @@ class Grid extends React.Component<
   */
   async componentDidMount() {
     // Checks for new Marketplace updates
-    fetch(LATEST_RELEASE).then(res => res.json()).then(
+    fetch(LATEST_RELEASE_URL).then(res => res.json()).then(
       result => {
         if (result.message) throw result;
         this.setState({
-          version: result[0].name,
+          version: result.name,
         });
 
         try {
@@ -474,8 +473,6 @@ class Grid extends React.Component<
         console.error("Failed to check for updates", error);
       },
     );
-
-    Changelog();
 
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
@@ -541,7 +538,7 @@ class Grid extends React.Component<
           <div className="marketplace-header__left">
             {this.state.newUpdate
               ? <button type="button" title={t("grid.newUpdate")} className="marketplace-header-icon-button" id="marketplace-update"
-                onClick={() => window.location.href = "https://github.com/spicetify/spicetify-marketplace/releases/latest"}
+                onClick={() => openModal("UPDATE")}
               >
                 <DownloadIcon />
                 &nbsp;{this.state.version}

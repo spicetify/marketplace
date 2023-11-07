@@ -42,21 +42,7 @@ i18n
     },
   });
 
-// TODO: the mono-stylesheet doesn't seem to import nested component stylesheets properly on build?
-// import './styles/styles.scss';
-import "./styles/components/_grid.scss";
-import "./styles/components/_dropdown.scss";
-import "./styles/components/_card.scss";
-import "./styles/components/_settings.scss";
-import "./styles/components/_reload-modal.scss";
-import "./styles/components/_add-snippet-modal.scss";
-import "./styles/components/_readme-pages.scss";
-import "./styles/components/_fixes.scss";
-import "./styles/components/prismjs-themes/prism-tomorrow.scss";
-import "./styles/components/_devtools.scss";
-import "./styles/components/_code-editors.scss";
-import "./styles/components/_backup.scss";
-
+import "./styles/styles.scss";
 import Grid from "./components/Grid";
 import ReadmePage from "./components/ReadmePage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";

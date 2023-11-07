@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
-		"target": "ES2017",
+		"target": "ES2022",
 		"jsx": "react",
-		"module": "commonjs",
-		"resolveJsonModule": true,
+		"module": "ES2022",
+		"moduleResolution": "bundler",
 		"outDir": "./dist",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
@@ -11,7 +11,7 @@
 		"strictPropertyInitialization": false,
 		"skipLibCheck": true,
 		"noImplicitAny": false,
-		"lib": ["ES2021.String", "dom"]
+		"lib": ["ES2022", "DOM"]
 	},
 	"include": ["src/**/*"]
 }

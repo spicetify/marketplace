@@ -7,9 +7,10 @@ import ReloadModal from "../components/Modals/Reload";
 import SettingsModal from "../components/Modals/Settings";
 import ThemeDevToolsModal from "../components/Modals/ThemeDevTools";
 import BackupModal from "../components/Modals/BackupModal";
+import UpdateModal from "../components/Modals/Update";
 import { CardProps } from "../components/Card/Card";
 
-export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS" | "BACKUP";
+export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS" | "BACKUP" | "UPDATE";
 
 const getModalSettings = (
   modalType: ModalType,
@@ -60,6 +61,12 @@ const getModalSettings = (
     return {
       title: t("backupModal.title"),
       content: <BackupModal />,
+      isLarge: true,
+    };
+  case "UPDATE":
+    return {
+      title: t("updateModal.title"),
+      content: <UpdateModal />,
       isLarge: true,
     };
 

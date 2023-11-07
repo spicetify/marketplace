@@ -1,4 +1,3 @@
-
 declare global {
   interface Window {
     Marketplace: Record<string, unknown>;
@@ -16,9 +15,17 @@ export type SortBoxOption = {
   value: string;
 };
 
-export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps";
+export type RepoTopic =
+  | "spicetify-extensions"
+  | "spicetify-themes"
+  | "spicetify-apps";
 
-export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
+export type TabType =
+  | "Extensions"
+  | "Themes"
+  | "Snippets"
+  | "Apps"
+  | "Installed";
 
 export type CardType = "extension" | "theme" | "snippet" | "app";
 
@@ -121,15 +128,25 @@ export type VisualConfig = {
   colorShift: boolean;
   themeDevTools: boolean;
   albumArtBasedColors: boolean;
-  albumArtBasedColorsMode: "monochromeLight" | "monochromeDark" | "quad" | "triad" | "analogic" | "analogicComplement";
-  albumArtBasedColorsVibrancy: "DESATURATED" | "LIGHT_VIBRANT" | "PROMINENT" | "VIBRANT";
+  albumArtBasedColorsMode:
+    | "monochromeLight"
+    | "monochromeDark"
+    | "quad"
+    | "triad"
+    | "analogic"
+    | "analogicComplement";
+  albumArtBasedColorsVibrancy:
+    | "DESATURATED"
+    | "LIGHT_VIBRANT"
+    | "PROMINENT"
+    | "VIBRANT";
   // Legacy from reddit app
   type: boolean;
   // I was considering adding watchers as "followers" but it looks like the value is a duplicate
   // of stargazers, and the subscribers_count isn't returned in the main API call we make
   // https://github.community/t/bug-watchers-count-is-the-duplicate-of-stargazers-count/140865/4
   followers: boolean;
-}
+};
 
 // example colour scheme
 // const exampleSchemes = {
@@ -154,17 +171,24 @@ export type SchemeIni = {
   [key: string]: ColourScheme;
 };
 
-export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars" | "lastUpdated" | "mostStale";
+export type SortMode =
+  | "a-z"
+  | "z-a"
+  | "newest"
+  | "oldest"
+  | "stars"
+  | "lastUpdated"
+  | "mostStale";
 
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js
-  visual: VisualConfig,
-  tabs: TabItemConfig[],
+  visual: VisualConfig;
+  tabs: TabItemConfig[];
   activeTab: string;
   theme: {
     activeThemeKey?: string;
     schemes?: SchemeIni;
     activeScheme?: string | null;
-  },
+  };
   sort: SortMode;
 };
