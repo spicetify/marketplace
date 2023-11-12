@@ -329,4 +329,10 @@ export default [
     "code": "div.x-downloadButton-DownloadButton { display: none; }",
     "preview": "resources/assets/snippets/hide-download-button.png",
   },
+  {
+    "title": "Smaller right sidebar covert art",
+    "description": "Makes the right sidebar cover art smaller and move the track info to the right",
+    "code": ":root { --right-sidebar-cover-art-size: 85px; } \n.main-nowPlayingView-coverArt { width: var(--right-sidebar-cover-art-size); } \n.zL6hQR4mukVUUQaa_7K1 { min-height: unset !important; height: var(--right-sidebar-cover-art-size) !important; } \n.main-nowPlayingView-nowPlayingGrid { flex-direction: unset; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-name { font-size: 1.25rem; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-artists { font-size: 0.85rem; }",
+    "preview": "resources/assets/snippets/smaller-right-sidebar-cover.png",
+  },
 ];
