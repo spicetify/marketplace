@@ -86,11 +86,13 @@ export const TopBarContent = (props: {
     }
     if (tabBar && topBarContent && Spicetify.Platform.History.location.pathname === "/marketplace") {
       topBarContent.appendChild(tabBar);
+      document.querySelector(".main-topBar-container")?.setAttribute("style", "contain: unset;");
     }
     Spicetify.Platform.History.listen(({ pathname }) => {
       if (pathname != "/marketplace") {
       // Delete tabBar from the dom
         document.querySelector(".marketplace-tabBar")?.remove();
+        document.querySelector(".main-topBar-container")?.removeAttribute("style");
       }
     });
   };
