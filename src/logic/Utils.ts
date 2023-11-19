@@ -213,17 +213,20 @@ export const generateSortOptions = (t: (key: string) => string) => {
     { key: "z-a", value: t("grid.sort.zToA") },
   ];
 };
+
+type MarketplaceResetCategory = "extensions" | "snippets" | "theme";
 /**
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (...categories: ("extensions" | "snippets" | "theme")[]) => {
+export const resetMarketplace = (categories?: MarketplaceResetCategory[] | MarketplaceResetCategory | []) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
+  const categoriesToReset = Array.isArray(categories) ? categories : (categories ? [categories] : []);
 
   // If no categories provided, reset everything
-  if (categories.length === 0) {
+  if (categoriesToReset.length === 0) {
     // Loop through all marketplace keys.
     // This includes extensions, themes, and snippets, as well as the Marketplace settings.
     Object.keys(localStorage).forEach((key) => {
@@ -234,19 +237,29 @@ export const resetMarketplace = (...categories: ("extensions" | "snippets" | "th
   }
 
   // If have categories, reset only those
-  categories.forEach((category) => {
-    if (category === "extensions") {
+  categoriesToReset.forEach((category) => {
+    switch (category) {
+    case "extensions":
       // Remove the extensions themselves
       keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
       // Remove the list of extension keys
       keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
-    } else if (category === "snippets") {
+      break;
+
+    case "snippets":
       keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
       keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
-    } else if (category === "theme") {
+      break;
+
+    case "theme":
       keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
       keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
       keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
+      break;
+
+    default:
+      console.warn(`Unknown category: ${category}`);
+      break;
     }
   });
 
