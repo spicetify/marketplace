@@ -219,7 +219,7 @@ type MarketplaceResetCategory = "extensions" | "snippets" | "theme";
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (categories?: MarketplaceResetCategory[] | MarketplaceResetCategory | []) => {
+export const resetMarketplace = (categories?: MarketplaceResetCategory[] | MarketplaceResetCategory) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
@@ -258,7 +258,7 @@ export const resetMarketplace = (categories?: MarketplaceResetCategory[] | Marke
       break;
 
     default:
-      console.warn(`Unknown category: ${category}`);
+      console.error(`Unknown category: ${category}`);
       break;
     }
   });
