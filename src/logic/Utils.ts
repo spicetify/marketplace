@@ -218,14 +218,13 @@ export const generateSortOptions = (t: (key: string) => string) => {
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (categories?: ResetCategory[] | ResetCategory) => {
+export const resetMarketplace = (...categories: ResetCategory[] | []) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
-  const categoriesToReset = Array.isArray(categories) ? categories : (categories ? [categories] : []);
 
   // If no categories provided, reset everything
-  if (categoriesToReset.length === 0) {
+  if (categories.length === 0) {
     // Loop through all marketplace keys.
     // This includes extensions, themes, and snippets, as well as the Marketplace settings.
     Object.keys(localStorage).forEach((key) => {
@@ -236,7 +235,7 @@ export const resetMarketplace = (categories?: ResetCategory[] | ResetCategory) =
   }
 
   // If have categories, reset only those
-  categoriesToReset.forEach((category) => {
+  categories.forEach((category) => {
     switch (category) {
     case "extensions":
       // Remove the extensions themselves
