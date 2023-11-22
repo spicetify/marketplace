@@ -1,5 +1,5 @@
 import { CardProps } from "../components/Card/Card";
-import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption, ResetCategory } from "../types/marketplace-types";
 import Chroma from "chroma-js";
 import { LOCALSTORAGE_KEYS } from "../constants";
 /**
@@ -214,12 +214,11 @@ export const generateSortOptions = (t: (key: string) => string) => {
   ];
 };
 
-type MarketplaceResetCategory = "extensions" | "snippets" | "theme";
 /**
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (categories?: MarketplaceResetCategory[] | MarketplaceResetCategory) => {
+export const resetMarketplace = (categories?: ResetCategory[] | ResetCategory) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
