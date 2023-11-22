@@ -218,7 +218,7 @@ export const generateSortOptions = (t: (key: string) => string) => {
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (...categories: ResetCategory[] | []) => {
+export const resetMarketplace = (...categories: ResetCategory[]) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
