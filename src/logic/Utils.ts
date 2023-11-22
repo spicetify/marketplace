@@ -1,5 +1,5 @@
 import { CardProps } from "../components/Card/Card";
-import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption, ResetCategory } from "../types/marketplace-types";
 import Chroma from "chroma-js";
 import { LOCALSTORAGE_KEYS } from "../constants";
 /**
@@ -213,11 +213,12 @@ export const generateSortOptions = (t: (key: string) => string) => {
     { key: "z-a", value: t("grid.sort.zToA") },
   ];
 };
+
 /**
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (...categories: ("extensions" | "snippets" | "theme")[]) => {
+export const resetMarketplace = (...categories: ResetCategory[]) => {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
@@ -235,18 +236,28 @@ export const resetMarketplace = (...categories: ("extensions" | "snippets" | "th
 
   // If have categories, reset only those
   categories.forEach((category) => {
-    if (category === "extensions") {
+    switch (category) {
+    case "extensions":
       // Remove the extensions themselves
       keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
       // Remove the list of extension keys
       keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
-    } else if (category === "snippets") {
+      break;
+
+    case "snippets":
       keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
       keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
-    } else if (category === "theme") {
+      break;
+
+    case "theme":
       keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
       keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
       keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
+      break;
+
+    default:
+      console.error(`Unknown category: ${category}`);
+      break;
     }
   });
 

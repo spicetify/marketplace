@@ -27,6 +27,8 @@ export type TabType =
   | "Apps"
   | "Installed";
 
+export type ResetCategory = "extensions" | "snippets" | "theme";
+
 export type CardType = "extension" | "theme" | "snippet" | "app";
 
 export type RepoType = "extension" | "theme" | "app";

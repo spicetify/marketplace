@@ -77,7 +77,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <div className="settings-row">
         <label className="col description">{t("settings.resetDescription")}</label>
         <div className="col action">
-          <Button onClick={resetMarketplace}>{t("settings.resetBtn")}</Button>
+          <Button onClick={() => resetMarketplace()}>{t("settings.resetBtn")}</Button>
         </div>
       </div>
 
