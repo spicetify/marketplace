@@ -36,12 +36,6 @@ export default [
     "preview": "resources/assets/snippets/fix-DJ-icon.png",
   },
   {
-    "title": "Hide Upgrade Button",
-    "description": "Makes the upgrade button hidden",
-    "code": ".main-topBar-UpgradeButton {\n  display: none !important;\n}",
-    "preview": "resources/assets/snippets/hide-upgrade-button.png",
-  },
-  {
     "title": "Auto-hide Friends",
     "description": "Collapse the friends activity sidebar on small screens",
     "code": "[aria-label='Friend Activity'] {\n  transition: width 0.3s;\n}\n@media screen and (max-width: 1200px) {\n  [aria-label='Friend Activity'] {\n    width: 0;\n  }\n  [aria-label='Friend Activity'] .LayoutResizer__resize-bar {\n    display: none;\n  }\n}",
