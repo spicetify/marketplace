@@ -259,8 +259,8 @@ export default [
   },
   {
     "title": "Hide now playing view button",
-    "description": "Hides the now playing view button in the playbar (only triggers after you click somewhere/do something)",
-    "code": "button.Button-sc-1dqy6lx-0.Button-sm-16-buttonTertiary-iconOnly-useBrowserDefaultFocusStyle.main-genericButton-button:has(span):has(svg):has(path[d='M11.196 8 6 5v6l5.196-3z']) {display: none;}",
+    "description": "Hides the now playing view button from the playbar",
+    "code": "button:has(path[d='M11.196 8 6 5v6l5.196-3z'], path[d='.966.783 1.75 1.75 1.75h10.5a1.75']) {display: none;}",
     "preview": "resources/assets/snippets/hide-now-playing-view-button.png",
   },
   {
