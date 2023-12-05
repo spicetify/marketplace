@@ -391,7 +391,7 @@ async function waitForAlbumArt(): Promise<string | undefined> {
   // Only return when the album art is loaded
   return new Promise((resolve) => {
     setInterval(() => {
-      const albumArtSrc = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
+      const albumArtSrc = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
       if (albumArtSrc) {
         resolve(albumArtSrc);
       }
@@ -404,7 +404,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    let albumArtSrc = Spicetify.Player.data?.track?.metadata?.image_xlarge_url;
+    let albumArtSrc = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
 
     // If it doesn't exist, wait for it to load
     if (albumArtSrc == null) {
