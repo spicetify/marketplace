@@ -94,7 +94,7 @@ import {
       injectColourScheme(activeScheme);
 
       // Add to Spicetify.Config
-      // @ts-expect-error: `current_theme` is read-only type in types
+      // @ts-expect-error: `color_scheme` is read-only type in types
       Spicetify.Config.color_scheme = themeManifest.activeScheme;
       if (localStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
         initAlbumArtBasedColor(activeScheme);
