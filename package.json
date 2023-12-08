@@ -1,6 +1,6 @@
 {
   "name": "spicetify-marketplace",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "homepage": "https://github.com/spicetify/spicetify-marketplace",
   "repository": "github:spicetify/spicetify-marketplace",
   "bugs": {
@@ -29,22 +29,22 @@
     "@types/chroma-js": "^2.4.3",
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
-    "@types/semver": "^7.5.5",
-    "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "@typescript-eslint/parser": "^6.11.0",
+    "@types/semver": "^7.5.6",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.53.0",
+    "eslint": "^8.55.0",
     "eslint-plugin-react": "^7.33.2",
     "husky": "^8.0.3",
-    "spicetify-creator": "^1.0.16",
-    "typescript": "^5.2.2"
+    "spicetify-creator": "^1.0.17",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "react-dropdown": "^1.11.0",
     "chroma-js": "^2.4.2",
-    "i18next": "^23.7.6",
+    "i18next": "^23.7.8",
     "i18next-browser-languagedetector": "^7.2.0",
     "prismjs": "^1.29.0",
+    "react-dropdown": "^1.11.0",
     "react-i18next": "^13.5.0",
     "react-simple-code-editor": "^0.13.1",
     "semver": "^7.5.4"
