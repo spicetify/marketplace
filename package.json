@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@types/chroma-js": "^2.4.3",
-    "@types/react": "17.0.2",
-    "@types/react-dom": "17.0.2",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0",
     "@types/semver": "^7.5.6",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
