@@ -329,4 +329,10 @@ export default [
     "code": ":root { --right-sidebar-cover-art-size: 85px; } \n.main-nowPlayingView-coverArt { width: var(--right-sidebar-cover-art-size); } \n.main-nowPlayingView-coverArtContainer { min-height: unset !important; height: var(--right-sidebar-cover-art-size) !important; } \n.main-nowPlayingView-nowPlayingGrid { flex-direction: unset; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-name { font-size: 1.25rem; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-artists { font-size: 0.85rem; }",
     "preview": "resources/assets/snippets/smaller-right-sidebar-cover.png",
   },
+  {
+    "title": "Remove top spacing",
+    "description": "Remove top spacing where should be the Window action buttons. Useful for tiling window managers.",
+    "code": ".spotify__container--is-desktop .Root__top-container { padding-top: 8px; }",
+    "preview": "resources/assets/snippets/remove-top-spacing.png",
+  },
 ];

@@ -464,7 +464,7 @@ class Grid extends React.Component<
         });
 
         try {
-          this.setState({ newUpdate: semver.gt(this.state.version, MARKETPLACE_VERSION) });
+          this.setState({ newUpdate: semver.gt(result.name, MARKETPLACE_VERSION) });
         } catch (err) {
           console.error(err);
         }

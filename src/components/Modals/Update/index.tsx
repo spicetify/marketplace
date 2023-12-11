@@ -20,7 +20,7 @@ async function fetchLatestReleaseInfo(): Promise<{
       ? {
         version: tag_name.replace("v", ""),
         changelog: await getMarkdownHTML(
-          body.match(/## What's Changed([\s\S]*?)\r\n\r/)[1],
+          body.match(/## What's Changed([\s\S]*?)(\r\n\r|\n\n##)/)[1],
           "spicetify",
           "spicetify-marketplace",
         ),
