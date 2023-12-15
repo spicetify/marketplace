@@ -408,7 +408,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
 
     // If it doesn't exist, wait for it to load
     if (albumArtSrc == null) {
-      albumArtSrc = await waitForAlbumArt();
+      albumArtSrc = await waitForAlbumArt() as string;
     }
 
     if (albumArtSrc) {

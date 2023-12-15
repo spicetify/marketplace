@@ -40,7 +40,7 @@ class Grid extends React.Component<
   version: string,
   newUpdate: boolean,
   searchValue: string,
-  cards: Card[],
+  cards: typeof Card[],
   tabs: TabItemConfig[],
   rest: boolean,
   endOfList: boolean,
@@ -78,6 +78,7 @@ class Grid extends React.Component<
   lastScroll = 0;
   requestQueue: never[][] = [];
   requestPage = 0;
+  // @ts-expect-error: `'Card' refers to a value, but is being used as a type here.`
   cardList: Card[] = [];
   sortConfig: { by: string };
   // TODO: why are these set up funny
@@ -129,7 +130,7 @@ class Grid extends React.Component<
       updateActiveTheme={this.setActiveTheme.bind(this)}
     />;
 
-    this.cardList.push(card as unknown as Card);
+    this.cardList.push(card as unknown as typeof Card);
   }
 
   // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
@@ -162,7 +163,7 @@ class Grid extends React.Component<
     this.cardList = this.cardList.map((card, index) => {
       return <Card {...card.props}
         key={index.toString()} CONFIG={this.CONFIG} />;
-    }) as unknown as Card[];
+    }) as unknown as typeof Card[];
     this.setState({ cards: [...this.cardList] });
   }
 

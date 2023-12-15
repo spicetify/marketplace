@@ -56,6 +56,7 @@ const BackupModal = () => {
    * Prompt user to select a file to import and then run importMarketplace
    */
   const importSettingsFromFile = async () => {
+  // @ts-expect-error: `showOpenFilePicker not defined in type Window`
     const fileHandle = await window.showOpenFilePicker();
     const file = await fileHandle[0].getFile();
     const text = await file.text();

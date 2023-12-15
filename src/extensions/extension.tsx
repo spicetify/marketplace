@@ -94,7 +94,7 @@ import {
       injectColourScheme(activeScheme);
 
       // Add to Spicetify.Config
-      // @ts-expect-error: `color_scheme` is read-only type in types
+
       Spicetify.Config.color_scheme = themeManifest.activeScheme;
       if (localStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
         initAlbumArtBasedColor(activeScheme);
@@ -119,7 +119,6 @@ import {
     injectUserCSS(userCSS);
 
     // Add to Spicetify.Config
-    // @ts-expect-error: `current_theme` is read-only type in types
     Spicetify.Config.current_theme = themeManifest.manifest?.name;
 
     // Inject any included js
@@ -169,9 +168,7 @@ import {
   window.sessionStorage.setItem("marketplace-request-tld", tld);
 
   // Save to Spicetify.Config for use when removing a theme
-  // @ts-expect-error: Config doesn't have a `local_theme` property
   Spicetify.Config.local_theme = Spicetify.Config.current_theme;
-  // @ts-expect-error: Config doesn't have a `local_color_scheme` property
   Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
   const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedThemeKey) initializeTheme(installedThemeKey);
