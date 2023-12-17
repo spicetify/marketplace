@@ -2,6 +2,8 @@
 // AUTHOR: theRealPadster, CharlieS1103
 // DESCRIPTION: Companion extension for Spicetify Marketplace
 
+import { t } from "i18next";
+
 import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
 import { RepoType } from "../types/marketplace-types";
 import {
@@ -168,16 +170,23 @@ import {
 
   window.sessionStorage.setItem("marketplace-request-tld", tld);
 
-  // Save to Spicetify.Config for use when removing a theme
-  // @ts-expect-error: Config doesn't have a `local_theme` property
-  Spicetify.Config.local_theme = Spicetify.Config.current_theme;
-  // @ts-expect-error: Config doesn't have a `local_color_scheme` property
-  Spicetify.Config.local_color_scheme = Spicetify.Config.color_scheme;
-  const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
-  if (installedThemeKey) initializeTheme(installedThemeKey);
-
   const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
   installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
+
+  const { current_theme: localTheme } = Spicetify.Config;
+  localStorage.setItem(LOCALSTORAGE_KEYS.localTheme, localTheme);
+  const installedTheme = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+  if (installedTheme) {
+    if (localTheme.toLocaleLowerCase() !== "marketplace") {
+      Spicetify.showNotification(
+        t("notifications.wrongLocalTheme"),
+        true,
+        5000,
+      );
+      return;
+    }
+    initializeTheme(installedTheme);
+  }
 })();
 
 /**

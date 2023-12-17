@@ -114,6 +114,9 @@
     "save": "Сохранить",
     "colour_one": "цвет",
     "colour_other": "цвета",
-    "favourite": "избранное"
+    "favourite": "избранное",
+    "notifications": {
+      "wrongLocalTheme": "Пожалуйста, измените значение current_theme в config-xpui.ini на 'marketplace', чтобы устанавливать темы из Маркетплейса"
+    }
   }
 }
