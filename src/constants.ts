@@ -3,19 +3,21 @@ import { version } from "../package.json";
 
 export const MARKETPLACE_VERSION = version;
 
+const STORAGE_KEY_PREFIX = "marketplace";
 export const LOCALSTORAGE_KEYS = {
-  installedExtensions: "marketplace:installed-extensions",
-  installedSnippets: "marketplace:installed-snippets",
-  installedThemes: "marketplace:installed-themes",
-  activeTab: "marketplace:active-tab",
-  tabs: "marketplace:tabs",
-  sort: "marketplace:sort",
+  installedExtensions: `${STORAGE_KEY_PREFIX}:installed-extensions`,
+  installedSnippets: `${STORAGE_KEY_PREFIX}:installed-snippets`,
+  installedThemes: `${STORAGE_KEY_PREFIX}:installed-themes`,
+  activeTab: `${STORAGE_KEY_PREFIX}:active-tab`,
+  tabs: `${STORAGE_KEY_PREFIX}:tabs`,
+  sort: `${STORAGE_KEY_PREFIX}:sort`,
   // Theme installed store the localsorage key of the theme (e.g. marketplace:installed:NYRI4/Comfy-spicetify/user.css)
-  themeInstalled: "marketplace:theme-installed",
-  albumArtBasedColor: "marketplace:albumArtBasedColors",
-  albumArtBasedColorMode: "marketplace:albumArtBasedColorsMode",
-  albumArtBasedColorVibrancy: "marketplace:albumArtBasedColorsVibrancy",
-  colorShift: "marketplace:colorShift",
+  themeInstalled: `${STORAGE_KEY_PREFIX}:theme-installed`,
+  localTheme: `${STORAGE_KEY_PREFIX}:local-theme`,
+  albumArtBasedColor: `${STORAGE_KEY_PREFIX}:albumArtBasedColors`,
+  albumArtBasedColorMode: `${STORAGE_KEY_PREFIX}:albumArtBasedColorsMode`,
+  albumArtBasedColorVibrancy: `${STORAGE_KEY_PREFIX}:albumArtBasedColorsVibrancy`,
+  colorShift: `${STORAGE_KEY_PREFIX}:colorShift`,
 };
 
 // Initalize topbar tabs

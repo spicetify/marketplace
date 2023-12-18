@@ -1,7 +1,8 @@
 import React, { Key } from "react";
 import { withTranslation } from "react-i18next";
-import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
+import { t } from "i18next";
 
+import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
 import {
   getLocalStorageDataFromKey,
@@ -18,7 +19,6 @@ import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
-import { t } from "i18next";
 const Spicetify = window.Spicetify;
 
 export type CardProps = {
@@ -140,6 +140,16 @@ class Card extends React.Component<CardProps, {
         console.debug("Theme already installed, removing");
         this.removeTheme(this.localStorageKey);
       } else {
+        const localTheme = localStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
+        if (localTheme != null && localTheme.toLowerCase() !== "marketplace") {
+          Spicetify.showNotification(
+            t("notifications.wrongLocalTheme"),
+            true,
+            5000,
+          );
+          return;
+        }
+
         // Remove theme if already installed, then install the new theme
         this.removeTheme();
         this.installTheme();
@@ -298,7 +308,9 @@ class Card extends React.Component<CardProps, {
 
       // Add to Spicetify.Config
       const name = this.props.item.manifest?.name;
+      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
       if (name) Spicetify.Config.current_theme = name;
+      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
       if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
     }
 
@@ -335,8 +347,10 @@ class Card extends React.Component<CardProps, {
       this.props.updateColourSchemes(null, null);
 
       // Restore Spicetify.Config
-      Spicetify.Config.current_theme = Spicetify.Config.local_theme;
-      Spicetify.Config.color_scheme = Spicetify.Config.local_color_scheme;
+      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
+      Spicetify.Config.current_theme = "marketplace";
+      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
+      Spicetify.Config.color_scheme = "marketplace";
 
       this.setState({ installed: false });
     }

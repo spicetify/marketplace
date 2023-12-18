@@ -114,6 +114,9 @@
     "save": "Save",
     "colour_one": "colour",
     "colour_other": "colours",
-    "favourite": "favourite"
+    "favourite": "favourite",
+    "notifications": {
+      "wrongLocalTheme": "Please set current_theme in config-xpui.ini to 'marketplace' to install themes using the Marketplace."
+    }
   }
 }
