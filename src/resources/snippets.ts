@@ -176,7 +176,7 @@ export default [
   {
     "title": "Fix playlist and folder position",
     "description": "Replaces the playlists section in the left side bar to align with all the other category icons for the new UI. Screenshot includes 'Playlist icons' snippet",
-    "code": "div.playlist-item__img.folder, img.playlist-item__img { margin-right: 16px; } div.main-rootlist-rootlist { --left-sidebar-item-height: 32px; --left-sidebar-item-indentation-width: 10px; } div.GlueDropTarget.personal-library > * { height: 32px !important; }",
+    "code": ".playlist-item__img.folder, .playlist-item__img { margin-right: 16px; } .main-rootlist-rootlist { --left-sidebar-item-height: 32px; --left-sidebar-item-indentation-width: 10px; } div.GlueDropTarget.personal-library > * { height: 32px !important; }",
     "preview": "resources/assets/snippets/fix-playlist-and-folder-position.png",
   },
   {
@@ -314,13 +314,13 @@ export default [
   {
     "title": "Hide lyrics button",
     "description": "Hides the lyrics button in the playbar",
-    "code": "button.main-nowPlayingBar-lyricsButton { display: none; }",
+    "code": ".main-nowPlayingBar-lyricsButton { display: none; }",
     "preview": "resources/assets/snippets/hide-lyrics-button.png",
   },
   {
     "title": "Hide download button",
     "description": "Hide download button in EPs and albums",
-    "code": "div.x-downloadButton-DownloadButton { display: none; }",
+    "code": ".x-downloadButton-DownloadButton { display: none; }",
     "preview": "resources/assets/snippets/hide-download-button.png",
   },
   {
