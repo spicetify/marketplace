@@ -38,7 +38,7 @@ export default [
   {
     "title": "Auto-hide Friends",
     "description": "Collapse the friends activity sidebar on small screens",
-    "code": "[aria-label='Friend Activity'] {\n  transition: width 0.3s;\n}\n@media screen and (max-width: 1200px) {\n  [aria-label='Friend Activity'] {\n    width: 0;\n  }\n  [aria-label='Friend Activity'] .LayoutResizer__resize-bar {\n    display: none;\n  }\n}",
+    "code": ".Root__right-sidebar {\n  transition: width 0.3s;\n}\n@media screen and (max-width: 1200px) {\n  .Root__right-sidebar {\n    width: 0;\n  }\n  .Root__right-sidebar .LayoutResizer__resize-bar {\n    display: none;\n  }\n}",
     "preview": "resources/assets/snippets/auto-hide-friends.png",
   },
   {
@@ -182,7 +182,7 @@ export default [
   {
     "title": "Remove recently played from homepage",
     "description": "Removes the recently played shelf from the home page",
-    "code": "section.main-shelf-shelf[aria-label='Recently played'] { visibility: hidden; position: absolute; }",
+    "code": ".main-shelf-shelf:has([href='/genre/recently-played']) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-recently-played.png",
   },
   {
@@ -248,13 +248,13 @@ export default [
   {
     "title": "Hide profile username",
     "description": "Hides your username next to your profile picture",
-    "code": "span.Type__TypeElement-sc-goli3j-0.TypeElement-mestoBold-type.main-userWidget-displayName {display: none !important;}",
+    "code": ".main-userWidget-displayName {display: none !important;}",
     "preview": "resources/assets/snippets/hide-profile-username.png",
   },
   {
     "title": "Hide now playing view button",
     "description": "Hides the now playing view button from the playbar",
-    "code": "button:has(path[d='M11.196 8 6 5v6l5.196-3z'], path[d='.966.783 1.75 1.75 1.75h10.5a1.75']) {display: none;}",
+    "code": "button:has(path[d='M11.196 8 6 5v6l5.196-3z']) {display: none;}",
     "preview": "resources/assets/snippets/hide-now-playing-view-button.png",
   },
   {
@@ -290,7 +290,7 @@ export default [
   {
     "title": "Default Progress Bar",
     "description": "Return progress bar to default size and location on themes that change it",
-    "code": ".playback-bar {position: relative !important; display: block !important; --playback-bar-grid-gap: 8px !important; -webkit-box-orient: horizontal !important; -webkit-box-direction: normal !important; -webkit-box-pack: justify !important; -ms-flex-pack: justify !important; -webkit-box-align: center !important; -ms-flex-align: center !important; align-items: center !important; display: -webkit-box !important; display: -ms-flexbox !important; display: flex !important; -ms-flex-direction: row !important; flex-direction: row !important; gap: var(--playback-bar-grid-gap) !important; justify-content: space-between !important; height: 12px !important;} .x-progressBar-progressBarBg {--progress-bar-height: 6px !important; --progress-bar-radius: 10px !important;} :root .Root__now-playing-bar .playback-bar > div {height: 17.59px !important;} .player-controls__buttons--new-icons { margin-bottom: 12px !importan;} .main-nowPlayingBar-nowPlayingBar {padding-bottom: 0px !important;}",
+    "code": ".playback-bar {position: relative !important; display: block !important; --playback-bar-grid-gap: 8px !important; -webkit-box-orient: horizontal !important; -webkit-box-direction: normal !important; -webkit-box-pack: justify !important; -webkit-box-align: center !important; align-items: center !important; display: -webkit-box !important; display: flex !important; flex-direction: row !important; gap: var(--playback-bar-grid-gap) !important; justify-content: space-between !important; height: 12px !important;} .x-progressBar-progressBarBg {--progress-bar-height: 6px !important; --progress-bar-radius: 10px !important;} :root .Root__now-playing-bar .playback-bar > div {height: 17.59px !important;} .player-controls__buttons--new-icons { margin-bottom: 12px !importan;} .main-nowPlayingBar-nowPlayingBar {padding-bottom: 0px !important;}",
     "preview": "resources/assets/snippets/default-progress-bar.png",
   },
   {
@@ -332,7 +332,7 @@ export default [
   {
     "title": "Remove top spacing",
     "description": "Remove top spacing where should be the Window action buttons. Useful for tiling window managers.",
-    "code": ".spotify__container--is-desktop .Root__top-container { padding-top: 8px; }",
+    "code": ".Root__top-container:has([class*='yourLibraryX']) { padding-top: 8px; }",
     "preview": "resources/assets/snippets/remove-top-spacing.png",
   },
 ];
