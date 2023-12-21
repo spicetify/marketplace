@@ -206,7 +206,7 @@ export default [
   {
     "title": "Remove Popular sections from homepage",
     "description": "Thanks Spotify, but I have a music taste",
-    "code": ".main-shelf-shelf.Shelf:has(> div > div > .main-shelf-seeAll[href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'],[href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
+    "code": ".main-shelf-shelf.Shelf:has([href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-popular.png",
   },
   {
