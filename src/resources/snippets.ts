@@ -17,12 +17,6 @@ export default [
     "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); color: var(--spice-sidebar); }",
     "preview": "resources/assets/snippets/fixed-episodes-icon.png",
   },
-  // {
-  //   "title": "Fix 'Made For You' Icon",
-  //   "description": "Fix the colours of the Made For You icon",
-  //   "code": ".utp540VMXpC3bYIxo9wy {\n  color: var(--spice-sidebar);\n  background: var(--spice-text);\n  opacity: 1;\n}\n.t6d9Hf7maqFPHp1Y02VR {\n  color: var(--spice-text);\n}",
-  //   "preview": "https://placekitten.com/200/200",
-  // },
   {
     "title": "Fix 'Liked' Icon",
     "description": "Fix the colours of the Liked icon in sidebar",
@@ -238,12 +232,6 @@ export default [
     "description": "Hides the next up card while in fullscreen view (appears shortly before switching to the next song)",
     "code": ".npv-up-next.fade-in-and-out-transition-enter-done {display: none;}",
     "preview": "resources/assets/snippets/fullscreen-hide-next-up.png",
-  },
-  {
-    "title": "Hide podcast tab",
-    "description": "Hides the podcast tab in Your Library",
-    "code": "[href='/collection/podcasts'] {display: none;}",
-    "preview": "resources/assets/snippets/hide-podcast-tab.png",
   },
   {
     "title": "Hide profile username",
