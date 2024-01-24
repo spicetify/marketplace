@@ -1,7 +1,9 @@
+import Chroma from "chroma-js";
+
 import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption, ResetCategory } from "../types/marketplace-types";
-import Chroma from "chroma-js";
 import { LOCALSTORAGE_KEYS } from "../constants";
+
 /**
  * Get localStorage data (or fallback value), given a key
  * @param key The localStorage key
