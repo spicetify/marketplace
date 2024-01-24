@@ -1,8 +1,8 @@
 import { t } from "i18next";
 
 import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { addToSessionStorage, processAuthors } from "./Utils";
 import { RepoTopic, CardItem, Snippet } from "../types/marketplace-types";
+import { addToSessionStorage, processAuthors } from "./Utils";
 import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
@@ -15,7 +15,7 @@ import snippetsJSON from "../resources/snippets";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = []) {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], showArchived = false) {
   // www is needed or it will block with "cross-origin" error.
   let url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
 
@@ -41,7 +41,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url)),
+    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url) && (showArchived || !item.archived)),
   };
 
   return filteredResults;
@@ -149,9 +149,14 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
       if (manifest && manifest.name && manifest.description && manifest.main
       ) {
         // Add to list unless we're hiding installed items and it's installed
-        if (!(hideInstalled
-          && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))
-        ) accum.push(item);
+        if (
+          !(
+            hideInstalled &&
+            localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`)
+          )
+        ) {
+          accum.push(item);
+        }
       }
       // else {
       //     console.error("Invalid manifest:", manifest);

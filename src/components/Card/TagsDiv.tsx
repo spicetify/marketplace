@@ -12,6 +12,7 @@ const TagsDiv = (props: {
   // Map of english names for tags so that the css can identify them for colouring
   const englishTagMap = {
     [t("grid.externalJS")]: "external JS",
+    [t("grid.archived")]: "archived",
     [t("grid.dark")]: "dark",
     [t("grid.light")]: "light",
   };
@@ -26,8 +27,8 @@ const TagsDiv = (props: {
       "data-tag": string;
     }, HTMLElement>[]>((accum, tag) => {
       const englishTag = englishTagMap[tag] || tag;
-      // Render tags if enabled. Always render external JS tag
-      if (props.showTags || tag === t("grid.externalJS")) {
+      // Render tags if enabled. Always render external JS and archived tags
+      if (props.showTags || tag === t("grid.externalJS") || tag === t("grid.archived")) {
         accum.push(
           React.createElement("li", {
             className: "marketplace-card__tag",
@@ -40,20 +41,25 @@ const TagsDiv = (props: {
     }, []);
   };
 
-  const baseTags = props.tags.slice(0, MAX_TAGS);
+  const baseTags = props.tags
+    // Sort tags so that externalJS and archived tags come first
+    .sort((a) =>
+      a === t("grid.externalJS") || a === t("grid.archived") ? -1 : 1,
+    )
+    .slice(0, MAX_TAGS);
   const extraTags = props.tags.slice(MAX_TAGS);
 
   // Render the tags list and add expand button if there are more tags
   return (
     <div className="marketplace-card__tags-container">
       <ul className="marketplace-card__tags">
-        { generateTags(baseTags) }
-        { extraTags.length && expanded
+        {generateTags(baseTags)}
+        {extraTags.length && expanded
           ? generateTags(extraTags)
           : null
         }
       </ul>
-      { extraTags.length && !expanded
+      {extraTags.length && !expanded
         ? <button
           className="marketplace-card__tags-more-btn"
           onClick={(e) => {
