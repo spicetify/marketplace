@@ -17,12 +17,6 @@ export default [
     "code": ".main-yourEpisodesButton-yourEpisodesIcon { background: var(--spice-text); color: var(--spice-sidebar); }",
     "preview": "resources/assets/snippets/fixed-episodes-icon.png",
   },
-  // {
-  //   "title": "Fix 'Made For You' Icon",
-  //   "description": "Fix the colours of the Made For You icon",
-  //   "code": ".utp540VMXpC3bYIxo9wy {\n  color: var(--spice-sidebar);\n  background: var(--spice-text);\n  opacity: 1;\n}\n.t6d9Hf7maqFPHp1Y02VR {\n  color: var(--spice-text);\n}",
-  //   "preview": "https://placekitten.com/200/200",
-  // },
   {
     "title": "Fix 'Liked' Icon",
     "description": "Fix the colours of the Liked icon in sidebar",
@@ -240,12 +234,6 @@ export default [
     "preview": "resources/assets/snippets/fullscreen-hide-next-up.png",
   },
   {
-    "title": "Hide podcast tab",
-    "description": "Hides the podcast tab in Your Library",
-    "code": "[href='/collection/podcasts'] {display: none;}",
-    "preview": "resources/assets/snippets/hide-podcast-tab.png",
-  },
-  {
     "title": "Hide profile username",
     "description": "Hides your username next to your profile picture",
     "code": "span.Type__TypeElement-sc-goli3j-0.TypeElement-mestoBold-type.main-userWidget-displayName {display: none !important;}",
@@ -300,9 +288,9 @@ export default [
     "preview": "resources/assets/snippets/fix-listening-on.png",
   },
   {
-    "title": "Smooth Progress/Volume bar",
+    "title": "Smooth Progress/Volume Bar",
     "description": "Makes the Progress/Volume bar glide",
-    "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
+    "code": "@property --progress-bar-transform { inherits: true; initial-value: 0%; syntax: '<percentage>'; } .progress-bar { transition: --progress-bar-transform 1s linear !important; } .progress-bar:active { transition-duration: 150ms !important; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
   },
   {

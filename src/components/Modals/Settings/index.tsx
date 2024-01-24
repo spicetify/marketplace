@@ -1,13 +1,11 @@
 import React from "react";
 import { t } from "i18next";
+
 import { Config } from "../../../types/marketplace-types";
-
 import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "../../../logic/Utils";
-
 import ConfigRow from "./ConfigRow";
 import Button from "../../Button";
 import TabRow from "./TabRow";
-
 import { openModal } from "../../../logic/LaunchModals";
 import { LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../../../constants";
 
@@ -60,6 +58,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig } : Props) => {
       <h2 className="settings-heading">{t("settings.optionsHeading")}</h2>
       <ConfigRow name={t("settings.starCountLabel")} storageKey='stars' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.tagsLabel")} storageKey='tags' modalConfig={modalConfig} updateConfig={updateConfig}/>
+      <ConfigRow name={t("settings.showArchived")} storageKey='showArchived' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.devToolsLabel")} storageKey='themeDevTools' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.hideInstalledLabel")} storageKey='hideInstalled' modalConfig={modalConfig} updateConfig={updateConfig}/>
       <ConfigRow name={t("settings.colourShiftLabel")} storageKey='colorShift' modalConfig={modalConfig} updateConfig={updateConfig}/>

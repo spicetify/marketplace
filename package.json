@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/spicetify/spicetify-marketplace/issues"
   },
-  "packageManager": "pnpm@8.10.5",
+  "packageManager": "pnpm@8.14.2",
   "scripts": {
     "build": "spicetify-creator",
     "build:local": "spicetify-creator --out=dist --minify",

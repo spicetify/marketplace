@@ -5,6 +5,7 @@
       "optionsHeading": "Основные",
       "starCountLabel": "Отображать количество звезд",
       "tagsLabel": "Отображать теги",
+      "showArchived": "Отображать архивные репозитории",
       "devToolsLabel": "Включить инструменты разработчика тем",
       "hideInstalledLabel": "Скрывать установленное в других вкладках",
       "colourShiftLabel": "Менять цвета каждую минуту",
@@ -33,6 +34,7 @@
     },
     "snippets": {
       "addTitle": "Добавление сниппета",
+      "duplicateName": "Сниппет с таким названием уже существует",
       "editTitle": "Редактирование сниппета",
       "viewTitle": "Просмотр сниппета",
       "customCSS": "CSS",
@@ -90,6 +92,7 @@
       "installed": "Установлено",
       "lastUpdated": "Обновлено: {{val, datetime}}",
       "externalJS": "содержит JS",
+      "archived": "архивировано",
       "dark": "темный",
       "light": "светлый",
       "sort": {
@@ -114,6 +117,15 @@
     "save": "Сохранить",
     "colour_one": "цвет",
     "colour_other": "цвета",
-    "favourite": "избранное"
+    "favourite": "избранное",
+    "notifications": {
+      "wrongLocalTheme": "Пожалуйста, измените значение current_theme в config-xpui.ini на 'marketplace', чтобы использовать темы из Маркетплейса",
+      "tooManyRequests": "Слишком много запросов. Пожалуйста, попробуйте позже",
+      "noCdnConnection": "Маркетплейс не может подключиться к CDN. Пожалуйста, попробуйте позже",
+      "markdownParsingError": "Ошибка при парсинге Markdown (HTTP {{status}})",
+      "noReadmeFile": "README не найден",
+      "themeInstallationError": "Ошибка при установке темы",
+      "extensionInstallationError": "Ошибка при установке расширения"
+    }
   }
 }

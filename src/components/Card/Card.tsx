@@ -1,7 +1,8 @@
 import React, { Key } from "react";
 import { withTranslation } from "react-i18next";
-import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
+import { t } from "i18next";
 
+import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
 import {
   getLocalStorageDataFromKey,
@@ -18,7 +19,6 @@ import { openModal } from "../../logic/LaunchModals";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
 import Button from "../Button";
-import { t } from "i18next";
 const Spicetify = window.Spicetify;
 
 export type CardProps = {
@@ -71,6 +71,7 @@ class Card extends React.Component<CardProps, {
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
     this.tags = props.item.tags || [];
     if (props.item.include) this.tags.push(t("grid.externalJS"));
+    if (props.item.archived) this.tags.push(t("grid.archived"));
 
     this.state = {
       // Initial value. Used to trigger a re-render.
@@ -140,6 +141,16 @@ class Card extends React.Component<CardProps, {
         console.debug("Theme already installed, removing");
         this.removeTheme(this.localStorageKey);
       } else {
+        const localTheme = localStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
+        if (localTheme != null && localTheme.toLowerCase() !== "marketplace") {
+          Spicetify.showNotification(
+            t("notifications.wrongLocalTheme"),
+            true,
+            5000,
+          );
+          return;
+        }
+
         // Remove theme if already installed, then install the new theme
         this.removeTheme();
         this.installTheme();
@@ -167,7 +178,7 @@ class Card extends React.Component<CardProps, {
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
     if (!this.props.item) {
-      Spicetify.showNotification("There was an error installing extension", true);
+      Spicetify.showNotification(t("notifications.extensionInstallationError"), true);
       return;
     }
     const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
@@ -219,7 +230,7 @@ class Card extends React.Component<CardProps, {
   async installTheme(update = false) {
     const { item } = this.props;
     if (!item) {
-      Spicetify.showNotification("There was an error installing theme", true);
+      Spicetify.showNotification(t("notifications.themeInstallationError"), true);
       return;
     }
     console.debug(`Installing theme ${this.localStorageKey}`);
@@ -298,7 +309,9 @@ class Card extends React.Component<CardProps, {
 
       // Add to Spicetify.Config
       const name = this.props.item.manifest?.name;
+      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
       if (name) Spicetify.Config.current_theme = name;
+      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
       if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
     }
 
@@ -335,8 +348,10 @@ class Card extends React.Component<CardProps, {
       this.props.updateColourSchemes(null, null);
 
       // Restore Spicetify.Config
-      Spicetify.Config.current_theme = Spicetify.Config.local_theme;
-      Spicetify.Config.color_scheme = Spicetify.Config.local_color_scheme;
+      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
+      Spicetify.Config.current_theme = "marketplace";
+      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
+      Spicetify.Config.color_scheme = "marketplace";
 
       this.setState({ installed: false });
     }
@@ -393,7 +408,7 @@ class Card extends React.Component<CardProps, {
   }
 
   openReadme() {
-    if (this.props.item?.manifest && this.props.item?.manifest?.readme) {
+    if (this.props.item?.manifest?.readme) {
       Spicetify.Platform.History.push({
         pathname: `${CUSTOM_APP_PATH}/readme`,
         state: {
@@ -410,7 +425,7 @@ class Card extends React.Component<CardProps, {
         },
       });
     } else {
-      Spicetify.showNotification("No page was found", true);
+      Spicetify.showNotification(t("notifications.noReadmeFile"), true);
     }
   }
 
