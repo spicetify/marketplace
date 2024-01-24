@@ -1,5 +1,5 @@
 import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { RepoTopic, CardItem, Snippet  } from "../types/marketplace-types";
+import { RepoTopic, CardItem, Snippet } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
 import snippetsJSON from "../resources/snippets";
 
