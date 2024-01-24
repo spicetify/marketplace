@@ -1,4 +1,5 @@
 import Chroma from "chroma-js";
+import { t } from "i18next";
 
 import { CardProps } from "../components/Card/Card";
 import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption, ResetCategory } from "../types/marketplace-types";
@@ -564,7 +565,10 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
       method: "POST",
       body: JSON.stringify(postBody),
     });
-    if (!response.ok) throw Spicetify.showNotification(`Error parsing markdown (HTTP ${response.status})`, true);
+    if (!response.ok) throw Spicetify.showNotification(
+      t("notifications.markdownParsingError", { status: response.status }),
+      true,
+    );
 
     const html = await response.text();
 
