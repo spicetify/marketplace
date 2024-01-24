@@ -5,6 +5,7 @@
       "optionsHeading": "Основные",
       "starCountLabel": "Отображать количество звезд",
       "tagsLabel": "Отображать теги",
+      "showArchived": "Отображать архивные репозитории",
       "devToolsLabel": "Включить инструменты разработчика тем",
       "hideInstalledLabel": "Скрывать установленное в других вкладках",
       "colourShiftLabel": "Менять цвета каждую минуту",
@@ -91,6 +92,7 @@
       "installed": "Установлено",
       "lastUpdated": "Обновлено: {{val, datetime}}",
       "externalJS": "содержит JS",
+      "archived": "архивировано",
       "dark": "темный",
       "light": "светлый",
       "sort": {

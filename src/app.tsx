@@ -103,6 +103,7 @@ class App extends React.Component<{
       visual: {
         stars: JSON.parse(getLocalStorageDataFromKey("marketplace:stars", true)),
         tags: JSON.parse(getLocalStorageDataFromKey("marketplace:tags", true)),
+        showArchived: JSON.parse(getLocalStorageDataFromKey("marketplace:showArchived", false)),
         hideInstalled: JSON.parse(getLocalStorageDataFromKey("marketplace:hideInstalled", false)),
         colorShift: JSON.parse(getLocalStorageDataFromKey("marketplace:colorShift", false)),
         themeDevTools: JSON.parse(getLocalStorageDataFromKey("marketplace:themeDevTools", false)),
