@@ -288,7 +288,7 @@ export default [
     "preview": "resources/assets/snippets/fix-listening-on.png",
   },
   {
-    "title": "Smooth Progress/Volume bar",
+    "title": "Smooth Progress/Volume Bar",
     "description": "Makes the Progress/Volume bar glide",
     "code": "@property --progress-bar-transform { inherits: true; initial-value: 0%; syntax: '<percentage>'; } .progress-bar { transition: --progress-bar-transform 1s linear !important; } .progress-bar:active { transition-duration: 150ms !important; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
