@@ -33,7 +33,7 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
     const processedDescription = description.trim();
 
     if (isInstalled && props.type !== "EDIT_SNIPPET") {
-      Spicetify.showNotification("That name is already taken!", true);
+      Spicetify.showNotification(t("snippets.duplicateName"), true);
       return;
     }
 

@@ -33,6 +33,7 @@
     },
     "snippets": {
       "addTitle": "Add Snippet",
+      "duplicateName": "That name is already taken!",
       "editTitle": "Edit Snippet",
       "viewTitle": "View Snippet",
       "customCSS": "Custom CSS",
@@ -80,7 +81,7 @@
       "whatsChanged": "What's Changed",
       "seeChangelog": "See changelog",
       "howToUpgrade": "How to upgrade",
-      "viewGuide": "View install guide"
+      "viewGuide": "View guide"
     },
     "grid": {
       "spicetifyMarketplace": "Spicetify Marketplace",
@@ -116,7 +117,13 @@
     "colour_other": "colours",
     "favourite": "favourite",
     "notifications": {
-      "wrongLocalTheme": "Please set current_theme in config-xpui.ini to 'marketplace' to install themes using the Marketplace."
+      "wrongLocalTheme": "Please set current_theme in config-xpui.ini to 'marketplace' to install themes using the Marketplace",
+      "tooManyRequests": "Too many requests, cool down",
+      "noCdnConnection": "Marketplace is unable to connect to the CDN. Please check your Internet configuration",
+      "markdownParsingError": "Error parsing markdown (HTTP {{status}})",
+      "noReadmeFile": "No README was found",
+      "themeInstallationError": "There was an error installing theme",
+      "extensionInstallationError": "There was an error installing extension"
     }
   }
 }

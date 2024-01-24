@@ -1,8 +1,8 @@
-import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { CardItem, Snippet } from "../types/marketplace-types";
-import { addToSessionStorage, processAuthors } from "./Utils";
+import { t } from "i18next";
 
-import { RepoTopic } from "../types/marketplace-types";
+import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
+import { addToSessionStorage, processAuthors } from "./Utils";
+import { RepoTopic, CardItem, Snippet } from "../types/marketplace-types";
 import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
@@ -30,7 +30,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
     .catch(() => null);
 
   if (!allRepos?.items) {
-    Spicetify.showNotification("Too Many Requests, Cool Down.", true);
+    Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
     return { items: [] };
   }
 
