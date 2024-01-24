@@ -290,7 +290,7 @@ export default [
   {
     "title": "Smooth Progress/Volume bar",
     "description": "Makes the Progress/Volume bar glide",
-    "code": ".x-progressBar-fillColor { transition: 500ms; } .progress-bar__slider { transition: 500ms; }",
+    "code": ".x-progressBar-fillColor, .progress-bar__slider { transition: 1000ms; transition-timing-function: linear; }",
     "preview": "resources/assets/snippets/smooth-progress-bar.png",
   },
   {
