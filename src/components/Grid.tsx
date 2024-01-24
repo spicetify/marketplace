@@ -190,7 +190,12 @@ class Grid extends React.Component<
     const activeTab = this.CONFIG.activeTab;
     switch (activeTab) {
     case "Extensions": {
-      const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST);
+      const pageOfRepos = await getTaggedRepos(
+        "spicetify-extensions",
+        this.requestPage,
+        this.BLACKLIST,
+        this.CONFIG.visual.showArchived,
+      );
       const extensions: CardItem[] = [];
       for (const repo of pageOfRepos.items) {
         const repoExtensions = await fetchExtensionManifest(
@@ -208,7 +213,10 @@ class Grid extends React.Component<
 
         if (repoExtensions && repoExtensions.length) {
           extensions.push(...repoExtensions.map((extension) => ({
-            ...extension, lastUpdated: repo.pushed_at, created: repo.created_at,
+            ...extension,
+            archived: repo.archived,
+            lastUpdated: repo.pushed_at,
+            created: repo.created_at,
           })));
         }
       }
@@ -266,7 +274,12 @@ class Grid extends React.Component<
       // Don't need to return a page number because
       // installed extension do them all in one go, since it's local
     } case "Themes": {
-      const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST);
+      const pageOfRepos = await getTaggedRepos(
+        "spicetify-themes",
+        this.requestPage,
+        this.BLACKLIST,
+        this.CONFIG.visual.showArchived,
+      );
       const themes: CardItem[] = [];
       for (const repo of pageOfRepos.items) {
         const repoThemes = await fetchThemeManifest(
@@ -285,6 +298,7 @@ class Grid extends React.Component<
           themes.push(...repoThemes.map(
             (theme) => ({
               ...theme,
+              archived: repo.archived,
               lastUpdated: repo.pushed_at,
               created: repo.created_at,
             }),
@@ -311,7 +325,12 @@ class Grid extends React.Component<
       break;
     }
     case "Apps": {
-      const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST);
+      const pageOfRepos = await getTaggedRepos(
+        "spicetify-apps",
+        this.requestPage,
+        this.BLACKLIST,
+        this.CONFIG.visual.showArchived,
+      );
       const apps: CardItem[] = [];
 
       for (const repo of pageOfRepos.items) {
@@ -329,6 +348,7 @@ class Grid extends React.Component<
         if (repoApps && repoApps.length) {
           apps.push(...repoApps.map((app) => ({
             ...app,
+            archived: repo.archived,
             lastUpdated: repo.pushed_at,
             created: repo.created_at,
           })));

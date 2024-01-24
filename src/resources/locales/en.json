@@ -5,6 +5,7 @@
       "optionsHeading": "Options",
       "starCountLabel": "Stars count",
       "tagsLabel": "Tags",
+      "showArchived": "Show archived repos",
       "devToolsLabel": "Theme developer tools",
       "hideInstalledLabel": "Hide installed when browsing",
       "colourShiftLabel": "Shift colours every minute",
@@ -91,6 +92,7 @@
       "installed": "Installed",
       "lastUpdated": "Last updated {{val, datetime}}",
       "externalJS": "external JS",
+      "archived": "archived",
       "dark": "dark",
       "light": "light",
       "sort": {
