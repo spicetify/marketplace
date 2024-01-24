@@ -33,6 +33,7 @@
     },
     "snippets": {
       "addTitle": "Добавление сниппета",
+      "duplicateName": "Сниппет с таким названием уже существует",
       "editTitle": "Редактирование сниппета",
       "viewTitle": "Просмотр сниппета",
       "customCSS": "CSS",
@@ -116,7 +117,13 @@
     "colour_other": "цвета",
     "favourite": "избранное",
     "notifications": {
-      "wrongLocalTheme": "Пожалуйста, измените значение current_theme в config-xpui.ini на 'marketplace', чтобы устанавливать темы из Маркетплейса"
+      "wrongLocalTheme": "Пожалуйста, измените значение current_theme в config-xpui.ini на 'marketplace', чтобы использовать темы из Маркетплейса",
+      "tooManyRequests": "Слишком много запросов. Пожалуйста, попробуйте позже",
+      "noCdnConnection": "Маркетплейс не может подключиться к CDN. Пожалуйста, попробуйте позже",
+      "markdownParsingError": "Ошибка при парсинге Markdown (HTTP {{status}})",
+      "noReadmeFile": "README не найден",
+      "themeInstallationError": "Ошибка при установке темы",
+      "extensionInstallationError": "Ошибка при установке расширения"
     }
   }
 }
