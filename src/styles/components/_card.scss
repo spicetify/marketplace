@@ -39,7 +39,7 @@
         border-radius: 4px;
         padding: 0px 9px 2px;
 
-        &[data-tag='external JS'] {
+        &[data-tag='external JS'], &[data-tag=archived] {
           background-color: hsl(0deg 70% 54%);
           color: #fff;
         }

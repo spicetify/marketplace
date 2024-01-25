@@ -30,8 +30,9 @@ import {
 } from "../logic/FetchRemotes";
 
 (async function init() {
-  while (!(Spicetify?.LocalStorage && Spicetify?.showNotification)) {
-    await new Promise(resolve => setTimeout(resolve, 10));
+  if (!Spicetify.LocalStorage || !Spicetify.showNotification) {
+    setTimeout(init, 100);
+    return;
   }
 
   // https://github.com/satya164/react-simple-code-editor/issues/86
@@ -159,7 +160,7 @@ import {
   if (!tld) {
     if (window.navigator.onLine) {
       console.error(new Error("Unable to connect to the CDN, please check your Internet configuration."));
-      Spicetify.showNotification("Marketplace is unable to connect to the CDN. Please check your Internet configuration.", true, 5000);
+      Spicetify.showNotification(t("notifications.noCdnConnection"), true, 5000);
     } else {
       // Reload Marketplace extension in case the user couldn't connect to the CDN because they were offline
       window.addEventListener("online", init, { once: true });
@@ -178,11 +179,7 @@ import {
   const installedTheme = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedTheme) {
     if (localTheme.toLocaleLowerCase() !== "marketplace") {
-      Spicetify.showNotification(
-        t("notifications.wrongLocalTheme"),
-        true,
-        5000,
-      );
+      Spicetify.showNotification(t("notifications.wrongLocalTheme"), true, 5000);
       return;
     }
     initializeTheme(installedTheme);
@@ -206,7 +203,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
     .catch(() => null);
 
   if (!allRepos?.items) {
-    Spicetify.showNotification?.("Too Many Requests, Cool Down.", true);
+    Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
     return { items: [] };
   }
 

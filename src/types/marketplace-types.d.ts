@@ -58,6 +58,7 @@ export type Snippet = {
   user: undefined;
   repo: undefined;
   branch: undefined;
+  archived: undefined;
   extensionURL: undefined;
   readmeURL: undefined;
   stars: undefined;
@@ -95,6 +96,7 @@ export type CardItem = {
   user: string;
   repo: string;
   branch: string;
+  archived: boolean;
   imageURL: string;
   extensionURL: string;
   readmeURL: string;
@@ -126,6 +128,7 @@ export type CardItem = {
 export type VisualConfig = {
   stars: boolean;
   tags: boolean;
+  showArchived: boolean;
   hideInstalled: boolean;
   colorShift: boolean;
   themeDevTools: boolean;
