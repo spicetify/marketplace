@@ -78,10 +78,10 @@ export default [
     "preview": "resources/assets/snippets/fix-playlist-hover.png",
   },
   {
-    "title": "Disable Homepage Recommendation",
-    "description": "Disable Homepage Recommendation charts",
-    "code": "section[data-testid='home-page'] .main-shelf-shelf:not([aria-label='Recently played'], [aria-label='Your playlists']) {\n	display: none !important;\n}",
-    "preview": "resources/assets/snippets/disable-recommendation.png",
+    "title": "Disable Homepage Recommendations",
+    "description": "Removes all recommendations from the homepage",
+    "code": "[data-testid='home-page'] .main-home-content > *:not(.view-homeShortcutsGrid-shortcuts, .main-shelf-shelf:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
+    "preview": "resources/assets/snippets/disable-recommendations.png",
   },
   {
     "title": "Circular Album Art",

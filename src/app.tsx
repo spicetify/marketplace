@@ -1,37 +1,22 @@
-// import styles from './styles/app.module.scss'
 import React from "react";
-import { Config, TabItemConfig } from "./types/marketplace-types";
-
 import i18n, { t } from "i18next";
-import ca from "./resources/locales/ca.json";
-import en from "./resources/locales/en.json";
-import enUS from "./resources/locales/en-US.json";
-import es from "./resources/locales/es.json";
-import fr from "./resources/locales/fr.json";
-import zhTW from "./resources/locales/zh-TW.json";
-import zhCN from "./resources/locales/zh-CN.json";
-import ru from "./resources/locales/ru.json";
-import et from "./resources/locales/et.json";
-import { initReactI18next } from "react-i18next";
-import { withTranslation } from "react-i18next";
+import { withTranslation, initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+
+import "./styles/styles.scss";
+import locales from "./resources/locales";
+import { Config, TabItemConfig } from "./types/marketplace-types";
+import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
+import Grid from "./components/Grid";
+import ReadmePage from "./components/ReadmePage";
+import { getLocalStorageDataFromKey } from "./logic/Utils";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .use(LanguageDetector)
   .init({
     // the translations
-    resources: {
-      ca,
-      en,
-      "en-US": enUS,
-      es,
-      fr,
-      ru,
-      "zh-TW": zhTW,
-      "zh-CN": zhCN,
-      et,
-    },
+    resources: locales,
     detection: {
       order: [ "navigator", "htmlTag" ],
     },
@@ -41,12 +26,6 @@ i18n
       escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
     },
   });
-
-import "./styles/styles.scss";
-import Grid from "./components/Grid";
-import ReadmePage from "./components/ReadmePage";
-import { getLocalStorageDataFromKey } from "./logic/Utils";
-import { ALL_TABS, LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "./constants";
 
 class App extends React.Component<{
   t: (key: string) => string,
