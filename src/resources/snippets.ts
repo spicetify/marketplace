@@ -323,4 +323,10 @@ export default [
     "code": ".Root__top-container:has([class*='yourLibraryX']) { padding-top: 8px; }",
     "preview": "resources/assets/snippets/remove-top-spacing.png",
   },
+	{
+		"title": "Fix the Queue Panel",
+    "description": "Restores the Queue Panel functionality and appearance",
+		"code": ":is(#queue-panel, #history-panel, [data-encore-id='tabPanel']) [data-encore-id='listRow'] { display: none; }",
+		"preview": "resources/assets/snippets/fix-queue-panel.png",
+	},
 ];
