@@ -1,0 +1,131 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Ustawienia Marketplace",
+      "optionsHeading": "Opcje",
+      "starCountLabel": "Ilość gwiazdek",
+      "tagsLabel": "Tagi",
+      "showArchived": "Pokaż archiwalne repozytoria",
+      "devToolsLabel": "Narzędzia do tworzenia motywów",
+      "hideInstalledLabel": "Ukryj zainstalowane podczas przeglądania",
+      "colourShiftLabel": "Zmieniaj kolory co minutę",
+      "albumArtBasedColors": "Zmień kolory bazując na okładce albumu",
+      "albumArtBasedColorsMode": "Tryb schematu kolorów (ColorApi)",
+      "albumArtBasedColorsVibrancy": "Kolor pobrany z okładki albumu",
+      "albumArtBasedColorsVibrancyToolTip": "Nasycony: Kolor, który jest najbardziej widoczny, ale o znacznie mniejszej jasności. \nJasny wibrujący: Najbardziej żywy kolor, ale z nieco zwiększoną jasnością. \nWyraźny: Kolor, który najbardziej rzuca się w oczy na okładce albumu. \nWibrujący: Najbardziej żywy kolor na okładce albumu",
+      "almbumArtColorsModeToolTip": "Monochromatyczny ciemny: Schemat kolorów oparty bezpośrednio na wybranym głównym kolorze, wykorzystujący różne odcienie głównego koloru i mieszający szarości w celu stworzenia schematu kolorów, jest to odwrotność Monochromatycznego jasnego. \nMonochromatyczny jasny: Schemat kolorów oparty bezpośrednio na wybranym głównym kolorze, wykorzystujący różne odcienie głównego koloru i mieszanie szarości w celu utworzenia schematu kolorów. Tło monochromatycznego światła będzie na pierwszym planie lub kolorem tekstu w monochromatycznym ciemnym i odwrotnie. \nAnalogowy: Schemat kolorów oparty na wybranym głównym kolorze, wykorzystujący kolory sąsiadujące z głównym kolorem na kole kolorów. \nUzupełnienie analogowe: Schemat kolorów oparty na wybranym głównym kolorze, wykorzystujący kolory sąsiadujące z głównym kolorem na kole kolorów i kolorem uzupełniającym. \nTriada: Schemat kolorów oparty na wybranym głównym kolorze, wykorzystujący kolory na kole kolorów, które są w równej odległości od głównego koloru. \nQuad: Schemat kolorów oparty na wybranym głównym kolorze, wykorzystujący kolory na kole kolorów, które są oddalone o 90 stopni od głównego koloru.",
+      "tabsHeading": "Karty",
+      "resetHeading": "Reset",
+      "resetBtn": "Zresetuj",
+      "resetDescription": "Odinstaluj wszystkie rozszerzenia, motywy i zresetuj preferencje",
+      "backupHeading": "Kopia zapasowa/Przywracanie kopii",
+      "backupLabel": "Utwórz kopię zapasową lub przywróć wszystkie dane Marketplace. Kopia nie zawiera ustawień dla rzeczy zainstalowanych poprzez Marketplace.",
+      "backupBtn": "Otwórz",
+      "versionHeading": "Wersja",
+      "versionBtn": "Skopiuj",
+      "versionCopied": "Skopiowano"
+    },
+    "tabs": {
+      "Extensions": "Rozszerzenia",
+      "Themes": "Motywy",
+      "Snippets": "Snippety",
+      "Apps": "Aplikacje",
+      "Installed": "Zainstalowane"
+    },
+    "snippets": {
+      "addTitle": "Dodaj Snippet",
+      "duplicateName": "Ta nazwa jest już zajęta!",
+      "editTitle": "Edytuj Snippet",
+      "viewTitle": "Pokaż Snippet",
+      "customCSS": "Niestandardowy CSS",
+      "customCSSPlaceholder": "Wprowadź tutaj swój własny CSS! Możesz go znaleźć w zakładce 'Zainstalowane' aby nim zarządzać.",
+      "snippetName": "Nazwa snippetu",
+      "snippetNamePlaceholder": "Wprowadź nazwę swojego niestandardowego snippetu",
+      "snippetDesc": "Opis snippetu",
+      "snippetDescPlaceholder": "Wpisz opis swojego snippetu",
+      "snippetPreview": "Podgląd snippetu",
+      "optional": "Opcjonalne",
+      "addImage": "Dodaj obraz",
+      "changeImage": "Zmień obraz",
+      "saveCSS": "Zapisz CSS"
+    },
+    "reloadModal": {
+      "title": "Przeładuj",
+      "description": "Do ukończenia tej operacji wymagane jest przeładowanie strony.",
+      "reloadNow": "Przeładuj teraz",
+      "reloadLater": "Przeładuj póżniej"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Skopiowano do schowka",
+      "noDataPasted": "Dane nie zostały wklejone",
+      "invalidJSON": "Nieprawidłowy JSON",
+      "inputLabel": "Ustawienia Marketplace",
+      "inputPlaceholder": "Skopiuj/wklej tu swoje ustawienia",
+      "exportBtn": "Eksportuj",
+      "importBtn": "Importuj",
+      "fileImportBtn": "Importuj z pliku"
+    },
+    "devTools": {
+      "title": "Narzędzia developerskie do motywów",
+      "noThemeInstalled": "Błąd: Nie zainstalowano motywu",
+      "noThemeManifest": "Błąd: Nie znaleziono pliku manifestu motywu",
+      "colorIniEditor": "Edytor color.ini",
+      "colorIniEditorPlaceholder": "[nazwa-twojego-koloru]",
+      "invalidCSS": "Nieprawidłowy CSS"
+    },
+    "updateModal": {
+      "title": "Zaktualizuj Marketplace",
+      "description": "Zaktualizuj Spicetify Marketplace, aby otrzymywać nowe funkcje i poprawki błędów.",
+      "currentVersion": "Obecna wersja: {{version}}",
+      "latestVersion": "Najnowsza wersja: {{version}}",
+      "whatsChanged": "Co się zmieniło",
+      "seeChangelog": "Zobacz zmiany",
+      "howToUpgrade": "Jak zaktualizować",
+      "viewGuide": "Zobacz przewodnik"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
+      "newUpdate": "Nowa aktualizacja",
+      "addCSS": "Dodaj CSS",
+      "search": "Wyszukaj",
+      "installed": "Zainstalowane",
+      "lastUpdated": "Ostatnio zaktualizowane {{val, datetime}}",
+      "externalJS": "zewnętrzny JS",
+      "archived": "archiwalny",
+      "dark": "ciemny",
+      "light": "jasny",
+      "sort": {
+        "label": "Sortuj po:",
+        "stars": "Ilość gwiazdek",
+        "newest": "Najnowsze",
+        "oldest": "Najstarsze",
+        "lastUpdated": "Ostatnio zaktualizowane",
+        "mostStale": "Najrzadziej aktualizowane",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Ładowanie...",
+      "errorLoading": "Błąd podczas ładowania README"
+    },
+    "github": "GitHub",
+    "install": "Zainstaluj",
+    "remove": "Odinstaluj",
+    "save": "Zapisz",
+    "colour_one": "kolor",
+    "colour_other": "kolory",
+    "favourite": "ulubione",
+    "notifications": {
+      "wrongLocalTheme": "Ustaw current_theme w config-xpui.ini na \"marketplace\", aby instalować motywy za pomocą Marketplace.",
+      "tooManyRequests": "Za dużo żądań, spokojnie",
+      "noCdnConnection": "Marketplace nie może połączyć się z CDN. Sprawdź swoją konfigurację internetową",
+      "markdownParsingError": "Błąd podczas parsowania markdownu (HTTP {{status}})",
+      "noReadmeFile": "Nie znaleziono README",
+      "themeInstallationError": "Wystąpił błąd podczas instalacji motywu",
+      "extensionInstallationError": "Wystąpił błąd podczas instalacji rozszerzenia"
+    }
+  }
+}

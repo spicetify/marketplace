@@ -7,6 +7,7 @@ import zhTW from "./zh-TW.json";
 import zhCN from "./zh-CN.json";
 import ru from "./ru.json";
 import et from "./et.json";
+import pl from "./pl.json";
 
 export default {
   ca,
@@ -18,5 +19,6 @@ export default {
   "zh-TW": zhTW,
   "zh-CN": zhCN,
   et,
+  pl,
 };
 
