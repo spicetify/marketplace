@@ -19,6 +19,6 @@ export default {
   "zh-TW": zhTW,
   "zh-CN": zhCN,
   et,
-  "pl-PL": pl,
+  pl,
 };
 
