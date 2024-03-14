@@ -323,4 +323,10 @@ export default [
     "code": ".Root__top-container:has([class*='yourLibraryX']) { padding-top: 8px; }",
     "preview": "resources/assets/snippets/remove-top-spacing.png",
   },
+  {
+    "title": "Switch Sidebars",
+    "description": "Move the navigation panel to the right and the information sidebar to the left.",
+    "code": ".Root__top-container .Root__nav-bar { grid-area: right-sidebar !important; } .Root__top-container .Root__right-sidebar { grid-area: left-sidebar !important; }",
+    "preview": "resources/assets/snippets/switch-sidebars.png",
+  },
 ];
