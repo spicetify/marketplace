@@ -5,9 +5,9 @@
       "optionsHeading": "Opzioni",
       "starCountLabel": "Contatore stelle",
       "tagsLabel": "Tag",
-      "showArchived": "Mostra repos archiviati",
-      "devToolsLabel": "Strumenti sviluppo tema",
-      "hideInstalledLabel": "Nascondi gli installato durante la navigazione",
+      "showArchived": "Mostra repository archiviati",
+      "devToolsLabel": "Strumenti di sviluppo del tema",
+      "hideInstalledLabel": "Nascondi i pacchetti già installati durante la navigazione",
       "colourShiftLabel": "Cambia colori ogni minuto",
       "albumArtBasedColors": "Cambia i colori in base alla copertina dell'album",
       "albumArtBasedColorsMode": "Schema colori modalità (ColorApi)",
@@ -52,8 +52,8 @@
     "reloadModal": {
       "title": "Ricarica",
       "description": "È necessario ricaricare la pagina per completare questa operazione.",
-      "reloadNow": "Ricarica ora",
-      "reloadLater": "Ricarica dopo"
+      "reloadNow": "Ricarica",
+      "reloadLater": "Più tardi"
     },
     "backupModal": {
       "title": "$t(settings.backupHeading)",
@@ -67,7 +67,7 @@
       "fileImportBtn": "Importa da file"
     },
     "devTools": {
-      "title": "Strumenti sviluppo tema",
+      "title": "Strumenti di sviluppo del tema",
       "noThemeInstalled": "Errore: Nessun tema del Marketplace installato",
       "noThemeManifest": "Errore: Nessun manifest del tema trovato",
       "colorIniEditor": "Editor Color.ini",
