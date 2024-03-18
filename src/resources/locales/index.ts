@@ -8,6 +8,7 @@ import zhCN from "./zh-CN.json";
 import ru from "./ru.json";
 import et from "./et.json";
 import pl from "./pl.json";
+import it from "./it.json";
 
 export default {
   ca,
@@ -20,5 +21,6 @@ export default {
   "zh-CN": zhCN,
   et,
   pl,
+  it,
 };
 

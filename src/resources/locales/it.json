@@ -1,0 +1,131 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Impostazioni Marketplace",
+      "optionsHeading": "Opzioni",
+      "starCountLabel": "Contatore stelle",
+      "tagsLabel": "Tag",
+      "showArchived": "Mostra repository archiviati",
+      "devToolsLabel": "Strumenti di sviluppo del tema",
+      "hideInstalledLabel": "Nascondi i pacchetti già installati durante la navigazione",
+      "colourShiftLabel": "Cambia colori ogni minuto",
+      "albumArtBasedColors": "Cambia i colori in base alla copertina dell'album",
+      "albumArtBasedColorsMode": "Schema colori modalità (ColorApi)",
+      "albumArtBasedColorsVibrancy": "Colore preso dalla copertina dell'album",
+      "albumArtBasedColorsVibrancyToolTip": "Desaturato: Il colore predominante ma con molta meno luminosità \n Vibrante Chiaro: Il colore più intenso ma con la luminosità aumentata leggermente \n Predominante: Il colore che spicca di più nella copertina dell'album \n Vibrante: Il colore più intenso nella copertina dell'album",
+      "almbumArtColorsModeToolTip": "Monocromo Scuro: Uno schema di colori basato direttamente sul colore principale selezionato, utilizzando diverse sfumature del colore principale e mescolando i grigi per creare uno schema di colori; questo è l'inverso di Monocromo Chiaro. \n Monocromo Chiaro: Uno schema di colori basato direttamente sul colore principale selezionato, utilizzando diverse sfumature del colore principale e mescolando i grigi per creare uno schema di colori. Lo sfondo di Monocromo Chiaro sarebbe il colore del testo o di quello in primo piano su Monocromo Scuro e viceversa. \n Armonico: Uno schema di colori basato sul colore principale selezionato, utilizzando i colori adiacenti al colore principale sulla ruota dei colori.\n Armonico Complementare: Uno schema di colori basato sul colore principale selezionato, utilizzando i colori adiacenti al colore principale sulla ruota dei colori e il colore complementare. \n Ternario: Uno schema di colori basato sul colore principale selezionato, utilizzando i colori sulla ruota dei colori che sono equidistanti dal colore principale. \n Quaternario: Uno schema di colori basato sul colore principale selezionato, utilizzando i colori sulla ruota dei colori che sono a 90 gradi dal colore principale.",
+      "tabsHeading": "Schede",
+      "resetHeading": "Reimposta",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Disinstalla tutte le estensioni e i temi, e ripristina le preferenze",
+      "backupHeading": "Backup/Ripristino",
+      "backupLabel": "Effettua il backup o ripristina tutti i dati del Marketplace. Questo non include le impostazioni per qualsiasi elemento installato tramite Marketplace.",
+      "backupBtn": "Apri",
+      "versionHeading": "Versione",
+      "versionBtn": "Copia",
+      "versionCopied": "Copiato"
+    },
+    "tabs": {
+      "Extensions": "Estensioni",
+      "Themes": "Temi",
+      "Snippets": "Moduli",
+      "Apps": "Applicazioni",
+      "Installed": "Installato"
+    },
+    "snippets": {
+      "addTitle": "Aggiungi Modulo",
+      "duplicateName": "Questo nome è già stato utilizzato!",
+      "editTitle": "Modifica Modulo",
+      "viewTitle": "Visualizza Modulo",
+      "customCSS": "CSS personalizzato",
+      "customCSSPlaceholder": "Scrivi qui il tuo CSS personalizzato! Puoi trovarli nella scheda degli installati per la gestione.",
+      "snippetName": "Nome Modulo",
+      "snippetNamePlaceholder": "Inserisci un nome per il tuo modulo personalizzato",
+      "snippetDesc": "Descrizione Modulo",
+      "snippetDescPlaceholder": "Inserisci una descrizione per il tuo modulo personalizzato",
+      "snippetPreview": "Anteprima Modulo",
+      "optional": "Opzionale",
+      "addImage": "Aggiungi immagine",
+      "changeImage": "Cambia immagine",
+      "saveCSS": "Salva CSS"
+    },
+    "reloadModal": {
+      "title": "Ricarica",
+      "description": "È necessario ricaricare la pagina per completare questa operazione.",
+      "reloadNow": "Ricarica",
+      "reloadLater": "Più tardi"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Impostazioni copiate negli appunti",
+      "noDataPasted": "Nessun dato incollato",
+      "invalidJSON": "JSON non valido",
+      "inputLabel": "Impostazioni Marketplace",
+      "inputPlaceholder": "Copia/incolla qui le tue impostazioni",
+      "exportBtn": "Esporta",
+      "importBtn": "Importa",
+      "fileImportBtn": "Importa da file"
+    },
+    "devTools": {
+      "title": "Strumenti di sviluppo del tema",
+      "noThemeInstalled": "Errore: Nessun tema del Marketplace installato",
+      "noThemeManifest": "Errore: Nessun manifest del tema trovato",
+      "colorIniEditor": "Editor Color.ini",
+      "colorIniEditorPlaceholder": "[nome-del-tuo-schema-colori]",
+      "invalidCSS": "Classi CSS non valide"
+    },
+    "updateModal": {
+      "title": "Aggiorna il Marketplace",
+      "description": "Aggiorna Spicetify Marketplace per ricevere nuove funzionalità e correzioni dei bug.",
+      "currentVersion": "Versione attuale: {{version}}",
+      "latestVersion": "Ultima versione: {{version}}",
+      "whatsChanged": "Cos'è Cambiato",
+      "seeChangelog": "Guarda il changelog",
+      "howToUpgrade": "Come effettuare l'aggiornamento",
+      "viewGuide": "Visualizza guida"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
+      "newUpdate": "Nuovo aggiornamento",
+      "addCSS": "Aggiungi CSS",
+      "search": "Cerca",
+      "installed": "Installato",
+      "lastUpdated": "Ultimo aggiornamento {{val, datetime}}",
+      "externalJS": "jS esterno",
+      "archived": "archiviato",
+      "dark": "scuro",
+      "light": "chiaro",
+      "sort": {
+        "label": "Ordina per:",
+        "stars": "Valutazione",
+        "newest": "Più recente",
+        "oldest": "Meno recenti",
+        "lastUpdated": "Ultimo aggiornamento",
+        "mostStale": "Meno Aggiornato",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Caricamento...",
+      "errorLoading": "Errore nel caricamento del README"
+    },
+    "github": "GitHub",
+    "install": "Installa",
+    "remove": "Rimuovi",
+    "save": "Salva",
+    "colour_one": "colore",
+    "colour_other": "colori",
+    "favourite": "preferito",
+    "notifications": {
+      "wrongLocalTheme": "Si prega d'impostare current_theme in config-xpui.ini su 'marketplace' per installare temi utilizzando il Marketplace",
+      "tooManyRequests": "Troppe richieste, attendi un momento",
+      "noCdnConnection": "Il Marketplace non riesce a connettersi al CDN. Si prega di controllare la configurazione Internet",
+      "markdownParsingError": "Errore durante l'analisi del Markdown (HTTP {{status}})",
+      "noReadmeFile": "Nessun README trovato",
+      "themeInstallationError": "Si è verificato un errore durante l'installazione del tema",
+      "extensionInstallationError": "Si è verificato un errore durante l'installazione dell'estensione"
+    }
+  }
+}
