@@ -1,0 +1,36 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "pnpm run watch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "run",
+        "watch"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "spicetify watch -a",
+      "runtimeExecutable": "spicetify",
+      "runtimeArgs": [
+        "watch",
+        "-a"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Watch app build and Spicetify",
+      "configurations": ["pnpm run watch", "spicetify watch -a"]
+    }
+  ]
+}
