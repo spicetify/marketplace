@@ -1,9 +1,8 @@
 import { t } from "i18next";
 
-import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
+import { BLACKLIST_URL, SNIPPETS_URL, ITEMS_PER_REQUEST } from "../constants";
 import { RepoTopic, CardItem, Snippet } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
-import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -303,10 +302,13 @@ export const getBlacklist = async () => {
 };
 
 /**
-* It fetches the snippets.json file from the Github repository and returns it as a JSON object.
+* It fetches the snippets.json file from the Github repository and returns it as an array of snippets.
 * @returns Array of snippets
 */
 export const fetchCssSnippets = async () => {
+  const snippetsJSON = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => []) as Snippet[];
+  if (!snippetsJSON.length) return [];
+
   const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
     const snip = { ...snippet } as Snippet;
 

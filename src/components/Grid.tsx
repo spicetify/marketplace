@@ -88,6 +88,7 @@ class Grid extends React.Component<
   CONFIG: Config;
   updateAppConfig: (CONFIG: Config) => void;
   BLACKLIST: string[] | undefined;
+  SNIPPETS: Snippet[] | undefined;
 
   // TODO: should I put this in Grid state?
   getInstalledTheme() {
@@ -373,7 +374,7 @@ class Grid extends React.Component<
       else console.debug("No more app results");
       break;
     } case "Snippets": {
-      const snippets = await fetchCssSnippets();
+      const snippets = this.SNIPPETS;
 
       if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
         // Stop this queue from continuing to fetch and append to cards list
@@ -509,8 +510,9 @@ class Grid extends React.Component<
       }
     }
 
-    // Load blacklist
+    // Load blacklist and snippets
     this.BLACKLIST = await getBlacklist();
+    this.SNIPPETS = await fetchCssSnippets();
     this.newRequest(ITEMS_PER_REQUEST);
   }
 
