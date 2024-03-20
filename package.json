@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/spicetify/spicetify-marketplace/issues"
   },
-  "packageManager": "pnpm@8.14.2",
+  "packageManager": "pnpm@8.15.5",
   "scripts": {
     "build": "spicetify-creator",
     "build:local": "spicetify-creator --out=dist --minify",
@@ -26,28 +26,29 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "@types/chroma-js": "^2.4.3",
+    "@types/chroma-js": "^2.4.4",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
-    "@types/semver": "^7.5.6",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
+    "@types/semver": "^7.5.8",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.55.0",
-    "eslint-plugin-react": "^7.33.2",
-    "husky": "^8.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "husky": "^9.0.11",
     "spicetify-creator": "^1.0.17",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.3",
+    "typescript-eslint": "^7.3.1"
   },
   "dependencies": {
     "chroma-js": "^2.4.2",
-    "i18next": "^23.7.8",
+    "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.0",
     "prismjs": "^1.29.0",
     "react-dropdown": "^1.11.0",
-    "react-i18next": "^13.5.0",
+    "react-i18next": "^14.1.0",
     "react-simple-code-editor": "^0.13.1",
-    "semver": "^7.5.4"
+    "semver": "^7.6.0"
   },
   "private": true
 }
