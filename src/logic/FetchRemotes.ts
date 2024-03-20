@@ -306,8 +306,8 @@ export const getBlacklist = async () => {
 * @returns Array of snippets
 */
 export const fetchCssSnippets = async () => {
-  const snippetsJSON = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => ({})) as Snippet[] | undefined;
-  if (!snippetsJSON) return [];
+  const snippetsJSON = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => []) as Snippet[];
+  if (!snippetsJSON.length) return [];
 
   const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
     const snip = { ...snippet } as Snippet;
