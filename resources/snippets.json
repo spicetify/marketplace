@@ -328,5 +328,11 @@
     "description": "Move the navigation panel to the right and the information sidebar to the left.",
     "code": ".Root__top-container .Root__nav-bar { grid-area: right-sidebar !important; } .Root__top-container .Root__right-sidebar { grid-area: left-sidebar !important; }",
     "preview": "resources/assets/snippets/switch-sidebars.png"
+  },
+  {
+    "title": "Amogus Dancing",
+    "description": "Adds dancing amogus onto your playback bar!",
+    "code": ".player-controls .playback-progressbar::after { content: ""; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 42px; /* Asegúrate de cambiar esto para que no se superponga con el otro GIF */ position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI5czk0Z2hvd2Eyd28xbnoxanFubXNvNnA3eHV0Z3R1Zm1sYjJ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3pvo4H9dg4BX4gueg/giphy.gif'); }",
+    "preview": "resources/assets/snippets/amogus-dancing.png"
   }
 ]
