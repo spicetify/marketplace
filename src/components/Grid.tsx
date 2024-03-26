@@ -498,7 +498,7 @@ class Grid extends React.Component<
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-    const viewPort = document.querySelector(".os-viewport");
+    const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
     this.checkScroll = this.isScrolledBottom.bind(this);
     if (viewPort) {
       viewPort.addEventListener("scroll", this.checkScroll);
@@ -522,7 +522,7 @@ class Grid extends React.Component<
    */
   componentWillUnmount(): void {
     this.gridUpdateTabs = this.gridUpdatePostsVisual = null;
-    const viewPort = document.querySelector(".os-viewport");
+    const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
     if (viewPort) {
       this.lastScroll = viewPort.scrollTop;
       viewPort.removeEventListener("scroll", this.checkScroll);
