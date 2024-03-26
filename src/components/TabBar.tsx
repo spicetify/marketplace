@@ -71,7 +71,7 @@ export const TopBarContent = (props: {
   activeLink: string;
   switchCallback: (option: Option) => void;
 }) => {
-  const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host");
+  const resizeHost = document.querySelector(".Root__main-view .os-resize-observer-host") ?? document.querySelector(".Root__main-view .os-size-observer");
   if (!resizeHost) return null;
 
   const [windowSize, setWindowSize] = useState(resizeHost.clientWidth);
