@@ -334,5 +334,11 @@
     "description": "Adds dancing amogus onto your playback bar!",
     "code": ".player-controls .playback-progressbar::after { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 42px;  position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI5czk0Z2hvd2Eyd28xbnoxanFubXNvNnA3eHV0Z3R1Zm1sYjJ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3pvo4H9dg4BX4gueg/giphy.gif'); }",
     "preview": "resources/assets/snippets/amogus-dancing.png"
+  },
+  {
+    "title": "Pokémon Adventure",
+    "description": "Adds Ash and Pikachu to your playback bar!",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 42px ; height: 42px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 42px 42px ; background-image: url('https://i.giphy.com/mFYJZxzy2SFqC8YSWd.webp'); }",
+    "preview": "resources/assets/snippets/pokemon-adventure.png"
   }
 ]
