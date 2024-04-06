@@ -358,7 +358,7 @@
 	"description": "Hides the Audiobook button on the home page",
 	"code": "button[aria-label='Audiobooks'] {display:none;}",
 	"preview": "resources/assets/snippets/Hide-Audiobooks-Button.png"
-  }
+  },
   {
 	"title": "Hide Podcast Button",
 	"description": "Hides the Podcast button on the home page",
