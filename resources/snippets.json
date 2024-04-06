@@ -340,5 +340,35 @@
     "description": "Adds Ash and Pikachu to your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 42px ; height: 42px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 42px 42px ; background-image: url('https://i.giphy.com/mFYJZxzy2SFqC8YSWd.webp'); }",
     "preview": "resources/assets/snippets/pokemon-adventure.png"
+  },
+  {
+	"title": "Hide Friend Activity Button 2024",
+	"description": "Hides the Friend Activity button",
+	"code": "[aria-label='Friend Activity'] {display:none;}",
+	"preview": "resources/assets/snippets/Hide-Friend-Activity-Button.png"
+  },
+  {
+	"title": "Hide What's New Button",
+	"description": "Hides the What's New button",
+	"code": "[aria-label=\"What's New\"] {display:none;}",
+	"preview": "resources/assets/snippets/Hide-Whats-New-Button.png"
+  },
+  {
+	"title": "Hide Audiobooks Button",
+	"description": "Hides the Audiobook button on the home page",
+	"code": "button[aria-label='Audiobooks'] {display:none;}",
+	"preview": "resources/assets/snippets/Hide-Audiobooks-Button.png"
+  }
+  {
+	"title": "Hide Podcast Button",
+	"description": "Hides the Podcast button on the home page",
+	"code": "button[aria-label='Podcasts'] {display:none;}",
+	"preview": "resources/assets/snippets/Hide-Podcast-Button.png"
+  },
+  {
+	"title": "Hide Recently Played Sections",
+	"description": "Hides the Recently Played sections on the home page",
+	"code": ".view-homeShortcutsGrid-shortcuts, section[aria-label='Recently played'] {display:none;}",
+	"preview": "resources/assets/snippets/Hide-Recently-Played.png"
   }
 ]
