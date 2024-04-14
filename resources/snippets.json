@@ -370,5 +370,11 @@
 	"description": "Hides the Recently Played sections on the home page",
 	"code": ".view-homeShortcutsGrid-shortcuts, section[aria-label='Recently played'] {display:none;}",
 	"preview": "resources/assets/snippets/Hide-Recently-Played.png"
+  },
+  {
+	"title": "More Visible Unplayable Tracks",
+	"description": "Changes the background of unplayable tracks to make it easier to spot them in large playlists.",
+	"code": ".main-trackList-disabled{background:#f004}.main-trackList-disabled:focus-within,.main-trackList-disabled:hover{background:#f005}.main-trackList-disabled.main-trackList-selected,.main-trackList-disabled.main-trackList-selected:hover{background:#f006}",
+	"preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
   }
 ]
