@@ -9,6 +9,7 @@ import ru from "./ru.json";
 import et from "./et.json";
 import pl from "./pl.json";
 import it from "./it.json";
+import uk from "./uk.json";
 
 export default {
   ca,
@@ -22,5 +23,6 @@ export default {
   et,
   pl,
   it,
+  uk,
 };
 
