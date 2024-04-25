@@ -34,11 +34,11 @@
     },
     "snippets": {
       "addTitle": "スニペットを追加",
-      "duplicateName": "その名前は既に使われています！",
+      "duplicateName": "その名前は既に使われています!",
       "editTitle": "スニペットを編集",
       "viewTitle": "スニペットを表示",
       "customCSS": "カスタムCSS",
-      "customCSSPlaceholder": "ここにカスタムCSSを入力してください！ 管理用のインストール済みタブで見つけることができます。",
+      "customCSSPlaceholder": "ここにカスタムCSSを入力してください! 管理用のインストール済みタブで見つけることができます。",
       "snippetName": "スニペット名",
       "snippetNamePlaceholder": "カスタムスニペットの名前を入力してください",
       "snippetDesc": "スニペットの説明",
@@ -85,7 +85,7 @@
       "viewGuide": "ガイドを見る"
     },
     "grid": {
-      "spicetifyMarketplace": "Spicetify マーケットプレイス",
+      "spicetifyMarketplace": "Spicetify Marketplace",
       "newUpdate": "新しいアップデート",
       "addCSS": "CSSを追加",
       "search": "検索",
