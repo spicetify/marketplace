@@ -1,0 +1,131 @@
+{
+  "translation": {
+    "settings": {
+      "title": "マーケットプレイスの設定",
+      "optionsHeading": "オプション",
+      "starCountLabel": "スターの数",
+      "tagsLabel": "タグ",
+      "showArchived": "アーカイブされたリポジトリを表示",
+      "devToolsLabel": "テーマ開発者ツール",
+      "hideInstalledLabel": "ブラウジング時にインストール済みを非表示にする",
+      "colourShiftLabel": "1分ごとに色を変更",
+      "albumArtBasedColors": "アルバムアートに基づいて色を変更",
+      "albumArtBasedColorsMode": "カラースキーム（ColorApi）モード",
+      "albumArtBasedColorsVibrancy": "アルバムアートから取得した色",
+      "albumArtBasedColorsVibrancyToolTip": "Desaturated: 最も目立つ色だが、明るさがはるかに抑えられています \n Light Vibrant: 最も活気ある色ですが、明るさが少し増しています \n Prominent: アルバムアートで最も目立つ色です \n Vibrant: アルバムアートで最も鮮やかな色です",
+      "almbumArtColorsModeToolTip": "Monochrome Dark: 選択したメインカラーを基にした色の配色スキームで、メインカラーの異なる濃淡やグレーを混ぜて配色することで、これはMonochrome Lightの反対です。 \n Monochrome Light: 選択したメインカラーを直接基にした色の配色スキームで、メインカラーの異なる濃淡やグレーを混ぜて配色します。Monochrome Lightの背景色は、Monochrome Darkの前景色やテキスト色となり、その逆も同様です。 \n Analogic: 選択されたメインカラーを基に、カラーホイール上でメインカラーに隣接する色を使用した配色スキームです。 \n Analogic Complementary: 選択したメインカラーを基に、カラーホイール上でメインカラーに隣接する色と補色を使用した配色スキームです。 \n Triad: 選択したメインカラーを基に、カラーホイール上でメインカラーから等距離にある色を使用した配色スキームです。 \n Quad: 選択されたメインカラーを基に、カラーホイール上でメインカラーから90度離れた色を使用した配色スキームです。",
+      "tabsHeading": "タブ",
+      "resetHeading": "リセット",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "すべての拡張機能とテーマをアンインストールし、設定をリセットします",
+      "backupHeading": "バックアップ/リストア",
+      "backupLabel": "すべてのマーケットプレイスデータのバックアップまたはリストアを行います。これには、マーケットプレイスを介してインストールされた設定は含まれません。",
+      "backupBtn": "開く",
+      "versionHeading": "バージョン",
+      "versionBtn": "コピー",
+      "versionCopied": "コピーされました"
+    },
+    "tabs": {
+      "Extensions": "拡張機能",
+      "Themes": "テーマ",
+      "Snippets": "スニペット",
+      "Apps": "アプリ",
+      "Installed": "インストール済み"
+    },
+    "snippets": {
+      "addTitle": "スニペットを追加",
+      "duplicateName": "その名前は既に使われています!",
+      "editTitle": "スニペットを編集",
+      "viewTitle": "スニペットを表示",
+      "customCSS": "カスタムCSS",
+      "customCSSPlaceholder": "ここにカスタムCSSを入力してください! 管理用のインストール済みタブで見つけることができます。",
+      "snippetName": "スニペット名",
+      "snippetNamePlaceholder": "カスタムスニペットの名前を入力してください",
+      "snippetDesc": "スニペットの説明",
+      "snippetDescPlaceholder": "カスタムスニペットの説明を入力してください",
+      "snippetPreview": "スニペットプレビュー",
+      "optional": "オプション",
+      "addImage": "画像を追加",
+      "changeImage": "画像を変更",
+      "saveCSS": "CSSを保存"
+    },
+    "reloadModal": {
+      "title": "リロード",
+      "description": "この操作を完了するにはページのリロードが必要です。",
+      "reloadNow": "今すぐ読み込む",
+      "reloadLater": "後で読み込む"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "設定がクリップボードにコピーされました",
+      "noDataPasted": "データが貼り付けられていません",
+      "invalidJSON": "無効なJSON",
+      "inputLabel": "マーケットプレイスの設定",
+      "inputPlaceholder": "ここに設定をコピー＆ペーストしてください",
+      "exportBtn": "エクスポート",
+      "importBtn": "インポート",
+      "fileImportBtn": "ファイルからインポート"
+    },
+    "devTools": {
+      "title": "テーマ開発ツール",
+      "noThemeInstalled": "エラー：マーケットプレイスのテーマがインストールされていません",
+      "noThemeManifest": "エラー：テーママニフェストが見つかりませんでした",
+      "colorIniEditor": "Color.ini Editor",
+      "colorIniEditorPlaceholder": "[your-colour-scheme-name]",
+      "invalidCSS": "無効なCSS"
+    },
+    "updateModal": {
+      "title": "マーケットプレイスの更新",
+      "description": "新機能やバグ修正を受け取るために、Spicetify Marketplaceを更新してください。",
+      "currentVersion": "現在のバージョン: {{version}}",
+      "latestVersion": "最新のバージョン: {{version}}",
+      "whatsChanged": "変更内容",
+      "seeChangelog": "変更履歴を見る",
+      "howToUpgrade": "アップグレード方法",
+      "viewGuide": "ガイドを見る"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
+      "newUpdate": "新しいアップデート",
+      "addCSS": "CSSを追加",
+      "search": "検索",
+      "installed": "インストール済み",
+      "lastUpdated": "{{val, datetime}}に最終更新",
+      "externalJS": "外部JS",
+      "archived": "アーカイブ済み",
+      "dark": "ダーク",
+      "light": "ライト",
+      "sort": {
+        "label": "並べ替え:",
+        "stars": "スター",
+        "newest": "最新",
+        "oldest": "最古",
+        "lastUpdated": "最終更新",
+        "mostStale": "最も古い",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - README",
+      "loading": "読み込み中...",
+      "errorLoading": "READMEの読み込み中にエラーが発生しました"
+    },
+    "github": "GitHub",
+    "install": "インストール",
+    "remove": "削除",
+    "save": "保存",
+    "colour_one": "色",
+    "colour_other": "色",
+    "favourite": "お気に入り",
+    "notifications": {
+      "wrongLocalTheme": "config-xpui.iniのcurrent_themeを 'marketplace' に設定して、マーケットプレイスを使用してテーマをインストールしてください",
+      "tooManyRequests": "リクエストが多すぎます。時間をおいて再試行してください",
+      "noCdnConnection": "マーケットプレイスがCDNに接続できません。インターネットの設定を確認してください",
+      "markdownParsingError": "Markdownの解析エラー（HTTP {{status}}）",
+      "noReadmeFile": "READMEが見つかりませんでした",
+      "themeInstallationError": "テーマのインストール中にエラーが発生しました",
+      "extensionInstallationError": "拡張機能のインストール中にエラーが発生しました"
+    }
+  }
+}

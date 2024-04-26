@@ -10,6 +10,7 @@ import et from "./et.json";
 import pl from "./pl.json";
 import it from "./it.json";
 import uk from "./uk.json";
+import ja from "./ja.json";
 
 export default {
   ca,
@@ -24,5 +25,5 @@ export default {
   pl,
   it,
   uk,
+  ja,
 };
-
