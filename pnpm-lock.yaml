@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.4.2
     version: 2.4.2
   i18next:
-    specifier: ^23.10.1
-    version: 23.10.1
+    specifier: ^23.11.3
+    version: 23.11.3
   i18next-browser-languagedetector:
     specifier: ^7.2.0
     version: 7.2.0
@@ -22,7 +22,7 @@ dependencies:
     version: 1.11.0(react-dom@18.2.0)(react@18.2.0)
   react-i18next:
     specifier: ^14.1.0
-    version: 14.1.0(i18next@23.10.1)(react-dom@18.2.0)(react@18.2.0)
+    version: 14.1.0(i18next@23.11.3)(react-dom@18.2.0)(react@18.2.0)
   react-simple-code-editor:
     specifier: ^0.13.1
     version: 0.13.1(react-dom@18.2.0)(react@18.2.0)
@@ -1891,10 +1891,10 @@ packages:
       '@babel/runtime': 7.23.2
     dev: false
 
-  /i18next@23.10.1:
-    resolution: {integrity: sha512-NDiIzFbcs3O9PXpfhkjyf7WdqFn5Vq6mhzhtkXzj51aOcNuPNcTwuYNuXCpHsanZGHlHKL35G7huoFeVic1hng==}
+  /i18next@23.11.3:
+    resolution: {integrity: sha512-Pq/aSKowir7JM0rj+Wa23Kb6KKDUGno/HjG+wRQu0PxoTbpQ4N89MAT0rFGvXmLkRLNMb1BbBOKGozl01dabzg==}
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.1
     dev: false
 
   /iconv-lite@0.6.3:
@@ -2762,7 +2762,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-i18next@14.1.0(i18next@23.10.1)(react-dom@18.2.0)(react@18.2.0):
+  /react-i18next@14.1.0(i18next@23.11.3)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-3KwX6LHpbvGQ+sBEntjV4sYW3Zovjjl3fpoHbUwSgFHf0uRBcbeCBLR5al6ikncI5+W0EFb71QXZmfop+J6NrQ==}
     peerDependencies:
       i18next: '>= 23.2.3'
@@ -2777,7 +2777,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.24.1
       html-parse-stringify: 3.0.1
-      i18next: 23.10.1
+      i18next: 23.11.3
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
