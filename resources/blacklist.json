@@ -1,3 +1,6 @@
 {
-	"repos": ["https://github.com/FoxRefire/spiceDL"]
+	"repos": [
+		"https://github.com/FoxRefire/spiceDL",
+		"https://github.com/dupitydumb/LyricsPlus-Spotify"
+	]
 }
