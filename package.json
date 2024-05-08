@@ -1,12 +1,12 @@
 {
   "name": "spicetify-marketplace",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/spicetify/spicetify-marketplace",
   "repository": "github:spicetify/spicetify-marketplace",
   "bugs": {
     "url": "https://github.com/spicetify/spicetify-marketplace/issues"
   },
-  "packageManager": "pnpm@8.15.5",
+  "packageManager": "pnpm@9.0.6",
   "scripts": {
     "build": "spicetify-creator",
     "build:local": "spicetify-creator --out=dist --minify",

@@ -118,9 +118,18 @@ class ReadmePage extends React.Component<
   }
 
   render() {
+    const expFeatures = JSON.parse(
+      localStorage.getItem("spicetify-exp-features") || "{}",
+    );
+    const isGlobalNav = expFeatures.enableGlobalNavBar?.value !== "control" && true;
+
+    const tabBarMargin = {
+      marginTop: isGlobalNav ? "60px" : "0px",
+    };
+
     return (
       <section className="contentSpacing">
-        <div className="marketplace-header">
+        <div className="marketplace-header" style={tabBarMargin}>
           <div className="marketplace-header__left">
             <h1>{this.props.title}</h1>
           </div>
