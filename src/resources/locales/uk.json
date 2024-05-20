@@ -76,7 +76,7 @@
     },
     "updateModal": {
       "title": "Оновити Маркетплейс",
-      "description": "Оновіть Spicetify Marketplace щоб отримувати нові функції і багфікси.", 
+      "description": "Оновіть Spicetify Marketplace щоб отримувати нові функції і багфікси.",
       "currentVersion": "Поточна версія: {{version}}",
       "latestVersion": "Остання версія: {{version}}",
       "whatsChanged": "Що змінилося",
@@ -119,9 +119,9 @@
     "colour_other": "кольори",
     "favourite": "улюблене",
     "notifications": {
-      "wrongLocalTheme": "Будь ласка, поставте 'marketplace' у змінну current_theme у файлі config-xpui.ini щоб встановлювати теми за допомогою Маркетплейсу", 
+      "wrongLocalTheme": "Будь ласка, поставте 'marketplace' у змінну current_theme у файлі config-xpui.ini щоб встановлювати теми за допомогою Маркетплейсу",
       "tooManyRequests": "Забагато запитів, зачекайте",
-      "noCdnConnection": "Маркетплейс не може зв'язатися з CDN. Будь ласка, перевірте вашу конфігурацію Інтернету", 
+      "noCdnConnection": "Маркетплейс не може зв'язатися з CDN. Будь ласка, перевірте вашу конфігурацію Інтернету",
       "markdownParsingError": "Помилка розбору markdown (HTTP {{status}})",
       "noReadmeFile": "README не знайдено",
       "themeInstallationError": "Сталася помилка при встановленні теми",

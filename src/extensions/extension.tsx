@@ -5,29 +5,24 @@
 import { t } from "i18next";
 
 import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { RepoType } from "../types/marketplace-types";
+import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist } from "../logic/FetchRemotes";
 import {
-  getLocalStorageDataFromKey,
-  resetMarketplace,
+  addExtensionToSpicetifyConfig,
   exportMarketplace,
-  isGithubRawUrl,
+  getAvailableTLD,
+  getLocalStorageDataFromKey,
   getParamsFromGithubRaw,
+  initAlbumArtBasedColor,
+  initColorShiftLoop,
   initializeSnippets,
   injectColourScheme,
-  initColorShiftLoop,
-  parseCSS,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
-  addExtensionToSpicetifyConfig,
-  initAlbumArtBasedColor,
-  getAvailableTLD,
+  isGithubRawUrl,
+  parseCSS,
+  resetMarketplace
 } from "../logic/Utils";
-import {
-  getBlacklist,
-  fetchThemeManifest,
-  fetchExtensionManifest,
-  fetchAppManifest,
-} from "../logic/FetchRemotes";
+import type { RepoType } from "../types/marketplace-types";
 
 (async function init() {
   if (!Spicetify.LocalStorage || !Spicetify.showNotification) {
@@ -49,7 +44,7 @@ import {
     reset: resetMarketplace,
     // Export all marketplace localstorage keys
     export: exportMarketplace,
-    version: MARKETPLACE_VERSION,
+    version: MARKETPLACE_VERSION
   };
 
   const tld = await getAvailableTLD();
@@ -126,10 +121,10 @@ import {
     Spicetify.Config.current_theme = themeManifest.manifest?.name;
 
     // Inject any included js
-    if (themeManifest.include && themeManifest.include.length) {
+    if (themeManifest.include?.length) {
       // console.log("Including js", installedThemeData.include);
 
-      themeManifest.include.forEach((script) => {
+      for (const script of themeManifest.include) {
         const newScript = document.createElement("script");
         let src = script;
 
@@ -147,7 +142,7 @@ import {
 
         // Add to Spicetify.Config
         addExtensionToSpicetifyConfig(script);
-      });
+      }
     }
   };
 
@@ -172,7 +167,9 @@ import {
   window.sessionStorage.setItem("marketplace-request-tld", tld);
 
   const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-  installedExtensions.forEach((extensionKey) => initializeExtension(extensionKey));
+  for (const extensionKey of installedExtensions) {
+    initializeExtension(extensionKey);
+  }
 
   const { current_theme: localTheme } = Spicetify.Config;
   localStorage.setItem(LOCALSTORAGE_KEYS.localTheme, localTheme);
@@ -198,9 +195,11 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}&q=${encodeURIComponent(`topic:spicetify-${type}s`)}`;
   if (pageNum) url += `&page=${pageNum}`;
 
-  const allRepos = JSON.parse(window.sessionStorage.getItem(`spicetify-${type}s-page-${pageNum}`) || "null") || await fetch(url)
-    .then(res => res.json())
-    .catch(() => null);
+  const allRepos =
+    JSON.parse(window.sessionStorage.getItem(`spicetify-${type}s-page-${pageNum}`) || "null") ||
+    (await fetch(url)
+      .then((res) => res.json())
+      .catch(() => null));
 
   if (!allRepos?.items) {
     Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
@@ -212,7 +211,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   const filteredResults = {
     ...allRepos,
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST?.includes(item.html_url)),
+    items: allRepos.items.filter((item) => !BLACKLIST?.includes(item.html_url))
   };
 
   return filteredResults;
@@ -235,8 +234,8 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 
   // If still have more results, recursively fetch next page
   console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
-  if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1); // There are more results. currentPage + 1 is the next page to fetch.
-  else console.debug(`No more ${type} results`);
+  if (remainingResults > 0) return await loadPageRecursive(type, pageNum + 1);
+  console.debug(`No more ${type} results`);
 }
 
 (async function initializePreload() {
@@ -250,11 +249,7 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
 
   // Begin by getting the themes and extensions from github
   // const [extensionReposArray, themeReposArray] = await Promise.all([
-  await Promise.all([
-    loadPageRecursive("extension", 0),
-    loadPageRecursive("theme", 0),
-    loadPageRecursive("app", 0),
-  ]);
+  await Promise.all([loadPageRecursive("extension", 0), loadPageRecursive("theme", 0), loadPageRecursive("app", 0)]);
 
   // let extensionsNextPage = 1;
   // let themesNextPage = 1;

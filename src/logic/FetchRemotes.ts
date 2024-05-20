@@ -1,7 +1,7 @@
 import { t } from "i18next";
 
-import { BLACKLIST_URL, SNIPPETS_URL, ITEMS_PER_REQUEST } from "../constants";
-import { RepoTopic, CardItem, Snippet } from "../types/marketplace-types";
+import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
+import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
 
 // TODO: add sort type, order, etc?
@@ -14,7 +14,7 @@ import { addToSessionStorage, processAuthors } from "./Utils";
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[] = [], showArchived = false) {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string[] = [], showArchived = false) {
   // www is needed or it will block with "cross-origin" error.
   let url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}`;
 
@@ -24,9 +24,11 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  const allRepos = JSON.parse(window.sessionStorage.getItem(`${tag}-page-${page}`) || "null") || await fetch(url)
-    .then(res => res.json())
-    .catch(() => null);
+  const allRepos =
+    JSON.parse(window.sessionStorage.getItem(`${tag}-page-${page}`) || "null") ||
+    (await fetch(url)
+      .then((res) => res.json())
+      .catch(() => null));
 
   if (!allRepos?.items) {
     Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
@@ -40,7 +42,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST:string[
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter(item => !BLACKLIST.includes(item.html_url) && (showArchived || !item.archived)),
+    items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url) && (showArchived || !item.archived))
   };
 
   return filteredResults;
@@ -75,12 +77,12 @@ async function fetchRepoManifest(url: string) {
 // TODO: add try/catch here?
 // TODO: can we add a return type here?
 /**
-* Get the manifest object for a repo
-* @param user Owner username
-* @param repo Repo name
-* @param branch Default branch name (e.g. main or master)
-* @returns The manifest object
-*/
+ * Get the manifest object for a repo
+ * @param user Owner username
+ * @param repo Repo name
+ * @param branch Default branch name (e.g. main or master)
+ * @returns The manifest object
+ */
 async function getRepoManifest(user: string, repo: string, branch: string) {
   const key = `${user}-${repo}`;
   const sessionStorageItem = window.sessionStorage.getItem(key);
@@ -102,13 +104,13 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
 
 // TODO: can we add a return type here?
 /**
-* Fetch extensions from a repo and format data for generating cards
-* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
-* @param branch The repo's default branch (e.g. main or master)
-* @param stars The number of stars the repo has
-* @param hideInstalled Whether to hide installed items or not (defaults to `false`)
-* @returns Extension info for card (or null)
-*/
+ * Fetch extensions from a repo and format data for generating cards
+ * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param branch The repo's default branch (e.g. main or master)
+ * @param stars The number of stars the repo has
+ * @param hideInstalled Whether to hide installed items or not (defaults to `false`)
+ * @returns Extension info for card (or null)
+ */
 export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
@@ -131,29 +133,23 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
         repo,
         branch: selectedBranch,
 
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
+        imageURL: manifest.preview?.startsWith("http")
           ? manifest.preview
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
         extensionURL: manifest.main.startsWith("http")
           ? manifest.main
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+        readmeURL: manifest.readme?.startsWith("http")
           ? manifest.readme
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
         stars,
-        tags: manifest.tags,
+        tags: manifest.tags
       };
 
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description && manifest.main
-      ) {
+      if (manifest?.name && manifest.description && manifest.main) {
         // Add to list unless we're hiding installed items and it's installed
-        if (
-          !(
-            hideInstalled &&
-            localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`)
-          )
-        ) {
+        if (!(hideInstalled && localStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
           accum.push(item);
         }
       }
@@ -172,12 +168,12 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 
 // TODO: can we add a return type here?
 /**
-* Fetch themes from a repo and format data for generating cards
-* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
-* @param branch The repo's default branch (e.g. main or master)
-* @param stars The number of stars the repo has
-* @returns Extension info for card (or null)
-*/
+ * Fetch themes from a repo and format data for generating cards
+ * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param branch The repo's default branch (e.g. main or master)
+ * @param stars The number of stars the repo has
+ * @returns Extension info for card (or null)
+ */
 export async function fetchThemeManifest(contents_url: string, branch: string, stars: number) {
   try {
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
@@ -199,10 +195,10 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
         user,
         repo,
         branch: selectedBranch,
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
+        imageURL: manifest.preview?.startsWith("http")
           ? manifest.preview
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+        readmeURL: manifest.readme?.startsWith("http")
           ? manifest.readme
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
         stars,
@@ -213,11 +209,11 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
         // TODO: clean up indentation etc
         schemesURL: manifest.schemes
-          ? (
-            manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-          )
+          ? manifest.schemes.startsWith("http")
+            ? manifest.schemes
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
           : null,
-        include: manifest.include,
+        include: manifest.include
       };
       // If manifest is valid, add it to the list
       if (manifest?.name && manifest?.usercss && manifest?.description) {
@@ -232,12 +228,12 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
 }
 
 /**
-* Fetch custom apps from a repo and format data for generating cards
-* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
-* @param branch The repo's default branch (e.g. main or master)
-* @param stars The number of stars the repo has
-* @returns Extension info for card (or null)
-*/
+ * Fetch custom apps from a repo and format data for generating cards
+ * @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+ * @param branch The repo's default branch (e.g. main or master)
+ * @param stars The number of stars the repo has
+ * @returns Extension info for card (or null)
+ */
 export async function fetchAppManifest(contents_url: string, branch: string, stars: number) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
@@ -261,22 +257,22 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
         repo,
         branch: selectedBranch,
 
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
+        imageURL: manifest.preview?.startsWith("http")
           ? manifest.preview
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
         // Custom Apps don't have an entry point; they're just listed so they can link out from the card
         // extensionURL: manifest.main.startsWith("http")
         //   ? manifest.main
         //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+        readmeURL: manifest.readme?.startsWith("http")
           ? manifest.readme
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
         stars,
-        tags: manifest.tags,
+        tags: manifest.tags
       };
 
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description) {
+      if (manifest?.name && manifest.description) {
         accum.push(item);
       }
       // else {
@@ -293,20 +289,24 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 }
 
 /**
-* It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.
-* @returns String array of blacklisted repos
-*/
+ * It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.
+ * @returns String array of blacklisted repos
+ */
 export const getBlacklist = async () => {
-  const json = await fetch(BLACKLIST_URL).then(res => res.json()).catch(() => ({}));
+  const json = await fetch(BLACKLIST_URL)
+    .then((res) => res.json())
+    .catch(() => ({}));
   return json.repos as string[] | undefined;
 };
 
 /**
-* It fetches the snippets.json file from the Github repository and returns it as an array of snippets.
-* @returns Array of snippets
-*/
+ * It fetches the snippets.json file from the Github repository and returns it as an array of snippets.
+ * @returns Array of snippets
+ */
 export const fetchCssSnippets = async () => {
-  const snippetsJSON = await fetch(SNIPPETS_URL).then(res => res.json()).catch(() => []) as Snippet[];
+  const snippetsJSON = (await fetch(SNIPPETS_URL)
+    .then((res) => res.json())
+    .catch(() => [])) as Snippet[];
   if (!snippetsJSON.length) return [];
 
   const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
@@ -317,7 +317,7 @@ export const fetchCssSnippets = async () => {
       snip.imageURL = snip.preview.startsWith("http")
         ? snip.preview
         : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
-      delete snip.preview;
+      snip.preview = undefined;
     }
 
     accum.push(snip);
@@ -325,4 +325,3 @@ export const fetchCssSnippets = async () => {
   }, []);
   return snippets;
 };
-
