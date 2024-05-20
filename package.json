@@ -1,10 +1,10 @@
 {
-  "name": "spicetify-marketplace",
+  "name": "marketplace",
   "version": "1.0.2",
-  "homepage": "https://github.com/spicetify/spicetify-marketplace",
-  "repository": "github:spicetify/spicetify-marketplace",
+  "homepage": "https://github.com/spicetify/marketplace",
+  "repository": "github:spicetify/marketplace",
   "bugs": {
-    "url": "https://github.com/spicetify/spicetify-marketplace/issues"
+    "url": "https://github.com/spicetify/marketplace/issues"
   },
   "packageManager": "pnpm@9.0.6",
   "scripts": {
@@ -17,7 +17,7 @@
     "type-check": "tsc --noEmit",
     "watch": "spicetify-creator --watch",
     "prepare": "husky install",
-    "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/spicetify-cli/master/globals.d.ts"
+    "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/cli/main/globals.d.ts"
   },
   "engines": {
     "yarn": "please-use-pnpm",
