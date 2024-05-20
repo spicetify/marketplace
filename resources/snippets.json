@@ -1,5 +1,11 @@
 [
   {
+    "title": "Fix Lyrics Plus Theme",
+    "description": "Fixes theme for Lyrics Plus. Uses current theme colors.",
+    "code": ".lyrics-lyricsContainer-LyricsBackground{background-color: var(--background)}.lyrics-lyricsContainer-SyncedLyricsPage{--lyrics-color-active: var(--spice-text);--lyrics-color-background: transparent;--lyrics-background-noise: transparent;--lyrics-color-inactive: var(--background-elevated-base)}.lyrics-lyricsContainer-LyricsContainer blur-enabled{--lyrics-color-active: var(--spice-text);--lyrics-color-background: transparent;--lyrics-background-noise: transparent;--lyrics-color-inactive: var(--background-elevated-base)}.lyrics-lyricsContainer-UnsyncedLyricsPage{--lyrics-color-active: var(--spice-text);--lyrics-color-background: transparent;--lyrics-background-noise: transparent;--lyrics-color-inactive: var(--background-elevated-base)}",
+    "preview": "resources/assets/snippets/fix-lyrics-theme.png"
+  },
+  {
     "title": "Rounded 'Now Playing' Bar",
     "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
     "code": ":root{ --border-radius-1: 8px; } .Root__now-playing-bar, .Root__now-playing-bar footer { border-radius: var(--border-radius-1) !important; }",
