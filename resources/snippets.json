@@ -2,7 +2,7 @@
   {
     "title": "Fix Lyrics Plus Theme",
     "description": "Fixes theme for Lyrics Plus. Uses current theme colors.",
-    "code": ".lyrics-lyricsContainer-LyricsBackground{background-color: var(--background)}.lyrics-lyricsContainer-SyncedLyricsPage{--lyrics-color-active: var(--spice-text);--lyrics-color-background: transparent;--lyrics-background-noise: transparent;--lyrics-color-inactive: var(--background-elevated-base)}.lyrics-lyricsContainer-LyricsContainer blur-enabled{--lyrics-color-active: var(--spice-text);--lyrics-color-background: transparent;--lyrics-background-noise: transparent;--lyrics-color-inactive: var(--background-elevated-base)}.lyrics-lyricsContainer-UnsyncedLyricsPage{--lyrics-color-active: var(--spice-text);--lyrics-color-background: transparent;--lyrics-background-noise: transparent;--lyrics-color-inactive: var(--background-elevated-base)}",
+    "code": ".lyrics-lyricsContainer-LyricsBackground{background-color: var(--spice-main);background-image: none}.lyrics-lyricsContainer-SyncedLyricsPage,.lyrics-lyricsContainer-UnsyncedLyricsPage,.lyrics-lyricsContainer-LyricsContainer blur-enabled{--lyrics-color-background: var(--spice-main);--lyrics-color-active: var(--spice-text);--lyrics-color-inactive: var(--spice-highlight);--lyrics-background-noise: none;--lyrics-highlight-background: none}.lyrics-lyricsContainer-LyricsLine:not(.lyrics-lyricsContainer-LyricsLine-active):not(.lyrics-lyricsContainer-LyricsLine-paddingLine){color: var(--spice-text);opacity: 0.25}",
     "preview": "resources/assets/snippets/fix-lyrics-theme.png"
   },
   {
