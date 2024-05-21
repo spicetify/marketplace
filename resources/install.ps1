@@ -45,7 +45,7 @@ Write-Host -Object 'Unzipping and installing...' -ForegroundColor 'Cyan'
 Expand-Archive -Path $marketArchivePath -DestinationPath $marketAppPath -Force
 Move-Item -Path "$unpackedFolderPath\*" -Destination $marketAppPath -Force
 Remove-Item -Path $marketArchivePath, $unpackedFolderPath -Force
-spicetify config custom_apps marketplace- -q
+spicetify config custom_apps spicetify-marketplace- -q
 spicetify config custom_apps marketplace
 spicetify config inject_css 1 replace_colors 1
 
