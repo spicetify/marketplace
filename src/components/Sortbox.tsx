@@ -1,6 +1,6 @@
 import React from "react";
-import Dropdown, { Option } from "react-dropdown";
-import { SortBoxOption } from "../types/marketplace-types";
+import Dropdown, { type Option } from "react-dropdown";
+import type { SortBoxOption } from "../types/marketplace-types";
 
 interface Props {
   sortBoxOptions: SortBoxOption[];
@@ -9,7 +9,6 @@ interface Props {
 }
 
 const SortBox = (props: Props) => {
-
   const _onSelect = (item: Option) => {
     props.onChange(item.value);
   };
@@ -17,7 +16,7 @@ const SortBox = (props: Props) => {
   const options: Option[] = props.sortBoxOptions.map((item) => {
     return {
       value: item.key,
-      label: item.value,
+      label: item.value
     };
   });
 
@@ -27,14 +26,9 @@ const SortBox = (props: Props) => {
     // Create a drop down menu
     <div className="marketplace-sortBox">
       <div className="marketplace-sortBox-header">
-        <div className="marketplace-sortBox-header-title">
-        </div>
+        <div className="marketplace-sortBox-header-title" />
 
-        <Dropdown placeholder="Select an option"
-          options={options} value={sortBySelected?.key}
-          onChange={_onSelect}
-        />
-
+        <Dropdown placeholder="Select an option" options={options} value={sortBySelected?.key} onChange={_onSelect} />
       </div>
     </div>
   );
