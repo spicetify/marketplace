@@ -33,7 +33,7 @@ New-Item -Path $marketAppPath, $marketThemePath -ItemType 'Directory' -Force | O
 
 Write-Host -Object 'Downloading Marketplace...' -ForegroundColor 'Cyan'
 $marketArchivePath = "$marketAppPath\marketplace.zip"
-$unpackedFolderPath = "$marketAppPath\marketplace-dist"
+$unpackedFolderPath = "$marketAppPath\spicetify-marketplace-dist"
 $Parameters = @{
   Uri             = 'https://github.com/spicetify/marketplace/releases/latest/download/marketplace.zip'
   UseBasicParsing = $true
