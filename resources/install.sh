@@ -49,7 +49,7 @@ echo "INSTALLING"
 cd "$INSTALL_DIR/marketplace"
 
 # Remove old custom app name if exists
-spicetify config custom_apps marketplace-
+spicetify config custom_apps spicetify-marketplace-
 
 # Color injection fix
 spicetify config inject_css 1
