@@ -43,7 +43,7 @@ unzip -q -d "$INSTALL_DIR/marketplace-tmp" -o "$TAR_FILE"
 cd "$INSTALL_DIR/marketplace-tmp"
 echo "COPYING"
 rm -rf "$INSTALL_DIR/marketplace/" "$INSTALL_DIR/marketplace/"
-mv "$INSTALL_DIR/marketplace-tmp/marketplace-dist" "$INSTALL_DIR/marketplace"
+mv "$INSTALL_DIR/marketplace-tmp/spicetify-marketplace-dist" "$INSTALL_DIR/marketplace"
 
 echo "INSTALLING"
 cd "$INSTALL_DIR/marketplace"
