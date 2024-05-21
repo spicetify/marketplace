@@ -314,10 +314,8 @@ export const fetchCssSnippets = async () => {
 
     // Because the card component looks for an imageURL prop
     if (snip.preview) {
-      snip.imageURL = snip.preview.startsWith("http")
-        ? snip.preview
-        : `https://raw.githubusercontent.com/spicetify/marketplace/main/${snip.preview}`;
-      delete snip.preview;
+      snip.imageURL = snip.preview.startsWith("http") ? snip.preview : `https://raw.githubusercontent.com/spicetify/marketplace/main/${snip.preview}`;
+      snip.preview = undefined;
     }
 
     accum.push(snip);
