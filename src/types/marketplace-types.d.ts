@@ -15,17 +15,9 @@ export type SortBoxOption = {
   value: string;
 };
 
-export type RepoTopic =
-  | "spicetify-extensions"
-  | "spicetify-themes"
-  | "spicetify-apps";
+export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps";
 
-export type TabType =
-  | "Extensions"
-  | "Themes"
-  | "Snippets"
-  | "Apps"
-  | "Installed";
+export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
 
 export type ResetCategory = "extensions" | "snippets" | "theme";
 
@@ -133,18 +125,8 @@ export type VisualConfig = {
   colorShift: boolean;
   themeDevTools: boolean;
   albumArtBasedColors: boolean;
-  albumArtBasedColorsMode:
-    | "monochromeLight"
-    | "monochromeDark"
-    | "quad"
-    | "triad"
-    | "analogic"
-    | "analogicComplement";
-  albumArtBasedColorsVibrancy:
-    | "DESATURATED"
-    | "LIGHT_VIBRANT"
-    | "PROMINENT"
-    | "VIBRANT";
+  albumArtBasedColorsMode: "monochromeLight" | "monochromeDark" | "quad" | "triad" | "analogic" | "analogicComplement";
+  albumArtBasedColorsVibrancy: "DESATURATED" | "LIGHT_VIBRANT" | "PROMINENT" | "VIBRANT";
   // Legacy from reddit app
   type: boolean;
   // I was considering adding watchers as "followers" but it looks like the value is a duplicate
@@ -176,14 +158,7 @@ export type SchemeIni = {
   [key: string]: ColourScheme;
 };
 
-export type SortMode =
-  | "a-z"
-  | "z-a"
-  | "newest"
-  | "oldest"
-  | "stars"
-  | "lastUpdated"
-  | "mostStale";
+export type SortMode = "a-z" | "z-a" | "newest" | "oldest" | "stars" | "lastUpdated" | "mostStale";
 
 export type Config = {
   // Fetch the settings and set defaults. Used in Settings.js

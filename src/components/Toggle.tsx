@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 import styles from "../styles/modules/toggle.module.scss";
 
@@ -16,14 +16,17 @@ const Toggle = (props: {
 
   return (
     <label className={wrapperClassList.join(" ")}>
-      <input className={styles["toggle-input"]} type='checkbox' checked={props.enabled}
+      <input
+        className={styles["toggle-input"]}
+        type="checkbox"
+        checked={props.enabled}
         data-storage-key={props.storageKey}
         id={toggleId}
         title={`Toggle for ${props.storageKey}`}
         onChange={props.onChange}
       />
       <span className={styles["toggle-indicator-wrapper"]}>
-        <span className={styles["toggle-indicator"]}></span>
+        <span className={styles["toggle-indicator"]} />
       </span>
     </label>
   );

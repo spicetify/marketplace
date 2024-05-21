@@ -1,5 +1,5 @@
 import React from "react";
-import { Author } from "../../types/marketplace-types";
+import type { Author } from "../../types/marketplace-types";
 
 const AuthorsDiv = (props: {
   authors: Author[];
@@ -7,7 +7,7 @@ const AuthorsDiv = (props: {
   // Add a div with author links inside
   const authorsDiv = (
     <div className="marketplace-card__authors">
-      { props.authors.map((author, index) => {
+      {props.authors.map((author) => {
         return (
           <a
             title={author.name}
@@ -18,7 +18,7 @@ const AuthorsDiv = (props: {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            key={index}
+            key={author.name + author.url}
           >
             {author.name}
           </a>

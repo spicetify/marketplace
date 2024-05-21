@@ -1,5 +1,5 @@
-import { TabItemConfig } from "./types/marketplace-types";
 import { version } from "../package.json";
+import type { TabItemConfig } from "./types/marketplace-types";
 
 export const MARKETPLACE_VERSION = version;
 
@@ -17,7 +17,7 @@ export const LOCALSTORAGE_KEYS = {
   albumArtBasedColor: `${STORAGE_KEY_PREFIX}:albumArtBasedColors`,
   albumArtBasedColorMode: `${STORAGE_KEY_PREFIX}:albumArtBasedColorsMode`,
   albumArtBasedColorVibrancy: `${STORAGE_KEY_PREFIX}:albumArtBasedColorsVibrancy`,
-  colorShift: `${STORAGE_KEY_PREFIX}:colorShift`,
+  colorShift: `${STORAGE_KEY_PREFIX}:colorShift`
 };
 
 // Initalize topbar tabs
@@ -27,7 +27,7 @@ export const ALL_TABS: TabItemConfig[] = [
   { name: "Themes", enabled: true },
   { name: "Snippets", enabled: true },
   { name: "Apps", enabled: true },
-  { name: "Installed", enabled: true },
+  { name: "Installed", enabled: true }
 ];
 
 // Max GitHub API items per page
@@ -39,14 +39,11 @@ export const CUSTOM_APP_PATH = "/marketplace";
 // Used in Card.tsx
 export const MAX_TAGS = 4;
 
-export const SNIPPETS_PAGE_URL =
-	"https://github.com/spicetify/spicetify-marketplace/blob/main/src/resources/snippets.ts";
+export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/spicetify-marketplace/blob/main/src/resources/snippets.ts";
 
-export const SNIPPETS_URL =
-  "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/snippets.json";
+export const SNIPPETS_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/snippets.json";
 
-export const BLACKLIST_URL =
-	"https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
+export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/blacklist.json";
 
 export const RELEASES_URL = "https://github.com/spicetify/spicetify-marketplace/releases";
 

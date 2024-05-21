@@ -342,39 +342,39 @@
     "preview": "resources/assets/snippets/pokemon-adventure.png"
   },
   {
-	"title": "Hide Friend Activity Button 2024",
-	"description": "Hides the Friend Activity button",
-	"code": "[aria-label='Friend Activity'] {display:none;}",
-	"preview": "resources/assets/snippets/Hide-Friend-Activity-Button.png"
+    "title": "Hide Friend Activity Button 2024",
+    "description": "Hides the Friend Activity button",
+    "code": "[aria-label='Friend Activity'] {display:none;}",
+    "preview": "resources/assets/snippets/Hide-Friend-Activity-Button.png"
   },
   {
-	"title": "Hide What's New Button",
-	"description": "Hides the What's New button",
-	"code": "[aria-label=\"What's New\"] {display:none;}",
-	"preview": "resources/assets/snippets/Hide-Whats-New-Button.png"
+    "title": "Hide What's New Button",
+    "description": "Hides the What's New button",
+    "code": "[aria-label=\"What's New\"] {display:none;}",
+    "preview": "resources/assets/snippets/Hide-Whats-New-Button.png"
   },
   {
-	"title": "Hide Audiobooks Button",
-	"description": "Hides the Audiobook button on the home page",
-	"code": "button[aria-label='Audiobooks'] {display:none;}",
-	"preview": "resources/assets/snippets/Hide-Audiobooks-Button.png"
+    "title": "Hide Audiobooks Button",
+    "description": "Hides the Audiobook button on the home page",
+    "code": "button[aria-label='Audiobooks'] {display:none;}",
+    "preview": "resources/assets/snippets/Hide-Audiobooks-Button.png"
   },
   {
-	"title": "Hide Podcast Button",
-	"description": "Hides the Podcast button on the home page",
-	"code": "button[aria-label='Podcasts'] {display:none;}",
-	"preview": "resources/assets/snippets/Hide-Podcast-Button.png"
+    "title": "Hide Podcast Button",
+    "description": "Hides the Podcast button on the home page",
+    "code": "button[aria-label='Podcasts'] {display:none;}",
+    "preview": "resources/assets/snippets/Hide-Podcast-Button.png"
   },
   {
-	"title": "Hide Recently Played Sections",
-	"description": "Hides the Recently Played sections on the home page",
-	"code": ".view-homeShortcutsGrid-shortcuts, section[aria-label='Recently played'] {display:none;}",
-	"preview": "resources/assets/snippets/Hide-Recently-Played.png"
+    "title": "Hide Recently Played Sections",
+    "description": "Hides the Recently Played sections on the home page",
+    "code": ".view-homeShortcutsGrid-shortcuts, section[aria-label='Recently played'] {display:none;}",
+    "preview": "resources/assets/snippets/Hide-Recently-Played.png"
   },
   {
-	"title": "More Visible Unplayable Tracks",
-	"description": "Changes the background of unplayable tracks to make it easier to spot them in large playlists.",
-	"code": ".main-trackList-disabled{background:#f004}.main-trackList-disabled:focus-within,.main-trackList-disabled:hover{background:#f005}.main-trackList-disabled.main-trackList-selected,.main-trackList-disabled.main-trackList-selected:hover{background:#f006}",
-	"preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
+    "title": "More Visible Unplayable Tracks",
+    "description": "Changes the background of unplayable tracks to make it easier to spot them in large playlists.",
+    "code": ".main-trackList-disabled{background:#f004}.main-trackList-disabled:focus-within,.main-trackList-disabled:hover{background:#f005}.main-trackList-disabled.main-trackList-selected,.main-trackList-disabled.main-trackList-selected:hover{background:#f006}",
+    "preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
   }
 ]

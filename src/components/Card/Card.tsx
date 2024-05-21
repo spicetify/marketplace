@@ -1,24 +1,17 @@
-import React, { Key } from "react";
-import { withTranslation } from "react-i18next";
 import { t } from "i18next";
+import React, { type Key } from "react";
+import { withTranslation } from "react-i18next";
 
-import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
-import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
-import {
-  getLocalStorageDataFromKey,
-  parseIni,
-  initializeSnippets,
-  parseCSS,
-  injectUserCSS,
-  generateKey,
-} from "../../logic/Utils";
-import TrashIcon from "../Icons/TrashIcon";
+import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
+import { openModal } from "../../logic/LaunchModals";
+import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "../../logic/Utils";
+import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
+import Button from "../Button";
 import DownloadIcon from "../Icons/DownloadIcon";
 import GitHubIcon from "../Icons/GitHubIcon";
-import { openModal } from "../../logic/LaunchModals";
+import TrashIcon from "../Icons/TrashIcon";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
-import Button from "../Button";
 const Spicetify = window.Spicetify;
 
 export type CardProps = {
@@ -33,15 +26,18 @@ export type CardProps = {
   activeThemeKey?: string;
 };
 
-class Card extends React.Component<CardProps, {
-  installed: boolean
-  // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
-  stars: number;
-  tagsExpanded: boolean;
-  externalUrl: string;
-  lastUpdated: string | undefined;
-  created: string | undefined;
-}> {
+export class Card extends React.Component<
+  CardProps,
+  {
+    installed: boolean;
+    // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
+    stars: number;
+    tagsExpanded: boolean;
+    externalUrl: string;
+    lastUpdated: string | undefined;
+    created: string | undefined;
+  }
+> {
   // Theme stuff
   // cssURL?: string;
   // schemesURL?: string;
@@ -81,11 +77,12 @@ class Card extends React.Component<CardProps, {
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
       tagsExpanded: false,
-      externalUrl: (this.props.item.user && this.props.item.repo) // These won't exist for snippets
-        ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
-        : "",
-      lastUpdated: (this.props.item.user && this.props.item.repo) ? this.props.item.lastUpdated : undefined,
-      created: (this.props.item.user && this.props.item.repo) ? this.props.item.created : undefined,
+      externalUrl:
+        this.props.item.user && this.props.item.repo // These won't exist for snippets
+          ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
+          : "",
+      lastUpdated: this.props.item.user && this.props.item.repo ? this.props.item.lastUpdated : undefined,
+      created: this.props.item.user && this.props.item.repo ? this.props.item.created : undefined
     };
   }
 
@@ -101,11 +98,11 @@ class Card extends React.Component<CardProps, {
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
-      const repoData = await fetch(url).then(res => res.json());
+      const repoData = await fetch(url).then((res) => res.json());
       const { stargazers_count, pushed_at } = repoData;
 
       const stateUpdate = { stars: 0, lastUpdated: undefined };
-      if ((this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars)) {
+      if (this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars) {
         stateUpdate.stars = stargazers_count;
         console.debug(`Stars updated to: ${stargazers_count}`);
       }
@@ -113,12 +110,12 @@ class Card extends React.Component<CardProps, {
         stateUpdate.lastUpdated = pushed_at;
         console.debug(`New update pushed at: ${pushed_at}`);
         switch (this.props.type) {
-        case "extension":
-          this.installExtension();
-          break;
-        case "theme":
-          this.installTheme(true);
-          break;
+          case "extension":
+            this.installExtension();
+            break;
+          case "theme":
+            this.installTheme(true);
+            break;
         }
       }
     }
@@ -143,11 +140,7 @@ class Card extends React.Component<CardProps, {
       } else {
         const localTheme = localStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
         if (localTheme != null && localTheme.toLowerCase() !== "marketplace") {
-          Spicetify.showNotification(
-            t("notifications.wrongLocalTheme"),
-            true,
-            5000,
-          );
+          Spicetify.showNotification(t("notifications.wrongLocalTheme"), true, 5000);
           return;
         }
 
@@ -182,22 +175,25 @@ class Card extends React.Component<CardProps, {
       return;
     }
     const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
-    localStorage.setItem(this.localStorageKey, JSON.stringify({
-      manifest,
-      type: this.props.type,
-      title,
-      subtitle,
-      authors,
-      user,
-      repo,
-      branch,
-      imageURL,
-      extensionURL,
-      readmeURL,
-      stars: this.state.stars,
-      lastUpdated,
-      created,
-    }));
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify({
+        manifest,
+        type: this.props.type,
+        title,
+        subtitle,
+        authors,
+        user,
+        repo,
+        branch,
+        imageURL,
+        extensionURL,
+        readmeURL,
+        stars: this.state.stars,
+        lastUpdated,
+        created
+      })
+    );
 
     // Add to installed list if not there already
     const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
@@ -255,11 +251,8 @@ class Card extends React.Component<CardProps, {
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
 
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include, lastUpdated, created } = item;
-
-    localStorage.setItem(this.localStorageKey, JSON.stringify({
+    const {
       manifest,
-      type: this.props.type,
       title,
       subtitle,
       authors,
@@ -269,18 +262,40 @@ class Card extends React.Component<CardProps, {
       imageURL,
       extensionURL,
       readmeURL,
-      stars: this.state.stars,
-      tags: this.tags,
-      // Theme stuff
       cssURL,
       schemesURL,
       include,
-      // Installed theme localstorage item has schemes, nothing else does
-      schemes: parsedSchemes,
-      activeScheme,
       lastUpdated,
-      created,
-    }));
+      created
+    } = item;
+
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify({
+        manifest,
+        type: this.props.type,
+        title,
+        subtitle,
+        authors,
+        user,
+        repo,
+        branch,
+        imageURL,
+        extensionURL,
+        readmeURL,
+        stars: this.state.stars,
+        tags: this.tags,
+        // Theme stuff
+        cssURL,
+        schemesURL,
+        include,
+        // Installed theme localstorage item has schemes, nothing else does
+        schemes: parsedSchemes,
+        activeScheme,
+        lastUpdated,
+        created
+      })
+    );
 
     // TODO: handle this differently?
 
@@ -318,9 +333,9 @@ class Card extends React.Component<CardProps, {
     this.setState({ installed: true });
   }
 
-  removeTheme(themeKey?: string | null) {
+  removeTheme(defaultThemeKey?: string | null) {
     // If don't specify theme, remove the currently installed theme
-    themeKey = themeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    const themeKey = defaultThemeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
     const themeValue = themeKey && localStorage.getItem(themeKey);
 
@@ -359,12 +374,15 @@ class Card extends React.Component<CardProps, {
 
   installSnippet() {
     console.debug(`Installing snippet ${this.localStorageKey}`);
-    localStorage.setItem(this.localStorageKey, JSON.stringify({
-      code: this.props.item.code,
-      title: this.props.item.title,
-      description: this.props.item.description,
-      imageURL: this.props.item.imageURL,
-    }));
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify({
+        code: this.props.item.code,
+        title: this.props.item.title,
+        description: this.props.item.description,
+        imageURL: this.props.item.imageURL
+      })
+    );
 
     // Add to installed list if not there already
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
@@ -398,9 +416,7 @@ class Card extends React.Component<CardProps, {
   async fetchAndInjectUserCSS(theme) {
     try {
       const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
-      const userCSS = theme
-        ? await parseCSS(this.props.item as CardItem, tld)
-        : undefined;
+      const userCSS = theme ? await parseCSS(this.props.item as CardItem, tld) : undefined;
       injectUserCSS(userCSS);
     } catch (error) {
       console.warn(error);
@@ -420,9 +436,9 @@ class Card extends React.Component<CardProps, {
             readmeURL: this.props.item.readmeURL,
             type: this.props.type,
             install: this.buttonClicked.bind(this),
-            isInstalled: this.isInstalled.bind(this),
-          },
-        },
+            isInstalled: this.isInstalled.bind(this)
+          }
+        }
       });
     } else {
       Spicetify.showNotification(t("notifications.noReadmeFile"), true);
@@ -450,17 +466,19 @@ class Card extends React.Component<CardProps, {
     }
 
     return (
-      <div className={cardClasses.join(" ")} onClick={() => {
-        if (this.props.type === "snippet") {
-          const processedName = this.props.item.title.replace(/\n/g, "");
+      <div
+        className={cardClasses.join(" ")}
+        onClick={() => {
+          if (this.props.type === "snippet") {
+            const processedName = this.props.item.title.replace(/\n/g, "");
 
-          if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
-            return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
+            if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
+              return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
 
-          openModal("VIEW_SNIPPET", undefined, undefined, this.props, this.buttonClicked.bind(this));
-        } else this.openReadme();
-      }
-      }>
+            openModal("VIEW_SNIPPET", undefined, undefined, this.props, this.buttonClicked.bind(this));
+          } else this.openReadme();
+        }}
+      >
         <div className="main-card-draggable" draggable="true">
           <div className="main-card-imageContainer">
             <div className="main-cardImage-imageWrapper">
@@ -475,7 +493,10 @@ class Card extends React.Component<CardProps, {
                   onError={(e) => {
                     // Set to transparent PNG to remove the placeholder icon
                     // https://png-pixel.com
-                    e.currentTarget.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII");
+                    e.currentTarget.setAttribute(
+                      "src",
+                      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII"
+                    );
 
                     // Add class for styling
                     e.currentTarget.closest(".main-cardImage-imageWrapper")?.classList.add("main-cardImage-imageWrapper--error");
@@ -490,17 +511,12 @@ class Card extends React.Component<CardProps, {
               title={this.props.type === "snippet" ? this.props.item.title : this.props.item.manifest?.name}
               className="main-cardHeader-link"
               dir="auto"
-              href={this.props.type !== "snippet"
-                ? this.state.externalUrl
-                : SNIPPETS_PAGE_URL
-              }
+              href={this.props.type !== "snippet" ? this.state.externalUrl : SNIPPETS_PAGE_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="main-cardHeader-text main-type-balladBold">
-                {this.props.item.title}
-              </div>
+              <div className="main-cardHeader-text main-type-balladBold">{this.props.item.title}</div>
             </a>
             <div className="main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader">
               {/* Add authors if they exist */}
@@ -510,32 +526,29 @@ class Card extends React.Component<CardProps, {
             <p className="marketplace-card-desc">
               {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
             </p>
-            {this.props.item.lastUpdated &&
-            <p className="marketplace-card-desc">
-              {t("grid.lastUpdated",
-                { val: new Date(this.props.item.lastUpdated),
+            {this.props.item.lastUpdated && (
+              <p className="marketplace-card-desc">
+                {t("grid.lastUpdated", {
+                  val: new Date(this.props.item.lastUpdated),
                   formatParams: {
-                    val: { year: "numeric", month: "long", day: "numeric" },
-                  },
-                })
-              }
-            </p>}
+                    val: { year: "numeric", month: "long", day: "numeric" }
+                  }
+                })}
+              </p>
+            )}
             {this.tags.length ? (
               <div className="marketplace-card__bottom-meta main-type-mestoBold">
                 <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />
               </div>
             ) : null}
-            {IS_INSTALLED && (
-              <div className="marketplace-card__bottom-meta main-type-mestoBold">
-                ✓ {t("grid.installed")}
-              </div>
-            )}
+            {IS_INSTALLED && <div className="marketplace-card__bottom-meta main-type-mestoBold">✓ {t("grid.installed")}</div>}
             <Spicetify.ReactComponent.TooltipWrapper
               label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
               renderInline={true}
             >
               <div className="main-card-PlayButtonContainer">
-                <Button classes={["marketplace-installButton"]}
+                <Button
+                  classes={["marketplace-installButton"]}
                   type="circle"
                   // If it is installed, it will remove it when button is clicked, if not it will save
                   // TODO: Refactor this using lookups or sth similar
