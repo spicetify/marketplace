@@ -1,20 +1,16 @@
-import React from "react";
 import { t } from "i18next";
-import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
+import React from "react";
+import Editor from "react-simple-code-editor";
 import "prismjs/components/prism-css";
 
-import {
-  getLocalStorageDataFromKey,
-  initializeSnippets,
-  fileToBase64,
-} from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
+import type { ModalType } from "../../../logic/LaunchModals";
+import { fileToBase64, getLocalStorageDataFromKey, initializeSnippets } from "../../../logic/Utils";
 import Button from "../../Button";
-import { CardProps } from "../../Card/Card";
-import { ModalType } from "../../../logic/LaunchModals";
+import type { CardProps } from "../../Card/Card";
 
-const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: () => void }) => {
+const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: () => void }) => {
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
   const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
   const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
@@ -44,7 +40,9 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
 
       localStorage.removeItem(`marketplace:installed:snippet:${props.content.item.title}`);
       const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-      const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key: string) => key !== `marketplace:installed:snippet:${props.content?.item.title}`);
+      const remainingInstalledSnippetKeys = installedSnippetKeys.filter(
+        (key: string) => key !== `marketplace:installed:snippet:${props.content?.item.title}`
+      );
       localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
     }
 
@@ -55,25 +53,17 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
         code,
         description: processedDescription,
         imageURL,
-        custom: true,
-      }),
+        custom: true
+      })
     );
 
     // Add to installed list if not there already
-    const installedSnippetKeys = getLocalStorageDataFromKey(
-      LOCALSTORAGE_KEYS.installedSnippets,
-      [],
-    );
+    const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
     if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
       installedSnippetKeys.push(localStorageKey);
-      localStorage.setItem(
-        LOCALSTORAGE_KEYS.installedSnippets,
-        JSON.stringify(installedSnippetKeys),
-      );
+      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
     }
-    const installedSnippets = installedSnippetKeys.map((key: string) =>
-      getLocalStorageDataFromKey(key),
-    );
+    const installedSnippets = installedSnippetKeys.map((key: string) => getLocalStorageDataFromKey(key));
     initializeSnippets(installedSnippets);
 
     Spicetify.PopupModal.hide();
@@ -92,89 +82,97 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={code}
-            onValueChange={code => setCode(code)}
-            highlight={code => highlight(code, languages.css)}
+            onValueChange={(code) => setCode(code)}
+            highlight={(code) => highlight(code, languages.css)}
             textareaId="marketplace-custom-css"
             textareaClassName="snippet-code-editor"
             readOnly={props.type === "VIEW_SNIPPET"}
             placeholder={t("snippets.customCSSPlaceholder")}
-            style={{
-              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
-              // fontSize: 12,
-            }}
+            style={
+              {
+                // fontFamily: "'Fira code', 'Fira Mono', monospace'",
+                // fontSize: 12,
+              }
+            }
           />
         </div>
       </div>
       <div className="marketplace-customCSS-input-container">
         <label htmlFor="marketplace-customCSS-name-submit">{t("snippets.snippetName")}</label>
-        <input id="marketplace-customCSS-name-submit" className="marketplace-code-editor"
-          value={name} onChange={(e) => {
-            if (props.type !== "VIEW_SNIPPET")
-              setName(e.target.value);
+        <input
+          id="marketplace-customCSS-name-submit"
+          className="marketplace-code-editor"
+          value={name}
+          onChange={(e) => {
+            if (props.type !== "VIEW_SNIPPET") setName(e.target.value);
           }}
           placeholder={t("snippets.snippetNamePlaceholder")}
         />
       </div>
       <div className="marketplace-customCSS-input-container">
-        <label htmlFor="marketplace-customCSS-description-submit">
-          {t("snippets.snippetDesc")}
-        </label>
-        <input id="marketplace-customCSS-description-submit" className="marketplace-code-editor"
-          value={description} onChange={(e) => {
-            if (props.type !== "VIEW_SNIPPET")
-              setDescription(e.target.value);
+        <label htmlFor="marketplace-customCSS-description-submit">{t("snippets.snippetDesc")}</label>
+        <input
+          id="marketplace-customCSS-description-submit"
+          className="marketplace-code-editor"
+          value={description}
+          onChange={(e) => {
+            if (props.type !== "VIEW_SNIPPET") setDescription(e.target.value);
           }}
           placeholder={t("snippets.snippetDescPlaceholder")}
         />
       </div>
       <div className="marketplace-customCSS-input-container">
         <label htmlFor={PREVIEW_IMAGE_ID}>
-          {t("snippets.snippetPreview")} { props.type !== "VIEW_SNIPPET" && `(${t("snippets.optional")})` }
+          {t("snippets.snippetPreview")} {props.type !== "VIEW_SNIPPET" && `(${t("snippets.optional")})`}
         </label>
-        {imageURL &&
+        {imageURL && (
           <label htmlFor={PREVIEW_IMAGE_ID} style={{ textAlign: "center" }}>
             <img className="marketplace-customCSS-image-preview" src={imageURL} alt="Preview" />
           </label>
-        }
+        )}
       </div>
-      {props.type !== "VIEW_SNIPPET"
+      {props.type !== "VIEW_SNIPPET" && (
         // Don't display buttons on "View Snippet" modal
-        &&
-          <>
-            <Button onClick={FileInputClick}>
-              {imageURL.length ? t("snippets.changeImage") : t("snippets.addImage")}
-              <input
-                id={PREVIEW_IMAGE_ID}
-                type="file"
-                style={{ display: "none" }}
-                ref={(input: HTMLInputElement) => inputElement = input}
-                onChange={async (event) => {
-                  if (event.target.files?.[0]) {
-                    try {
-                      const b64 = await fileToBase64(event.target.files?.[0]);
-                      if (b64) {
-                        // console.debug(b64);
-                        setimageURL(b64 as string);
-                      }
-                    } catch (err) {
-                      console.error(err);
+        <>
+          <Button onClick={FileInputClick}>
+            {imageURL.length ? t("snippets.changeImage") : t("snippets.addImage")}
+            <input
+              id={PREVIEW_IMAGE_ID}
+              type="file"
+              style={{ display: "none" }}
+              // biome-ignore lint/suspicious/noAssignInExpressions: TODO: fix this
+              ref={(input: HTMLInputElement) => (inputElement = input)}
+              onChange={async (event) => {
+                if (event.target.files?.[0]) {
+                  try {
+                    const b64 = await fileToBase64(event.target.files?.[0]);
+                    if (b64) {
+                      // console.debug(b64);
+                      setimageURL(b64 as string);
                     }
+                  } catch (err) {
+                    console.error(err);
                   }
-                }} />
-            </Button>
-            {/* Disable the save button if the name or code are empty */}
-            <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
-              {t("snippets.saveCSS")}
-            </Button>
-          </>
-      }
-      {
-        props.type === "VIEW_SNIPPET"
-          &&
-          <Button onClick={() => {props.callback && props.callback(); setInstalled(!isInstalled);}}>
-            {isInstalled ? t("remove") : t("install")}
+                }
+              }}
+            />
           </Button>
-      }
+          {/* Disable the save button if the name or code are empty */}
+          <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
+            {t("snippets.saveCSS")}
+          </Button>
+        </>
+      )}
+      {props.type === "VIEW_SNIPPET" && (
+        <Button
+          onClick={() => {
+            props.callback?.();
+            setInstalled(!isInstalled);
+          }}
+        >
+          {isInstalled ? t("remove") : t("install")}
+        </Button>
+      )}
     </div>
   );
 };

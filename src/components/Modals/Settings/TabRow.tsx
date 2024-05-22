@@ -1,13 +1,12 @@
-import React from "react";
 import { t } from "i18next";
-import { Config } from "../../../types/marketplace-types";
+import React from "react";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
+import type { Config } from "../../../types/marketplace-types";
 
 import Toggle from "../../Toggle";
 
 const TabRow = (props: {
   name: string;
-  key?: number; // The React prop
   modalConfig: Config;
   updateConfig: (CONFIG: Config) => void;
 }) => {
@@ -35,10 +34,7 @@ const TabRow = (props: {
     props.modalConfig.tabs[newPos] = props.modalConfig.tabs[currPos];
     props.modalConfig.tabs[currPos] = temp;
 
-    localStorage.setItem(
-      LOCALSTORAGE_KEYS.tabs,
-      JSON.stringify(props.modalConfig.tabs),
-    );
+    localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
 
     // Saves the config settings to app as well as SettingsModal state
     props.updateConfig(props.modalConfig);
@@ -46,23 +42,29 @@ const TabRow = (props: {
 
   return (
     <div className="settings-row">
-      <label htmlFor={toggleId} className="col description">{t(`tabs.${props.name}`)}</label>
+      <label htmlFor={toggleId} className="col description">
+        {t(`tabs.${props.name}`)}
+      </label>
       <div className="col action">
         <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
-          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
-            dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-up"]) }}>
-          </svg>
+          <svg
+            height="16"
+            width="16"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-up"]) }}
+          />
         </button>
         <button title="Move down" className="arrow-btn" disabled={index === props.modalConfig.tabs.length - 1} onClick={() => moveTab(index, 1)}>
-          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
-            dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-down"]) }}>
-          </svg>
+          <svg
+            height="16"
+            width="16"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            dangerouslySetInnerHTML={{ __html: String(Spicetify.SVGIcons["chart-down"]) }}
+          />
         </button>
-        <Toggle name={props.name} storageKey={`tab:${props.name}`}
-          clickable={props.name !== "Extensions"}
-          enabled={enabled}
-          onChange={clickToggle}
-        />
+        <Toggle name={props.name} storageKey={`tab:${props.name}`} clickable={props.name !== "Extensions"} enabled={enabled} onChange={clickToggle} />
       </div>
     </div>
   );

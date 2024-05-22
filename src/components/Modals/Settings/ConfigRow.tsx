@@ -1,8 +1,8 @@
 import React from "react";
-import { Config } from "../../../types/marketplace-types";
-import Toggle from "../../Toggle";
-import SortBox from "../../Sortbox";
+import type { Config } from "../../../types/marketplace-types";
 import TooltipIcon from "../../Icons/TooltipIcon";
+import SortBox from "../../Sortbox";
+import Toggle from "../../Toggle";
 const Spicetify = window.Spicetify;
 
 const ConfigRow = (props: {
@@ -16,9 +16,7 @@ const ConfigRow = (props: {
   description?: string | null;
 }) => {
   const type = props.type;
-  const componentId = (type === "dropdown")
-    ? "dropdown:" + props.storageKey
-    : "toggle:" + props.storageKey;
+  const componentId = type === "dropdown" ? `dropdown:${props.storageKey}` : `toggle:${props.storageKey}`;
   const enabled = !!props.modalConfig.visual[props.storageKey];
 
   const settingsToggleChange = (e) => {
@@ -46,25 +44,32 @@ const ConfigRow = (props: {
   if (type === "dropdown" && props.options) {
     return (
       <div className="settings-row">
-        <label htmlFor={componentId} className="col description">{props.name}</label>
+        <label htmlFor={componentId} className="col description">
+          {props.name}
+        </label>
         <div className="col action">
           <SortBox
             sortBoxOptions={props.options.map((option) => {
               return {
                 key: option,
-                value: option,
+                value: option
               };
             })}
             onChange={(value) => settingsDropdownChange(value)}
             sortBySelectedFn={(item) => {
-              return item.key == props.modalConfig.visual[props.storageKey];
+              return item.key === props.modalConfig.visual[props.storageKey];
             }}
           />
           <Spicetify.ReactComponent.TooltipWrapper
             label={
               <>
-                {props.description.split("\n").map(line => {
-                  return <>{line}<br /></>;
+                {props.description.split("\n").map((line) => {
+                  return (
+                    <span key={line}>
+                      {line}
+                      <br />
+                    </span>
+                  );
                 })}
               </>
             }
@@ -80,12 +85,13 @@ const ConfigRow = (props: {
           </Spicetify.ReactComponent.TooltipWrapper>
         </div>
       </div>
-
     );
   }
   return (
     <div className="settings-row">
-      <label htmlFor={componentId} className="col description">{props.name}</label>
+      <label htmlFor={componentId} className="col description">
+        {props.name}
+      </label>
       <div className="col action">
         <Toggle name={props.name} storageKey={props.storageKey} enabled={enabled} onChange={settingsToggleChange} />
       </div>

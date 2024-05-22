@@ -50,10 +50,10 @@ jobs:
           wait-interval: 10
       - name: Download target branch
 
-        run: curl -s -o spicetify-marketplace.zip https://codeload.github.com/${{ github.repository }}/zip/refs/heads/dist
+        run: curl -s -o marketplace.zip https://codeload.github.com/${{ github.repository }}/zip/refs/heads/dist
       - name: Publish the release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.check_version.outputs.new_version }}
           generate_release_notes: true
-          files: spicetify-marketplace.zip
+          files: marketplace.zip
