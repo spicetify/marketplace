@@ -125,7 +125,7 @@
       "markdownParsingError": "Fehler beim Parsen von Markdown (HTTP {{status}})",
       "noReadmeFile": "README wurde nicht gefunden",
       "themeInstallationError": "Beim Installieren von einem Design ist ein Fehler aufgetreten",
-      "extensionInstallationError": Beim Installieren einer Erweiterung ist ein Fehler aufgetreten"
+      "extensionInstallationError": "Beim Installieren einer Erweiterung ist ein Fehler aufgetreten"
     }
   }
 }
