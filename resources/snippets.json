@@ -385,7 +385,7 @@
   }
   {
     "title": "[Global Nav Bar] marketplace header margin fix",
-    "description": "removes the standard margin, and sets it back to 0",
+    "description": "Global Nav Bar breaks the margin for certain themes, this removes the standard margin, and sets it back to 0",
     "code": "div.marketplace-header:has(.marketplace-header__left .marketplace-sortBox-header){margin-top:unset;}",
     "preview": "resources/assets/snippets/glob-nav-mrktplc-margin.png"
   }
