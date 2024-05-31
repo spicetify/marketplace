@@ -11,6 +11,7 @@ import ru from "./ru.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
+import deDE from "./de-DE.json";
 
 export default {
   ca,
@@ -25,5 +26,6 @@ export default {
   pl,
   it,
   uk,
-  ja
+  ja,
+  "de-DE": deDE
 };
