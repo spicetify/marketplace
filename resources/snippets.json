@@ -377,4 +377,10 @@
     "code": ".main-trackList-disabled{background:#f004}.main-trackList-disabled:focus-within,.main-trackList-disabled:hover{background:#f005}.main-trackList-disabled.main-trackList-selected,.main-trackList-disabled.main-trackList-selected:hover{background:#f006}",
     "preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
   }
+  {
+    "title": "Fixed Sidebar",
+    "description": "Fix sidebar tabs in control mode.",
+    "code": ".link-subtle { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 20px; height: 40px }",
+    "preview": "resources/assets/snippets/Fixed-Sidebar.png"
+  }
 ]
