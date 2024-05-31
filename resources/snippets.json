@@ -382,7 +382,7 @@
     "description": "Removes the max visible width restrictions of the 'sidebar' items. Useful if you have more than the scrolling limit but not as much that it will overflow with the searchbar",
     "code": ".custom-navlinks-scrollable_container{max-width: unset!important}",
     "preview": "resources/assets/snippets/glob-nav-max-items.png"
-  }
+  },
   {
     "title": "[Global Nav Bar] marketplace header margin fix",
     "description": "Global Nav Bar breaks the margin for certain themes, this removes the standard margin, and sets it back to 0",
