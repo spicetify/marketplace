@@ -381,6 +381,6 @@
     "title": "Fixed Sidebar",
     "description": "Fix sidebar tabs in control mode.",
     "code": ".link-subtle { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; gap: 20px; height: 40px }",
-    "preview": "resources/assets/snippets/Fixed-Sidebar.png"
+    "preview": "resources/assets/snippets/Fixed-Sidebar.gif"
   }
 ]
