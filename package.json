@@ -39,7 +39,7 @@
     "@biomejs/biome": "^1.7.3",
     "chroma-js": "^2.4.2",
     "i18next": "^23.11.3",
-    "i18next-browser-languagedetector": "^7.2.0",
+    "i18next-browser-languagedetector": "^8.0.0",
     "prismjs": "^1.29.0",
     "react-dropdown": "^1.11.0",
     "react-i18next": "^14.1.0",
