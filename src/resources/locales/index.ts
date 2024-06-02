@@ -1,4 +1,5 @@
 import ca from "./ca.json";
+import deDE from "./de-DE.json";
 import enUS from "./en-US.json";
 import en from "./en.json";
 import es from "./es.json";
@@ -11,7 +12,7 @@ import ru from "./ru.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
-import deDE from "./de-DE.json";
+
 
 export default {
   ca,
