@@ -13,7 +13,6 @@ import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
 
-
 export default {
   ca,
   en,
