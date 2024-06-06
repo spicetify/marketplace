@@ -376,5 +376,11 @@
     "description": "Changes the background of unplayable tracks to make it easier to spot them in large playlists.",
     "code": ".main-trackList-disabled{background:#f004}.main-trackList-disabled:focus-within,.main-trackList-disabled:hover{background:#f005}.main-trackList-disabled.main-trackList-selected,.main-trackList-disabled.main-trackList-selected:hover{background:#f006}",
     "preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
-  }
+  },
+  {
+    "title": "Reorder Now Playing View",
+    "description": "Changes the order in which the elements are displayed in the Now Playing View to: 1. Next in queue, 2. Now playing, 3. Lyrics, 4. About the artist, 5. Credits, 6. On tour, 7. Merch",
+    "code": "/* Now Playing */\n .main-nowPlayingView-nowPlayingWidget {\n order: 2;\n }\n /* Lyrics */\n .main-nowPlayingView-sectionHeaderSpacing {\n order: 3;\n }\n /* About */\n .main-nowPlayingView-aboutArtistV2 {\n order: 4;\n }\n /* Credits */\n .main-nowPlayingView-credits {\n order: 5;\n }\n /* Tour */\n .main-nowPlayingView-artistOnTour {\n order: 6;\n }\n /* Merch */\n .main-nowPlayingView-merch {\n order: 7;\n }\n /* Queue */\n .main-nowPlayingView-queue {\n order: 1;\n }\n",
+    "preview": "resources/assets/snippets/reorder-now-playing-view.png"
+}
 ]
