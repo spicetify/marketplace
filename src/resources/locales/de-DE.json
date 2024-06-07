@@ -1,0 +1,131 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Marketplace Einstellungen",
+      "optionsHeading": "Optionen",
+      "starCountLabel": "Sterne Anzahl",
+      "tagsLabel": "Schlagwörter",
+      "showArchived": "Archivierte repos anzeigen",
+      "devToolsLabel": "Design Entwicklerwerkzeuge",
+      "hideInstalledLabel": "Versteckt installierte beim durchsuchen",
+      "colourShiftLabel": "Jede Minute Farbe wechseln",
+      "albumArtBasedColors": "Farbe basierend auf Album Cover wechseln",
+      "albumArtBasedColorsMode": "Farbschema (ColorApi) Modus",
+      "albumArtBasedColorsVibrancy": "Farbe vom Album Cover übernommen",
+      "albumArtBasedColorsVibrancyToolTip": "Entsättigt: Die am stärksten ausgeprägte Farbe, aber mit viel weniger Helligkeit \n Leicht lebhaft: Die am stärksten leuchtende Farbe, aber mit etwas mehr Helligkeit \n Prominent: Die Farbe, die im Albumcover am stärksten hervortritt \n Lebendig: Die lebendigste Farbe im Albumcover",
+      "almbumArtColorsModeToolTip": "Monochrom Dunkel: Ein Farbschema, das direkt auf der ausgewählten Hauptfarbe basiert, wobei verschiedene Schattierungen der Hauptfarbe verwendet und Grautöne beigemischt werden, um ein Farbschema zu erstellen; dies ist das Gegenteil von Monochrom Hell. \n Monochrom Hell: Ein Farbschema, das direkt auf der ausgewählten Hauptfarbe basiert, wobei verschiedene Schattierungen der Hauptfarbe verwendet und Grautöne beigemischt werden, um ein Farbschema zu erstellen. Der Hintergrund von Monochrom hell wäre die Vordergrund- oder Textfarbe bei Monochrom dunkel und umgekehrt. \n Analogisch: Ein Farbschema, das auf der ausgewählten Hauptfarbe basiert und die Farben verwendet, die auf dem Farbkreis neben der Hauptfarbe liegen. \n Analogisch Komplementär: Ein Farbschema, das auf der ausgewählten Hauptfarbe basiert, wobei die Farben neben der Hauptfarbe auf dem Farbkreis und die Komplementärfarbe verwendet werden. \n Dreiklang: Ein Farbschema auf der Grundlage der ausgewählten Hauptfarbe, bei dem die Farben auf dem Farbkreis verwendet werden, die gleich weit von der Hauptfarbe entfernt sind. \n Vierer: Ein Farbschema auf der Grundlage der ausgewählten Hauptfarbe, bei dem die Farben auf dem Farbkreis verwendet werden, die 90 Grad von der Hauptfarbe entfernt sind.",
+      "tabsHeading": "Register",
+      "resetHeading": "Zurücksetzen",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Deinstalliere alle Erweiterungen und Themes und setze Präferenzen zurück",
+      "backupHeading": "Sicherung erstellen / Wiederherstellen",
+      "backupLabel": "Sichern Sie alle Marketplace-Daten oder stellen Sie sie wieder her. Dies umfasst nicht die Einstellungen für alles, was über den Marketplace installiert wurde.",
+      "backupBtn": "Öffnen",
+      "versionHeading": "Version",
+      "versionBtn": "Kopieren",
+      "versionCopied": "Kopiert"
+    },
+    "tabs": {
+      "Extensions": "Erweiterungen",
+      "Themes": "Designs",
+      "Snippets": "Snippets",
+      "Apps": "Apps",
+      "Installed": "Installiert"
+    },
+    "snippets": {
+      "addTitle": "Snippet hinzufügen",
+      "duplicateName": "Dieser Name ist bereits vergeben!",
+      "editTitle": "Snippet bearbeiten",
+      "viewTitle": "Snippet ansehen",
+      "customCSS": "Benutzerdefiniertes CSS",
+      "customCSSPlaceholder": "Geben Sie hier Ihre eigenen benutzerdefinierten CSS ein! Sie finden sie auf der Registerkarte „Installiert“ für die Verwaltung.",
+      "snippetName": "Snippet Name",
+      "snippetNamePlaceholder": "Geben Sie einen Namen für ihr benutzerdefiniertes Snippet ein",
+      "snippetDesc": "Snippet Beschreibung",
+      "snippetDescPlaceholder": "Geben sie eine Beschreibung für ihr benutzerdefiniertes Snippet ein",
+      "snippetPreview": "Snippet Vorschau",
+      "optional": "Optional",
+      "addImage": "Foto hinzufügen",
+      "changeImage": "Foto ändern",
+      "saveCSS": "CSS speichern"
+    },
+    "reloadModal": {
+      "title": "Neu laden",
+      "description": "Um diesen Vorgang abzuschließen, muss die Seite neu geladen werden.",
+      "reloadNow": "Jetzt neu laden",
+      "reloadLater": "Später neu laden"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Einstellungen in die Zwischenablage kopiert",
+      "noDataPasted": "Keine Daten eingefügt",
+      "invalidJSON": "Ungültiges JSON",
+      "inputLabel": "Marketplace Einstellungen",
+      "inputPlaceholder": "Kopieren Sie Ihre Einstellungen und fügen Sie sie hier ein",
+      "exportBtn": "Export",
+      "importBtn": "Import",
+      "fileImportBtn": "Von Datei importieren"
+    },
+    "devTools": {
+      "title": "Design Entwicklerwerkzeug",
+      "noThemeInstalled": "Fehler: Kein Marketplace Design installed",
+      "noThemeManifest": "Fehler: Kein Design-Manifest gefunden",
+      "colorIniEditor": "Color.ini Bearbeitung",
+      "colorIniEditorPlaceholder": "[your-colour-scheme-name]",
+      "invalidCSS": "Ungültiges CSS"
+    },
+    "updateModal": {
+      "title": "Aktualisieren Sie den Marketplace",
+      "description": "Aktualisieren Sie den Spicetify Marketplace um neue Funktionen und Fehlerbehebungen zu erhalten.",
+      "currentVersion": "Derzeitige Version: {{version}}",
+      "latestVersion": "Neueste Version: {{version}}",
+      "whatsChanged": "Was hat sich geändert?",
+      "seeChangelog": "Änderungsverlauf ansehen",
+      "howToUpgrade": "Wie man aktualisiert",
+      "viewGuide": "Anleitung ansehen"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
+      "newUpdate": "Neues Update",
+      "addCSS": "CSS hinzufügen",
+      "search": "Suchen",
+      "installed": "Installiert",
+      "lastUpdated": "Zuletzt aktualisiert {{val, datetime}}",
+      "externalJS": "Externes JS",
+      "archived": "archiviert",
+      "dark": "dunkel",
+      "light": "hell",
+      "sort": {
+        "label": "Sortieren nach:",
+        "stars": "Sterne",
+        "newest": "Neueste",
+        "oldest": "Älteste",
+        "lastUpdated": "Zuletzt aktualisiert",
+        "mostStale": "Am abgestandensten",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Les mich",
+      "loading": "Laden...",
+      "errorLoading": "Fehler beim laden von README"
+    },
+    "github": "GitHub",
+    "install": "Installieren",
+    "remove": "Entfernen",
+    "save": "Speichern",
+    "colour_one": "Farbe",
+    "colour_other": "Farben",
+    "favourite": "Favorit",
+    "notifications": {
+      "wrongLocalTheme": "Bitte setzen Sie current_theme in config-xpui.ini auf 'marketplace', um Themen über den Marketplace zu installieren",
+      "tooManyRequests": "Zu viele Anfragen, beruhigen Sie sich",
+      "noCdnConnection": "Marketplace kann sich nicht mit dem CDN verbinden. Bitte überprüfen Sie Ihre Internetkonfiguration",
+      "markdownParsingError": "Fehler beim Parsen von Markdown (HTTP {{status}})",
+      "noReadmeFile": "README wurde nicht gefunden",
+      "themeInstallationError": "Beim Installieren von einem Design ist ein Fehler aufgetreten",
+      "extensionInstallationError": "Beim Installieren einer Erweiterung ist ein Fehler aufgetreten"
+    }
+  }
+}
