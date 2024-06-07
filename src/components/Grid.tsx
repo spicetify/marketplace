@@ -489,7 +489,7 @@ class Grid extends React.Component<
 
     // Load blacklist and snippets
     this.BLACKLIST = await getBlacklist();
-    this.SNIPPETS = await fetchCssSnippets();
+    this.SNIPPETS = await fetchCssSnippets(this.CONFIG.visual.hideInstalled);
     this.newRequest(ITEMS_PER_REQUEST);
   }
 
