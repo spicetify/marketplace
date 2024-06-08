@@ -66,6 +66,12 @@
     "preview": "resources/assets/snippets/hover-panels.png"
   },
   {
+    "title": "New Hover Panel",
+    "description": "A New Hover Panel that servers the same purpose as the legacy 'Hover Panels', but only for the left sidebar and without modifying any other elements.",
+    "code": "#Desktop_LeftSidebar_Id {\n  position: absolute;\n  left: -280px;\n  width: 288px;\n  height: 100%;\n  background-color: black;\n  opacity: 0;\n  visibility: visible;\n  transition: left 0.5s ease, opacity 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  left: 0;\n  opacity: 1;\n  visibility: visible;\n}\n:root {\n  margin-left: -8px;\n}",
+    "preview": "resources/assets/snippets/new-hover-panel.png"
+  },
+  {
     "title": "Fix progress bar displacement",
     "description": "Fixes the progress bar displacement for a few themes. Better version of @CharlieS1103 Snippet",
     "code": ".main-connectBar-connectBar {\n  overflow: visible !important;\n  position: absolute !important;\n  display: flex !important;\n  align-items: unset !important;\n  left: 80% !important;\n  height: 20px !important;\n  bottom: 1% !important;\n  padding: 2px !important;\n  background-color: transparent !important;\n  color: var(--spice-text) !important;\n}\n.control-button::after {\n  display: none !important;\n}",
