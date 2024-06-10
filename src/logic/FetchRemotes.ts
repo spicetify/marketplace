@@ -132,7 +132,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
           user,
           repo,
           branch: selectedBranch,
-  
+
           imageURL: manifest.preview && manifest.preview.startsWith("http")
             ? manifest.preview
             : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
@@ -146,17 +146,16 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
           tags: manifest.tags,
         };
           // Add to list unless we're hiding installed items and it's installed
-          if (
-            !(
-              hideInstalled &&
+        if (
+          !(
+            hideInstalled &&
               localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`)
-            )
-          ) {
-            accum.push(item);
-          }
+          )
+        ) {
+          accum.push(item);
+        }
       }
-      
-      
+
       // else {
       //     console.error("Invalid manifest:", manifest);
       // }
@@ -190,39 +189,41 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-      const selectedBranch = manifest.branch || branch;
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
-        imageURL: manifest.preview && manifest.preview.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        readmeURL: manifest.readme && manifest.readme.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags,
-        // theme stuff
-        cssURL: manifest.usercss.startsWith("http")
-          ? manifest.usercss
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-        // TODO: clean up indentation etc
-        schemesURL: manifest.schemes
-          ? (
-            manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-          )
-          : null,
-        include: manifest.include,
-      };
-      // If manifest is valid, add it to the list
       if (manifest?.name && manifest?.usercss && manifest?.description) {
+        const selectedBranch = manifest.branch || branch;
+        const item = {
+          manifest,
+          title: manifest.name,
+          subtitle: manifest.description,
+          authors: processAuthors(manifest.authors, user),
+          user,
+          repo,
+          branch: selectedBranch,
+          imageURL: manifest.preview && manifest.preview.startsWith("http")
+            ? manifest.preview
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+          readmeURL: manifest.readme && manifest.readme.startsWith("http")
+            ? manifest.readme
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          stars,
+          tags: manifest.tags,
+          // theme stuff
+          cssURL: manifest.usercss.startsWith("http")
+            ? manifest.usercss
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+          // TODO: clean up indentation etc
+          schemesURL: manifest.schemes
+            ? (
+              manifest.schemes.startsWith("http") ? manifest.schemes : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+            )
+            : null,
+          include: manifest.include,
+        };
+        // If manifest is valid, add it to the list
+
         accum.push(item);
       }
+
       return accum;
     }, []);
     return parsedManifests;
