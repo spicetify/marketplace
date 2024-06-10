@@ -115,7 +115,6 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
 
-    // Check if manifest object is designated for Extensions
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
@@ -123,6 +122,8 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+
+      // Check if manifest object is designated for Extensions
       if (manifest && manifest.name && manifest.description && manifest.main
       ) {
         const selectedBranch = manifest.branch || branch;
@@ -290,9 +291,8 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
       // else {
       //     console.error("Invalid manifest:", manifest);
       // }
-
-      return accum;
     }
+      return accum;
     }, []);
 
     return parsedManifests;
