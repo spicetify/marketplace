@@ -1,10 +1,10 @@
 {
-  "name": "spicetify-marketplace",
+  "name": "marketplace",
   "version": "1.0.2",
-  "homepage": "https://github.com/spicetify/spicetify-marketplace",
-  "repository": "github:spicetify/spicetify-marketplace",
+  "homepage": "https://github.com/spicetify/marketplace",
+  "repository": "github:spicetify/marketplace",
   "bugs": {
-    "url": "https://github.com/spicetify/spicetify-marketplace/issues"
+    "url": "https://github.com/spicetify/marketplace/issues"
   },
   "packageManager": "pnpm@9.0.6",
   "scripts": {
@@ -12,12 +12,12 @@
     "build:local": "spicetify-creator --out=dist --minify",
     "build:prod": "pnpm build:local && pnpm copy:docs",
     "copy:docs": "copyfiles README.md dist/",
-    "lint": "eslint --fix src",
-    "lint:ci": "eslint src",
+    "lint": "biome check --apply *",
+    "lint:ci": "biome check *",
     "type-check": "tsc --noEmit",
     "watch": "spicetify-creator --watch",
     "prepare": "husky install",
-    "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/spicetify-cli/master/globals.d.ts"
+    "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/cli/main/globals.d.ts"
   },
   "engines": {
     "yarn": "please-use-pnpm",
@@ -30,20 +30,16 @@
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
     "@types/semver": "^7.5.8",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
     "husky": "^9.0.11",
     "spicetify-creator": "^1.0.17",
-    "typescript": "^5.4.3",
-    "typescript-eslint": "^7.8.0"
+    "typescript": "^5.4.3"
   },
   "dependencies": {
+    "@biomejs/biome": "^1.7.3",
     "chroma-js": "^2.4.2",
     "i18next": "^23.11.3",
-    "i18next-browser-languagedetector": "^7.2.0",
+    "i18next-browser-languagedetector": "^8.0.0",
     "prismjs": "^1.29.0",
     "react-dropdown": "^1.11.0",
     "react-i18next": "^14.1.0",

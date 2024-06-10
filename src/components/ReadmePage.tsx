@@ -1,7 +1,7 @@
 import React from "react";
 import { withTranslation } from "react-i18next";
 import { getMarkdownHTML } from "../logic/Utils";
-import { CardType } from "../types/marketplace-types";
+import type { CardType } from "../types/marketplace-types";
 import Button from "./Button";
 import DownloadIcon from "./Icons/DownloadIcon";
 import GitHubIcon from "./Icons/GitHubIcon";
@@ -9,34 +9,34 @@ import LoadingIcon from "./Icons/LoadingIcon";
 import TrashIcon from "./Icons/TrashIcon";
 
 class ReadmePage extends React.Component<
-{
-  // props
-  // TODO: decide what data we want to pass in and how we want to store it
-  // (this currently comes from Card.openReadme)
-  data: {
+  {
+    // props
+    // TODO: decide what data we want to pass in and how we want to store it
+    // (this currently comes from Card.openReadme)
+    data: {
+      title: string;
+      user: string;
+      repo: string;
+      branch: string;
+      readmeURL: string;
+      readmeDir: string;
+      type: CardType;
+      install: () => void;
+      isInstalled: () => boolean;
+    };
     title: string;
-    user: string;
-    repo: string;
-    branch: string;
-    readmeURL: string;
-    readmeDir: string;
-    type: CardType;
-    install: () => void;
-    isInstalled: () => boolean;
+    // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
+    t: (key: string) => string;
   },
-  title: string,
-  // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
-  t: (key: string) => string,
-},
-{
-  isInstalled: boolean,
-  // state
-  html: string,
-}
+  {
+    isInstalled: boolean;
+    // state
+    html: string;
+  }
 > {
   state = {
     isInstalled: this.props.data.isInstalled(),
-    html: `<p>${this.props.t("readmePage.loading")}</p>`,
+    html: `<p>${this.props.t("readmePage.loading")}</p>`
   };
 
   getReadmeHTML = async () => {
@@ -59,11 +59,10 @@ class ReadmePage extends React.Component<
 
   componentDidMount() {
     // Get and set readme html once loaded
-    this.getReadmeHTML()
-      .then((html) => {
-        if (html == null) return;
-        this.setState({ html });
-      });
+    this.getReadmeHTML().then((html) => {
+      if (html == null) return;
+      this.setState({ html });
+    });
   }
 
   componentDidUpdate() {
@@ -86,15 +85,21 @@ class ReadmePage extends React.Component<
     // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
     // This works for urls relative to the repo readme
+    // biome-ignore lint/complexity/noForEach: querySelectorAll returns a NodeList, not an array
     document.querySelectorAll("#marketplace-readme img").forEach((img) => {
-      img.addEventListener("error", (e) => {
-        const element = e.target as HTMLImageElement;
-        const originalSrc = element.getAttribute("src");
-        const fixedSrc = originalSrc?.charAt(0) === "/"
-          ? `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc?.slice(1)}`
-          : `${this.props.data.readmeURL.substring(0, this.props.data.readmeURL.lastIndexOf("/"))}/${originalSrc}`;
-        element.setAttribute("src", fixedSrc);
-      }, { once: true });
+      img.addEventListener(
+        "error",
+        (e) => {
+          const element = e.target as HTMLImageElement;
+          const originalSrc = element.getAttribute("src");
+          const fixedSrc =
+            originalSrc?.charAt(0) === "/"
+              ? `https://raw.githubusercontent.com/${this.props.data.user}/${this.props.data.repo}/${this.props.data.branch}/${originalSrc?.slice(1)}`
+              : `${this.props.data.readmeURL.substring(0, this.props.data.readmeURL.lastIndexOf("/"))}/${originalSrc}`;
+          element.setAttribute("src", fixedSrc);
+        },
+        { once: true }
+      );
     });
   }
 
@@ -102,29 +107,27 @@ class ReadmePage extends React.Component<
     if (this.props.data.type === "app") {
       return {
         icon: <GitHubIcon />,
-        text: this.props.t("github"),
-      };
-    } else if (this.state.isInstalled) {
-      return {
-        icon: <TrashIcon />,
-        text: this.props.t("remove"),
-      };
-    } else {
-      return {
-        icon: <DownloadIcon />,
-        text: this.props.t("install"),
+        text: this.props.t("github")
       };
     }
+    if (this.state.isInstalled) {
+      return {
+        icon: <TrashIcon />,
+        text: this.props.t("remove")
+      };
+    }
+    return {
+      icon: <DownloadIcon />,
+      text: this.props.t("install")
+    };
   }
 
   render() {
-    const expFeatures = JSON.parse(
-      localStorage.getItem("spicetify-exp-features") || "{}",
-    );
+    const expFeatures = JSON.parse(localStorage.getItem("spicetify-exp-features") || "{}");
     const isGlobalNav = expFeatures.enableGlobalNavBar?.value !== "control" && true;
 
     const tabBarMargin = {
-      marginTop: isGlobalNav ? "60px" : "0px",
+      marginTop: isGlobalNav ? "60px" : "0px"
     };
 
     return (
@@ -143,15 +146,17 @@ class ReadmePage extends React.Component<
               }}
               label={this.buttonContent().text}
             >
-              {this.buttonContent().icon}
-              {" "}
-              {this.buttonContent().text}
+              {this.buttonContent().icon} {this.buttonContent().text}
             </Button>
           </div>
         </div>
-        {this.state.html === "<p>Loading...</p>"
-          ? <footer className="marketplace-footer"><LoadingIcon /></footer>
-          : <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>}
+        {this.state.html === "<p>Loading...</p>" ? (
+          <footer className="marketplace-footer">
+            <LoadingIcon />
+          </footer>
+        ) : (
+          <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }} />
+        )}
       </section>
     );
   }

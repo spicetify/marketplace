@@ -1,9 +1,9 @@
 import Chroma from "chroma-js";
 import { t } from "i18next";
 
-import { CardProps } from "../components/Card/Card";
-import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption, ResetCategory } from "../types/marketplace-types";
+import type { CardProps } from "../components/Card/Card";
 import { LOCALSTORAGE_KEYS } from "../constants";
+import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -31,12 +31,20 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
  * @param hex 3 or 6 character hex string
  * @returns Array of RGB values
  */
-const hexToRGB = (hex: string) => {
-  if (hex.length === 3) {
-    hex = hex.split("").map((char) => char + char).join("");
-  } else if (hex.length != 6) {
+const hexToRGB = (inputHex: string) => {
+  const hex =
+    inputHex.length === 3
+      ? inputHex
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : inputHex;
+
+  if (hex.length !== 6) {
     throw "Only 3- or 6-digit hex colours are allowed.";
-  } else if (hex.match(/[^0-9a-f]/i)) {
+  }
+
+  if (hex.match(/[^0-9a-f]/i)) {
     throw "Only hex colours are allowed.";
   }
 
@@ -45,38 +53,35 @@ const hexToRGB = (hex: string) => {
     throw "Could not parse hex colour.";
   }
 
-  const aRgb = [
-    parseInt(aRgbHex[0], 16),
-    parseInt(aRgbHex[1], 16),
-    parseInt(aRgbHex[2], 16),
-  ];
+  const aRgb = [Number.parseInt(aRgbHex[0], 16), Number.parseInt(aRgbHex[1], 16), Number.parseInt(aRgbHex[2], 16)];
 
   return aRgb;
 };
 
 /**
-* Parse INI file into a colour scheme object
-* @param data The INI file string data
-* @returns Object containing the parsed colour schemes
-*/
-export const parseIni = (data: string) => {
+ * Parse INI file into a colour scheme object
+ * @param data The INI file string data
+ * @returns Object containing the parsed colour schemes
+ */
+export const parseIni = (data: string): SchemeIni => {
   const regex = {
     section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
     param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
-    comment: /^\s*;.*$/,
+    comment: /^\s*;.*$/
   };
   const value = {};
   const lines = data.split(/[\r\n]+/);
   let section: string | null = null;
-  lines.forEach(function(line) {
+  for (const line of lines) {
     if (regex.comment.test(line)) {
-      return;
-    } else if (regex.param.test(line)) {
+      return {};
+    }
+    if (regex.param.test(line)) {
       // Discard color scheme if it contains xrdb
       if (line.includes("xrdb")) {
         delete value[section ?? ""];
         section = null;
-        return;
+        return {};
       }
 
       const match: string[] | null = line.match(regex.param);
@@ -95,10 +100,10 @@ export const parseIni = (data: string) => {
         value[match[1]] = {};
         section = match[1];
       }
-    } else if (line.length == 0 && section) {
+    } else if (line.length === 0 && section) {
       section = null;
     }
-  });
+  }
   return value;
 };
 
@@ -123,9 +128,9 @@ export const unparseIni = (data: SchemeIni) => {
 };
 
 /**
-* Loop through the snippets and add the contents of the code as a style tag in the DOM
-* @param snippets The snippets to initialize
-*/
+ * Loop through the snippets and add the contents of the code as a style tag in the DOM
+ * @param snippets The snippets to initialize
+ */
 // TODO: keep this in sync with the extension.js file
 export const initializeSnippets = (snippets: Snippet[]) => {
   // Remove any existing marketplace snippets
@@ -134,9 +139,7 @@ export const initializeSnippets = (snippets: Snippet[]) => {
 
   const style = document.createElement("style");
   const styleContent = snippets.reduce((accum, snippet) => {
-    accum += `/* ${snippet.title} - ${snippet.description} */\n`;
-    accum += `${snippet.code}\n`;
-    return accum;
+    return `${accum}/* ${snippet.title} - ${snippet.description} */\n${snippet.code}\n`;
   }, "");
 
   style.innerHTML = styleContent;
@@ -169,12 +172,12 @@ export const processAuthors = (authors: Author[], user: string) => {
   if (authors && authors.length > 0) {
     parsedAuthors = authors.map((author) => ({
       name: author.name,
-      url: sanitizeUrl(author.url),
+      url: sanitizeUrl(author.url)
     }));
   } else {
     parsedAuthors.push({
       name: user,
-      url: "https://github.com/" + user,
+      url: `https://github.com/${user}`
     });
   }
 
@@ -182,16 +185,14 @@ export const processAuthors = (authors: Author[], user: string) => {
 };
 
 /**
-* Generate a list of options for the schemes dropdown.
-* @param schemes The schemes object from the theme.
-* @returns Array of options for the schemes dropdown.
-*/
+ * Generate a list of options for the schemes dropdown.
+ * @param schemes The schemes object from the theme.
+ * @returns Array of options for the schemes dropdown.
+ */
 export const generateSchemesOptions = (schemes: SchemeIni) => {
   // e.g. [ { key: "red", value: "Red" }, { key: "dark", value: "Dark" } ]
   if (!schemes) return [];
-  return Object.keys(schemes).map(schemeName => (
-    { key: schemeName, value: schemeName } as SortBoxOption
-  ));
+  return Object.keys(schemes).map((schemeName) => ({ key: schemeName, value: schemeName }) as SortBoxOption);
 };
 
 /**
@@ -213,7 +214,7 @@ export const generateSortOptions = (t: (key: string) => string) => {
     { key: "lastUpdated", value: t("grid.sort.lastUpdated") },
     { key: "mostStale", value: t("grid.sort.mostStale") },
     { key: "a-z", value: t("grid.sort.aToZ") },
-    { key: "z-a", value: t("grid.sort.zToA") },
+    { key: "z-a", value: t("grid.sort.zToA") }
   ];
 };
 
@@ -230,44 +231,44 @@ export const resetMarketplace = (...categories: ResetCategory[]) => {
   if (categories.length === 0) {
     // Loop through all marketplace keys.
     // This includes extensions, themes, and snippets, as well as the Marketplace settings.
-    Object.keys(localStorage).forEach((key) => {
+    for (const key in localStorage) {
       if (key.startsWith("marketplace:")) {
         keysToRemove.push(key);
       }
-    });
+    }
   }
 
   // If have categories, reset only those
-  categories.forEach((category) => {
+  for (const category of categories) {
     switch (category) {
-    case "extensions":
-      // Remove the extensions themselves
-      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
-      // Remove the list of extension keys
-      keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
-      break;
+      case "extensions":
+        // Remove the extensions themselves
+        keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []));
+        // Remove the list of extension keys
+        keysToRemove.push(LOCALSTORAGE_KEYS.installedExtensions);
+        break;
 
-    case "snippets":
-      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
-      keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
-      break;
+      case "snippets":
+        keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []));
+        keysToRemove.push(LOCALSTORAGE_KEYS.installedSnippets);
+        break;
 
-    case "theme":
-      keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
-      keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
-      keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
-      break;
+      case "theme":
+        keysToRemove.push(...getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []));
+        keysToRemove.push(LOCALSTORAGE_KEYS.installedThemes);
+        keysToRemove.push(LOCALSTORAGE_KEYS.themeInstalled);
+        break;
 
-    default:
-      console.error(`Unknown category: ${category}`);
-      break;
+      default:
+        console.error(`Unknown category: ${category}`);
+        break;
     }
-  });
+  }
 
-  keysToRemove.forEach((key) => {
+  for (const key of keysToRemove) {
     localStorage.removeItem(key);
     console.debug(`Removed ${key}`);
-  });
+  }
 
   console.debug("Marketplace has been reset");
   location.reload();
@@ -277,24 +278,24 @@ export const exportMarketplace = () => {
   // TODO: Export settings, extensions, snippets, themes, colour scheme
   const data = {};
 
-  Object.keys(localStorage).forEach((key) => {
+  for (const key in localStorage) {
     // console.log(`${key}: ${localStorage.getItem(key)}`);
     if (key.startsWith("marketplace:")) {
       data[key] = localStorage.getItem(key);
     }
-  });
+  }
   return data as JSON;
 };
 
-export const importMarketplace = (data : JSON) => {
+export const importMarketplace = (data: JSON) => {
   console.debug("Importing Marketplace");
   // First reset the marketplace
   resetMarketplace();
   // Then import the data
-  Object.keys(data).forEach((key) => {
+  for (const key in data) {
     localStorage.setItem(key, data[key]);
     console.debug(`Imported ${key}`);
-  });
+  }
 };
 
 // NOTE: Keep in sync with extension.js
@@ -311,10 +312,10 @@ export const injectColourScheme = (scheme: ColourScheme | null) => {
 
     let injectStr = ":root {";
     const themeIniKeys = Object.keys(scheme);
-    themeIniKeys.forEach((key) => {
+    for (const key of themeIniKeys) {
       injectStr += `--spice-${key}: #${scheme[key]};`;
       injectStr += `--spice-rgb-${key}: ${hexToRGB(scheme[key])};`;
-    });
+    }
     injectStr += "}";
     schemeTag.innerHTML = injectStr;
     document.body.appendChild(schemeTag);
@@ -373,7 +374,7 @@ export const getColorFromImage = async (image: string) => {
   let vibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy);
   // Add a underscore before any uppercase characters, then make the whole string uppercase
   vibrancy = vibrancy.replace(/([A-Z])/g, "_$1").toUpperCase();
-  const colorOptions = (await Spicetify.colorExtractor(image));
+  const colorOptions = await Spicetify.colorExtractor(image);
   const color = colorOptions[vibrancy];
   return color.substring(1);
 };
@@ -383,8 +384,9 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
   // Add a hyphen before any uppercase characters
   const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
   //fetch `https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`
-  const palette = await  fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`)
-    .then((response) => response.json());
+  const palette = await fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`).then((response) =>
+    response.json()
+  );
   // create an array of the hex values for the colors while also removing the #
   const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
   return colorArray;
@@ -407,7 +409,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    let albumArtSrc = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
+    let albumArtSrc: string | undefined = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
 
     // If it doesn't exist, wait for it to load
     if (albumArtSrc == null) {
@@ -432,11 +434,13 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
         }
       }
       // Order the color map by how similar the colors are to eachother
-      const orderedColorMap = new Map([...colorMap.entries()].sort((a, b) => {
-        const aColor = Chroma(a[0]);
-        const bColor = Chroma(b[0]);
-        return aColor.get("lab.l") - bColor.get("lab.l");
-      }));
+      const orderedColorMap = new Map(
+        [...colorMap.entries()].sort((a, b) => {
+          const aColor = Chroma(a[0]);
+          const bColor = Chroma(b[0]);
+          return aColor.get("lab.l") - bColor.get("lab.l");
+        })
+      );
       colorMap = orderedColorMap;
       // replace the keys in the color map with the new colors
       const newScheme = {};
@@ -453,20 +457,20 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   });
 };
 
-export const parseCSS = async (themeData: CardItem, tld?: string) => {
+export const parseCSS = async (themeData: CardItem, defaultTld?: string) => {
   if (!themeData.cssURL) throw new Error("No CSS URL provided");
 
-  tld ||= await getAvailableTLD();
+  const tld = defaultTld || (await getAvailableTLD());
 
   const userCssUrl = isGithubRawUrl(themeData.cssURL)
-  // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
-    ? `https://cdn.jsdelivr.${tld}/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
+    ? // TODO: this should probably be the URL stored in localstorage actually (i.e. put this url in localstorage)
+      `https://cdn.jsdelivr.${tld}/gh/${themeData.user}/${themeData.repo}@${themeData.branch}/${themeData.manifest.usercss}`
     : themeData.cssURL;
   // TODO: Make this more versatile
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
   console.debug("Parsing CSS: ", userCssUrl);
-  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then(res => res.text());
+  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then((res) => res.text());
   // console.log("Parsed CSS: ", css);
 
   const urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];
@@ -492,7 +496,7 @@ export const isGithubRawUrl = (url: string) => {
   const parsedUrl = new URL(url);
   parsedUrl.host;
 
-  return (parsedUrl.host === "raw.githubusercontent.com");
+  return parsedUrl.host === "raw.githubusercontent.com";
 };
 
 /**
@@ -508,7 +512,7 @@ export const getParamsFromGithubRaw = (url: string) => {
     user: regex_result ? regex_result.groups?.user : null,
     repo: regex_result ? regex_result.groups?.repo : null,
     branch: regex_result ? regex_result.groups?.branch : null,
-    filePath: regex_result ? regex_result.groups?.filePath : null,
+    filePath: regex_result ? regex_result.groups?.filePath : null
   };
 
   return obj;
@@ -516,7 +520,7 @@ export const getParamsFromGithubRaw = (url: string) => {
 
 export function addToSessionStorage(items, key?) {
   if (!items) return;
-  items.forEach((item) => {
+  for (const item of items) {
     const itemKey = key || `${item.user}-${item.repo}`;
 
     // If the key already exists, it will append to it instead of overwriting it
@@ -524,12 +528,12 @@ export function addToSessionStorage(items, key?) {
     const parsed = existing ? JSON.parse(existing) : [];
     parsed.push(item);
     window.sessionStorage.setItem(itemKey, JSON.stringify(parsed));
-  });
+  }
 }
 export function getInvalidCSS(): string[] {
   const unparsedCSS = document.querySelector("body > style.marketplaceCSS.marketplaceUserCSS");
   const classNameList = unparsedCSS?.innerHTML;
-  const regex = new RegExp (`.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*{`, "g");
+  const regex = /.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\s*{/g;
   if (!classNameList) return ["Error: Class name list not found; please create an issue"];
   const matches = classNameList.matchAll(regex);
   const invalidCssClassName: string[] = [];
@@ -537,12 +541,11 @@ export function getInvalidCSS(): string[] {
     // Check if match is the same class name as an html element
     const className = match[0].replace(/{/g, "").trim();
     const classesArr = className.split(" ");
-    let element;
+    let element: HTMLCollectionOf<Element> | Element | null;
     for (let i = 0; i < classesArr.length; i++) {
       try {
         element = document.querySelector(`${classesArr[i]}`);
-      }
-      catch (e) {
+      } catch (e) {
         element = document.getElementsByClassName(`${className}`);
       }
       if (!element) {
@@ -558,17 +561,14 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
     const postBody = {
       text: markdown,
       context: `${user}/${repo}`,
-      mode: "gfm",
+      mode: "gfm"
     };
 
     const response = await fetch("https://api.github.com/markdown", {
       method: "POST",
-      body: JSON.stringify(postBody),
+      body: JSON.stringify(postBody)
     });
-    if (!response.ok) throw Spicetify.showNotification(
-      t("notifications.markdownParsingError", { status: response.status }),
-      true,
-    );
+    if (!response.ok) throw Spicetify.showNotification(t("notifications.markdownParsingError", { status: response.status }), true);
 
     const html = await response.text();
 
@@ -580,7 +580,7 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
 
 // This function is used to sleep for a certain amount of time
 export function sleep(ms: number | undefined) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function generateKey(props: CardProps) {
@@ -588,18 +588,18 @@ export function generateKey(props: CardProps) {
 
   let cardId: string;
   switch (props.type) {
-  case "snippet":
-    cardId = props.item.title.replaceAll(" ", "-");
-    break;
-  case "theme":
-    cardId = props.item.manifest?.usercss || "";
-    break;
-  case "extension":
-    cardId = props.item.manifest?.main || "";
-    break;
-  case "app":
-    cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
-    break;
+    case "snippet":
+      cardId = props.item.title.replaceAll(" ", "-");
+      break;
+    case "theme":
+      cardId = props.item.manifest?.usercss || "";
+      break;
+    case "extension":
+      cardId = props.item.manifest?.main || "";
+      break;
+    case "app":
+      cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
+      break;
   }
 
   return `marketplace:installed:${prefix}${cardId}`;
@@ -607,8 +607,7 @@ export function generateKey(props: CardProps) {
 
 export const sanitizeUrl = (url: string) => {
   const u = decodeURI(url).trim().toLowerCase();
-  if (u.startsWith("javascript:") || u.startsWith("data:") || u.startsWith("vbscript:"))
-    return "about:blank";
+  if (u.startsWith("javascript:") || u.startsWith("data:") || u.startsWith("vbscript:")) return "about:blank";
   return url;
 };
 
@@ -660,28 +659,27 @@ const compareUpdated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
 
 export const sortCardItems = (cardItems: CardItem[] | Snippet[], sortMode: string) => {
   switch (sortMode) {
-  case "a-z":
-    cardItems.sort((a, b) => compareNames(a, b));
-    break;
-  case "z-a":
-    cardItems.sort((a, b) => compareNames(b, a));
-    break;
-  case "newest":
-    cardItems.sort((a, b) => compareCreated(a, b));
-    break;
-  case "oldest":
-    cardItems.sort((a, b) => compareCreated(b, a));
-    break;
-  case "lastUpdated":
-    cardItems.sort((a, b) => compareUpdated(a, b));
-    break;
-  case "mostStale":
-    cardItems.sort((a, b) => compareUpdated(b, a));
-    break;
-  case "stars":
-  default:
-    cardItems.sort((a, b) => b.stars - a.stars);
-    break;
+    case "a-z":
+      cardItems.sort((a, b) => compareNames(a, b));
+      break;
+    case "z-a":
+      cardItems.sort((a, b) => compareNames(b, a));
+      break;
+    case "newest":
+      cardItems.sort((a, b) => compareCreated(a, b));
+      break;
+    case "oldest":
+      cardItems.sort((a, b) => compareCreated(b, a));
+      break;
+    case "lastUpdated":
+      cardItems.sort((a, b) => compareUpdated(a, b));
+      break;
+    case "mostStale":
+      cardItems.sort((a, b) => compareUpdated(b, a));
+      break;
+    default:
+      cardItems.sort((a, b) => b.stars - a.stars);
+      break;
   }
 };
 
@@ -695,7 +693,6 @@ export async function getAvailableTLD() {
       if (response.type === "opaqueredirect") return tld;
     } catch (err) {
       console.error(err);
-      continue;
     }
   }
 }

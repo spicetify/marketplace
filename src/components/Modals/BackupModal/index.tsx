@@ -1,13 +1,10 @@
-import React from "react";
 import { t } from "i18next";
-import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
+import React from "react";
+import Editor from "react-simple-code-editor";
 import "prismjs/components/prism-json";
 
-import {
-  exportMarketplace,
-  importMarketplace,
-} from "../../../logic/Utils";
+import { exportMarketplace, importMarketplace } from "../../../logic/Utils";
 import Button from "../../Button";
 
 const BackupModal = () => {
@@ -70,22 +67,24 @@ const BackupModal = () => {
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
             value={importText}
-            onValueChange={text => setImportText(text)}
-            highlight={text => highlight(text, languages.css)}
+            onValueChange={(text) => setImportText(text)}
+            highlight={(text) => highlight(text, languages.css)}
             textareaId="marketplace-import-text"
             textareaClassName="import-textarea"
             readOnly={false}
             className="marketplace-code-editor-textarea"
             placeholder={t("backupModal.inputPlaceholder")}
-            style={{
-              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
-              // fontSize: 12,
-            }}
+            style={
+              {
+                // fontFamily: "'Fira code', 'Fira Mono', monospace'",
+                // fontSize: 12,
+              }
+            }
           />
         </div>
       </div>
       <>
-        <Button classes={["marketplace-backup-button"]} onClick={exportSettings} >
+        <Button classes={["marketplace-backup-button"]} onClick={exportSettings}>
           {t("backupModal.exportBtn")}
         </Button>
         <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromInput}>
