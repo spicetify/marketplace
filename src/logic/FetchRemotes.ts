@@ -114,6 +114,8 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
+
+    // Check if manifest object is designated for Extensions
     if (!regex_result || !regex_result.groups) return null;
     const { user, repo } = regex_result.groups;
 
@@ -189,6 +191,8 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+            
+      // Check if manifest object is designated for a Theme
       if (manifest?.name && manifest?.usercss && manifest?.description) {
         const selectedBranch = manifest.branch || branch;
         const item = {
@@ -251,6 +255,9 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+
+      // Check if manifest object is designated for a Custom App
+      if (manifest && manifest.name && manifest.description && !manifest.main && !manifest.usercss) {
       const selectedBranch = manifest.branch || branch;
       // TODO: tweak saved items
       const item = {
@@ -277,14 +284,15 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
       };
 
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description) {
-        accum.push(item);
-      }
+      
+      accum.push(item);
+      
       // else {
       //     console.error("Invalid manifest:", manifest);
       // }
 
       return accum;
+    }
     }, []);
 
     return parsedManifests;
