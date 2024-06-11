@@ -1,8 +1,8 @@
 import React, { Key } from "react";
 import { withTranslation } from "react-i18next";
-import { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
+import { CardItem, CardType, Config, SchemeIni, VisualConfig } from "../../types/marketplace-types";
 
-import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH, SNIPPETS_PAGE_URL } from "../../constants";
+import { LOCALSTORAGE_KEYS, CUSTOM_APP_PATH } from "../../constants";
 import {
   getLocalStorageDataFromKey,
   parseIni,
@@ -22,8 +22,8 @@ import { t } from "i18next";
 const Spicetify = window.Spicetify;
 
 export type CardProps = {
-  // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
-  item: CardItem | Snippet;
+  // From `fetchExtensionManifest()`, `fetchThemeManifest()`, fetchAppManifest, and fetchSnippetManifest
+  item: CardItem;
   CONFIG: Config;
   // From `appendCard()`
   updateColourSchemes: (SchemeIni, string) => void;
@@ -79,9 +79,7 @@ class Card extends React.Component<CardProps, {
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
       tagsExpanded: false,
-      externalUrl: (this.props.item.user && this.props.item.repo) // These won't exist for snippets
-        ? `https://github.com/${this.props.item.user}/${this.props.item.repo}`
-        : "",
+      externalUrl: `https://github.com/${this.props.item.user}/${this.props.item.repo}`,
       lastUpdated: (this.props.item.user && this.props.item.repo) ? this.props.item.lastUpdated : undefined,
     };
   }
@@ -93,7 +91,7 @@ class Card extends React.Component<CardProps, {
 
   async componentDidMount() {
     // Refresh stars if on "Installed" tab with stars enabled
-    if (this.props.CONFIG.activeTab === "Installed" && this.props.type !== "snippet") {
+    if (this.props.CONFIG.activeTab === "Installed") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
@@ -325,12 +323,33 @@ class Card extends React.Component<CardProps, {
   }
 
   installSnippet() {
+    const { item } = this.props;
+    if (!item) {
+      Spicetify.showNotification("There was an error installing snippet", true);
+      return;
+    }
+
     console.debug(`Installing snippet ${this.localStorageKey}`);
+
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, readmeURL, include, lastUpdated } = item;
+
     localStorage.setItem(this.localStorageKey, JSON.stringify({
-      code: this.props.item.code,
-      title: this.props.item.title,
-      description: this.props.item.description,
-      imageURL: this.props.item.imageURL,
+      manifest,
+      type: this.props.type,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      readmeURL,
+      stars: this.state.stars,
+      tags: this.tags,
+      include,
+      lastUpdated,
+      // Snippet stuff
+      snippetCSS: this.props.item.snippetCSS,
     }));
 
     // Add to installed list if not there already
@@ -411,16 +430,20 @@ class Card extends React.Component<CardProps, {
 
     const detail: string[] = [];
     // this.visual.type && detail.push(this.type);
-    if (this.props.type !== "snippet" && this.props.visual.stars) {
+    if (
+      // this.props.type !== "snippet" &&
+      this.props.visual.stars) {
       detail.push(`★ ${this.state.stars}`);
     }
 
     return (
+      // TODO: this part
       <div className={cardClasses.join(" ")} onClick={() => {
         if (this.props.type === "snippet") {
-          const processedName = this.props.item.title.replace(/\n/g, "");
+          // const processedName = this.props.item.title.replace(/\n/g, "");//bacon
+          console.log("localStorageKey", this.localStorageKey);
 
-          if (getLocalStorageDataFromKey(`marketplace:installed:snippet:${processedName}`)?.custom)
+          if (getLocalStorageDataFromKey(this.localStorageKey)?.custom)
             return openModal("EDIT_SNIPPET", undefined, undefined, this.props);
 
           openModal("VIEW_SNIPPET", undefined, undefined, this.props, this.buttonClicked.bind(this));
@@ -456,10 +479,7 @@ class Card extends React.Component<CardProps, {
               title={this.props.type === "snippet" ? this.props.item.title : this.props.item.manifest?.name}
               className="main-cardHeader-link"
               dir="auto"
-              href={this.props.type !== "snippet"
-                ? this.state.externalUrl
-                : SNIPPETS_PAGE_URL
-              }
+              href={this.state.externalUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
@@ -474,7 +494,7 @@ class Card extends React.Component<CardProps, {
               <span>{detail.join(" ‒ ")}</span>
             </div>
             <p className="marketplace-card-desc">
-              {this.props.type === "snippet" ? this.props.item.description : this.props.item.manifest?.description}
+              {this.props.item.manifest?.description}
             </p>
             {this.props.item.lastUpdated &&
             <p className="marketplace-card-desc">

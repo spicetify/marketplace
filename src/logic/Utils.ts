@@ -1,5 +1,5 @@
 import { CardProps } from "../components/Card/Card";
-import { Author, CardItem, ColourScheme, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { Author, CardItem, ColourScheme, SchemeIni, SortBoxOption } from "../types/marketplace-types";
 import Chroma from "chroma-js";
 import { LOCALSTORAGE_KEYS } from "../constants";
 /**
@@ -119,7 +119,7 @@ export const unparseIni = (data: SchemeIni) => {
 * @param snippets The snippets to initialize
 */
 // TODO: keep this in sync with the extension.js file
-export const initializeSnippets = (snippets: Snippet[]) => {
+export const initializeSnippets = (snippets: CardItem[]) => { // TODO: make snippet sub-type?
   // Remove any existing marketplace snippets
   const existingSnippets = document.querySelector("style.marketplaceSnippets");
   if (existingSnippets) existingSnippets.remove();
@@ -127,7 +127,7 @@ export const initializeSnippets = (snippets: Snippet[]) => {
   const style = document.createElement("style");
   const styleContent = snippets.reduce((accum, snippet) => {
     accum += `/* ${snippet.title} - ${snippet.description} */\n`;
-    accum += `${snippet.code}\n`;
+    accum += `${snippet.snippetCSS}\n`;
     return accum;
   }, "");
 
@@ -507,18 +507,18 @@ export function sleep(ms: number | undefined) {
 }
 
 export function generateKey(props: CardProps) {
-  const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
+  const prefix = `${props.item.user}/${props.item.repo}/`;
 
   let cardId: string;
   switch (props.type) {
-  case "snippet":
-    cardId = props.item.title.replaceAll(" ", "-");
+  case "extension":
+    cardId = props.item.manifest?.main || "";
     break;
   case "theme":
     cardId = props.item.manifest?.usercss || "";
     break;
-  case "extension":
-    cardId = props.item.manifest?.main || "";
+  case "snippet":
+    cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";
     break;
   case "app":
     cardId = props.item.manifest?.name?.replaceAll(" ", "-") || "";

@@ -10,8 +10,8 @@ import { LOCALSTORAGE_KEYS, ITEMS_PER_REQUEST, MARKETPLACE_VERSION, LATEST_RELEA
 import { openModal } from "../logic/LaunchModals";
 import {
   getTaggedRepos,
-  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest,
-  fetchCssSnippets, getBlacklist,
+  getBlacklist,
+  fetchExtensionManifest, fetchThemeManifest, fetchAppManifest, fetchSnippetManifest,
 } from "../logic/FetchRemotes";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
@@ -123,7 +123,7 @@ class Grid extends React.Component<
       updateActiveTheme={this.setActiveTheme.bind(this)}
     />;
 
-    this.cardList.push(card as unknown as Card);
+    this.cardList.push(card as unknown as typeof Card);
     this.setState({ cards: this.cardList });
   }
 
@@ -229,14 +229,14 @@ class Grid extends React.Component<
         if (installedStuff[type].length) {
           installedStuff[type].forEach(async (itemKey) => {
             // TODO: err handling
-            const extension = getLocalStorageDataFromKey(itemKey);
+            const item = getLocalStorageDataFromKey(itemKey);
             // I believe this stops the requests when switching tabs?
             if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
               // Stop this queue from continuing to fetch and append to cards list
               return -1;
             }
 
-            this.appendCard(extension, type as CardType);
+            this.appendCard(item, type as CardType);
           });
         }
       }
@@ -311,15 +311,41 @@ class Grid extends React.Component<
       else console.debug("No more app results");
       break;
     } case "Snippets": {
-      const snippets = await fetchCssSnippets();
+      const pageOfRepos = await getTaggedRepos("spicetify-snippets", this.requestPage, this.BLACKLIST, query);
+      for (const repo of pageOfRepos.items) {
+        const snippets = await fetchSnippetManifest(
+          repo.contents_url,
+          repo.default_branch,
+          repo.stargazers_count,
+          this.CONFIG.visual.hideInstalled,
+        );
 
-      if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-        // Stop this queue from continuing to fetch and append to cards list
-        return -1;
+        // I believe this stops the requests when switching tabs?
+        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+          // Stop this queue from continuing to fetch and append to cards list
+          return -1;
+        }
+
+        if (snippets && snippets.length) {
+          console.debug(`${repo.name} has ${snippets.length} snippets:`, snippets);
+          snippets.forEach((snippet) => {
+            Object.assign(snippet, { lastUpdated: repo.pushed_at });
+            this.appendCard(snippet, "snippet");
+          });
+        }
       }
-      if (snippets && snippets.length) {
-        snippets.forEach((snippet) => this.appendCard(snippet, "snippet"));
-      }
+
+      // First result is null or -1 so it coerces to 1
+      const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
+      // Sets the amount of items that have thus been fetched
+      const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+      const remainingResults = pageOfRepos.total_count - soFarResults;
+
+      // If still have more results, return next page number to fetch
+      console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} snippets`);
+      if (remainingResults > 0) return currentPage + 1;
+      else console.debug("No more snippet results");
+      break;
     }}
 
     this.setState({ rest: true, endOfList: true });

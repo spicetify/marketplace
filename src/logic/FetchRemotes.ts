@@ -1,9 +1,8 @@
 import { BLACKLIST_URL, ITEMS_PER_REQUEST } from "../constants";
-import { CardItem, Snippet } from "../types/marketplace-types";
+import { CardItem } from "../types/marketplace-types";
 import { addToSessionStorage, processAuthors } from "./Utils";
 
 import { RepoTopic } from "../types/marketplace-types";
-import snippetsJSON from "../resources/snippets";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -272,6 +271,70 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
   }
 }
 
+// TODO: can we add a return type here?
+/**
+* Fetch snippets from a repo and format data for generating cards
+* @param contents_url The repo's GitHub API contents_url (e.g. "https://api.github.com/repos/theRealPadster/spicetify-hide-podcasts/contents/{+path}")
+* @param branch The repo's default branch (e.g. main or master)
+* @param stars The number of stars the repo has
+* @param hideInstalled If we should hide installed snippets
+* @returns Snippet info for card (or null)
+*/
+export async function fetchSnippetManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
+  try {
+    let manifests;
+    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+    // TODO: err handling?
+    if (!regex_result || !regex_result.groups) return null;
+    const { user, repo } = regex_result.groups;
+
+    manifests = await getRepoManifest(user, repo, branch);
+
+    // If the manifest returned is not an array, initialize it as one
+    if (!Array.isArray(manifests)) manifests = [manifests];
+
+    // Manifest is initially parsed
+    // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
+    const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
+      const selectedBranch = manifest.branch || branch;
+      const item = {
+        manifest,
+        title: manifest.name,
+        subtitle: manifest.description,
+        authors: processAuthors(manifest.authors, user),
+        user,
+        repo,
+        branch: selectedBranch,
+        imageURL: manifest.preview && manifest.preview.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        readmeURL: manifest.readme && manifest.readme.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        stars,
+        tags: manifest.tags,
+        // snippet stuff
+        // TODO: do we have the css string in the manifest, or referencer a file?
+        snippetCSS: manifest.snippetcss,
+        include: manifest.include,
+      };
+      // If manifest is valid, add it to the list
+      if (manifest?.name && manifest?.snippetcss && manifest?.description) {
+        // Add to list unless we're hiding installed items and it's installed
+        if (!(hideInstalled
+          && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.name.replaceAll(" ", "-")}`))
+        ) accum.push(item);
+      }
+      return accum;
+    }, []);
+    return parsedManifests;
+  }
+  catch (err) {
+    // console.warn(contents_url, err);
+    return null;
+  }
+}
+
 /**
 * It fetches the blacklist.json file from the GitHub repository and returns the array of blocked repos.
 * @returns String array of blacklisted repos
@@ -279,26 +342,4 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 export const getBlacklist = async () => {
   const json = await fetch(BLACKLIST_URL).then(res => res.json()).catch(() => ({}));
   return json.repos as string[] | undefined;
-};
-
-/**
-* It fetches the snippets.json file from the Github repository and returns it as a JSON object.
-* @returns Array of snippets
-*/
-export const fetchCssSnippets = async () => {
-  const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
-    const snip = { ...snippet } as Snippet;
-
-    // Because the card component looks for an imageURL prop
-    if (snip.preview) {
-      snip.imageURL = snip.preview.startsWith("http")
-        ? snip.preview
-        : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
-      delete snip.preview;
-    }
-
-    accum.push(snip);
-    return accum;
-  }, []);
-  return snippets;
 };

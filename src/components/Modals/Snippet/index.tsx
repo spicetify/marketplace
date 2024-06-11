@@ -8,6 +8,7 @@ import {
   getLocalStorageDataFromKey,
   initializeSnippets,
   fileToBase64,
+  generateKey,
 } from "../../../logic/Utils";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import Button from "../../Button";
@@ -16,19 +17,22 @@ import { ModalType } from "../../../logic/LaunchModals";
 
 const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: () => void }) => {
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
-  const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
+  const [css, setCSS] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.snippetCSS || "");
   const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
   const [description, setDescription] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "");
   const [imageURL, setimageURL] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.imageURL || "");
 
   const processName = () => name.replace(/\n/g, "").replaceAll(" ", "-");
-  const processCode = () => code.replace(/\n/g, "\\n");
+  const processCSS = () => css.replace(/\n/g, "\\n");
 
-  const localStorageKey = `marketplace:installed:snippet:${processName()}`;
+  const { item } = props.content || { item: {} as CardProps };
+
+  // TODO: the key doesn't match with repo-based snippets, so this won't work for those
+  const localStorageKey = item?.custom ? `marketplace:installed:custom-snippet:${processName()}` : generateKey(item);
   const [isInstalled, setInstalled] = React.useState(!!getLocalStorageDataFromKey(localStorageKey));
 
   const saveSnippet = () => {
-    // const processedCode = processCode();
+    // const processedCSS = processCSS();
     const processedName = processName();
     const processedDescription = description.trim();
 
@@ -51,8 +55,9 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
     localStorage.setItem(
       localStorageKey,
       JSON.stringify({
+        // TODO: oh crap, this won't work for custom snippets, since they don't have all the manifest stuff...
         title: processedName,
-        code,
+        snippetCSS: css,
         description: processedDescription,
         imageURL,
         custom: true,
@@ -91,9 +96,9 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
         <label htmlFor="marketplace-custom-css">{t("snippets.customCSS")}</label>
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           <Editor
-            value={code}
-            onValueChange={code => setCode(code)}
-            highlight={code => highlight(code, languages.css)}
+            value={css}
+            onValueChange={css => setCSS(css)}
+            highlight={css => highlight(css, languages.css)}
             textareaId="marketplace-custom-css"
             textareaClassName="snippet-code-editor"
             readOnly={props.type === "VIEW_SNIPPET"}
@@ -162,8 +167,8 @@ const SnippetModal = (props: { content?: CardProps, type: ModalType, callback?: 
                   }
                 }} />
             </Button>
-            {/* Disable the save button if the name or code are empty */}
-            <Button onClick={saveSnippet} disabled={!processName() || !processCode()}>
+            {/* Disable the save button if the name or css are empty */}
+            <Button onClick={saveSnippet} disabled={!processName() || !processCSS()}>
               {t("snippets.saveCSS")}
             </Button>
           </>
