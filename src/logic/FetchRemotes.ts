@@ -133,25 +133,23 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
         repo,
         branch: selectedBranch,
 
-        imageURL:
-          manifest.preview && manifest.preview.startsWith("http")
-            ? manifest.preview
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        imageURL: manifest.preview?.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
         extensionURL: manifest.main.startsWith("http")
           ? manifest.main
           : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL:
-          manifest.readme && manifest.readme.startsWith("http")
-            ? manifest.readme
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        readmeURL: manifest.readme?.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
         stars,
         tags: manifest.tags
       };
 
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description && manifest.main) {
+      if (manifest?.name && manifest.description && manifest.main) {
         // Add to list unless we're hiding installed items and it's installed
-        if (!(hideInstalled && localStorage.getItem("marketplace:installed:" + `${user}/${repo}/${manifest.main}`))) {
+        if (!(hideInstalled && localStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
           accum.push(item);
         }
       }
@@ -197,14 +195,12 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
         user,
         repo,
         branch: selectedBranch,
-        imageURL:
-          manifest.preview && manifest.preview.startsWith("http")
-            ? manifest.preview
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        readmeURL:
-          manifest.readme && manifest.readme.startsWith("http")
-            ? manifest.readme
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        imageURL: manifest.preview?.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        readmeURL: manifest.readme?.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
         stars,
         tags: manifest.tags,
         // theme stuff
@@ -261,24 +257,22 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
         repo,
         branch: selectedBranch,
 
-        imageURL:
-          manifest.preview && manifest.preview.startsWith("http")
-            ? manifest.preview
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+        imageURL: manifest.preview?.startsWith("http")
+          ? manifest.preview
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
         // Custom Apps don't have an entry point; they're just listed so they can link out from the card
         // extensionURL: manifest.main.startsWith("http")
         //   ? manifest.main
         //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL:
-          manifest.readme && manifest.readme.startsWith("http")
-            ? manifest.readme
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+        readmeURL: manifest.readme?.startsWith("http")
+          ? manifest.readme
+          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
         stars,
         tags: manifest.tags
       };
 
       // If manifest is valid, add it to the list
-      if (manifest && manifest.name && manifest.description) {
+      if (manifest?.name && manifest.description) {
         accum.push(item);
       }
       // else {
@@ -323,7 +317,7 @@ export const fetchCssSnippets = async () => {
       snip.imageURL = snip.preview.startsWith("http")
         ? snip.preview
         : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
-      delete snip.preview;
+      snip.preview = undefined;
     }
 
     accum.push(snip);
