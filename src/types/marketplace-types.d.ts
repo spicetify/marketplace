@@ -15,7 +15,7 @@ export type SortBoxOption = {
   value: string;
 };
 
-export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps";
+export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps" | "spicetify-snippets";
 
 export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
 
