@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 
 import styles from "../styles/modules/button.module.scss";
 
