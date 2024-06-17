@@ -123,36 +123,36 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-      const selectedBranch = manifest.branch || branch;
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
-
-        imageURL: manifest.preview?.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        extensionURL: manifest.main.startsWith("http")
-          ? manifest.main
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL: manifest.readme?.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags
-      };
-
-      // If manifest is valid, add it to the list
+      // Check if manifest object is designated for Extensions
       if (manifest?.name && manifest.description && manifest.main) {
+        const selectedBranch = manifest.branch || branch;
+        const item = {
+          manifest,
+          title: manifest.name,
+          subtitle: manifest.description,
+          authors: processAuthors(manifest.authors, user),
+          user,
+          repo,
+          branch: selectedBranch,
+
+          imageURL: manifest.preview?.startsWith("http")
+            ? manifest.preview
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+          extensionURL: manifest.main.startsWith("http")
+            ? manifest.main
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+          readmeURL: manifest.readme?.startsWith("http")
+            ? manifest.readme
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          stars,
+          tags: manifest.tags
+        };
         // Add to list unless we're hiding installed items and it's installed
         if (!(hideInstalled && localStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
           accum.push(item);
         }
       }
+
       // else {
       //     console.error("Invalid manifest:", manifest);
       // }
@@ -186,39 +186,42 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-      const selectedBranch = manifest.branch || branch;
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
-        imageURL: manifest.preview?.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        readmeURL: manifest.readme?.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags,
-        // theme stuff
-        cssURL: manifest.usercss.startsWith("http")
-          ? manifest.usercss
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
-        // TODO: clean up indentation etc
-        schemesURL: manifest.schemes
-          ? manifest.schemes.startsWith("http")
-            ? manifest.schemes
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-          : null,
-        include: manifest.include
-      };
-      // If manifest is valid, add it to the list
+      // Check if manifest object is designated for a Theme
       if (manifest?.name && manifest?.usercss && manifest?.description) {
+        const selectedBranch = manifest.branch || branch;
+        const item = {
+          manifest,
+          title: manifest.name,
+          subtitle: manifest.description,
+          authors: processAuthors(manifest.authors, user),
+          user,
+          repo,
+          branch: selectedBranch,
+          imageURL: manifest.preview?.startsWith("http")
+            ? manifest.preview
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+          readmeURL: manifest.readme?.startsWith("http")
+            ? manifest.readme
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          stars,
+          tags: manifest.tags,
+          // theme stuff
+          cssURL: manifest.usercss.startsWith("http")
+            ? manifest.usercss
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+          // TODO: clean up indentation etc
+          schemesURL: manifest.schemes
+            ? manifest.schemes.startsWith("http")
+              ? manifest.schemes
+              : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
+            : null,
+          include: manifest.include
+        };
+        // If manifest is valid, add it to the list
+
         accum.push(item);
       }
+
       return accum;
     }, []);
     return parsedManifests;
@@ -246,39 +249,41 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
-      const selectedBranch = manifest.branch || branch;
-      // TODO: tweak saved items
-      const item = {
-        manifest,
-        title: manifest.name,
-        subtitle: manifest.description,
-        authors: processAuthors(manifest.authors, user),
-        user,
-        repo,
-        branch: selectedBranch,
+      // Check if manifest object is designated for a Custom App
+      if (manifest?.name && manifest.description && !manifest.main && !manifest.usercss) {
+        const selectedBranch = manifest.branch || branch;
+        // TODO: tweak saved items
+        const item = {
+          manifest,
+          title: manifest.name,
+          subtitle: manifest.description,
+          authors: processAuthors(manifest.authors, user),
+          user,
+          repo,
+          branch: selectedBranch,
 
-        imageURL: manifest.preview?.startsWith("http")
-          ? manifest.preview
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-        // Custom Apps don't have an entry point; they're just listed so they can link out from the card
-        // extensionURL: manifest.main.startsWith("http")
-        //   ? manifest.main
-        //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-        readmeURL: manifest.readme?.startsWith("http")
-          ? manifest.readme
-          : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
-        stars,
-        tags: manifest.tags
-      };
+          imageURL: manifest.preview?.startsWith("http")
+            ? manifest.preview
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+          // Custom Apps don't have an entry point; they're just listed so they can link out from the card
+          // extensionURL: manifest.main.startsWith("http")
+          //   ? manifest.main
+          //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
+          readmeURL: manifest.readme?.startsWith("http")
+            ? manifest.readme
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          stars,
+          tags: manifest.tags
+        };
 
-      // If manifest is valid, add it to the list
-      if (manifest?.name && manifest.description) {
+        // If manifest is valid, add it to the list
+
         accum.push(item);
-      }
-      // else {
-      //     console.error("Invalid manifest:", manifest);
-      // }
 
+        // else {
+        //     console.error("Invalid manifest:", manifest);
+        // }
+      }
       return accum;
     }, []);
 
@@ -314,7 +319,9 @@ export const fetchCssSnippets = async (hideInstalled = false) => {
 
     // Because the card component looks for an imageURL prop
     if (snip.preview) {
-      snip.imageURL = snip.preview.startsWith("http") ? snip.preview : `https://raw.githubusercontent.com/spicetify/marketplace/main/${snip.preview}`;
+      snip.imageURL = snip.preview.startsWith("http")
+        ? snip.preview
+        : `https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/${snip.preview}`;
       snip.preview = undefined;
     }
 
