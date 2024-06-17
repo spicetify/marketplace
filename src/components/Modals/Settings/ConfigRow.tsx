@@ -44,10 +44,10 @@ const ConfigRow = (props: {
   if (type === "dropdown" && props.options) {
     return (
       <div className="settings-row">
-        <label htmlFor={componentId} className="col description">
+        <label htmlFor={componentId} className="col-sm description">
           {props.name}
         </label>
-        <div className="col action">
+        <div className="col-sm action">
           <SortBox
             sortBoxOptions={props.options.map((option) => {
               return {
@@ -89,10 +89,10 @@ const ConfigRow = (props: {
   }
   return (
     <div className="settings-row">
-      <label htmlFor={componentId} className="col description">
+      <label htmlFor={componentId} className="col-sm description">
         {props.name}
       </label>
-      <div className="col action">
+      <div className="col-sm action">
         <Toggle name={props.name} storageKey={props.storageKey} enabled={enabled} onChange={settingsToggleChange} />
       </div>
     </div>

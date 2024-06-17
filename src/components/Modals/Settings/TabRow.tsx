@@ -42,10 +42,10 @@ const TabRow = (props: {
 
   return (
     <div className="settings-row">
-      <label htmlFor={toggleId} className="col description">
+      <label htmlFor={toggleId} className="col-sm description">
         {t(`tabs.${props.name}`)}
       </label>
-      <div className="col action">
+      <div className="col-sm action">
         <button title="Move up" className="arrow-btn" disabled={index === 0} onClick={() => moveTab(index, -1)}>
           <svg
             height="16"
