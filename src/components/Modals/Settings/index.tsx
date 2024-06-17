@@ -7,7 +7,7 @@ import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "../../../lo
 import type { Config } from "../../../types/marketplace-types";
 import Button from "../../Button";
 import ConfigRow from "./ConfigRow";
-import TabRow from "./TabRow";
+import DnDList from "./DnDList";
 
 interface Props {
   CONFIG: Config;
@@ -87,11 +87,15 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
 
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
-        <div className="tabs-container">
+        {/*
+<div className="tabs-container">
           {modalConfig.tabs.map(({ name }) => {
             return <TabRow key={name} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
           })}
         </div>
+        */}
+
+        <DnDList modalConfig={modalConfig} updateConfig={updateConfig} />
       </div>
 
       <div className="settings-block">
@@ -115,13 +119,14 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       </div>
 
       <div className="settings-block-bottom">
-        <h2>{t("settings.versionHeading")}</h2>
         <div className="settings-row">
           <label className="col description">
-            {t("grid.spicetifyMarketplace")} {MARKETPLACE_VERSION}
+            {t("grid.spicetifyMarketplace")} {t("settings.versionHeading")} {MARKETPLACE_VERSION}
           </label>
           <div className="col action">
-            <Button onClick={copyVersion}>{versionButtonText}</Button>
+            <Button onClick={copyVersion} classes={["small"]}>
+              {versionButtonText}
+            </Button>
           </div>
         </div>
       </div>
