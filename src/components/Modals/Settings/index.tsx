@@ -97,8 +97,8 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.resetHeading")}</h2>
         <div className="settings-row">
-          <label className="col-lg description">{t("settings.resetDescription")}</label>
-          <div className="col-lg action">
+          <label className="col description">{t("settings.resetDescription")}</label>
+          <div className="col action">
             <Button onClick={() => resetMarketplace()}>{t("settings.resetBtn")}</Button>
           </div>
         </div>
@@ -107,8 +107,8 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.backupHeading")}</h2>
         <div className="settings-row">
-          <label className="col-lg description">{t("settings.backupLabel")}</label>
-          <div className="col-lg action">
+          <label className="col description">{t("settings.backupLabel")}</label>
+          <div className="col action">
             <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
           </div>
         </div>
@@ -117,10 +117,10 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <div className="settings-block-bottom">
         <h2>{t("settings.versionHeading")}</h2>
         <div className="settings-row">
-          <label className="col-lg description">
+          <label className="col description">
             {t("grid.spicetifyMarketplace")} {MARKETPLACE_VERSION}
           </label>
-          <div className="col-lg action">
+          <div className="col action">
             <Button onClick={copyVersion}>{versionButtonText}</Button>
           </div>
         </div>
