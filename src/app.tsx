@@ -46,10 +46,9 @@ class App extends React.Component<
     super(props);
 
     // Get tabs config from local storage
-    const tabsString = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
+    const tabsData = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
     let tabs: TabItemConfig[] = [];
     try {
-      tabs = JSON.parse(tabsString);
       if (!Array.isArray(tabs)) {
         throw new Error("Could not parse marketplace tabs key");
       }
@@ -59,6 +58,8 @@ class App extends React.Component<
       if (tabs.filter((tab) => !tab).length > 0) {
         throw new Error("Falsey marketplace tabs key");
       }
+
+      tabs = tabsData;
     } catch {
       tabs = ALL_TABS;
       localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
