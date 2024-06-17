@@ -16,23 +16,7 @@
     display: flex;
     justify-content: space-between;
 
-
-    .col-lg {
-      display: flex;
-      align-items: center;
-
-      &.action {
-        text-align: right;
-        margin-inline-start: 8px;
-
-        // The tooltip icon
-        & .marketplace-sortBox + .marketplace-tooltip-icon {
-          margin-inline-start: 8px;
-        }
-      }
-    }
-
-    .col-sm {
+    .col {
       display: flex;
       padding: 8px 0;
       align-items: center;
@@ -52,8 +36,8 @@
   .settings-heading {
     position: relative;
     border-bottom: 2px solid var(--spice-button-disabled);;
-    padding: 0 0 0px;
-    margin: 0 0 0px;
+    padding: 0 0 4px;
+    margin: 0 0 4px;
   }
 }
 
