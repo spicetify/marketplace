@@ -1,4 +1,5 @@
-import type React from "react";
+// biome-ignore lint/style/useImportType: React is not a type
+import React from "react";
 
 import styles from "../styles/modules/toggle.module.scss";
 

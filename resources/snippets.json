@@ -8,7 +8,7 @@
   {
     "title": "Rounded Images",
     "description": "Adds rounded corners to the cover art, playlist covers, cards and other images",
-    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
+    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .x-entityImage-circle,\n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
     "preview": "resources/assets/snippets/rounded-images.png"
   },
   {
@@ -62,8 +62,14 @@
   {
     "title": "Hover Panels",
     "description": "Have your playlist, right sidebar, and controls bar be hoverable.",
-    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints {\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: 350px !important;\n  opacity: 1 !important;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position: absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader {\n  top: 0 !important;\n}\n.main-yourLibraryX-navItem {\n  overflow: hidden;\n}\n.main-coverSlotCollapsed-navAltContainer {\n  overflow: visible;\n}\n.LayoutResizer__resize-bar {\n  display: none;\n}\n:root {\n  --left-sidebar-width: 35px !important;\n  --right-sidebar-width: 50px !important;\n}",
+    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints {\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: 350px !important;\n  opacity: 1 !important;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position: absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader {\n  top: 0 !important;\n}\n.main-yourLibraryX-navItem {\n  overflow: hidden;\n}\n.main-coverSlotCollapsed-navAltContainer {\n  overflow: visible;\n}\n.LayoutResizer__resize-bar {\n  display: none;\n}\n:root {\n  --left-sidebar-width: 35px !important;\n  --right-sidebar-width: 50px !important;\n  margin-left:-8px;\n}",
     "preview": "resources/assets/snippets/hover-panels.png"
+  },
+  {
+    "title": "New Hover Panel",
+    "description": "A New Hover Panel that servers the same purpose as the legacy 'Hover Panels', but only for the left sidebar and without modifying any other elements.",
+    "code": "#Desktop_LeftSidebar_Id {\n  position: absolute;\n  left: -280px;\n  width: 288px;\n  height: 100%;\n  background-color: black;\n  opacity: 0;\n  visibility: visible;\n  transition: left 0.5s ease, opacity 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  left: 0;\n  opacity: 1;\n  visibility: visible;\n}\n:root {\n  margin-left: -8px;\n}",
+    "preview": "resources/assets/snippets/new-hover-panel.png"
   },
   {
     "title": "Fix progress bar displacement",
@@ -382,5 +388,28 @@
     "description": "Changes the order in which the elements are displayed in the Now Playing View to: 1. Next in queue, 2. Now playing, 3. Lyrics, 4. About the artist, 5. Credits, 6. On tour, 7. Merch",
     "code": "/* Now Playing */\n .main-nowPlayingView-nowPlayingWidget {\n order: 2;\n }\n /* Lyrics */\n .main-nowPlayingView-sectionHeaderSpacing {\n order: 3;\n }\n /* About */\n .main-nowPlayingView-aboutArtistV2 {\n order: 4;\n }\n /* Credits */\n .main-nowPlayingView-credits {\n order: 5;\n }\n /* Tour */\n .main-nowPlayingView-artistOnTour {\n order: 6;\n }\n /* Merch */\n .main-nowPlayingView-merch {\n order: 7;\n }\n /* Queue */\n .main-nowPlayingView-queue {\n order: 1;\n }\n",
     "preview": "resources/assets/snippets/reorder-now-playing-view.png"
-}
+},
+    "title": "Hide Mini Player Button",
+    "description": "Hides the Mini Player button.",
+    "code": "button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16V2.45z']) {display: none;}",
+    "preview": "resources/assets/snippets/Hide-Mini-Player-Button.png"
+  },
+  {
+    "title": "Hide Full Screen Button",
+    "description": "Hides the Full Screen button.",
+    "code": "button:has(path[d='M6.53 9.47a.75.75 0 0 1 0 1.06l-2.72 2.72h1.018a.75.75 0 0 1 0 1.5H1.25v-3.579a.75.75 0 0 1 1.5 0v1.018l2.72-2.72a.75.75 0 0 1 1.06 0zm2.94-2.94a.75.75 0 0 1 0-1.06l2.72-2.72h-1.018a.75.75 0 1 1 0-1.5h3.578v3.579a.75.75 0 0 1-1.5 0V3.81l-2.72 2.72a.75.75 0 0 1-1.06 0z']) {display: none;}",
+    "preview": "resources/assets/snippets/Hide-Full-Screen-Button.png"
+  },
+  {
+    "title": "Queue Top Side Panel",
+    "description": "Moves the \"Next in queue\" section to the top of the Now Playing view",
+    "code": ".main-nowPlayingView-section:not(.main-nowPlayingView-queue) { order: 99; }",
+    "preview": "resources/assets/snippets/Queue-Top-Side-Panel.png"
+  },
+  {
+    "title": "Small Video Button",
+    "description": "Makes the \"Switch to video\" button smaller and less intrusive, for consistency",
+    "code": ".dcSY8Zom_VXgK71Lbym_ { position: absolute; opacity: 0.4; transition: opacity 0.5s; z-index: 999; } .dcSY8Zom_VXgK71Lbym_:hover { position: absolute; opacity: 1; } .dcSY8Zom_VXgK71Lbym_ .encore-text { display: none; }",
+    "preview": "resources/assets/snippets/Small-Video-Button.png"
+  }
 ]
