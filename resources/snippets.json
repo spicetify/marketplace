@@ -394,5 +394,17 @@
     "description": "Hides the Full Screen button.",
     "code": "button:has(path[d='M6.53 9.47a.75.75 0 0 1 0 1.06l-2.72 2.72h1.018a.75.75 0 0 1 0 1.5H1.25v-3.579a.75.75 0 0 1 1.5 0v1.018l2.72-2.72a.75.75 0 0 1 1.06 0zm2.94-2.94a.75.75 0 0 1 0-1.06l2.72-2.72h-1.018a.75.75 0 1 1 0-1.5h3.578v3.579a.75.75 0 0 1-1.5 0V3.81l-2.72 2.72a.75.75 0 0 1-1.06 0z']) {display: none;}",
     "preview": "resources/assets/snippets/Hide-Full-Screen-Button.png"
+  },
+  {
+    "title": "Queue Top Side Panel",
+    "description": "Moves the \"Next in queue\" section to the top of the Now Playing view",
+    "code": ".main-nowPlayingView-section:not(.main-nowPlayingView-queue) { order: 99; }",
+    "preview": "resources/assets/snippets/Queue-Top-Side-Panel.png"
+  },
+  {
+    "title": "Small Video Button",
+    "description": "Makes the \"Switch to video\" button smaller and less intrusive, for consistency",
+    "code": ".dcSY8Zom_VXgK71Lbym_ { position: absolute; opacity: 0.4; transition: opacity 0.5s; z-index: 999; } .dcSY8Zom_VXgK71Lbym_:hover { position: absolute; opacity: 1; } .dcSY8Zom_VXgK71Lbym_ .encore-text { display: none; }",
+    "preview": "resources/assets/snippets/Small-Video-Button.png"
   }
 ]
