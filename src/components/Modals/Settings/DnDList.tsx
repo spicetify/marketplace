@@ -11,15 +11,14 @@ const DnDList = (props: {
     userSelect: "none",
     padding: 16,
     margin: "0 8px 0 0",
-    background: isDragging ? "lightgreen" : "grey",
+    background: isDragging ? "none" : "2px solid var(--spice-button-disabled);" ,
     ...draggableStyle
   });
 
   const getListStyle = (isDraggingOver) => ({
     display: "flex",
     padding: 8,
-    overflow: "auto",
-    background: isDraggingOver ? "lightblue" : "lightgrey"
+    overflow: "auto"
   });
 
   const onDragEnd = (result: DropResult) => {
