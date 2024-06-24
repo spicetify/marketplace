@@ -87,14 +87,6 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
 
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
-        {/*
-<div className="tabs-container">
-          {modalConfig.tabs.map(({ name }) => {
-            return <TabRow key={name} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
-          })}
-        </div>
-        */}
-
         <DnDList modalConfig={modalConfig} updateConfig={updateConfig} />
       </div>
 
