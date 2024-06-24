@@ -3,15 +3,12 @@ import { DragDropContext, Draggable, type DropResult, Droppable } from "react-be
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
 
-
-
-
 const DnDList = (props: {
   modalConfig: Config;
   updateConfig: (CONFIG: Config) => void;
 }) => {
   // Get Value of CSS variable
-  const colorVariable = getComputedStyle(document.body).getPropertyValue("--spice-button-disabled")
+  const colorVariable = getComputedStyle(document.body).getPropertyValue("--spice-button-disabled");
 
   const getItemStyle = (isDragging, draggableStyle, isEnabled) => ({
     borderRadius: "5px",
@@ -53,15 +50,12 @@ const DnDList = (props: {
   }
 
   const onToggleEnabled = (name) => {
-    const updatedTabs = props.modalConfig.tabs.map(tab =>
-      tab.name === name ? { ...tab, enabled: !tab.enabled } : tab
-    );
+    const updatedTabs = props.modalConfig.tabs.map((tab) => (tab.name === name ? { ...tab, enabled: !tab.enabled } : tab));
 
     props.modalConfig.tabs = updatedTabs;
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
     props.updateConfig(props.modalConfig);
   };
-
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
