@@ -11,7 +11,7 @@ const DnDList = (props: {
     userSelect: "none",
     padding: 16,
     margin: "0 8px 0 0",
-    background: isDragging ? "none" : "2px solid var(--spice-button-disabled);" ,
+    background: isDragging ? "none" : "2px solid var(--spice-button-disabled);",
     ...draggableStyle
   });
 
