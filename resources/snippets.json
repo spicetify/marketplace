@@ -75,7 +75,7 @@
     "title": "Hide Made For YOU",
     "description": "Hide the 'Made For YOU' section on the home page.",
     "code": "section[aria-label^='Made For'] {\n  display: none;\n}",
-    "preview": "resources/assets/snippets/Hide-Made-For-YOU.jpg"
+    "preview": "resources/assets/snippets/Hide-Made-For-YOU.png"
   },
   {
     "title": "Fix progress bar displacement",
