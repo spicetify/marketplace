@@ -80,6 +80,19 @@ button.arrow-btn {
   }
 }
 
+.dnd-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%
+}
+
+.dnd-icon {
+  position: absolute;
+  left: 4px;
+}
+
 // Add snippet modal
 #marketplace-add-snippet-container input, textarea {
   width: 100%;
@@ -91,3 +104,5 @@ button.arrow-btn {
   border: 1px solid var(--spice-button);
   border-radius: 4px;
 }
+
+
