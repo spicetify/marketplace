@@ -36,7 +36,7 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.7.3",
+    "@biomejs/biome": "^1.8.3",
     "chroma-js": "^2.4.2",
     "i18next": "^23.11.3",
     "i18next-browser-languagedetector": "^8.0.0",
