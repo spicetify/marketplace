@@ -33,7 +33,7 @@
     "copyfiles": "^2.4.1",
     "husky": "^9.0.11",
     "spicetify-creator": "^1.0.17",
-    "typescript": "^5.4.3"
+    "typescript": "^5.5.2"
   },
   "dependencies": {
     "@biomejs/biome": "^1.7.3",

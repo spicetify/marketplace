@@ -58,8 +58,8 @@ importers:
         specifier: ^1.0.17
         version: 1.0.17(less@4.2.0)(postcss@8.4.31)(sass@1.69.3)(stylus@0.60.0)
       typescript:
-        specifier: ^5.4.3
-        version: 5.4.3
+        specifier: ^5.5.2
+        version: 5.5.2
 
 packages:
 
@@ -915,8 +915,8 @@ packages:
   tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
-  typescript@5.4.3:
-    resolution: {integrity: sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==}
+  typescript@5.5.2:
+    resolution: {integrity: sha512-NcRtPEOsPFFWjobJEtfihkLCZCXZt/os3zf8nTxjVH3RvTSxjrCamJpbExGvYOF+tFHc3pA65qpdwPbzjohhew==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1768,7 +1768,7 @@ snapshots:
 
   tslib@2.6.2: {}
 
-  typescript@5.4.3: {}
+  typescript@5.5.2: {}
 
   uglify-js@3.17.4: {}
 
