@@ -74,7 +74,7 @@
   {
     "title": "Dynamic Left Sidebar",
     "description": "Makes the left sidebar dynamic, so it only shows when you hover over it and pushes the main content to the right.",
-    "code": "#Desktop_LeftSidebar_Id {\n  width: 0px;\n  transition: width 0.5s ease, padding-left 0.5s ease;\n  z-index: 12;\n}\n\n#Desktop_LeftSidebar_Id:hover {\n  padding-left: 8px;\n  width: 280px;\n}\n:root {\n  margin-left: -8px;\n}",
+    "code": "#Desktop_LeftSidebar_Id {\n  width: 0px;\n  transition: width 0.5s ease, padding-left 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  padding-left: 8px;\n  width: 280px;\n}\n:root {\n  margin-left: -8px;\n}\ndiv[data-testid^='LayoutResizer__resize-bar'] {\n  display: none;\n}",
     "preview": "resources/assets/snippets/Dynamic-Left-Sidebar.gif"
   },
   {
