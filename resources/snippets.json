@@ -69,7 +69,7 @@
     "title": "New Hover Panel",
     "description": "A New Hover Panel that servers the same purpose as the legacy 'Hover Panels', but only for the left sidebar and without modifying any other elements.",
     "code": "#Desktop_LeftSidebar_Id {\n  position: absolute;\n  left: -280px;\n  width: 288px;\n  height: 100%;\n  background-color: black;\n  opacity: 0;\n  visibility: visible;\n  transition: left 0.5s ease, opacity 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  left: 0;\n  opacity: 1;\n  visibility: visible;\n}\n:root {\n  margin-left: -8px;\n}",
-    "preview": "resources/assets/snippets/new-hover-panel.png"
+    "preview": "resources/assets/snippets/new-hover-panel.gif"
   },
   {
     "title": "Dynamic Left Sidebar",
