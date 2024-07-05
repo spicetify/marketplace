@@ -69,7 +69,13 @@
     "title": "New Hover Panel",
     "description": "A New Hover Panel that servers the same purpose as the legacy 'Hover Panels', but only for the left sidebar and without modifying any other elements.",
     "code": "#Desktop_LeftSidebar_Id {\n  position: absolute;\n  left: -280px;\n  width: 288px;\n  height: 100%;\n  background-color: black;\n  opacity: 0;\n  visibility: visible;\n  transition: left 0.5s ease, opacity 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  left: 0;\n  opacity: 1;\n  visibility: visible;\n}\n:root {\n  margin-left: -8px;\n}",
-    "preview": "resources/assets/snippets/new-hover-panel.png"
+    "preview": "resources/assets/snippets/new-hover-panel.gif"
+  },
+  {
+    "title": "Dynamic Left Sidebar",
+    "description": "Make the left sidebar dynamic, so it only shows when you hover over it and pushes the main content to the right.",
+    "code": "#Desktop_LeftSidebar_Id {\n  width: 0px;\n  transition: width 0.5s ease, padding-left 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  padding-left: 8px;\n  width: 280px;\n}\n:root {\n  margin-left: -8px;\n}\nsvg[data-encore-id='icon']{\n  overflow: visible;\n}\nspan{\n  white-space: nowrap;\n}",
+    "preview": "resources/assets/snippets/Dynamic-Left-Sidebar.gif"
   },
   {
     "title": "Dynamic Left Sidebar",
