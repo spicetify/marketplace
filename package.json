@@ -12,7 +12,7 @@
     "build:local": "spicetify-creator --out=dist --minify",
     "build:prod": "pnpm build:local && pnpm copy:docs",
     "copy:docs": "copyfiles README.md dist/",
-    "lint": "biome check --apply *",
+    "lint": "biome check --write ./src",
     "lint:ci": "biome check *",
     "type-check": "tsc --noEmit",
     "watch": "spicetify-creator --watch",
