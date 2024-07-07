@@ -88,6 +88,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
         <DnDList modalConfig={modalConfig} updateConfig={updateConfig} />
+        <label className="settings-tabs-description">({t("settings.tabsDescription")})</label>
       </div>
 
       <div className="settings-block">
