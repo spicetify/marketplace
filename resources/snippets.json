@@ -418,5 +418,11 @@
     "description": "Makes the \"Switch to video\" button smaller and less intrusive, for consistency",
     "code": ".dcSY8Zom_VXgK71Lbym_ { position: absolute; opacity: 0.4; transition: opacity 0.5s; z-index: 999; } .dcSY8Zom_VXgK71Lbym_:hover { position: absolute; opacity: 1; } .dcSY8Zom_VXgK71Lbym_ .encore-text { display: none; }",
     "preview": "resources/assets/snippets/Small-Video-Button.png"
+  },
+  {
+    "title": "Spinning CD Cover Art",
+    "description": "Converts the cover art of the currently playing song to a slowly spinning CD.",
+    "code": "@keyframes rotating {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.cover-art {animation: rotating 360s linear infinite;clip-path: circle(50% at 50% 50%);position: relative;}.cover-art::after {content: '';position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 22%;height: 22%;background: radial-gradient( circle at center, rgba(24, 22, 35, 0.9) 0%, rgba(24, 22, 35, 0.9) 38%, rgba(255, 255, 255, 0.1) 38%, rgba(255, 255, 255, 0.1) 40%, rgba(24, 22, 35, 0.9) 40%, rgba(24, 22, 35, 0.9) 100% ), repeating-radial-gradient( circle at center, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0.1) 1px, transparent 1px, transparent 4px );border-radius: 50%;pointer-events: none;box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) inset, 0 0 20px rgba(255, 255, 255, 0.1);}.cover-art::before {content: '';position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 6%;height: 6%;background: rgba(24, 22, 35, 1);border-radius: 50%;box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);z-index: 1;}",
+    "preview": "resources/assets/snippets/Spinning-CD-Cover-Art.jpg"
   }
 ]
