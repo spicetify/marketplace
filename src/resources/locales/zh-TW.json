@@ -9,6 +9,7 @@
       "hideInstalledLabel": "瀏覽時隱藏已安裝項目",
       "colourShiftLabel": "每分鐘進行色調偏移",
       "tabsHeading": "分頁",
+      "tabsDescription": "拖放更改顺序，点击启用/禁用",
       "resetHeading": "重設",
       "resetBtn": "$t(settings.resetHeading)",
       "resetDescription": "解除安裝所有擴充套件和主題， 並重設偏好設定",

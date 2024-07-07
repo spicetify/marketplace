@@ -7,7 +7,7 @@ import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "../../../lo
 import type { Config } from "../../../types/marketplace-types";
 import Button from "../../Button";
 import ConfigRow from "./ConfigRow";
-import TabRow from "./TabRow";
+import DnDList from "./DnDList";
 
 interface Props {
   CONFIG: Config;
@@ -73,46 +73,54 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
 
   return (
     <div id="marketplace-config-container">
-      <h2 className="settings-heading">{t("settings.optionsHeading")}</h2>
-      <ConfigRow name={t("settings.starCountLabel")} storageKey="stars" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name={t("settings.tagsLabel")} storageKey="tags" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name={t("settings.showArchived")} storageKey="showArchived" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name={t("settings.devToolsLabel")} storageKey="themeDevTools" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name={t("settings.hideInstalledLabel")} storageKey="hideInstalled" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name={t("settings.colourShiftLabel")} storageKey="colorShift" modalConfig={modalConfig} updateConfig={updateConfig} />
-      <ConfigRow name={t("settings.albumArtBasedColors")} storageKey="albumArtBasedColors" modalConfig={modalConfig} updateConfig={updateConfig} />
-      {AlbumArtColorDropDowns}
-
-      <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
-      <div className="tabs-container">
-        {modalConfig.tabs.map(({ name }) => {
-          return <TabRow key={name} name={name} modalConfig={modalConfig} updateConfig={updateConfig} />;
-        })}
+      <div className="settings-block-top">
+        <h2 className="settings-heading">{t("settings.optionsHeading")}</h2>
+        <ConfigRow name={t("settings.starCountLabel")} storageKey="stars" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow name={t("settings.tagsLabel")} storageKey="tags" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow name={t("settings.showArchived")} storageKey="showArchived" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow name={t("settings.devToolsLabel")} storageKey="themeDevTools" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow name={t("settings.hideInstalledLabel")} storageKey="hideInstalled" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow name={t("settings.colourShiftLabel")} storageKey="colorShift" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow name={t("settings.albumArtBasedColors")} storageKey="albumArtBasedColors" modalConfig={modalConfig} updateConfig={updateConfig} />
+        {AlbumArtColorDropDowns}
       </div>
 
-      <h2 className="settings-heading">{t("settings.resetHeading")}</h2>
-      <div className="settings-row">
-        <label className="col description">{t("settings.resetDescription")}</label>
-        <div className="col action">
-          <Button onClick={() => resetMarketplace()}>{t("settings.resetBtn")}</Button>
+      <div className="settings-block">
+        <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
+        <DnDList modalConfig={modalConfig} updateConfig={updateConfig} />
+        <label className="settings-tabs-description">({t("settings.tabsDescription")})</label>
+      </div>
+
+      <div className="settings-block">
+        <h2 className="settings-heading">{t("settings.resetHeading")}</h2>
+        <div className="settings-row">
+          <label className="col description">{t("settings.resetDescription")}</label>
+          <div className="col action">
+            <Button onClick={() => resetMarketplace()}>{t("settings.resetBtn")}</Button>
+          </div>
         </div>
       </div>
 
-      <h2 className="settings-heading">{t("settings.backupHeading")}</h2>
-      <div className="settings-row">
-        <label className="col description">{t("settings.backupLabel")}</label>
-        <div className="col action">
-          <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
+      <div className="settings-block">
+        <h2 className="settings-heading">{t("settings.backupHeading")}</h2>
+        <div className="settings-row">
+          <label className="col description">{t("settings.backupLabel")}</label>
+          <div className="col action">
+            <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
+          </div>
         </div>
       </div>
 
-      <h2>{t("settings.versionHeading")}</h2>
-      <div className="setting-row">
-        <label className="col description">
-          {t("grid.spicetifyMarketplace")} {MARKETPLACE_VERSION}
-        </label>
-        <div className="col action">
-          <Button onClick={copyVersion}>{versionButtonText}</Button>
+      <div className="settings-block-bottom">
+        <div className="settings-row">
+          <label className="col description">
+            {t("grid.spicetifyMarketplace")} {t("settings.versionHeading")} {MARKETPLACE_VERSION}
+          </label>
+          <div className="col action">
+            <Button onClick={copyVersion} classes={["small"]}>
+              {versionButtonText}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
