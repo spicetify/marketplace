@@ -9,6 +9,7 @@
       "hideInstalledLabel": "Esconder instalado cuando buscando",
       "colourShiftLabel": "Cambiar colores cada minuto",
       "tabsHeading": "Pestañas",
+      "tabsDescription": "Arrastre y suelte para cambiar el orden, haga clic para activar/desactivar",
       "resetHeading": "Reestablecer",
       "resetBtn": "$t(settings.resetHeading)",
       "resetDescription": "Borrar todas estensiones and temas, y borrar preferencias",
