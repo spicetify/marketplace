@@ -1,11 +1,30 @@
 #marketplace-config-container {
+  .settings-block {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .settings-block-top {
+    padding-bottom: 10px;
+  }
+
+  .settings-block-bottom {
+    padding-top: 10px;
+  }
+
+  .settings-tabs-description {
+    font-style: italic;
+    font-size: 12px;
+  }
+
+
   .settings-row {
     display: flex;
     justify-content: space-between;
 
     .col {
       display: flex;
-      padding: 10px 0;
+      padding: 8px 0;
       align-items: center;
 
       &.action {
@@ -67,6 +86,19 @@ button.arrow-btn {
   }
 }
 
+.dnd-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%
+}
+
+.dnd-icon {
+  position: absolute;
+  left: 4px;
+}
+
 // Add snippet modal
 #marketplace-add-snippet-container input, textarea {
   width: 100%;
@@ -78,3 +110,5 @@ button.arrow-btn {
   border: 1px solid var(--spice-button);
   border-radius: 4px;
 }
+
+
