@@ -176,7 +176,7 @@
   {
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
-    "code": "@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 10s linear infinite; clip-path: circle(50% at 50% 50%);}",
+    "code": "@keyframes rotating {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.cover-art, .main-nowPlayingView-coverArtContainer::after, .main-nowPlayingView-coverArtContainer::before {animation: rotating 10s linear infinite;border-radius: 50%;}.cover-art {clip-path: circle(50% at 50% 50%);}",
     "preview": "resources/assets/snippets/rotating-coverart.png"
   },
   {
