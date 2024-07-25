@@ -1,0 +1,6 @@
+{
+    "title": "Rick Astley Dance",
+    "description": "enjoy the dance of Rickey Astley above your play-back bar while streaming songs on spotify",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 350px; height: 300px; bottom: calc(100% - 7px); right: 1500px; position: absolute; image-rendering: pixelated; background-size: 350px 300px; background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTBieXRiMngybjQxdXltMHl4d3gyYnBydG13a3F5cWFvbHRwd3RzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8BfWbo3zI8xbXL5dPa/giphy.gif'); }",
+    "preview": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTBieXRiMngybjQxdXltMHl4d3gyYnBydG13a3F5cWFvbHRwd3RzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8BfWbo3zI8xbXL5dPa/giphy.gif"
+}
