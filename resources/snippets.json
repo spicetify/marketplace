@@ -6,6 +6,12 @@
     "preview": "resources/assets/snippets/rounded-now-playing.png"
   },
   {
+    "title": "Dancin' Rick",
+    "description": "Adds Rick Astley to accompany you",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 350px; height: 300px; bottom: calc(100% - 7px); right: 1500px; position: absolute; image-rendering: pixelated; background-size: 350px 300px; background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTBieXRiMngybjQxdXltMHl4d3gyYnBydG13a3F5cWFvbHRwd3RzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8BfWbo3zI8xbXL5dPa/giphy.gif'); }",
+    "preview": "resources/assets/snippets/dancing-rick.png"
+  },
+  {
     "title": "Rounded Images",
     "description": "Adds rounded corners to the cover art, playlist covers, cards and other images",
     "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .x-entityImage-circle, \n .main-image-image, \n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
