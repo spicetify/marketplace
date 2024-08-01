@@ -44,7 +44,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-dropdown": "^1.11.0",
     "react-i18next": "^14.1.0",
-    "react-simple-code-editor": "^0.13.1",
+    "react-simple-code-editor": "^0.14.1",
     "semver": "^7.6.0"
   },
   "private": true
