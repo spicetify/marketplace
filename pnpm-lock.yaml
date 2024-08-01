@@ -55,8 +55,8 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1
       husky:
-        specifier: ^9.0.11
-        version: 9.0.11
+        specifier: ^9.1.4
+        version: 9.1.4
       spicetify-creator:
         specifier: ^1.0.17
         version: 1.0.17(less@4.2.0)(postcss@8.4.31)(sass@1.69.3)(stylus@0.60.0)
@@ -511,8 +511,8 @@ packages:
   html-parse-stringify@3.0.1:
     resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
 
-  husky@9.0.11:
-    resolution: {integrity: sha512-AB6lFlbwwyIqMdHYhwPe+kjOC3Oc5P3nThEoW/AaO2BX3vJDjWPFxYLxokUZOo6RNX20He3AaT8sESs9NJcmEw==}
+  husky@9.1.4:
+    resolution: {integrity: sha512-bho94YyReb4JV7LYWRWxZ/xr6TtOTt8cMfmQ39MQYJ7f/YE268s3GdghGwi+y4zAeqewE5zYLvuhV0M0ijsDEA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1436,7 +1436,7 @@ snapshots:
     dependencies:
       void-elements: 3.1.0
 
-  husky@9.0.11: {}
+  husky@9.1.4: {}
 
   i18next-browser-languagedetector@8.0.0:
     dependencies:
