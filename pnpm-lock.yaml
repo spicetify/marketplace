@@ -33,8 +33,8 @@ importers:
         specifier: ^14.1.0
         version: 14.1.0(i18next@23.12.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-simple-code-editor:
-        specifier: ^0.13.1
-        version: 0.13.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^0.14.1
+        version: 0.14.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       semver:
         specifier: ^7.6.0
         version: 7.6.0
@@ -827,11 +827,11 @@ packages:
       react-native:
         optional: true
 
-  react-simple-code-editor@0.13.1:
-    resolution: {integrity: sha512-XYeVwRZwgyKtjNIYcAEgg2FaQcCZwhbarnkJIV20U2wkCU9q/CPFBo8nRXrK4GXUz3AvbqZFsZRrpUTkqqEYyQ==}
+  react-simple-code-editor@0.14.1:
+    resolution: {integrity: sha512-BR5DtNRy+AswWJECyA17qhUDvrrCZ6zXOCfkQY5zSmb96BVUbpVAv03WpcjcwtCwiLbIANx3gebHOcXYn1EHow==}
     peerDependencies:
-      react: '*'
-      react-dom: '*'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
@@ -1728,7 +1728,7 @@ snapshots:
     optionalDependencies:
       react-dom: 18.2.0(react@18.2.0)
 
-  react-simple-code-editor@0.13.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  react-simple-code-editor@0.14.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
