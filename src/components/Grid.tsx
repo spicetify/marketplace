@@ -5,7 +5,15 @@ import semver from "semver";
 const Spicetify = window.Spicetify;
 
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
+import {
+  fetchAppManifest,
+  fetchCssSnippets,
+  fetchExtensionManifest,
+  fetchRemoteSnippetsManifest,
+  fetchThemeManifest,
+  getBlacklist,
+  getTaggedRepos
+} from "../logic/FetchRemotes";
 import { openModal } from "../logic/LaunchModals";
 import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
@@ -350,7 +358,23 @@ class Grid extends React.Component<
         break;
       }
       case "Snippets": {
-        const snippets = this.SNIPPETS;
+        const pageOfRepos = await getTaggedRepos("spicetify-snippets", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const remoteSnippets: Snippet[] = [];
+        for (const repo of pageOfRepos.items) {
+          const repoSnippets = await fetchRemoteSnippetsManifest(repo.contents_url, repo.default_branch, this.CONFIG.visual.hideInstalled);
+
+          // I believe this stops the requests when switching tabs?
+          if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
+            // Stop this queue from continuing to fetch and append to cards list
+            return -1;
+          }
+
+          if (repoSnippets?.length) {
+            remoteSnippets.push(...repoSnippets);
+          }
+        }
+
+        const snippets = this.SNIPPETS?.concat(remoteSnippets);
 
         if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
           // Stop this queue from continuing to fetch and append to cards list
