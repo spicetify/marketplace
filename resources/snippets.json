@@ -1,4 +1,10 @@
 [
+   {
+    "title": "Remove Playlist Cover Art",
+    "description": "Removes the cover art from opened playlists",
+    "code": ".main-entityHeader-imageContainer.main-entityHeader-imageContainerNew { display: none; }",
+    "preview": "resources/assets/snippets/Remove-Playlist-Cover.png"
+  },
   {
     "title": "Rounded 'Now Playing' Bar",
     "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
