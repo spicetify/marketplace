@@ -436,5 +436,5 @@
     "description": "Adds rounded corners to Buttons",
     "code": "/* TopBar */\n .main-topBar-buddyFeed, \n .main-topBar-button {\n border-radius: 15% !important;\n }\n .main-userWidget-boxCondensed {\n border-radius: 6px;\n }\n \n /* PlayBar */\n .main-playPauseButton-button {\n  border-radius: 6px;\n }\n  /* HomePage */\n .view-homeShortcutsGrid-playButton,\n .ButtonInner-medium-iconOnly {\n  border-radius: 10px;\n }\n  /* playlist */\n .ButtonInner-large-iconOnly {\n border-radius: 12px;\n }\n \n /* Now playing bar */\n .Button-sc-y0gtbx-0,\n .main-nowPlayingView-aboutArtistV2FollowButton {\n border-radius: 6px;\n }\n /* Spicetify Marketplace */\n .marketplace-installButton {\n border-radius: 10px;\n }\n \n /* Search */\n .search-searchCategory-carouselButton,\n .ChipInnerComponent-sm,\n .ChipInnerComponent-sm-selected {\n border-radius: 6px;\n }\n .x-filterBox-expandButton {\n border-radius: 15% !important;\n }\n \n /* X button */\n .XNFZdOLgMlx491fEWdYJ,\n .ChipClear__ChipClearComponent-sc-zv5btm-0,\n .Button-sc-1dqy6lx-0 {\n border-radius: 6px;\n}",
     "preview": "resources/assets/snippets/Rounded-Buttons.png"
-  },
+  }
 ]
