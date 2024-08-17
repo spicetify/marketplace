@@ -1,5 +1,11 @@
 [
   {
+    "title": "Remove Playlist Album Cover",
+    "description": "Remove the album cover from the playlist banner",
+    "code": ".main-entityHeader-imageContainer.main-entityHeader-imageContainerNew { display: none; }",
+    "preview": "resources/assets/snippets/Remove-Playlist-Cover.png"
+  },
+  {
     "title": "Rounded 'Now Playing' Bar",
     "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
     "code": ":root{ --border-radius-1: 8px; } .Root__now-playing-bar, .Root__now-playing-bar footer { border-radius: var(--border-radius-1) !important; }",
