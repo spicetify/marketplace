@@ -84,6 +84,12 @@
     "preview": "resources/assets/snippets/Dynamic-Left-Sidebar.gif"
   },
   {
+    "title": "Hide New release from",
+    "description": "Hides the 'New release from' section on the home page.",
+    "code": "section[aria-label^='New release from'] {\n  display: none;\n}",
+    "preview": "resources/assets/snippets/Hide-New-release-from.png"
+  },
+  {
     "title": "Hide Made For YOU",
     "description": "Hide the 'Made For YOU' section on the home page.",
     "code": "section[aria-label^='Made For'] {\n  display: none;\n}",
