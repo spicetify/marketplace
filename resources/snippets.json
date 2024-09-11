@@ -432,8 +432,8 @@
     "preview": "resources/assets/snippets/nyan-cat-progress-bar.gif"
   },
   {
-    "title": "Root top container padding fix",
-    "description": "Sets padding-top of .Root__top-container",
+    "title": "Padding Fix",
+    "description": "fixes padding-top of .Root__top-container",
     "code": ".Root__top-container { padding-top: 8px !important }",
     "preview": "resources/assets/snippets/fix-padding.png"
   }
