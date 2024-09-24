@@ -23,7 +23,10 @@ echo "FETCHING Version $tag"
 download_uri=$releases_uri/download/v$tag/marketplace.zip
     default_color_uri="https://raw.githubusercontent.com/spicetify/marketplace/main/resources/color.ini"
 
-SPICETIFY_CONFIG_DIR="${SPICETIFY_CONFIG:-$HOME/.config/spicetify}"
+SPICETIFY_CONFIG_DIR="$SPICETIFY_CONFIG"
+if [ -z "$SPICETIFY_CONFIG_DIR" ]; then
+	SPICETIFY_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/spicetify"
+fi
 INSTALL_DIR="$SPICETIFY_CONFIG_DIR/CustomApps"
 
 if [ ! -d "$INSTALL_DIR" ]; then
