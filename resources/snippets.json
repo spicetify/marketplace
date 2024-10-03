@@ -104,7 +104,7 @@
   {
     "title": "Circular Album Art",
     "description": "Makes the now playing album art be circular (like a vinyl)",
-    "code": ".cover-art-image { clip-path: circle(50% at 50% 50%);}. main-nowPlayingBar-left button {border-radius: 50%;}",
+    "code": ".cover-art-image { clip-path: circle(50% at 50% 50%); }.main-nowPlayingBar-left {border-radius: 50%;}",
     "preview": "resources/assets/snippets/circular-album-art.png"
   },
   {
