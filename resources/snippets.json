@@ -438,9 +438,9 @@
     "preview": "resources/assets/snippets/be-square.png"
   },
   {
-    "title": "Rounded Buttons"
-    "description": "Add rounded coners to buttons and search bar"
-    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG {border-radius: 15% !important;} .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected {border-radius: 6px;} .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly, .marketplace-installButton {border-radius: 10px !important;} .ButtonInner-large-iconOnly {border-radius: 12px !important;} .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput {border-collapse: separate; border-radius: 6px !important;}"
+    "title": "Rounded Buttons",
+    "description": "Add rounded coners to buttons and search bar",
+    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG {border-radius: 15% !important;} .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected {border-radius: 6px;} .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly, .marketplace-installButton {border-radius: 10px !important;} .ButtonInner-large-iconOnly {border-radius: 12px !important;} .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput {border-collapse: separate; border-radius: 6px !important;}",
     "preview": "resources/assets/snippets/rounded-buttons.png"
   }
 ]
