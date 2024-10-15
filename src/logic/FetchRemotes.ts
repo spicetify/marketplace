@@ -83,6 +83,7 @@ async function fetchRepoManifest(url: string) {
  * @param branch Default branch name (e.g. main or master)
  * @returns The manifest object
  */
+
 async function getRepoManifest(user: string, repo: string, branch: string) {
   const key = `${user}-${repo}`;
   const sessionStorageItem = window.sessionStorage.getItem(key);
@@ -334,4 +335,43 @@ export const fetchCssSnippets = async (hideInstalled = false) => {
   }, []);
 
   return snippets;
+};
+
+export const fetchRemoteSnippetsManifest = async (contents_url: string, branch: string, hideInstalled = false) => {
+  try {
+    const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
+
+    // TODO: err handling?
+    if (!regex_result || !regex_result.groups) return null;
+    const { user, repo } = regex_result.groups;
+
+    const manifests = await getRepoManifest(user, repo, branch);
+
+    // Manifest is initially parsed
+    const parsedManifests: Snippet[] = manifests.reduce((accum, manifest) => {
+      const selectedBranch = manifest.branch || branch;
+
+      // Check if manifest object is designated for a Snippet
+      if (manifest?.title && manifest.description && manifest.code && !manifest.main && !manifest.usercss) {
+        const item = {
+          title: manifest.title,
+          description: manifest.description,
+          code: manifest.code,
+          imageURL: manifest.preview?.startsWith("http")
+            ? manifest.preview
+            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`
+        };
+
+        // Add to list unless we're hiding installed items and it's installed
+        if (!(hideInstalled && localStorage.getItem(`marketplace:installed:snippet:${manifest.title.replaceAll(" ", "-")}`))) {
+          accum.push(item);
+        }
+      }
+      return accum;
+    }, []);
+
+    return parsedManifests;
+  } catch {
+    return null;
+  }
 };
