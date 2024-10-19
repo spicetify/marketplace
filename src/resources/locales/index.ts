@@ -8,11 +8,11 @@ import fr from "./fr.json";
 import it from "./it.json";
 import ja from "./ja.json";
 import pl from "./pl.json";
+import ptBR from "./pt-BR.json";
 import ru from "./ru.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
-import ptBR from "./pt-BR.json";
 
 export default {
   ca,
