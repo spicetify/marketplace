@@ -61,18 +61,14 @@ const ConfigRow = (props: {
             }}
           />
           <Spicetify.ReactComponent.TooltipWrapper
-            label={
-              <>
-                {props.description.split("\n").map((line) => {
-                  return (
-                    <span key={line}>
-                      {line}
-                      <br />
-                    </span>
-                  );
-                })}
-              </>
-            }
+            label={props.description.split("\n").map((line) => {
+              return (
+                <span key={line}>
+                  {line}
+                  <br />
+                </span>
+              );
+            })}
             renderInline={true}
             showDelay={10}
             placement="top"
