@@ -416,7 +416,7 @@ class Grid extends React.Component<
     console.debug("updateColourSchemes", schemes, activeScheme);
     this.CONFIG.theme.schemes = schemes;
     this.CONFIG.theme.activeScheme = activeScheme;
-    if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
+    if (activeScheme) (Spicetify.Config as { [key: string]: unknown }).color_scheme = activeScheme;
 
     if (schemes && activeScheme && schemes[activeScheme]) {
       injectColourScheme(this.CONFIG.theme.schemes[activeScheme]);

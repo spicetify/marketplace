@@ -88,13 +88,13 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.tabsHeading")}</h2>
         <DnDList modalConfig={modalConfig} updateConfig={updateConfig} />
-        <label className="settings-tabs-description">({t("settings.tabsDescription")})</label>
+        <p className="settings-tabs-description">({t("settings.tabsDescription")})</p>
       </div>
 
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.resetHeading")}</h2>
         <div className="settings-row">
-          <label className="col description">{t("settings.resetDescription")}</label>
+          <span className="col description">{t("settings.resetDescription")}</span>
           <div className="col action">
             <Button onClick={() => resetMarketplace()}>{t("settings.resetBtn")}</Button>
           </div>
@@ -104,7 +104,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.backupHeading")}</h2>
         <div className="settings-row">
-          <label className="col description">{t("settings.backupLabel")}</label>
+          <span className="col description">{t("settings.backupLabel")}</span>
           <div className="col action">
             <Button onClick={onBackupClick}>{t("settings.backupBtn")}</Button>
           </div>
@@ -113,9 +113,9 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
 
       <div className="settings-block-bottom">
         <div className="settings-row">
-          <label className="col description">
+          <span className="col description">
             {t("grid.spicetifyMarketplace")} {t("settings.versionHeading")} {MARKETPLACE_VERSION}
-          </label>
+          </span>
           <div className="col action">
             <Button onClick={copyVersion} classes={["small"]}>
               {versionButtonText}
