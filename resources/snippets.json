@@ -442,5 +442,11 @@
     "description": "Add rounded coners to buttons and search bar",
     "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG, .main-embedWidgetGenerator-themeRadio, .Psc33HXPyazZYAAr1tgz {border-radius: 15% !important;} .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected, .switch, .arrow-btn, .pSxFsY9Fgcj5f8Gf05mh, .qyKJPLjz8o4jnbk92JOn, .reset, .rdp-button, .btn, .TabItem__StyledTabItem-sc-2ani5y-0, .main-playlistEditDetailsModal-closeBtn, .main-embedWidgetGenerator-closeBtn, .Chip__ChipComponent-sc-ry3uox-0 {border-radius: 6px !important;} .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly,  .button-module__button___hf2qg_marketplace {border-radius: 10px !important;} .ButtonInner-large-iconOnly {border-radius: 12px !important;} .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput,  .toggle-module__toggle-indicator-wrapper___6Lcp0_marketplace, .x-toggle-indicatorWrapper, .main-topBar-searchBar {border-collapse: separate; border-radius: 6px !important;}",
     "preview": "resources/assets/snippets/rounded-buttons.png"
+  },
+  {
+    "title": "Rounded Thicker Bars",
+    "description": "Makes the progress bar and volume bar thicker and rounded, inspired by Thicker Bars snippet.",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
   }
 ]
