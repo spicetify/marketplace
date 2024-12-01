@@ -449,4 +449,10 @@
     "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
   }
+  {
+    "title": "Better connect bar",
+    "description": "Make connect bar a better look.",
+    "code": ".main-connectBar-connectBar { position: absolute !important; overflow: visible !important; left: 75% !important; height: 20px !important; bottom: 1% !important; padding: 2px !important; }",
+    "preview": "resources/assets/snippets/Better-connect-bar.jpg"
+  }
 ]
