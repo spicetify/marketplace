@@ -8,6 +8,7 @@ import fr from "./fr.json";
 import it from "./it.json";
 import ja from "./ja.json";
 import pl from "./pl.json";
+import ptBR from "./pt-BR.json";
 import ru from "./ru.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
@@ -27,5 +28,6 @@ export default {
   it,
   uk,
   ja,
+  "pt-BR": ptBR,
   "de-DE": deDE
 };
