@@ -448,5 +448,11 @@
     "description": "Makes the progress bar and volume bar thicker and rounded, inspired by Thicker Bars snippet.",
     "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
+  },
+  {
+    "title": "Shonky",
+    "description": "Adds shonky to your playback bar!",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 42px; height: 42px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 42px 42px ; background-image: url('https://static.blahaj.zone/shonky/assets/icons/Shonky-48px.png'); }",
+    
   }
 ]
