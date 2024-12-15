@@ -453,6 +453,6 @@
     "title": "Shonky",
     "description": "Adds shonky to your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 42px; height: 42px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 42px 42px ; background-image: url('https://static.blahaj.zone/shonky/assets/icons/Shonky-48px.png'); }",
-    
+    "preview": "resources/assets/snippets/ShonkyOnBar.png"
   }
 ]
