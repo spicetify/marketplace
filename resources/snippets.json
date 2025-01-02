@@ -1,5 +1,11 @@
 [
   {
+    "title": "Smoother Slide-In 'Sidebar'",
+    "description": "A CSS snippet for a sidebar that slides in smoothly from the left when hovered, with a snappy entry and smooth exit transition.",
+    "code": "#Desktop_LeftSidebar_Id { position: absolute; left: -280px; width: 288px; height: 100%; background-color: black; opacity: 0; visibility: visible; transition: left 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; z-index: 12; } #Desktop_LeftSidebar_Id:hover { left: 0; opacity: 1; visibility: visible; } #Desktop_LeftSidebar_Id::before { content: ''; position: absolute; left: -10px; top: 0; width: 10px; height: 100%; background-color: transparent; pointer-events: auto; z-index: 11; } body { margin: 0; overflow-x: hidden; } @media (max-width: 768px) { #Desktop_LeftSidebar_Id { width: 200px; } }",
+    "preview": "resources/assets/snippets/smooth-slide-in-sidebar.gif"
+  },
+  {
     "title": "Rounded 'Now Playing' Bar",
     "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
     "code": ":root{ --border-radius-1: 8px; } .Root__now-playing-bar, .Root__now-playing-bar footer { border-radius: var(--border-radius-1) !important; }",
