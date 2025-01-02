@@ -455,4 +455,10 @@
     "code": ".main-nowPlayingView-nowPlayingWidget > div > div:nth-child(1) > div { box-shadow: none !important; } .main-nowPlayingView-coverArt { border-radius: 192px; overflow: hidden; }",
     "preview": "resources/assets/snippets/Circular-Shadow-fix-for-album-art.png"
   }
+  {
+    "title": "Better connect bar",
+    "description": "Make connect bar a better look.",
+    "code": ".main-connectBar-connectBar { position: absolute !important; overflow: visible !important; left: 75% !important; height: 20px !important; bottom: 1% !important; padding: 2px !important; }",
+    "preview": "resources/assets/snippets/Better-connect-bar.jpg"
+  }
 ]
