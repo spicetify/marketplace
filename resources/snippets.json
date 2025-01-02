@@ -448,5 +448,11 @@
     "description": "Makes the progress bar and volume bar thicker and rounded, inspired by Thicker Bars snippet.",
     "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
+  },
+  {
+    "title": "Circular shadow fix for album art",
+    "description": "Fixes the square shadow you get in some setups when you have any sort of circular album art snippet installed.",
+    "code": ".main-nowPlayingView-nowPlayingWidget > div > div:nth-child(1) > div { box-shadow: none !important; } .main-nowPlayingView-coverArt { border-radius: 192px; overflow: hidden; }",
+    "preview": "resources/assets/snippets/Circular-Shadow-fix-for-album-art.png"
   }
 ]
