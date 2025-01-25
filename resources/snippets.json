@@ -408,12 +408,6 @@
     "preview": "resources/assets/snippets/glob-nav-max-items.png"
   },
   {
-    "title": "[Global Nav Bar] marketplace header margin fix",
-    "description": "Global Nav Bar breaks the margin for certain themes, this removes the standard margin, and sets it back to 0",
-    "code": "div.marketplace-header:has(.marketplace-header__left .marketplace-sortBox-header){margin-top:unset;}",
-    "preview": "resources/assets/snippets/glob-nav-mrktplc-margin.png"
-  },
-  {
     "title": "Hide Mini Player Button",
     "description": "Hides the Mini Player button.",
     "code": "button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16V2.45z']) {display: none;}",
