@@ -416,7 +416,7 @@ class Grid extends React.Component<
     console.debug("updateColourSchemes", schemes, activeScheme);
     this.CONFIG.theme.schemes = schemes;
     this.CONFIG.theme.activeScheme = activeScheme;
-    if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
+    if (activeScheme) (Spicetify.Config as { [key: string]: unknown }).color_scheme = activeScheme;
 
     if (schemes && activeScheme && schemes[activeScheme]) {
       injectColourScheme(this.CONFIG.theme.schemes[activeScheme]);
@@ -489,7 +489,7 @@ class Grid extends React.Component<
 
     // Load blacklist and snippets
     this.BLACKLIST = await getBlacklist();
-    this.SNIPPETS = await fetchCssSnippets();
+    this.SNIPPETS = await fetchCssSnippets(this.CONFIG.visual.hideInstalled);
     this.newRequest(ITEMS_PER_REQUEST);
   }
 

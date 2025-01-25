@@ -1,5 +1,11 @@
 [
   {
+    "title": "Remove Playlist Album Cover",
+    "description": "Remove the album cover from the playlist banner",
+    "code": ".main-entityHeader-imageContainer.main-entityHeader-imageContainerNew { display: none; }",
+    "preview": "resources/assets/snippets/Remove-Playlist-Cover.png"
+  },
+  {
     "title": "Rounded 'Now Playing' Bar",
     "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
     "code": ":root{ --border-radius-1: 8px; } .Root__now-playing-bar, .Root__now-playing-bar footer { border-radius: var(--border-radius-1) !important; }",
@@ -8,7 +14,7 @@
   {
     "title": "Rounded Images",
     "description": "Adds rounded corners to the cover art, playlist covers, cards and other images",
-    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
+    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .x-entityImage-circle, \n .main-image-image, \n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }",
     "preview": "resources/assets/snippets/rounded-images.png"
   },
   {
@@ -62,8 +68,26 @@
   {
     "title": "Hover Panels",
     "description": "Have your playlist, right sidebar, and controls bar be hoverable.",
-    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints {\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: 350px !important;\n  opacity: 1 !important;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position: absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader {\n  top: 0 !important;\n}\n.main-yourLibraryX-navItem {\n  overflow: hidden;\n}\n.main-coverSlotCollapsed-navAltContainer {\n  overflow: visible;\n}\n.LayoutResizer__resize-bar {\n  display: none;\n}\n:root {\n  --left-sidebar-width: 35px !important;\n  --right-sidebar-width: 50px !important;\n}",
+    "code": ".Root__nav-bar {\n  position: absolute;\n  width: 35px;\n  opacity: 0;\n  bottom: 0;\n  left: 0;\n  top: 0;\n  z-index: 12;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-yourLibraryX-entryPoints {\n  background: var(--spice-sidebar);\n}\n.Root__nav-bar:hover {\n  width: 250px;\n  opacity: 1;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.LayoutResizer__resize-bar {\n  cursor: none;\n}\n.Root__top-bar {\n  opacity: 0;\n  transition: visibility 5s, opacity 1s linear;\n}\n.Root__top-bar:hover {\n  transition-delay: 0.5s;\n  opacity: 1;\n  transition: visibility 5s, opacity 0.5s linear;\n}\n.main-topBar-container {\n  -webkit-padding-end: 32px;\n  padding: 16px 85px;\n  padding-inline-end: 32px;\n  max-width: none;\n}\n.main-buddyFeed-container:hover {\n  width: 350px !important;\n  opacity: 1 !important;\n  transition: width 250ms, opacity 400ms ease-in;\n}\n.main-buddyFeed-container {\n  position: absolute;\n  right: -5px;\n  top: 0;\n  bottom: 84px;\n  width: 50px !important;\n  opacity: 0 !important;\n  transition: width 400ms, opacity 250ms ease-out;\n}\n.main-trackList-trackListHeader {\n  top: 0 !important;\n}\n.main-yourLibraryX-navItem {\n  overflow: hidden;\n}\n.main-coverSlotCollapsed-navAltContainer {\n  overflow: visible;\n}\n.LayoutResizer__resize-bar {\n  display: none;\n}\n:root {\n  --left-sidebar-width: 35px !important;\n  --right-sidebar-width: 50px !important;\n  margin-left:-8px;\n}",
     "preview": "resources/assets/snippets/hover-panels.png"
+  },
+  {
+    "title": "New Hover Panel",
+    "description": "A New Hover Panel that servers the same purpose as the legacy 'Hover Panels', but only for the left sidebar and without modifying any other elements.",
+    "code": "#Desktop_LeftSidebar_Id {\n  position: absolute;\n  left: -280px;\n  width: 288px;\n  height: 100%;\n  background-color: black;\n  opacity: 0;\n  visibility: visible;\n  transition: left 0.5s ease, opacity 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  left: 0;\n  opacity: 1;\n  visibility: visible;\n}\n:root {\n  margin-left: -8px;\n}",
+    "preview": "resources/assets/snippets/new-hover-panel.gif"
+  },
+  {
+    "title": "Dynamic Left Sidebar",
+    "description": "Make the left sidebar dynamic, so it only shows when you hover over it and pushes the main content to the right.",
+    "code": "#Desktop_LeftSidebar_Id {\n  width: 0px;\n  transition: width 0.5s ease, padding-left 0.5s ease;\n  z-index: 12;\n}\n#Desktop_LeftSidebar_Id:hover {\n  padding-left: 8px;\n  width: 280px;\n}\n:root {\n  margin-left: -8px;\n}\nsvg[data-encore-id='icon']{\n  overflow: visible;\n}\n#Desktop_LeftSidebar_Id span {\n  white-space: nowrap;\n}",
+    "preview": "resources/assets/snippets/Dynamic-Left-Sidebar.gif"
+  },
+  {
+    "title": "Hide Made For YOU",
+    "description": "Hide the 'Made For YOU' section on the home page.",
+    "code": "section[aria-label^='Made For'] {\n  display: none;\n}",
+    "preview": "resources/assets/snippets/Hide-Made-For-YOU.png"
   },
   {
     "title": "Fix progress bar displacement",
@@ -80,13 +104,13 @@
   {
     "title": "Disable Homepage Recommendations",
     "description": "Removes all recommendations from the homepage",
-    "code": "[data-testid='home-page'] .main-home-content > *:not(.view-homeShortcutsGrid-shortcuts, .main-shelf-shelf:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
+    "code": "[data-testid='home-page'] .contentSpacing > *:not(.view-homeShortcutsGrid-shortcuts, .main-shelf-shelf:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
     "preview": "resources/assets/snippets/disable-recommendations.png"
   },
   {
     "title": "Circular Album Art",
     "description": "Makes the now playing album art be circular (like a vinyl)",
-    "code": ".cover-art { clip-path: circle(50% at 50% 50%);}",
+    "code": ".cover-art-image { clip-path: circle(50% at 50% 50%); }.main-nowPlayingBar-left {border-radius: 50%;}",
     "preview": "resources/assets/snippets/circular-album-art.png"
   },
   {
@@ -122,7 +146,7 @@
   {
     "title": "Pointers",
     "description": "Clickable elements are now a pointer",
-    "code": "button, .show-followButton-button, .main-dropDown-dropDown, .x-toggle-wrapper, .main-playlistEditDetailsModal-closeBtn, .main-trackList-rowPlayPauseButton, .main-rootlist-rootlistItemLink:link, .main-rootlist-rootlistItemLink:visited, .x-sortBox-sortDropdown, .main-contextMenu-menuItemButton, .main-trackList-column, .main-moreButton-button, .x-downloadButton-button, .main-playButton-PlayButton, .main-coverSlotExpandedCollapseButton-chevron, .main-coverSlotCollapsed-chevron, .control-button:focus, .control-button:hover, .main-repeatButton-button, .main-skipForwardButton-button, .main-playPauseButton-button, .main-skipBackButton-button, .main-shuffleButton-button, .main-addButton-button, .progress-bar__slider, .playback-bar, .main-editImageButton-image, .X1lXSiVj0pzhQCUo_72A { cursor: pointer !important; }",
+    "code": "button, .show-followButton-button, .main-dropDown-dropDown, .x-toggle-wrapper, .main-playlistEditDetailsModal-closeBtn, .main-trackList-rowPlayPauseButton, .main-rootlist-rootlistItemLink:link, .main-rootlist-rootlistItemLink:visited, .x-sortBox-sortDropdown, .main-contextMenu-menuItemButton, .main-trackList-column, .main-moreButton-button, .x-downloadButton-button, .main-playButton-PlayButton, .main-coverSlotExpandedCollapseButton-chevron, .main-coverSlotCollapsed-chevron, .control-button:focus, .control-button:hover, .main-repeatButton-button, .main-skipForwardButton-button, .main-playPauseButton-button, .main-skipBackButton-button, .main-shuffleButton-button, .main-addButton-button, .progress-bar__slider, .playback-bar, .main-editImageButton-image, .X1lXSiVj0pzhQCUo_72A, .main-card-card, .main-trackList-trackListRow, .Dropdown-control { cursor: pointer !important; }",
     "preview": "resources/assets/snippets/pointer.png"
   },
   {
@@ -140,13 +164,13 @@
   {
     "title": "Hide Sidebar ScrollBar",
     "description": "Hides Sidebar ScrollBar near playlist section",
-    "code": ".os-scrollbar:nth-child(6) .os-scrollbar-handle { visibility: hidden; }",
+    "code": "#Desktop_LeftSidebar_Id .os-scrollbar-handle, .Root__nav-bar .os-scrollbar-handle, #Desktop_LeftSidebar_Id .os-scrollbar-track, .Root__nav-bar .os-scrollbar-track { visibility: hidden; }",
     "preview": "resources/assets/snippets/hide-sidebar-scrollbar.png"
   },
   {
     "title": "Modern ScrollBar",
     "description": "Thin rounded modern scrollbar",
-    "code": ".os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle { border-radius: 4px; width: 6px; background-color: var(--spice-button-disabled); } .os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track { width: 6px; }",
+    "code": ".os-scrollbar-handle { width:0.25rem!important;border-radius:10rem !important; transition: width 300ms ease-in-out; } .os-scrollbar-handle:focus,.os-scrollbar-handle:focus-within,.os-scrollbar-handle:hover { width:0.35rem!important }",
     "preview": "resources/assets/snippets/modern-scrollbar.png"
   },
   {
@@ -158,7 +182,7 @@
   {
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
-    "code": "@keyframes rotating { from { transform: rotate(0deg); } to { transform: rotate(360deg); }} .cover-art { animation: rotating 10s linear infinite; clip-path: circle(50% at 50% 50%);}",
+    "code": "@keyframes rotating {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.cover-art, .main-nowPlayingView-coverArtContainer::after, .main-nowPlayingView-coverArtContainer::before {animation: rotating 10s linear infinite;border-radius: 50%;}.cover-art {clip-path: circle(50% at 50% 50%);} .main-nowPlayingBar-left button {background: transparent;}",
     "preview": "resources/assets/snippets/rotating-coverart.png"
   },
   {
@@ -325,8 +349,8 @@
   },
   {
     "title": "Switch Sidebars",
-    "description": "Move the navigation panel to the right and the information sidebar to the left.",
-    "code": ".Root__top-container .Root__nav-bar { grid-area: right-sidebar !important; } .Root__top-container .Root__right-sidebar { grid-area: left-sidebar !important; }",
+    "description": "Move the navigation panel to the right and the information sidebar to the left. Drag to resize works in reverse or pre-switching context (drag off the application window to adjust).",
+    "code": ".Root__top-container .Root__nav-bar { grid-area: right-sidebar !important;} .Root__top-container .Root__right-sidebar { grid-area: left-sidebar !important;} .Root__top-container .Root__nav-bar .os-scrollbar,.Root__top-container .Root__nav-bar .LayoutResizer__resize-bar { left: -4px !important; right: auto !important; } .Root__top-container .Root__right-sidebar .os-scrollbar, .Root__top-container .Root__right-sidebar .LayoutResizer__resize-bar {  right: -4px !important; left: auto !important; } .Root__top-container .Root__nav-bar .LayoutResizer__resize-bar { transform: scaleX(-1); } .Root__top-container .Root__right-sidebar .LayoutResizer__resize-bar { transform: scaleX(-1); }",
     "preview": "resources/assets/snippets/switch-sidebars.png"
   },
   {
@@ -388,5 +412,71 @@
     "description": "Global Nav Bar breaks the margin for certain themes, this removes the standard margin, and sets it back to 0",
     "code": "div.marketplace-header:has(.marketplace-header__left .marketplace-sortBox-header){margin-top:unset;}",
     "preview": "resources/assets/snippets/glob-nav-mrktplc-margin.png"
+  },
+  {
+    "title": "Hide Mini Player Button",
+    "description": "Hides the Mini Player button.",
+    "code": "button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16V2.45z']) {display: none;}",
+    "preview": "resources/assets/snippets/Hide-Mini-Player-Button.png"
+  },
+  {
+    "title": "Hide Full Screen Button",
+    "description": "Hides the Full Screen button.",
+    "code": "button:has(path[d='M6.53 9.47a.75.75 0 0 1 0 1.06l-2.72 2.72h1.018a.75.75 0 0 1 0 1.5H1.25v-3.579a.75.75 0 0 1 1.5 0v1.018l2.72-2.72a.75.75 0 0 1 1.06 0zm2.94-2.94a.75.75 0 0 1 0-1.06l2.72-2.72h-1.018a.75.75 0 1 1 0-1.5h3.578v3.579a.75.75 0 0 1-1.5 0V3.81l-2.72 2.72a.75.75 0 0 1-1.06 0z']) {display: none;}",
+    "preview": "resources/assets/snippets/Hide-Full-Screen-Button.png"
+  },
+  {
+    "title": "Queue Top Side Panel",
+    "description": "Moves the \"Next in queue\" section to the top of the Now Playing view",
+    "code": ".main-nowPlayingView-section:not(.main-nowPlayingView-queue) { order: 99; }",
+    "preview": "resources/assets/snippets/Queue-Top-Side-Panel.png"
+  },
+  {
+    "title": "Small Video Button",
+    "description": "Makes the \"Switch to video\" button smaller and less intrusive, for consistency",
+    "code": ".dcSY8Zom_VXgK71Lbym_ { position: absolute; opacity: 0.4; transition: opacity 0.5s; z-index: 999; } .dcSY8Zom_VXgK71Lbym_:hover { position: absolute; opacity: 1; } .dcSY8Zom_VXgK71Lbym_ .encore-text { display: none; }",
+    "preview": "resources/assets/snippets/Small-Video-Button.png"
+  },
+  {
+    "title": "Spinning CD Cover Art",
+    "description": "Converts the cover art of the currently playing song to a slowly spinning CD.",
+    "code": "@keyframes rotating {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.cover-art {animation: rotating 360s linear infinite;clip-path: circle(50% at 50% 50%);position: relative;}.cover-art::after {content: '';position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 22%;height: 22%;background: radial-gradient( circle at center, rgba(24, 22, 35, 0.9) 0%, rgba(24, 22, 35, 0.9) 38%, rgba(255, 255, 255, 0.1) 38%, rgba(255, 255, 255, 0.1) 40%, rgba(24, 22, 35, 0.9) 40%, rgba(24, 22, 35, 0.9) 100% ), repeating-radial-gradient( circle at center, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0.1) 1px, transparent 1px, transparent 4px );border-radius: 50%;pointer-events: none;box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) inset, 0 0 20px rgba(255, 255, 255, 0.1);}.cover-art::before {content: '';position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 6%;height: 6%;background: rgba(24, 22, 35, 1);border-radius: 50%;box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);z-index: 1;} .main-nowPlayingBar-left button {background: transparent;}",
+    "preview": "resources/assets/snippets/Spinning-CD-Cover-Art.jpg"
+  },
+  {
+    "title": "Nyan Cat Progress Bar",
+    "description": "Changes your playback progress bar to Nyan cat flying through space on a rainbow.",
+    "code": ".playback-bar .x-progressBar-fillColor {\n    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAMCAIAAAAs6UAAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUNCQzIyREQ0QjdEMTFFMzlEMDM4Qzc3MEY0NzdGMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUNCQzIyREU0QjdEMTFFMzlEMDM4Qzc3MEY0NzdGMDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQ0JDMjJEQjRCN0QxMUUzOUQwMzhDNzcwRjQ3N0YwOCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQ0JDMjJEQzRCN0QxMUUzOUQwMzhDNzcwRjQ3N0YwOCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PovDFgYAAAAmSURBVHjaYvjPwMAAxjMZmBhA9H8INv4P4TPM/A+m04zBNECAAQBCWQv9SUQpVgAAAABJRU5ErkJggg==')\n        repeat-x !important;\n    background: linear-gradient(\n        to bottom,\n        #ff0000 0%,\n        #ff0000 16.5%,\n        #ff9900 16.5%,\n        #ff9900 33%,\n        #ffff00 33%,\n        #ffff00 50%,\n        #33ff00 50%,\n        #33ff00 66%,\n        #0099ff 66%,\n        #0099ff 83.5%,\n        #6633ff 83.5%,\n        #6633ff 100%\n    ) !important;\n    width: 100% !important;\n}\n\n.playback-bar .x-progressBar-progressBarBg {\n    background: url('data:image/gif;base64,R0lGODlhMAAMAIAAAAxBd////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQECgAAACwAAAAAMAAMAAACJYSPqcvtD6MKstpLr24Z9A2GYvJ544mhXQmxoesElIyCcB3dRgEAIfkEBAoAAAAsAQACAC0ACgAAAiGEj6nLHG0enNQdWbPefOHYhSLydVhJoSYXPO04qrAmJwUAIfkEBAoAAAAsBQABACkACwAAAiGEj6nLwQ8jcC5ViW3evHt1GaE0flxpphn6BNTEqvI8dQUAIfkEBAoAAAAsAQABACoACwAAAiGEj6nLwQ+jcU5VidPNvPtvad0GfmSJeicUUECbxnK0RgUAIfkEBAoAAAAsAAAAACcADAAAAiCEj6mbwQ+ji5QGd6t+c/v2hZzYiVpXmuoKIikLm6hXAAAh+QQECgAAACwAAAAALQAMAAACI4SPqQvBD6NysloTXL480g4uX0iW1Wg21oem7ismLUy/LFwAACH5BAQKAAAALAkAAAAkAAwAAAIghI8Joe0Po0yBWTaz3g/z7UXhMX7kYmplmo0rC8cyUgAAIfkEBAoAAAAsBQAAACUACgAAAh2Ejwmh7Q+jbIFZNrPeEXPudU74IVa5kSiYqOtRAAAh+QQECgAAACwEAAAAIgAKAAACHISPELfpD6OcqTGKs4bWRp+B36YFi0mGaVmtWQEAIfkEBAoAAAAsAAAAACMACgAAAh2EjxC36Q+jnK8xirOW1kavgd+2BYtJhmnpiGtUAAAh+QQECgAAACwAAAAALgALAAACIYSPqcvtD+MKicqLn82c7e6BIhZQ5jem6oVKbfdqQLzKBQAh+QQECgAAACwCAAIALAAJAAACHQx+hsvtD2OStDplKc68r2CEm0eW5uSN6aqe1lgAADs=') !important;\n}\n\n.playback-bar .progress-bar__slider {\n    background: url('data:image/gif;base64,R0lGODlhIgAVAKIHAL3/9/+Zmf8zmf/MmZmZmf+Z/wAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpDMkJBNjY5RTU1NEJFMzExOUM4QUM2MDAwNDQzRERBQyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpCREIzOEIzMzRCN0IxMUUzODhEQjgwOTYzMTgyNTE0QiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpCREIzOEIzMjRCN0IxMUUzODhEQjgwOTYzMTgyNTE0QiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkM1QkE2NjlFNTU0QkUzMTE5QzhBQzYwMDA0NDNEREFDIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkMyQkE2NjlFNTU0QkUzMTE5QzhBQzYwMDA0NDNEREFDIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8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') !important;\n    width: 34px !important;\n    height: 21px !important;\n    border: none !important;\n    margin-left: -18px !important;\n    margin-top: 0px !important;\n    visibility: visible !important;\n    display: block !important;\n    transform: translateY(-50%) scale(0.8);\n    border-radius: 0 !important;\n    box-shadow: none !important;\n    transition: transform 0.1s cubic-bezier(0, 0, 0.2, 1) !important;\n}\n\n.playback-bar .progress-bar__slider::after {\n    display: none !important;\n}\n\n.playback-bar .progress-bar {\n    --progress-bar-height: 8px !important;\n}\n\n.playback-bar\n    :is(\n        .playback-progressbar-isInteractive .progress-bar--isDragging,\n        .playback-progressbar-isInteractive .progress-bar:focus,\n        .playback-progressbar-isInteractive .progress-bar:hover,\n        .playback-progressbar-isInteractive:focus-within\n    ) {\n    --progress-bar-height: 12px !important;\n}\n\n.playback-bar\n    :is(\n        .x-progressBar-progressBarBg,\n        .x-progressBar-sliderArea,\n        .x-progressBar-fillColor\n    ) {\n    transition: height 0.1s cubic-bezier(0, 0, 0.2, 1) !important;\n}\n\n.playback-bar\n    :is(\n        .playback-progressbar-isInteractive .progress-bar--isDragging,\n        .playback-progressbar-isInteractive .progress-bar:focus,\n        .playback-progressbar-isInteractive .progress-bar:hover,\n        .playback-progressbar-isInteractive:focus-within\n    )\n    .progress-bar__slider {\n    image-rendering: pixelated !important;\n    transform: translateY(-50%) scale(1) !important;\n}\n\n/* uncomment if you use text theme, for time readability */\n/* .playback-bar__progress-time-elapsed,\n.main-playbackBarRemainingTime-container {\n    mix-blend-mode: normal !important;\n    background: rgba(var(--spice-rgb-main), 0.8) !important;\n    box-shadow: 0 0 16px 8px var(--spice-main) !important;\n} */",
+    "preview": "resources/assets/snippets/nyan-cat-progress-bar.gif"
+  },
+  {
+    "title": "Be Square",
+    "description": "Removes rounded edges on square images and some Spotify UI. Does not affect images with 50% border-radius such as avatars or play buttons.",
+    "code": ".main-cardImage-image, .main-cardImage-imageWrapper, #fad-art-image, #fad-art:hover, #fad-art-overlay, #fsd-art-image,.main-entityHeader-image, .main-coverSlotCollapsed-navAltContainer,.main-trackList-rowSectionEnd>:not(:last-child), [dir=ltr] .main-trackList-rowSectionVariable>:not(:last-child,.main-trackList-facepile), [dir=ltr] .main-trackList-rowSectionStart>:not(:last-child),.main-nowPlayingView-coverArt, .x-entityImage-xsmall,.fRZRXRIV2YBCFLYgwDAr,.HD9s7U5E1RLSWKpXmrqx,.main-editImageButton-rounded,.x-entityImage,.osuFIR_6Jo9yKsmLL4y2,.Vn9yz8P5MjIvDT8c0U6w,.k270skPbT7JOaSidSA2a,.aaasJtK_0Z_ggHet0u6v,.kwzBRpFigKr1EP2d5qle,.H3mjE6AEBDPRuHNKUpRK ,.GS_6HA9xIobh5dt5VUSY,.GenericModal,.jW4eWdr_LUeOXwPpKhWG, .kh6wYYPvgRPBhA2wj3AS .qp7Sys7hJSZHLzw4K_yF,.ffFwfKcPDbmAPLXzxzKq,.main-nowPlayingView-section,.main-nowPlayingView-aboutArtistV2Image,.huMHH_FySIW5UhSrJfy8>video,.main-topBar-background,.main-nowPlayingView-aboutArtistButton,.RmbxUFLb4j9KmgftJyk1,.main-trackList-rowImage,.main-editImageButton-image, .lkXpBMSmNP9w702sek8V, /*-Canvas-*/.yMQTWVwLJ5bV8VGiaqU3:not(.MxmW8QkHqHWtuhO589PV)/**/,.main-yourLibraryX-entryPoints,.Root__main-view { border-radius: 0px !important; }",
+    "preview": "resources/assets/snippets/be-square.png"
+  },
+  {
+    "title": "Rounded Buttons",
+    "description": "Add rounded coners to buttons and search bar",
+    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG, .main-embedWidgetGenerator-themeRadio, .Psc33HXPyazZYAAr1tgz {border-radius: 15% !important;} .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected, .switch, .arrow-btn, .pSxFsY9Fgcj5f8Gf05mh, .qyKJPLjz8o4jnbk92JOn, .reset, .rdp-button, .btn, .TabItem__StyledTabItem-sc-2ani5y-0, .main-playlistEditDetailsModal-closeBtn, .main-embedWidgetGenerator-closeBtn, .Chip__ChipComponent-sc-ry3uox-0 {border-radius: 6px !important;} .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly,  .button-module__button___hf2qg_marketplace {border-radius: 10px !important;} .ButtonInner-large-iconOnly {border-radius: 12px !important;} .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput,  .toggle-module__toggle-indicator-wrapper___6Lcp0_marketplace, .x-toggle-indicatorWrapper, .main-topBar-searchBar {border-collapse: separate; border-radius: 6px !important;}",
+    "preview": "resources/assets/snippets/rounded-buttons.png"
+  },
+  {
+    "title": "Rounded Thicker Bars",
+    "description": "Makes the progress bar and volume bar thicker and rounded, inspired by Thicker Bars snippet.",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
+  },
+  {
+    "title": "Circular shadow fix for album art",
+    "description": "Fixes the square shadow you get in some setups when you have any sort of circular album art snippet installed.",
+    "code": ".main-nowPlayingView-nowPlayingWidget > div > div:nth-child(1) > div { box-shadow: none !important; } .main-nowPlayingView-coverArt { border-radius: 192px; overflow: hidden; }",
+    "preview": "resources/assets/snippets/Circular-Shadow-fix-for-album-art.png"
+  },
+  {
+    "title": "Declutter now playing bar",
+    "description": "Remove all extra elements from now playing bar except song details",
+    "code": ".main-nowPlayingView-section{ display:none; } .main-nowPlayingView-aboutArtistV2{ display:none; } .nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .Loading{ display:none !important; } .LoadingLyricsCard{ display:none !important; } .f6_Fu_ei4TIJWR0wzvTk{ display:none !important; }",
+    "preview": "resources/assets/snippets/declutter-now-playing-bar.png"
   }
 ]
