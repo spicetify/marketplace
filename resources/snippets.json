@@ -104,7 +104,7 @@
   {
     "title": "Disable Homepage Recommendations",
     "description": "Removes all recommendations from the homepage",
-    "code": "[data-testid='home-page'] .contentSpacing > *:not(.view-homeShortcutsGrid-shortcuts, .main-shelf-shelf:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
+    "code": "[data-testid='home-page'] .contentSpacing > *:not(.view-homeShortcutsGrid-shortcuts, [data-testid='component-shelf']:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
     "preview": "resources/assets/snippets/disable-recommendations.png"
   },
   {
@@ -224,7 +224,7 @@
   {
     "title": "Remove Popular sections from homepage",
     "description": "Thanks Spotify, but I have a music taste",
-    "code": ".main-shelf-shelf.Shelf:has([href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
+    "code": "[data-testid='home-page'] .contentSpacing > [data-testid='component-shelf']:has([href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-popular.png"
   },
   {
