@@ -1,5 +1,11 @@
 [
   {
+    "title": "Remove Playlist Album Cover",
+    "description": "Remove the album cover from the playlist banner",
+    "code": ".main-entityHeader-imageContainer.main-entityHeader-imageContainerNew { display: none; }",
+    "preview": "resources/assets/snippets/Remove-Playlist-Cover.png"
+  },
+  {
     "title": "Rounded 'Now Playing' Bar",
     "description": "Adds rounded corners to the 'Now Playing' bar so it matches the rest of the User Interface.",
     "code": ":root{ --border-radius-1: 8px; } .Root__now-playing-bar, .Root__now-playing-bar footer { border-radius: var(--border-radius-1) !important; }",
@@ -98,13 +104,13 @@
   {
     "title": "Disable Homepage Recommendations",
     "description": "Removes all recommendations from the homepage",
-    "code": "[data-testid='home-page'] .contentSpacing > *:not(.view-homeShortcutsGrid-shortcuts, .main-shelf-shelf:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
+    "code": "[data-testid='home-page'] .contentSpacing > *:not(.view-homeShortcutsGrid-shortcuts, [data-testid='component-shelf']:has([href=\"/genre/recently-played\"], [href=\"/section/0JQ5DAnM3wGh0gz1MXnu3z\"])) {\n  display: none !important;\n}",
     "preview": "resources/assets/snippets/disable-recommendations.png"
   },
   {
     "title": "Circular Album Art",
     "description": "Makes the now playing album art be circular (like a vinyl)",
-    "code": ".cover-art { clip-path: circle(50% at 50% 50%);}",
+    "code": ".cover-art-image { clip-path: circle(50% at 50% 50%); }.main-nowPlayingBar-left {border-radius: 50%;}",
     "preview": "resources/assets/snippets/circular-album-art.png"
   },
   {
@@ -158,13 +164,13 @@
   {
     "title": "Hide Sidebar ScrollBar",
     "description": "Hides Sidebar ScrollBar near playlist section",
-    "code": ".os-scrollbar:nth-child(6) .os-scrollbar-handle { visibility: hidden; }",
+    "code": "#Desktop_LeftSidebar_Id .os-scrollbar-handle, .Root__nav-bar .os-scrollbar-handle, #Desktop_LeftSidebar_Id .os-scrollbar-track, .Root__nav-bar .os-scrollbar-track { visibility: hidden; }",
     "preview": "resources/assets/snippets/hide-sidebar-scrollbar.png"
   },
   {
     "title": "Modern ScrollBar",
     "description": "Thin rounded modern scrollbar",
-    "code": ".os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle { border-radius: 4px; width: 6px; background-color: var(--spice-button-disabled); } .os-theme-spotify.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track { width: 6px; }",
+    "code": ".os-scrollbar-handle { width:0.25rem!important;border-radius:10rem !important; transition: width 300ms ease-in-out; } .os-scrollbar-handle:focus,.os-scrollbar-handle:focus-within,.os-scrollbar-handle:hover { width:0.35rem!important }",
     "preview": "resources/assets/snippets/modern-scrollbar.png"
   },
   {
@@ -218,7 +224,7 @@
   {
     "title": "Remove Popular sections from homepage",
     "description": "Thanks Spotify, but I have a music taste",
-    "code": ".main-shelf-shelf.Shelf:has([href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
+    "code": "[data-testid='home-page'] .contentSpacing > [data-testid='component-shelf']:has([href='/section/0JQ5DAuChZYPe9iDhh2mJz'], [href='/section/0JQ5DAnM3wGh0gz1MXnu4h'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3B'], [href='/section/0JQ5DAnM3wGh0gz1MXnu3D']) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-popular.png"
   },
   {
@@ -343,8 +349,8 @@
   },
   {
     "title": "Switch Sidebars",
-    "description": "Move the navigation panel to the right and the information sidebar to the left.",
-    "code": ".Root__top-container .Root__nav-bar { grid-area: right-sidebar !important; } .Root__top-container .Root__right-sidebar { grid-area: left-sidebar !important; }",
+    "description": "Move the navigation panel to the right and the information sidebar to the left. Drag to resize works in reverse or pre-switching context (drag off the application window to adjust).",
+    "code": ".Root__top-container .Root__nav-bar { grid-area: right-sidebar !important;} .Root__top-container .Root__right-sidebar { grid-area: left-sidebar !important;} .Root__top-container .Root__nav-bar .os-scrollbar,.Root__top-container .Root__nav-bar .LayoutResizer__resize-bar { left: -4px !important; right: auto !important; } .Root__top-container .Root__right-sidebar .os-scrollbar, .Root__top-container .Root__right-sidebar .LayoutResizer__resize-bar {  right: -4px !important; left: auto !important; } .Root__top-container .Root__nav-bar .LayoutResizer__resize-bar { transform: scaleX(-1); } .Root__top-container .Root__right-sidebar .LayoutResizer__resize-bar { transform: scaleX(-1); }",
     "preview": "resources/assets/snippets/switch-sidebars.png"
   },
   {
@@ -449,10 +455,22 @@
     "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
   },
+    "title": "Circular shadow fix for album art",
+    "description": "Fixes the square shadow you get in some setups when you have any sort of circular album art snippet installed.",
+    "code": ".main-nowPlayingView-nowPlayingWidget > div > div:nth-child(1) > div { box-shadow: none !important; } .main-nowPlayingView-coverArt { border-radius: 192px; overflow: hidden; }",
+    "preview": "resources/assets/snippets/Circular-Shadow-fix-for-album-art.png"
+  },
   {
+    "title": "Declutter now playing bar",
+    "description": "Remove all extra elements from now playing bar except song details",
+    "code": ".main-nowPlayingView-section{ display:none; } .main-nowPlayingView-aboutArtistV2{ display:none; } .nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .Loading{ display:none !important; } .LoadingLyricsCard{ display:none !important; } .f6_Fu_ei4TIJWR0wzvTk{ display:none !important; }",
+    "preview": "resources/assets/snippets/declutter-now-playing-bar.png"
+  },
+{
     "title": "Shonky",
     "description": "Adds shonky to your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 42px; height: 42px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 42px 42px ; background-image: url('https://static.blahaj.zone/shonky/assets/icons/Shonky-48px.png'); }",
     "preview": "resources/assets/snippets/ShonkyOnBar.png"
+
   }
 ]
