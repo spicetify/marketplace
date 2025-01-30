@@ -43,7 +43,7 @@
     "prismjs": "^1.29.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dropdown": "^1.11.0",
-    "react-i18next": "^15.1.0",
+    "react-i18next": "^15.4.0",
     "react-simple-code-editor": "^0.14.1",
     "semver": "^7.6.0"
   },
