@@ -467,6 +467,7 @@
     "code": "button[aria-label='Listen Together'] svg * { fill: currentColor !important; transform: scale(0.95) !important; transform-origin: center !important; }",
     "preview": "resources/assets/snippets/Fix-Listen-Together-Button.png"
   },
+  {
     "title": "Circular shadow fix for album art",
     "description": "Fixes the square shadow you get in some setups when you have any sort of circular album art snippet installed.",
     "code": ".main-nowPlayingView-nowPlayingWidget > div > div:nth-child(1) > div { box-shadow: none !important; } .main-nowPlayingView-coverArt { border-radius: 192px; overflow: hidden; }",
