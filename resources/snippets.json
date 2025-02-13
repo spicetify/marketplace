@@ -240,12 +240,6 @@
     "preview": "resources/assets/snippets/thicker-bars.png"
   },
   {
-    "title": "Hide friends activity button",
-    "description": "Hides the friends activity button next to your profile picture",
-    "code": "button.encore-over-media-set.main-topBar-buddyFeed {display: none;}",
-    "preview": "resources/assets/snippets/hide-friends-activity-button.png"
-  },
-  {
     "title": "Fullscreen hide playing from",
     "description": "Hides the playing from card while in fullscreen view",
     "code": ".npv-header.npv-header {display: none;}",
@@ -366,10 +360,10 @@
     "preview": "resources/assets/snippets/pokemon-adventure.png"
   },
   {
-    "title": "Hide Friend Activity Button 2024",
+    "title": "Hide Friend Activity Button",
     "description": "Hides the Friend Activity button",
-    "code": "[aria-label='Friend Activity'] {display:none;}",
-    "preview": "resources/assets/snippets/Hide-Friend-Activity-Button.png"
+    "code": "[aria-label='Friend Activity'] {display:none!important;}",
+    "preview": "resources/assets/snippets/hide-friend-activity-button.png"
   },
   {
     "title": "Hide What's New Button",
