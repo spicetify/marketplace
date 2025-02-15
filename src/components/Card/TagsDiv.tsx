@@ -50,7 +50,7 @@ const TagsDiv = (props: {
     }, []);
   };
   // Sort tags so that externalJS and archived tags come first
-  let baseTags = props.tags.sort((a) => (a === t("grid.externalJS") || a === t("grid.archived") ? -1 : 1));
+  let baseTags = [...(props.tags ?? [])].sort((a) => (a === t("grid.externalJS") || a === t("grid.archived") ? -1 : 1));
   let extraTags: string[] = [];
   // If there are more than one extra tags, slice them and add an expand button
   if (baseTags.length - MAX_TAGS > 1) {
