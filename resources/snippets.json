@@ -460,5 +460,11 @@
     "description": "Remove all extra elements from now playing bar except song details",
     "code": ".main-nowPlayingView-section{ display:none; } .main-nowPlayingView-aboutArtistV2{ display:none; } .nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .Loading{ display:none !important; } .LoadingLyricsCard{ display:none !important; } .f6_Fu_ei4TIJWR0wzvTk{ display:none !important; }",
     "preview": "resources/assets/snippets/declutter-now-playing-bar.png"
+  },
+  {
+    "title": "Remove the Artists and Credits sections from the Sidebar",
+    "description": "It will only show the album cover and the next song",
+    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
+    "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
   }
 ]
