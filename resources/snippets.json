@@ -449,7 +449,6 @@
     "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
   },
-  {
     "title": "Circular shadow fix for album art",
     "description": "Fixes the square shadow you get in some setups when you have any sort of circular album art snippet installed.",
     "code": ".main-nowPlayingView-nowPlayingWidget > div > div:nth-child(1) > div { box-shadow: none !important; } .main-nowPlayingView-coverArt { border-radius: 192px; overflow: hidden; }",
@@ -460,5 +459,12 @@
     "description": "Remove all extra elements from now playing bar except song details",
     "code": ".main-nowPlayingView-section{ display:none; } .main-nowPlayingView-aboutArtistV2{ display:none; } .nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .Loading{ display:none !important; } .LoadingLyricsCard{ display:none !important; } .f6_Fu_ei4TIJWR0wzvTk{ display:none !important; }",
     "preview": "resources/assets/snippets/declutter-now-playing-bar.png"
+  },
+{
+    "title": "Shonky",
+    "description": "Adds shonky to your playback bar!",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 42px; height: 42px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 42px 42px ; background-image: url('https://static.blahaj.zone/shonky/assets/icons/Shonky-48px.png'); }",
+    "preview": "resources/assets/snippets/ShonkyOnBar.png"
+
   }
 ]
