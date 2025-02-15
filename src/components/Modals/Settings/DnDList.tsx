@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 import { DragDropContext, Draggable, type DropResult, Droppable } from "react-beautiful-dnd";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
@@ -7,24 +7,48 @@ const DnDList = (props: {
   modalConfig: Config;
   updateConfig: (CONFIG: Config) => void;
 }) => {
-  // Get Value of CSS variable
   const colorVariable = getComputedStyle(document.body).getPropertyValue("--spice-button-disabled");
+  const [currentSize, setCurrentSize] = useState({ width: window.innerWidth });
 
-  const getItemStyle = (isDragging, draggableStyle, isEnabled) => ({
-    borderRadius: "5px",
-    border: isEnabled ? `2px solid ${colorVariable}` : "2px solid red",
-    userSelect: "none",
-    paddingTop: 12,
-    paddingBottom: 12,
-    width: "110px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: isEnabled ? "none" : "line-through",
-    ...draggableStyle
-  });
+  useEffect(() => {
+    const onResize = () => setCurrentSize({ width: window.innerWidth });
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
-  const getListStyle = (isDraggingOver) => ({
+  const adjustTransform = (transform: string) => {
+    const match = transform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
+    if (!match) return transform;
+    const isMaximized = currentSize.width >= window.screen.width * 0.95;
+    const offsetX = isMaximized ? 600 : 430;
+    const offsetY = isMaximized ? 120 : 70;
+    const x = Number.parseFloat(match[1]) - offsetX;
+    const y = Number.parseFloat(match[2]) - offsetY;
+    return `translate(${x}px, ${y}px)`;
+  };
+
+  const getItemStyle = (isDragging, draggableStyle, isEnabled) => {
+    const style = { ...draggableStyle };
+    if (isDragging && style.transform) {
+      style.transform = adjustTransform(style.transform);
+    }
+    return {
+      borderRadius: "5px",
+      border: isEnabled ? `2px solid ${colorVariable}` : "2px solid red",
+      userSelect: "none",
+      paddingTop: 12,
+      paddingBottom: 12,
+      width: "110px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textDecoration: isEnabled ? "none" : "line-through",
+      cursor: "pointer",
+      ...style
+    };
+  };
+
+  const getListStyle = () => ({
     display: "flex",
     paddingTop: 8,
     paddingBottom: 8,
@@ -62,18 +86,16 @@ const DnDList = (props: {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" direction="horizontal">
         {(provided, snapshot) => (
-          <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
+          <div ref={provided.innerRef} style={getListStyle()} {...provided.droppableProps}>
             {props.modalConfig.tabs.map((item, index) => (
               <Draggable key={item.name} draggableId={item.name} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    {...provided.dragHandleProps}
                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, item.enabled)}
-                    onClick={() => onToggleEnabled(item.name)}
                   >
-                    <div className="dnd-box">
+                    <div className="dnd-box" {...provided.dragHandleProps} onClick={() => onToggleEnabled(item.name)}>
                       <svg
                         className="dnd-icon"
                         fill="currentColor"
