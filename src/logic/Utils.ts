@@ -69,39 +69,36 @@ export const parseIni = (data: string): SchemeIni => {
     param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
     comment: /^\s*;.*$/
   };
-  const value = {};
+  const value: SchemeIni = {};
   const lines = data.split(/[\r\n]+/);
   let section: string | null = null;
+
   for (const line of lines) {
     if (regex.comment.test(line)) {
-      return {};
+      continue; // Skip comment lines
     }
+
     if (regex.param.test(line)) {
-      // Discard color scheme if it contains xrdb
+      // Check for xrdb
       if (line.includes("xrdb")) {
-        delete value[section ?? ""];
-        section = null;
-        return {};
+        continue; // Skip xrdb lines
       }
 
-      const match: string[] | null = line.match(regex.param);
-
-      // TODO: github copilot made this part, but I have no idea what it does
-      // if (match?.length !== 3) {
-      //   throw "Could not parse INI file.";
-      // }
-
-      if (section && match) {
-        value[section][match[1]] = match[2].split(";")[0].trim();
+      const match = line.match(regex.param);
+      if (section && match && match.length === 3) {
+        const key = match[1].trim();
+        const val = match[2].split(";")[0].trim();
+        if (!value[section]) {
+          value[section] = {};
+        }
+        value[section][key] = val;
       }
     } else if (regex.section.test(line)) {
       const match = line.match(regex.section);
       if (match) {
-        value[match[1]] = {};
         section = match[1];
+        value[section] = {};
       }
-    } else if (line.length === 0 && section) {
-      section = null;
     }
   }
   return value;
