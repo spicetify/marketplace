@@ -39,7 +39,7 @@ export const CUSTOM_APP_PATH = "/marketplace";
 // Used in Card.tsx
 export const MAX_TAGS = 4;
 
-export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/marketplace/blob/main/src/resources/snippets.ts";
+export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/marketplace/blob/main/resources/snippets.json";
 
 export const SNIPPETS_URL = "https://raw.githubusercontent.com/spicetify/marketplace/main/resources/snippets.json";
 
