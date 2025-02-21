@@ -478,5 +478,11 @@
     "description": "It will only show the album cover and the next song",
     "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
+  },
+  {
+    "title": "Hide Create button",
+    "description": "Hide Create button from Top Bar (global-nav-bar).",
+    "code": ".fiHe04F7JrFVxwTtQKNC  { display: none; }",
+    "preview": "resources/assets/snippets/Hide-Create-button.png"
   }
 ]
