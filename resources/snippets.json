@@ -332,7 +332,7 @@
   {
     "title": "Smaller right sidebar cover art",
     "description": "Makes the right sidebar cover art smaller and move the track info to the right.",
-    "code": ":root { --right-sidebar-cover-art-size: 85px; } \n.main-nowPlayingView-coverArt { width: var(--right-sidebar-cover-art-size); } \n.main-nowPlayingView-coverArtContainer { min-height: unset !important; height: var(--right-sidebar-cover-art-size) !important; } \n.main-nowPlayingView-nowPlayingGrid { flex-direction: row !important;  align-items: center; gap: 100px; } \n.main-nowPlayingView-contextItemInfo { flex: 1; min-width: 0; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-name { font-size: 1.25rem; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-artists { font-size: 0.85rem; } \n.main-nowPlayingView-contextItemInfo:before { display: none !important; } ",
+    "code": ":root { --right-sidebar-cover-art-size: 85px; } \n.main-nowPlayingView-coverArt { width: var(--right-sidebar-cover-art-size); } \n.main-nowPlayingView-coverArtContainer { min-height: unset !important; width: var(--right-sidebar-cover-art-size) !important; } \n.main-nowPlayingView-nowPlayingGrid { flex-direction: row !important;  align-items: center; } \n.main-nowPlayingView-contextItemInfo { flex: 1; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-name { font-size: 1.25rem; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-artists { font-size: 0.85rem; } \n.main-nowPlayingView-contextItemInfo:before { display: none !important; } ",
     "preview": "resources/assets/snippets/smaller-right-sidebar-cover.png"
   },
   {
