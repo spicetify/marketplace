@@ -1,11 +1,45 @@
+[CmdletBinding()]
+param(
+    [Parameter()]
+    [switch]$BypassAdmin
+)
+
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$bypassAdminEnabled = ($args -contains "--bypass-admin") -or ($MyInvocation.Line -like "*--bypass-admin*")
+function Invoke-Spicetify {
+    param (
+        [Parameter(Mandatory = $true, Position = 0, ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+    
+    $spicetifyArgs = @()
+    if ($BypassAdmin) {
+        $spicetifyArgs += "--bypass-admin"
+    }
+    $spicetifyArgs += $Arguments
+    
+    & spicetify $spicetifyArgs
+    return $LASTEXITCODE
+}
 
-$spicetifyArgs = @()
-if ($bypassAdminEnabled) {
-    $spicetifyArgs += "--bypass-admin"
+function Invoke-SpicetifyWithOutput {
+    param (
+        [Parameter(Mandatory = $true, Position = 0, ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+    
+    $spicetifyArgs = @()
+    if ($BypassAdmin) {
+        $spicetifyArgs += "--bypass-admin"
+    }
+    $spicetifyArgs += $Arguments
+    
+    $output = (& spicetify $spicetifyArgs 2>&1 | Out-String).Trim()
+    return @{
+        Output = $output
+        ExitCode = $LASTEXITCODE
+    }
 }
 
 Write-Host -Object 'Setting up...' -ForegroundColor 'Cyan'
@@ -21,14 +55,13 @@ if (-not (Get-Command -Name 'spicetify' -ErrorAction 'SilentlyContinue')) {
 }
 
 try {
-    $cmdArgs = $spicetifyArgs + @("path", "userdata")
-    $spicetifyOutput = (& spicetify $cmdArgs 2>&1 | Out-String).Trim()
-    if ($LASTEXITCODE -ne 0) {
+    $result = Invoke-SpicetifyWithOutput "path" "userdata"
+    if ($result.ExitCode -ne 0) {
         Write-Host -Object "Error from Spicetify:" -ForegroundColor 'Red'
-        Write-Host -Object $spicetifyOutput -ForegroundColor 'Red'
+        Write-Host -Object $result.Output -ForegroundColor 'Red'
         return
     }
-    $spiceUserDataPath = $spicetifyOutput
+    $spiceUserDataPath = $result.Output
 } catch {
     Write-Host -Object "Error running Spicetify:" -ForegroundColor 'Red'
     Write-Host -Object $_.Exception.Message.Trim() -ForegroundColor 'Red'
@@ -40,22 +73,20 @@ if (-not (Test-Path -Path $spiceUserDataPath -PathType 'Container' -ErrorAction 
 }
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
+
 $isThemeInstalled = $(
-    $cmdArgs = $spicetifyArgs + @("path", "-s")
-    & spicetify $cmdArgs | Out-Null
+    Invoke-Spicetify "path" "-s" | Out-Null
     -not $LASTEXITCODE
 )
-$cmdArgs = $spicetifyArgs + @("config", "current_theme")
-$currentTheme = (& spicetify $cmdArgs)
+$currentTheme = (Invoke-SpicetifyWithOutput "config" "current_theme").Output
 $setTheme = $true
 
 Write-Host -Object 'Removing and creating Marketplace folders...' -ForegroundColor 'Cyan'
 try {
-    $cmdArgs = $spicetifyArgs + @("path", "userdata")
-    $spicetifyOutput = (& spicetify $cmdArgs 2>&1 | Out-String).Trim()
-    if ($LASTEXITCODE -ne 0) {
+    $result = Invoke-SpicetifyWithOutput "path" "userdata"
+    if ($result.ExitCode -ne 0) {
         Write-Host -Object "Error: Failed to get Spicetify path. Details:" -ForegroundColor 'Red'
-        Write-Host -Object $spicetifyOutput -ForegroundColor 'Red'
+        Write-Host -Object $result.Output -ForegroundColor 'Red'
         return
     }
 
@@ -83,12 +114,9 @@ Write-Host -Object 'Unzipping and installing...' -ForegroundColor 'Cyan'
 Expand-Archive -Path $marketArchivePath -DestinationPath $marketAppPath -Force
 Move-Item -Path "$unpackedFolderPath\*" -Destination $marketAppPath -Force
 Remove-Item -Path $marketArchivePath, $unpackedFolderPath -Force
-$cmdArgs = $spicetifyArgs + @("config", "custom_apps", "spicetify-marketplace-", "-q")
-& spicetify $cmdArgs
-$cmdArgs = $spicetifyArgs + @("config", "custom_apps", "marketplace")
-& spicetify $cmdArgs
-$cmdArgs = $spicetifyArgs + @("config", "inject_css", "1", "replace_colors", "1")
-& spicetify $cmdArgs
+Invoke-Spicetify "config" "custom_apps" "spicetify-marketplace-" "-q"
+Invoke-Spicetify "config" "custom_apps" "marketplace"
+Invoke-Spicetify "config" "inject_css" "1" "replace_colors" "1"
 
 Write-Host -Object 'Downloading placeholder theme...' -ForegroundColor 'Cyan'
 $Parameters = @{
@@ -110,13 +138,10 @@ if ($isThemeInstalled -and ($currentTheme -ne 'marketplace')) {
     if ($choice = 1) { $setTheme = $false }
 }
 if ($setTheme) {
-    $cmdArgs = $spicetifyArgs + @("config", "current_theme", "marketplace")
-    & spicetify $cmdArgs
+    Invoke-Spicetify "config" "current_theme" "marketplace"
 }
-$cmdArgs = $spicetifyArgs + @("backup")
-& spicetify $cmdArgs
-$cmdArgs = $spicetifyArgs + @("apply")
-& spicetify $cmdArgs
+Invoke-Spicetify "backup"
+Invoke-Spicetify "apply"
 
 Write-Host -Object 'Done!' -ForegroundColor 'Green'
 Write-Host -Object 'If nothing has happened, check the messages above for errors'
