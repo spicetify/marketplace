@@ -13,10 +13,22 @@ if (-not (Get-Command -Name 'spicetify' -ErrorAction 'SilentlyContinue')) {
   Invoke-WebRequest @Parameters | Invoke-Expression
 }
 
-spicetify path userdata | Out-Null
-$spiceUserDataPath = (spicetify path userdata)
+try {
+    $spicetifyOutput = spicetify path userdata 2>&1 | Out-String
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host -Object "Error from Spicetify:" -ForegroundColor 'Red'
+        Write-Host -Object $spicetifyOutput -ForegroundColor 'Red'
+        exit 1
+    }
+    $spiceUserDataPath = $spicetifyOutput.Trim()
+} catch {
+    Write-Host -Object "Error running Spicetify:" -ForegroundColor 'Red'
+    Write-Host -Object $_.Exception.Message -ForegroundColor 'Red'
+    exit 1
+}
+
 if (-not (Test-Path -Path $spiceUserDataPath -PathType 'Container' -ErrorAction 'SilentlyContinue')) {
-  $spiceUserDataPath = "$env:APPDATA\spicetify"
+    $spiceUserDataPath = "$env:APPDATA\spicetify"
 }
 $marketAppPath = "$spiceUserDataPath\CustomApps\marketplace"
 $marketThemePath = "$spiceUserDataPath\Themes\marketplace"
@@ -28,8 +40,23 @@ $currentTheme = (spicetify config current_theme)
 $setTheme = $true
 
 Write-Host -Object 'Removing and creating Marketplace folders...' -ForegroundColor 'Cyan'
-Remove-Item -Path $marketAppPath, $marketThemePath -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
-New-Item -Path $marketAppPath, $marketThemePath -ItemType 'Directory' -Force | Out-Null
+try {
+    $spicetifyOutput = spicetify path userdata 2>&1 | Out-String
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host -Object "Error: Failed to get Spicetify path. Details:" -ForegroundColor 'Red'
+        Write-Host -Object $spicetifyOutput -ForegroundColor 'Red'
+        exit 1
+    }
+
+    Remove-Item -Path $marketAppPath, $marketThemePath -Recurse -Force -ErrorAction 'SilentlyContinue' | Out-Null
+    if (-not (New-Item -Path $marketAppPath, $marketThemePath -ItemType 'Directory' -Force -ErrorAction 'Stop')) {
+        Write-Host -Object "Error: Failed to create Marketplace directories." -ForegroundColor 'Red'
+        exit 1
+    }
+} catch {
+    Write-Host -Object "Error: $($_.Exception.Message)" -ForegroundColor 'Red'
+    exit 1
+}
 
 Write-Host -Object 'Downloading Marketplace...' -ForegroundColor 'Cyan'
 $marketArchivePath = "$marketAppPath\marketplace.zip"
