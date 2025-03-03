@@ -643,7 +643,7 @@ class Grid extends React.Component<
           if (cardsOfType.length) {
             return (
               // Add a header for the card type
-              <>
+              <div className="marketplace-content">
                 {/* Add a header for the card type */}
                 <h2 className="marketplace-card-type-heading">{t(`tabs.${cardType.name}`)}</h2>
                 {/* Add the grid and cards */}
@@ -654,7 +654,7 @@ class Grid extends React.Component<
                 >
                   {cardsOfType}
                 </div>
-              </>
+              </div>
             );
           }
           return null;
@@ -666,8 +666,15 @@ class Grid extends React.Component<
           </Button>
         ) : null}
         <footer className="marketplace-footer">
-          {!this.state.endOfList &&
-            (this.state.rest && this.state.cards.length > 0 ? <LoadMoreIcon onClick={this.loadMore.bind(this)} /> : <LoadingIcon />)}
+          {!this.state.endOfList ? (
+            this.state.rest && this.state.cards.length > 0 ? (
+              <LoadMoreIcon onClick={this.loadMore.bind(this)} />
+            ) : (
+              <LoadingIcon />
+            )
+          ) : (
+            <div style={{ height: "64px" }} />
+          )}
         </footer>
         <TopBarContent switchCallback={this.switchTo.bind(this)} links={this.CONFIG.tabs} activeLink={this.CONFIG.activeTab} />
       </section>
