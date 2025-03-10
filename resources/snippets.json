@@ -402,6 +402,12 @@
     "preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
   },
   {
+    "title": "[Global Nav Bar] remove scrolling overflow",
+    "description": "Removes the max visible width restrictions of the 'sidebar' items. Useful if you have more than the scrolling limit but not as much that it will overflow with the searchbar",
+    "code": ".custom-navlinks-scrollable_container{max-width: unset!important}",
+    "preview": "resources/assets/snippets/glob-nav-max-items.png"
+  },
+  {
     "title": "Hide Mini Player Button",
     "description": "Hides the Mini Player button.",
     "code": "button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16V2.45z']) {display: none;}",
