@@ -1,4 +1,10 @@
 [
+   {
+    "title": "Dont Dim Now Playing View",
+    "description": "keeps the now playing view from dimming as if it's always being hovered",
+    "code": ".E08D6ucrHuPJYzzGO7HG:after { opacity: 0; }",
+    "preview": "https://files.catbox.moe/d2m2ba.png"
+  }
   {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
