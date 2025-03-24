@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import React, { type DetailedReactHTMLElement } from "react";
 
-import { MAX_TAGS } from "../../constants";
+import { MAX_TAGS } from "@constants";
 
 const TagsDiv = (props: {
   tags: string[];

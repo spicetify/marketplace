@@ -11,7 +11,19 @@
     "strictPropertyInitialization": false,
     "skipLibCheck": true,
     "noImplicitAny": false,
-    "lib": ["ES2022", "DOM"]
+    "lib": ["ES2022", "DOM"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+      "@src/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@extensions/*": ["src/extensions/*"],
+      "@logic/*": ["src/logic/*"],
+      "@type/*": ["src/types/*"],
+      "@constants": ["src/constants"],
+      "@locales": ["src/resources/locales"],
+      "@locales/*": ["src/resources/locales/*"]
+    }
   },
   "include": ["src/**/*"]
 }

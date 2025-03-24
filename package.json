@@ -16,7 +16,7 @@
     "lint:ci": "biome check *",
     "type-check": "tsc --noEmit",
     "watch": "spicetify-creator --watch",
-    "prepare": "husky install",
+    "prepare": "husky",
     "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/cli/main/globals.d.ts"
   },
   "engines": {
@@ -26,26 +26,27 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "@types/chroma-js": "^2.4.4",
+    "@types/chroma-js": "^2.4.5",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
     "@types/semver": "^7.5.8",
     "copyfiles": "^2.4.1",
-    "husky": "^9.1.4",
+    "eslint-import-resolver-typescript": "^4.2.2",
+    "husky": "^9.1.7",
     "spicetify-creator": "^1.0.17",
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "chroma-js": "^3.1.1",
-    "i18next": "^24.2.2",
-    "i18next-browser-languagedetector": "^8.0.0",
-    "prismjs": "^1.29.0",
+    "@biomejs/biome": "^1.9.4",
+    "chroma-js": "^3.1.2",
+    "i18next": "^24.2.3",
+    "i18next-browser-languagedetector": "^8.0.4",
+    "prismjs": "^1.30.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dropdown": "^1.11.0",
-    "react-i18next": "^15.4.0",
+    "react-i18next": "^15.4.1",
     "react-simple-code-editor": "^0.14.1",
-    "semver": "^7.7.0"
+    "semver": "^7.7.1"
   },
   "private": true
 }

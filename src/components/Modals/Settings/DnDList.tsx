@@ -1,7 +1,7 @@
-import React, { Component, useState, useEffect, useRef } from "react";
+import { LOCALSTORAGE_KEYS } from "@constants";
+import type { Config, TabItemConfig } from "@type/marketplace-types";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Draggable, type DropResult, Droppable } from "react-beautiful-dnd";
-import { LOCALSTORAGE_KEYS } from "../../../constants";
-import type { Config, TabItemConfig } from "../../../types/marketplace-types";
 
 const DnDList = (props: {
   modalConfig: Config;

@@ -1,8 +1,8 @@
+import TooltipIcon from "@components/Icons/TooltipIcon";
+import SortBox from "@components/Sortbox";
+import Toggle from "@components/Toggle";
+import type { Config } from "@type/marketplace-types";
 import React from "react";
-import type { Config } from "../../../types/marketplace-types";
-import TooltipIcon from "../../Icons/TooltipIcon";
-import SortBox from "../../Sortbox";
-import Toggle from "../../Toggle";
 const Spicetify = window.Spicetify;
 
 const ConfigRow = (props: {

@@ -1,5 +1,5 @@
-import { version } from "../package.json";
-import type { TabItemConfig } from "./types/marketplace-types";
+import { version } from "@/package.json";
+import type { TabItemConfig } from "@type/marketplace-types";
 
 export const MARKETPLACE_VERSION = version;
 

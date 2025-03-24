@@ -7,23 +7,25 @@ import styles from "../styles/modules/button.module.scss";
 // Circle is used by the install/remove button
 type ButtonType = "round" | "circle";
 
-const Button = (props: {
+interface ButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   classes?: string[];
   label?: string | null;
   type?: ButtonType;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled?: boolean;
-}) => {
-  const buttonType = props.type || "round";
+}
+
+const Button: React.FC<ButtonProps> = ({ children, onClick, classes = [], disabled = false, label, type = "button" }) => {
+  const buttonType = type || "round";
 
   const classList = [styles.button];
   if (buttonType === "circle") classList.push(styles.circle);
-  if (props.classes) classList.push(...props.classes);
+  if (classes) classList.push(...classes);
 
   return (
-    <button className={classList.join(" ")} onClick={props.onClick} aria-label={props.label || ""} disabled={props.disabled}>
-      {props.children}
+    <button className={classList.join(" ")} onClick={onClick} aria-label={label || ""} disabled={disabled}>
+      {children}
     </button>
   );
 };

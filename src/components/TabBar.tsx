@@ -1,7 +1,7 @@
+import type { TabItemConfig } from "@type/marketplace-types";
 import React, { useState, useEffect } from "react";
 import Dropdown, { type Option } from "react-dropdown";
 import { withTranslation } from "react-i18next";
-import type { TabItemConfig } from "../types/marketplace-types";
 
 // NOTE: The label and value are the same (e.g. "Extensions")
 type TabOptionConfig = Option & {

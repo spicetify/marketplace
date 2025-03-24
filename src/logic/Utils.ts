@@ -1,9 +1,9 @@
 import Chroma from "chroma-js";
 import { t } from "i18next";
 
-import type { CardProps } from "../components/Card/Card";
-import { LOCALSTORAGE_KEYS } from "../constants";
-import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import type { CardProps } from "@components/Card/Card";
+import { LOCALSTORAGE_KEYS } from "@constants";
+import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "@type/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key

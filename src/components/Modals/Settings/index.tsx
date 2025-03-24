@@ -1,13 +1,13 @@
 import { t } from "i18next";
 import React from "react";
 
-import { LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../../../constants";
-import { openModal } from "../../../logic/LaunchModals";
-import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "../../../logic/Utils";
-import type { Config } from "../../../types/marketplace-types";
-import Button from "../../Button";
-import ConfigRow from "./ConfigRow";
-import DnDList from "./DnDList";
+import Button from "@components/Button";
+import ConfigRow from "@components/Modals/Settings/ConfigRow";
+import DnDList from "@components/Modals/Settings/DnDList";
+import { LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "@constants";
+import { openModal } from "@logic/LaunchModals";
+import { getLocalStorageDataFromKey, resetMarketplace, sleep } from "@logic/Utils";
+import type { Config } from "@type/marketplace-types";
 
 interface Props {
   CONFIG: Config;

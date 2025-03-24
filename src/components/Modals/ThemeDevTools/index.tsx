@@ -4,9 +4,9 @@ import React from "react";
 import Editor from "react-simple-code-editor";
 import "prismjs/components/prism-ini";
 
-import { LOCALSTORAGE_KEYS } from "../../../constants";
-import { getInvalidCSS, getLocalStorageDataFromKey, parseIni, unparseIni } from "../../../logic/Utils";
-import Button from "../../Button";
+import Button from "@components/Button";
+import { LOCALSTORAGE_KEYS } from "@constants";
+import { getInvalidCSS, getLocalStorageDataFromKey, parseIni, unparseIni } from "@logic/Utils";
 
 const themeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 const themeManifest = themeKey ? getLocalStorageDataFromKey(themeKey) : null;

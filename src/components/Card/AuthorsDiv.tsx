@@ -1,5 +1,5 @@
+import type { Author } from "@type/marketplace-types";
 import React from "react";
-import type { Author } from "../../types/marketplace-types";
 
 const AuthorsDiv = (props: {
   authors: Author[];
