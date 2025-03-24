@@ -24,7 +24,11 @@
       "backupBtn": "Open",
       "versionHeading": "Version",
       "versionBtn": "Copy",
-      "versionCopied": "Copied"
+      "versionCopied": "Copied",
+      "clearCacheDescription": "Clear the manifest cache and refresh data.",
+      "clearCacheBtn": "Clear Cache",
+      "clearCacheSuccessBtn": "Cache Cleared",
+      "clearCacheFailureBtn": "Clear Failed"
     },
     "tabs": {
       "Extensions": "Extensions",

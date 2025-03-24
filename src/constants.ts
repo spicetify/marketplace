@@ -48,3 +48,11 @@ export const BLACKLIST_URL = "https://raw.githubusercontent.com/spicetify/market
 export const RELEASES_URL = "https://github.com/spicetify/marketplace/releases";
 
 export const LATEST_RELEASE_URL = "https://api.github.com/repos/spicetify/marketplace/releases/latest";
+
+export const CACHE_EXPIRATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+export const IDB_DB_NAME = "marketplaceCache";
+export const IDB_DB_VERSION = 1;
+export const IDB_REPO_LIST_STORE = "repoLists";
+export const IDB_MANIFEST_STORE = "manifests";
+export const IDB_BLACKLIST_STORE = "blacklist";
+export const IDB_SNIPPETS_STORE = "snippets";

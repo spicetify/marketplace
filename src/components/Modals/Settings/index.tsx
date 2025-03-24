@@ -1,6 +1,7 @@
 import { t } from "i18next";
 import React from "react";
 
+import { clearAllCaches } from "@/src/logic/IndexedDbCache";
 import Button from "@components/Button";
 import ConfigRow from "@components/Modals/Settings/ConfigRow";
 import DnDList from "@components/Modals/Settings/DnDList";
@@ -21,10 +22,19 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
 
   const [modalConfig, setModalConfig] = React.useState({ ...CONFIG });
   const [versionButtonText, setVersionButtonText] = React.useState(t("settings.versionBtn"));
+  const [cacheButtonText, setCacheButtonText] = React.useState(t("settings.clearCacheBtn"));
+
   // TODO: use React.useCallback?
   const updateConfig = (CONFIG: Config) => {
     updateAppConfig({ ...CONFIG });
     setModalConfig({ ...CONFIG });
+  };
+
+  /** Clear Marketplace manifest cache and update Button text */
+  const clearCache = async () => {
+    const success = await clearAllCaches();
+    setCacheButtonText(success ? t("settings.clearCacheSuccessBtn") : t("settings.clearCacheFailureBtn"));
+    setTimeout(() => setCacheButtonText(t("settings.clearCacheBtn")), 3000);
   };
 
   /** Copy Marketplace version to clipboard and update button text */
@@ -93,6 +103,12 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
 
       <div className="settings-block">
         <h2 className="settings-heading">{t("settings.resetHeading")}</h2>
+        <div className="settings-row">
+          <span className="col description">{t("settings.clearCacheDescription")}</span>
+          <div className="col action">
+            <Button onClick={clearCache}>{cacheButtonText}</Button>
+          </div>
+        </div>
         <div className="settings-row">
           <span className="col description">{t("settings.resetDescription")}</span>
           <div className="col action">

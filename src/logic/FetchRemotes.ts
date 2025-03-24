@@ -1,7 +1,17 @@
 import { t } from "i18next";
 
-import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "@constants";
-import { addToSessionStorage, processAuthors } from "@logic/Utils";
+import {
+  BLACKLIST_URL,
+  CACHE_EXPIRATION_MS,
+  IDB_BLACKLIST_STORE,
+  IDB_MANIFEST_STORE,
+  IDB_REPO_LIST_STORE,
+  IDB_SNIPPETS_STORE,
+  ITEMS_PER_REQUEST,
+  SNIPPETS_URL
+} from "@constants";
+import { getCachedData, setCachedData } from "@logic/IndexedDbCache";
+import { processAuthors } from "@logic/Utils";
 import type { CardItem, RepoTopic, Snippet } from "@type/marketplace-types";
 
 // TODO: add sort type, order, etc?
@@ -24,18 +34,21 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
   // Sorting params (not implemented for Marketplace yet)
   // if (sortConfig.by.match(/top|controversial/) && sortConfig.time) {
   //     url += `&t=${sortConfig.time}`
-  const allRepos =
-    JSON.parse(window.sessionStorage.getItem(`${tag}-page-${page}`) || "null") ||
-    (await fetch(url)
-      .then((res) => res.json())
-      .catch(() => null));
+
+  const cacheKey = url;
+  const cachedResult = await getCachedData(IDB_REPO_LIST_STORE, cacheKey);
+  if (cachedResult?.timestamp && Date.now() - cachedResult.timestamp < CACHE_EXPIRATION_MS) {
+    return cachedResult.data;
+  }
+
+  const allRepos = await fetch(url)
+    .then((res) => res.json())
+    .catch(() => null);
 
   if (!allRepos?.items) {
     Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
     return { items: [] };
   }
-
-  window.sessionStorage.setItem(`${tag}-page-${page}`, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,
@@ -45,6 +58,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
     items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url) && (showArchived || !item.archived))
   };
 
+  await setCachedData(IDB_REPO_LIST_STORE, cacheKey, filteredResults);
   return filteredResults;
 }
 
@@ -84,21 +98,20 @@ async function fetchRepoManifest(url: string) {
  * @returns The manifest object
  */
 async function getRepoManifest(user: string, repo: string, branch: string) {
-  const key = `${user}-${repo}`;
-  const sessionStorageItem = window.sessionStorage.getItem(key);
-  const failedSessionStorageItems = JSON.parse(window.sessionStorage.getItem("noManifests") || "[]");
-  if (sessionStorageItem) return JSON.parse(sessionStorageItem);
+  const cacheKey = `manifest-${user}-${repo}-${branch}`;
+
+  const cachedManifest = await getCachedData(IDB_MANIFEST_STORE, cacheKey);
+  if (cachedManifest?.timestamp && Date.now() - cachedManifest.timestamp < CACHE_EXPIRATION_MS) {
+    return cachedManifest.data;
+  }
 
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (failedSessionStorageItems.includes(url)) return null;
 
   let manifest = await fetchRepoManifest(url);
-
-  if (!manifest) return addToSessionStorage([url], "noManifests");
+  if (!manifest) return null;
   if (!Array.isArray(manifest)) manifest = [manifest];
 
-  addToSessionStorage(manifest, key);
-
+  await setCachedData(IDB_MANIFEST_STORE, cacheKey, manifest);
   return manifest;
 }
 
@@ -120,6 +133,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
+    if (!manifests) return null;
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -182,6 +196,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
+    if (!manifests) return null;
 
     // Manifest is initially parsed
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
@@ -246,6 +261,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
+    if (!manifests) return null;
 
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
@@ -298,10 +314,23 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
  * @returns String array of blacklisted repos
  */
 export const getBlacklist = async () => {
+  const cacheKey = "blacklist-data";
+
+  const cachedBlacklist = await getCachedData(IDB_BLACKLIST_STORE, cacheKey);
+  if (cachedBlacklist?.timestamp && Date.now() - cachedBlacklist.timestamp < CACHE_EXPIRATION_MS) {
+    return cachedBlacklist.data;
+  }
+
   const json = await fetch(BLACKLIST_URL)
     .then((res) => res.json())
-    .catch(() => ({}));
-  return json.repos as string[] | undefined;
+    .catch((error) => {
+      console.error("Error fetching blacklist:", error);
+      return { repos: [] };
+    });
+  const blacklist = (json.repos as string[] | undefined) || [];
+
+  await setCachedData(IDB_BLACKLIST_STORE, cacheKey, blacklist);
+  return blacklist;
 };
 
 /**
@@ -309,9 +338,20 @@ export const getBlacklist = async () => {
  * @returns Array of snippets
  */
 export const fetchCssSnippets = async (hideInstalled = false) => {
+  const cacheKey = "css-snippets-data";
+
+  const cachedSnippets = await getCachedData(IDB_SNIPPETS_STORE, cacheKey);
+  if (cachedSnippets?.timestamp && Date.now() - cachedSnippets.timestamp < CACHE_EXPIRATION_MS) {
+    return cachedSnippets.data;
+  }
+
   const snippetsJSON = (await fetch(SNIPPETS_URL)
     .then((res) => res.json())
-    .catch(() => [])) as Snippet[];
+    .catch((error) => {
+      console.error("Error fetching CSS snippets:", error);
+      return [];
+    })) as Snippet[];
+
   if (!snippetsJSON.length) return [];
 
   const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
@@ -333,5 +373,6 @@ export const fetchCssSnippets = async (hideInstalled = false) => {
     return accum;
   }, []);
 
+  await setCachedData(IDB_SNIPPETS_STORE, cacheKey, snippets);
   return snippets;
 };

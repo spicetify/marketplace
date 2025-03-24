@@ -3,6 +3,7 @@ import { t } from "i18next";
 
 import type { CardProps } from "@components/Card/Card";
 import { LOCALSTORAGE_KEYS } from "@constants";
+import { clearAllCaches } from "@logic/IndexedDbCache";
 import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "@type/marketplace-types";
 
 /**
@@ -221,6 +222,8 @@ export const generateSortOptions = (t: (key: string) => string) => {
  */
 export const resetMarketplace = (...categories: ResetCategory[]) => {
   console.debug("Resetting Marketplace");
+
+  clearAllCaches();
 
   const keysToRemove: string[] = [];
 
