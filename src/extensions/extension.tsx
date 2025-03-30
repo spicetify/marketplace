@@ -4,8 +4,8 @@
 
 import { t } from "i18next";
 
-import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist } from "../logic/FetchRemotes";
+import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "@constants";
+import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist } from "@logic/FetchRemotes";
 import {
   addExtensionToSpicetifyConfig,
   exportMarketplace,
@@ -21,8 +21,8 @@ import {
   isGithubRawUrl,
   parseCSS,
   resetMarketplace
-} from "../logic/Utils";
-import type { RepoType } from "../types/marketplace-types";
+} from "@logic/Utils";
+import type { RepoType } from "@type/marketplace-types";
 
 (async function init() {
   if (!Spicetify.LocalStorage || !Spicetify.showNotification) {

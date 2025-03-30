@@ -1,8 +1,8 @@
 import { t } from "i18next";
 import React from "react";
 
-import { LATEST_RELEASE_URL, MARKETPLACE_VERSION, RELEASES_URL } from "../../../constants";
-import { getMarkdownHTML } from "../../../logic/Utils";
+import { LATEST_RELEASE_URL, MARKETPLACE_VERSION, RELEASES_URL } from "@constants";
+import { getMarkdownHTML } from "@logic/Utils";
 
 async function fetchLatestReleaseInfo(): Promise<{
   version: string;

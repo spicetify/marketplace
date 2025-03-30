@@ -4,8 +4,8 @@ import React from "react";
 import Editor from "react-simple-code-editor";
 import "prismjs/components/prism-json";
 
-import { exportMarketplace, importMarketplace } from "../../../logic/Utils";
-import Button from "../../Button";
+import Button from "@components/Button";
+import { exportMarketplace, importMarketplace } from "@logic/Utils";
 
 const BackupModal = () => {
   const [importText, setImportText] = React.useState("");
@@ -53,7 +53,7 @@ const BackupModal = () => {
    * Prompt user to select a file to import and then run importMarketplace
    */
   const importSettingsFromFile = async () => {
-    const fileHandle = await window.showOpenFilePicker();
+    const fileHandle = await (window as any).showOpenFilePicker();
     const file = await fileHandle[0].getFile();
     const text = await file.text();
 

@@ -1,6 +1,6 @@
+import type { SortBoxOption } from "@type/marketplace-types";
 import React from "react";
 import Dropdown, { type Option } from "react-dropdown";
-import type { SortBoxOption } from "../types/marketplace-types";
 
 interface Props {
   sortBoxOptions: SortBoxOption[];

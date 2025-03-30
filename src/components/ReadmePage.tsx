@@ -1,12 +1,12 @@
+import Button from "@components/Button";
+import DownloadIcon from "@components/Icons/DownloadIcon";
+import GitHubIcon from "@components/Icons/GitHubIcon";
+import LoadingIcon from "@components/Icons/LoadingIcon";
+import TrashIcon from "@components/Icons/TrashIcon";
+import { getMarkdownHTML } from "@logic/Utils";
+import type { CardType } from "@type/marketplace-types";
 import React from "react";
 import { withTranslation } from "react-i18next";
-import { getMarkdownHTML } from "../logic/Utils";
-import type { CardType } from "../types/marketplace-types";
-import Button from "./Button";
-import DownloadIcon from "./Icons/DownloadIcon";
-import GitHubIcon from "./Icons/GitHubIcon";
-import LoadingIcon from "./Icons/LoadingIcon";
-import TrashIcon from "./Icons/TrashIcon";
 
 class ReadmePage extends React.Component<
   {

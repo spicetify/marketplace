@@ -4,11 +4,11 @@ import React from "react";
 import Editor from "react-simple-code-editor";
 import "prismjs/components/prism-css";
 
-import { LOCALSTORAGE_KEYS } from "../../../constants";
-import type { ModalType } from "../../../logic/LaunchModals";
-import { fileToBase64, getLocalStorageDataFromKey, initializeSnippets } from "../../../logic/Utils";
-import Button from "../../Button";
-import type { CardProps } from "../../Card/Card";
+import Button from "@components/Button";
+import type { CardProps } from "@components/Card/Card";
+import { LOCALSTORAGE_KEYS } from "@constants";
+import type { ModalType } from "@logic/LaunchModals";
+import { fileToBase64, getLocalStorageDataFromKey, initializeSnippets } from "@logic/Utils";
 
 const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: () => void }) => {
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";

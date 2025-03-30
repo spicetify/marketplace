@@ -4,12 +4,12 @@ import React from "react";
 import { initReactI18next, withTranslation } from "react-i18next";
 
 import "./styles/styles.scss";
-import Grid from "./components/Grid";
-import ReadmePage from "./components/ReadmePage";
-import { ALL_TABS, CUSTOM_APP_PATH, LOCALSTORAGE_KEYS } from "./constants";
-import { getLocalStorageDataFromKey } from "./logic/Utils";
-import locales from "./resources/locales";
-import type { Config, TabItemConfig } from "./types/marketplace-types";
+import Grid from "@components/Grid";
+import ReadmePage from "@components/ReadmePage";
+import { ALL_TABS, CUSTOM_APP_PATH, LOCALSTORAGE_KEYS } from "@constants";
+import locales from "@locales";
+import { getLocalStorageDataFromKey } from "@logic/Utils";
+import type { Config, TabItemConfig } from "@type/marketplace-types";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

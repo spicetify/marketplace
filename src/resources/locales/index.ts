@@ -1,19 +1,19 @@
-import ar from "./ar.json";
-import ca from "./ca.json";
-import deDE from "./de-DE.json";
-import enUS from "./en-US.json";
-import en from "./en.json";
-import es from "./es.json";
-import et from "./et.json";
-import fr from "./fr.json";
-import it from "./it.json";
-import ja from "./ja.json";
-import pl from "./pl.json";
-import ptBR from "./pt-BR.json";
-import ru from "./ru.json";
-import uk from "./uk.json";
-import zhCN from "./zh-CN.json";
-import zhTW from "./zh-TW.json";
+import ar from "@locales/ar.json";
+import ca from "@locales/ca.json";
+import deDE from "@locales/de-DE.json";
+import enUS from "@locales/en-US.json";
+import en from "@locales/en.json";
+import es from "@locales/es.json";
+import et from "@locales/et.json";
+import fr from "@locales/fr.json";
+import it from "@locales/it.json";
+import ja from "@locales/ja.json";
+import pl from "@locales/pl.json";
+import ptBR from "@locales/pt-BR.json";
+import ru from "@locales/ru.json";
+import uk from "@locales/uk.json";
+import zhCN from "@locales/zh-CN.json";
+import zhTW from "@locales/zh-TW.json";
 
 export default {
   ar,

@@ -1,6 +1,6 @@
+import Button from "@components/Button";
 import { t } from "i18next";
 import React from "react";
-import Button from "../../Button";
 
 const ReloadModal = () => {
   return (

@@ -4,20 +4,20 @@ import { withTranslation } from "react-i18next";
 import semver from "semver";
 const Spicetify = window.Spicetify;
 
-import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
-import { openModal } from "../logic/LaunchModals";
-import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
-import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
-import Button from "./Button";
-import Card, { type Card as CardClass } from "./Card/Card";
-import DownloadIcon from "./Icons/DownloadIcon";
-import LoadMoreIcon from "./Icons/LoadMoreIcon";
-import LoadingIcon from "./Icons/LoadingIcon";
-import SettingsIcon from "./Icons/SettingsIcon";
-import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
-import SortBox from "./Sortbox";
-import { TopBarContent } from "./TabBar";
+import Button from "@components/Button";
+import Card, { type Card as CardClass } from "@components/Card/Card";
+import DownloadIcon from "@components/Icons/DownloadIcon";
+import LoadMoreIcon from "@components/Icons/LoadMoreIcon";
+import LoadingIcon from "@components/Icons/LoadingIcon";
+import SettingsIcon from "@components/Icons/SettingsIcon";
+import ThemeDeveloperToolsIcon from "@components/Icons/ThemeDeveloperToolsIcon";
+import SortBox from "@components/Sortbox";
+import { TopBarContent } from "@components/TabBar";
+import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "@constants";
+import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "@logic/FetchRemotes";
+import { openModal } from "@logic/LaunchModals";
+import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "@logic/Utils";
+import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "@type/marketplace-types";
 
 class Grid extends React.Component<
   {

@@ -2,16 +2,16 @@ import { t } from "i18next";
 import React, { type Key } from "react";
 import { withTranslation } from "react-i18next";
 
-import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
-import { openModal } from "../../logic/LaunchModals";
-import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "../../logic/Utils";
-import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
-import Button from "../Button";
-import DownloadIcon from "../Icons/DownloadIcon";
-import GitHubIcon from "../Icons/GitHubIcon";
-import TrashIcon from "../Icons/TrashIcon";
-import AuthorsDiv from "./AuthorsDiv";
-import TagsDiv from "./TagsDiv";
+import Button from "@components/Button";
+import AuthorsDiv from "@components/Card/AuthorsDiv";
+import TagsDiv from "@components/Card/TagsDiv";
+import DownloadIcon from "@components/Icons/DownloadIcon";
+import GitHubIcon from "@components/Icons/GitHubIcon";
+import TrashIcon from "@components/Icons/TrashIcon";
+import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "@constants";
+import { openModal } from "@logic/LaunchModals";
+import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "@logic/Utils";
+import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "@type/marketplace-types";
 const Spicetify = window.Spicetify;
 
 export type CardProps = {
