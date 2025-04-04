@@ -40,7 +40,7 @@
     "chroma-js": "^3.1.1",
     "i18next": "^24.2.2",
     "i18next-browser-languagedetector": "^8.0.0",
-    "prismjs": "^1.29.0",
+    "prismjs": "^1.30.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dropdown": "^1.11.0",
     "react-i18next": "^15.4.0",
