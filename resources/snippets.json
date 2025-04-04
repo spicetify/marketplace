@@ -484,5 +484,11 @@
     "description": "It will only show the album cover and the next song",
     "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
+  },
+  {
+    "title": "CLEAN CANVAS",
+    "description": "removes spotify canvas gradient",
+    "code": ".E08D6ucrHuPJYzzGO7HG:after { opacity: 0 } .E08D6ucrHuPJYzzGO7HG:before, .main-nowPlayingView-contextItemInfo:before { background: none !important; } .eEiwEPDfVRD0HKjYM_dq button { background: #00000000 }",
+    "preview": "resources/assets/snippets/remove-spotify-canvas-gradient.png"
   }
 ]
