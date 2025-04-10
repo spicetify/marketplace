@@ -1,5 +1,11 @@
 [
   {
+    "title": "Hide 'Scroll through previews'",
+    "description": "Hides the 'Scroll through previews of tracks' button from albums/playlists",
+    "code": "[aria-label^='Explore'] { display: none !important; }",
+    "preview": "resources/assets/snippets/hide-scroll-through-previews.png"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
