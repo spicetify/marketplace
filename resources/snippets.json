@@ -1,5 +1,11 @@
 [
   {
+    "title": "Hide Now Playing and Friends Activity",
+    "description": "It hides Now Playing and Friends Activity",
+    "code": ".Root__right-sidebar { width: 0; } .Root__right-sidebar .LayoutResizer__resize-bar { display: none; }",
+    "preview": "resources/assets/snippets/hide-now-playing-and-friends-activity.png"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
