@@ -13,6 +13,8 @@
 # Usage (IMPORTANT)
 If you have downloaded the extension from the marketplace you must download the application in my <a href="https://github.com/AndySharp44s/Cristify-Downloader/releases" target="_blank">Github</a>, it acts as a server to download the songs, it has an easy to use interface and very configurable.  
 
+In the future I will put the option to automatically see the updates, until then if you have any error be aware of my repository because I will upload updates as needed.
+
 <a href="https://github.com/AndySharp44s/Cristify-Downloader/releases" target="_blank">https://github.com/AndySharp44s/Cristify-Downloader/releases</a>
 
 # Cristify Downloader
