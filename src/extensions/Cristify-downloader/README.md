@@ -11,7 +11,9 @@
 </div>
 
 # Usage (IMPORTANT)
-If you have downloaded the extension from the marketplace you must download the application in my github, it acts as a server to download the songs, it has an easy to use interface and very configurable.
+If you have downloaded the extension from the marketplace you must download the application in my <a href="https://github.com/AndySharp44s/Cristify-Downloader/releases" target="_blank">Github</a>, it acts as a server to download the songs, it has an easy to use interface and very configurable.  
+
+<a href="https://github.com/AndySharp44s/Cristify-Downloader/releases" target="_blank">https://github.com/AndySharp44s/Cristify-Downloader/releases</a>
 
 # Cristify Downloader
 This program automatically installs an extension for Spicetify (you need Spicetify before installing this program) and creates an internal server. A background application waits for commands sent from Spotify to download any song or lyrics.
