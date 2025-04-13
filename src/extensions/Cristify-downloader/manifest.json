@@ -1,7 +1,17 @@
 {
   "name": "Cristify Downloader",
   "description": "Download songs directly from Spotify using Spicetify and Spotdl.",
-  "author": "AndySharp44s",
+  "authors": [
+    {
+      "name": "AndySharp44s",
+      "url": "https://github.com/AndySharp44s"
+    }
+  ],
   "version": "1.4",
-  "spicetifyVersion": "^2.20.0"
+  "spicetifyVersion": "^2.20.0",
+  "main": "index.js",
+  "preview": "screenshot.png",
+  "readme": "README.md",
+  "tags": ["downloader", "spotify", "spotdl", "premium", "premiun", "free", "download"]
 }
+
