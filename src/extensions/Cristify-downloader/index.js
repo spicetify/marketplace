@@ -16,7 +16,7 @@
 
     const lang = Locale.getLocale();
     const buttontxt = "Download Song";
-    const version = "2.2";
+    const version = "2.3";
     const port = "2012";
 
     function wait(ms) {
@@ -251,7 +251,7 @@
 
             if (webEncendida) {
                 const img = new Image();
-                img.src = `http://localhost:${port}?url=huhiuhjkjbkhjhb&name=${btoa(unescape(encodeURIComponent(artistObject)))}`;
+                img.src = `http://localhost:${port}?url=PLAYLOCALSONG&name=${btoa(unescape(encodeURIComponent(artistObject)))}`;
             } else {
                 ShowError();
             }
@@ -445,6 +445,16 @@
   </g>
 </svg>`
 
+    function generarTextoAleatorio(longitud) {
+        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let textoAleatorio = '';
+        for (let i = 0; i < longitud; i++) {
+            const indice = Math.floor(Math.random() * caracteres.length);
+            textoAleatorio += caracteres.charAt(indice);
+        }
+        return textoAleatorio;
+    }
+
     const button = new Spicetify.Playbar.Button("Configure", SVG3, () => {
         (async () => {
             Spicetify.showNotification("Wait please...");
@@ -453,7 +463,8 @@
 
             if (webEncendida) {
                 const img = new Image();
-                img.src = `http://localhost:${port}?url=CONFIGURECRISTIFY`;
+                const textoAleatorio = generarTextoAleatorio(10);
+                img.src = `http://localhost:${port}?url=CONFIGURECRISTIFY${textoAleatorio}`;
             } else {
                 ShowError();
             }
