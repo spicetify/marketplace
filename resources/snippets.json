@@ -484,5 +484,11 @@
     "description": "It will only show the album cover and the next song",
     "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
+  },
+  {
+    "title": "Increase Size of Apps List",
+    "description": "Just makes the apps list inside the titlebar slightly wider so you don't have to click an arrow to see all your apps.",
+    "code": ".custom-navlinks-scrollable_container { max-width: calc(100px* var(--max-custom-navlink-count) + 8px*(var(--max-custom-navlink-count) - 1)); -webkit-app-region: no-drag; }",
+    "preview": "resources/assets/snippets/Increase-Size-of-Apps-List.png"
   }
 ]
