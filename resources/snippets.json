@@ -484,5 +484,11 @@
     "description": "It will only show the album cover and the next song",
     "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
+  },
+  {
+    "title": "Star wars lightsaber progress bar",
+    "description": "it changes the default spotify progress bar, into the Anakin lightsaber",
+    "code": ".playback-bar .x-progressBar-progressBarBg {height: 80% !important;background: none !important;}.playback-bar .x-progressBar-sliderArea {height: 100% !important;}.playback-bar .x-progressBar-fillColor {height: 60% !important;margin-top: 2px !important;background: #fff !important;box-shadow: -2px 0px 5px 5px #10c3fd !important;border-radius: 1px solid #fff !important;}.player-controls .playback-progressbar::before {content: '';width: 80px ;height: 80px;bottom: calc(100% - 7px);left: -5px;top:-35px;z-index: 10;position: absolute;background-size: 80px 80px;background-image: url(https://i.imgur.com/jhwlQlr.png'); }",
+    "preview": "resources/assets/snippets/light-saber-bar.png"
   }
 ]
