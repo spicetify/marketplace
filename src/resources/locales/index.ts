@@ -14,6 +14,7 @@ import ru from "./ru.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
+import ko from "./ko.json";
 
 export default {
   ar,
@@ -31,5 +32,7 @@ export default {
   uk,
   ja,
   "pt-BR": ptBR,
-  "de-DE": deDE
+  "de-DE": deDE,
+  ko,
 };
+
