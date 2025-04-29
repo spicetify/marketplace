@@ -8,7 +8,7 @@
       "showArchived": "보관된 리포지스토리 보기",
       "devToolsLabel": "테마 개발자 도구",
       "hideInstalledLabel": "설치된 기능은 탐색 결과에서 숨기기",
-      "colourShiftLabel": "매 분마다 색상 변경", 
+      "colourShiftLabel": "매 분마다 색상 변경",
       "albumArtBasedColors": "앨범 표지에 따라 색상 변경",
       "albumArtBasedColorsMode": "색상 구성표 (색상Api) 모드",
       "albumArtBasedColorsVibrancy": "앨범 표지에서 색상 추출",

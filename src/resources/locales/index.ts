@@ -33,6 +33,6 @@ export default {
   ru,
   uk,
   "zh-CN": zhCN,
-  "zh-TW": zhTW,
+  "zh-TW": zhTW
 };
 
