@@ -484,5 +484,11 @@
     "description": "It will only show the album cover and the next song",
     "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
+  },
+  {
+    "title": "Minecraft progress bar",
+    "description": "Replaces the default progress bar with the minecraft XP bar",
+    "code": ".playback-bar .x-progressBar-progressBarBg { height: 80% !important; background-image: url(https://i.imgur.com/di9J4K0.png) !important; background-size: cover; background-position: center; } .playback-bar .x-progressBar-sliderArea { height: 100% !important; } .playback-bar .x-progressBar-fillColor { height: 100% !Important; background: none; background-image: url(https://i.imgur.com/c7NB133.png)!important; background-size: cover; background-position: center; }",
+    "preview": "resources/assets/snippets/XP-bar-pr.png"
   }
 ]
