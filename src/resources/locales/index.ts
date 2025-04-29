@@ -8,31 +8,31 @@ import et from "./et.json";
 import fr from "./fr.json";
 import it from "./it.json";
 import ja from "./ja.json";
+import ko from "./ko.json";
 import pl from "./pl.json";
 import ptBR from "./pt-BR.json";
 import ru from "./ru.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
-import ko from "./ko.json";
 
 export default {
   ar,
   ca,
-  en,
-  "en-US": enUS,
-  es,
-  fr,
-  ru,
-  "zh-TW": zhTW,
-  "zh-CN": zhCN,
-  et,
-  pl,
-  it,
-  uk,
-  ja,
-  "pt-BR": ptBR,
   "de-DE": deDE,
+  "en-US": enUS,
+  en,
+  es,
+  et,
+  fr,
+  it,
+  ja,
   ko,
+  pl,
+  "pt-BR": ptBR,
+  ru,
+  uk,
+  "zh-CN": zhCN,
+  "zh-TW": zhTW,
 };
 
