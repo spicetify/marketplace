@@ -35,4 +35,3 @@ export default {
   "zh-CN": zhCN,
   "zh-TW": zhTW
 };
-
