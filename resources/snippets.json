@@ -492,9 +492,9 @@
     "preview": "resources/assets/snippets/XP-bar-pr.png"
   },
   {
-    "title": "Fix queue popop colors",
+    "title": "Fix clear queue popop colors",
     "description": "Why is it in light mode? Who knows! this fixes it to not be.",
     "code": ".ReactModalPortal .e-9640-text, dialog .e-9640-text {color: var(--spice-text)} .Button-buttonTertiary-medium-useBrowserDefaultFocusStyle {background: var(--spice-text); color: var(--spice-main)} .jAjrv_00X1qyxaEHmJCb {background: var(--spice-main)}",
-    "preview": "resources/assets/snippets/fix-queue-popup-colors.png"
+    "preview": "resources/assets/snippets/fix-clear-queue-popup-colors.png"
   }
 ]
