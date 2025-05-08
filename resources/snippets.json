@@ -1,5 +1,10 @@
 [
   {
+    "title": "hover panel(tm)",
+    "description": "Make the left side panel appear on hover, while preserving the resize functionality of it. + actually good animations (and don't hide it while resizing, that would be frustrating.)",
+    "code": ":root{--ease-out-cubic:cubic-bezier(0.215, 0.61, 0.355, 1);--ease-in-out-cubic:cubic-bezier(0.645, 0.045, 0.355, 1);--hoverable-area:16px;#Desktop_LeftSidebar_Id{--offset:calc(calc(var(--left-sidebar-width) * 1px) - var(--hoverable-area));position:absolute;height:100%;opacity:0;left:calc(var(--offset) * -1);transition-property:left, opacity;transition-duration:300ms;transition-timing-function:var(--ease-in-out-cubic);transition-delay:150ms;&:focus-within,&:has(.LayoutResizer__resize-bar--resizing),&:hover{left:0;opacity:1;transition-duration:150ms;transition-timing-function:var(--ease-out-cubic);transition-delay:50ms}}}"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
