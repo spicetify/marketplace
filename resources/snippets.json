@@ -194,7 +194,7 @@
   {
     "title": "Rotating Cover Art",
     "description": "Adds circular mask to cover art and rotation",
-    "code": "@keyframes rotating {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.cover-art, .main-nowPlayingView-coverArtContainer::after, .main-nowPlayingView-coverArtContainer::before {animation: rotating 10s linear infinite;border-radius: 50%;}.cover-art {clip-path: circle(50% at 50% 50%);} .main-nowPlayingBar-left button {background: transparent;}",
+    "code": "@keyframes rotating {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.cover-art, .main-nowPlayingView-coverArtContainer::after, .main-nowPlayingView-coverArtContainer::before {animation: rotating 10s linear infinite;border-radius: 50%;}.cover-art {clip-path: circle(50% at 50% 50%);} .main-nowPlayingBar-left button {background: transparent;} .main-nowPlayingView-coverArt {box-shadow:none; filter: drop-shadow(0 9px 9px rgba(0,0,0,.271));}",
     "preview": "resources/assets/snippets/rotating-coverart.png"
   },
   {
@@ -405,7 +405,7 @@
     "title": "More Visible Unplayable Tracks",
     "description": "Changes the background of unplayable tracks to make it easier to spot them in large playlists.",
     "code": ".main-trackList-disabled{background:#f004}.main-trackList-disabled:focus-within,.main-trackList-disabled:hover{background:#f005}.main-trackList-disabled.main-trackList-selected,.main-trackList-disabled.main-trackList-selected:hover{background:#f006}",
-    "preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks"
+    "preview": "resources/assets/snippets/More-Visible-Unplayable-Tracks.png"
   },
   {
     "title": "Hide Mini Player Button",
@@ -452,7 +452,7 @@
   {
     "title": "Rounded Buttons",
     "description": "Add rounded coners to buttons and search bar",
-    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG {border-radius: 15% !important;} .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected, .switch, .arrow-btn, .pSxFsY9Fgcj5f8Gf05mh, .qyKJPLjz8o4jnbk92JOn, .reset, .rdp-button, .btn, .TabItem__StyledTabItem-sc-2ani5y-0, .main-embedWidgetGenerator-closeBtn, .main-playlistEditDetailsModal-closeBtn, .profile-userEditDetails-closeButton,  .mKUj4tXOjumlcv0q9Qta, .Chip__ChipComponent-sc-ry3uox-0, .LegacyChipInner__ChipInnerComponent-sc-1qguixk-0, .sHDdcNIw9AQLbLrpdcqO, .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly,  .button-module__button___hf2qg_marketplace, .link-subtle, .yDdtQxGIyqWU3GNrntPu, .AIlmv6h8bR5NY5R0VceT, .e-9640-baseline, .XlmJIRaVv7a23oYq6lwU  {border-radius: 6px !important;} .ButtonInner-large-iconOnly, .tLjX9htIKD_OCmEX01UN {border-radius: 12px !important;} .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput,  .toggle-module__toggle-indicator-wrapper___6Lcp0_marketplace, .x-toggle-indicatorWrapper, .main-topBar-searchBar {border-collapse: separate; border-radius: 6px !important;}",
+    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG {border-radius: 15% !important;} .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected, .switch, .arrow-btn, .pSxFsY9Fgcj5f8Gf05mh, .qyKJPLjz8o4jnbk92JOn, .reset, .rdp-button, .btn, .TabItem__StyledTabItem-sc-2ani5y-0, .main-embedWidgetGenerator-closeBtn, .main-playlistEditDetailsModal-closeBtn, .profile-userEditDetails-closeButton,  .mKUj4tXOjumlcv0q9Qta, .Chip__ChipComponent-sc-ry3uox-0, .LegacyChipInner__ChipInnerComponent-sc-1qguixk-0, .sHDdcNIw9AQLbLrpdcqO, .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly,  .button-module__button___hf2qg_marketplace, .link-subtle, .yDdtQxGIyqWU3GNrntPu, .AIlmv6h8bR5NY5R0VceT, .e-9640-baseline, .XlmJIRaVv7a23oYq6lwU, .main-card-PlayButtonContainer, .e-9800-baseline, .e-9812-baseline {border-radius: 6px !important;} .ButtonInner-large-iconOnly, .tLjX9htIKD_OCmEX01UN {border-radius: 12px !important;} .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput,  .toggle-module__toggle-indicator-wrapper___6Lcp0_marketplace, .x-toggle-indicatorWrapper, .main-topBar-searchBar {border-collapse: separate; border-radius: 6px !important;}",
     "preview": "resources/assets/snippets/rounded-buttons.png"
   },
   {
@@ -490,5 +490,11 @@
     "description": "It will only show the album cover and the next song",
     "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
+  },
+  {
+    "title": "Minecraft progress bar",
+    "description": "Replaces the default progress bar with the minecraft XP bar",
+    "code": ".playback-bar .x-progressBar-progressBarBg { height: 80% !important; background-image: url(https://i.imgur.com/di9J4K0.png) !important; background-size: cover; background-position: center; } .playback-bar .x-progressBar-sliderArea { height: 100% !important; } .playback-bar .x-progressBar-fillColor { height: 100% !Important; background: none; background-image: url(https://i.imgur.com/c7NB133.png)!important; background-size: cover; background-position: center; }",
+    "preview": "resources/assets/snippets/XP-bar-pr.png"
   }
 ]
