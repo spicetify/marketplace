@@ -6,6 +6,12 @@
     "preview": "resources/assets/snippets/sonic-dancing.png"
   },
   {
+    "title": "Sonic Dancing that moves with the progress bar",
+    "description": "You get sonic dancing and moving with the playback bar!",
+    "code": ".player-controls .playback-progressbar .progress-bar::before { content: ''; width: 32px; height: 32px; bottom: calc(100%); left: var(--progress-bar-transform); position: absolute; transition: left var(--progress-bar-duration); image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
+    "preview": "resources/assets/snippets/sonic-moving.png"
+  },
+  {
     "title": "Remove Playlist Album Cover",
     "description": "Remove the album cover from the playlist banner",
     "code": ".main-entityHeader-imageContainer.main-entityHeader-imageContainerNew { display: none; }",
