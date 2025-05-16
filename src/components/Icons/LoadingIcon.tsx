@@ -18,7 +18,15 @@ const LoadingIcon = () => {
   //   })));
 
   return (
-    <svg width="100px" height="100px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" role="img" aria-label="Loading Icon">
+    <svg
+      style={{ marginTop: "60px" }}
+      width="100px"
+      height="100px"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid"
+      role="img"
+      aria-label="Loading Icon"
+    >
       <circle cx="50" cy="50" r="0" fill="none" stroke="currentColor" strokeWidth="2">
         <animate
           attributeName="r"
