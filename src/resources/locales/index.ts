@@ -8,6 +8,7 @@ import et from "./et.json";
 import fr from "./fr.json";
 import it from "./it.json";
 import ja from "./ja.json";
+import ko from "./ko.json";
 import pl from "./pl.json";
 import ptBR from "./pt-BR.json";
 import ru from "./ru.json";
@@ -18,18 +19,19 @@ import zhTW from "./zh-TW.json";
 export default {
   ar,
   ca,
-  en,
+  "de-DE": deDE,
   "en-US": enUS,
+  en,
   es,
-  fr,
-  ru,
-  "zh-TW": zhTW,
-  "zh-CN": zhCN,
   et,
-  pl,
+  fr,
   it,
-  uk,
   ja,
+  ko,
+  pl,
   "pt-BR": ptBR,
-  "de-DE": deDE
+  ru,
+  uk,
+  "zh-CN": zhCN,
+  "zh-TW": zhTW
 };
