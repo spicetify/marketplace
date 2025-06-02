@@ -15,8 +15,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       i18next:
-        specifier: ^25.0.2
-        version: 25.0.2(typescript@5.8.2)
+        specifier: ^25.2.1
+        version: 25.2.1(typescript@5.8.2)
       i18next-browser-languagedetector:
         specifier: ^8.1.0
         version: 8.1.0
@@ -31,7 +31,7 @@ importers:
         version: 1.11.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-i18next:
         specifier: ^15.5.1
-        version: 15.5.1(i18next@25.0.2(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2)
+        version: 15.5.1(i18next@25.2.1(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2)
       react-simple-code-editor:
         specifier: ^0.14.1
         version: 0.14.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -75,6 +75,10 @@ packages:
 
   '@babel/runtime@7.27.1':
     resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.27.4':
+    resolution: {integrity: sha512-t3yaEOuGu9NlIZ+hIeGbBjFtZT7j2cb2tg0fuaJKeGotchRjjLfrBA9Kwf8quhpP1EUuxModQg04q/mBwyg8uA==}
     engines: {node: '>=6.9.0'}
 
   '@biomejs/biome@1.8.3':
@@ -261,8 +265,8 @@ packages:
     resolution: {integrity: sha512-YGZxdTTL9lmLkCUTpg4j0zQ7IhRB5ZmqNBbGCl3Tg6MP/d5/6sY7L5mmTjzbc6JKgVZYiqTQTNhPFsbXNGlRaA==}
     engines: {node: '>=0.8'}
 
-  debug@4.4.0:
-    resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
+  debug@4.4.1:
+    resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -515,8 +519,8 @@ packages:
   i18next-browser-languagedetector@8.1.0:
     resolution: {integrity: sha512-mHZxNx1Lq09xt5kCauZ/4bsXOEA2pfpwSoU11/QTJB+pD94iONFwp+ohqi///PwiFvjFOxe1akYCdHyFo1ng5Q==}
 
-  i18next@25.0.2:
-    resolution: {integrity: sha512-xWxgK8GAaPYkV9ia2tdgbtdM+qiC+ysVTBPvXhpCORU/+QkeQe3BSI7Crr+c4ZXULN1PfnXG/HY2n7HGx4KKBg==}
+  i18next@25.2.1:
+    resolution: {integrity: sha512-+UoXK5wh+VlE1Zy5p6MjcvctHXAhRwQKCxiJD8noKZzIXmnAX8gdHX5fLPA3MEVxEN4vbZkQFy8N0LyD9tUqPw==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -1047,6 +1051,8 @@ snapshots:
 
   '@babel/runtime@7.27.1': {}
 
+  '@babel/runtime@7.27.4': {}
+
   '@biomejs/biome@1.8.3':
     optionalDependencies:
       '@biomejs/cli-darwin-arm64': 1.8.3
@@ -1228,7 +1234,7 @@ snapshots:
       find-pkg: 0.1.2
       fs-exists-sync: 0.1.0
 
-  debug@4.4.0:
+  debug@4.4.1:
     dependencies:
       ms: 2.1.3
 
@@ -1437,9 +1443,9 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.27.1
 
-  i18next@25.0.2(typescript@5.8.2):
+  i18next@25.2.1(typescript@5.8.2):
     dependencies:
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.27.4
     optionalDependencies:
       typescript: 5.8.2
 
@@ -1690,11 +1696,11 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  react-i18next@15.5.1(i18next@25.0.2(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2):
+  react-i18next@15.5.1(i18next@25.2.1(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2):
     dependencies:
       '@babel/runtime': 7.27.1
       html-parse-stringify: 3.0.1
-      i18next: 25.0.2(typescript@5.8.2)
+      i18next: 25.2.1(typescript@5.8.2)
       react: 18.2.0
     optionalDependencies:
       react-dom: 18.2.0(react@18.2.0)
@@ -1706,7 +1712,7 @@ snapshots:
 
   react-redux@7.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.24.1
       '@types/react-redux': 7.1.33
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
@@ -1748,7 +1754,7 @@ snapshots:
 
   redux@4.2.1:
     dependencies:
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.24.1
 
   regenerator-runtime@0.14.0: {}
 
@@ -1851,7 +1857,7 @@ snapshots:
   stylus@0.60.0:
     dependencies:
       '@adobe/css-tools': 4.2.0
-      debug: 4.4.0
+      debug: 4.4.1
       glob: 7.2.3
       sax: 1.2.4
       source-map: 0.7.4
