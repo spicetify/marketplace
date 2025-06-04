@@ -1,3 +1,8 @@
 {
-  "repos": ["https://github.com/FoxRefire/spiceDL", "https://github.com/s000ik/Speedify", "https://github.com/hudzax/amai-lyrics"]
+  "repos": [
+    "https://github.com/FoxRefire/spiceDL",
+    "https://github.com/s000ik/Speedify",
+    "https://github.com/ssatwik975/Speedify",
+    "https://github.com/hudzax/amai-lyrics"
+  ]
 }
