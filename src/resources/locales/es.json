@@ -1,13 +1,19 @@
 {
   "translation": {
     "settings": {
-      "title": "Ajustes",
+      "title": "Ajustes de Marketplace",
       "optionsHeading": "Opciones",
       "starCountLabel": "Número de estrellas",
       "tagsLabel": "Etiquetas",
+      "showArchived": "Mostrar repositorios archivados",
       "devToolsLabel": "Herramientas para desarrolladores de temas",
       "hideInstalledLabel": "Ocultar lo instalado al navegar",
       "colourShiftLabel": "Cambiar colores cada minuto",
+      "albumArtBasedColors": "Cambiar los colores según la portada del álbum",
+      "albumArtBasedColorsMode": "Modo de esquema de colores (ColorApi)",
+      "albumArtBasedColorsVibrancy": "Color obtenido de la portada del álbum",
+      "albumArtBasedColorsVibrancyToolTip": "Desaturado: El color más prominente pero con mucha menos brillo \n Vibrante claro: El color más vibrante pero con el brillo aumentado un poco \n Prominente: El color que más destaca en la portada del álbum \n Vibrante: El color más vibrante en la portada del álbum",
+      "almbumArtColorsModeToolTip": "Monocromo oscuro: Un esquema de color basado directamente en el color principal seleccionado, usando diferentes tonos del color principal y mezclando con grises para crear un esquema de color, esto es lo inverso de Monocromo claro. \n Monocromo claro: Un esquema de color basado directamente en el color principal seleccionado, usando diferentes tonos del color principal y mezclando con grises para crear un esquema de color. El fondo del monocromo claro sería el primer plano o color de texto en Monocromo oscuro y viceversa. \n Analógico: Un esquema de color basado en el color principal seleccionado, usando los colores adyacentes al color principal en la rueda de colores. \n Complementario analógico: Un esquema de color basado en el color principal seleccionado, usando los colores adyacentes al color principal en la rueda de colores y el color complementario. \n Tríada: Un esquema de color basado en el color principal seleccionado, usando los colores en la rueda de colores que están equidistantes del color principal. \n Cuádruple: Un esquema de color basado en el color principal seleccionado, usando los colores en la rueda de colores que están a 90 grados del color principal.",
       "tabsHeading": "Pestañas",
       "tabsDescription": "Arrastre y suelte para cambiar el orden, haga clic para activar/desactivar",
       "resetHeading": "Restablecer",
@@ -15,7 +21,10 @@
       "resetDescription": "Borrar todas extensiones y temas, y borrar preferencias",
       "backupHeading": "Copia de seguridad/Restauración",
       "backupLabel": "Haz una copia de seguridad o restaura todos los datos de Marketplace. Esto no incluye la configuración de nada instalado a través de Marketplace.",
-      "backupBtn": "Abrir"
+      "backupBtn": "Abrir",
+      "versionHeading": "Versión",
+      "versionBtn": "Copiar",
+      "versionCopied": "Copiado"
     },
     "tabs": {
       "Extensions": "Extensiones",
@@ -26,6 +35,7 @@
     },
     "snippets": {
       "addTitle": "Añadir Código",
+      "duplicateName": "¡Ese nombre ya está en uso!",
       "editTitle": "Editar Código",
       "viewTitle": "Ver Código",
       "customCSS": "Custom CSS",
@@ -65,6 +75,16 @@
       "colorIniEditorPlaceholder": "[nombre-de-esquema-de-color]",
       "invalidCSS": "CSS inválido"
     },
+    "updateModal": {
+      "title": "Actualizar el Marketplace",
+      "description": "Actualiza Spicetify Marketplace para recibir nuevas funciones y correcciones de errores.",
+      "currentVersion": "Versión actual: {{version}}",
+      "latestVersion": "Última versión: {{version}}",
+      "whatsChanged": "Qué ha cambiado",
+      "seeChangelog": "Ver registro de cambios",
+      "howToUpgrade": "Cómo actualizar",
+      "viewGuide": "Ver guía"
+    },
     "grid": {
       "spicetifyMarketplace": "Marketplace de Spicetify",
       "newUpdate": "Nueva actualización",
@@ -73,8 +93,19 @@
       "installed": "Instalado",
       "lastUpdated": "Última actualización {{val, datetime}}",
       "externalJS": "JS externo",
+      "archived": "archivado",
       "dark": "oscuro",
-      "light": "claro"
+      "light": "claro",
+      "sort": {
+        "label": "Ordenar por:",
+        "stars": "Estrellas",
+        "newest": "Más nuevo",
+        "oldest": "Más antiguo",
+        "lastUpdated": "Última actualización",
+        "mostStale": "Más desactualizado",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
     },
     "readmePage": {
       "title": "$t(grid.spicetifyMarketplace) - Readme",
@@ -87,6 +118,15 @@
     "save": "Guardar",
     "colour_one": "color",
     "colour_other": "colores",
-    "favourite": "favorito"
+    "favourite": "favorito",
+    "notifications": {
+      "wrongLocalTheme": "Por favor, establece current_theme en config-xpui.ini como 'marketplace' para instalar temas usando el Marketplace",
+      "tooManyRequests": "Demasiadas solicitudes, espera un momento",
+      "noCdnConnection": "Marketplace no puede conectarse al CDN. Por favor, revisa tu configuración de Internet",
+      "markdownParsingError": "Error al analizar markdown (HTTP {{status}})",
+      "noReadmeFile": "No se encontró el archivo README",
+      "themeInstallationError": "Hubo un error al instalar el tema",
+      "extensionInstallationError": "Hubo un error al instalar la extensión"
+    }
   }
 }
