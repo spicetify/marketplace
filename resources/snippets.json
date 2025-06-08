@@ -2,7 +2,7 @@
   {
     "title": "Hide 'Scroll through previews'",
     "description": "Hides the 'Scroll through previews of tracks' button from albums/playlists",
-    "code": ".K06ol8ltPT_atXE_JjUP { display: none !important; }",
+    "code": ".main-actionBar-exploreButton { display: none !important; }",
     "preview": "resources/assets/snippets/hide-scroll-through-previews.png"
   },
   {
