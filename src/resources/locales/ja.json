@@ -13,7 +13,7 @@
       "albumArtBasedColorsMode": "カラースキーム（ColorApi）モード",
       "albumArtBasedColorsVibrancy": "アルバムアートから取得した色",
       "albumArtBasedColorsVibrancyToolTip": "Desaturated: 最も目立つ色だが、明るさがはるかに抑えられています \n Light Vibrant: 最も活気ある色ですが、明るさが少し増しています \n Prominent: アルバムアートで最も目立つ色です \n Vibrant: アルバムアートで最も鮮やかな色です",
-      "almbumArtColorsModeToolTip": "Monochrome Dark: 選択したメインカラーを基にした色の配色スキームで、メインカラーの異なる濃淡やグレーを混ぜて配色することで、これはMonochrome Lightの反対です。 \n Monochrome Light: 選択したメインカラーを直接基にした色の配色スキームで、メインカラーの異なる濃淡やグレーを混ぜて配色します。Monochrome Lightの背景色は、Monochrome Darkの前景色やテキスト色となり、その逆も同様です。 \n Analogic: 選択されたメインカラーを基に、カラーホイール上でメインカラーに隣接する色を使用した配色スキームです。 \n Analogic Complementary: 選択したメインカラーを基に、カラーホイール上でメインカラーに隣接する色と補色を使用した配色スキームです。 \n Triad: 選択したメインカラーを基に、カラーホイール上でメインカラーから等距離にある色を使用した配色スキームです。 \n Quad: 選択されたメインカラーを基に、カラーホイール上でメインカラーから90度離れた色を使用した配色スキームです。",
+      "albumArtColorsModeToolTip": "Monochrome Dark: 選択したメインカラーを基にした色の配色スキームで、メインカラーの異なる濃淡やグレーを混ぜて配色することで、これはMonochrome Lightの反対です。 \n Monochrome Light: 選択したメインカラーを直接基にした色の配色スキームで、メインカラーの異なる濃淡やグレーを混ぜて配色します。Monochrome Lightの背景色は、Monochrome Darkの前景色やテキスト色となり、その逆も同様です。 \n Analogic: 選択されたメインカラーを基に、カラーホイール上でメインカラーに隣接する色を使用した配色スキームです。 \n Analogic Complementary: 選択したメインカラーを基に、カラーホイール上でメインカラーに隣接する色と補色を使用した配色スキームです。 \n Triad: 選択したメインカラーを基に、カラーホイール上でメインカラーから等距離にある色を使用した配色スキームです。 \n Quad: 選択されたメインカラーを基に、カラーホイール上でメインカラーから90度離れた色を使用した配色スキームです。",
       "tabsHeading": "タブ",
       "tabsDescription": "ドラッグ＆ドロップで順序を変更し、クリックで有効／無効を切り替える",
       "resetHeading": "リセット",

@@ -20,7 +20,7 @@
       "albumArtBasedColorsMode": "色彩方案 (ColorApi) 模式",
       "albumArtBasedColorsVibrancy": "已從專輯封面抽取顏色",
       "albumArtBasedColorsVibrancyToolTip": "Desaturated：最突出但亮度較低的顏色 \n Light Vibrant：最接近 Vibrant 的色彩，但亮度稍微提升一些 \n Prominent：專輯封面裡面出現最多的色彩 \n Vibrant：專輯中最明亮的色彩",
-      "almbumArtColorsModeToolTip": "Monochrome Dark：這個色彩方案直接以選擇的主色彩為基礎，但使用比較不一樣的色調並且融入灰色。這和 Monochrome Light 正好相反。 \n Monochrome Light：這個色彩方案直接以選擇的主色彩為基礎，但使用比較不一樣的色調並且融入灰色。這和 Monochrome Light 正好相反。Monochrome Light 的背景色會是 Monochrome Dark 的前景或文字顏色，反之亦然。 \n Analogic：這個色彩方案以選擇的主色彩為基礎，使用色環上主色彩鄰近的色彩。 \n Analogic Complementary：這個色彩方案以選擇的主色彩為基礎，使用色環上主色彩鄰近的色彩以及互補色。 \n Triad：這個色彩方案以選擇的主色彩為基礎，使用色環上和主色彩距離相等的顏色。 \n Quad：這個色彩方案以選擇的主色彩為基礎，使用色環上和主色彩差 90 度的顏色。",
+      "albumArtColorsModeToolTip": "Monochrome Dark：這個色彩方案直接以選擇的主色彩為基礎，但使用比較不一樣的色調並且融入灰色。這和 Monochrome Light 正好相反。 \n Monochrome Light：這個色彩方案直接以選擇的主色彩為基礎，但使用比較不一樣的色調並且融入灰色。這和 Monochrome Light 正好相反。Monochrome Light 的背景色會是 Monochrome Dark 的前景或文字顏色，反之亦然。 \n Analogic：這個色彩方案以選擇的主色彩為基礎，使用色環上主色彩鄰近的色彩。 \n Analogic Complementary：這個色彩方案以選擇的主色彩為基礎，使用色環上主色彩鄰近的色彩以及互補色。 \n Triad：這個色彩方案以選擇的主色彩為基礎，使用色環上和主色彩距離相等的顏色。 \n Quad：這個色彩方案以選擇的主色彩為基礎，使用色環上和主色彩差 90 度的顏色。",
       "versionHeading": "版本",
       "versionBtn": "複製",
       "versionCopied": "已複製"
