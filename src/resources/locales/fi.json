@@ -1,0 +1,132 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Marketplacen asetukset",
+      "optionsHeading": "Valinnat",
+      "starCountLabel": "Tähdet",
+      "tagsLabel": "Tagit",
+      "showArchived": "Näytä arkistoituja lähdekoodivarastoja",
+      "devToolsLabel": "Teeman kehittäjätyökalut",
+      "hideInstalledLabel": "Piilota asennetut",
+      "colourShiftLabel": "Väriä muutetaan joka minuutti",
+      "albumArtBasedColors": "Muuta väriä albumin perusteella",
+      "albumArtBasedColorsMode": "Värityyli (ColorApi) tila",
+      "albumArtBasedColorsVibrancy": "Väri otettu albumista",
+      "albumArtBasedColorsVibrancyToolTip": "Kyllästelemätön: Väri, joka on näkyvin, mutta jonka kirkkaus on paljon pienempi \n Valoisa eloisa: Eloisin väri, jonka kirkkautta on hieman lisätty \n Merkittävä: Väri, joka erottuu eniten albumin kuvituksessa \n Eloisa: Albumin kuvituksen eloisin väri",
+      "almbumArtColorsModeToolTip": "Tumma yksiväri: Suoraan valittuun pääväriin perustuva värimaailma, jossa käytetään päävärin eri sävyjä ja harmaita sekoittamalla värimaailman luomiseksi. Tämä on vaalean yksivärisen käänteinen värimaailma. \n Vaalea yksiväri: Suoraan valittuun pääväriin perustuva värimaailma, jossa käytetään päävärin eri sävyjä ja harmaita sekoittamalla värimaailman luomiseksi. Vaalean yksivärisen värimaailman tausta olisi tumman yksivärisen värimaailman etualan tai tekstin väri ja päinvastoin. \n Analoginen: Valittuun pääväriin perustuva värimaailma, jossa käytetään väriympyrässä päävärin viereisiä värejä. \n Analoginen komplementtiväri: Valittuun pääväriin perustuva värimaailma, jossa käytetään väriympyrässä päävärin viereisiä värejä ja komplementtiväriä. \n Kolmio: Valittuun pääväriin perustuva värimaailma, jossa käytetään väriympyrän värejä, jotka ovat yhtä kaukana pääväristä. \n Neliväri: Valittuun pääväriin perustuva värimaailma, jossa käytetään väriympyrän värejä, jotka ovat 90 asteen etäisyydellä pääväristä.",
+      "tabsHeading": "Sivut",
+      "tabsDescription": "Vedä ja pudota uudelleen järjestykseen, napsauta käyttöön/pois käytöstä",
+      "resetHeading": "Palauta",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Poista kaikki laajennukset ja teemat ja palauta asetukset",
+      "backupHeading": "Varmuuskopioi/Palauta",
+      "backupLabel": "Varmuuskopioi tai palauta kaikki Marketplacen data. Tämä ei sisällä asetuksia mitään, joka on asennettu Marketplacein kautta.",
+      "backupBtn": "Avaa",
+      "versionHeading": "Versio",
+      "versionBtn": "Kopioi",
+      "versionCopied": "Kopioitu"
+    },
+    "tabs": {
+      "Extensions": "Laajennukset",
+      "Themes": "Teemat",
+      "Snippets": "Koodin pätkät",
+      "Apps": "Sovellukset",
+      "Installed": "Asennetut"
+    },
+    "snippets": {
+      "addTitle": "Lisää koodin pätkä",
+      "duplicateName": "Nimi on jo käytössä!",
+      "editTitle": "Muokkaa koodin pätkää",
+      "viewTitle": "Näytä koodin pätkä",
+      "customCSS": "Oma CSS",
+      "customCSSPlaceholder": "Syötä oma mukautettu CSS-koodisi tähän! Löydät ne hallintaa varten asennetut-välilehdeltä.",
+      "snippetName": "Koodin pätkän nimi",
+      "snippetNamePlaceholder": "Anna nimi koodin pätkälle",
+      "snippetDesc": "Koodin pätkän kuvaus",
+      "snippetDescPlaceholder": "Anna kuvaus koodin pätkälle",
+      "snippetPreview": "Koodin pätkän esikatselu",
+      "optional": "Valinnainen",
+      "addImage": "Lisää kuva",
+      "changeImage": "Vaihda kuva",
+      "saveCSS": "Tallenna CSS"
+    },
+    "reloadModal": {
+      "title": "Lataa uudelleen",
+      "description": "Sivun lataaminen uudelleen on vaadittava tämän toiminnon suorittamiseksi.",
+      "reloadNow": "Lataa uudelleen nyt",
+      "reloadLater": "Lataa uudelleen myöhemmin"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Asetukset kopioitu leikepöydälle",
+      "noDataPasted": "Ei dataa liitetty",
+      "invalidJSON": "Virheellinen JSON",
+      "inputLabel": "Marketplacen asetukset",
+      "inputPlaceholder": "Kopioi/liitä asetuksesi tähän",
+      "exportBtn": "Vie",
+      "importBtn": "Tuo",
+      "fileImportBtn": "Tuo tiedostosta"
+    },
+    "devTools": {
+      "title": "Teeman kehittäjätyökalut",
+      "noThemeInstalled": "Virhe: Ei Marketplace-teemaa asennettu",
+      "noThemeManifest": "Virhe: Ei teeman manifestia",
+      "colorIniEditor": "Color.ini-editori",
+      "colorIniEditorPlaceholder": "[sinun-värityylisi-nimi]",
+      "invalidCSS": "Virheellinen CSS"
+    },
+    "updateModal": {
+      "title": "Päivitä Marketplace",
+      "description": "Päivitä Spicetify Marketplace saadaksesi uusia ominaisuuksia ja bugikorjauksia.",
+      "currentVersion": "Nykyinen versio: {{version}}",
+      "latestVersion": "Uusin versio: {{version}}",
+      "whatsChanged": "Mitä on muuttunut",
+      "seeChangelog": "Katso muutosloki",
+      "howToUpgrade": "Kuinka päivittää",
+      "viewGuide": "Näytä opas"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
+      "newUpdate": "Uusi päivitys",
+      "addCSS": "Lisää CSS",
+      "search": "Haku",
+      "installed": "Asennettu",
+      "lastUpdated": "Viimeisin päivitys {{val, datetime}}",
+      "externalJS": "ulkoiset JS-skriptit",
+      "archived": "arkistoitu",
+      "dark": "tumma",
+      "light": "vaalea",
+      "sort": {
+        "label": "Järjestä:",
+        "stars": "Tähdet",
+        "newest": "Uusin",
+        "oldest": "Vanhin",
+        "lastUpdated": "Viimeisin päivitys",
+        "mostStale": "Eniten vanhentunut",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Readme",
+      "loading": "Ladataan...",
+      "errorLoading": "Virhe ladattaessa README"
+    },
+    "github": "GitHub",
+    "install": "Asenna",
+    "remove": "Poista",
+    "save": "Tallenna",
+    "colour_one": "väri",
+    "colour_other": "värit",
+    "favourite": "suosikki",
+    "notifications": {
+      "wrongLocalTheme": "Aseta current_theme config-xpui.ini-tiedostossa 'marketplace'-arvoon käyttääksesi Marketplace-teemoja",
+      "tooManyRequests": "Liian monta pyyntöä, odota hetki",
+      "noCdnConnection": "Marketplace ei pysty yhdistämään CDN:ään. Tarkista internetyhteys",
+      "markdownParsingError": "Virhe jäsentämässä markdownia (HTTP {{status}})",
+      "noReadmeFile": "Ei README-tiedostoa löytynyt",
+      "themeInstallationError": "Teeman asentamisessa tapahtui virhe",
+      "extensionInstallationError": "Laajennuksen asentamisessa tapahtui virhe"
+    }
+  }
+}
