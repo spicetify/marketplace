@@ -13,7 +13,7 @@
       "albumArtBasedColorsMode": "색상 구성표 (색상Api) 모드",
       "albumArtBasedColorsVibrancy": "앨범 표지에서 색상 추출",
       "albumArtBasedColorsVibrancyToolTip": "탁색 (Desaturated): 가장 두드러지지만 밝기가 낮은 색상입니다.\n쨍한 백색 (Light Vibrant): 가장 생생하게 느껴지면서도 밝기가 조금 더 높아진 색상입니다.\n강조색 (Prominent): 앨범 아트에서 가장 눈에 띄는 색상입니다, 앨범 아트에서 가장 돋보이는 색이라고 할 수 있죠.\n높은 채도색 (Vibrant): 앨범 아트에서 가장 생생한 색상입니다.",
-      "almbumArtColorsModeToolTip": "모노크롬 다크 (Monochrome Dark): 선택한 메인 색상을 기준으로 다양한 명암들과 회색을 섞어 만든 색상입니다. 이는 Monochrome Light의 반대 개념이죠.\n모노크롬 라이트 (Monochrome Light): 선택한 메인 색상을 기준으로 다양한 명암과 회색을 섞어 만든 색상입니다. Monochrome Light의 배경색은 Monochrome Dark의 전경색(배경색) 또는 텍스트의 색상이 되며, 그 반대도 마찬가지입니다.\n유사색 (Analogic): 선택한 메인 색상을 기준으로 색 팔레트에서 메인 색상에 인접한 색상들을 이용하여 만든 색상입니다.\n유사 보색 (Analogic Complementary): 선택한 메인 색상을 기준으로 색 팔레트에서 메인 색상에 인접한 색상들과 보색들을 함께 사용하여 만든 색입니다.\n트라이드 (Triad): 선택한 메인 색상을 기준으로 색팔레트에서 메인 색상으로부터 동일한 간격으로 떨어져 있는 세 가지 색상을 사용하여 만든 색상 구성표입니다.\n쿼드 (Quad): 선택한 메인 색상을 기준으로 색팔레트에서 메인 색상으로부터 90도 간격으로 떨어져 있는 네 가지 색상을 사용하여 만든 색상 구성표입니다.",
+      "albumArtColorsModeToolTip": "모노크롬 다크 (Monochrome Dark): 선택한 메인 색상을 기준으로 다양한 명암들과 회색을 섞어 만든 색상입니다. 이는 Monochrome Light의 반대 개념이죠.\n모노크롬 라이트 (Monochrome Light): 선택한 메인 색상을 기준으로 다양한 명암과 회색을 섞어 만든 색상입니다. Monochrome Light의 배경색은 Monochrome Dark의 전경색(배경색) 또는 텍스트의 색상이 되며, 그 반대도 마찬가지입니다.\n유사색 (Analogic): 선택한 메인 색상을 기준으로 색 팔레트에서 메인 색상에 인접한 색상들을 이용하여 만든 색상입니다.\n유사 보색 (Analogic Complementary): 선택한 메인 색상을 기준으로 색 팔레트에서 메인 색상에 인접한 색상들과 보색들을 함께 사용하여 만든 색입니다.\n트라이드 (Triad): 선택한 메인 색상을 기준으로 색팔레트에서 메인 색상으로부터 동일한 간격으로 떨어져 있는 세 가지 색상을 사용하여 만든 색상 구성표입니다.\n쿼드 (Quad): 선택한 메인 색상을 기준으로 색팔레트에서 메인 색상으로부터 90도 간격으로 떨어져 있는 네 가지 색상을 사용하여 만든 색상 구성표입니다.",
       "tabsHeading": "탭",
       "tabsDescription": "끌어 놓아 순서를 변경하고, 클릭하여 활성화 및 비활성화 합니다.",
       "resetHeading": "\n초기화",
