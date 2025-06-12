@@ -57,7 +57,7 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
         updateConfig={updateConfig}
         type="dropdown"
         options={["monochromeDark", "monochromeLight", "analogicComplement", "analogic", "triad", "quad"]}
-        description={t("settings.albumArtColorsModeToolTip")}
+        description={t("settings.almbumArtColorsModeToolTip")}
       />
       <ConfigRow
         name={t("settings.albumArtBasedColorsVibrancy")}

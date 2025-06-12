@@ -5,7 +5,6 @@ import enUS from "./en-US.json";
 import en from "./en.json";
 import es from "./es.json";
 import et from "./et.json";
-import fi from "./fi.json";
 import fr from "./fr.json";
 import it from "./it.json";
 import ja from "./ja.json";
@@ -25,7 +24,6 @@ export default {
   en,
   es,
   et,
-  fi,
   fr,
   it,
   ja,
