@@ -1,4 +1,3 @@
-import { use } from "i18next";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Dropdown, { type Option } from "react-dropdown";
 import { withTranslation } from "react-i18next";
