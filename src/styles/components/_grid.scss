@@ -1,5 +1,9 @@
 @use "../constants.scss";
 
+.main-topBar-container:has(.marketplace-tabBar) {
+  contain: unset;
+}
+
 .marketplace-header {
   -webkit-box-pack: justify;
   -webkit-box-align: center;
@@ -16,7 +20,7 @@
   flex-direction: row;
   top: 64px;
   z-index: 1;
-  
+
   // Fix positioning on readme pages
   .contentSpacing:has(#marketplace-readme) & {
     top: 0;

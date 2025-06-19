@@ -72,15 +72,11 @@ export const TopBarContent = (props: {
     }
 
     topBarContent.appendChild(tabBar.current);
-    document.querySelector(".main-topBar-container")?.setAttribute("style", "contain: unset;");
   }, [tabBar.current]);
 
   useEffect(() => {
     contextHandler();
-    return () => {
-      (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
-      document.querySelector(".main-topBar-container")?.removeAttribute("style");
-    };
+    return () => (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
   });
 
   return <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;
