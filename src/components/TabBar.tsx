@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { use } from "i18next";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Dropdown, { type Option } from "react-dropdown";
 import { withTranslation } from "react-i18next";
 import type { TabItemConfig } from "../types/marketplace-types";
@@ -60,57 +61,42 @@ export const TopBarContent = (props: {
   activeLink: string;
   switchCallback: (option: Option) => void;
 }) => {
-  const resizeHost = document.querySelector(
-    ".Root__main-view .os-resize-observer-host, .Root__main-view .os-size-observer, .Root__main-view .main-view-container__scroll-node"
-  );
-  if (!resizeHost) return null;
+  const tabBar = useRef<HTMLElement | null>(null);
 
-  const [windowSize, setWindowSize] = useState(resizeHost.clientWidth);
-  const resizeHandler = () => setWindowSize(resizeHost.clientWidth);
-  const contextHandler = () => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: This is a callback that needs to be stable
+  const contextHandler = useCallback(() => {
     // Move the marketplace-tabBar item to the main-topBar-topbarContent div
-    const tabBar = document.querySelector(".marketplace-tabBar");
     const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
-    if (!tabBar || !topBarContent) {
+    if (!tabBar?.current || !topBarContent) {
       setTimeout(contextHandler, 100);
       return;
     }
-    if (tabBar && topBarContent && Spicetify.Platform.History.location.pathname === "/marketplace") {
-      topBarContent.appendChild(tabBar);
-      document.querySelector(".main-topBar-container")?.setAttribute("style", "contain: unset;");
-    }
-    Spicetify.Platform.History.listen(({ pathname }) => {
-      if (pathname !== "/marketplace") {
-        // Delete tabBar from the dom
-        document.querySelector(".marketplace-tabBar")?.remove();
-        document.querySelector(".main-topBar-container")?.removeAttribute("style");
-      }
-    });
-  };
-  useEffect(() => {
-    const observer = new ResizeObserver(resizeHandler);
-    observer.observe(resizeHost);
-    return () => {
-      observer.disconnect();
-    };
-  });
+
+    topBarContent.appendChild(tabBar.current);
+    document.querySelector(".main-topBar-container")?.setAttribute("style", "contain: unset;");
+  }, [tabBar.current]);
+
   useEffect(() => {
     contextHandler();
+    return () => {
+      (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
+      document.querySelector(".main-topBar-container")?.removeAttribute("style");
+    };
   });
-  return <TabBar windowSize={windowSize} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;
+
+  return <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;
 };
 
 interface TabBarProps {
   links: TabItemConfig[];
   activeLink: string;
   switchCallback: (option: Option) => void;
-  windowSize: number;
 }
-const TabBar = React.memo<TabBarProps>(function TabBar({ links, activeLink, switchCallback, windowSize = Number.POSITIVE_INFINITY }: TabBarProps) {
-  const tabBarRef = React.useRef<HTMLUListElement | null>(null);
-  const [childrenSizes, setChildrenSizes] = useState([] as number[]);
+const TabBar = React.forwardRef(function TabBar({ links, activeLink, switchCallback }: TabBarProps, ref: React.ForwardedRef<HTMLElement>) {
+  const tabBarRef = useRef<HTMLUListElement | null>(null);
+  const [childrenSizes, setChildrenSizes] = useState([0]);
   const [availableSpace, setAvailableSpace] = useState(0);
-  const [droplistItem, setDroplistItems] = useState([] as number[]);
+  const [droplistItem, setDroplistItems] = useState([0]);
 
   // Key is the tab name, value is also the tab name, active is if it's active
   const options = links.map(({ name, enabled }) => {
@@ -118,11 +104,16 @@ const TabBar = React.memo<TabBarProps>(function TabBar({ links, activeLink, swit
     return { label: name, value: name, active, enabled } as TabOptionConfig;
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Run when windowSize changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Run when tabBarRef changes
   useEffect(() => {
     if (!tabBarRef.current) return;
-    setAvailableSpace(tabBarRef.current.clientWidth);
-  }, [windowSize, tabBarRef.current?.clientWidth]);
+
+    const observer = new ResizeObserver((entries) => setAvailableSpace(entries[0].contentRect.width));
+    observer.observe(tabBarRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [tabBarRef.current]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Run when links change
   useEffect(() => {
@@ -167,7 +158,7 @@ const TabBar = React.memo<TabBarProps>(function TabBar({ links, activeLink, swit
   }, [availableSpace, childrenSizes]);
 
   return (
-    <nav className="marketplace-tabBar marketplace-tabBar-nav">
+    <nav className="marketplace-tabBar marketplace-tabBar-nav" ref={ref}>
       <ul className="marketplace-tabBar-header" ref={tabBarRef}>
         {options
           .filter((_, id) => !droplistItem.includes(id))

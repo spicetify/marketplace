@@ -12,7 +12,7 @@ const Button = (props: {
   classes?: string[];
   label?: string | null;
   type?: ButtonType;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled?: boolean;
 }) => {
   const buttonType = props.type || "round";
