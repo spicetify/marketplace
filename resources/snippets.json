@@ -266,7 +266,7 @@
   {
     "title": "Hide now playing view button",
     "description": "Hides the now playing view button from the playbar",
-    "code": "button:has(path[d='M11.196 8 6 5v6l5.196-3z']) {display: none;}",
+    "code": "button:has(path[d='M11.196 8 6 5v6l5.196-3z']), button:has(path[d='M11.196 8 6 5v6z']) {display: none;}",
     "preview": "resources/assets/snippets/hide-now-playing-view-button.png"
   },
   {
@@ -404,7 +404,7 @@
   {
     "title": "Hide Mini Player Button",
     "description": "Hides the Mini Player button.",
-    "code": "button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16V2.45z']) {display: none;}",
+    "code": "button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16V2.45z']), button:has(path[d='M16 2.45c0-.8-.65-1.45-1.45-1.45H1.45C.65 1 0 1.65 0 2.45v11.1C0 14.35.65 15 1.45 15h5.557v-1.5H1.5v-11h13V7H16z']) {display: none;}",
     "preview": "resources/assets/snippets/Hide-Mini-Player-Button.png"
   },
   {
