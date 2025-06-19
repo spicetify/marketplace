@@ -91,7 +91,7 @@ interface TabBarProps {
   activeLink: string;
   switchCallback: (option: Option) => void;
 }
-const TabBar = React.forwardRef(function TabBar({ links, activeLink, switchCallback }: TabBarProps, ref: React.ForwardedRef<HTMLElement>) {
+const TabBar = React.forwardRef(({ links, activeLink, switchCallback }: TabBarProps, ref: React.ForwardedRef<HTMLElement>) => {
   const tabBarRef = useRef<HTMLUListElement | null>(null);
   const [childrenSizes, setChildrenSizes] = useState([0]);
   const [availableSpace, setAvailableSpace] = useState(0);
