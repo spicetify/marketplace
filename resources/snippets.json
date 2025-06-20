@@ -510,9 +510,9 @@
     "preview": "resources/assets/snippets/jumping-zerotwo.png"
   },
   {
-  "title": "BMO Progressbar",
-  "description": "Adds a dancing BMO to the Progress Bar.",
-  "code": ".player-controls .playback-progressbar::before { content: ''; width: 45px; height: 45px; bottom: calc(100% - 6px); right: 10px; position: absolute; image-rendering: high-quality; background-size: 45px 45px; background-image: url('https://64.media.tumblr.com/38ff0368992c9f601ee746469f9a19c1/tumblr_mqf4asbozS1qmkil9o1_500.gif'); }",
-  "preview": "resources/assets/snippets/bmo-dancing.png"
+    "title": "BMO Progressbar",
+    "description": "Adds a dancing BMO to the Progress Bar.",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 45px; height: 45px; bottom: calc(100% - 6px); right: 10px; position: absolute; image-rendering: high-quality; background-size: 45px 45px; background-image: url('https://64.media.tumblr.com/38ff0368992c9f601ee746469f9a19c1/tumblr_mqf4asbozS1qmkil9o1_500.gif'); }",
+    "preview": "resources/assets/snippets/bmo-dancing.png"
   }
 ]
