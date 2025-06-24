@@ -514,5 +514,11 @@
     "description": "Adds a dancing BMO to the Progress Bar.",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 45px; height: 45px; bottom: calc(100% - 6px); right: 10px; position: absolute; image-rendering: high-quality; background-size: 45px 45px; background-image: url('https://64.media.tumblr.com/38ff0368992c9f601ee746469f9a19c1/tumblr_mqf4asbozS1qmkil9o1_500.gif'); }",
     "preview": "resources/assets/snippets/bmo-dancing.png"
+  },
+  {
+    "title": "Moving Minecraft Bee",
+    "description": "Adds a Minecraft Bee to the Progress Bar which follows throughout the duration of the track.",
+    "code": ".player-controls .playback-progressbar .progress-bar::before { content: ''; width: 55px; height: 55px; bottom: calc(40%); left: var(--progress-bar-transform); position: absolute; transition: left var(--progress-bar-duration); transform: translate(-15px, 0px); image-rendering: auto; background-size: 55px 55px; background-image: url('https://i.imgur.com/1oyD6fu.gif'); }",
+    "preview": "resources/assets/snippets/minecraft-bee-snippet.gif"
   }
 ]
