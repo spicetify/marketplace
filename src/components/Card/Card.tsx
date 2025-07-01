@@ -13,6 +13,7 @@ import TrashIcon from "../Icons/TrashIcon";
 import Tooltip from "../Tooltip";
 import AuthorsDiv from "./AuthorsDiv";
 import TagsDiv from "./TagsDiv";
+
 const Spicetify = window.Spicetify;
 
 export type CardProps = {
@@ -467,6 +468,7 @@ export class Card extends React.Component<
     }
 
     return (
+      // biome-ignore lint/a11y/noStaticElementInteractions: Card is clickable
       <div
         className={cardClasses.join(" ")}
         onClick={() => {

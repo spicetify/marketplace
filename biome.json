@@ -1,7 +1,11 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
-  "organizeImports": {
-    "enabled": true
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "enabled": true,
@@ -30,7 +34,8 @@
     "formatter": {
       "trailingCommas": "none",
       "arrowParentheses": "always"
-    }
+    },
+    "jsxRuntime": "reactClassic"
   },
   "vcs": {
     "enabled": true,

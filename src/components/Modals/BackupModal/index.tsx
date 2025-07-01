@@ -33,7 +33,7 @@ const BackupModal = () => {
     let settings: JSON;
     try {
       settings = JSON.parse(settingsString);
-    } catch (e) {
+    } catch (_e) {
       Spicetify.showNotification(t("backupModal.invalidJSON"));
       return;
     }
@@ -83,18 +83,17 @@ const BackupModal = () => {
           />
         </div>
       </div>
-      <>
-        <Button classes={["marketplace-backup-button"]} onClick={exportSettings}>
-          {t("backupModal.exportBtn")}
-        </Button>
-        <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromInput}>
-          {t("backupModal.importBtn")}
-        </Button>
 
-        <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromFile}>
-          {t("backupModal.fileImportBtn")}
-        </Button>
-      </>
+      <Button classes={["marketplace-backup-button"]} onClick={exportSettings}>
+        {t("backupModal.exportBtn")}
+      </Button>
+      <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromInput}>
+        {t("backupModal.importBtn")}
+      </Button>
+
+      <Button classes={["marketplace-backup-button"]} onClick={importSettingsFromFile}>
+        {t("backupModal.fileImportBtn")}
+      </Button>
     </div>
   );
 };

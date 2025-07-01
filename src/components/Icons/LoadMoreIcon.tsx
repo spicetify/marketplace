@@ -3,9 +3,12 @@ import React from "react";
 export default class LoadMoreIcon extends React.Component<{ onClick: () => void }> {
   render() {
     return (
-      <div
+      <button
         style={{
-          marginTop: "60px"
+          marginTop: "60px",
+          border: "none",
+          backgroundColor: "transparent",
+          cursor: "pointer"
         }}
         onClick={this.props.onClick}
       >
@@ -24,7 +27,7 @@ export default class LoadMoreIcon extends React.Component<{ onClick: () => void 
         >
           Load more
         </span>
-      </div>
+      </button>
     );
   }
 }

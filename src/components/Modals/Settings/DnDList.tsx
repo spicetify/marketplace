@@ -1,12 +1,9 @@
-import React, { Component, useState, useEffect, useRef } from "react";
-import { DragDropContext, Draggable, type DropResult, Droppable } from "react-beautiful-dnd";
+import React, { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable, type DropResult } from "react-beautiful-dnd";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
 
-const DnDList = (props: {
-  modalConfig: Config;
-  updateConfig: (CONFIG: Config) => void;
-}) => {
+const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) => void }) => {
   const colorVariable = getComputedStyle(document.body).getPropertyValue("--spice-button-disabled");
   const [currentSize, setCurrentSize] = useState({ width: window.innerWidth });
 
@@ -85,7 +82,7 @@ const DnDList = (props: {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" direction="horizontal">
-        {(provided, snapshot) => (
+        {(provided, _snapshot) => (
           <div ref={provided.innerRef} style={getListStyle()} {...provided.droppableProps}>
             {props.modalConfig.tabs.map((item, index) => (
               <Draggable key={item.name} draggableId={item.name} index={index}>
@@ -95,6 +92,7 @@ const DnDList = (props: {
                     {...provided.draggableProps}
                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, item.enabled)}
                   >
+                    {/* biome-ignore lint/a11y/noStaticElementInteractions: Spotify stylings */}
                     <div className="dnd-box" {...provided.dragHandleProps} onClick={() => onToggleEnabled(item.name)}>
                       <svg
                         className="dnd-icon"

@@ -25,13 +25,6 @@
   min-inline-size: 0px;
   align-self: center;
 
-  @media screen and (min-width: 768px) {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    text-transform: none;
-    letter-spacing: normal;
-  }
-
   // From the inner div...
   position: relative;
   background-color: var(--spice-text);
@@ -40,6 +33,13 @@
   font-size: inherit;
   padding-block: 12px;
   padding-inline: 32px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-transform: none;
+    letter-spacing: normal;
+  }
 
   &:hover {
     transform: scale(1.04);
