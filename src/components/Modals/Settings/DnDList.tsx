@@ -82,7 +82,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" direction="horizontal">
-        {(provided, _snapshot) => (
+        {(provided) => (
           <div ref={provided.innerRef} style={getListStyle()} {...provided.droppableProps}>
             {props.modalConfig.tabs.map((item, index) => (
               <Draggable key={item.name} draggableId={item.name} index={index}>

@@ -33,7 +33,7 @@ const BackupModal = () => {
     let settings: JSON;
     try {
       settings = JSON.parse(settingsString);
-    } catch (_e) {
+    } catch {
       Spicetify.showNotification(t("backupModal.invalidJSON"));
       return;
     }

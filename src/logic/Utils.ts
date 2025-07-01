@@ -17,7 +17,7 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
     try {
       // If it's json parse it
       return JSON.parse(data);
-    } catch (_err) {
+    } catch {
       // If it's just a string or something
       return data;
     }
@@ -542,7 +542,7 @@ export function getInvalidCSS(): string[] {
     for (let i = 0; i < classesArr.length; i++) {
       try {
         element = document.querySelector(`${classesArr[i]}`);
-      } catch (_e) {
+      } catch {
         element = document.getElementsByClassName(`${className}`);
       }
       if (!element) {
@@ -570,7 +570,7 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
     const html = await response.text();
 
     return html;
-  } catch (_err) {
+  } catch {
     return null;
   }
 }
