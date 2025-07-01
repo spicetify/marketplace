@@ -15,8 +15,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       i18next:
-        specifier: ^25.2.1
-        version: 25.2.1(typescript@5.8.2)
+        specifier: ^25.3.0
+        version: 25.3.0(typescript@5.8.2)
       i18next-browser-languagedetector:
         specifier: ^8.2.0
         version: 8.2.0
@@ -31,7 +31,7 @@ importers:
         version: 1.11.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-i18next:
         specifier: ^15.5.1
-        version: 15.5.1(i18next@25.2.1(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2)
+        version: 15.5.1(i18next@25.3.0(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2)
       react-simple-code-editor:
         specifier: ^0.14.1
         version: 0.14.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -75,10 +75,6 @@ packages:
 
   '@babel/runtime@7.27.1':
     resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/runtime@7.27.4':
-    resolution: {integrity: sha512-t3yaEOuGu9NlIZ+hIeGbBjFtZT7j2cb2tg0fuaJKeGotchRjjLfrBA9Kwf8quhpP1EUuxModQg04q/mBwyg8uA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.27.6':
@@ -523,8 +519,8 @@ packages:
   i18next-browser-languagedetector@8.2.0:
     resolution: {integrity: sha512-P+3zEKLnOF0qmiesW383vsLdtQVyKtCNA9cjSoKCppTKPQVfKd2W8hbVo5ZhNJKDqeM7BOcvNoKJOjpHh4Js9g==}
 
-  i18next@25.2.1:
-    resolution: {integrity: sha512-+UoXK5wh+VlE1Zy5p6MjcvctHXAhRwQKCxiJD8noKZzIXmnAX8gdHX5fLPA3MEVxEN4vbZkQFy8N0LyD9tUqPw==}
+  i18next@25.3.0:
+    resolution: {integrity: sha512-ZSQIiNGfqSG6yoLHaCvrkPp16UejHI8PCDxFYaNG/1qxtmqNmqEg4JlWKlxkrUmrin2sEjsy+Mjy1TRozBhOgw==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -1055,8 +1051,6 @@ snapshots:
 
   '@babel/runtime@7.27.1': {}
 
-  '@babel/runtime@7.27.4': {}
-
   '@babel/runtime@7.27.6': {}
 
   '@biomejs/biome@1.9.4':
@@ -1449,9 +1443,9 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.27.6
 
-  i18next@25.2.1(typescript@5.8.2):
+  i18next@25.3.0(typescript@5.8.2):
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.27.6
     optionalDependencies:
       typescript: 5.8.2
 
@@ -1702,11 +1696,11 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  react-i18next@15.5.1(i18next@25.2.1(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2):
+  react-i18next@15.5.1(i18next@25.3.0(typescript@5.8.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.8.2):
     dependencies:
       '@babel/runtime': 7.27.1
       html-parse-stringify: 3.0.1
-      i18next: 25.2.1(typescript@5.8.2)
+      i18next: 25.3.0(typescript@5.8.2)
       react: 18.2.0
     optionalDependencies:
       react-dom: 18.2.0(react@18.2.0)
@@ -1718,7 +1712,7 @@ snapshots:
 
   react-redux@7.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@babel/runtime': 7.24.1
+      '@babel/runtime': 7.27.6
       '@types/react-redux': 7.1.33
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
@@ -1760,7 +1754,7 @@ snapshots:
 
   redux@4.2.1:
     dependencies:
-      '@babel/runtime': 7.24.1
+      '@babel/runtime': 7.27.6
 
   regenerator-runtime@0.14.0: {}
 
