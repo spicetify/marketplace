@@ -4,7 +4,6 @@ import TooltipIcon from "../../Icons/TooltipIcon";
 import SortBox from "../../Sortbox";
 import Toggle from "../../Toggle";
 import Tooltip from "../../Tooltip";
-const Spicetify = window.Spicetify;
 
 const ConfigRow = (props: {
   name: string;

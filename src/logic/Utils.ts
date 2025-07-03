@@ -17,7 +17,7 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
     try {
       // If it's json parse it
       return JSON.parse(data);
-    } catch (err) {
+    } catch {
       // If it's just a string or something
       return data;
     }
@@ -108,11 +108,11 @@ export const parseIni = (data: string): SchemeIni => {
 export const unparseIni = (data: SchemeIni) => {
   let output = "";
   for (const key in data) {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
+    if (Object.hasOwn(data, key)) {
       if (typeof data[key] === "object") {
         output += `[${key}]\n`;
         for (const subKey in data[key]) {
-          if (Object.prototype.hasOwnProperty.call(data[key], subKey)) {
+          if (Object.hasOwn(data[key], subKey)) {
             output += `${subKey}=${data[key][subKey]}\n`;
           }
         }
@@ -542,7 +542,7 @@ export function getInvalidCSS(): string[] {
     for (let i = 0; i < classesArr.length; i++) {
       try {
         element = document.querySelector(`${classesArr[i]}`);
-      } catch (e) {
+      } catch {
         element = document.getElementsByClassName(`${className}`);
       }
       if (!element) {
@@ -570,7 +570,7 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
     const html = await response.text();
 
     return html;
-  } catch (err) {
+  } catch {
     return null;
   }
 }

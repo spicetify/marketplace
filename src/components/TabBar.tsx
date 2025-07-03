@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Dropdown, { type Option } from "react-dropdown";
 import { withTranslation } from "react-i18next";
 import type { TabItemConfig } from "../types/marketplace-types";
@@ -55,14 +55,9 @@ const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({ items, swit
   );
 });
 
-export const TopBarContent = (props: {
-  links: TabItemConfig[];
-  activeLink: string;
-  switchCallback: (option: Option) => void;
-}) => {
+export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: string; switchCallback: (option: Option) => void }) => {
   const tabBar = useRef<HTMLElement | null>(null);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: This is a callback that needs to be stable
   const contextHandler = useCallback(() => {
     // Move the marketplace-tabBar item to the main-topBar-topbarContent div
     const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
@@ -99,7 +94,6 @@ const TabBar = React.forwardRef(({ links, activeLink, switchCallback }: TabBarPr
     return { label: name, value: name, active, enabled } as TabOptionConfig;
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Run when tabBarRef changes
   useEffect(() => {
     if (!tabBarRef.current) return;
 
@@ -110,7 +104,6 @@ const TabBar = React.forwardRef(({ links, activeLink, switchCallback }: TabBarPr
     };
   }, [tabBarRef.current]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Run when links change
   useEffect(() => {
     if (!tabBarRef.current) return;
 

@@ -3,10 +3,7 @@ import React, { type DetailedReactHTMLElement } from "react";
 
 import { MAX_TAGS } from "../../constants";
 
-const TagsDiv = (props: {
-  tags: string[];
-  showTags: boolean;
-}) => {
+const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
   const [expanded, setExpanded] = React.useState(false);
 
   // Map of english names for tags so that the css can identify them for colouring
