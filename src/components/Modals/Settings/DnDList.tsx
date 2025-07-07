@@ -58,15 +58,12 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
   };
 
   return (
-    // @ts-expect-error
     <DragDropContext onDragEnd={onDragEnd}>
-      {/* @ts-expect-error */}
       <Droppable droppableId="droppable" direction="horizontal">
         {(provided) => (
           <div ref={provided.innerRef} style={getListStyle()} {...provided.droppableProps}>
             {props.modalConfig.tabs.map((item, index) => (
-              // @ts-expect-error
-              <Draggable draggableId={item.name} index={index}>
+              <Draggable key={item.name} draggableId={item.name} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
