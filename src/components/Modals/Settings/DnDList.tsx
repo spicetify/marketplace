@@ -1,17 +1,10 @@
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
 
 const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) => void }) => {
   const colorVariable = getComputedStyle(document.body).getPropertyValue("--spice-button-disabled");
-  const [_currentSize, setCurrentSize] = useState({ width: window.innerWidth });
-
-  useEffect(() => {
-    const onResize = () => setCurrentSize({ width: window.innerWidth });
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
   const getItemStyle = (_isDragging, draggableStyle, isEnabled) => {
     return {
