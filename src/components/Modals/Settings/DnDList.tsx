@@ -1,11 +1,11 @@
+import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable, type DropResult } from "react-beautiful-dnd";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
 
 const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) => void }) => {
   const colorVariable = getComputedStyle(document.body).getPropertyValue("--spice-button-disabled");
-  const [currentSize, setCurrentSize] = useState({ width: window.innerWidth });
+  const [_currentSize, setCurrentSize] = useState({ width: window.innerWidth });
 
   useEffect(() => {
     const onResize = () => setCurrentSize({ width: window.innerWidth });
@@ -13,22 +13,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const adjustTransform = (transform: string) => {
-    const match = transform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
-    if (!match) return transform;
-    const isMaximized = currentSize.width >= window.screen.width * 0.95;
-    const offsetX = isMaximized ? 600 : 430;
-    const offsetY = isMaximized ? 120 : 70;
-    const x = Number.parseFloat(match[1]) - offsetX;
-    const y = Number.parseFloat(match[2]) - offsetY;
-    return `translate(${x}px, ${y}px)`;
-  };
-
-  const getItemStyle = (isDragging, draggableStyle, isEnabled) => {
-    const style = { ...draggableStyle };
-    if (isDragging && style.transform) {
-      style.transform = adjustTransform(style.transform);
-    }
+  const getItemStyle = (_isDragging, draggableStyle, isEnabled) => {
     return {
       borderRadius: "5px",
       border: isEnabled ? `2px solid ${colorVariable}` : "2px solid red",
@@ -41,7 +26,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
       justifyContent: "center",
       textDecoration: isEnabled ? "none" : "line-through",
       cursor: "pointer",
-      ...style
+      ...draggableStyle
     };
   };
 
@@ -80,12 +65,15 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
   };
 
   return (
+    // @ts-expect-error
     <DragDropContext onDragEnd={onDragEnd}>
+      {/* @ts-expect-error */}
       <Droppable droppableId="droppable" direction="horizontal">
         {(provided) => (
           <div ref={provided.innerRef} style={getListStyle()} {...provided.droppableProps}>
             {props.modalConfig.tabs.map((item, index) => (
-              <Draggable key={item.name} draggableId={item.name} index={index}>
+              // @ts-expect-error
+              <Draggable draggableId={item.name} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
