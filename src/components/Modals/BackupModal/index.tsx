@@ -10,10 +10,39 @@ import Button from "../../Button";
 const BackupModal = () => {
   const [importText, setImportText] = React.useState("");
 
-  const exportSettings = () => {
+  async function saveFile(data: FileSystemWriteChunkType) {
+    const date = new Date();
+    const newHandle = await window.showSaveFilePicker({
+      id: "marketplace-settings-backup",
+      suggestedName: `marketplace-settings-${date.toISOString()}.json`,
+      excludeAcceptAllOption: true,
+      types: [
+        {
+          description: "JSON files",
+          accept: { "application/json": [".json"] }
+        }
+      ]
+    });
+
+    const writableStream = await newHandle.createWritable();
+    await writableStream.write(data);
+    await writableStream.close();
+  }
+
+  const exportSettings = async () => {
     const settings = exportMarketplace();
-    Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(settings));
-    Spicetify.showNotification(t("backupModal.settingsCopied"));
+
+    try {
+      await saveFile(JSON.stringify(settings, null, 2));
+      Spicetify.showNotification(t("backupModal.settingsSaved"));
+    } catch (error: any) {
+      if (error.name !== "AbortError") {
+        console.error("Failed to save file, copying to clipboard instead:", error);
+        Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(settings));
+        Spicetify.showNotification(t("backupModal.settingsCopied"));
+      }
+    }
+
     Spicetify.PopupModal.hide();
   };
 
