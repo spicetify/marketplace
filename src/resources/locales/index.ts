@@ -13,6 +13,7 @@ import ko from "./ko.json";
 import pl from "./pl.json";
 import ptBR from "./pt-BR.json";
 import ru from "./ru.json";
+import tr from "./tr.json";
 import uk from "./uk.json";
 import zhCN from "./zh-CN.json";
 import zhTW from "./zh-TW.json";
@@ -33,6 +34,7 @@ export default {
   pl,
   "pt-BR": ptBR,
   ru,
+  tr,
   uk,
   "zh-CN": zhCN,
   "zh-TW": zhTW
