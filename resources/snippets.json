@@ -520,5 +520,11 @@
     "description": "Adds a Minecraft Bee to the Progress Bar which follows throughout the duration of the track.",
     "code": ".player-controls .playback-progressbar .progress-bar::before { content: ''; width: 55px; height: 55px; bottom: calc(40%); left: var(--progress-bar-transform); position: absolute; transition: left var(--progress-bar-duration); transform: translate(-15px, 0px); image-rendering: auto; background-size: 55px 55px; background-image: url('https://i.imgur.com/1oyD6fu.gif'); }",
     "preview": "resources/assets/snippets/minecraft-bee-snippet.gif"
+  },
+  {
+    "title": "Locked Sidebar Width",
+    "description": "Locks the sidebars to a width of 280px and hides the resize bars to prevent the sidebars from becoming too wide when resizing the window.",
+    "code": "div#Desktop_LeftSidebar_Id,\ndiv#Desktop_LeftSidebar_Id + div + div + div,\n.NowPlayingView {\n    max-width: 280px;\n}\n\n.LayoutResizer__resize-bar.LayoutResizer__inline-start,\n.LayoutResizer__resize-bar.LayoutResizer__inline-end {\n    display: none;\n}",
+    "preview": "resources/assets/snippets/locked-sidebar-width.png"
   }
 ]
