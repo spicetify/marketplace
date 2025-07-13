@@ -1,0 +1,132 @@
+{
+  "translation": {
+    "settings": {
+      "title": "Marketplace Ayarları",
+      "optionsHeading": "Seçenekler",
+      "starCountLabel": "Yıldız sayısı",
+      "tagsLabel": "Etiketler",
+      "showArchived": "Arşivlenmiş repoları göster",
+      "devToolsLabel": "Tema geliştirici araçları",
+      "hideInstalledLabel": "Göz atarken yüklü olanları gizle",
+      "colourShiftLabel": "Renkleri her dakika değiştir",
+      "albumArtBasedColors": "Albüm kapağına göre renkleri değiştir",
+      "albumArtBasedColorsMode": "Renk şeması (ColorApi) modu",
+      "albumArtBasedColorsVibrancy": "Albüm kapağından alınan renk",
+      "albumArtBasedColorsVibrancyToolTip": "Doygunluğu Azaltılmış: En belirgin olan ancak çok daha az parlaklığa sahip renk \n Açık Canlı: En canlı renk, ancak parlaklığı bir miktar artırılmış \n Öne Çıkan: Albüm kapağında en çok göze çarpan renk \n Canlı: Albüm kapağındaki en canlı renk",
+      "albumArtColorsModeToolTip": "Monokrom Koyu: Seçilen ana renge dayalı, ana rengin farklı tonlarını kullanan ve gri tonlarıyla karıştırarak bir renk şeması oluşturan bir düzen. Monokrom Açık'ın tersidir. \n Monokrom Açık: Seçilen ana renge dayalı, ana rengin farklı tonlarını kullanan ve gri tonlarıyla karıştırarak bir renk şeması oluşturan bir düzen. Monokrom Açık'ın arka planı, Monokrom Koyu'daki ön plan veya metin rengi olacaktır ve tam tersi. \n Analog: Seçilen ana renge dayalı, renk çarkında ana rengin bitişiğindeki renkleri kullanan bir renk şeması. \n Analog Tamamlayıcı: Seçilen ana renge dayalı, renk çarkında ana rengin bitişiğindeki renkleri ve tamamlayıcı rengi kullanan bir renk şeması. \n Üçlü: Seçilen ana renge dayalı, renk çarkında ana renge eşit uzaklıktaki renkleri kullanan bir renk şeması. \n Dörtlü: Seçilen ana renge dayalı, renk çarkında ana renge 90 derece uzaklıktaki renkleri kullanan bir renk şeması.",
+      "tabsHeading": "Sekmeler",
+      "tabsDescription": "Yeniden sıralamak için sürükleyip bırakın, etkinleştirmek/devre dışı bırakmak için tıklayın",
+      "resetHeading": "Sıfırla",
+      "resetBtn": "$t(settings.resetHeading)",
+      "resetDescription": "Tüm eklentileri ve temaları kaldırıp tercihleri sıfırla",
+      "backupHeading": "Yedekle/Geri Yükle",
+      "backupLabel": "Tüm Marketplace verilerini yedekleyin veya geri yükleyin. Bu, Marketplace ile yüklenen öğelerin ayarlarını kapsamaz.",
+      "backupBtn": "Aç",
+      "versionHeading": "Sürüm",
+      "versionBtn": "Kopyala",
+      "versionCopied": "Kopyalandı"
+    },
+    "tabs": {
+      "Extensions": "Eklentiler",
+      "Themes": "Temalar",
+      "Snippets": "Snippet'ler",
+      "Apps": "Uygulamalar",
+      "Installed": "Yüklenenler"
+    },
+    "snippets": {
+      "addTitle": "Snippet Ekle",
+      "duplicateName": "Bu isim zaten alınmış!",
+      "editTitle": "Snippet'i Düzenle",
+      "viewTitle": "Snippet'i Görüntüle",
+      "customCSS": "Özel CSS",
+      "customCSSPlaceholder": "Kendi özel CSS'inizi buraya girin. Yönetim için snippet'leri Yüklenenler sekmesinde bulabilirsiniz.",
+      "snippetName": "Snippet Adı",
+      "snippetNamePlaceholder": "Özel snippet'iniz için bir ad girin",
+      "snippetDesc": "Snippet Açıklaması",
+      "snippetDescPlaceholder": "Özel snippet'iniz için bir açıklama girin",
+      "snippetPreview": "Snippet Önizlemesi",
+      "optional": "İsteğe Bağlı",
+      "addImage": "Resim ekle",
+      "changeImage": "Resmi değiştir",
+      "saveCSS": "CSS'i Kaydet"
+    },
+    "reloadModal": {
+      "title": "Yeniden Yükle",
+      "description": "Bu işlemi tamamlamak için sayfanın yeniden yüklenmesi gerekiyor.",
+      "reloadNow": "Şimdi yeniden yükle",
+      "reloadLater": "Daha sonra yeniden yükle"
+    },
+    "backupModal": {
+      "title": "$t(settings.backupHeading)",
+      "settingsCopied": "Ayarlar panoya kopyalandı",
+      "noDataPasted": "Yapıştırılan veri yok",
+      "invalidJSON": "Geçersiz JSON",
+      "inputLabel": "Marketplace Ayarları",
+      "inputPlaceholder": "Ayarlarınızı buraya kopyalayıp yapıştırın",
+      "exportBtn": "Dışa Aktar",
+      "importBtn": "İçe Aktar",
+      "fileImportBtn": "Dosyadan içe aktar"
+    },
+    "devTools": {
+      "title": "Tema Geliştirici Araçları",
+      "noThemeInstalled": "Hata: Yüklü bir marketplace teması yok",
+      "noThemeManifest": "Hata: Tema manifestosu bulunamadı",
+      "colorIniEditor": "Color.ini Düzenleyici",
+      "colorIniEditorPlaceholder": "[renk-semanızın-adı]",
+      "invalidCSS": "Geçersiz CSS"
+    },
+    "updateModal": {
+      "title": "Marketplace'i Güncelle",
+      "description": "Yeni özellikleri ve hata düzeltmelerini almak için Spicetify Marketplace'i güncelleyin.",
+      "currentVersion": "Mevcut sürüm: {{version}}",
+      "latestVersion": "En son sürüm: {{version}}",
+      "whatsChanged": "Neler Değişti",
+      "seeChangelog": "Değişiklik günlüğünü gör",
+      "howToUpgrade": "Nasıl yükseltilir",
+      "viewGuide": "Rehberi görüntüle"
+    },
+    "grid": {
+      "spicetifyMarketplace": "Spicetify Marketplace",
+      "newUpdate": "Yeni güncelleme",
+      "addCSS": "CSS Ekle",
+      "search": "Ara",
+      "installed": "Yüklü",
+      "lastUpdated": "Son güncelleme: {{val, datetime}}",
+      "externalJS": "harici JS",
+      "archived": "arşivlenmiş",
+      "dark": "koyu",
+      "light": "açık",
+      "sort": {
+        "label": "Sırala:",
+        "stars": "Yıldız",
+        "newest": "En Yeni",
+        "oldest": "En Eski",
+        "lastUpdated": "Son Güncellenen",
+        "mostStale": "En Eski Güncelleme",
+        "aToZ": "A-Z",
+        "zToA": "Z-A"
+      }
+    },
+    "readmePage": {
+      "title": "$t(grid.spicetifyMarketplace) - Benioku",
+      "loading": "Yükleniyor...",
+      "errorLoading": "README yüklenirken hata oluştu"
+    },
+    "github": "GitHub",
+    "install": "Yükle",
+    "remove": "Kaldır",
+    "save": "Kaydet",
+    "colour_one": "renk",
+    "colour_other": "renkler",
+    "favourite": "favori",
+    "notifications": {
+      "wrongLocalTheme": "Marketplace kullanarak tema yüklemek için lütfen config-xpui.ini dosyasındaki current_theme ayarını 'marketplace' olarak değiştir",
+      "tooManyRequests": "Çok fazla istek gönderildi, lütfen bekleyin",
+      "noCdnConnection": "Marketplace, CDN'e bağlanamıyor. Lütfen internet bağlantınızı kontrol edin",
+      "markdownParsingError": "Markdown ayrıştırılırken hata oluştu (HTTP {{status}})",
+      "noReadmeFile": "README dosyası bulunamadı",
+      "themeInstallationError": "Tema yüklenirken bir hata oluştu",
+      "extensionInstallationError": "Eklenti yüklenirken bir hata oluştu"
+    }
+  }
+}
