@@ -44,7 +44,7 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "prismjs": "^1.30.0",
     "react-dropdown": "^1.11.0",
-    "react-i18next": "^15.5.1",
+    "react-i18next": "^15.6.1",
     "react-simple-code-editor": "^0.14.1",
     "semver": "^7.7.2"
   },
