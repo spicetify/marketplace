@@ -525,6 +525,6 @@
     "title": "Moving Pointing Man",
     "description": "Adds a Pointing Man to the Progress Bar which follows throughout the duration of the track.",
     "code": ".player-controls .playback-progressbar .progress-bar::before { content: ''; width: 55px; height: 55px; bottom: calc(40%); left: var(--progress-bar-transform); position: absolute; transition: left var(--progress-bar-duration); transform: translate(-15px, 0px); image-rendering: auto; background-size: 55px 55px; background-image: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHN5dWo0cmhvdThzeWlmNG4zdW45OGFzemNwNWIwZTBwbmV5ZW93MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/RfNLAz3a1Zus5r7yVy/giphy.gif'); }",
-    "preview": "resources/assets/snippets/pointing-man.gif"
+    "preview": "resources/assets/snippets/pointing-man.png"
   }
 ]
