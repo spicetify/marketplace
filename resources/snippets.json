@@ -520,5 +520,11 @@
     "description": "Adds a Minecraft Bee to the Progress Bar which follows throughout the duration of the track.",
     "code": ".player-controls .playback-progressbar .progress-bar::before { content: ''; width: 55px; height: 55px; bottom: calc(40%); left: var(--progress-bar-transform); position: absolute; transition: left var(--progress-bar-duration); transform: translate(-15px, 0px); image-rendering: auto; background-size: 55px 55px; background-image: url('https://i.imgur.com/1oyD6fu.gif'); }",
     "preview": "resources/assets/snippets/minecraft-bee-snippet.gif"
+  },
+  {
+    "title": "Dancing Minion",
+    "description": "Adds a Dancing Minion to the Progress Bar which follows throughout the duration of the track.",
+    "code": ".player-controls .playback-progressbar .progress-bar::before { z-index:1; content: ''; width: 60px; height: 60px; bottom: calc(40%); left: var(--progress-bar-transform); position: absolute; transition: left var(--progress-bar-duration); transform: translate(-25px, 13px); image-rendering: auto; background-size: 60px 60px; background-image: url('https://media.tenor.com/gvjH24AtYM0AAAAi/minion-minions.gif'); }",
+    "preview": "resources/assets/snippets/dancing-minion-snippet.gif"
   }
 ]
