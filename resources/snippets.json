@@ -524,7 +524,7 @@
   {
     "title": "Gawr Gura Karaoke",
     "description": "Adds a Gawr Gura Karaoke gif to the Progress Bar",
-    "code": ".player-controls .playback-progressbar::before { content: ''; width: 60px; height: 50px; bottom: calc(100% - 7px); right: -5px; position: absolute; pointer-events: none; background-repeat: no-repeat; background-size: 60px 50px; background-image: url('https://media.tenor.com/qLco28DUQwUAAAAi/gura.gif'); }",
-    "preview": "resources/assets/snippets/gurakaraoke.png"
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 60px; height: 60px; bottom: calc(100% - 3px); right: -8px; position: absolute; pointer-events: none; background-repeat: no-repeat; background-size: 60px 60px; background-image: url('https://media.tenor.com/qLco28DUQwUAAAAi/gura.gif'); }",
+    "preview": "resources/assets/snippets/gawrgurapreview.png"
   }
 ]
