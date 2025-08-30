@@ -524,7 +524,7 @@
   {
     "title": "Gawr Gura Karaoke",
     "description": "Adds a Gawr Gura Karaoke gif to the Progress Bar",
-    "code": ".player-controls .playback-progressbar::before { content: ''; width: 60px; height: 50px; bottom: calc(95%); right: -5px; position: absolute; background-size: 60px 50px; background-image: url('https://walfiegif.wordpress.com/wp-content/uploads/2023/07/out-transparent-8.gif'); }",
+    "code": ".player-controls .playback-progressbar::before { content: ''; width: 60px; height: 50px; bottom: calc(95%); right: -5px; position: absolute; background-size: 60px 50px; background-image: url('https://media.tenor.com/qLco28DUQwUAAAAi/gura.gif'); }",
     "preview": "resources/assets/snippets/gurakaraoke.png"
   }
 ]
