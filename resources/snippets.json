@@ -1,4 +1,10 @@
 [
+    {
+    "title": "No Lossless Indicator",
+    "description": "Removes the Lossless text from the Now Playing bar.",
+    "code": ".eBxEUeZhLhMiwCvoQAOj {display: none !important;}",
+    "preview": "resources/assets/snippets/no-lossless-indicator.png"
+  },
   {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
