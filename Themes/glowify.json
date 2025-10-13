@@ -1,0 +1,13 @@
+{
+  "name": "Glowify",
+  "description": "A modern, rounded and glowified theme for Spicetify.",
+  "preview": "preview.png",
+  "readme": "README.md",
+  "usercss": "user.css",
+  "schemes": "color.ini",
+  "include": ["https://nmwplays.github.io/Glowify/theme.js"],
+  "authors": [
+    { "name": "NMWplays", "url": "https://github.com/NMWplays" }
+  ],
+  "tags": ["dark", "rounded", "glowified"]
+}
