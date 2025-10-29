@@ -532,5 +532,11 @@
     "description": "Remove the unused space in topbar.",
     "code": ".Kgjmt7IX5samBYUpbkBu { display: none !important; }",
     "preview": "resources/assets/snippets/remove-unused-space.png"
+  },
+  {
+    "title": "Smaller Lyrics",
+    "description": "Changes the lyrics to be one font-size smaller. (3 down to 2)",
+    "code": ".lyrics-lyricsContent-text { font-size: var(--encore-text-size-larger-2) !important; }",
+    "preview": "resources/assets/snippets/smaller-lyrics.png"
   }
 ]
