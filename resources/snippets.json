@@ -532,5 +532,11 @@
     "description": "Remove the unused space in topbar.",
     "code": ".Kgjmt7IX5samBYUpbkBu { display: none !important; }",
     "preview": "resources/assets/snippets/remove-unused-space.png"
+  },
+  {
+    "title": "Hide All Images",
+    "description": "Hides all images across the Spotify UI, including album art, artist images, background images, playlist covers, profile avatars, podcast art, and more.",
+    "code": ".Root__main-view, .main-view-container, .os-content {} .Root__main-view [style*='background-image']:not([class*='Icon']):not([class*='icon']), .Root__main-view [style*='background:url']:not([class*='Icon']):not([class*='icon']), .Root__main-view [style*='image-set(']:not([class*='Icon']):not([class*='icon']) { background: none !important; } img, .cover-art-image, .artist-image, .card-image, .main-nowPlayingWidget-coverArt { display: none !important; visibility: hidden !important; } [aria-label*='Now Playing'] [style*='background-image'], [aria-label*='Now playing'] [style*='background-image'], [aria-label*='Now Playing'] [style*='image-set('], [aria-label*='Now playing'] [style*='image-set('], [aria-label*='Now Playing'] [style*='url('], [aria-label*='Now playing'] [style*='url('], [class^='main-nowPlayingView'] [style*='background-image'], [class^='main-nowPlayingView'] [style*='image-set('], [class^='main-nowPlayingView'] [style*='url('] { background: none !important; -webkit-mask-image: none !important; mask-image: none !important; } [style*='background-image'], [style*='background:url'], [style*='image-set('] { background: none !important; -webkit-mask-image: none !important; mask-image: none !important; }",
+    "preview": "resources/assets/snippets/Blank-PNG-Pic.png"
   }
 ]
