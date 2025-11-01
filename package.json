@@ -37,7 +37,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.2.2",
+    "@biomejs/biome": "^2.3.2",
     "@hello-pangea/dnd": "^18.0.1",
     "chroma-js": "^3.1.1",
     "i18next": "^25.5.2",
