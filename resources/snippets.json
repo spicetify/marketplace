@@ -530,7 +530,7 @@
   {
     "title": "Remove Unused Space in Topbar",
     "description": "Remove the unused space in topbar.",
-    "code": ".Kgjmt7IX5samBYUpbkBu { display: none !important; }",
+    "code": ".Kgjmt7IX5samBYUpbkBu, .OPsY6bKl1_FfA8jFpq1V { display: none !important; }",
     "preview": "resources/assets/snippets/remove-unused-space.png"
   }
 ]
