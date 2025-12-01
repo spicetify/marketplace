@@ -26,7 +26,7 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "@types/chroma-js": "^2.4.4",
+    "@types/chroma-js": "^3.1.2",
     "@types/react": "18.2.25",
     "@types/react-dom": "18.2.0",
     "@types/semver": "^7.7.0",
@@ -39,7 +39,7 @@
   "dependencies": {
     "@biomejs/biome": "^2.3.2",
     "@hello-pangea/dnd": "^18.0.1",
-    "chroma-js": "^3.1.1",
+    "chroma-js": "^3.2.0",
     "i18next": "^25.6.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "prismjs": "^1.30.0",
