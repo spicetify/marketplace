@@ -4,7 +4,7 @@
     "description": "Hides the main lyrics button if you have any other lyrics extension installed.",
     "code": "button[aria-label*=\"Lyrics\"], button[aria-label*=\"lyrics\"]{display:none!important}",
     "preview": "resources/assets/snippets/hide-main-lyrics-button.png"
-  }
+  },
   {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
