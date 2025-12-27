@@ -544,5 +544,5 @@
     "description": "Removes black sections from the top navigation and user widget areas.",
     "code": ".Root__globalNav button, .Root__globalNav.main-globalNav-link-icon, .main-topBar-historyButtons.main-topBar-button { background-color: transparent !important; } .Fxnb0xe6bL7I7W8V0p6C, .main-topBar-buddyFeed, .main-userWidget-boxCondensed, .SFgYidQmrqrFEVh65Zrg, .SFgYidQmrqrFEVh65Zrg:hover, .main-userWidget-boxCondensed:focus-visible, .main-userWidget-boxCondensed:hover, .main-userWidget-boxCondensed[data-context-menu-open="true"], .main-topBar-whatsNewFeed { background-color: transparent !important; } @media (min-width: 1024px) { .sl_aPp6GDg05ItSfmsS7 { height: 0; } }",
     "preview": "resources/assets/snippets/blackremover.png"
-}
+},
 ]
