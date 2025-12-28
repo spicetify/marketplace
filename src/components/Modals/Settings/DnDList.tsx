@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, type DropResult, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
 import React from "react";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
@@ -70,6 +70,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
                     {...provided.draggableProps}
                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, item.enabled)}
                   >
+                    {/** biome-ignore lint/a11y/noStaticElementInteractions: Spotify stylings */}
                     <div className="dnd-box" {...provided.dragHandleProps} onClick={() => onToggleEnabled(item.name)}>
                       <svg
                         className="dnd-icon"

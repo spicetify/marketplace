@@ -13,8 +13,8 @@ import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } fr
 import Button from "./Button";
 import Card, { type Card as CardClass } from "./Card/Card";
 import DownloadIcon from "./Icons/DownloadIcon";
-import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
+import LoadMoreIcon from "./Icons/LoadMoreIcon";
 import SettingsIcon from "./Icons/SettingsIcon";
 import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
 import SortBox from "./Sortbox";

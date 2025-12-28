@@ -45,7 +45,6 @@ const ThemeDevToolsModal = () => {
         <div className="marketplace-code-editor-wrapper marketplace-code-editor">
           {getInvalidCSS().map((cssClass, index) => {
             return (
-              // biome-ignore lint/suspicious/noArrayIndexKey: CSS classname is not unique
               <div key={index} className="invalid-css-text">
                 {cssClass}
               </div>

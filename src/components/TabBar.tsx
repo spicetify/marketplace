@@ -58,7 +58,6 @@ const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({ items, swit
 export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: string; switchCallback: (option: Option) => void }) => {
   const tabBar = useRef<HTMLElement | null>(null);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: TODO
   const contextHandler = useCallback(() => {
     // Move the marketplace-tabBar item to the main-topBar-topbarContent div
     const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
@@ -95,7 +94,6 @@ const TabBar = React.forwardRef(({ links, activeLink, switchCallback }: TabBarPr
     return { label: name, value: name, active, enabled } as TabOptionConfig;
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: TODO
   useEffect(() => {
     if (!tabBarRef.current) return;
 
@@ -106,7 +104,6 @@ const TabBar = React.forwardRef(({ links, activeLink, switchCallback }: TabBarPr
     };
   }, [tabBarRef.current]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: TODO
   useEffect(() => {
     if (!tabBarRef.current) return;
 
