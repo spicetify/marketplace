@@ -1,11 +1,10 @@
 {
-  "repos": [
-    "https://github.com/FoxRefire/spiceDL",
-    "https://github.com/FoxRefire/SpiceDL",
-    "https://github.com/s000ik/Speedify",
-    "https://github.com/ssatwik975/Speedify",
-    "https://github.com/hudzax/amai-lyrics",
-    "https://github.com/ivLis-Studio/lyrics-plus",
-    "https://github.com/korovagg/statswin"
-  ]
+	"repos": [
+		"https://github.com/FoxRefire/*",
+		"https://github.com/*/spiceDL",
+		"https://github.com/*/Speedify",
+		"https://github.com/hudzax/amai-lyrics",
+		"https://github.com/ivLis-Studio/lyrics-plus",
+		"https://github.com/korovagg/statswin"
+	]
 }
