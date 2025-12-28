@@ -468,7 +468,7 @@ export class Card extends React.Component<
     }
 
     return (
-      // biome-ignore lint/a11y/noStaticElementInteractions: Card is clickable
+      // biome-ignore lint/a11y/noStaticElementInteractions: Not static
       <div
         className={cardClasses.join(" ")}
         onClick={() => {
