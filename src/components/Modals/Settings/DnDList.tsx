@@ -70,7 +70,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
                     {...provided.draggableProps}
                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style, item.enabled)}
                   >
-                    {/* biome-ignore lint/a11y/noStaticElementInteractions: Spotify stylings */}
+                    {/** biome-ignore lint/a11y/noStaticElementInteractions: Spotify stylings */}
                     <div className="dnd-box" {...provided.dragHandleProps} onClick={() => onToggleEnabled(item.name)}>
                       <svg
                         className="dnd-icon"
