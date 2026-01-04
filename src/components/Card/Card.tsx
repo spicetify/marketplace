@@ -71,7 +71,7 @@ export class Card extends React.Component<
     if (props.item.include) this.tags.push(t("grid.externalJS"));
     if (props.item.archived) this.tags.push(t("grid.archived"));
 
-    if (!props.item.archived && props.item.lastUpdated) {
+    if (!props.item.archived && props.item.lastUpdated && (props.type === "extension" || props.type === "app")) {
       const lastUpdate = new Date(props.item.lastUpdated);
       const threshold = new Date();
       threshold.setMonth(threshold.getMonth() - INACTIVE_THRESHOLD_MONTHS);
