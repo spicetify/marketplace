@@ -39,6 +39,9 @@ export const CUSTOM_APP_PATH = "/marketplace";
 // Used in Card.tsx
 export const MAX_TAGS = 4;
 
+// Repos without updates for this many months are marked as inactive
+export const INACTIVE_THRESHOLD_MONTHS = 8;
+
 export const SNIPPETS_PAGE_URL = "https://github.com/spicetify/marketplace/blob/main/resources/snippets.json";
 
 export const SNIPPETS_URL = "https://raw.githubusercontent.com/spicetify/marketplace/main/resources/snippets.json";

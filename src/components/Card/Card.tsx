@@ -2,7 +2,7 @@ import { t } from "i18next";
 import React, { type Key } from "react";
 import { withTranslation } from "react-i18next";
 
-import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
+import { CUSTOM_APP_PATH, INACTIVE_THRESHOLD_MONTHS, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
 import { openModal } from "../../logic/LaunchModals";
 import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "../../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
@@ -70,6 +70,13 @@ export class Card extends React.Component<
     this.tags = props.item.tags || [];
     if (props.item.include) this.tags.push(t("grid.externalJS"));
     if (props.item.archived) this.tags.push(t("grid.archived"));
+
+    if (!props.item.archived && props.item.lastUpdated) {
+      const lastUpdate = new Date(props.item.lastUpdated);
+      const threshold = new Date();
+      threshold.setMonth(threshold.getMonth() - INACTIVE_THRESHOLD_MONTHS);
+      if (lastUpdate < threshold) this.tags.push(t("grid.inactive"));
+    }
 
     this.state = {
       // Initial value. Used to trigger a re-render.

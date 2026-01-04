@@ -94,6 +94,7 @@
       "lastUpdated": "Son güncelleme: {{val, datetime}}",
       "externalJS": "harici JS",
       "archived": "arşivlenmiş",
+      "inactive": "pasif",
       "dark": "koyu",
       "light": "açık",
       "sort": {

@@ -94,6 +94,7 @@
       "lastUpdated": "마지막 업데이트일 {{val, datetime}}",
       "externalJS": "external JS",
       "archived": "만료됨",
+      "inactive": "비활성",
       "dark": "다크 모드",
       "light": "라이트 모드",
       "sort": {

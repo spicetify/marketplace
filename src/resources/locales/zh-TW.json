@@ -81,6 +81,7 @@
       "installed": "已經安裝",
       "lastUpdated": "上次更新於 {{val, datetime}}",
       "externalJS": "有外部 JS",
+      "inactive": "不活躍",
       "dark": "暗色",
       "light": "亮色"
     },

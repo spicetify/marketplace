@@ -44,6 +44,11 @@
           color: #fff;
         }
 
+        &[data-tag=inactive] {
+          background-color: hsl(35deg 90% 50%);
+          color: #fff;
+        }
+
         &[data-tag='dark'] {
           background-color: #000;
           color: #fff;

@@ -81,6 +81,7 @@
       "installed": "Instal·lat",
       "lastUpdated": "Última actualizació {{val, datetime}}",
       "externalJS": "JS extern",
+      "inactive": "inactiu",
       "dark": "fosc",
       "light": "clar"
     },

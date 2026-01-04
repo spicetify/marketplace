@@ -81,6 +81,7 @@
       "installed": "Paigaldatud",
       "lastUpdated": "Viimati uuendatud {{val, datetime}}",
       "externalJS": "väline JS",
+      "inactive": "mitteaktiivne",
       "dark": "tume",
       "light": "hele"
     },

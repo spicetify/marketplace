@@ -10,6 +10,7 @@ const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
   const englishTagMap = {
     [t("grid.externalJS")]: "external JS",
     [t("grid.archived")]: "archived",
+    [t("grid.inactive")]: "inactive",
     [t("grid.dark")]: "dark",
     [t("grid.light")]: "light"
   };
@@ -30,7 +31,7 @@ const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
     >((accum, tag) => {
       const englishTag = englishTagMap[tag] || tag;
       // Render tags if enabled. Always render external JS and archived tags
-      if (props.showTags || tag === t("grid.externalJS") || tag === t("grid.archived")) {
+      if (props.showTags || tag === t("grid.externalJS") || tag === t("grid.archived") || tag === t("grid.inactive")) {
         accum.push(
           React.createElement(
             "li",
@@ -47,7 +48,7 @@ const TagsDiv = (props: { tags: string[]; showTags: boolean }) => {
     }, []);
   };
   // Sort tags so that externalJS and archived tags come first
-  let baseTags = [...(props.tags ?? [])].sort((a) => (a === t("grid.externalJS") || a === t("grid.archived") ? -1 : 1));
+  let baseTags = [...(props.tags ?? [])].sort((a) => (a === t("grid.externalJS") || a === t("grid.archived") || a === t("grid.inactive") ? -1 : 1));
   let extraTags: string[] = [];
   // If there are more than one extra tags, slice them and add an expand button
   if (baseTags.length - MAX_TAGS > 1) {

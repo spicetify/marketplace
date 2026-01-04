@@ -94,6 +94,7 @@
       "lastUpdated": "Última actualización {{val, datetime}}",
       "externalJS": "JS externo",
       "archived": "archivado",
+      "inactive": "inactivo",
       "dark": "oscuro",
       "light": "claro",
       "sort": {

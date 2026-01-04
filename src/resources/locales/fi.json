@@ -94,6 +94,7 @@
       "lastUpdated": "Viimeisin päivitys {{val, datetime}}",
       "externalJS": "ulkoiset JS-skriptit",
       "archived": "arkistoitu",
+      "inactive": "epäaktiivinen",
       "dark": "tumma",
       "light": "vaalea",
       "sort": {

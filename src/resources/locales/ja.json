@@ -94,6 +94,7 @@
       "lastUpdated": "{{val, datetime}}に最終更新",
       "externalJS": "外部JS",
       "archived": "アーカイブ済み",
+      "inactive": "非アクティブ",
       "dark": "ダーク",
       "light": "ライト",
       "sort": {

@@ -94,6 +94,7 @@
       "lastUpdated": "Обновлено: {{val, datetime}}",
       "externalJS": "содержит JS",
       "archived": "архивировано",
+      "inactive": "неактивно",
       "dark": "темный",
       "light": "светлый",
       "sort": {

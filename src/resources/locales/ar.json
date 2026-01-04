@@ -94,6 +94,7 @@
       "lastUpdated": "آخر تحديث {{val, datetime}}",
       "externalJS": "JS خارجي",
       "archived": "مؤرشفة",
+      "inactive": "غير نشط",
       "dark": "داكن",
       "light": "فاتح",
       "sort": {

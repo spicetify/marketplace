@@ -95,6 +95,7 @@
       "lastUpdated": "上次更新于 {{val, datetime}}",
       "externalJS": "外部 JS",
       "archived": "已存档",
+      "inactive": "不活跃",
       "dark": "深色",
       "light": "浅色",
       "sort": {
