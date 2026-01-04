@@ -73,9 +73,8 @@ export class Card extends React.Component<
 
     if (!props.item.archived && props.item.lastUpdated && (props.type === "extension" || props.type === "app")) {
       const lastUpdate = new Date(props.item.lastUpdated);
-      const threshold = new Date();
-      threshold.setMonth(threshold.getMonth() - INACTIVE_THRESHOLD_MONTHS);
-      if (lastUpdate < threshold) this.tags.push(t("grid.inactive"));
+      const thresholdMs = INACTIVE_THRESHOLD_MONTHS * 30 * 24 * 60 * 60 * 1000;
+      if (Date.now() - lastUpdate.getTime() > thresholdMs) this.tags.push(t("grid.inactive"));
     }
 
     this.state = {

@@ -11,6 +11,9 @@
     "devTools": {
       "colorIniEditorPlaceholder": "[your-color-scheme-name]"
     },
+    "grid": {
+      "inactive": "inactive"
+    },
     "colour_one": "color",
     "colour_other": "colors",
     "favourite": "favorite"
