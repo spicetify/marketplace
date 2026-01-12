@@ -2,9 +2,9 @@
   {
     "name": "SmartVis",
     "description": "Real-time audio visualizer for Spicetify",
-    "preview": "https://cdn.jsdelivr.net/gh/AdrianDieDose/SmartVis@main/vis_screenshot.png",
-    "main": "https://cdn.jsdelivr.net/gh/AdrianDieDose/SmartVis@main/smartvis.js",
-    "readme": "https://cdn.jsdelivr.net/gh/AdrianDieDose/SmartVis@main/README.md",
+    "preview": "https://cdn.jsdelivr.net/gh/AdrianDieDose/SmartVis@master/vis_screenshot.png",
+    "main": "https://cdn.jsdelivr.net/gh/AdrianDieDose/SmartVis@master/smartvis.js",
+    "readme": "https://cdn.jsdelivr.net/gh/AdrianDieDose/SmartVis@master/README.md",
     "authors": [
       { "name": "Adrian Duda", "url": "https://github.com/AdrianDieDose" }
     ],
