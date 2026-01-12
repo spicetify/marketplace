@@ -1,9 +1,0 @@
-{
-  "name": "SmartVis",
-  "description": "Real-time audio visualizer for Spicetify",
-  "author": "Adrian Duda",
-  "repo": "https://github.com/AdrianDieDose/SmartVis",
-  "main": "smartvis.js",
-  "tags": ["audio", "visualizer", "spicetify", "bpm", "music", "css"],
-  "version": "1.0.0"
-}
