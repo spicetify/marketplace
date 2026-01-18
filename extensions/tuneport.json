@@ -1,0 +1,10 @@
+{
+  "name": "TunePort Bridge",
+  "description": "Relay bridge for TunePort extension to sync local files from YouTube.",
+  "main": "tuneport.js",
+  "preview": "preview.png",
+  "readme": "README.md",
+  "branch": "main",
+  "repo": "Microck/tuneport",
+  "path": "spicetify-extension"
+}
