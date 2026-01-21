@@ -27,6 +27,37 @@ export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
 };
 
 /**
+ * Check if a GitHub URL matches a blacklist pattern
+ * Supports case-insensitive matching and glob patterns:
+ * - Exact URL: "https://github.com/user/repo"
+ * - All repos from user: "https://github.com/user/{asterisk}"
+ * - Specific repo name from any user: "https://github.com/{asterisk}/reponame"
+ * @param url The GitHub URL to check
+ * @param pattern The blacklist pattern to match against
+ * @returns True if the URL matches the pattern
+ */
+const matchesBlacklistPattern = (url: string, pattern: string): boolean => {
+  const normalizedUrl = url.toLowerCase();
+  const normalizedPattern = pattern.toLowerCase();
+
+  if (!normalizedPattern.includes("*")) return normalizedUrl === normalizedPattern;
+
+  const regexPattern = normalizedPattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^/]+");
+
+  return new RegExp(`^${regexPattern}$`).test(normalizedUrl);
+};
+
+/**
+ * Check if a GitHub URL is blacklisted
+ * @param url The GitHub URL to check
+ * @param blacklist Array of blacklist patterns
+ * @returns True if the URL is blacklisted
+ */
+export const isBlacklisted = (url: string, blacklist: string[]): boolean => {
+  return blacklist.some((pattern) => matchesBlacklistPattern(url, pattern));
+};
+
+/**
  * Convert hexadeciaml string to rgb values
  * @param hex 3 or 6 character hex string
  * @returns Array of RGB values

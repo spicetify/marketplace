@@ -85,7 +85,7 @@ class ReadmePage extends React.Component<
     // e.g. "screenshot.png" loads https://xpui.app.spotify.com/screenshot.png and breaks
     // so I turn it into https://raw.githubusercontent.com/theRealPadster/spicetify-hide-podcasts/main/screenshot.png
     // This works for urls relative to the repo readme
-    document.querySelectorAll("#marketplace-readme img").forEach((img) => {
+    for (const img of Array.from(document.querySelectorAll("#marketplace-readme img"))) {
       img.addEventListener(
         "error",
         (e) => {
@@ -99,7 +99,7 @@ class ReadmePage extends React.Component<
         },
         { once: true }
       );
-    });
+    }
   }
 
   buttonContent() {
