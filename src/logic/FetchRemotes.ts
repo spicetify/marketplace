@@ -2,7 +2,7 @@ import { t } from "i18next";
 
 import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
 import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
-import { addToSessionStorage, processAuthors } from "./Utils";
+import { addToSessionStorage, isBlacklisted, processAuthors } from "./Utils";
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -42,7 +42,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url) && (showArchived || !item.archived))
+    items: allRepos.items.filter((item) => !isBlacklisted(item.html_url, BLACKLIST) && (showArchived || !item.archived))
   };
 
   return filteredResults;

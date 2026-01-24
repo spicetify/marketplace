@@ -18,6 +18,7 @@ import {
   injectColourScheme,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
+  isBlacklisted,
   isGithubRawUrl,
   parseCSS,
   resetMarketplace
@@ -190,7 +191,7 @@ import type { RepoType } from "../types/marketplace-types";
  * @returns TODO
  */
 async function queryRepos(type: RepoType, pageNum = 1) {
-  const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
+  const BLACKLIST: string[] = JSON.parse(window.sessionStorage.getItem("marketplace:blacklist") || "[]");
 
   let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}&q=${encodeURIComponent(`topic:spicetify-${type}s`)}`;
   if (pageNum) url += `&page=${pageNum}`;
@@ -211,7 +212,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   const filteredResults = {
     ...allRepos,
     page_count: allRepos.items.length,
-    items: allRepos.items.filter((item) => !BLACKLIST?.includes(item.html_url))
+    items: allRepos.items.filter((item) => !isBlacklisted(item.html_url, BLACKLIST))
   };
 
   return filteredResults;
