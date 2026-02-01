@@ -1,5 +1,11 @@
 [
   {
+    "title": "Hide Lyrics Button", 
+    "description": "Hides the main lyrics button if you have any other lyrics extension installed.",
+    "code": "button[aria-label*=\"Lyrics\"], button[aria-label*=\"lyrics\"]{display:none!important}",
+    "preview": "resources/assets/snippets/hide-main-lyrics-button.png"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
