@@ -541,7 +541,7 @@
   },
   {
     "title": "Fix Thicker Bars Hover",
-    "description": "Fixes the hover preview on proggress bars when using a snippet that makes them thicker.",
+    "description": "Fixes the hover preview on progress bars when using a snippet that makes them thicker.",
     "code": ".x-progressBar-sliderArea * { height: 100% !important; }",
     "preview": "resources/assets/snippets/Fix-Thicker-Bars-Hover.jpg"
   }
