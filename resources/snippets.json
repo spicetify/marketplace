@@ -1,6 +1,6 @@
 [
   {
-    "title": "Custom-App Icon Fix",
+    "title": "Custom App Icon Fix",
     "description": "Expands the custom app icon section so you don't have to scroll!",
     "code": ".custom-navlinks-scrollable_container { max-width: none !important; width: 100% !important; overflow-x: visible !important; } .search-searchCategory-contentArea { max-width: none !important; width: 100% !important; } .search-searchCategory-categoryGrid { display: flex !important; flex-wrap: wrap !important; overflow: visible !important; }",
     "preview": "resources/assets/snippets/app-icon_fix.png"
