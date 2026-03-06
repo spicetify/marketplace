@@ -1,5 +1,11 @@
 [
   {
+    "title": "Enlarge App Icons",
+    "description": "Expands the custom app icon section so you don't have to scroll!",
+    "code": ".custom-navlinks-scrollable_container { max-width: none !important; width: 100% !important; overflow-x: visible !important; } .search-searchCategory-contentArea { max-width: none !important; width: 100% !important; } .search-searchCategory-categoryGrid { display: flex !important; flex-wrap: wrap !important; overflow: visible !important; }",
+    "preview": "resources/assets/snippets/enlarge_app-icons.png"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
