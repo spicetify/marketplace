@@ -332,7 +332,7 @@
   {
     "title": "Hide lyrics button",
     "description": "Hides the lyrics button in the playbar",
-    "code": ".main-nowPlayingBar-lyricsButton { display: none; }",
+    "code": ".main-nowPlayingBar-lyricsButton[data-testid='lyrics-button'] { display: none !important; }",
     "preview": "resources/assets/snippets/hide-lyrics-button.png"
   },
   {
