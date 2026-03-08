@@ -308,9 +308,18 @@ declare namespace Spicetify {
      *  - `appchange` type when user changes page.
      */
     function addEventListener(type: string, callback: (event?: Event) => void): void;
-    function addEventListener(type: "songchange", callback: (event?: Event & { data: PlayerState }) => void): void;
-    function addEventListener(type: "onplaypause", callback: (event?: Event & { data: PlayerState }) => void): void;
-    function addEventListener(type: "onprogress", callback: (event?: Event & { data: number }) => void): void;
+    function addEventListener(
+      type: "songchange",
+      callback: (event?: Event & { data: PlayerState }) => void,
+    ): void;
+    function addEventListener(
+      type: "onplaypause",
+      callback: (event?: Event & { data: PlayerState }) => void,
+    ): void;
+    function addEventListener(
+      type: "onprogress",
+      callback: (event?: Event & { data: number }) => void,
+    ): void;
     function addEventListener(
       type: "appchange",
       callback: (
@@ -325,8 +334,8 @@ declare namespace Spicetify {
              */
             container: HTMLElement;
           };
-        }
-      ) => void
+        },
+      ) => void,
     ): void;
     /**
      * Skip to previous track.
@@ -524,22 +533,33 @@ declare namespace Spicetify {
       callback: (b: Response["body"]) => void,
       onError?: (e: Error) => void,
       body?: Body,
-      headers?: Headers
+      headers?: Headers,
     ): Promise<Response["body"]>;
     function postSub(
       url: string,
       body: Body | null,
       callback: (b: Response["body"]) => void,
-      onError?: (e: Error) => void
+      onError?: (e: Error) => void,
     ): Promise<Response["body"]>;
-    function request(method: Method, url: string, body?: Body, headers?: Headers): Promise<Response>;
-    function resolve(method: Method, url: string, body?: Body, headers?: Headers): Promise<Response>;
+    function request(
+      method: Method,
+      url: string,
+      body?: Body,
+      headers?: Headers,
+    ): Promise<Response>;
+    function resolve(
+      method: Method,
+      url: string,
+      body?: Body,
+      headers?: Headers,
+    ): Promise<Response>;
   }
   /**
    * Fetch interesting colors from URI.
    * @param uri Any type of URI that has artwork (playlist, track, album, artist, show, ...)
    */
   function colorExtractor(uri: string): Promise<{
+    DARK_VIBRANT: string;
     DESATURATED: string;
     LIGHT_VIBRANT: string;
     PROMINENT: string;
@@ -677,8 +697,14 @@ declare namespace Spicetify {
         };
     const KEYS: Record<ValidKey, string>;
     function registerShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void): void;
-    function registerIsolatedShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void): void;
-    function registerImportantShortcut(keys: KeysDefine, callback: (event: KeyboardEvent) => void): void;
+    function registerIsolatedShortcut(
+      keys: KeysDefine,
+      callback: (event: KeyboardEvent) => void,
+    ): void;
+    function registerImportantShortcut(
+      keys: KeysDefine,
+      callback: (event: KeyboardEvent) => void,
+    ): void;
     function _deregisterShortcut(keys: KeysDefine): void;
     function deregisterImportantShortcut(keys: KeysDefine): void;
     function changeShortcut(keys: KeysDefine, newKeys: KeysDefine): void;
@@ -715,7 +741,12 @@ declare namespace Spicetify {
      * Create a single toggle.
      */
     class Item {
-      constructor(name: string, isEnabled: boolean, onClick: (self: Item) => void, icon?: Icon | string);
+      constructor(
+        name: string,
+        isEnabled: boolean,
+        onClick: (self: Item) => void,
+        icon?: Icon | string,
+      );
       name: string;
       isEnabled: boolean;
       /**
@@ -755,11 +786,11 @@ declare namespace Spicetify {
       /**
        * Add an item to sub items list
        */
-      addItem(item: Item);
+      addItem(item: Item): void;
       /**
        * Remove an item from sub items list
        */
-      removeItem(item: Item);
+      removeItem(item: Item): void;
       /**
        * SubMenu is only available in Profile menu when method "register" is called.
        */
@@ -1238,7 +1269,13 @@ declare namespace Spicetify {
        * List of valid icons to use.
        */
       static readonly iconList: Icon[];
-      constructor(name: string, onClick: OnClickCallback, shouldAdd?: ShouldAddCallback, icon?: Icon, disabled?: boolean);
+      constructor(
+        name: string,
+        onClick: OnClickCallback,
+        shouldAdd?: ShouldAddCallback,
+        icon?: Icon,
+        disabled?: boolean,
+      );
       name: string;
       icon: Icon | string;
       disabled: boolean;
@@ -1265,7 +1302,12 @@ declare namespace Spicetify {
      * `Item`s in `subItems` array shouldn't be registered.
      */
     class SubMenu {
-      constructor(name: string, subItems: Iterable<Item>, shouldAdd?: ShouldAddCallback, disabled?: boolean);
+      constructor(
+        name: string,
+        subItems: Iterable<Item>,
+        shouldAdd?: ShouldAddCallback,
+        disabled?: boolean,
+      );
       name: string;
       disabled: boolean;
       /**
@@ -1307,11 +1349,11 @@ declare namespace Spicetify {
   }
 
   /** React instance to create components */
-  const React: any;
+  const React: typeof import("react");
   /** React DOM instance to render and mount components */
-  const ReactDOM: any;
+  const ReactDOM: typeof import("react-dom/client");
   /** React DOM Server instance to render components to string */
-  const ReactDOMServer: any;
+  const ReactDOMServer: typeof import("react-dom/server");
 
   /** Stock React components exposed from Spotify library */
   namespace ReactComponent {
@@ -1371,7 +1413,13 @@ declare namespace Spicetify {
        * or a function. If a function is passed it will be called with
        * (`isOpen`, `handleContextMenu`, `ref`) as arguments.
        */
-      children: Element | ((isOpen?: boolean, handleContextMenu?: (e: MouseEvent) => void, ref?: (e: Element) => void) => Element);
+      children:
+        | Element
+        | ((
+            isOpen?: boolean,
+            handleContextMenu?: (e: MouseEvent) => void,
+            ref?: (e: Element) => void,
+          ) => Element);
     };
     type MenuProps = {
       /**
@@ -1695,13 +1743,13 @@ declare namespace Spicetify {
        * Values from the colorSet will be pasted into the CSS.
        */
       UNSAFE_colorSet?: ColorSetBody;
-      onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-      onMouseEnter?: (event: MouseEvent<HTMLButtonElement>) => void;
-      onMouseLeave?: (event: MouseEvent<HTMLButtonElement>) => void;
-      onMouseDown?: (event: MouseEvent<HTMLButtonElement>) => void;
-      onMouseUp?: (event: MouseEvent<HTMLButtonElement>) => void;
-      onFocus?: (event: FocusEvent<HTMLButtonElement>) => void;
-      onBlur?: (event: FocusEvent<HTMLButtonElement>) => void;
+      onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+      onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+      onMouseLeave?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+      onMouseDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+      onMouseUp?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+      onFocus?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+      onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
     };
     /**
      * Generic context menu provider
@@ -1813,11 +1861,18 @@ declare namespace Spicetify {
    */
   namespace Topbar {
     class Button {
-      constructor(label: string, icon: Icon | string, onClick: (self: Button) => void, disabled?: boolean);
+      constructor(
+        label: string,
+        icon: Icon | string,
+        onClick: (self: Button) => void,
+        disabled?: boolean,
+        isRight?: boolean,
+      );
       label: string;
       icon: string;
       onClick: (self: Button) => void;
       disabled: boolean;
+      isRight: boolean;
       element: HTMLButtonElement;
       tippy: any;
     }
@@ -1837,7 +1892,7 @@ declare namespace Spicetify {
         onClick?: (self: Button) => void,
         disabled?: boolean,
         active?: boolean,
-        registerOnCreate?: boolean
+        registerOnCreate?: boolean,
       );
       label: string;
       icon: string;
@@ -1860,7 +1915,7 @@ declare namespace Spicetify {
         onClick?: (self: Widget) => void,
         disabled?: boolean,
         active?: boolean,
-        registerOnCreate?: boolean
+        registerOnCreate?: boolean,
       );
       label: string;
       icon: string;
@@ -1878,13 +1933,6 @@ declare namespace Spicetify {
    * SVG icons
    */
   const SVGIcons: Record<Icon, string>;
-
-  /**
-   * Return font styling used by Spotify.
-   * @param font Name of the font.
-   * Can match any of the fonts listed in `Spicetify._fontStyle` or returns a generic style otherwise.
-   */
-  function getFontStyle(font: Variant): string;
 
   /**
    * A filtered copy of user's `config-xpui` file.
@@ -2042,18 +2090,6 @@ declare namespace Spicetify {
      */
     const Definitions: Record<Query | string, any>;
     /**
-     * GraphQL query definitions. Subset of `Definitions` that are used as query requests.
-     */
-    const QueryDefinitions: Record<Query | string, any>;
-    /**
-     * GraphQL mutation definitions. Subset of `Definitions` that are used as mutation requests.
-     */
-    const MutationDefinitions: Record<Query | string, any>;
-    /**
-     * GraphQL response definitions. Subset of `Definitions` that are used as response types.
-     */
-    const ResponseDefinitions: Record<Query | string, any>;
-    /**
      * Sends a GraphQL query to Spotify.
      * @description A preinitialized version of `Spicetify.GraphQL.Handler` using current context.
      * @param query Query to send
@@ -2061,7 +2097,11 @@ declare namespace Spicetify {
      * @param context Context to use
      * @return Promise that resolves to the response
      */
-    function Request(query: (typeof Definitions)[Query | string], variables?: Record<string, any>, context?: Record<string, any>): Promise<any>;
+    function Request(
+      query: (typeof Definitions)[Query | string],
+      variables?: Record<string, any>,
+      context?: Record<string, any>,
+    ): Promise<any>;
     /**
      * Context for GraphQL queries.
      * @description Used to set context for the handler and initialze it.
@@ -2073,8 +2113,12 @@ declare namespace Spicetify {
      * @return Function to handle GraphQL queries
      */
     function Handler(
-      context: Record<string, any>
-    ): (query: (typeof Definitions)[Query | string], variables?: Record<string, any>, context?: Record<string, any>) => Promise<any>;
+      context: Record<string, any>,
+    ): (
+      query: (typeof Definitions)[Query | string],
+      variables?: Record<string, any>,
+      context?: Record<string, any>,
+    ) => Promise<any>;
   }
 
   namespace ReactHook {
@@ -2094,8 +2138,14 @@ declare namespace Spicetify {
       label?: string,
       contextUri?: string,
       sectionIndex?: number,
-      dropOriginUri?: string
-    ): (event: React.DragEvent, uris?: string[], label?: string, contextUri?: string, sectionIndex?: number) => void;
+      dropOriginUri?: string,
+    ): (
+      event: React.DragEvent,
+      uris?: string[],
+      label?: string,
+      contextUri?: string,
+      sectionIndex?: number,
+    ) => void;
 
     /**
      * React Hook to use extracted color from GraphQL
@@ -2111,7 +2161,11 @@ declare namespace Spicetify {
      *
      * @return Extracted color hex code.
      */
-    function useExtractedColor(uri: string, fallbackColor?: string, variant?: "colorRaw" | "colorLight" | "colorDark"): string;
+    function useExtractedColor(
+      uri: string,
+      fallbackColor?: string,
+      variant?: "colorRaw" | "colorLight" | "colorDark",
+    ): string;
   }
 
   /**
@@ -2254,7 +2308,10 @@ declare namespace Spicetify {
      * @return Localized string
      * @throws {RangeError} If the date is invalid
      */
-    function formatDate(date: number | Date | undefined, options?: Intl.DateTimeFormatOptions): string;
+    function formatDate(
+      date: number | Date | undefined,
+      options?: Intl.DateTimeFormatOptions,
+    ): string;
     /**
      * Format time into relative locale string
      *
@@ -2263,7 +2320,10 @@ declare namespace Spicetify {
      * @return Localized string
      * @throws {RangeError} If the date is invalid
      */
-    function formatRelativeTime(date: number | Date | undefined, options?: Intl.DateTimeFormatOptions): string;
+    function formatRelativeTime(
+      date: number | Date | undefined,
+      options?: Intl.DateTimeFormatOptions,
+    ): string;
     /**
      * Format number into locale string
      *
@@ -2351,7 +2411,9 @@ declare namespace Spicetify {
      *
      * @param dictionary Dictionary to set
      */
-    function setDictionary(dictionary: Record<string, string | { one: string; other: string }>): void;
+    function setDictionary(
+      dictionary: Record<string, string | { one: string; other: string }>,
+    ): void;
     /**
      * Transform text into locale lowercase
      *
