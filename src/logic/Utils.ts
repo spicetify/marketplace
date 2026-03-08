@@ -3,7 +3,15 @@ import { t } from "i18next";
 
 import type { CardProps } from "../components/Card/Card";
 import { LOCALSTORAGE_KEYS } from "../constants";
-import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import type {
+  Author,
+  CardItem,
+  ColourScheme,
+  ResetCategory,
+  SchemeIni,
+  Snippet,
+  SortBoxOption
+} from "../types/marketplace-types";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -412,9 +420,9 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
   // Add a hyphen before any uppercase characters
   const modeStr = mode.replace(/([A-Z])/g, "-$1").toLowerCase();
   //fetch `https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`
-  const palette = await fetch(`https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`).then((response) =>
-    response.json()
-  );
+  const palette = await fetch(
+    `https://www.thecolorapi.com/scheme?hex=${mainColor}&mode=${modeStr}&count=${numColors}`
+  ).then((response) => response.json());
   // create an array of the hex values for the colors while also removing the #
   const colorArray = palette.colors.map((color) => color.hex.value.substring(1));
   return colorArray;
@@ -533,7 +541,9 @@ export const isGithubRawUrl = (url: string) => {
  * @returns { { user: string, repo: string, branch: string, filePath: string } }
  */
 export const getParamsFromGithubRaw = (url: string) => {
-  const regex_result = url.match(/https:\/\/raw\.githubusercontent\.com\/(?<user>[^/]+)\/(?<repo>[^/]+)\/(?<branch>[^/]+)\/(?<filePath>.+$)/);
+  const regex_result = url.match(
+    /https:\/\/raw\.githubusercontent\.com\/(?<user>[^/]+)\/(?<repo>[^/]+)\/(?<branch>[^/]+)\/(?<filePath>.+$)/
+  );
   // e.g. https://raw.githubusercontent.com/spicetify/spicetify-extensions/main/featureshuffle/featureshuffle.js
 
   const obj = {
@@ -596,7 +606,8 @@ export async function getMarkdownHTML(markdown: string, user: string, repo: stri
       method: "POST",
       body: JSON.stringify(postBody)
     });
-    if (!response.ok) throw Spicetify.showNotification(t("notifications.markdownParsingError", { status: response.status }), true);
+    if (!response.ok)
+      throw Spicetify.showNotification(t("notifications.markdownParsingError", { status: response.status }), true);
 
     const html = await response.text();
 
@@ -717,7 +728,10 @@ export async function getAvailableTLD() {
 
   for (const tld of tlds) {
     try {
-      const response = await fetch(`https://cdn.jsdelivr.${tld}`, { redirect: "manual", cache: "no-cache" });
+      const response = await fetch(`https://cdn.jsdelivr.${tld}`, {
+        redirect: "manual",
+        cache: "no-cache"
+      });
       if (response.type === "opaqueredirect") return tld;
     } catch (err) {
       console.error(err);

@@ -6,9 +6,22 @@ import semver from "semver";
 const Spicetify = window.Spicetify;
 
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
+import {
+  fetchAppManifest,
+  fetchCssSnippets,
+  fetchExtensionManifest,
+  fetchThemeManifest,
+  getBlacklist,
+  getTaggedRepos
+} from "../logic/FetchRemotes";
 import { openModal } from "../logic/LaunchModals";
-import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
+import {
+  generateSchemesOptions,
+  generateSortOptions,
+  getLocalStorageDataFromKey,
+  injectColourScheme,
+  sortCardItems
+} from "../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import Button from "./Button";
 import Card, { type Card as CardClass } from "./Card/Card";
@@ -185,7 +198,12 @@ class Grid extends React.Component<
     const activeTab = this.CONFIG.activeTab;
     switch (activeTab) {
       case "Extensions": {
-        const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const pageOfRepos = await getTaggedRepos(
+          "spicetify-extensions",
+          this.requestPage,
+          this.BLACKLIST,
+          this.CONFIG.visual.showArchived
+        );
         const extensions: CardItem[] = [];
         for (const repo of pageOfRepos.items) {
           const repoExtensions = await fetchExtensionManifest(
@@ -268,7 +286,12 @@ class Grid extends React.Component<
         // installed extension do them all in one go, since it's local
       }
       case "Themes": {
-        const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const pageOfRepos = await getTaggedRepos(
+          "spicetify-themes",
+          this.requestPage,
+          this.BLACKLIST,
+          this.CONFIG.visual.showArchived
+        );
         const themes: CardItem[] = [];
         for (const repo of pageOfRepos.items) {
           const repoThemes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
@@ -310,7 +333,12 @@ class Grid extends React.Component<
         break;
       }
       case "Apps": {
-        const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const pageOfRepos = await getTaggedRepos(
+          "spicetify-apps",
+          this.requestPage,
+          this.BLACKLIST,
+          this.CONFIG.visual.showArchived
+        );
         const apps: CardItem[] = [];
 
         for (const repo of pageOfRepos.items) {
@@ -385,7 +413,12 @@ class Grid extends React.Component<
 
     this.requestPage = await this.loadPage(queue);
 
-    while (this.requestPage && this.requestPage !== -1 && this.cardList.length < maxCardQuantity && !this.state.endOfList) {
+    while (
+      this.requestPage &&
+      this.requestPage !== -1 &&
+      this.cardList.length < maxCardQuantity &&
+      !this.state.endOfList
+    ) {
       this.requestPage = await this.loadPage(queue);
     }
 
@@ -476,7 +509,8 @@ class Grid extends React.Component<
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-    const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
+    const viewPort =
+      document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
     this.checkScroll = this.isScrolledBottom.bind(this);
     if (viewPort) {
       viewPort.addEventListener("scroll", this.checkScroll);
@@ -501,7 +535,8 @@ class Grid extends React.Component<
    */
   componentWillUnmount(): void {
     this.gridUpdateTabs = this.gridUpdatePostsVisual = null;
-    const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
+    const viewPort =
+      document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
     if (viewPort) {
       this.lastScroll = viewPort.scrollTop;
       viewPort.removeEventListener("scroll", this.checkScroll);
@@ -678,7 +713,11 @@ class Grid extends React.Component<
             <div style={{ height: "64px" }} />
           )}
         </footer>
-        <TopBarContent switchCallback={this.switchTo.bind(this)} links={this.CONFIG.tabs} activeLink={this.CONFIG.activeTab} />
+        <TopBarContent
+          switchCallback={this.switchTo.bind(this)}
+          links={this.CONFIG.tabs}
+          activeLink={this.CONFIG.activeTab}
+        />
       </section>
     );
   }

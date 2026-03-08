@@ -3,6 +3,7 @@
     "target": "ES2022",
     "jsx": "react",
     "module": "ES2022",
+    "types": ["@spicetify/creator/client"],
     "moduleResolution": "bundler",
     "outDir": "./dist",
     "esModuleInterop": true,

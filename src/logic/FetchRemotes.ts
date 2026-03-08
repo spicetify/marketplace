@@ -111,7 +111,12 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
  * @param hideInstalled Whether to hide installed items or not (defaults to `false`)
  * @returns Extension info for card (or null)
  */
-export async function fetchExtensionManifest(contents_url: string, branch: string, stars: number, hideInstalled = false) {
+export async function fetchExtensionManifest(
+  contents_url: string,
+  branch: string,
+  stars: number,
+  hideInstalled = false
+) {
   try {
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
