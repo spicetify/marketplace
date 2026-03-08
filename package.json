@@ -8,9 +8,11 @@
   },
   "packageManager": "pnpm@9.0.6",
   "scripts": {
-    "build": "spicetify-creator",
-    "build:local": "spicetify-creator --out=dist --minify",
-    "build:prod": "pnpm build:local && pnpm copy:docs",
+    "sc": "spicetify-creator",
+    "dev": "spicetify-creator dev",
+    "build": "spicetify-creator build",
+    "update-types": "spicetify-creator update-types",
+    "build:prod": "pnpm run build && pnpm copy:docs",
     "copy:docs": "copyfiles README.md dist/",
     "lint": "biome check --write ./src",
     "lint:ci": "biome check *",
@@ -26,6 +28,7 @@
     "node": ">=20"
   },
   "devDependencies": {
+    "@spicetify/creator": "^1.0.0",
     "@types/chroma-js": "^3.1.2",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
