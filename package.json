@@ -14,12 +14,11 @@
     "update-types": "spicetify-creator update-types",
     "build:prod": "pnpm run build && pnpm copy:docs",
     "copy:docs": "copyfiles README.md dist/",
-    "lint": "biome check --write ./src",
-    "lint:ci": "biome check *",
+    "fmt": "oxfmt",
+    "lint": "oxlint --fix ./src",
+    "lint:ci": "oxlint",
     "type-check": "tsc --noEmit",
-    "watch": "spicetify-creator --watch",
-    "prepare": "husky",
-    "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/cli/main/globals.d.ts"
+    "prepare": "husky"
   },
   "engines": {
     "yarn": "please-use-pnpm",
@@ -36,11 +35,11 @@
     "@types/wicg-file-system-access": "^2023.10.7",
     "copyfiles": "^2.4.1",
     "husky": "^9.1.7",
-    "spicetify-creator": "^1.0.17",
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.3.10",
     "@hello-pangea/dnd": "^18.0.1",
     "chroma-js": "^3.2.0",
     "i18next": "^25.8.0",
