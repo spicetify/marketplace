@@ -1,12 +1,12 @@
 {
   "name": "marketplace",
   "version": "1.0.8",
+  "private": true,
   "homepage": "https://github.com/spicetify/marketplace",
-  "repository": "github:spicetify/marketplace",
   "bugs": {
     "url": "https://github.com/spicetify/marketplace/issues"
   },
-  "packageManager": "pnpm@9.0.6",
+  "repository": "github:spicetify/marketplace",
   "scripts": {
     "sc": "spicetify-creator",
     "dev": "spicetify-creator dev",
@@ -20,11 +20,16 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky"
   },
-  "engines": {
-    "yarn": "please-use-pnpm",
-    "npm": "please-use-pnpm",
-    "pnpm": ">=8",
-    "node": ">=20"
+  "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
+    "chroma-js": "^3.2.0",
+    "i18next": "^25.8.0",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "prismjs": "^1.30.0",
+    "react-dropdown": "^1.11.0",
+    "react-i18next": "^16.5.0",
+    "react-simple-code-editor": "^0.14.1",
+    "semver": "^7.7.3"
   },
   "devDependencies": {
     "@spicetify/creator": "^1.0.0",
@@ -39,16 +44,11 @@
     "oxlint": "^1.51.0",
     "typescript": "^5.9.3"
   },
-  "dependencies": {
-    "@hello-pangea/dnd": "^18.0.1",
-    "chroma-js": "^3.2.0",
-    "i18next": "^25.8.0",
-    "i18next-browser-languagedetector": "^8.2.0",
-    "prismjs": "^1.30.0",
-    "react-dropdown": "^1.11.0",
-    "react-i18next": "^16.5.0",
-    "react-simple-code-editor": "^0.14.1",
-    "semver": "^7.7.3"
+  "engines": {
+    "node": ">=20",
+    "npm": "please-use-pnpm",
+    "pnpm": ">=8",
+    "yarn": "please-use-pnpm"
   },
-  "private": true
+  "packageManager": "pnpm@9.0.6"
 }

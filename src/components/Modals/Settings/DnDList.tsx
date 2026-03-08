@@ -50,7 +50,9 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
   }
 
   const onToggleEnabled = (name) => {
-    const updatedTabs = props.modalConfig.tabs.map((tab) => (tab.name === name ? { ...tab, enabled: !tab.enabled } : tab));
+    const updatedTabs = props.modalConfig.tabs.map((tab) =>
+      tab.name === name ? { ...tab, enabled: !tab.enabled } : tab
+    );
 
     props.modalConfig.tabs = updatedTabs;
     localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));

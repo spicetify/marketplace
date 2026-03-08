@@ -35,7 +35,9 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
   };
 
   // Can't use proper event listener here because it's just the DOM outside the component
-  const closeButton = document.querySelector("body > generic-modal button.main-trackCreditsModal-closeBtn") as HTMLElement;
+  const closeButton = document.querySelector(
+    "body > generic-modal button.main-trackCreditsModal-closeBtn"
+  ) as HTMLElement;
   const modalOverlay = document.querySelector("body > generic-modal > div") as HTMLElement;
   if (closeButton && modalOverlay) {
     closeButton.onclick = () => location.reload();
@@ -75,13 +77,48 @@ const SettingsModal = ({ CONFIG, updateAppConfig }: Props) => {
     <div id="marketplace-config-container">
       <div className="settings-block-top">
         <h2 className="settings-heading">{t("settings.optionsHeading")}</h2>
-        <ConfigRow name={t("settings.starCountLabel")} storageKey="stars" modalConfig={modalConfig} updateConfig={updateConfig} />
-        <ConfigRow name={t("settings.tagsLabel")} storageKey="tags" modalConfig={modalConfig} updateConfig={updateConfig} />
-        <ConfigRow name={t("settings.showArchived")} storageKey="showArchived" modalConfig={modalConfig} updateConfig={updateConfig} />
-        <ConfigRow name={t("settings.devToolsLabel")} storageKey="themeDevTools" modalConfig={modalConfig} updateConfig={updateConfig} />
-        <ConfigRow name={t("settings.hideInstalledLabel")} storageKey="hideInstalled" modalConfig={modalConfig} updateConfig={updateConfig} />
-        <ConfigRow name={t("settings.colourShiftLabel")} storageKey="colorShift" modalConfig={modalConfig} updateConfig={updateConfig} />
-        <ConfigRow name={t("settings.albumArtBasedColors")} storageKey="albumArtBasedColors" modalConfig={modalConfig} updateConfig={updateConfig} />
+        <ConfigRow
+          name={t("settings.starCountLabel")}
+          storageKey="stars"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
+        <ConfigRow
+          name={t("settings.tagsLabel")}
+          storageKey="tags"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
+        <ConfigRow
+          name={t("settings.showArchived")}
+          storageKey="showArchived"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
+        <ConfigRow
+          name={t("settings.devToolsLabel")}
+          storageKey="themeDevTools"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
+        <ConfigRow
+          name={t("settings.hideInstalledLabel")}
+          storageKey="hideInstalled"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
+        <ConfigRow
+          name={t("settings.colourShiftLabel")}
+          storageKey="colorShift"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
+        <ConfigRow
+          name={t("settings.albumArtBasedColors")}
+          storageKey="albumArtBasedColors"
+          modalConfig={modalConfig}
+          updateConfig={updateConfig}
+        />
         {AlbumArtColorDropDowns}
       </div>
 

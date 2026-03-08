@@ -14,8 +14,12 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: 
   const PREVIEW_IMAGE_ID = "marketplace-customCSS-preview";
   const [code, setCode] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.code || "");
   const [name, setName] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.title || "");
-  const [description, setDescription] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || "");
-  const [imageURL, setimageURL] = React.useState(props.type === "ADD_SNIPPET" ? "" : props.content?.item.imageURL || "");
+  const [description, setDescription] = React.useState(
+    props.type === "ADD_SNIPPET" ? "" : props.content?.item.description || ""
+  );
+  const [imageURL, setimageURL] = React.useState(
+    props.type === "ADD_SNIPPET" ? "" : props.content?.item.imageURL || ""
+  );
 
   const processName = () => name.replace(/\n/g, "").replaceAll(" ", "-");
   const processCode = () => code.replace(/\n/g, "\\n");
@@ -88,12 +92,10 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: 
             textareaClassName="snippet-code-editor"
             readOnly={props.type === "VIEW_SNIPPET"}
             placeholder={t("snippets.customCSSPlaceholder")}
-            style={
-              {
-                // fontFamily: "'Fira code', 'Fira Mono', monospace'",
-                // fontSize: 12,
-              }
-            }
+            style={{
+              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
+              // fontSize: 12,
+            }}
           />
         </div>
       </div>

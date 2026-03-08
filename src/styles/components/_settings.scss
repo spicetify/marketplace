@@ -17,7 +17,6 @@
     font-size: 12px;
   }
 
-
   .settings-row {
     display: flex;
     justify-content: space-between;
@@ -41,7 +40,7 @@
 
   .settings-heading {
     position: relative;
-    border-bottom: 2px solid var(--spice-button-disabled);;
+    border-bottom: 2px solid var(--spice-button-disabled);
     padding: 0 0 4px;
     margin: 0 0 4px;
   }
@@ -66,7 +65,7 @@ button.arrow-btn {
   align-items: center;
   border: 0px;
   border-radius: 50%;
-  background-color: rgba(var(--spice-rgb-shadow), .7);
+  background-color: rgba(var(--spice-rgb-shadow), 0.7);
   color: var(--spice-text);
   cursor: pointer;
   display: flex;
@@ -81,7 +80,7 @@ button.arrow-btn {
 
   &.disabled,
   &[disabled] {
-    color: rgba(var(--spice-rgb-text), .3);
+    color: rgba(var(--spice-rgb-text), 0.3);
     cursor: not-allowed;
   }
 }
@@ -91,7 +90,7 @@ button.arrow-btn {
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 100%
+  width: 100%;
 }
 
 .dnd-icon {
@@ -100,7 +99,8 @@ button.arrow-btn {
 }
 
 // Add snippet modal
-#marketplace-add-snippet-container input, textarea {
+#marketplace-add-snippet-container input,
+textarea {
   width: 100%;
   margin-bottom: 10px;
   padding: 3px 5px;
@@ -110,5 +110,3 @@ button.arrow-btn {
   border: 1px solid var(--spice-button);
   border-radius: 4px;
 }
-
-

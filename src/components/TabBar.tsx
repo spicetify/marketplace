@@ -55,7 +55,11 @@ const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({ items, swit
   );
 });
 
-export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: string; switchCallback: (option: Option) => void }) => {
+export const TopBarContent = (props: {
+  links: TabItemConfig[];
+  activeLink: string;
+  switchCallback: (option: Option) => void;
+}) => {
   const tabBar = useRef<HTMLElement | null>(null);
 
   const contextHandler = useCallback(() => {
@@ -74,7 +78,9 @@ export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: strin
     return () => (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
   });
 
-  return <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;
+  return (
+    <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />
+  );
 };
 
 interface TabBarProps {
@@ -82,81 +88,83 @@ interface TabBarProps {
   activeLink: string;
   switchCallback: (option: Option) => void;
 }
-const TabBar = React.forwardRef(({ links, activeLink, switchCallback }: TabBarProps, ref: React.ForwardedRef<HTMLElement>) => {
-  const tabBarRef = useRef<HTMLUListElement | null>(null);
-  const [childrenSizes, setChildrenSizes] = useState([0]);
-  const [availableSpace, setAvailableSpace] = useState(0);
-  const [droplistItem, setDroplistItems] = useState([0]);
+const TabBar = React.forwardRef(
+  ({ links, activeLink, switchCallback }: TabBarProps, ref: React.ForwardedRef<HTMLElement>) => {
+    const tabBarRef = useRef<HTMLUListElement | null>(null);
+    const [childrenSizes, setChildrenSizes] = useState([0]);
+    const [availableSpace, setAvailableSpace] = useState(0);
+    const [droplistItem, setDroplistItems] = useState([0]);
 
-  // Key is the tab name, value is also the tab name, active is if it's active
-  const options = links.map(({ name, enabled }) => {
-    const active = name === activeLink;
-    return { label: name, value: name, active, enabled } as TabOptionConfig;
-  });
-
-  useEffect(() => {
-    if (!tabBarRef.current) return;
-
-    const observer = new ResizeObserver((entries) => setAvailableSpace(entries[0].contentRect.width));
-    observer.observe(tabBarRef.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, [tabBarRef.current]);
-
-  useEffect(() => {
-    if (!tabBarRef.current) return;
-
-    const children = Array.from(tabBarRef.current.children);
-    const tabbarItemSizes = children.map((child) => child.clientWidth);
-
-    setChildrenSizes(tabbarItemSizes);
-  }, [links]);
-
-  useEffect(() => {
-    if (!tabBarRef.current) return;
-
-    const totalSize = childrenSizes.reduce((a, b) => a + b, 0);
-
-    // Can we render everything?
-    if (totalSize <= availableSpace) {
-      setDroplistItems([]);
-      return;
-    }
-
-    // The `More` button can be set to _any_ of the children. So we
-    // reserve space for the largest item instead of always taking
-    // the last item.
-    const viewMoreButtonSize = Math.max(...childrenSizes);
-
-    // Figure out how many children we can render while also showing
-    // the More button
-    const itemsToHide = [] as number[];
-    let stopWidth = viewMoreButtonSize;
-
-    childrenSizes.forEach((childWidth, i) => {
-      if (availableSpace >= stopWidth + childWidth) {
-        stopWidth += childWidth;
-      } else {
-        itemsToHide.push(i);
-      }
+    // Key is the tab name, value is also the tab name, active is if it's active
+    const options = links.map(({ name, enabled }) => {
+      const active = name === activeLink;
+      return { label: name, value: name, active, enabled } as TabOptionConfig;
     });
 
-    setDroplistItems(itemsToHide);
-  }, [availableSpace, childrenSizes]);
+    useEffect(() => {
+      if (!tabBarRef.current) return;
 
-  return (
-    <nav className="marketplace-tabBar marketplace-tabBar-nav" ref={ref}>
-      <ul className="marketplace-tabBar-header" ref={tabBarRef}>
-        {options
-          .filter((_, id) => !droplistItem.includes(id))
-          .map((item) => (
-            <TabBarItemWithTranslation key={item.value} item={item} switchTo={switchCallback} />
-          ))}
-        {droplistItem.length || childrenSizes.length === 0 ? (
-          <TabBarMore items={droplistItem.map((i) => options[i]).filter((i) => i)} switchTo={switchCallback} />
-        ) : null}
-      </ul>
-    </nav>
-  );
-});
+      const observer = new ResizeObserver((entries) => setAvailableSpace(entries[0].contentRect.width));
+      observer.observe(tabBarRef.current);
+      return () => {
+        observer.disconnect();
+      };
+    }, [tabBarRef.current]);
+
+    useEffect(() => {
+      if (!tabBarRef.current) return;
+
+      const children = Array.from(tabBarRef.current.children);
+      const tabbarItemSizes = children.map((child) => child.clientWidth);
+
+      setChildrenSizes(tabbarItemSizes);
+    }, [links]);
+
+    useEffect(() => {
+      if (!tabBarRef.current) return;
+
+      const totalSize = childrenSizes.reduce((a, b) => a + b, 0);
+
+      // Can we render everything?
+      if (totalSize <= availableSpace) {
+        setDroplistItems([]);
+        return;
+      }
+
+      // The `More` button can be set to _any_ of the children. So we
+      // reserve space for the largest item instead of always taking
+      // the last item.
+      const viewMoreButtonSize = Math.max(...childrenSizes);
+
+      // Figure out how many children we can render while also showing
+      // the More button
+      const itemsToHide = [] as number[];
+      let stopWidth = viewMoreButtonSize;
+
+      childrenSizes.forEach((childWidth, i) => {
+        if (availableSpace >= stopWidth + childWidth) {
+          stopWidth += childWidth;
+        } else {
+          itemsToHide.push(i);
+        }
+      });
+
+      setDroplistItems(itemsToHide);
+    }, [availableSpace, childrenSizes]);
+
+    return (
+      <nav className="marketplace-tabBar marketplace-tabBar-nav" ref={ref}>
+        <ul className="marketplace-tabBar-header" ref={tabBarRef}>
+          {options
+            .filter((_, id) => !droplistItem.includes(id))
+            .map((item) => (
+              <TabBarItemWithTranslation key={item.value} item={item} switchTo={switchCallback} />
+            ))}
+          {droplistItem.length || childrenSizes.length === 0 ? (
+            <TabBarMore items={droplistItem.map((i) => options[i]).filter((i) => i)} switchTo={switchCallback} />
+          ) : null}
+        </ul>
+      </nav>
+    );
+  }
+);

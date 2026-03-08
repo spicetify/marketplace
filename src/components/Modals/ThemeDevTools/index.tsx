@@ -12,7 +12,9 @@ const themeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 const themeManifest = themeKey ? getLocalStorageDataFromKey(themeKey) : null;
 
 const ThemeDevToolsModal = () => {
-  const [code, setCode] = React.useState(themeManifest ? unparseIni(themeManifest.schemes) : t("devTools.noThemeInstalled"));
+  const [code, setCode] = React.useState(
+    themeManifest ? unparseIni(themeManifest.schemes) : t("devTools.noThemeInstalled")
+  );
 
   return (
     <div id="marketplace-theme-dev-tools-container" className="marketplace-theme-dev-tools-container">

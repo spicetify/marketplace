@@ -9,7 +9,15 @@ import ThemeDevToolsModal from "../components/Modals/ThemeDevTools";
 import UpdateModal from "../components/Modals/Update";
 import type { Config } from "../types/marketplace-types";
 
-export type ModalType = "ADD_SNIPPET" | "EDIT_SNIPPET" | "VIEW_SNIPPET" | "RELOAD" | "SETTINGS" | "THEME_DEV_TOOLS" | "BACKUP" | "UPDATE";
+export type ModalType =
+  | "ADD_SNIPPET"
+  | "EDIT_SNIPPET"
+  | "VIEW_SNIPPET"
+  | "RELOAD"
+  | "SETTINGS"
+  | "THEME_DEV_TOOLS"
+  | "BACKUP"
+  | "UPDATE";
 
 const getModalSettings = (
   modalType: ModalType,
@@ -47,7 +55,9 @@ const getModalSettings = (
       return {
         title: t("settings.title"),
         // TODO: If I just use {CONFIG}, it nests it inside another object...
-        content: <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />,
+        content: (
+          <SettingsModal CONFIG={CONFIG as Config} updateAppConfig={updateAppConfig as (CONFIG: Config) => void} />
+        ),
         isLarge: true
       };
     case "THEME_DEV_TOOLS":

@@ -15,7 +15,11 @@ async function fetchLatestReleaseInfo(): Promise<{
     return body && tag_name && !message
       ? {
           version: tag_name.replace("v", ""),
-          changelog: await getMarkdownHTML(body.match(/## What's Changed([\s\S]*?)(\r\n\r|\n\n##)/)[1], "spicetify", "marketplace")
+          changelog: await getMarkdownHTML(
+            body.match(/## What's Changed([\s\S]*?)(\r\n\r|\n\n##)/)[1],
+            "spicetify",
+            "marketplace"
+          )
         }
       : null;
   } catch (error) {
@@ -38,8 +42,12 @@ function UpdateModal(): React.ReactElement {
     <div id="marketplace-update-container">
       <div id="marketplace-update-description">
         <h4>{t("updateModal.description")}</h4>
-        <a href={`${RELEASES_URL}/tag/v${MARKETPLACE_VERSION}`}>{t("updateModal.currentVersion", { version: MARKETPLACE_VERSION })}</a>
-        <a href={`${RELEASES_URL}/tag/v${releaseInfo?.version}`}>{t("updateModal.latestVersion", { version: releaseInfo?.version })}</a>
+        <a href={`${RELEASES_URL}/tag/v${MARKETPLACE_VERSION}`}>
+          {t("updateModal.currentVersion", { version: MARKETPLACE_VERSION })}
+        </a>
+        <a href={`${RELEASES_URL}/tag/v${releaseInfo?.version}`}>
+          {t("updateModal.latestVersion", { version: releaseInfo?.version })}
+        </a>
       </div>
       <hr />
       <div id="marketplace-update-whats-changed">
