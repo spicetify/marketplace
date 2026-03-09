@@ -545,4 +545,10 @@
     "code": ".NowPlayingView { border-radius: 8px !important; } [data-right-sidebar-hidden=false] .Root__right-sidebar, .npv-nowPlayingbar-container, .oXO9_yYs6JyOwkBn8E4a { width: 670px !important; } [data-right-sidebar-hidden=true] .Root__right-sidebar, .npv-nowPlayingbar-container { width: 0px !important; } .main-nowPlayingView-nowPlayingGrid:has(.canvasVideoContainerNPV video) { .main-nowPlayingView-contextItemInfo { margin-top: 30vh !important; } [aria-hidden=false] .HIaySI1OwWK1MLojie8y, .fetnShpUoCol51CFSqwn { margin-top: 26vh !important; margin-bottom: -31vh !important; } .canvasVideoContainerNPV { margin-top: -5vh !important; } .Of__Db4QgB9osz_mFxhw:before, .Of__Db4QgB9osz_mFxhw:after { background: transparent !important; } }",
     "preview": "resources/assets/snippets/giga_npv_canvas.png"
   }
+  {
+    "title": "Smooth Progress Bar",
+    "description": "Makes the progress bar smooth like it should be",
+    "code": "@property --progress-bar-transform{syntax:'<percentage>';inherits:true;initial-value:0%}.progress-bar--isDragging .x-progressBar-foreground,.x-progressBar-background:active .x-progressBar-foreground,.x-progressBar-foreground:active{transition:none!important}",
+    "preview": "resources/assets/snippets/smooth.png"
+  }
 ]
