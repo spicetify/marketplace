@@ -103,12 +103,10 @@ const BackupModal = () => {
             readOnly={false}
             className="marketplace-code-editor-textarea"
             placeholder={t("backupModal.inputPlaceholder")}
-            style={
-              {
-                // fontFamily: "'Fira code', 'Fira Mono', monospace'",
-                // fontSize: 12,
-              }
-            }
+            style={{
+              // fontFamily: "'Fira code', 'Fira Mono', monospace'",
+              // fontSize: 12,
+            }}
           />
         </div>
       </div>

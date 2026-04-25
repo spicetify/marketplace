@@ -42,7 +42,8 @@ class ReadmePage extends React.Component<
   getReadmeHTML = async () => {
     return fetch(this.props.data.readmeURL)
       .then((res) => {
-        if (!res.ok) throw Spicetify.showNotification(`${this.props.t("readmePage.errorLoading")} (HTTP ${res.status})`, true);
+        if (!res.ok)
+          throw Spicetify.showNotification(`${this.props.t("readmePage.errorLoading")} (HTTP ${res.status})`, true);
         return res.text();
       })
       .then((readmeText) => getMarkdownHTML(readmeText, this.props.data.user, this.props.data.repo))
@@ -154,7 +155,11 @@ class ReadmePage extends React.Component<
             <LoadingIcon />
           </footer>
         ) : (
-          <div id="marketplace-readme" className="marketplace-readme__container" dangerouslySetInnerHTML={{ __html: this.state.html }} />
+          <div
+            id="marketplace-readme"
+            className="marketplace-readme__container"
+            dangerouslySetInnerHTML={{ __html: this.state.html }}
+          />
         )}
       </section>
     );

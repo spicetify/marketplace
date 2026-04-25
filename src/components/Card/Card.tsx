@@ -4,7 +4,14 @@ import { withTranslation } from "react-i18next";
 
 import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
 import { openModal } from "../../logic/LaunchModals";
-import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "../../logic/Utils";
+import {
+  generateKey,
+  getLocalStorageDataFromKey,
+  initializeSnippets,
+  injectUserCSS,
+  parseCSS,
+  parseIni
+} from "../../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 import Button from "../Button";
 import DownloadIcon from "../Icons/DownloadIcon";
@@ -176,7 +183,20 @@ export class Card extends React.Component<
       Spicetify.showNotification(t("notifications.extensionInstallationError"), true);
       return;
     }
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
+    const {
+      manifest,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
+      lastUpdated,
+      created
+    } = this.props.item;
     localStorage.setItem(
       this.localStorageKey,
       JSON.stringify({
@@ -502,7 +522,9 @@ export class Card extends React.Component<
                     );
 
                     // Add class for styling
-                    e.currentTarget.closest(".main-cardImage-imageWrapper")?.classList.add("main-cardImage-imageWrapper--error");
+                    e.currentTarget
+                      .closest(".main-cardImage-imageWrapper")
+                      ?.classList.add("main-cardImage-imageWrapper--error");
                   }}
                 />
               </div>
@@ -544,8 +566,13 @@ export class Card extends React.Component<
                 <TagsDiv tags={this.tags} showTags={this.props.CONFIG.visual.tags} />
               </div>
             ) : null}
-            {IS_INSTALLED && <div className="marketplace-card__bottom-meta main-type-mestoBold">✓ {t("grid.installed")}</div>}
-            <Tooltip label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")} renderInline={true}>
+            {IS_INSTALLED && (
+              <div className="marketplace-card__bottom-meta main-type-mestoBold">✓ {t("grid.installed")}</div>
+            )}
+            <Tooltip
+              label={this.props.type === "app" ? t("github") : IS_INSTALLED ? t("remove") : t("install")}
+              renderInline={true}
+            >
               <div className="main-card-PlayButtonContainer">
                 <Button
                   classes={["marketplace-installButton"]}
