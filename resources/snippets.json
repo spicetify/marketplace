@@ -498,6 +498,12 @@
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
   },
   {
+    "title": "Show all buttons on the top bar",
+    "description": "Increase the size of the top bar's button section to its maximum and reposition the search bar accordingly.",
+    "code": ".custom-navlinks-scrollable_container { max-width: max-content; } .main-globalNav-searchSection{ position: relative; }",
+    "preview": "resources/assets/snippets/show-all-buttons-on-the-top-bar.png"
+  },
+  {
     "title": "Minecraft progress bar",
     "description": "Replaces the default progress bar with the minecraft XP bar",
     "code": ".playback-bar .x-progressBar-progressBarBg { height: 80% !important; background-image: url(https://i.imgur.com/di9J4K0.png) !important; background-size: cover; background-position: center; } .playback-bar .x-progressBar-sliderArea { height: 100% !important; } .playback-bar .x-progressBar-fillColor { height: 100% !Important; background: none; background-image: url(https://i.imgur.com/c7NB133.png)!important; background-size: cover; background-position: center; }",
