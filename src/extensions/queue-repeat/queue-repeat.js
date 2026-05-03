@@ -9,6 +9,7 @@
     let previousTrackUri     = null;
     let queueWatcherInterval = null;
     let buttonElement        = null;
+    let isPolling            = false;
 
     function log(msg, level = "log") {
         console[level](`[${EXT_NAME}] ${msg}`);
@@ -118,8 +119,9 @@
     }
 
     async function pollForNewQueueTracks() {
-        if (!isActive) return;
+        if (!isActive || isPolling) return;
 
+        isPolling = true;
         try {
             const currentQueueUris = await getAllQueueTracks();
             const repeatSet        = new Set(repeatList);
@@ -139,7 +141,8 @@
             }
         } catch (err) {
             log(`Queue watcher error: ${err}`, "warn");
-        }
+        } finally {
+            isPolling = false;
     }
 
     function startQueueWatcher() {
