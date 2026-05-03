@@ -143,8 +143,8 @@
             log(`Queue watcher error: ${err}`, "warn");
         } finally {
             isPolling = false;
-+        }
-+    }
+        }
+    }
     function startQueueWatcher() {
         stopQueueWatcher();
         queueWatcherInterval = setInterval(pollForNewQueueTracks, 2000);
