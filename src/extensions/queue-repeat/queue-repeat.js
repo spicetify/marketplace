@@ -254,9 +254,11 @@
         if (active) {
             buttonElement.classList.add("qr-active");
             buttonElement.title = "Queue Repeat: on (click to disable)";
+            buttonElement.setAttribute("aria-pressed", "true");
         } else {
             buttonElement.classList.remove("qr-active");
             buttonElement.title = "Queue Repeat: off (click to enable)";
+            buttonElement.setAttribute("aria-pressed", "true");
         }
     }
 
