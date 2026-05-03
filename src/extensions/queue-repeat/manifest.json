@@ -1,0 +1,9 @@
+{
+  "name": "Queue Repeat",
+  "description": "Loop tracks added to the manual queue",
+  "main": "queue-repeat.js",
+  "authors": ["Malik"],
+  "readme": "README.md",
+  "version": "1.0.0",
+  "preview": "Foto.png"
+}
