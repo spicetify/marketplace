@@ -266,6 +266,7 @@
         btn.innerHTML = ICON_SVG;
         btn.title     = "Queue Repeat: off (click to enable)";
         btn.setAttribute("aria-label", "Queue Repeat");
+        btn.setAttribute("aria-pressed", "false");
         btn.addEventListener("click", async () => {
             await toggleQueueRepeat();
         });
