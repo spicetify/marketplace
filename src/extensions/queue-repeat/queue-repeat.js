@@ -92,7 +92,9 @@
         updateButtonVisual(true);
 
         log(`Queue Repeat on. ${repeatList.length} track(s) in repeat list.`);
-        repeatList.forEach((uri, i) => log(`  [${i + 1}] ${uri}`));
+        for (const [i, uri] of repeatList.entries()) {
+            log(`  [${i + 1}] ${uri}`);
+        }
 
         startQueueWatcher();
 
@@ -126,7 +128,9 @@
             if (newUris.length > 0) {
                 repeatList.push(...newUris);
                 log(`${newUris.length} new track(s) added to repeat list.`);
-                newUris.forEach(uri => log(`  + ${uri}`));
+                for (const uri of newUris) {
+                    log(`  + ${uri}`);
+                }
                 Spicetify.showNotification(
                     `Queue Repeat: ${newUris.length} new track(s) added`,
                     false,
