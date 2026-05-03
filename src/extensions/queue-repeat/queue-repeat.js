@@ -176,7 +176,7 @@
         if (previousTrackUri && repeatList.includes(previousTrackUri)) {
             log(`Re-queuing: ${previousTrackUri}`);
             try {
-                await Spicetify.Platform.PlayerAPI.addToQueue([{ uri: previousTrackUri }]);
+                await Spicetify.addToQueue([{ uri: previousTrackUri }]);
                 log("Re-queued.");
             } catch (err) {
                 log(`Failed to re-queue: ${err}`, "error");
