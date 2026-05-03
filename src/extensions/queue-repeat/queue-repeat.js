@@ -258,7 +258,7 @@
         } else {
             buttonElement.classList.remove("qr-active");
             buttonElement.title = "Queue Repeat: off (click to enable)";
-            buttonElement.setAttribute("aria-pressed", "true");
+            buttonElement.setAttribute("aria-pressed", "false");
         }
     }
 
