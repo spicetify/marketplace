@@ -4,8 +4,5 @@
     "source.organizeImports": "never",
     "source.fixAll": "always"
   },
-  "editor.defaultFormatter": "biomejs.biome",
-  "[snippets]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  }
+  "editor.defaultFormatter": "biomejs.biome"
 }
