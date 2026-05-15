@@ -554,7 +554,7 @@
   {
     "title": "Hide Marketplace Button",
     "description": "Hides the marketplace button while keeping it functional.",
-    "code": "button[aria-label="Marketplace"] { background: none !important; opacity: 0% !important }",
-    "preview": "Preview image of the snippet"
+    "code": "button[aria-label=\"Marketplace\"] { background: none !important; opacity: 0% !important }",
+    "preview": "resources/assets/snippets/HideMarketplaceButton.png"
   }
 ]
