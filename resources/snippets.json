@@ -494,7 +494,7 @@
   {
     "title": "Remove the Artists and Credits sections from the Sidebar",
     "description": "It will only show the album cover and the next song",
-    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
+    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue):not(.lyrics-npv-card) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
   },
   {
