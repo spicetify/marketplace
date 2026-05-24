@@ -554,7 +554,7 @@
   {
     "title": "Thicker Folder Buttons",
     "description": "Enlarges the folders drop-down icon and hitbox",
-    "code": "button[aria-label=\"Expand folder\"] svg { width: 60px; height: 24px; } button[aria-label=\"Collapse folder\"] svg { width: 60px; height: 24px; } [aria-label=\"Collapse folder\"], [aria-label=\"Expand folder\"]{ border-radius: 0px; margin-right: -18px; }",
+    "code": "button[aria-label=\"Expand folder\"] svg, button[aria-label=\"Collapse folder\"] svg { width: 60px; height: 24px; } [aria-label=\"Collapse folder\"], [aria-label=\"Expand folder\"]{ border-radius: 0px; margin-right: -18px; }",
     "preview": "resources/assets/snippets/thicker_folder_buttons.png"
   }
 ]
