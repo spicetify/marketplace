@@ -19,7 +19,7 @@ importers:
         version: 3.2.0
       i18next:
         specifier: ^26.3.0
-        version: 26.3.0(typescript@5.9.3)
+        version: 26.3.0(typescript@6.0.3)
       i18next-browser-languagedetector:
         specifier: ^8.2.0
         version: 8.2.0
@@ -31,7 +31,7 @@ importers:
         version: 1.11.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react-i18next:
         specifier: ^17.0.6
-        version: 17.0.6(i18next@26.3.0(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
+        version: 17.0.6(i18next@26.3.0(typescript@6.0.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@6.0.3)
       react-simple-code-editor:
         specifier: ^0.14.1
         version: 0.14.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -64,8 +64,8 @@ importers:
         specifier: ^1.0.17
         version: 1.0.17(less@4.5.1)(postcss@8.5.6)(sass@1.97.1)(stylus@0.64.0)
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.3
+        version: 6.0.3
 
 packages:
 
@@ -1077,8 +1077,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1619,9 +1619,9 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.4
 
-  i18next@26.3.0(typescript@5.9.3):
+  i18next@26.3.0(typescript@6.0.3):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.3
 
   iconv-lite@0.6.3:
     dependencies:
@@ -1860,16 +1860,16 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-  react-i18next@17.0.6(i18next@26.3.0(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3):
+  react-i18next@17.0.6(i18next@26.3.0(typescript@6.0.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@6.0.3):
     dependencies:
       '@babel/runtime': 7.29.2
       html-parse-stringify: 3.0.1
-      i18next: 26.3.0(typescript@5.9.3)
+      i18next: 26.3.0(typescript@6.0.3)
       react: 19.2.3
       use-sync-external-store: 1.6.0(react@19.2.3)
     optionalDependencies:
       react-dom: 19.2.3(react@19.2.3)
-      typescript: 5.9.3
+      typescript: 6.0.3
 
   react-redux@9.2.0(@types/react@19.2.7)(react@19.2.3)(redux@5.0.1):
     dependencies:
@@ -2055,7 +2055,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  typescript@5.9.3: {}
+  typescript@6.0.3: {}
 
   uglify-js@3.17.4: {}
 
