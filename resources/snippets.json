@@ -552,7 +552,7 @@
     "preview": "resources/assets/snippets/giga_npv_canvas.png"
   },
   {
-    "title": "Gigantic Now Playing View & Canvas",
+    "title": "Guitar Play Button",
     "description": "Replaces Spotify's play/pause icon with a centered guitar icon.",
     "code": "button[data-testid=\"control-button-playpause\"] svg{display:none!important}button[data-testid=\"control-button-playpause\"]{position:relative!important;background:transparent!important;border:none!important;box-shadow:none!important}button[data-testid=\"control-button-playpause\"]>span{opacity:0!important}button[data-testid=\"control-button-playpause\"]::after{display:none!important}button[data-testid=\"control-button-playpause\"]::before{content:\"\"!important;position:absolute!important;inset:0!important;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23A7F3D0' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M45 12 L52 5'/%3E%3Cpath d='M42 15 L49 8'/%3E%3Cpath d='M28 29 L45 12'/%3E%3Cpath d='M24 25 C18 23 12 26 10 32 C8 38 12 44 18 46 C23 48 28 45 30 40 L34 36'/%3E%3Cpath d='M21 28 L28 35'/%3E%3Cpath d='M18 31 L25 38'/%3E%3Cpath d='M15 34 L22 41'/%3E%3C/g%3E%3C/svg%3E\")!important;background-position:center!important;background-repeat:no-repeat!important;background-size:45px 45px!important;display:block!important;z-index:999!important;transition:transform .2s cubic-bezier(.34,1.56,.64,1)!important}button[data-testid=\"control-button-playpause\"]:hover::before{transform:scale(1.15)!important;filter:drop-shadow(0 0 4px #A7F3D0)!important}",
     "preview": "resources/assets/snippets/guitar-play-button.png"
