@@ -1,7 +1,7 @@
 [
   {
     "title": "Shigure Ui Dancing",
-    "description": "Adds a Anime Girl dancing on the playback bar",
+    "description": "Adds an Anime Girl dancing on the playback bar",
     "code": ".player-controls .playback-progressbar::before {content: '';position: absolute;width: 64px;height: 64px;left: 10px;bottom: calc(100% - 12px);background-image: url('https://files.catbox.moe/107il4.gif');background-size: contain;background-repeat: no-repeat;pointer-events: none;}",
     "preview": "resources/assets/snippets/Shigure_Ui_dancing.png"
   },
