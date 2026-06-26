@@ -1,4 +1,3 @@
-console.log("hide-stats.js loaded!");
 
 (function HideStats() {
   async function main() {
