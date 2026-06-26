@@ -4,4 +4,5 @@
   "main": "hide-stats.js",
   "authors": ["YourGitHubUsername"],
   "version": "1.0.0"
+  "preview": "preview.png"
 }
