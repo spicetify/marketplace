@@ -1,0 +1,8 @@
+{
+  "name": "Audio Manager",
+  "description": "An extension that allows you to create volume presets and/or change volume for each song individually.",
+  "main": "AudioManager.js",
+  "authors": ["PlasmaTi"],
+  "userConfig": {},
+  "preview": "preview.png"
+}
