@@ -43,9 +43,9 @@
     "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=20",
+    "node": ">=24",
     "npm": "please-use-pnpm",
-    "pnpm": ">=8",
+    "pnpm": ">=11",
     "yarn": "please-use-pnpm"
   },
   "packageManager": "pnpm@11.9.0"
