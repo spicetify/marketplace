@@ -8,6 +8,7 @@ const Spicetify = window.Spicetify;
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
 import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
 import { openModal } from "../logic/LaunchModals";
+import { marketplaceStorage } from "../logic/Storage";
 import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import Button from "./Button";
@@ -85,10 +86,10 @@ class Grid extends React.Component<
 
   // TODO: should I put this in Grid state?
   getInstalledTheme() {
-    const installedThemeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    const installedThemeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
     if (!installedThemeKey) return null;
 
-    const installedThemeDataStr = localStorage.getItem(installedThemeKey);
+    const installedThemeDataStr = marketplaceStorage.getItem(installedThemeKey);
     if (!installedThemeDataStr) return null;
 
     const installedTheme = JSON.parse(installedThemeDataStr);
@@ -132,7 +133,7 @@ class Grid extends React.Component<
   updateSort(sortByValue) {
     if (sortByValue) {
       this.sortConfig.by = sortByValue;
-      localStorage.setItem(LOCALSTORAGE_KEYS.sort, sortByValue);
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.sort, sortByValue);
     }
 
     // this.requestPage = null;
@@ -163,7 +164,7 @@ class Grid extends React.Component<
 
   switchTo(option: Option) {
     this.CONFIG.activeTab = option.value;
-    localStorage.setItem(LOCALSTORAGE_KEYS.activeTab, option.value);
+    marketplaceStorage.setItem(LOCALSTORAGE_KEYS.activeTab, option.value);
     this.cardList = [];
     // this.requestPage = null;
     this.requestPage = 0;
@@ -213,7 +214,7 @@ class Grid extends React.Component<
           }
         }
 
-        sortCardItems(extensions, localStorage.getItem("marketplace:sort") || "stars");
+        sortCardItems(extensions, marketplaceStorage.getItem("marketplace:sort") || "stars");
 
         for (const extension of extensions) {
           this.appendCard(extension, "extension", activeTab);
@@ -254,7 +255,7 @@ class Grid extends React.Component<
               installedOfType.push(installedItem);
             }
 
-            sortCardItems(installedOfType, localStorage.getItem("marketplace:sort") || "stars");
+            sortCardItems(installedOfType, marketplaceStorage.getItem("marketplace:sort") || "stars");
 
             for (const item of installedOfType) {
               this.appendCard(item, type as CardType, activeTab);
@@ -292,7 +293,7 @@ class Grid extends React.Component<
         }
         this.setState({ cards: this.cardList });
 
-        sortCardItems(themes, localStorage.getItem("marketplace:sort") || "stars");
+        sortCardItems(themes, marketplaceStorage.getItem("marketplace:sort") || "stars");
 
         for (const theme of themes) {
           this.appendCard(theme, "theme", activeTab);
@@ -334,7 +335,7 @@ class Grid extends React.Component<
         }
         this.setState({ cards: this.cardList });
 
-        sortCardItems(apps, localStorage.getItem("marketplace:sort") || "stars");
+        sortCardItems(apps, marketplaceStorage.getItem("marketplace:sort") || "stars");
 
         for (const app of apps) {
           this.appendCard(app, "app", activeTab);
@@ -360,7 +361,7 @@ class Grid extends React.Component<
         }
 
         if (snippets?.length) {
-          sortCardItems(snippets, localStorage.getItem("marketplace:sort") || "stars");
+          sortCardItems(snippets, marketplaceStorage.getItem("marketplace:sort") || "stars");
           for (const snippet of snippets) {
             this.appendCard(snippet, "snippet", activeTab);
           }
@@ -433,7 +434,7 @@ class Grid extends React.Component<
     if (installedThemeData) {
       installedThemeData.activeScheme = activeScheme;
       console.debug(installedThemeData);
-      localStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
+      marketplaceStorage.setItem(installedThemeKey, JSON.stringify(installedThemeData));
     } else {
       console.debug("No installed theme data");
     }

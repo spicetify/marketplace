@@ -5,10 +5,11 @@ import Editor from "react-simple-code-editor";
 import "prismjs/components/prism-ini";
 
 import { LOCALSTORAGE_KEYS } from "../../../constants";
+import { marketplaceStorage } from "../../../logic/Storage";
 import { getInvalidCSS, getLocalStorageDataFromKey, parseIni, unparseIni } from "../../../logic/Utils";
 import Button from "../../Button";
 
-const themeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+const themeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 const themeManifest = themeKey ? getLocalStorageDataFromKey(themeKey) : null;
 
 const ThemeDevToolsModal = () => {
@@ -60,7 +61,7 @@ const saveColorIni = (code: string) => {
   if (themeKey) {
     const colorIniParsed = parseIni(code);
     themeManifest.schemes = colorIniParsed;
-    localStorage.setItem(themeKey, JSON.stringify(themeManifest));
+    marketplaceStorage.setItem(themeKey, JSON.stringify(themeManifest));
   } else {
     Spicetify.showNotification(t("devTools.noThemeManifest"), true);
   }

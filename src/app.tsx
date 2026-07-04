@@ -7,6 +7,7 @@ import "./styles/styles.scss";
 import Grid from "./components/Grid";
 import ReadmePage from "./components/ReadmePage";
 import { ALL_TABS, CUSTOM_APP_PATH, LOCALSTORAGE_KEYS } from "./constants";
+import { hydrateMarketplaceStorage, marketplaceStorage } from "./logic/Storage";
 import { getLocalStorageDataFromKey } from "./logic/Utils";
 import locales from "./resources/locales";
 import type { Config, TabItemConfig } from "./types/marketplace-types";
@@ -34,17 +35,23 @@ class App extends React.Component<
   {
     count: number;
     CONFIG: Config;
+    storageReady: boolean;
   }
 > {
   state = {
     count: 0,
-    CONFIG: {} as Config
+    CONFIG: {} as Config,
+    storageReady: false
   };
 
   CONFIG: Config;
   constructor(props) {
     super(props);
+    this.CONFIG = this.createConfig();
+    this.state.CONFIG = this.CONFIG;
+  }
 
+  createConfig() {
     // Get tabs config from local storage
     const tabsData = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.tabs, null);
     let tabs: TabItemConfig[] = [];
@@ -62,7 +69,7 @@ class App extends React.Component<
       }
     } catch {
       tabs = ALL_TABS;
-      localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
     }
 
     // Get active theme
@@ -83,7 +90,7 @@ class App extends React.Component<
       console.error(err);
     }
 
-    this.CONFIG = {
+    const config = {
       // Fetch the settings and set defaults. Used in Settings.js
       visual: {
         stars: JSON.parse(getLocalStorageDataFromKey("marketplace:stars", true)),
@@ -112,9 +119,20 @@ class App extends React.Component<
       sort: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sort, "stars")
     };
 
-    if (!this.CONFIG.activeTab || !this.CONFIG.tabs.filter((tab) => tab.name === this.CONFIG.activeTab).length) {
-      this.CONFIG.activeTab = this.CONFIG.tabs[0].name;
+    if (!config.activeTab || !config.tabs.filter((tab) => tab.name === config.activeTab).length) {
+      config.activeTab = config.tabs[0].name;
     }
+
+    return config;
+  }
+
+  async componentDidMount() {
+    await hydrateMarketplaceStorage();
+    this.CONFIG = this.createConfig();
+    this.setState({
+      CONFIG: this.CONFIG,
+      storageReady: true
+    });
   }
 
   updateConfig = (config: Config) => {
@@ -126,6 +144,8 @@ class App extends React.Component<
   };
 
   render() {
+    if (!this.state.storageReady) return null;
+
     const { location, replace } = Spicetify.Platform.History;
     // If page state set to display readme, render it
     // (This location state data comes from Card.openReadme())

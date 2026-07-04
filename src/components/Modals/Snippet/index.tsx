@@ -6,6 +6,7 @@ import "prismjs/components/prism-css";
 
 import { LOCALSTORAGE_KEYS } from "../../../constants";
 import type { ModalType } from "../../../logic/LaunchModals";
+import { marketplaceStorage } from "../../../logic/Storage";
 import { fileToBase64, getLocalStorageDataFromKey, initializeSnippets } from "../../../logic/Utils";
 import Button from "../../Button";
 import type { CardProps } from "../../Card/Card";
@@ -38,15 +39,15 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: 
       // Remove from installed list
       console.debug(`Deleting outdated snippet: ${props.content.item.title}`);
 
-      localStorage.removeItem(`marketplace:installed:snippet:${props.content.item.title}`);
+      marketplaceStorage.removeItem(`marketplace:installed:snippet:${props.content.item.title}`);
       const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
       const remainingInstalledSnippetKeys = installedSnippetKeys.filter(
         (key: string) => key !== `marketplace:installed:snippet:${props.content?.item.title}`
       );
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
     }
 
-    localStorage.setItem(
+    marketplaceStorage.setItem(
       localStorageKey,
       JSON.stringify({
         title: processedName,
@@ -61,7 +62,7 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: 
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
     if (installedSnippetKeys.indexOf(localStorageKey) === -1) {
       installedSnippetKeys.push(localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
     }
     const installedSnippets = installedSnippetKeys.map((key: string) => getLocalStorageDataFromKey(key));
     initializeSnippets(installedSnippets);
