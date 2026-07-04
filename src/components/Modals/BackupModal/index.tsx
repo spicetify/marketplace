@@ -63,7 +63,7 @@ const BackupModal = () => {
     }
 
     // Check if settings string is valid JSON, if not return an error message and exit
-    let settings: JSON;
+    let settings: unknown;
     try {
       settings = JSON.parse(settingsString);
     } catch {
@@ -71,15 +71,20 @@ const BackupModal = () => {
       return;
     }
 
-    await importMarketplace(settings);
-    location.reload();
+    try {
+      await importMarketplace(settings);
+      location.reload();
+    } catch (error) {
+      console.error("Failed to import Marketplace backup", error);
+      Spicetify.showNotification(error instanceof Error ? error.message : t("backupModal.invalidJSON"), true);
+    }
   };
 
   /**
    * Import settings from the text input
    */
-  const importSettingsFromInput = () => {
-    void importSettings(importText);
+  const importSettingsFromInput = async () => {
+    await importSettings(importText);
   };
 
   /**

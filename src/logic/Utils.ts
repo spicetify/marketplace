@@ -319,7 +319,19 @@ export const exportMarketplace = () => {
   return data as JSON;
 };
 
-export const importMarketplace = async (data: JSON) => {
+function isMarketplaceBackupData(data: unknown): data is Record<string, string> {
+  if (typeof data !== "object" || data === null || Array.isArray(data)) return false;
+  if (Object.getPrototypeOf(data) !== Object.prototype) return false;
+
+  const entries = Object.entries(data);
+  if (entries.length === 0) return false;
+
+  return entries.every(([key, value]) => key.startsWith("marketplace:") && typeof value === "string");
+}
+
+export const importMarketplace = async (data: unknown) => {
+  if (!isMarketplaceBackupData(data)) throw new Error("Invalid Marketplace backup data");
+
   console.debug("Importing Marketplace");
   // First reset the marketplace
   await removeMarketplaceData([]);

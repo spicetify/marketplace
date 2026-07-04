@@ -125,9 +125,14 @@ export async function hydrateMarketplaceStorage() {
   if (hydrationPromise) return hydrationPromise;
 
   hydrationPromise = (async () => {
-    await loadIndexedDBCache();
-    await migrateLocalStorage();
-    hydrated = true;
+    try {
+      await loadIndexedDBCache();
+      await migrateLocalStorage();
+      hydrated = true;
+    } catch (error) {
+      console.warn("Marketplace storage hydration failed", error);
+      hydrationPromise = null;
+    }
   })();
 
   return hydrationPromise;

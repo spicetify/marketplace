@@ -47,8 +47,7 @@ class App extends React.Component<
   CONFIG: Config;
   constructor(props) {
     super(props);
-    this.CONFIG = this.createConfig();
-    this.state.CONFIG = this.CONFIG;
+    this.CONFIG = {} as Config;
   }
 
   createConfig() {
