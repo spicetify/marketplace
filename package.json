@@ -1,12 +1,12 @@
 {
   "name": "marketplace",
-  "version": "1.0.8",
+  "version": "1.0.9",
+  "private": true,
   "homepage": "https://github.com/spicetify/marketplace",
-  "repository": "github:spicetify/marketplace",
   "bugs": {
     "url": "https://github.com/spicetify/marketplace/issues"
   },
-  "packageManager": "pnpm@9.0.6",
+  "repository": "github:spicetify/marketplace",
   "scripts": {
     "build": "spicetify-creator",
     "build:local": "spicetify-creator --out=dist --minify",
@@ -18,23 +18,6 @@
     "watch": "spicetify-creator --watch",
     "prepare": "husky",
     "update-types": "curl -s -o src/types/spicetify.d.ts https://raw.githubusercontent.com/spicetify/cli/main/globals.d.ts"
-  },
-  "engines": {
-    "yarn": "please-use-pnpm",
-    "npm": "please-use-pnpm",
-    "pnpm": ">=8",
-    "node": ">=20"
-  },
-  "devDependencies": {
-    "@types/chroma-js": "^3.1.2",
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3",
-    "@types/semver": "^7.7.1",
-    "@types/wicg-file-system-access": "^2023.10.7",
-    "copyfiles": "^2.4.1",
-    "husky": "^9.1.7",
-    "spicetify-creator": "^1.0.17",
-    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@biomejs/biome": "^2.4.13",
@@ -48,5 +31,22 @@
     "react-simple-code-editor": "^0.14.1",
     "semver": "^7.8.1"
   },
-  "private": true
+  "devDependencies": {
+    "@types/chroma-js": "^3.1.2",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@types/semver": "^7.7.1",
+    "@types/wicg-file-system-access": "^2023.10.7",
+    "copyfiles": "^2.4.1",
+    "husky": "^9.1.7",
+    "spicetify-creator": "^1.0.17",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=24",
+    "npm": "please-use-pnpm",
+    "pnpm": ">=11",
+    "yarn": "please-use-pnpm"
+  },
+  "packageManager": "pnpm@11.9.0"
 }

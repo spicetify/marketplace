@@ -4,6 +4,7 @@ import { t } from "i18next";
 import type { CardProps } from "../components/Card/Card";
 import { LOCALSTORAGE_KEYS } from "../constants";
 import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import { marketplaceStorage } from "./Storage";
 
 /**
  * Get localStorage data (or fallback value), given a key
@@ -12,7 +13,7 @@ import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet,
  * @returns The data stored in localStorage, or the fallback value if not found
  */
 export const getLocalStorageDataFromKey = (key: string, fallback?: unknown) => {
-  const data = localStorage.getItem(key);
+  const data = marketplaceStorage.getItem(key);
   if (data) {
     try {
       // If it's json parse it
@@ -250,19 +251,15 @@ export const generateSortOptions = (t: (key: string) => string) => {
  * Reset Marketplace localStorage keys
  * @param categories The categories to reset. If none provided, reset everything.
  */
-export const resetMarketplace = (...categories: ResetCategory[]) => {
+async function removeMarketplaceData(categories: ResetCategory[]) {
   console.debug("Resetting Marketplace");
 
   const keysToRemove: string[] = [];
 
   // If no categories provided, reset everything
   if (categories.length === 0) {
-    // Loop through all marketplace keys.
-    // This includes extensions, themes, and snippets, as well as the Marketplace settings.
-    for (const key in localStorage) {
-      if (key.startsWith("marketplace:")) {
-        keysToRemove.push(key);
-      }
+    for (const key of marketplaceStorage.keys()) {
+      if (key.startsWith("marketplace:")) keysToRemove.push(key);
     }
   }
 
@@ -293,12 +290,20 @@ export const resetMarketplace = (...categories: ResetCategory[]) => {
     }
   }
 
-  for (const key of keysToRemove) {
-    localStorage.removeItem(key);
+  for (const key of new Set(keysToRemove)) {
+    await marketplaceStorage.removeItemAsync(key);
     console.debug(`Removed ${key}`);
   }
 
   console.debug("Marketplace has been reset");
+}
+
+export const resetMarketplace = (...categories: ResetCategory[]) => {
+  void resetMarketplaceAsync(...categories);
+};
+
+export const resetMarketplaceAsync = async (...categories: ResetCategory[]) => {
+  await removeMarketplaceData(categories);
   location.reload();
 };
 
@@ -306,22 +311,33 @@ export const exportMarketplace = () => {
   // TODO: Export settings, extensions, snippets, themes, colour scheme
   const data = {};
 
-  for (const key in localStorage) {
-    // console.log(`${key}: ${localStorage.getItem(key)}`);
+  for (const [key, value] of Object.entries(marketplaceStorage.entries())) {
     if (key.startsWith("marketplace:")) {
-      data[key] = localStorage.getItem(key);
+      data[key] = value;
     }
   }
   return data as JSON;
 };
 
-export const importMarketplace = (data: JSON) => {
+function isMarketplaceBackupData(data: unknown): data is Record<string, string> {
+  if (typeof data !== "object" || data === null || Array.isArray(data)) return false;
+  if (Object.getPrototypeOf(data) !== Object.prototype) return false;
+
+  const entries = Object.entries(data);
+  if (entries.length === 0) return false;
+
+  return entries.every(([key, value]) => key.startsWith("marketplace:") && typeof value === "string");
+}
+
+export const importMarketplace = async (data: unknown) => {
+  if (!isMarketplaceBackupData(data)) throw new Error("Invalid Marketplace backup data");
+
   console.debug("Importing Marketplace");
   // First reset the marketplace
-  resetMarketplace();
+  await removeMarketplaceData([]);
   // Then import the data
   for (const key in data) {
-    localStorage.setItem(key, data[key]);
+    await marketplaceStorage.setItemAsync(key, data[key]);
     console.debug(`Imported ${key}`);
   }
 };
@@ -440,7 +456,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
     let albumArtSrc: string | undefined = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
 
     // If it doesn't exist, wait for it to load
-    if (albumArtSrc == null) {
+    if (albumArtSrc === null || albumArtSrc === undefined) {
       albumArtSrc = await waitForAlbumArt();
     }
 

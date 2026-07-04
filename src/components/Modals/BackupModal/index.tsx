@@ -7,6 +7,10 @@ import "prismjs/components/prism-json";
 import { exportMarketplace, importMarketplace } from "../../../logic/Utils";
 import Button from "../../Button";
 
+function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === "AbortError";
+}
+
 const BackupModal = () => {
   const [importText, setImportText] = React.useState("");
 
@@ -35,8 +39,8 @@ const BackupModal = () => {
     try {
       await saveFile(JSON.stringify(settings, null, 2));
       Spicetify.showNotification(t("backupModal.settingsSaved"));
-    } catch (error: any) {
-      if (error.name !== "AbortError") {
+    } catch (error: unknown) {
+      if (!isAbortError(error)) {
         console.error("Failed to save file, copying to clipboard instead:", error);
         Spicetify.Platform.ClipboardAPI.copy(JSON.stringify(settings));
         Spicetify.showNotification(t("backupModal.settingsCopied"));
@@ -51,7 +55,7 @@ const BackupModal = () => {
    * If the string is empty or the JSON is invalid, show an error.
    * @param settingsString JSON string of settings to import
    */
-  const importSettings = (settingsString: string) => {
+  const importSettings = async (settingsString: string) => {
     // Check if the settings data exists, if not return an error message and exit
     if (!settingsString) {
       Spicetify.showNotification(t("backupModal.noDataPasted"));
@@ -59,7 +63,7 @@ const BackupModal = () => {
     }
 
     // Check if settings string is valid JSON, if not return an error message and exit
-    let settings: JSON;
+    let settings: unknown;
     try {
       settings = JSON.parse(settingsString);
     } catch {
@@ -67,15 +71,20 @@ const BackupModal = () => {
       return;
     }
 
-    importMarketplace(settings);
-    location.reload();
+    try {
+      await importMarketplace(settings);
+      location.reload();
+    } catch (error) {
+      console.error("Failed to import Marketplace backup", error);
+      Spicetify.showNotification(error instanceof Error ? error.message : t("backupModal.invalidJSON"), true);
+    }
   };
 
   /**
    * Import settings from the text input
    */
-  const importSettingsFromInput = () => {
-    importSettings(importText);
+  const importSettingsFromInput = async () => {
+    await importSettings(importText);
   };
 
   /**
@@ -86,7 +95,7 @@ const BackupModal = () => {
     const file = await fileHandle[0].getFile();
     const text = await file.text();
 
-    importSettings(text);
+    await importSettings(text);
   };
 
   return (
