@@ -2,6 +2,7 @@ import { t } from "i18next";
 
 import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
 import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
+import { marketplaceStorage } from "./Storage";
 import { addToSessionStorage, isBlacklisted, processAuthors } from "./Utils";
 
 // TODO: add sort type, order, etc?
@@ -116,7 +117,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
+    if (!regex_result?.groups) return null;
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
@@ -148,7 +149,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
           tags: manifest.tags
         };
         // Add to list unless we're hiding installed items and it's installed
-        if (!(hideInstalled && localStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
+        if (!(hideInstalled && marketplaceStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
           accum.push(item);
         }
       }
@@ -178,7 +179,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
   try {
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
+    if (!regex_result?.groups) return null;
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
@@ -242,7 +243,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
+    if (!regex_result?.groups) return null;
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
@@ -326,7 +327,7 @@ export const fetchCssSnippets = async (hideInstalled = false) => {
     }
 
     // Hide installed snippets if option is set and it's installed
-    if (!(hideInstalled && localStorage.getItem(`marketplace:installed:snippet:${snip.title.replaceAll(" ", "-")}`))) {
+    if (!(hideInstalled && marketplaceStorage.getItem(`marketplace:installed:snippet:${snip.title.replaceAll(" ", "-")}`))) {
       accum.push(snip);
     }
 

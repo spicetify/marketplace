@@ -17,10 +17,10 @@ jobs:
         with:
           run_install: false
 
-      - name: Install Node.js (v20)
+      - name: Install Node.js (v24)
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
