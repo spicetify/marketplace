@@ -554,7 +554,7 @@
   {
     "title": "Hide Ad Banner",
     "description": "It happens that the ad banner may persist even when using an adblocker, often even blank: this snippet fixes that.",
-    "code": "div:has(> div[data-testid="test-ref-div"]) { display: none !important; } div:has(> .ScclvBC0NsMgQLQC) { display: none !important; }",
+    "code": "div:has(> div[data-testid=\"test-ref-div\"]) { display: none !important; } div:has(> .ScclvBC0NsMgQLQC) { display: none !important; }",
     "preview": "resources/assets/snippets/Hide-Ad-Banner.png"
   }
 ]
