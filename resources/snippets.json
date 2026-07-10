@@ -284,7 +284,7 @@
   {
     "title": "Hide play count",
     "description": "Hides the play count on songs/albums etc so you can give each songs its chance without thinking about numbers",
-    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount {display: none}",
+    "code": ".main-trackList-trackListRow:not(:has(.main-trackList-rowSectionVariable ~ .main-trackList-rowSectionVariable)) .main-trackList-rowSectionVariable {display: none}",
     "preview": "resources/assets/snippets/hide-play-count.png"
   },
   {
