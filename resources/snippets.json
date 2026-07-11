@@ -555,6 +555,6 @@
   "title": "Pitch Black Cinema Player",
   "description": "Removes the dynamic album art gradient and forces a pure pitch-black background in the fullscreen/cinema media player.",
   "code": "div[style*=\"--cinema-mode-bg-color-from\"]{--cinema-mode-bg-color-from:#000000!important;--cinema-mode-bg-color-to:#000000!important;background:#000000!important}div[style*=\"--cinema-mode-bg-color-from\"]>div:first-child{background:transparent!important;background-image:none!important;background-color:transparent!important;box-shadow:none!important}",
-  "preview": "resources/assets/snippets/gpitch-black-cinema-player-preview.png"
+  "preview": "resources/assets/snippets/pitch-black-cinema-player-preview.png"
   }
 ]
