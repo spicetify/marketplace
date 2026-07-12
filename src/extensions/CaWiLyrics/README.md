@@ -1,4 +1,4 @@
-# CaWi Microphone Lyrics 🎤
+# CaWiLyrics 🎤
 
 A beautiful, immersive full-screen lyrics overlay extension for Spicetify. It replaces or enhances the standard lyrics view with fluid animations and dynamic visual effects.
 
@@ -24,5 +24,5 @@ If you want to test it right now:
 2. Copy it into your Spicetify `Extensions` folder.
 3. Run the following commands in your terminal:
    ```bash
-   spicetify config extensions cawi-lyrics.js
+   spicetify config extensions cawilyrics.js
    spicetify apply
