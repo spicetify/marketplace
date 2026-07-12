@@ -1,6 +1,7 @@
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
 import React from "react";
 import { LOCALSTORAGE_KEYS } from "../../../constants";
+import { marketplaceStorage } from "../../../logic/Storage";
 import type { Config, TabItemConfig } from "../../../types/marketplace-types";
 
 const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) => void }) => {
@@ -44,7 +45,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
 
     props.modalConfig.tabs = result;
 
-    localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
+    marketplaceStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
 
     props.updateConfig(props.modalConfig);
   }
@@ -53,7 +54,7 @@ const DnDList = (props: { modalConfig: Config; updateConfig: (CONFIG: Config) =>
     const updatedTabs = props.modalConfig.tabs.map((tab) => (tab.name === name ? { ...tab, enabled: !tab.enabled } : tab));
 
     props.modalConfig.tabs = updatedTabs;
-    localStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
+    marketplaceStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(props.modalConfig.tabs));
     props.updateConfig(props.modalConfig);
   };
 

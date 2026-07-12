@@ -290,7 +290,7 @@
   {
     "title": "Hide play count",
     "description": "Hides the play count on songs/albums etc so you can give each songs its chance without thinking about numbers",
-    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount {display: none}",
+    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount,.main-trackList-trackListRow:not(:has(.main-trackList-rowSectionVariable ~ .main-trackList-rowSectionVariable)) .main-trackList-rowSectionVariable {display: none}",
     "preview": "resources/assets/snippets/hide-play-count.png"
   },
   {
@@ -500,7 +500,7 @@
   {
     "title": "Remove the Artists and Credits sections from the Sidebar",
     "description": "It will only show the album cover and the next song",
-    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
+    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue):not(.lyrics-npv-card) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
   },
   {

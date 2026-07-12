@@ -4,6 +4,7 @@ import { withTranslation } from "react-i18next";
 
 import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
 import { openModal } from "../../logic/LaunchModals";
+import { marketplaceStorage } from "../../logic/Storage";
 import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "../../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } from "../../types/marketplace-types";
 import Button from "../Button";
@@ -74,7 +75,7 @@ export class Card extends React.Component<
     this.state = {
       // Initial value. Used to trigger a re-render.
       // isInstalled() is used for all other intents and purposes
-      installed: localStorage.getItem(this.localStorageKey) !== null,
+      installed: marketplaceStorage.getItem(this.localStorageKey) !== null,
 
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
@@ -90,7 +91,7 @@ export class Card extends React.Component<
 
   // Using this because it gets the live value ('installed' is stuck after a re-render)
   isInstalled() {
-    return localStorage.getItem(this.localStorageKey) !== null;
+    return marketplaceStorage.getItem(this.localStorageKey) !== null;
   }
 
   async componentDidMount() {
@@ -133,15 +134,15 @@ export class Card extends React.Component<
       }
       openModal("RELOAD");
     } else if (this.props.type === "theme") {
-      const themeKey = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+      const themeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
       const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
 
       if (this.isInstalled()) {
         console.debug("Theme already installed, removing");
         this.removeTheme(this.localStorageKey);
       } else {
-        const localTheme = localStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
-        if (localTheme != null && localTheme.toLowerCase() !== "marketplace") {
+        const localTheme = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
+        if (localTheme !== null && localTheme.toLowerCase() !== "marketplace") {
           Spicetify.showNotification(t("notifications.wrongLocalTheme"), true, 5000);
           return;
         }
@@ -177,7 +178,7 @@ export class Card extends React.Component<
       return;
     }
     const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
-    localStorage.setItem(
+    marketplaceStorage.setItem(
       this.localStorageKey,
       JSON.stringify({
         manifest,
@@ -201,7 +202,7 @@ export class Card extends React.Component<
     const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
     if (installedExtensions.indexOf(this.localStorageKey) === -1) {
       installedExtensions.push(this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
     }
 
     console.debug("Installed");
@@ -209,16 +210,16 @@ export class Card extends React.Component<
   }
 
   removeExtension() {
-    const extValue = localStorage.getItem(this.localStorageKey);
+    const extValue = marketplaceStorage.getItem(this.localStorageKey);
     if (extValue) {
       console.debug(`Removing extension ${this.localStorageKey}`);
       // Remove from localstorage
-      localStorage.removeItem(this.localStorageKey);
+      marketplaceStorage.removeItem(this.localStorageKey);
 
       // Remove from installed list
       const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
       const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
 
       console.debug("Removed");
       this.setState({ installed: false });
@@ -271,7 +272,7 @@ export class Card extends React.Component<
       created
     } = item;
 
-    localStorage.setItem(
+    marketplaceStorage.setItem(
       this.localStorageKey,
       JSON.stringify({
         manifest,
@@ -305,10 +306,10 @@ export class Card extends React.Component<
     const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
     if (installedThemes.indexOf(this.localStorageKey) === -1) {
       installedThemes.push(this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes));
 
       // const usercssURL = `https://raw.github.com/${this.user}/${this.repo}/${this.branch}/${this.manifest.usercss}`;
-      localStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
     }
 
     console.debug("Installed");
@@ -337,23 +338,23 @@ export class Card extends React.Component<
 
   removeTheme(defaultThemeKey?: string | null) {
     // If don't specify theme, remove the currently installed theme
-    const themeKey = defaultThemeKey || localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    const themeKey = defaultThemeKey || marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
-    const themeValue = themeKey && localStorage.getItem(themeKey);
+    const themeValue = themeKey && marketplaceStorage.getItem(themeKey);
 
     if (themeKey && themeValue) {
       console.debug(`Removing theme ${themeKey}`);
 
       // Remove from localstorage
-      localStorage.removeItem(themeKey);
+      marketplaceStorage.removeItem(themeKey);
 
       // Remove record of installed theme
-      localStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
+      marketplaceStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
 
       // Remove from installed list
       const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
       const remainingInstalledThemes = installedThemes.filter((key) => key !== themeKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
 
       console.debug("Removed");
 
@@ -376,7 +377,7 @@ export class Card extends React.Component<
 
   installSnippet() {
     console.debug(`Installing snippet ${this.localStorageKey}`);
-    localStorage.setItem(
+    marketplaceStorage.setItem(
       this.localStorageKey,
       JSON.stringify({
         code: this.props.item.code,
@@ -390,7 +391,7 @@ export class Card extends React.Component<
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
     if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
       installedSnippetKeys.push(this.localStorageKey);
-      localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
     }
     const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
     initializeSnippets(installedSnippets);
@@ -399,12 +400,12 @@ export class Card extends React.Component<
   }
 
   removeSnippet() {
-    localStorage.removeItem(this.localStorageKey);
+    marketplaceStorage.removeItem(this.localStorageKey);
 
     // Remove from installed list
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
     const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
-    localStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
+    marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
     const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
     initializeSnippets(remainingInstalledSnippets);
 
