@@ -1,0 +1,8 @@
+{
+  "name": "CaWiLyrics",
+  "description": "Full-screen lyrics overlay with fluid wave animations and dynamic effects.",
+  "main": "CaWiLyrics.js",
+  "authors": ["cawiworld"],
+  "version": "1.0.0",
+  "tags": ["lyrics", "visualizer", "ui", "fullscreen", "animationlyrics"]
+}
