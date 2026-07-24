@@ -550,5 +550,11 @@
     "description": "Greatly increases the width of the Now Playing View panel beyond the default limit (feel free to change it to your liking) at the cost of losing the ability to drag-resize it and enhances it with a cleaner look by removing the dark gradient over the canvas loop video and moving a few elements further down.",
     "code": ".NowPlayingView { border-radius: 8px !important; } [data-right-sidebar-hidden=false] .Root__right-sidebar, .npv-nowPlayingbar-container, .oXO9_yYs6JyOwkBn8E4a { width: 670px !important; } [data-right-sidebar-hidden=true] .Root__right-sidebar, .npv-nowPlayingbar-container { width: 0px !important; } .main-nowPlayingView-nowPlayingGrid:has(.canvasVideoContainerNPV video) { .main-nowPlayingView-contextItemInfo { margin-top: 30vh !important; } [aria-hidden=false] .HIaySI1OwWK1MLojie8y, .fetnShpUoCol51CFSqwn { margin-top: 26vh !important; margin-bottom: -31vh !important; } .canvasVideoContainerNPV { margin-top: -5vh !important; } .Of__Db4QgB9osz_mFxhw:before, .Of__Db4QgB9osz_mFxhw:after { background: transparent !important; } }",
     "preview": "resources/assets/snippets/giga_npv_canvas.png"
+  },
+  {
+  "title": "Remove duplicated/stock lyrics button",
+  "description": "Removes only the stock microphone icon. Best used with lyrics extensions (eg. Spicy Lyrics) to fix duplicate playbar buttons.",
+  "code": ".main-nowPlayingBar-lyricsButton[data-testid="lyrics-button"] { display: none !important; }",
+  "preview": "resources/assets/snippets/fix-duplicate-lyrics.png"
   }
 ]
