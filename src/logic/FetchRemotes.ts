@@ -121,10 +121,28 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
   const sessionStorageItem = window.sessionStorage.getItem(key);
   const failedSessionStorageItems = JSON.parse(window.sessionStorage.getItem("noManifests") || "[]");
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (!sessionStorageItem && failedSessionStorageItems.includes(url)) return null;
+  if (!sessionStorageItem && failedSessionStorageItems.includes(url)) return [];
 
-  let manifests = sessionStorageItem ? JSON.parse(sessionStorageItem) : await fetchRepoManifest(url);
-  if (!manifests) return addToSessionStorage([url], "noManifests");
+  let manifests: ReturnType<typeof JSON.parse>;
+  let loadedFromCache = false;
+
+  if (sessionStorageItem) {
+    try {
+      manifests = JSON.parse(sessionStorageItem);
+      loadedFromCache = true;
+    } catch (error) {
+      console.warn(`Invalid cached Marketplace manifest from ${user}/${repo}`, error);
+      window.sessionStorage.removeItem(key);
+      manifests = await fetchRepoManifest(url);
+    }
+  } else {
+    manifests = await fetchRepoManifest(url);
+  }
+
+  if (!manifests) {
+    addToSessionStorage([url], "noManifests");
+    return [];
+  }
   if (!Array.isArray(manifests)) manifests = [manifests];
 
   const parsedManifests = manifests.flatMap((manifest) => {
@@ -134,7 +152,7 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
     return [];
   });
 
-  if (!sessionStorageItem) window.sessionStorage.setItem(key, JSON.stringify(parsedManifests));
+  if (!loadedFromCache) window.sessionStorage.setItem(key, JSON.stringify(parsedManifests));
   return parsedManifests;
 }
 
