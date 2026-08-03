@@ -29,7 +29,8 @@
     "react-dropdown": "^1.11.0",
     "react-i18next": "^17.0.6",
     "react-simple-code-editor": "^0.14.1",
-    "semver": "^7.8.1"
+    "semver": "^7.8.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/chroma-js": "^3.1.2",
