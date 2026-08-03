@@ -195,22 +195,17 @@ export const fileToBase64 = (file: File) => {
  * @param user The repo owner
  * @returns The authors, with anything missing added
  */
-export const processAuthors = (authors: Author[], user: string) => {
-  let parsedAuthors: Author[] = [];
+export const processAuthors = (authors: unknown, user: string) => {
+  const parsedAuthors = Array.isArray(authors)
+    ? authors.flatMap((author): Author[] => {
+        if (!author || typeof author !== "object" || typeof author.name !== "string" || !author.name.trim() || typeof author.url !== "string") {
+          return [];
+        }
+        return [{ name: author.name, url: sanitizeUrl(author.url) }];
+      })
+    : [];
 
-  if (authors && authors.length > 0) {
-    parsedAuthors = authors.map((author) => ({
-      name: author.name,
-      url: sanitizeUrl(author.url)
-    }));
-  } else {
-    parsedAuthors.push({
-      name: user,
-      url: `https://github.com/${user}`
-    });
-  }
-
-  return parsedAuthors;
+  return parsedAuthors.length ? parsedAuthors : [{ name: user, url: `https://github.com/${user}` }];
 };
 
 /**

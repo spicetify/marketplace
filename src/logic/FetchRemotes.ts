@@ -5,6 +5,15 @@ import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
 import { marketplaceStorage } from "./Storage";
 import { addToSessionStorage, isBlacklisted, processAuthors } from "./Utils";
 
+const isNonEmptyString = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0;
+
+const stringArray = (value: unknown): string[] => (Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []);
+
+const manifestUrl = (value: unknown, user: string, repo: string, branch: string): string => {
+  if (typeof value !== "string" || !value) return "";
+  return value.startsWith("http") ? value : `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${value}`;
+};
+
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
@@ -125,8 +134,8 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
       // Check if manifest object is designated for Extensions
-      if (manifest?.name && manifest.description && manifest.main) {
-        const selectedBranch = manifest.branch || branch;
+      if (isNonEmptyString(manifest?.name) && isNonEmptyString(manifest.description) && isNonEmptyString(manifest.main)) {
+        const selectedBranch = isNonEmptyString(manifest.branch) ? manifest.branch : branch;
         const item = {
           manifest,
           title: manifest.name,
@@ -136,17 +145,11 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
           repo,
           branch: selectedBranch,
 
-          imageURL: manifest.preview?.startsWith("http")
-            ? manifest.preview
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-          extensionURL: manifest.main.startsWith("http")
-            ? manifest.main
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-          readmeURL: manifest.readme?.startsWith("http")
-            ? manifest.readme
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          imageURL: manifestUrl(manifest.preview, user, repo, selectedBranch),
+          extensionURL: manifestUrl(manifest.main, user, repo, selectedBranch),
+          readmeURL: manifestUrl(manifest.readme, user, repo, selectedBranch),
           stars,
-          tags: manifest.tags
+          tags: stringArray(manifest.tags)
         };
         // Add to list unless we're hiding installed items and it's installed
         if (!(hideInstalled && marketplaceStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
@@ -188,8 +191,8 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
     // const parsedManifests: ThemeCardItem[] = manifests.reduce((accum, manifest) => {
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
       // Check if manifest object is designated for a Theme
-      if (manifest?.name && manifest?.usercss && manifest?.description) {
-        const selectedBranch = manifest.branch || branch;
+      if (isNonEmptyString(manifest?.name) && isNonEmptyString(manifest.usercss) && isNonEmptyString(manifest.description)) {
+        const selectedBranch = isNonEmptyString(manifest.branch) ? manifest.branch : branch;
         const item = {
           manifest,
           title: manifest.name,
@@ -198,25 +201,15 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
           user,
           repo,
           branch: selectedBranch,
-          imageURL: manifest.preview?.startsWith("http")
-            ? manifest.preview
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
-          readmeURL: manifest.readme?.startsWith("http")
-            ? manifest.readme
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          imageURL: manifestUrl(manifest.preview, user, repo, selectedBranch),
+          readmeURL: manifestUrl(manifest.readme, user, repo, selectedBranch),
           stars,
-          tags: manifest.tags,
+          tags: stringArray(manifest.tags),
           // theme stuff
-          cssURL: manifest.usercss.startsWith("http")
-            ? manifest.usercss
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.usercss}`,
+          cssURL: manifestUrl(manifest.usercss, user, repo, selectedBranch),
           // TODO: clean up indentation etc
-          schemesURL: manifest.schemes
-            ? manifest.schemes.startsWith("http")
-              ? manifest.schemes
-              : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.schemes}`
-            : null,
-          include: manifest.include
+          schemesURL: typeof manifest.schemes === "string" ? manifestUrl(manifest.schemes, user, repo, selectedBranch) : null,
+          include: stringArray(manifest.include)
         };
         // If manifest is valid, add it to the list
 
@@ -251,8 +244,8 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     // Manifest is initially parsed
     const parsedManifests: CardItem[] = manifests.reduce((accum, manifest) => {
       // Check if manifest object is designated for a Custom App
-      if (manifest?.name && manifest.description && !manifest.main && !manifest.usercss) {
-        const selectedBranch = manifest.branch || branch;
+      if (isNonEmptyString(manifest?.name) && isNonEmptyString(manifest.description) && !manifest.main && !manifest.usercss) {
+        const selectedBranch = isNonEmptyString(manifest.branch) ? manifest.branch : branch;
         // TODO: tweak saved items
         const item = {
           manifest,
@@ -263,18 +256,14 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
           repo,
           branch: selectedBranch,
 
-          imageURL: manifest.preview?.startsWith("http")
-            ? manifest.preview
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.preview}`,
+          imageURL: manifestUrl(manifest.preview, user, repo, selectedBranch),
           // Custom Apps don't have an entry point; they're just listed so they can link out from the card
           // extensionURL: manifest.main.startsWith("http")
           //   ? manifest.main
           //   : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.main}`,
-          readmeURL: manifest.readme?.startsWith("http")
-            ? manifest.readme
-            : `https://raw.githubusercontent.com/${user}/${repo}/${selectedBranch}/${manifest.readme}`,
+          readmeURL: manifestUrl(manifest.readme, user, repo, selectedBranch),
           stars,
-          tags: manifest.tags
+          tags: stringArray(manifest.tags)
         };
 
         // If manifest is valid, add it to the list

@@ -10,7 +10,7 @@ import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeM
 import { openModal } from "../logic/LaunchModals";
 import { marketplaceStorage } from "../logic/Storage";
 import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
-import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
+import type { Author, CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import Button from "./Button";
 import Card, { type Card as CardClass } from "./Card/Card";
 import DownloadIcon from "./Icons/DownloadIcon";
@@ -109,12 +109,27 @@ class Grid extends React.Component<
    */
   appendCard(item: CardItem | Snippet, type: CardType, activeTab: string) {
     if (activeTab !== this.props.CONFIG.activeTab) return;
+    if (!item || typeof item.title !== "string" || !item.title.trim()) {
+      console.warn("Skipping malformed Marketplace item", item);
+      return;
+    }
+
+    const normalizedItem = {
+      ...item,
+      authors: Array.isArray(item.authors)
+        ? item.authors.filter(
+            (author): author is Author =>
+              !!author && typeof author.name === "string" && author.name.trim().length > 0 && typeof author.url === "string"
+          )
+        : undefined,
+      tags: Array.isArray(item.tags) ? item.tags.filter((tag): tag is string => typeof tag === "string") : undefined
+    } as CardItem | Snippet;
 
     const card = (
       <Card
-        item={item}
+        item={normalizedItem}
         // Set key prop so items don't get stuck when switching tabs
-        key={`${this.props.CONFIG.activeTab}:${item.user}:${item.title}`}
+        key={`${this.props.CONFIG.activeTab}:${normalizedItem.user}:${normalizedItem.title}`}
         CONFIG={this.CONFIG}
         visual={this.props.CONFIG.visual}
         type={type}
@@ -619,13 +634,14 @@ class Grid extends React.Component<
             .filter((card) => {
               const searchValue = this.state.searchValue.trim().toLowerCase();
               const { title, user, authors, tags } = card.props.item;
+              const includesSearch = (value: unknown) => typeof value === "string" && value.toLowerCase().includes(searchValue);
 
               return (
                 !searchValue ||
-                title.toLowerCase().includes(searchValue) ||
-                user?.toLowerCase().includes(searchValue) ||
-                authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
-                [...(tags ?? [])]?.some((tag) => tag.toLowerCase().includes(searchValue))
+                includesSearch(title) ||
+                includesSearch(user) ||
+                (Array.isArray(authors) && authors.some((author) => includesSearch(author?.name))) ||
+                (Array.isArray(tags) && tags.some(includesSearch))
               );
             })
             .map((card) => {

@@ -68,7 +68,7 @@ export class Card extends React.Component<
     Object.assign(this, props);
 
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
-    this.tags = props.item.tags || [];
+    this.tags = Array.isArray(props.item.tags) ? props.item.tags.filter((tag): tag is string => typeof tag === "string") : [];
     if (props.item.include) this.tags.push(t("grid.externalJS"));
     if (props.item.archived) this.tags.push(t("grid.archived"));
 
