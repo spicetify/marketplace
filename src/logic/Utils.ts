@@ -201,7 +201,12 @@ export const processAuthors = (authors: unknown, user: string) => {
         if (!author || typeof author !== "object" || typeof author.name !== "string" || !author.name.trim() || typeof author.url !== "string") {
           return [];
         }
-        return [{ name: author.name, url: sanitizeUrl(author.url) }];
+        try {
+          return [{ name: author.name, url: sanitizeUrl(author.url) }];
+        } catch (error) {
+          console.warn("Skipping Marketplace author with malformed URL", author, error);
+          return [];
+        }
       })
     : [];
 
