@@ -414,13 +414,23 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   }, 60 * 1000);
 };
 
-export const getColorFromImage = async (image: string) => {
+export const getColorFromUri = async (uri: string): Promise<string | undefined> => {
   let vibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy);
   // Add a underscore before any uppercase characters, then make the whole string uppercase
   vibrancy = vibrancy.replace(/([A-Z])/g, "_$1").toUpperCase();
-  const colorOptions = await Spicetify.colorExtractor(image);
-  const color = colorOptions[vibrancy];
-  return color.substring(1);
+
+  try {
+    const colorOptions = await Spicetify.colorExtractor(uri);
+    const color = colorOptions?.[vibrancy];
+    if (!color?.startsWith("#")) {
+      console.error(`No album-art color returned for Spotify URI "${uri}"`);
+      return undefined;
+    }
+    return color.substring(1);
+  } catch (error) {
+    console.error(`Failed to extract album-art color for Spotify URI "${uri}"`, error);
+    return undefined;
+  }
 };
 
 export const generateColorPalette = async (mainColor: string, numColors: number) => {
@@ -436,13 +446,13 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
   return colorArray;
 };
 
-async function waitForAlbumArt(): Promise<string | undefined> {
-  // Only return when the album art is loaded
+async function waitForPlayerItem(): Promise<Spicetify.PlayerTrack | undefined> {
   return new Promise((resolve) => {
-    setInterval(() => {
-      const albumArtSrc = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
-      if (albumArtSrc) {
-        resolve(albumArtSrc);
+    const interval = setInterval(() => {
+      const item = Spicetify.Player.data?.item;
+      if (item) {
+        clearInterval(interval);
+        resolve(item);
       }
     }, 50);
   });
@@ -453,16 +463,17 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    let albumArtSrc: string | undefined = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
+    let item: Spicetify.PlayerTrack | undefined = Spicetify.Player.data?.item;
 
-    // If it doesn't exist, wait for it to load
-    if (albumArtSrc === null || albumArtSrc === undefined) {
-      albumArtSrc = await waitForAlbumArt();
+    if (item === null || item === undefined) {
+      item = await waitForPlayerItem();
     }
 
-    if (albumArtSrc) {
+    if (item?.uri && !item.isLocal) {
       const numColors = new Set(Object.values(scheme)).size;
-      const mainColor: string = await getColorFromImage(albumArtSrc);
+      const mainColor = await getColorFromUri(item.uri);
+      if (!mainColor) return;
+
       const newColors = await generateColorPalette(mainColor, numColors);
       /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
       i.e.
@@ -497,6 +508,8 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
         }
       }
       injectColourScheme(newScheme);
+    } else {
+      console.error(`Cannot extract album-art color for unsupported track URI "${item?.uri ?? "unknown"}"`);
     }
   });
 };
