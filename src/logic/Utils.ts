@@ -422,7 +422,7 @@ export const getColorFromUri = async (uri: string): Promise<string | undefined> 
   try {
     const colorOptions = await Spicetify.colorExtractor(uri);
     const color = colorOptions?.[vibrancy];
-    if (!color?.startsWith("#")) {
+    if (typeof color !== "string" || !/^#[0-9a-f]{6}$/i.test(color)) {
       console.error(`No album-art color returned for Spotify URI "${uri}"`);
       return undefined;
     }
@@ -448,13 +448,19 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
 
 async function waitForPlayerItem(): Promise<Spicetify.PlayerTrack | undefined> {
   return new Promise((resolve) => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     const interval = setInterval(() => {
       const item = Spicetify.Player.data?.item;
       if (item) {
         clearInterval(interval);
+        if (timeout !== undefined) clearTimeout(timeout);
         resolve(item);
       }
     }, 50);
+    timeout = setTimeout(() => {
+      clearInterval(interval);
+      resolve(undefined);
+    }, 10_000);
   });
 }
 
