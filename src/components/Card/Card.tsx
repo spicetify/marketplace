@@ -94,7 +94,24 @@ export class Card extends React.Component<
     return marketplaceStorage.getItem(this.localStorageKey) !== null;
   }
 
+  handleOperationError(error: unknown) {
+    console.error(`Failed to update ${this.props.type} "${this.props.item.title}"`, error);
+    if (this.props.type === "theme") {
+      Spicetify.showNotification(t("notifications.themeInstallationError"), true);
+    } else if (this.props.type === "extension") {
+      Spicetify.showNotification(t("notifications.extensionInstallationError"), true);
+    }
+  }
+
   async componentDidMount() {
+    try {
+      await this.refreshInstalledItem();
+    } catch (error) {
+      this.handleOperationError(error);
+    }
+  }
+
+  async refreshInstalledItem() {
     // Refresh stars if on "Installed" tab with stars enabled
     if (this.props.CONFIG.activeTab === "Installed" && this.props.type !== "snippet") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
@@ -125,6 +142,14 @@ export class Card extends React.Component<
   }
 
   async buttonClicked() {
+    try {
+      await this.performButtonAction();
+    } catch (error) {
+      this.handleOperationError(error);
+    }
+  }
+
+  async performButtonAction() {
     if (this.props.type === "extension") {
       if (this.isInstalled()) {
         console.debug("Extension already installed, removing");
@@ -320,7 +345,7 @@ export class Card extends React.Component<
 
     if (!item.include) {
       // Add new theme css
-      this.fetchAndInjectUserCSS(this.localStorageKey);
+      await this.fetchAndInjectUserCSS(this.localStorageKey);
       // Update the active theme in Grid state, triggers state change and re-render
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
@@ -360,7 +385,7 @@ export class Card extends React.Component<
       console.debug("Removed");
 
       // Removes the current theme CSS
-      this.fetchAndInjectUserCSS(null);
+      await this.fetchAndInjectUserCSS(null);
       // Update the active theme in Grid state
       this.props.updateActiveTheme(null);
       // Removes the current colour scheme
@@ -418,13 +443,9 @@ export class Card extends React.Component<
    * @param {string | null} theme The theme localStorageKey or null, if we want to reset the theme
    */
   async fetchAndInjectUserCSS(theme) {
-    try {
-      const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
-      const userCSS = theme ? await parseCSS(this.props.item as CardItem, tld) : undefined;
-      injectUserCSS(userCSS);
-    } catch (error) {
-      console.warn(error);
-    }
+    const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
+    const userCSS = theme ? await parseCSS(this.props.item as CardItem, tld) : undefined;
+    injectUserCSS(userCSS);
   }
 
   openReadme() {
