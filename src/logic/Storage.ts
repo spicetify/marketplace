@@ -11,6 +11,7 @@ type StoredRecord = {
 const cache = new Map<string, string>();
 let databasePromise: Promise<IDBDatabase | null> | null = null;
 let hydrationPromise: Promise<void> | null = null;
+let mutationQueue: Promise<void> = Promise.resolve();
 let hydrated = false;
 
 function shouldMigrateLocalStorageKey(key: string) {
@@ -46,9 +47,9 @@ function openDatabase() {
 
 async function runStoreRequest<T>(mode: IDBTransactionMode, run: (store: IDBObjectStore) => IDBRequest<T> | undefined): Promise<T | undefined> {
   const database = await openDatabase();
-  if (!database) return undefined;
+  if (!database) throw new Error("Marketplace IndexedDB storage is unavailable");
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORE_NAME, mode);
     const request = run(transaction.objectStore(STORE_NAME));
     let result: T | undefined;
@@ -59,27 +60,71 @@ async function runStoreRequest<T>(mode: IDBTransactionMode, run: (store: IDBObje
       settled = true;
       resolve(value);
     };
+    const fail = (message: string, error: DOMException | null) => {
+      if (settled) return;
+      settled = true;
+      console.warn(message, error);
+      reject(error ?? new Error(message));
+    };
 
     transaction.oncomplete = () => settle(result);
-    transaction.onerror = () => {
-      console.warn("Marketplace IndexedDB transaction failed", transaction.error);
-      settle(undefined);
-    };
-    transaction.onabort = () => {
-      console.warn("Marketplace IndexedDB transaction aborted", transaction.error);
-      settle(undefined);
-    };
+    transaction.onerror = () => fail("Marketplace IndexedDB transaction failed", transaction.error);
+    transaction.onabort = () => fail("Marketplace IndexedDB transaction aborted", transaction.error);
 
     if (!request) return;
 
     request.onsuccess = () => {
       result = request.result;
     };
-    request.onerror = () => {
-      console.warn("Marketplace IndexedDB request failed", request.error);
-      settle(undefined);
-    };
+    request.onerror = () => fail("Marketplace IndexedDB request failed", request.error);
   });
+}
+
+async function persistChanges(previous: Map<string, string>, next: Map<string, string>) {
+  const updates = Array.from(next.entries()).filter(([key, value]) => previous.get(key) !== value);
+  const removals = Array.from(previous.keys()).filter((key) => !next.has(key));
+  if (updates.length === 0 && removals.length === 0) return;
+
+  const database = await openDatabase();
+  if (!database) throw new Error("Marketplace IndexedDB storage is unavailable");
+
+  await new Promise<void>((resolve, reject) => {
+    const transaction = database.transaction(STORE_NAME, "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    let settled = false;
+    const fail = (message: string) => {
+      if (settled) return;
+      settled = true;
+      reject(transaction.error ?? new Error(message));
+    };
+
+    transaction.oncomplete = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+    transaction.onerror = () => fail("Marketplace IndexedDB transaction failed");
+    transaction.onabort = () => fail("Marketplace IndexedDB transaction aborted");
+
+    for (const [key, value] of updates) store.put({ key, value });
+    for (const key of removals) store.delete(key);
+  });
+}
+
+function mutateStorage(mutate: (draft: Map<string, string>) => void) {
+  const operation = mutationQueue.then(async () => {
+    const previous = new Map(cache);
+    const next = new Map(previous);
+    mutate(next);
+    await persistChanges(previous, next);
+
+    for (const key of previous.keys()) {
+      if (!next.has(key)) cache.delete(key);
+    }
+    for (const [key, value] of next) cache.set(key, value);
+  });
+  mutationQueue = operation.catch(() => undefined);
+  return operation;
 }
 
 async function persistItem(key: string, value: string) {
@@ -145,22 +190,24 @@ export const marketplaceStorage = {
 
   setItem(key: string, value: string) {
     cache.set(key, value);
-    void persistItem(key, value);
+    void persistItem(key, value).catch((error) => console.warn("Marketplace item persistence failed", error));
   },
 
   async setItemAsync(key: string, value: string) {
-    cache.set(key, value);
-    await persistItem(key, value);
+    await mutateStorage((draft) => draft.set(key, value));
   },
 
   removeItem(key: string) {
     cache.delete(key);
-    void removePersistedItem(key);
+    void removePersistedItem(key).catch((error) => console.warn("Marketplace item removal failed", error));
   },
 
   async removeItemAsync(key: string) {
-    cache.delete(key);
-    await removePersistedItem(key);
+    await mutateStorage((draft) => draft.delete(key));
+  },
+
+  async mutateAsync(mutate: (draft: Map<string, string>) => void) {
+    await mutateStorage(mutate);
   },
 
   keys() {

@@ -127,7 +127,8 @@
       "markdownParsingError": "Error parsing markdown (HTTP {{status}})",
       "noReadmeFile": "No README was found",
       "themeInstallationError": "There was an error installing theme",
-      "extensionInstallationError": "There was an error installing extension"
+      "extensionInstallationError": "There was an error installing extension",
+      "marketplaceOperationError": "Marketplace could not complete this operation"
     }
   }
 }
