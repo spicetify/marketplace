@@ -1,5 +1,4 @@
 import i18n, { t } from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 import React from "react";
 import { initReactI18next, withTranslation } from "react-i18next";
 
@@ -14,14 +13,11 @@ import type { Config, TabItemConfig } from "./types/marketplace-types";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
-  .use(LanguageDetector)
   .init({
     // the translations
     resources: locales,
-    detection: {
-      order: ["navigator", "htmlTag"]
-    },
-    // lng: "en", // if you're using a language detector, do not define the lng option
+    // Use Spotify's client locale, not the embedded browser's (they can differ)
+    lng: Spicetify.Locale.getLocale(),
     fallbackLng: "en",
     interpolation: {
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
