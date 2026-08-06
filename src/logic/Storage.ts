@@ -9,9 +9,12 @@ type StoredRecord = {
 };
 
 const cache = new Map<string, string>();
+const durableCache = new Map<string, string>();
+const cacheRevisions = new Map<string, number>();
 let databasePromise: Promise<IDBDatabase | null> | null = null;
 let hydrationPromise: Promise<void> | null = null;
 let mutationQueue: Promise<void> = Promise.resolve();
+let mutationRevision = 0;
 let hydrated = false;
 
 function shouldMigrateLocalStorageKey(key: string) {
@@ -111,17 +114,29 @@ async function persistChanges(previous: Map<string, string>, next: Map<string, s
   });
 }
 
-function mutateStorage(mutate: (draft: Map<string, string>) => void) {
+function replaceMap(target: Map<string, string>, source: Map<string, string>) {
+  target.clear();
+  for (const [key, value] of source) target.set(key, value);
+}
+
+function mutateStorage(mutate: (draft: Map<string, string>) => void, revision = ++mutationRevision) {
   const operation = mutationQueue.then(async () => {
-    const previous = new Map(cache);
+    const previous = new Map(durableCache);
     const next = new Map(previous);
     mutate(next);
     await persistChanges(previous, next);
+    replaceMap(durableCache, next);
 
-    for (const key of previous.keys()) {
-      if (!next.has(key)) cache.delete(key);
+    const keysToReconcile = new Set([...cache.keys(), ...next.keys()]);
+    for (const key of keysToReconcile) {
+      if ((cacheRevisions.get(key) ?? 0) > revision) continue;
+      if (next.has(key)) {
+        cache.set(key, next.get(key) as string);
+      } else {
+        cache.delete(key);
+      }
+      cacheRevisions.set(key, revision);
     }
-    for (const [key, value] of next) cache.set(key, value);
   });
   mutationQueue = operation.catch(() => undefined);
   return operation;
@@ -131,22 +146,19 @@ async function persistItem(key: string, value: string) {
   await runStoreRequest("readwrite", (store) => store.put({ key, value }));
 }
 
-async function removePersistedItem(key: string) {
-  await runStoreRequest("readwrite", (store) => store.delete(key));
-}
-
 async function loadIndexedDBCache() {
   const records = await runStoreRequest<StoredRecord[]>("readonly", (store) => store.getAll());
   if (!records) return;
 
   for (const record of records) {
     cache.set(record.key, record.value);
+    durableCache.set(record.key, record.value);
   }
 }
 
 async function migrateLocalStorage() {
   try {
-    const migrated: Promise<void>[] = [];
+    const migrated: StoredRecord[] = [];
 
     for (let index = 0; index < window.localStorage.length; index++) {
       const key = window.localStorage.key(index);
@@ -156,10 +168,15 @@ async function migrateLocalStorage() {
       if (value === null) continue;
 
       cache.set(key, value);
-      migrated.push(persistItem(key, value));
+      migrated.push({ key, value });
     }
 
-    await Promise.all(migrated);
+    await Promise.all(
+      migrated.map(async ({ key, value }) => {
+        await persistItem(key, value);
+        durableCache.set(key, value);
+      })
+    );
   } catch (error) {
     console.warn("Marketplace localStorage migration failed", error);
   }
@@ -189,8 +206,10 @@ export const marketplaceStorage = {
   },
 
   setItem(key: string, value: string) {
+    const revision = ++mutationRevision;
     cache.set(key, value);
-    void persistItem(key, value).catch((error) => console.warn("Marketplace item persistence failed", error));
+    cacheRevisions.set(key, revision);
+    void mutateStorage((draft) => draft.set(key, value), revision).catch((error) => console.warn("Marketplace item persistence failed", error));
   },
 
   async setItemAsync(key: string, value: string) {
@@ -198,8 +217,10 @@ export const marketplaceStorage = {
   },
 
   removeItem(key: string) {
+    const revision = ++mutationRevision;
     cache.delete(key);
-    void removePersistedItem(key).catch((error) => console.warn("Marketplace item removal failed", error));
+    cacheRevisions.set(key, revision);
+    void mutateStorage((draft) => draft.delete(key), revision).catch((error) => console.warn("Marketplace item removal failed", error));
   },
 
   async removeItemAsync(key: string) {
