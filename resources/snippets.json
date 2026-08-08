@@ -554,6 +554,7 @@
   {
     "title": "Van-Gogh Hates Me",
     "description": "Hide Shooting Stars from StarryNight Theme. Removes the distracting shooting star animations from the StarryNight theme.",
-    "code": ".shootingstar { display: none !important; opacity: 0 !important; visibility: hidden !important; animation: none !important; }"
+    "code": ".shootingstar { display: none !important; opacity: 0 !important; visibility: hidden !important; animation: none !important; }",
+    "preview": "resources/assets/snippets/removed_stars.png"
   }
 ]
