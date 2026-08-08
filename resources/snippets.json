@@ -556,5 +556,11 @@
     "description": "Hide Shooting Stars from StarryNight Theme! Removes the distracting shooting star animations from the StarryNight theme.",
     "code": ".shootingstar { display: none !important; opacity: 0 !important; visibility: hidden !important; animation: none !important; }",
     "preview": "resources/assets/snippets/removed_stars.png"
+  },
+  {
+    "title": "Hide Getting Started Card",
+    "description": "Removes the annoying 'Getting Started' onboarding cards from the home view if its glitched.",
+    "code": "section[data-shelf-collapsable=true] { display: none !important; } .C8qLX8lOHwAx63FP.bKWw7XkMnYJ6al1a { display: none !important; }",
+    "preview": "resources/assets/snippets/hide_getting_started.png"
   }
 ]
