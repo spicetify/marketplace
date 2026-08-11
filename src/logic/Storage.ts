@@ -132,8 +132,12 @@ function mutateStorage(mutate: (draft: Map<string, string>) => void, revision = 
       if ((cacheRevisions.get(key) ?? 0) > revision) continue;
       if (next.has(key)) {
         cache.set(key, next.get(key) as string);
-      } else {
+      } else if (previous.has(key)) {
+        // Only drop keys this mutation actually removed. A cached key the durable
+        // snapshot never had (e.g. a partially failed migration) isn't ours to delete.
         cache.delete(key);
+      } else {
+        continue;
       }
       cacheRevisions.set(key, revision);
     }
