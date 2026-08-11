@@ -116,8 +116,13 @@ import type { RepoType } from "../types/marketplace-types";
     if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
     // Add theme css
-    const userCSS = await parseCSS(themeManifest, tld);
-    injectUserCSS(userCSS);
+    // A CSS failure shouldn't stop the theme's included JS from loading below
+    try {
+      const userCSS = await parseCSS(themeManifest, tld);
+      injectUserCSS(userCSS);
+    } catch (error) {
+      console.error("Failed to inject theme CSS", error);
+    }
 
     // Add to Spicetify.Config
     // @ts-expect-error: `current_theme` is read-only type in types
