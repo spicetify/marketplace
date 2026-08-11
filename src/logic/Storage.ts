@@ -188,7 +188,13 @@ export async function hydrateMarketplaceStorage() {
 
   hydrationPromise = (async () => {
     try {
-      await loadIndexedDBCache();
+      // A failed read must not skip the migration below: if IndexedDB is unavailable we can
+      // still populate the cache from localStorage and stay usable (in-memory) for the session
+      try {
+        await loadIndexedDBCache();
+      } catch (error) {
+        console.warn("Marketplace IndexedDB cache could not be read", error);
+      }
       await migrateLocalStorage();
       hydrated = true;
     } catch (error) {
