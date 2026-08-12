@@ -441,10 +441,6 @@ export class Card extends React.Component<
     }
   }
 
-  async removeTheme(defaultThemeKey?: string | null) {
-    await queueThemeOperation(() => this.removeThemeNow(defaultThemeKey));
-  }
-
   async installSnippet() {
     console.debug(`Installing snippet ${this.localStorageKey}`);
     await marketplaceStorage.mutateAsync((storage) => {
