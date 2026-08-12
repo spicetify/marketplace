@@ -2,6 +2,7 @@ import Dexie, { type EntityTable } from "dexie";
 
 const DATABASE_NAME = "spicetify-marketplace";
 const MARKETPLACE_KEY_PREFIX = "marketplace:";
+const HYDRATION_RETRY_DELAYS_MS = [150, 400, 1000];
 
 type StoredRecord = {
   key: string;
@@ -29,10 +30,14 @@ function getSettingsTable() {
   return settings;
 }
 
-function disableDatabase() {
+function resetDatabase() {
   database?.close();
   database = null;
   settings = null;
+}
+
+function disableDatabase() {
+  resetDatabase();
   databaseUnavailable = true;
 }
 
@@ -149,26 +154,37 @@ async function migrateLocalStorage() {
   }
 }
 
+// A read that fails means the stored state is unknown, not that it is empty.
+// Reopening usually works, since a reload can race the previous connection
+// being torn down. If every attempt fails we give up rather than report an
+// empty Marketplace and let the next write overwrite what we could not read.
 export async function hydrateMarketplaceStorage() {
   if (hydrated) return;
   if (hydrationPromise) return hydrationPromise;
 
   hydrationPromise = (async () => {
-    try {
-      await loadIndexedDBCache();
-    } catch (error) {
-      console.warn("Marketplace IndexedDB cache could not be read", error);
-      disableDatabase();
+    for (let attempt = 0; ; attempt++) {
+      try {
+        await loadIndexedDBCache();
+        break;
+      } catch (error) {
+        if (attempt >= HYDRATION_RETRY_DELAYS_MS.length) throw error;
+        console.warn(`Marketplace IndexedDB cache could not be read, retrying (${attempt + 1}/${HYDRATION_RETRY_DELAYS_MS.length})`, error);
+        resetDatabase();
+        await new Promise((resolve) => setTimeout(resolve, HYDRATION_RETRY_DELAYS_MS[attempt]));
+      }
     }
 
     await migrateLocalStorage();
     hydrated = true;
-  })().catch((error) => {
-    console.warn("Marketplace storage hydration failed", error);
-    hydrationPromise = null;
-  });
+  })();
 
-  return hydrationPromise;
+  try {
+    await hydrationPromise;
+  } catch (error) {
+    hydrationPromise = null;
+    throw error;
+  }
 }
 
 export const marketplaceStorage = {

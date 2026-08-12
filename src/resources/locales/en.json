@@ -92,6 +92,7 @@
       "addCSS": "Add CSS",
       "search": "Search",
       "installed": "Installed",
+      "storageUnreadable": "Marketplace could not read its saved data. Reload Spotify to try again.",
       "lastUpdated": "Last updated {{val, datetime}}",
       "externalJS": "external JS",
       "archived": "archived",
@@ -128,7 +129,8 @@
       "noReadmeFile": "No README was found",
       "themeInstallationError": "There was an error installing theme",
       "extensionInstallationError": "There was an error installing extension",
-      "marketplaceOperationError": "Marketplace could not complete this operation"
+      "marketplaceOperationError": "Marketplace could not complete this operation",
+      "storageUnreadable": "Marketplace could not read its saved data, so your extensions and themes were not loaded"
     }
   }
 }

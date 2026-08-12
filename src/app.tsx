@@ -32,12 +32,14 @@ class App extends React.Component<
     count: number;
     CONFIG: Config;
     storageReady: boolean;
+    storageUnreadable: boolean;
   }
 > {
   state = {
     count: 0,
     CONFIG: {} as Config,
-    storageReady: false
+    storageReady: false,
+    storageUnreadable: false
   };
 
   CONFIG: Config;
@@ -122,7 +124,16 @@ class App extends React.Component<
   }
 
   async componentDidMount() {
-    await hydrateMarketplaceStorage();
+    try {
+      await hydrateMarketplaceStorage();
+    } catch (error) {
+      // Showing the grid would claim nothing is installed, and the next action
+      // the user takes would then save that empty state over the real one.
+      console.error("Marketplace storage could not be read", error);
+      this.setState({ storageUnreadable: true });
+      return;
+    }
+
     this.CONFIG = this.createConfig();
     this.setState({
       CONFIG: this.CONFIG,
@@ -139,6 +150,7 @@ class App extends React.Component<
   };
 
   render() {
+    if (this.state.storageUnreadable) return <div className="marketplace-storage-error">{t("grid.storageUnreadable")}</div>;
     if (!this.state.storageReady) return null;
 
     const { location, replace } = Spicetify.Platform.History;
