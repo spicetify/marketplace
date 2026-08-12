@@ -416,8 +416,8 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 
 export const getColorFromUri = async (uri: string): Promise<string | undefined> => {
   const storedVibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy, "PROMINENT");
-  // Add a underscore before any uppercase characters, then make the whole string uppercase
-  const vibrancy = (typeof storedVibrancy === "string" ? storedVibrancy : "PROMINENT").replace(/([A-Z])/g, "_$1").toUpperCase();
+  // Convert camelCase settings values to Spicetify's UPPER_SNAKE_CASE keys.
+  const vibrancy = (typeof storedVibrancy === "string" ? storedVibrancy : "PROMINENT").replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
 
   try {
     const colorOptions = await Spicetify.colorExtractor(uri);

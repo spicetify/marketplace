@@ -193,9 +193,9 @@ export class Card extends React.Component<
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.debug("Snippet already installed, removing");
-        this.removeSnippet();
+        await this.removeSnippet();
       } else {
-        this.installSnippet();
+        await this.installSnippet();
       }
     } else {
       console.error("Unknown card type");
@@ -445,40 +445,39 @@ export class Card extends React.Component<
     await queueThemeOperation(() => this.removeThemeNow(defaultThemeKey));
   }
 
-  installSnippet() {
+  async installSnippet() {
     console.debug(`Installing snippet ${this.localStorageKey}`);
-    marketplaceStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify({
-        code: this.props.item.code,
-        title: this.props.item.title,
-        description: this.props.item.description,
-        imageURL: this.props.item.imageURL
-      })
-    );
+    await marketplaceStorage.mutateAsync((storage) => {
+      storage.set(
+        this.localStorageKey,
+        JSON.stringify({
+          code: this.props.item.code,
+          title: this.props.item.title,
+          description: this.props.item.description,
+          imageURL: this.props.item.imageURL
+        })
+      );
 
-    // Add to installed list if not there already
+      const installedSnippetKeys = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedSnippets));
+      if (!installedSnippetKeys.includes(this.localStorageKey)) {
+        storage.set(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify([...installedSnippetKeys, this.localStorageKey]));
+      }
+    });
+
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-    if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
-      installedSnippetKeys.push(this.localStorageKey);
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
-    }
-    const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-    initializeSnippets(installedSnippets);
-
+    initializeSnippets(installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key)));
     this.setState({ installed: true });
   }
 
-  removeSnippet() {
-    marketplaceStorage.removeItem(this.localStorageKey);
+  async removeSnippet() {
+    await marketplaceStorage.mutateAsync((storage) => {
+      storage.delete(this.localStorageKey);
+      const installedSnippetKeys = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedSnippets));
+      storage.set(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys.filter((key) => key !== this.localStorageKey)));
+    });
 
-    // Remove from installed list
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-    const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
-    marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
-    const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-    initializeSnippets(remainingInstalledSnippets);
-
+    initializeSnippets(installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key)));
     this.setState({ installed: false });
   }
 
