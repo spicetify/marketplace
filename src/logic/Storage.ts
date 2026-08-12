@@ -94,6 +94,7 @@ function mutateStorage(mutate: (draft: Map<string, string>) => void, optimistic 
   }
 
   const operation = enqueue(async () => {
+    await hydrateMarketplaceStorage();
     const previous = new Map(persistedCache);
     const next = new Map(previous);
     mutate(next);
