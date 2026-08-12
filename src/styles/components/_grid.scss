@@ -160,3 +160,11 @@
 .marketplace-content {
   margin-top: 60px;
 }
+
+.marketplace-empty-installed {
+  color: var(--spice-subtext);
+  margin: 0 auto;
+  max-width: 420px;
+  padding: 64px 0;
+  text-align: center;
+}

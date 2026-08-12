@@ -92,6 +92,8 @@
       "addCSS": "Add CSS",
       "search": "Search",
       "installed": "Installed",
+      "nothingInstalled": "You have not installed anything yet. Browse the Extensions, Themes, Snippets, and Apps tabs to get started.",
+      "noInstalledMatches": "None of your installed items match that search.",
       "lastUpdated": "Last updated {{val, datetime}}",
       "externalJS": "external JS",
       "archived": "archived",

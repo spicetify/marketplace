@@ -534,6 +534,60 @@ class Grid extends React.Component<
 
   render() {
     const { t } = this.props;
+
+    // Each card type renders its own heading and grid, or nothing when it has
+    // no cards to show.
+    const cardSections = [
+      { handle: "extension", name: "Extensions" },
+      { handle: "theme", name: "Themes" },
+      { handle: "snippet", name: "Snippets" },
+      { handle: "app", name: "Apps" }
+    ].map((cardType) => {
+      const cardsOfType = this.cardList
+        .filter((card) => card.props.type === cardType.handle)
+        .filter((card) => {
+          const searchValue = this.state.searchValue.trim().toLowerCase();
+          const { title, user, authors, tags } = card.props.item;
+
+          return (
+            !searchValue ||
+            title.toLowerCase().includes(searchValue) ||
+            user?.toLowerCase().includes(searchValue) ||
+            authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
+            [...(tags ?? [])]?.some((tag) => tag.toLowerCase().includes(searchValue))
+          );
+        })
+        .map((card) => {
+          // Clone the cards and update the prop to trigger re-render
+          return React.cloneElement(card, {
+            activeThemeKey: this.state.activeThemeKey,
+            key: card.key
+          });
+        })
+        .filter(
+          (
+            card,
+            index,
+            cards // Filter out duplicates to prevent spamming
+          ) => cards.findIndex((c) => c.key === card.key) === index
+        );
+
+      if (!cardsOfType.length) return null;
+
+      return (
+        <div className="marketplace-content">
+          <h2 className="marketplace-card-type-heading">{t(`tabs.${cardType.name}`)}</h2>
+          <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth" data-tab={this.CONFIG.activeTab}>
+            {cardsOfType}
+          </div>
+        </div>
+      );
+    });
+
+    // The installed tab has nothing else to fall back on, so say so rather than
+    // leaving the user looking at an empty page.
+    const installedTabIsEmpty = this.CONFIG.activeTab === "Installed" && cardSections.every((section) => section === null);
+
     return (
       <section className="contentSpacing">
         <div className="marketplace-header">
@@ -607,61 +661,12 @@ class Grid extends React.Component<
             </Tooltip>
           </div>
         </div>
-        {/* Add a header and grid for each card type if it has any cards */}
-        {[
-          { handle: "extension", name: "Extensions" },
-          { handle: "theme", name: "Themes" },
-          { handle: "snippet", name: "Snippets" },
-          { handle: "app", name: "Apps" }
-        ].map((cardType) => {
-          const cardsOfType = this.cardList
-            .filter((card) => card.props.type === cardType.handle)
-            .filter((card) => {
-              const searchValue = this.state.searchValue.trim().toLowerCase();
-              const { title, user, authors, tags } = card.props.item;
-
-              return (
-                !searchValue ||
-                title.toLowerCase().includes(searchValue) ||
-                user?.toLowerCase().includes(searchValue) ||
-                authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
-                [...(tags ?? [])]?.some((tag) => tag.toLowerCase().includes(searchValue))
-              );
-            })
-            .map((card) => {
-              // Clone the cards and update the prop to trigger re-render
-              return React.cloneElement(card, {
-                activeThemeKey: this.state.activeThemeKey,
-                key: card.key
-              });
-            })
-            .filter(
-              (
-                card,
-                index,
-                cards // Filter out duplicates to prevent spamming
-              ) => cards.findIndex((c) => c.key === card.key) === index
-            );
-
-          if (cardsOfType.length) {
-            return (
-              // Add a header for the card type
-              <div className="marketplace-content">
-                {/* Add a header for the card type */}
-                <h2 className="marketplace-card-type-heading">{t(`tabs.${cardType.name}`)}</h2>
-                {/* Add the grid and cards */}
-                <div
-                  className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth"
-                  data-tab={this.CONFIG.activeTab}
-                  data-card-type={t(`tabs.${cardType.name}`)} // This is used for the "no installed x" in css
-                >
-                  {cardsOfType}
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })}
+        {cardSections}
+        {installedTabIsEmpty ? (
+          <div className="marketplace-empty-installed">
+            {this.state.searchValue.trim() ? t("grid.noInstalledMatches") : t("grid.nothingInstalled")}
+          </div>
+        ) : null}
         {/* Add snippets button if on snippets tab */}
         {this.CONFIG.activeTab === "Snippets" ? (
           <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>
