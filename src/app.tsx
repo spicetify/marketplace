@@ -16,8 +16,8 @@ i18n
   .init({
     // the translations
     resources: locales,
-    // Use Spotify's client locale, not the embedded browser's (they can differ)
-    lng: Spicetify.Locale.getLocale(),
+    // Prefer Spotify's client locale when available; older CLI wrappers do not expose Locale.
+    lng: Spicetify.Locale?.getLocale?.() ?? navigator.language,
     fallbackLng: "en",
     interpolation: {
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
