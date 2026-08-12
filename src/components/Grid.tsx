@@ -585,8 +585,9 @@ class Grid extends React.Component<
     });
 
     // The installed tab has nothing else to fall back on, so say so rather than
-    // leaving the user looking at an empty page.
-    const installedTabIsEmpty = this.CONFIG.activeTab === "Installed" && cardSections.every((section) => section === null);
+    // leaving the user looking at an empty page. Wait for the load to finish
+    // first, otherwise this shows up for a moment on every visit to the tab.
+    const installedTabIsEmpty = this.CONFIG.activeTab === "Installed" && this.state.endOfList && cardSections.every((section) => section === null);
 
     return (
       <section className="contentSpacing">
