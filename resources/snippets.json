@@ -518,7 +518,7 @@
   {
     "title": "Hide Suggestions & Recommendations",
     "description": "Hides recommended and suggested tracks/collections from the Home screen and individual listings such as playlists and albums",
-    "code": "[data-shelf-collapsable], [data-shelf=\"shelf\"], [data-shelf=\"carousel\"], .playlistRecommenderContainer, .playlist-playlist-findMoreButton { display: none !important; }",
+    "code": ".main-home-content [data-shelf-collapsable], .main-home-content [data-shelf=\"shelf\"], .main-home-content [data-shelf=\"carousel\"], .playlistRecommenderContainer, .playlist-playlist-findMoreButton { display: none !important; }",
     "preview": "resources/assets/snippets/hide-recommendations.png"
   },
   {
