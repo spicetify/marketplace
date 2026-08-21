@@ -414,13 +414,23 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
   }, 60 * 1000);
 };
 
-export const getColorFromImage = async (image: string) => {
-  let vibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy);
+export const getColorFromUri = async (uri: string): Promise<string | undefined> => {
+  const storedVibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy, "PROMINENT");
   // Add a underscore before any uppercase characters, then make the whole string uppercase
-  vibrancy = vibrancy.replace(/([A-Z])/g, "_$1").toUpperCase();
-  const colorOptions = await Spicetify.colorExtractor(image);
-  const color = colorOptions[vibrancy];
-  return color.substring(1);
+  const vibrancy = (typeof storedVibrancy === "string" ? storedVibrancy : "PROMINENT").replace(/([A-Z])/g, "_$1").toUpperCase();
+
+  try {
+    const colorOptions = await Spicetify.colorExtractor(uri);
+    const color = colorOptions?.[vibrancy];
+    if (typeof color !== "string" || !/^#[0-9a-f]{6}$/i.test(color)) {
+      console.error(`No album-art color returned for Spotify URI "${uri}"`);
+      return undefined;
+    }
+    return color.substring(1);
+  } catch (error) {
+    console.error(`Failed to extract album-art color for Spotify URI "${uri}"`, error);
+    return undefined;
+  }
 };
 
 export const generateColorPalette = async (mainColor: string, numColors: number) => {
@@ -436,15 +446,21 @@ export const generateColorPalette = async (mainColor: string, numColors: number)
   return colorArray;
 };
 
-async function waitForAlbumArt(): Promise<string | undefined> {
-  // Only return when the album art is loaded
+async function waitForPlayerItem(): Promise<Spicetify.PlayerTrack | undefined> {
   return new Promise((resolve) => {
-    setInterval(() => {
-      const albumArtSrc = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
-      if (albumArtSrc) {
-        resolve(albumArtSrc);
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const interval = setInterval(() => {
+      const item = Spicetify.Player.data?.item;
+      if (item?.uri) {
+        clearInterval(interval);
+        if (timeout !== undefined) clearTimeout(timeout);
+        resolve(item);
       }
     }, 50);
+    timeout = setTimeout(() => {
+      clearInterval(interval);
+      resolve(undefined);
+    }, 10_000);
   });
 }
 
@@ -453,51 +469,52 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // and update the color scheme accordingly
   Spicetify.Player.addEventListener("songchange", async () => {
     await sleep(1000);
-    let albumArtSrc: string | undefined = Spicetify.Player.data?.item?.metadata?.image_xlarge_url;
+    let item: Spicetify.PlayerTrack | undefined = Spicetify.Player.data?.item;
 
-    // If it doesn't exist, wait for it to load
-    if (albumArtSrc === null || albumArtSrc === undefined) {
-      albumArtSrc = await waitForAlbumArt();
+    if (!item?.uri) {
+      item = await waitForPlayerItem();
     }
 
-    if (albumArtSrc) {
-      const numColors = new Set(Object.values(scheme)).size;
-      const mainColor: string = await getColorFromImage(albumArtSrc);
-      const newColors = await generateColorPalette(mainColor, numColors);
-      /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
+    if (!item?.uri || item.isLocal) return;
+
+    const numColors = new Set(Object.values(scheme)).size;
+    const mainColor = await getColorFromUri(item.uri);
+    if (!mainColor) return;
+
+    const newColors = await generateColorPalette(mainColor, numColors);
+    /*  Find which keys share the same value in the current scheme, create a new scheme that has the value as the key and all the keys in the old scheme as the value
       i.e.
       { "color1": "#000000", "color2": "#000000", "color3": "#FFFFFF" } ->
       { "#000000": ["color1", "color2"], "#FFFFFF": ["color3"]}
       */
-      let colorMap = new Map();
-      for (const [key, value] of Object.entries(scheme)) {
-        if (colorMap.has(value)) {
-          colorMap.get(value).push(key);
-        } else {
-          colorMap.set(value, [key]);
-        }
+    let colorMap = new Map();
+    for (const [key, value] of Object.entries(scheme)) {
+      if (colorMap.has(value)) {
+        colorMap.get(value).push(key);
+      } else {
+        colorMap.set(value, [key]);
       }
-      // Order the color map by how similar the colors are to eachother
-      const orderedColorMap = new Map(
-        [...colorMap.entries()].sort((a, b) => {
-          const aColor = Chroma(a[0]);
-          const bColor = Chroma(b[0]);
-          return aColor.get("lab.l") - bColor.get("lab.l");
-        })
-      );
-      colorMap = orderedColorMap;
-      // replace the keys in the color map with the new colors
-      const newScheme = {};
-      for (const [, value] of colorMap.entries()) {
-        const newColor = newColors.shift();
-        if (newColor) {
-          for (const key of value) {
-            newScheme[key] = newColor;
-          }
-        }
-      }
-      injectColourScheme(newScheme);
     }
+    // Order the color map by how similar the colors are to eachother
+    const orderedColorMap = new Map(
+      [...colorMap.entries()].sort((a, b) => {
+        const aColor = Chroma(a[0]);
+        const bColor = Chroma(b[0]);
+        return aColor.get("lab.l") - bColor.get("lab.l");
+      })
+    );
+    colorMap = orderedColorMap;
+    // replace the keys in the color map with the new colors
+    const newScheme = {};
+    for (const [, value] of colorMap.entries()) {
+      const newColor = newColors.shift();
+      if (newColor) {
+        for (const key of value) {
+          newScheme[key] = newColor;
+        }
+      }
+    }
+    injectColourScheme(newScheme);
   });
 };
 
