@@ -1,5 +1,11 @@
 [
   {
+    "title": "Hamsters Dancing",
+    "description": "Adds a couple of dancing hamsters on the playback bar",
+    "code": ".player-controls .playback-progressbar { position: relative; } .player-controls .playback-progressbar::before { content: ''; width: 80px; height: 80px; bottom: calc(100% - 20px); left: 0; position: absolute; background-size: 80px 80px; background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXk2NW15cTJrdjF0YjZ5eTBjODE0M2l3ejg3bDlvYWh5NmVub2l0eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/s7pdNRdwG1zxdwkazY/giphy.gif'); pointer-events: none; z-index: 0; } .player-controls .playback-progressbar::after { content: ''; width: 80px; height: 80px; bottom: calc(100% - 23px); right: 0; position: absolute; background-size: 80px 80px; background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExamN4OWxiOXY4dHZ5Mm90NjU5ZjhwcjV1dDd3dHdveHFkaGYzbGRmaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VxovskkECK4egQCltk/giphy.gif'); pointer-events: none; z-index: 0; }",
+    "preview": "resources/assets/snippets/dancing-hamster.png"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
@@ -20,7 +26,7 @@
   {
     "title": "Rounded Images",
     "description": "Adds rounded corners to the cover art, playlist covers, cards and other images",
-    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .x-entityImage-circle, \n .main-image-image, \n .kwzBRpFigKr1EP2d5qle, \n .lKuMkIKSZanMIK6aQWfx, \n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }\n \n /* Home Shortcuts Grid (force) */\n .view-homeShortcutsGrid-image,\n .view-homeShortcutsGrid-imageWrapper {\n border-radius: 4px !important;\n }\n \n /* Artist, Liked songs heart (force) */\n .T_JcGdJujSuj014SZfjl {\n border-radius: 20% !important;\n }",
+    "code": "/* Expanded Cover Art Image (+ position fix) */\n .main-navBar-navBar > :nth-child(3) {\n margin: 0 0 0 1px;\n border-radius: 6px;\n }\n \n /* Collapsed Cover Art Image */\n .cover-art-image,\n .artist-artistOverview-sideBlock > div > section > div:nth-child(3) > section:nth-child(2) > div > img,\n .view-homeShortcutsGrid-image {\n border-radius: 4px;\n }\n \n /*\n Playlist Header\n Search Category Card Image\n List Cards\n Local Files Card\n Placeholder Profile Card\n Artist Overview Side Block\n */\n  .X6NnaANU7oS1TJpc,\n .main-entityHeader-shadow,\n .x-categoryCard-image,\n .x-entityImage-circle, \n .main-image-image, \n .kwzBRpFigKr1EP2d5qle, \n .lKuMkIKSZanMIK6aQWfx, \n .main-cardImage-image,\n .main-cardImage-imageWrapper,\n .main-entityHeader-imagePlaceholder > div,\n .artist-artistOverview-sideBlock > div > section {\n border-radius: 6px;\n }\n \n /* Circled Artist + Profile Cards (force) */\n .main-cardImage-circular,\n .main-entityHeader-imagePlaceholder,\n .main-entityHeader-circle {\n border-radius: 50% !important;\n }\n \n /* Track List Image */\n .main-trackList-rowImage {\n border-radius: 3px;\n }\n \n /* Home Shortcuts Grid (force) */\n .view-homeShortcutsGrid-image,\n .view-homeShortcutsGrid-imageWrapper {\n border-radius: 4px !important;\n }\n \n /* Artist, Liked songs heart (force) */\n .T_JcGdJujSuj014SZfjl {\n border-radius: 20% !important;\n }",
     "preview": "resources/assets/snippets/rounded-images.png"
   },
   {
@@ -248,7 +254,7 @@
   {
     "title": "Thicker Bars",
     "description": "Makes the song progress and volume bar thicker",
-    "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; } .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-sliderArea * { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/thicker-bars.png"
   },
   {
@@ -278,7 +284,7 @@
   {
     "title": "Hide play count",
     "description": "Hides the play count on songs/albums etc so you can give each songs its chance without thinking about numbers",
-    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount {display: none}",
+    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount,.main-trackList-trackListRow:not(:has(.main-trackList-rowSectionVariable ~ .main-trackList-rowSectionVariable)) .main-trackList-rowSectionVariable {display: none}",
     "preview": "resources/assets/snippets/hide-play-count.png"
   },
   {
@@ -362,7 +368,7 @@
   {
     "title": "Amogus Dancing",
     "description": "Adds dancing amogus onto your playback bar!",
-    "code": ".player-controls .playback-progressbar::after { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 42px;  position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI5czk0Z2hvd2Eyd28xbnoxanFubXNvNnA3eHV0Z3R1Zm1sYjJ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3pvo4H9dg4BX4gueg/giphy.gif'); }",
+    "code": ".player-controls .playback-progressbar::after { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 42px;  position: absolute; image-rendering: pixelated; pointer-events: none; background-size: 32px 32px; background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI5czk0Z2hvd2Eyd28xbnoxanFubXNvNnA3eHV0Z3R1Zm1sYjJ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3pvo4H9dg4BX4gueg/giphy.gif'); }",
     "preview": "resources/assets/snippets/amogus-dancing.png"
   },
   {
@@ -452,13 +458,13 @@
   {
     "title": "Rounded Buttons",
     "description": "Add rounded corners to buttons and search bar",
-    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG { border-radius: 15% !important; } .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected, .switch, .arrow-btn, .pSxFsY9Fgcj5f8Gf05mh, .qyKJPLjz8o4jnbk92JOn, .reset, .rdp-button, .btn, .TabItem__StyledTabItem-sc-2ani5y-0, .main-embedWidgetGenerator-closeBtn, .main-playlistEditDetailsModal-closeBtn, .profile-userEditDetails-closeButton,  .mKUj4tXOjumlcv0q9Qta, .Chip__ChipComponent-sc-ry3uox-0, .LegacyChipInner__ChipInnerComponent-sc-1qguixk-0, .sHDdcNIw9AQLbLrpdcqO, .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly,  .button-module__button___hf2qg_marketplace, .link-subtle, .yDdtQxGIyqWU3GNrntPu, .AIlmv6h8bR5NY5R0VceT, .e-9640-baseline, .XlmJIRaVv7a23oYq6lwU, .main-card-PlayButtonContainer, .e-9800-baseline, .e-9812-baseline, .e-9890-baseline, .e-9911-baseline, .e-9921-baseline, .e-9960-baseline, .e-91000-baseline, .BfALkuQy0UjTI70U9QlQ, .ka4wGy_b04LNCthHIH1N, .uKWufPQjLFxGolUWWIqH, .UCyimCp8rEfL5nB8paBu, .cYftSUwUzYrIRbgxijgE { border-radius: 6px !important; } .ButtonInner-large-iconOnly, .tLjX9htIKD_OCmEX01UN { border-radius: 12px !important; } .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput,  .toggle-module__toggle-indicator-wrapper___6Lcp0_marketplace, .x-toggle-indicatorWrapper, .main-topBar-searchBar { border-collapse: separate; border-radius: 6px !important; }",
+    "code": ".x-filterBox-expandButton, .main-avatar-avatar, .main-topBar-buddyFeed, .main-topBar-button, .Button-sc-1dqy6lx-0, .main-coverSlotCollapsed-expandButton, .NqzueDshzvgXEygqOGPG { border-radius: 15% !important; } .XNFZdOLgMlx491fEWdYJ, .ChipClear__ChipClearComponent-sc-zv5btm-0, .Button-sc-1dqy6lx-0, .Button-sc-y0gtbx-0, .main-nowPlayingView-aboutArtistV2FollowButton, .main-playPauseButton-button, .ButtonInner-sc-14ud5tc-0, .search-searchCategory-carouselButton, .ChipInnerComponent-sm, .ChipInnerComponent-sm-selected, .switch, .arrow-btn, .pSxFsY9Fgcj5f8Gf05mh, .qyKJPLjz8o4jnbk92JOn, .reset, .rdp-button, .btn, .TabItem__StyledTabItem-sc-2ani5y-0, .main-embedWidgetGenerator-closeBtn, .main-playlistEditDetailsModal-closeBtn, .profile-userEditDetails-closeButton,  .mKUj4tXOjumlcv0q9Qta, .Chip__ChipComponent-sc-ry3uox-0, .LegacyChipInner__ChipInnerComponent-sc-1qguixk-0, .sHDdcNIw9AQLbLrpdcqO, .view-homeShortcutsGrid-playButton, .ButtonInner-medium-iconOnly,  .button-module__button___hf2qg_marketplace, .link-subtle, .yDdtQxGIyqWU3GNrntPu, .AIlmv6h8bR5NY5R0VceT, .e-9640-baseline, .XlmJIRaVv7a23oYq6lwU, .main-card-PlayButtonContainer, .e-9800-baseline, .e-9812-baseline, .e-9890-baseline, .e-9911-baseline, .e-9921-baseline, .e-9960-baseline, .e-91000-baseline, .BfALkuQy0UjTI70U9QlQ, .ka4wGy_b04LNCthHIH1N, .uKWufPQjLFxGolUWWIqH, .UCyimCp8rEfL5nB8paBu, .cYftSUwUzYrIRbgxijgE, .sdEd4DOwfUAWrygb, .ZeXdFwqzGVcDIHWQ, .e-10180-button-primary__inner { border-radius: 6px !important; } .ButtonInner-large-iconOnly, .tLjX9htIKD_OCmEX01UN { border-radius: 12px !important; } .main-globalNav-searchInputContainer, .SFAoASy0S_LZJmYZ3Fh9, .x-searchInput-searchInputInput,  .toggle-module__toggle-indicator-wrapper___6Lcp0_marketplace, .x-toggle-indicatorWrapper, .main-topBar-searchBar { border-collapse: separate; border-radius: 6px !important; }",
     "preview": "resources/assets/snippets/rounded-buttons.png"
   },
   {
     "title": "Rounded Thicker Bars",
     "description": "Makes the progress bar and volume bar thicker and rounded, inspired by Thicker Bars snippet.",
-    "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
+    "code": ".x-progressBar-progressBarBg { height: 100% !important; --progress-bar-radius: 10px !important;} .x-progressBar-sliderArea { height: 100% !important; } .x-progressBar-sliderArea * { height: 100% !important; } .x-progressBar-fillColor { height: 100% !important; }",
     "preview": "resources/assets/snippets/Rounded-Thicker-Bars.png"
   },
   {
@@ -488,7 +494,7 @@
   {
     "title": "Remove the Artists and Credits sections from the Sidebar",
     "description": "It will only show the album cover and the next song",
-    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue) {display: none !important}",
+    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue):not(.lyrics-npv-card) {display: none !important}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
   },
   {
@@ -538,5 +544,11 @@
     "description": "Transforms the player into a pill with glassy effect, and rounded corners for library icons.",
     "code": ".Root__right-sidebar .cover-art,.main-nowPlayingView-coverArtContainer .cover-art,.main-nowPlayingView-coverArtContainer div[style*=background]{background:0 0!important;border-radius:50%!important;opacity:1!important}.Root__right-sidebar .cover-art::after,.Root__right-sidebar .cover-art::before,.main-nowPlayingView-coverArtContainer .cover-art::after,.main-nowPlayingView-coverArtContainer .cover-art::before{display:none!important;content:none!important}.Root__right-sidebar img,.main-nowPlayingView-coverArtContainer img{border-radius:50%!important;visibility:visible!important;opacity:1!important;display:block!important}.Root__now-playing-bar,.main-nowPlayingBar-container{border-radius:99px!important;overflow:hidden!important;margin:12px!important;width:calc(100% - 24px)!important;box-shadow:0 10px 30px rgba(0,0,0,.5)!important;z-index:9999!important;backdrop-filter:blur(8px)!important;-webkit-backdrop-filter:blur(8px)!important;background-color:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.1)!important}footer.main-nowPlayingBar-nowPlayingBar{border-radius:99px!important}.main-nowPlayingBar-left *{box-shadow:none!important;-webkit-box-shadow:none!important;filter:none!important;-webkit-filter:none!important}.main-nowPlayingBar-left .main-coverSlot-container,.main-nowPlayingBar-left .main-coverSlot-expanded{box-shadow:none!important;background:0 0!important}.main-nowPlayingBar-left canvas{display:none!important}.main-nowPlayingBar-left canvas[class*=cover],.main-nowPlayingBar-left canvas[style*=transform]{display:block!important}.main-yourLibraryX-listItemImage,.main-yourLibraryX-listItemImage>div,.x-entityImage-imageContainer{border-radius:8px!important;-webkit-mask-image:none!important;mask-image:none!important;background-color:transparent!important;overflow:hidden!important}.main-yourLibraryX-listItemImage img,.x-entityImage-image{border-radius:8px!important;-webkit-mask-image:none!important;mask-image:none!important;border:none!important;width:100%!important;height:100%!important;aspect-ratio:1/1!important;object-fit:cover!important}[class*=rounded-full],[style*=\"border-radius: 50%\"]{border-radius:8px!important}.Root__main-view,.Root__nav-bar,.Root__right-sidebar,.os-host-overflow,.os-padding,div[data-testid=main-view-container]{border-radius:24px!important;overflow:hidden!important}.main-card-card,.main-cardImage-imageWrapper,.view-home-shortcut{border-radius:12px!important;overflow:hidden!important}:root{--spice-card:var(--spice-main-elevated)!important}",
     "preview": "resources/assets/snippets/Pill-Player-Bar.png"
+  },
+  {
+    "title": "Gigantic Now Playing View & Canvas",
+    "description": "Greatly increases the width of the Now Playing View panel beyond the default limit (feel free to change it to your liking) at the cost of losing the ability to drag-resize it and enhances it with a cleaner look by removing the dark gradient over the canvas loop video and moving a few elements further down.",
+    "code": ".NowPlayingView { border-radius: 8px !important; } [data-right-sidebar-hidden=false] .Root__right-sidebar, .npv-nowPlayingbar-container, .oXO9_yYs6JyOwkBn8E4a { width: 670px !important; } [data-right-sidebar-hidden=true] .Root__right-sidebar, .npv-nowPlayingbar-container { width: 0px !important; } .main-nowPlayingView-nowPlayingGrid:has(.canvasVideoContainerNPV video) { .main-nowPlayingView-contextItemInfo { margin-top: 30vh !important; } [aria-hidden=false] .HIaySI1OwWK1MLojie8y, .fetnShpUoCol51CFSqwn { margin-top: 26vh !important; margin-bottom: -31vh !important; } .canvasVideoContainerNPV { margin-top: -5vh !important; } .Of__Db4QgB9osz_mFxhw:before, .Of__Db4QgB9osz_mFxhw:after { background: transparent !important; } }",
+    "preview": "resources/assets/snippets/giga_npv_canvas.png"
   }
 ]

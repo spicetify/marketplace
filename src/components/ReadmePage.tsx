@@ -60,7 +60,7 @@ class ReadmePage extends React.Component<
   componentDidMount() {
     // Get and set readme html once loaded
     this.getReadmeHTML().then((html) => {
-      if (html == null) return;
+      if (html === null || html === undefined) return;
       this.setState({ html });
     });
   }

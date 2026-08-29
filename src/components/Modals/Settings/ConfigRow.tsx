@@ -1,4 +1,5 @@
 import React from "react";
+import { marketplaceStorage } from "../../../logic/Storage";
 import type { Config } from "../../../types/marketplace-types";
 import TooltipIcon from "../../Icons/TooltipIcon";
 import SortBox from "../../Sortbox";
@@ -24,7 +25,7 @@ const ConfigRow = (props: {
     const storageKey = e.target.dataset.storageKey;
     props.modalConfig.visual[storageKey] = state;
     console.debug(`toggling ${storageKey} to ${state}`);
-    localStorage.setItem(`marketplace:${storageKey}`, String(state));
+    marketplaceStorage.setItem(`marketplace:${storageKey}`, String(state));
 
     // Saves the config settings to app as well as SettingsModal state
     props.updateConfig(props.modalConfig);
@@ -34,7 +35,7 @@ const ConfigRow = (props: {
     const state = value;
     const storageKey = props.storageKey;
     props.modalConfig.visual[storageKey] = state;
-    localStorage.setItem(`marketplace:${storageKey}`, String(state));
+    marketplaceStorage.setItem(`marketplace:${storageKey}`, String(state));
     props.updateConfig(props.modalConfig);
   };
   if (props.description === undefined || props.description === null) {
