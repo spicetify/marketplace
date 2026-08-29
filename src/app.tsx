@@ -127,8 +127,6 @@ class App extends React.Component<
     try {
       await hydrateMarketplaceStorage();
     } catch (error) {
-      // Showing the grid would claim nothing is installed, and the next action
-      // the user takes would then save that empty state over the real one.
       console.error("Marketplace storage could not be read", error);
       this.setState({ storageUnreadable: true });
       return;

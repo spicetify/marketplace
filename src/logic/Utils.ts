@@ -532,7 +532,6 @@ export const parseCSS = async (themeData: CardItem, defaultTld?: string) => {
 
   console.debug("Parsing CSS: ", userCssUrl);
   const response = await fetch(`${userCssUrl}?time=${Date.now()}`);
-  // Otherwise an error page body gets injected as the theme's CSS
   if (!response.ok) throw new Error(`Failed to fetch theme CSS (HTTP ${response.status})`);
   let css = await response.text();
   // console.log("Parsed CSS: ", css);

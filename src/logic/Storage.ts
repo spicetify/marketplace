@@ -154,10 +154,6 @@ async function migrateLocalStorage() {
   }
 }
 
-// A read that fails means the stored state is unknown, not that it is empty.
-// Reopening usually works, since a reload can race the previous connection
-// being torn down. If every attempt fails we give up rather than report an
-// empty Marketplace and let the next write overwrite what we could not read.
 export async function hydrateMarketplaceStorage() {
   if (hydrated) return;
   if (hydrationPromise) return hydrationPromise;

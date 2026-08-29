@@ -361,7 +361,7 @@ export class Card extends React.Component<
       if (name) Spicetify.Config.current_theme = name;
       // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
       if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
-    } else if (previousThemeKey) {
+    } else if (previousThemeKey && previousThemeKey !== this.localStorageKey) {
       injectUserCSS();
       this.props.updateActiveTheme(null);
       this.props.updateColourSchemes(null, null);
