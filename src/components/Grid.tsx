@@ -8,11 +8,12 @@ const Spicetify = window.Spicetify;
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
 import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
 import { openModal } from "../logic/LaunchModals";
+import { storedCardItemSchema } from "../logic/Schemas";
 import { marketplaceStorage } from "../logic/Storage";
 import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import Button from "./Button";
-import Card, { type Card as CardClass } from "./Card/Card";
+import Card, { type CardProps } from "./Card/Card";
 import DownloadIcon from "./Icons/DownloadIcon";
 import LoadingIcon from "./Icons/LoadingIcon";
 import LoadMoreIcon from "./Icons/LoadMoreIcon";
@@ -21,6 +22,8 @@ import ThemeDeveloperToolsIcon from "./Icons/ThemeDeveloperToolsIcon";
 import SortBox from "./Sortbox";
 import { TopBarContent } from "./TabBar";
 import Tooltip from "./Tooltip";
+
+type CardElement = React.ReactElement<CardProps>;
 
 class Grid extends React.Component<
   {
@@ -34,7 +37,7 @@ class Grid extends React.Component<
     version: string;
     newUpdate: boolean;
     searchValue: string;
-    cards: CardClass[];
+    cards: CardElement[];
     tabs: TabItemConfig[];
     rest: boolean;
     endOfList: boolean;
@@ -72,7 +75,7 @@ class Grid extends React.Component<
   lastScroll = 0;
   requestQueue: never[][] = [];
   requestPage = 0;
-  cardList: CardClass[] = [];
+  cardList: CardElement[] = [];
   sortConfig: { by: string };
   // TODO: why are these set up funny
   // To get to the other side
@@ -126,7 +129,7 @@ class Grid extends React.Component<
       />
     );
 
-    this.cardList.push(card as unknown as CardClass);
+    this.cardList.push(card);
   }
 
   // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
@@ -158,7 +161,7 @@ class Grid extends React.Component<
   updatePostsVisual() {
     this.cardList = this.cardList.map((card, index) => {
       return <Card {...card.props} key={index.toString()} CONFIG={this.CONFIG} />;
-    }) as unknown as CardClass[];
+    });
     this.setState({ cards: [...this.cardList] });
   }
 
@@ -244,15 +247,18 @@ class Grid extends React.Component<
           if (installedStuff[type].length) {
             const installedOfType: CardItem[] = [];
             for (const itemKey of installedStuff[type]) {
-              // TODO: err handling
-              const installedItem = getLocalStorageDataFromKey(itemKey);
-              // I believe this stops the requests when switching tabs?
+              const installedItem = storedCardItemSchema.safeParse(getLocalStorageDataFromKey(itemKey));
               if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
                 // Stop this queue from continuing to fetch and append to cards list
                 return -1;
               }
 
-              installedOfType.push(installedItem);
+              if (!installedItem.success) {
+                console.warn(`Skipping invalid installed item ${itemKey}`, installedItem.error);
+                continue;
+              }
+
+              installedOfType.push(installedItem.data as CardItem);
             }
 
             sortCardItems(installedOfType, marketplaceStorage.getItem("marketplace:sort") || "stars");
