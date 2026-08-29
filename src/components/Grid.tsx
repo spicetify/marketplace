@@ -622,10 +622,11 @@ class Grid extends React.Component<
 
               return (
                 !searchValue ||
-                title.toLowerCase().includes(searchValue) ||
-                user?.toLowerCase().includes(searchValue) ||
-                authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
-                [...(tags ?? [])]?.some((tag) => tag.toLowerCase().includes(searchValue))
+                (typeof title === "string" && title.toLowerCase().includes(searchValue)) ||
+                (typeof user === "string" && user.toLowerCase().includes(searchValue)) ||
+                authors?.some((author) => typeof author?.name === "string" && author.name.toLowerCase().includes(searchValue)) ||
+                [...(tags ?? [])].some((tag) => typeof tag === "string" && tag.toLowerCase().includes(searchValue))
+
               );
             })
             .map((card) => {
