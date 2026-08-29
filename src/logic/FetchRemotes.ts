@@ -1,41 +1,10 @@
 import { t } from "i18next";
-import { z } from "zod";
 
 import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
 import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
+import { manifestSchema } from "./Schemas";
 import { marketplaceStorage } from "./Storage";
 import { addToSessionStorage, isBlacklisted, processAuthors } from "./Utils";
-
-const manifestSchema = z
-  .object({
-    name: z.string().trim().min(1),
-    description: z.string().trim().min(1),
-    main: z.string().trim().min(1).optional(),
-    usercss: z.string().trim().min(1).optional(),
-    authors: z
-      .array(
-        z
-          .object({
-            name: z.string().trim().min(1),
-            url: z.url().optional()
-          })
-          .transform(({ name, url }) => ({ name, url: url || `https://github.com/${name}` }))
-      )
-      .catch([]),
-    preview: z
-      .string()
-      .nullish()
-      .transform((preview) => preview || ""),
-    readme: z
-      .string()
-      .nullish()
-      .transform((readme) => readme || ""),
-    tags: z.union([z.array(z.string()), z.string().transform((tag) => [tag])]).catch([]),
-    branch: z.string().trim().min(1).optional(),
-    schemes: z.string().optional(),
-    include: z.array(z.string()).catch([])
-  })
-  .passthrough();
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
