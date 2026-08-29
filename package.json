@@ -24,12 +24,12 @@
     "@hello-pangea/dnd": "^18.0.1",
     "chroma-js": "^3.2.0",
     "i18next": "^26.3.0",
-    "i18next-browser-languagedetector": "^8.2.0",
     "prismjs": "^1.30.0",
     "react-dropdown": "^1.11.0",
     "react-i18next": "^17.0.6",
     "react-simple-code-editor": "^0.14.1",
-    "semver": "^7.8.1"
+    "semver": "^7.8.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/chroma-js": "^3.1.2",

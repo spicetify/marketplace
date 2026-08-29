@@ -284,7 +284,7 @@
   {
     "title": "Hide play count",
     "description": "Hides the play count on songs/albums etc so you can give each songs its chance without thinking about numbers",
-    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount {display: none}",
+    "code": ".main-trackList-playsHeader,.main-trackList-rowPlayCount,.main-trackList-trackListRow:not(:has(.main-trackList-rowSectionVariable ~ .main-trackList-rowSectionVariable)) .main-trackList-rowSectionVariable {display: none}",
     "preview": "resources/assets/snippets/hide-play-count.png"
   },
   {
@@ -338,7 +338,7 @@
   {
     "title": "Hide lyrics button",
     "description": "Hides the lyrics button in the playbar",
-    "code": ".main-nowPlayingBar-lyricsButton { display: none; }",
+    "code": ".main-nowPlayingBar-lyricsButton[data-testid='lyrics-button'] { display: none !important; }",
     "preview": "resources/assets/snippets/hide-lyrics-button.png"
   },
   {
@@ -368,7 +368,7 @@
   {
     "title": "Amogus Dancing",
     "description": "Adds dancing amogus onto your playback bar!",
-    "code": ".player-controls .playback-progressbar::after { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 42px;  position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI5czk0Z2hvd2Eyd28xbnoxanFubXNvNnA3eHV0Z3R1Zm1sYjJ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3pvo4H9dg4BX4gueg/giphy.gif'); }",
+    "code": ".player-controls .playback-progressbar::after { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 42px;  position: absolute; image-rendering: pixelated; pointer-events: none; background-size: 32px 32px; background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHI5czk0Z2hvd2Eyd28xbnoxanFubXNvNnA3eHV0Z3R1Zm1sYjJ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3pvo4H9dg4BX4gueg/giphy.gif'); }",
     "preview": "resources/assets/snippets/amogus-dancing.png"
   },
   {
