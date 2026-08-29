@@ -17,6 +17,35 @@ import TagsDiv from "./TagsDiv";
 
 const Spicetify = window.Spicetify;
 
+function readStoredStringArray(value: string | undefined): string[] {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed.filter((item) => typeof item === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+type PreparedTheme = {
+  activeScheme: string | null;
+  item: CardItem;
+  parsedSchemes: SchemeIni;
+  record: string;
+  userCSS?: string;
+};
+
+let themeOperationQueue: Promise<void> = Promise.resolve();
+
+function queueThemeOperation<T>(operation: () => Promise<T>) {
+  const result = themeOperationQueue.then(operation);
+  themeOperationQueue = result.then(
+    () => undefined,
+    () => undefined
+  );
+  return result;
+}
+
 export type CardProps = {
   // From `fetchExtensionManifest()`, `fetchThemeManifest()`, and snippets.json
   item: CardItem | Snippet;
@@ -94,7 +123,20 @@ export class Card extends React.Component<
     return marketplaceStorage.getItem(this.localStorageKey) !== null;
   }
 
+  handleOperationError(error: unknown) {
+    console.error(`Failed to update ${this.props.type} "${this.props.item.title}"`, error);
+    Spicetify.showNotification(t("notifications.marketplaceOperationError"), true);
+  }
+
   async componentDidMount() {
+    try {
+      await this.refreshInstalledItem();
+    } catch (error) {
+      this.handleOperationError(error);
+    }
+  }
+
+  async refreshInstalledItem() {
     // Refresh stars if on "Installed" tab with stars enabled
     if (this.props.CONFIG.activeTab === "Installed" && this.props.type !== "snippet") {
       // https://docs.github.com/en/rest/reference/repos#get-a-repository
@@ -114,62 +156,53 @@ export class Card extends React.Component<
         console.debug(`New update pushed at: ${pushed_at}`);
         switch (this.props.type) {
           case "extension":
-            this.installExtension();
+            await this.installExtension();
             break;
           case "theme":
-            this.installTheme(true);
+            await this.installTheme(true);
             break;
         }
       }
     }
   }
 
-  buttonClicked() {
+  async buttonClicked() {
+    try {
+      await this.performButtonAction();
+    } catch (error) {
+      this.handleOperationError(error);
+    }
+  }
+
+  async performButtonAction() {
     if (this.props.type === "extension") {
       if (this.isInstalled()) {
         console.debug("Extension already installed, removing");
-        this.removeExtension();
+        await this.removeExtension();
       } else {
-        this.installExtension();
+        await this.installExtension();
       }
+      // Wait for the storage write to persist before offering to reload.
       openModal("RELOAD");
     } else if (this.props.type === "theme") {
-      const themeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
-      const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
-
-      if (this.isInstalled()) {
-        console.debug("Theme already installed, removing");
-        this.removeTheme(this.localStorageKey);
-      } else {
-        const localTheme = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
-        if (localTheme !== null && localTheme.toLowerCase() !== "marketplace") {
-          Spicetify.showNotification(t("notifications.wrongLocalTheme"), true, 5000);
-          return;
-        }
-
-        // Remove theme if already installed, then install the new theme
-        this.removeTheme();
-        this.installTheme();
-      }
-
-      // If the new or previous theme has JS, prompt to reload
-      if (this.props.item.manifest?.include || previousTheme.include) openModal("RELOAD");
+      const shouldReload = await this.toggleTheme();
+      if (shouldReload) openModal("RELOAD");
     } else if (this.props.type === "app") {
       // Open repo in new tab
       window.open(this.state.externalUrl, "_blank");
     } else if (this.props.type === "snippet") {
       if (this.isInstalled()) {
         console.debug("Snippet already installed, removing");
-        this.removeSnippet();
+        await this.removeSnippet();
       } else {
-        this.installSnippet();
+        await this.installSnippet();
       }
     } else {
       console.error("Unknown card type");
     }
   }
 
-  installExtension() {
+  async installExtension() {
     console.debug(`Installing extension ${this.localStorageKey}`);
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
@@ -178,61 +211,55 @@ export class Card extends React.Component<
       return;
     }
     const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
-    marketplaceStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify({
-        manifest,
-        type: this.props.type,
-        title,
-        subtitle,
-        authors,
-        user,
-        repo,
-        branch,
-        imageURL,
-        extensionURL,
-        readmeURL,
-        stars: this.state.stars,
-        lastUpdated,
-        created
-      })
-    );
-
-    // Add to installed list if not there already
-    const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-    if (installedExtensions.indexOf(this.localStorageKey) === -1) {
-      installedExtensions.push(this.localStorageKey);
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions));
-    }
+    const record = JSON.stringify({
+      manifest,
+      type: this.props.type,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
+      stars: this.state.stars,
+      lastUpdated,
+      created
+    });
+    await marketplaceStorage.mutateAsync((storage) => {
+      storage.set(this.localStorageKey, record);
+      const installedExtensions = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedExtensions));
+      if (!installedExtensions.includes(this.localStorageKey)) {
+        storage.set(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify([...installedExtensions, this.localStorageKey]));
+      }
+    });
 
     console.debug("Installed");
     this.setState({ installed: true });
   }
 
-  removeExtension() {
+  async removeExtension() {
     const extValue = marketplaceStorage.getItem(this.localStorageKey);
     if (extValue) {
       console.debug(`Removing extension ${this.localStorageKey}`);
-      // Remove from localstorage
-      marketplaceStorage.removeItem(this.localStorageKey);
-
-      // Remove from installed list
-      const installedExtensions = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedExtensions, []);
-      const remainingInstalledExtensions = installedExtensions.filter((key) => key !== this.localStorageKey);
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(remainingInstalledExtensions));
+      await marketplaceStorage.mutateAsync((storage) => {
+        storage.delete(this.localStorageKey);
+        const installedExtensions = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedExtensions));
+        storage.set(LOCALSTORAGE_KEYS.installedExtensions, JSON.stringify(installedExtensions.filter((key) => key !== this.localStorageKey)));
+      });
 
       console.debug("Removed");
       this.setState({ installed: false });
     }
   }
 
-  async installTheme(update = false) {
-    const { item } = this.props;
+  async prepareTheme(update = false): Promise<PreparedTheme | null> {
+    const item = this.props.item as CardItem;
     if (!item) {
       Spicetify.showNotification(t("notifications.themeInstallationError"), true);
-      return;
+      return null;
     }
-    console.debug(`Installing theme ${this.localStorageKey}`);
 
     let parsedSchemes: SchemeIni = {};
     let currentScheme: string | null = null;
@@ -244,6 +271,7 @@ export class Card extends React.Component<
       currentScheme = activeScheme;
     } else if (item.schemesURL) {
       const schemesResponse = await fetch(item.schemesURL);
+      if (!schemesResponse.ok) throw new Error(`Failed to fetch theme schemes: ${schemesResponse.status}`);
       const colourSchemes = await schemesResponse.text();
       parsedSchemes = parseIni(colourSchemes);
     }
@@ -272,54 +300,56 @@ export class Card extends React.Component<
       created
     } = item;
 
-    marketplaceStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify({
-        manifest,
-        type: this.props.type,
-        title,
-        subtitle,
-        authors,
-        user,
-        repo,
-        branch,
-        imageURL,
-        extensionURL,
-        readmeURL,
-        stars: this.state.stars,
-        tags: this.tags,
-        // Theme stuff
-        cssURL,
-        schemesURL,
-        include,
-        // Installed theme localstorage item has schemes, nothing else does
-        schemes: parsedSchemes,
-        activeScheme,
-        lastUpdated,
-        created
-      })
-    );
+    const record = JSON.stringify({
+      manifest,
+      type: this.props.type,
+      title,
+      subtitle,
+      authors,
+      user,
+      repo,
+      branch,
+      imageURL,
+      extensionURL,
+      readmeURL,
+      stars: this.state.stars,
+      tags: this.tags,
+      // Theme stuff
+      cssURL,
+      schemesURL,
+      include,
+      // Installed theme localstorage item has schemes, nothing else does
+      schemes: parsedSchemes,
+      activeScheme,
+      lastUpdated,
+      created
+    });
 
-    // TODO: handle this differently?
-
-    // Add to installed list if not there already
-    const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
-    if (installedThemes.indexOf(this.localStorageKey) === -1) {
-      installedThemes.push(this.localStorageKey);
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes));
-
-      // const usercssURL = `https://raw.github.com/${this.user}/${this.repo}/${this.branch}/${this.manifest.usercss}`;
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+    let userCSS: string | undefined;
+    if (!item.include) {
+      const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
+      userCSS = await parseCSS(item, tld);
     }
+
+    return { activeScheme, item, parsedSchemes, record, userCSS };
+  }
+
+  async installPreparedTheme({ activeScheme, item, parsedSchemes, record, userCSS }: PreparedTheme, previousThemeKey?: string | null) {
+    console.debug(`Installing theme ${this.localStorageKey}`);
+    await marketplaceStorage.mutateAsync((storage) => {
+      const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes)).filter(
+        (key) => key !== previousThemeKey && key !== this.localStorageKey
+      );
+      if (previousThemeKey && previousThemeKey !== this.localStorageKey) storage.delete(previousThemeKey);
+      storage.set(this.localStorageKey, record);
+      storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify([...installedThemes, this.localStorageKey]));
+      storage.set(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+    });
 
     console.debug("Installed");
 
-    // TODO: We'll also need to actually update the usercss etc, not just the colour scheme
-    // e.g. the stuff from extension.js, like injectUserCSS() etc.
-
     if (!item.include) {
-      // Add new theme css
-      this.fetchAndInjectUserCSS(this.localStorageKey);
+      injectUserCSS(userCSS);
       // Update the active theme in Grid state, triggers state change and re-render
       this.props.updateActiveTheme(this.localStorageKey);
       // Update schemes in Grid, triggers state change and re-render
@@ -331,12 +361,53 @@ export class Card extends React.Component<
       if (name) Spicetify.Config.current_theme = name;
       // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
       if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
+    } else if (previousThemeKey && previousThemeKey !== this.localStorageKey) {
+      injectUserCSS();
+      this.props.updateActiveTheme(null);
+      this.props.updateColourSchemes(null, null);
+      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
+      Spicetify.Config.current_theme = "marketplace";
+      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
+      Spicetify.Config.color_scheme = "marketplace";
     }
 
     this.setState({ installed: true });
   }
 
-  removeTheme(defaultThemeKey?: string | null) {
+  async installTheme(update = false) {
+    await queueThemeOperation(async () => {
+      const preparedTheme = await this.prepareTheme(update);
+      const activeThemeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+      if (preparedTheme) await this.installPreparedTheme(preparedTheme, activeThemeKey);
+    });
+  }
+
+  async toggleTheme() {
+    return queueThemeOperation(async () => {
+      const themeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+      const previousTheme = themeKey ? getLocalStorageDataFromKey(themeKey, {}) : {};
+
+      if (this.isInstalled()) {
+        console.debug("Theme already installed, removing");
+        await this.removeThemeNow(this.localStorageKey);
+      } else {
+        const localTheme = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
+        if (localTheme !== null && localTheme.toLowerCase() !== "marketplace") {
+          Spicetify.showNotification(t("notifications.wrongLocalTheme"), true, 5000);
+          return false;
+        }
+
+        const preparedTheme = await this.prepareTheme();
+        if (!preparedTheme) return false;
+
+        await this.installPreparedTheme(preparedTheme, themeKey);
+      }
+
+      return Boolean(this.props.item.manifest?.include || previousTheme.include);
+    });
+  }
+
+  async removeThemeNow(defaultThemeKey?: string | null) {
     // If don't specify theme, remove the currently installed theme
     const themeKey = defaultThemeKey || marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
@@ -344,22 +415,17 @@ export class Card extends React.Component<
 
     if (themeKey && themeValue) {
       console.debug(`Removing theme ${themeKey}`);
-
-      // Remove from localstorage
-      marketplaceStorage.removeItem(themeKey);
-
-      // Remove record of installed theme
-      marketplaceStorage.removeItem(LOCALSTORAGE_KEYS.themeInstalled);
-
-      // Remove from installed list
-      const installedThemes = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedThemes, []);
-      const remainingInstalledThemes = installedThemes.filter((key) => key !== themeKey);
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(remainingInstalledThemes));
+      await marketplaceStorage.mutateAsync((storage) => {
+        storage.delete(themeKey);
+        storage.delete(LOCALSTORAGE_KEYS.themeInstalled);
+        const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes));
+        storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes.filter((key) => key !== themeKey)));
+      });
 
       console.debug("Removed");
 
       // Removes the current theme CSS
-      this.fetchAndInjectUserCSS(null);
+      injectUserCSS();
       // Update the active theme in Grid state
       this.props.updateActiveTheme(null);
       // Removes the current colour scheme
@@ -375,55 +441,40 @@ export class Card extends React.Component<
     }
   }
 
-  installSnippet() {
+  async installSnippet() {
     console.debug(`Installing snippet ${this.localStorageKey}`);
-    marketplaceStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify({
-        code: this.props.item.code,
-        title: this.props.item.title,
-        description: this.props.item.description,
-        imageURL: this.props.item.imageURL
-      })
-    );
+    await marketplaceStorage.mutateAsync((storage) => {
+      storage.set(
+        this.localStorageKey,
+        JSON.stringify({
+          code: this.props.item.code,
+          title: this.props.item.title,
+          description: this.props.item.description,
+          imageURL: this.props.item.imageURL
+        })
+      );
 
-    // Add to installed list if not there already
+      const installedSnippetKeys = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedSnippets));
+      if (!installedSnippetKeys.includes(this.localStorageKey)) {
+        storage.set(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify([...installedSnippetKeys, this.localStorageKey]));
+      }
+    });
+
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-    if (installedSnippetKeys.indexOf(this.localStorageKey) === -1) {
-      installedSnippetKeys.push(this.localStorageKey);
-      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys));
-    }
-    const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-    initializeSnippets(installedSnippets);
-
+    initializeSnippets(installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key)));
     this.setState({ installed: true });
   }
 
-  removeSnippet() {
-    marketplaceStorage.removeItem(this.localStorageKey);
+  async removeSnippet() {
+    await marketplaceStorage.mutateAsync((storage) => {
+      storage.delete(this.localStorageKey);
+      const installedSnippetKeys = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedSnippets));
+      storage.set(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(installedSnippetKeys.filter((key) => key !== this.localStorageKey)));
+    });
 
-    // Remove from installed list
     const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-    const remainingInstalledSnippetKeys = installedSnippetKeys.filter((key) => key !== this.localStorageKey);
-    marketplaceStorage.setItem(LOCALSTORAGE_KEYS.installedSnippets, JSON.stringify(remainingInstalledSnippetKeys));
-    const remainingInstalledSnippets = remainingInstalledSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-    initializeSnippets(remainingInstalledSnippets);
-
+    initializeSnippets(installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key)));
     this.setState({ installed: false });
-  }
-
-  /**
-   * Update the user.css in the DOM
-   * @param {string | null} theme The theme localStorageKey or null, if we want to reset the theme
-   */
-  async fetchAndInjectUserCSS(theme) {
-    try {
-      const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
-      const userCSS = theme ? await parseCSS(this.props.item as CardItem, tld) : undefined;
-      injectUserCSS(userCSS);
-    } catch (error) {
-      console.warn(error);
-    }
   }
 
   openReadme() {

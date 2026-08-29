@@ -23,6 +23,7 @@
     "@biomejs/biome": "^2.4.13",
     "@hello-pangea/dnd": "^18.0.1",
     "chroma-js": "^3.2.0",
+    "dexie": "^4.4.4",
     "i18next": "^26.3.0",
     "prismjs": "^1.30.0",
     "react-dropdown": "^1.11.0",
