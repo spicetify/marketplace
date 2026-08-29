@@ -1,7 +1,8 @@
+import Dexie, { type EntityTable } from "dexie";
+
 const DATABASE_NAME = "spicetify-marketplace";
-const DATABASE_VERSION = 1;
-const STORE_NAME = "settings";
 const MARKETPLACE_KEY_PREFIX = "marketplace:";
+const HYDRATION_RETRY_DELAYS_MS = [150, 400, 1000];
 
 type StoredRecord = {
   key: string;
@@ -9,114 +10,147 @@ type StoredRecord = {
 };
 
 const cache = new Map<string, string>();
-let databasePromise: Promise<IDBDatabase | null> | null = null;
+const persistedCache = new Map<string, string>();
+const cacheRevisions = new Map<string, number>();
+let database: Dexie | null = null;
+let settings: EntityTable<StoredRecord, "key"> | null = null;
+let databaseUnavailable = false;
 let hydrationPromise: Promise<void> | null = null;
+let mutationQueue: Promise<void> = Promise.resolve();
+let mutationRevision = 0;
 let hydrated = false;
 
-function shouldMigrateLocalStorageKey(key: string) {
-  return key.startsWith(MARKETPLACE_KEY_PREFIX);
+function getSettingsTable() {
+  if (databaseUnavailable || !window.indexedDB) return null;
+  if (settings) return settings;
+
+  database = new Dexie(DATABASE_NAME);
+  database.version(1).stores({ settings: "key" });
+  settings = database.table<StoredRecord, "key">("settings") as EntityTable<StoredRecord, "key">;
+  return settings;
 }
 
-function openDatabase() {
-  if (databasePromise) return databasePromise;
-
-  databasePromise = new Promise((resolve) => {
-    if (!window.indexedDB) {
-      resolve(null);
-      return;
-    }
-
-    const request = window.indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
-
-    request.onupgradeneeded = () => {
-      const database = request.result;
-      if (!database.objectStoreNames.contains(STORE_NAME)) database.createObjectStore(STORE_NAME, { keyPath: "key" });
-    };
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => {
-      console.warn("Marketplace IndexedDB storage unavailable", request.error);
-      resolve(null);
-    };
-    request.onblocked = () => resolve(null);
-  });
-
-  return databasePromise;
+function resetDatabase() {
+  database?.close();
+  database = null;
+  settings = null;
 }
 
-async function runStoreRequest<T>(mode: IDBTransactionMode, run: (store: IDBObjectStore) => IDBRequest<T> | undefined): Promise<T | undefined> {
-  const database = await openDatabase();
-  if (!database) return undefined;
+function disableDatabase() {
+  resetDatabase();
+  databaseUnavailable = true;
+}
 
-  return new Promise((resolve) => {
-    const transaction = database.transaction(STORE_NAME, mode);
-    const request = run(transaction.objectStore(STORE_NAME));
-    let result: T | undefined;
-    let settled = false;
+function enqueue(operation: () => Promise<void>) {
+  const result = mutationQueue.then(operation);
+  mutationQueue = result.catch(() => undefined);
+  return result;
+}
 
-    const settle = (value: T | undefined) => {
-      if (settled) return;
-      settled = true;
-      resolve(value);
-    };
+function changedKeys(previous: Map<string, string>, next: Map<string, string>) {
+  return new Set([
+    ...Array.from(previous.keys()).filter((key) => !next.has(key)),
+    ...Array.from(next.entries())
+      .filter(([key, value]) => previous.get(key) !== value)
+      .map(([key]) => key)
+  ]);
+}
 
-    transaction.oncomplete = () => settle(result);
-    transaction.onerror = () => {
-      console.warn("Marketplace IndexedDB transaction failed", transaction.error);
-      settle(undefined);
-    };
-    transaction.onabort = () => {
-      console.warn("Marketplace IndexedDB transaction aborted", transaction.error);
-      settle(undefined);
-    };
+function replaceMap(target: Map<string, string>, source: Map<string, string>) {
+  target.clear();
+  for (const [key, value] of source) target.set(key, value);
+}
 
-    if (!request) return;
+function reconcileCache(previous: Map<string, string>, next: Map<string, string>, revision: number) {
+  for (const key of changedKeys(previous, next)) {
+    if ((cacheRevisions.get(key) ?? 0) > revision) continue;
+    if (next.has(key)) cache.set(key, next.get(key) as string);
+    else cache.delete(key);
+    cacheRevisions.set(key, revision);
+  }
+}
 
-    request.onsuccess = () => {
-      result = request.result;
-    };
-    request.onerror = () => {
-      console.warn("Marketplace IndexedDB request failed", request.error);
-      settle(undefined);
-    };
+async function persistChanges(previous: Map<string, string>, next: Map<string, string>) {
+  const table = getSettingsTable();
+  if (!table || !database) return;
+
+  const updates = Array.from(next.entries())
+    .filter(([key, value]) => previous.get(key) !== value)
+    .map(([key, value]) => ({ key, value }));
+  const removals = Array.from(previous.keys()).filter((key) => !next.has(key));
+  if (updates.length === 0 && removals.length === 0) return;
+
+  await database.transaction("rw", table, async () => {
+    if (updates.length > 0) await table.bulkPut(updates);
+    if (removals.length > 0) await table.bulkDelete(removals);
   });
 }
 
-async function persistItem(key: string, value: string) {
-  await runStoreRequest("readwrite", (store) => store.put({ key, value }));
-}
+function mutateStorage(mutate: (draft: Map<string, string>) => void, optimistic = false) {
+  const revision = ++mutationRevision;
+  let optimisticPrevious: Map<string, string> | null = null;
+  let optimisticNext: Map<string, string> | null = null;
 
-async function removePersistedItem(key: string) {
-  await runStoreRequest("readwrite", (store) => store.delete(key));
+  if (optimistic) {
+    optimisticPrevious = new Map(cache);
+    optimisticNext = new Map(optimisticPrevious);
+    mutate(optimisticNext);
+    reconcileCache(optimisticPrevious, optimisticNext, revision);
+  }
+
+  const operation = enqueue(async () => {
+    await hydrateMarketplaceStorage();
+    const previous = new Map(persistedCache);
+    const next = new Map(previous);
+    mutate(next);
+    await persistChanges(previous, next);
+    replaceMap(persistedCache, next);
+    reconcileCache(previous, next, revision);
+  });
+
+  if (!optimistic || !optimisticPrevious || !optimisticNext) return operation;
+
+  return operation.catch((error) => {
+    reconcileCache(optimisticNext as Map<string, string>, persistedCache, revision);
+    throw error;
+  });
 }
 
 async function loadIndexedDBCache() {
-  const records = await runStoreRequest<StoredRecord[]>("readonly", (store) => store.getAll());
-  if (!records) return;
+  const table = getSettingsTable();
+  if (!table) return;
 
-  for (const record of records) {
-    cache.set(record.key, record.value);
+  const records = await table.toArray();
+  for (const { key, value } of records) {
+    cache.set(key, value);
+    persistedCache.set(key, value);
   }
 }
 
 async function migrateLocalStorage() {
-  try {
-    const migrated: Promise<void>[] = [];
+  const records: StoredRecord[] = [];
+  for (let index = 0; index < window.localStorage.length; index++) {
+    const key = window.localStorage.key(index);
+    if (!key?.startsWith(MARKETPLACE_KEY_PREFIX) || cache.has(key)) continue;
 
-    for (let index = 0; index < window.localStorage.length; index++) {
-      const key = window.localStorage.key(index);
-      if (!key || !shouldMigrateLocalStorageKey(key) || cache.has(key)) continue;
+    const value = window.localStorage.getItem(key);
+    if (value !== null) records.push({ key, value });
+  }
+  if (records.length === 0) return;
 
-      const value = window.localStorage.getItem(key);
-      if (value === null) continue;
-
-      cache.set(key, value);
-      migrated.push(persistItem(key, value));
+  const table = getSettingsTable();
+  if (table) {
+    try {
+      await table.bulkPut(records);
+    } catch (error) {
+      console.warn("Marketplace localStorage migration could not be persisted", error);
+      disableDatabase();
     }
+  }
 
-    await Promise.all(migrated);
-  } catch (error) {
-    console.warn("Marketplace localStorage migration failed", error);
+  for (const { key, value } of records) {
+    cache.set(key, value);
+    persistedCache.set(key, value);
   }
 }
 
@@ -125,17 +159,28 @@ export async function hydrateMarketplaceStorage() {
   if (hydrationPromise) return hydrationPromise;
 
   hydrationPromise = (async () => {
-    try {
-      await loadIndexedDBCache();
-      await migrateLocalStorage();
-      hydrated = true;
-    } catch (error) {
-      console.warn("Marketplace storage hydration failed", error);
-      hydrationPromise = null;
+    for (let attempt = 0; ; attempt++) {
+      try {
+        await loadIndexedDBCache();
+        break;
+      } catch (error) {
+        if (attempt >= HYDRATION_RETRY_DELAYS_MS.length) throw error;
+        console.warn(`Marketplace IndexedDB cache could not be read, retrying (${attempt + 1}/${HYDRATION_RETRY_DELAYS_MS.length})`, error);
+        resetDatabase();
+        await new Promise((resolve) => setTimeout(resolve, HYDRATION_RETRY_DELAYS_MS[attempt]));
+      }
     }
+
+    await migrateLocalStorage();
+    hydrated = true;
   })();
 
-  return hydrationPromise;
+  try {
+    await hydrationPromise;
+  } catch (error) {
+    hydrationPromise = null;
+    throw error;
+  }
 }
 
 export const marketplaceStorage = {
@@ -144,23 +189,23 @@ export const marketplaceStorage = {
   },
 
   setItem(key: string, value: string) {
-    cache.set(key, value);
-    void persistItem(key, value);
+    void mutateStorage((draft) => draft.set(key, value), true).catch((error) => console.warn("Marketplace item persistence failed", error));
   },
 
   async setItemAsync(key: string, value: string) {
-    cache.set(key, value);
-    await persistItem(key, value);
+    await mutateStorage((draft) => draft.set(key, value));
   },
 
   removeItem(key: string) {
-    cache.delete(key);
-    void removePersistedItem(key);
+    void mutateStorage((draft) => draft.delete(key), true).catch((error) => console.warn("Marketplace item removal failed", error));
   },
 
   async removeItemAsync(key: string) {
-    cache.delete(key);
-    await removePersistedItem(key);
+    await mutateStorage((draft) => draft.delete(key));
+  },
+
+  async mutateAsync(mutate: (draft: Map<string, string>) => void) {
+    await mutateStorage(mutate);
   },
 
   keys() {

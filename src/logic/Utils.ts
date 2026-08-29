@@ -416,8 +416,8 @@ export const initColorShiftLoop = (schemes: SchemeIni) => {
 
 export const getColorFromUri = async (uri: string): Promise<string | undefined> => {
   const storedVibrancy = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.albumArtBasedColorVibrancy, "PROMINENT");
-  // Add a underscore before any uppercase characters, then make the whole string uppercase
-  const vibrancy = (typeof storedVibrancy === "string" ? storedVibrancy : "PROMINENT").replace(/([A-Z])/g, "_$1").toUpperCase();
+  // Convert camelCase settings values to Spicetify's UPPER_SNAKE_CASE keys.
+  const vibrancy = (typeof storedVibrancy === "string" ? storedVibrancy : "PROMINENT").replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
 
   try {
     const colorOptions = await Spicetify.colorExtractor(uri);
@@ -531,7 +531,9 @@ export const parseCSS = async (themeData: CardItem, defaultTld?: string) => {
   const assetsUrl = userCssUrl.replace("/user.css", "/assets/");
 
   console.debug("Parsing CSS: ", userCssUrl);
-  let css = await fetch(`${userCssUrl}?time=${Date.now()}`).then((res) => res.text());
+  const response = await fetch(`${userCssUrl}?time=${Date.now()}`);
+  if (!response.ok) throw new Error(`Failed to fetch theme CSS (HTTP ${response.status})`);
+  let css = await response.text();
   // console.log("Parsed CSS: ", css);
 
   const urls = css.matchAll(/url\(['|"](?<path>.+?)['|"]\)/gm) || [];

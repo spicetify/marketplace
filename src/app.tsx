@@ -16,8 +16,8 @@ i18n
   .init({
     // the translations
     resources: locales,
-    // Use Spotify's client locale, not the embedded browser's (they can differ)
-    lng: Spicetify.Locale.getLocale(),
+    // Prefer Spotify's client locale when available; older CLI wrappers do not expose Locale.
+    lng: Spicetify.Locale?.getLocale?.() ?? navigator.language,
     fallbackLng: "en",
     interpolation: {
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
@@ -32,12 +32,14 @@ class App extends React.Component<
     count: number;
     CONFIG: Config;
     storageReady: boolean;
+    storageUnreadable: boolean;
   }
 > {
   state = {
     count: 0,
     CONFIG: {} as Config,
-    storageReady: false
+    storageReady: false,
+    storageUnreadable: false
   };
 
   CONFIG: Config;
@@ -122,7 +124,14 @@ class App extends React.Component<
   }
 
   async componentDidMount() {
-    await hydrateMarketplaceStorage();
+    try {
+      await hydrateMarketplaceStorage();
+    } catch (error) {
+      console.error("Marketplace storage could not be read", error);
+      this.setState({ storageUnreadable: true });
+      return;
+    }
+
     this.CONFIG = this.createConfig();
     this.setState({
       CONFIG: this.CONFIG,
@@ -139,6 +148,7 @@ class App extends React.Component<
   };
 
   render() {
+    if (this.state.storageUnreadable) return <div className="marketplace-storage-error">{t("grid.storageUnreadable")}</div>;
     if (!this.state.storageReady) return null;
 
     const { location, replace } = Spicetify.Platform.History;

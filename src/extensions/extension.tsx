@@ -39,7 +39,15 @@ import type { RepoType } from "../types/marketplace-types";
 
   // Show message on start.
   console.log(`Initializing Spicetify Marketplace v${MARKETPLACE_VERSION}`);
-  await hydrateMarketplaceStorage();
+  try {
+    await hydrateMarketplaceStorage();
+  } catch (error) {
+    // The installed lists are unknown here, so loading nothing is safer than
+    // rebuilding Spicetify's config from an empty view.
+    console.error("Marketplace storage could not be read", error);
+    Spicetify.showNotification(t("notifications.storageUnreadable"), true, 5000);
+    return;
+  }
 
   // Expose useful methods in global context
   window.Marketplace = {
@@ -116,8 +124,13 @@ import type { RepoType } from "../types/marketplace-types";
     if (existingMarketplaceThemeCSS) existingMarketplaceThemeCSS.remove();
 
     // Add theme css
-    const userCSS = await parseCSS(themeManifest, tld);
-    injectUserCSS(userCSS);
+    // A CSS failure shouldn't stop the theme's included JS from loading below
+    try {
+      const userCSS = await parseCSS(themeManifest, tld);
+      injectUserCSS(userCSS);
+    } catch (error) {
+      console.error("Failed to inject theme CSS", error);
+    }
 
     // Add to Spicetify.Config
     // @ts-expect-error: `current_theme` is read-only type in types
