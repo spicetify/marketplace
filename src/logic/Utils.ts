@@ -81,7 +81,7 @@ const hexToRGB = (inputHex: string) => {
   }
 
   const aRgbHex = hex.match(/.{1,2}/g);
-  if (!aRgbHex || aRgbHex.length !== 3) {
+  if (aRgbHex?.length !== 3) {
     throw "Could not parse hex colour.";
   }
 
@@ -557,7 +557,6 @@ export const parseCSS = async (themeData: CardItem, defaultTld?: string) => {
 
 export const isGithubRawUrl = (url: string) => {
   const parsedUrl = new URL(url);
-  parsedUrl.host;
 
   return parsedUrl.host === "raw.githubusercontent.com";
 };
@@ -752,7 +751,10 @@ export async function getAvailableTLD() {
 
   for (const tld of tlds) {
     try {
-      const response = await fetch(`https://cdn.jsdelivr.${tld}`, { redirect: "manual", cache: "no-cache" });
+      const response = await fetch(`https://cdn.jsdelivr.${tld}`, {
+        redirect: "manual",
+        cache: "no-cache"
+      });
       if (response.type === "opaqueredirect") return tld;
     } catch (err) {
       console.error(err);
