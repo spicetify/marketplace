@@ -567,13 +567,7 @@ class Grid extends React.Component<
             key: card.key
           });
         })
-        .filter(
-          (
-            card,
-            index,
-            cards
-          ) => cards.findIndex((c) => c.key === card.key) === index
-        );
+        .filter((card, index, cards) => cards.findIndex((c) => c.key === card.key) === index);
 
       if (!cardsOfType.length) return null;
 
