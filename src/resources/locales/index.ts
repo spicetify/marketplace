@@ -1,4 +1,5 @@
 import ar from "./ar.json";
+import be from "./be.json";
 import ca from "./ca.json";
 import deDE from "./de-DE.json";
 import en from "./en.json";
@@ -20,6 +21,7 @@ import zhTW from "./zh-TW.json";
 
 export default {
   ar,
+  be,
   ca,
   "de-DE": deDE,
   "en-US": enUS,

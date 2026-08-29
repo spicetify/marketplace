@@ -1,8 +1,41 @@
 import { t } from "i18next";
+import { z } from "zod";
 
 import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
 import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
-import { addToSessionStorage, processAuthors } from "./Utils";
+import { marketplaceStorage } from "./Storage";
+import { addToSessionStorage, isBlacklisted, processAuthors } from "./Utils";
+
+const manifestSchema = z
+  .object({
+    name: z.string().trim().min(1),
+    description: z.string().trim().min(1),
+    main: z.string().trim().min(1).optional(),
+    usercss: z.string().trim().min(1).optional(),
+    authors: z
+      .array(
+        z
+          .object({
+            name: z.string().trim().min(1),
+            url: z.url().optional()
+          })
+          .transform(({ name, url }) => ({ name, url: url || `https://github.com/${name}` }))
+      )
+      .catch([]),
+    preview: z
+      .string()
+      .nullish()
+      .transform((preview) => preview || ""),
+    readme: z
+      .string()
+      .nullish()
+      .transform((readme) => readme || ""),
+    tags: z.union([z.array(z.string()), z.string().transform((tag) => [tag])]).catch([]),
+    branch: z.string().trim().min(1).optional(),
+    schemes: z.string().optional(),
+    include: z.array(z.string()).catch([])
+  })
+  .passthrough();
 
 // TODO: add sort type, order, etc?
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
@@ -42,7 +75,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,
-    items: allRepos.items.filter((item) => !BLACKLIST.includes(item.html_url) && (showArchived || !item.archived))
+    items: allRepos.items.filter((item) => !isBlacklisted(item.html_url, BLACKLIST) && (showArchived || !item.archived))
   };
 
   return filteredResults;
@@ -87,19 +120,40 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
   const key = `${user}-${repo}`;
   const sessionStorageItem = window.sessionStorage.getItem(key);
   const failedSessionStorageItems = JSON.parse(window.sessionStorage.getItem("noManifests") || "[]");
-  if (sessionStorageItem) return JSON.parse(sessionStorageItem);
-
   const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
-  if (failedSessionStorageItems.includes(url)) return null;
+  if (!sessionStorageItem && failedSessionStorageItems.includes(url)) return [];
 
-  let manifest = await fetchRepoManifest(url);
+  let manifests: ReturnType<typeof JSON.parse>;
+  let loadedFromCache = false;
 
-  if (!manifest) return addToSessionStorage([url], "noManifests");
-  if (!Array.isArray(manifest)) manifest = [manifest];
+  if (sessionStorageItem) {
+    try {
+      manifests = JSON.parse(sessionStorageItem);
+      loadedFromCache = true;
+    } catch (error) {
+      console.warn(`Invalid cached Marketplace manifest from ${user}/${repo}`, error);
+      window.sessionStorage.removeItem(key);
+      manifests = await fetchRepoManifest(url);
+    }
+  } else {
+    manifests = await fetchRepoManifest(url);
+  }
 
-  addToSessionStorage(manifest, key);
+  if (!manifests) {
+    addToSessionStorage([url], "noManifests");
+    return [];
+  }
+  if (!Array.isArray(manifests)) manifests = [manifests];
 
-  return manifest;
+  const parsedManifests = manifests.flatMap((manifest) => {
+    const parsed = manifestSchema.safeParse(manifest);
+    if (parsed.success) return [parsed.data];
+    console.warn(`Invalid Marketplace manifest from ${user}/${repo}`, parsed.error);
+    return [];
+  });
+
+  if (!loadedFromCache) window.sessionStorage.setItem(key, JSON.stringify(parsedManifests));
+  return parsedManifests;
 }
 
 // TODO: can we add a return type here?
@@ -116,7 +170,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
+    if (!regex_result?.groups) return null;
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
@@ -148,7 +202,7 @@ export async function fetchExtensionManifest(contents_url: string, branch: strin
           tags: manifest.tags
         };
         // Add to list unless we're hiding installed items and it's installed
-        if (!(hideInstalled && localStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
+        if (!(hideInstalled && marketplaceStorage.getItem(`marketplace:installed:${user}/${repo}/${manifest.main}`))) {
           accum.push(item);
         }
       }
@@ -178,7 +232,7 @@ export async function fetchThemeManifest(contents_url: string, branch: string, s
   try {
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
+    if (!regex_result?.groups) return null;
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
@@ -242,7 +296,7 @@ export async function fetchAppManifest(contents_url: string, branch: string, sta
     // TODO: use the original search full_name ("theRealPadster/spicetify-hide-podcasts") or something to get the url better?
     const regex_result = contents_url.match(/https:\/\/api\.github\.com\/repos\/(?<user>.+)\/(?<repo>.+)\/contents/);
     // TODO: err handling?
-    if (!regex_result || !regex_result.groups) return null;
+    if (!regex_result?.groups) return null;
     const { user, repo } = regex_result.groups;
 
     const manifests = await getRepoManifest(user, repo, branch);
@@ -326,7 +380,7 @@ export const fetchCssSnippets = async (hideInstalled = false) => {
     }
 
     // Hide installed snippets if option is set and it's installed
-    if (!(hideInstalled && localStorage.getItem(`marketplace:installed:snippet:${snip.title.replaceAll(" ", "-")}`))) {
+    if (!(hideInstalled && marketplaceStorage.getItem(`marketplace:installed:snippet:${snip.title.replaceAll(" ", "-")}`))) {
       accum.push(snip);
     }
 

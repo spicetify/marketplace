@@ -6,6 +6,7 @@ import { t } from "i18next";
 
 import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
 import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist } from "../logic/FetchRemotes";
+import { hydrateMarketplaceStorage, marketplaceStorage } from "../logic/Storage";
 import {
   addExtensionToSpicetifyConfig,
   exportMarketplace,
@@ -18,6 +19,7 @@ import {
   injectColourScheme,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
+  isBlacklisted,
   isGithubRawUrl,
   parseCSS,
   resetMarketplace
@@ -37,6 +39,7 @@ import type { RepoType } from "../types/marketplace-types";
 
   // Show message on start.
   console.log(`Initializing Spicetify Marketplace v${MARKETPLACE_VERSION}`);
+  await hydrateMarketplaceStorage();
 
   // Expose useful methods in global context
   window.Marketplace = {
@@ -52,7 +55,7 @@ import type { RepoType } from "../types/marketplace-types";
   const initializeExtension = (extensionKey: string) => {
     const extensionManifest = getLocalStorageDataFromKey(extensionKey);
     // Abort if no manifest found or no extension URL (i.e. a theme)
-    if (!extensionManifest || !extensionManifest.extensionURL) return;
+    if (!extensionManifest?.extensionURL) return;
 
     console.debug("Initializing extension: ", extensionManifest);
 
@@ -94,9 +97,9 @@ import type { RepoType } from "../types/marketplace-types";
       // Add to Spicetify.Config
       // @ts-expect-error: `color_scheme` is read-only type in types
       Spicetify.Config.color_scheme = themeManifest.activeScheme;
-      if (localStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
+      if (marketplaceStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
         initAlbumArtBasedColor(activeScheme);
-      } else if (localStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
+      } else if (marketplaceStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {
         initColorShiftLoop(themeManifest.schemes);
       }
     } else {
@@ -172,8 +175,8 @@ import type { RepoType } from "../types/marketplace-types";
   }
 
   const { current_theme: localTheme } = Spicetify.Config;
-  localStorage.setItem(LOCALSTORAGE_KEYS.localTheme, localTheme);
-  const installedTheme = localStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+  marketplaceStorage.setItem(LOCALSTORAGE_KEYS.localTheme, localTheme);
+  const installedTheme = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
   if (installedTheme) {
     if (localTheme.toLocaleLowerCase() !== "marketplace") {
       Spicetify.showNotification(t("notifications.wrongLocalTheme"), true, 5000);
@@ -190,7 +193,7 @@ import type { RepoType } from "../types/marketplace-types";
  * @returns TODO
  */
 async function queryRepos(type: RepoType, pageNum = 1) {
-  const BLACKLIST = window.sessionStorage.getItem("marketplace:blacklist");
+  const BLACKLIST: string[] = JSON.parse(window.sessionStorage.getItem("marketplace:blacklist") || "[]");
 
   let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}&q=${encodeURIComponent(`topic:spicetify-${type}s`)}`;
   if (pageNum) url += `&page=${pageNum}`;
@@ -211,7 +214,7 @@ async function queryRepos(type: RepoType, pageNum = 1) {
   const filteredResults = {
     ...allRepos,
     page_count: allRepos.items.length,
-    items: allRepos.items.filter((item) => !BLACKLIST?.includes(item.html_url))
+    items: allRepos.items.filter((item) => !isBlacklisted(item.html_url, BLACKLIST))
   };
 
   return filteredResults;
