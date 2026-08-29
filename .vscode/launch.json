@@ -9,10 +9,7 @@
       "request": "launch",
       "name": "pnpm run watch",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "run",
-        "watch"
-      ],
+      "runtimeArgs": ["run", "watch"],
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
@@ -20,10 +17,7 @@
       "request": "launch",
       "name": "spicetify watch -a",
       "runtimeExecutable": "spicetify",
-      "runtimeArgs": [
-        "watch",
-        "-a"
-      ],
+      "runtimeArgs": ["watch", "-a"],
       "internalConsoleOptions": "openOnSessionStart"
     }
   ],

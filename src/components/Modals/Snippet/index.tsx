@@ -71,9 +71,9 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: 
     if (props.type === "EDIT_SNIPPET") location.reload();
   };
 
-  let inputElement: HTMLInputElement;
+  const inputElement = React.useRef<HTMLInputElement>(null);
   const FileInputClick = () => {
-    inputElement.click();
+    inputElement.current?.click();
   };
 
   return (
@@ -141,8 +141,7 @@ const SnippetModal = (props: { content?: CardProps; type: ModalType; callback?: 
               id={PREVIEW_IMAGE_ID}
               type="file"
               style={{ display: "none" }}
-              // biome-ignore lint/suspicious/noAssignInExpressions: TODO: fix this
-              ref={(input: HTMLInputElement) => (inputElement = input)}
+              ref={inputElement}
               onChange={async (event) => {
                 if (event.target.files?.[0]) {
                   try {
