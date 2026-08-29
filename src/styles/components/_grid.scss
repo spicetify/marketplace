@@ -161,6 +161,13 @@
   margin-top: 60px;
 }
 
+.marketplace-empty-installed {
+  color: var(--spice-subtext);
+  margin: 0 auto;
+  max-width: 420px;
+  padding: 64px 0;
+}
+
 .marketplace-storage-error {
   color: var(--spice-text);
   padding: 32px 0;

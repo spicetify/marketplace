@@ -88,12 +88,6 @@
     }
   }
 
-  &[data-tab='Installed'] {
-    &:empty::after {
-      content: 'No installed ' attr(data-card-type);
-      display: block;
-    }
-  }
 }
 
 // Card preview image error placeholder
