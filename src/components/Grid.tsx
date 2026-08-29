@@ -541,8 +541,6 @@ class Grid extends React.Component<
   render() {
     const { t } = this.props;
 
-    // Each card type renders its own heading and grid, or nothing when it has
-    // no cards to show.
     const cardSections = [
       { handle: "extension", name: "Extensions" },
       { handle: "theme", name: "Themes" },
@@ -564,7 +562,6 @@ class Grid extends React.Component<
           );
         })
         .map((card) => {
-          // Clone the cards and update the prop to trigger re-render
           return React.cloneElement(card, {
             activeThemeKey: this.state.activeThemeKey,
             key: card.key
@@ -574,7 +571,7 @@ class Grid extends React.Component<
           (
             card,
             index,
-            cards // Filter out duplicates to prevent spamming
+            cards
           ) => cards.findIndex((c) => c.key === card.key) === index
         );
 
@@ -590,9 +587,6 @@ class Grid extends React.Component<
       );
     });
 
-    // The installed tab has nothing else to fall back on, so say so rather than
-    // leaving the user looking at an empty page. Wait for the load to finish
-    // first, otherwise this shows up for a moment on every visit to the tab.
     const installedTabIsEmpty = this.CONFIG.activeTab === "Installed" && this.state.endOfList && cardSections.every((section) => section === null);
 
     return (
