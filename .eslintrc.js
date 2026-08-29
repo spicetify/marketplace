@@ -2,17 +2,13 @@ module.exports = {
   ignorePatterns: ["node_modules", "dist", ".eslintrc.js", "spicetify.d.ts"],
   env: {
     browser: true,
-    es2022: true,
+    es2022: true
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     sourceType: "module",
-    project: ["tsconfig.json"],
+    project: ["tsconfig.json"]
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
@@ -28,12 +24,12 @@ module.exports = {
     "keyword-spacing": "error",
     "no-multiple-empty-lines": ["error", { max: 1 }],
     "object-curly-spacing": ["error", "always"],
-    "key-spacing": ["error", { beforeColon: false, afterColon: true }],
+    "key-spacing": ["error", { beforeColon: false, afterColon: true }]
   },
   settings: {
     react: {
       // This is what Spotify uses
-      version: "17.0.2",
-    },
-  },
+      version: "17.0.2"
+    }
+  }
 };
