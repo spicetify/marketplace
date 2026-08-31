@@ -6,6 +6,12 @@
     "preview": "resources/assets/snippets/dancing-hamster.png"
   },
   {
+    "title": "Cyberl33k Dancing",
+    "description": "Adds an animated Cyberl33k character that follows the Spotify playback bar.",
+    "code": ".player-controls .playback-progressbar { overflow: visible !important; } .player-controls .playback-progressbar .progress-bar { overflow: visible !important; } .player-controls .playback-progressbar .progress-bar::before { content: '' !important; position: absolute !important; left: var(--progress-bar-transform) !important; transition: left var(--progress-bar-duration) linear !important; transform: translateX(-50%) !important; width: 64px !important; height: 96px !important; bottom: calc(100% - 7px) !important; background-image: url('https://raw.githubusercontent.com/n4th4n0/spicetify-cyberl33k/main/cyberl33k.gif') !important; background-repeat: no-repeat !important; background-position: center bottom !important; background-size: contain !important; image-rendering: pixelated !important; pointer-events: none !important; z-index: 9999 !important; }",
+    "preview": "resources/assets/snippets/cyberl33k-dancing.png"
+  },
+  {
     "title": "Sonic Dancing",
     "description": "You get sonic dancing on your playback bar!",
     "code": ".player-controls .playback-progressbar::before { content: ''; width: 32px; height: 32px; bottom: calc(100% - 7px); right: 10px; position: absolute; image-rendering: pixelated; background-size: 32px 32px; background-image: url('https://media.tenor.com/pWqGD2PHY3kAAAAj/fortnite-dance-sonic.gif'); }",
