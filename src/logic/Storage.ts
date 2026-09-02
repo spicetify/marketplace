@@ -2,6 +2,7 @@ import Dexie, { type EntityTable } from "dexie";
 
 const DATABASE_NAME = "spicetify-marketplace";
 const MARKETPLACE_KEY_PREFIX = "marketplace:";
+const LOCAL_STORAGE_MIGRATION_KEY = "internal:local-storage-migrated";
 const HYDRATION_RETRY_DELAYS_MS = [150, 400, 1000];
 
 type StoredRecord = {
@@ -26,6 +27,12 @@ function getSettingsTable() {
 
   database = new Dexie(DATABASE_NAME);
   database.version(1).stores({ settings: "key" });
+  database
+    .version(2)
+    .stores({ settings: "key" })
+    .upgrade(async (transaction) => {
+      await transaction.table("settings").put({ key: LOCAL_STORAGE_MIGRATION_KEY, value: "1" });
+    });
   settings = database.table<StoredRecord, "key">("settings") as EntityTable<StoredRecord, "key">;
   return settings;
 }
@@ -71,14 +78,18 @@ function reconcileCache(previous: Map<string, string>, next: Map<string, string>
 }
 
 async function persistChanges(previous: Map<string, string>, next: Map<string, string>) {
-  const table = getSettingsTable();
-  if (!table || !database) return;
-
   const updates = Array.from(next.entries())
     .filter(([key, value]) => previous.get(key) !== value)
     .map(([key, value]) => ({ key, value }));
   const removals = Array.from(previous.keys()).filter((key) => !next.has(key));
   if (updates.length === 0 && removals.length === 0) return;
+
+  const table = getSettingsTable();
+  if (!table || !database) {
+    for (const { key, value } of updates) window.localStorage.setItem(key, value);
+    for (const key of removals) window.localStorage.removeItem(key);
+    return;
+  }
 
   await database.transaction("rw", table, async () => {
     if (updates.length > 0) await table.bulkPut(updates);
@@ -118,33 +129,60 @@ function mutateStorage(mutate: (draft: Map<string, string>) => void, optimistic 
 
 async function loadIndexedDBCache() {
   const table = getSettingsTable();
-  if (!table) return;
+  if (!table) return false;
 
   const records = await table.toArray();
+  let localStorageMigrationComplete = false;
   for (const { key, value } of records) {
+    if (key === LOCAL_STORAGE_MIGRATION_KEY) {
+      localStorageMigrationComplete = true;
+      continue;
+    }
+
     cache.set(key, value);
     persistedCache.set(key, value);
   }
+  return localStorageMigrationComplete;
 }
 
-async function migrateLocalStorage() {
+async function migrateLocalStorage(localStorageMigrationComplete: boolean) {
   const records: StoredRecord[] = [];
+  const legacyKeys: string[] = [];
   for (let index = 0; index < window.localStorage.length; index++) {
     const key = window.localStorage.key(index);
-    if (!key?.startsWith(MARKETPLACE_KEY_PREFIX) || cache.has(key)) continue;
+    if (!key?.startsWith(MARKETPLACE_KEY_PREFIX)) continue;
+
+    legacyKeys.push(key);
+    if (localStorageMigrationComplete || cache.has(key)) continue;
 
     const value = window.localStorage.getItem(key);
     if (value !== null) records.push({ key, value });
   }
-  if (records.length === 0) return;
+  if (legacyKeys.length === 0 && localStorageMigrationComplete) return;
 
   const table = getSettingsTable();
-  if (table) {
+  let migrationPersisted = false;
+  if (table && database) {
     try {
-      await table.bulkPut(records);
+      if (!localStorageMigrationComplete) {
+        await database.transaction("rw", table, async () => {
+          await table.bulkPut([...records, { key: LOCAL_STORAGE_MIGRATION_KEY, value: "1" }]);
+        });
+      }
+      migrationPersisted = true;
     } catch (error) {
       console.warn("Marketplace localStorage migration could not be persisted", error);
       disableDatabase();
+    }
+  }
+
+  if (migrationPersisted) {
+    for (const key of legacyKeys) {
+      try {
+        window.localStorage.removeItem(key);
+      } catch (error) {
+        console.warn(`Marketplace localStorage migration source ${key} could not be removed`, error);
+      }
     }
   }
 
@@ -159,9 +197,10 @@ export async function hydrateMarketplaceStorage() {
   if (hydrationPromise) return hydrationPromise;
 
   hydrationPromise = (async () => {
+    let localStorageMigrationComplete = false;
     for (let attempt = 0; ; attempt++) {
       try {
-        await loadIndexedDBCache();
+        localStorageMigrationComplete = await loadIndexedDBCache();
         break;
       } catch (error) {
         if (attempt >= HYDRATION_RETRY_DELAYS_MS.length) throw error;
@@ -171,7 +210,7 @@ export async function hydrateMarketplaceStorage() {
       }
     }
 
-    await migrateLocalStorage();
+    await migrateLocalStorage(localStorageMigrationComplete);
     hydrated = true;
   })();
 
