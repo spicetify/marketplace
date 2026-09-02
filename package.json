@@ -26,7 +26,7 @@
     "dexie": "4.4.5",
     "i18next": "26.4.0",
     "prismjs": "1.30.0",
-    "react-dropdown": "1.11.0",
+    "react-dropdown": "2.0.0",
     "react-i18next": "17.0.12",
     "react-simple-code-editor": "0.14.1",
     "semver": "7.8.5",
