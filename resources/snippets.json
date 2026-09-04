@@ -556,5 +556,12 @@
     "description": "Removes the browse button from the search bar.",
     "code": ".main-globalNav-browseButtonWrapper { display: none !important }",
     "preview": "resources/assets/snippets/remove-browse.png"
+  },
+
+  {
+    "title": "Hide All Expand Buttons",
+    "description": "Hides expand buttons in the library, sidebar, and player.",
+    "code": ".main-nowPlayingView-headerButtonWrapper > button:nth-child(2) { display: none !important; } .mkxU7yK3S6E71zxQ .e-10810-legacy-button { display: none !important; } button[data-testid=\"fullscreen-mode-button\"] { display: none !important; }",
+    "preview": "resources/assets/snippets/hide-all-expand-buttons.png"
   }
 ]
