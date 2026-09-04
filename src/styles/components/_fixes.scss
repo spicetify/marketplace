@@ -1,8 +1,93 @@
 /*
+Spicetify's `Spicetify.PopupModal` builds its markup from Spotify's old Track
+Credits modal, inside a <generic-modal> custom element. Spotify has since
+deleted those classes (verified absent as of client 1.2.98), so the modal shell
+renders unstyled: no padding, the close button dropping into normal flow below
+the title, and no scroll container for overflowing content.
+
+These rules restore that chrome. Everything is scoped to <generic-modal> so only
+Spicetify-created modals are affected -- Spotify's own dialogs share
+.GenericModal__overlay, but use a hashed class for the modal box itself.
+
 TODO: can we get this added to the default Spicetify stylesheet?
-It should fix broken extension modals
+It should fix broken extension modals.
 */
 
-.GenericModal {
-  background-color: var(--spice-player);
+$modal-padding: 24px;
+
+generic-modal {
+  .GenericModal {
+    display: flex;
+    max-height: calc(100vh - 64px);
+    border-radius: 8px;
+    background-color: var(--spice-player);
+    overflow: hidden;
+  }
+
+  // Container for `isLarge: false`. Spotify removed its styles outright.
+  // The `isLarge: true` container (.main-embedWidgetGenerator-container) is
+  // still styled by Spotify, so it only needs the flex fix below.
+  .main-trackCreditsModal-container {
+    display: flex;
+    flex-direction: column;
+    width: 524px;
+    max-width: 100%;
+    min-height: 0;
+    color: var(--spice-text);
+  }
+
+  // Lets the scrolling section actually shrink inside the flex column.
+  .main-embedWidgetGenerator-container {
+    min-height: 0;
+  }
+
+  .main-trackCreditsModal-header {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: $modal-padding;
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+  }
+
+  .main-trackCreditsModal-closeBtn {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin-block-start: -8px;
+    margin-inline-end: -8px;
+    border: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    color: rgba(var(--spice-rgb-text), 0.7);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--spice-text);
+      background-color: rgba(var(--spice-rgb-text), 0.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--spice-text);
+      outline-offset: 2px;
+    }
+  }
+
+  .main-trackCreditsModal-mainSection {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 $modal-padding $modal-padding;
+  }
 }
