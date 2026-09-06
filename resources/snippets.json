@@ -556,5 +556,11 @@
     "description": "Removes the browse button from the search bar.",
     "code": ".main-globalNav-browseButtonWrapper { display: none !important }",
     "preview": "resources/assets/snippets/remove-browse.png"
+  },
+  {
+    "title": "Listening Snail",
+    "description": "A snail who is listening to music and following the duration bar",
+    "code": "@property --progress-bar-transform { inherits: true; initial-value: 0%; syntax: '<percentage>'; } .progress-bar { transition: --progress-bar-transform 1s linear !important; } .progress-bar--isDragging { transition-duration: 150ms !important; } .player-controls .playback-progressbar .progress-bar::before { content: ''; position: absolute; width: 45px; height: 45px; left: var(--progress-bar-transform); bottom: calc(100% - 6px); background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjExRzbg9rdGldmJ4cjd3wampua2V6eEON3ZqNmwzbcZyZV3ZHpiMCZlcD12MV9nbRlcm55hbf9naWZnYnlfaWQmy3Q9gw/ApFVEUQ9tGGMI9Yfjt/giphy.gif'); background-size: contain; background-repeat: no-repeat; background-position: center; transform: translateX(-8px); transition: left 100ms linear; pointer-events: none; z-index: 10; }",
+    "preview": "resources/assets/snippets/listening-snail.png"
   }
 ]
