@@ -558,3 +558,9 @@
     "preview": "resources/assets/snippets/remove-browse.png"
   }
 ]
+  {
+    "title": "Anya Forger Progress Bar",
+    "description": "Turn the Spotify Progress Bar pink, complete with Anya Forger slider knob",
+    "code": ".playback-bar .x-progressBar-fillColor{background:pink!important;width:100%!important}.playback-bar .progress-bar__slider{background-image:url('https://githubusercontent.com')!important;background-size:contain!important;background-repeat:no-repeat!important;background-color:transparent!important;width:54px!important;height:33px!important;border:none!important;margin-left:-17px!important;margin-top:0px!important;visibility:visible!important;display:block!important;transform:translateY(-50%) scale(.8);border-radius:0!important;box-shadow:none!important;transition:transform .1s cubic-bezier(0,0,.2,1)!important}.playback-bar .progress-bar__slider::after{display:none!important}.playback-bar .progress-bar{--progress-bar-height:8px!important}.playback-bar :is(.playback-progressbar-isInteractive .progress-bar--isDragging,.playback-progressbar-isInteractive .progress-bar:focus,.playback-progressbar-isInteractive .progress-bar:hover,.playback-progressbar-isInteractive:focus-within){--progress-bar-height:12px!important}.playback-bar :is(.x-progressBar-progressBarBg,.x-progressBar-sliderArea,.x-progressBar-fillColor){transition:height .1s cubic-bezier(0,0,.2,1)!important}.playback-bar :is(.playback-progressbar-isInteractive .progress-bar--isDragging,.playback-progressbar-isInteractive .progress-bar:focus,.playback-progressbar-isInteractive .progress-bar:hover,.playback-progressbar-isInteractive:focus-within) .progress-bar__slider{image-rendering:pixelated!important;transform:translateY(-50%) scale(1)!important}",
+    "preview": "resources/assets/snippets/anya-forger-progress-bar.png"
+  },
