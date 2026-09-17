@@ -345,7 +345,7 @@ export class Card extends React.Component<
     console.debug(`Installing theme ${this.localStorageKey}`);
     await marketplaceStorage.mutateAsync((storage) => {
       const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes)).filter(
-        (key) => key !== previousThemeKey && key !== this.localStorageKey
+        (key) => key !== this.localStorageKey && (!shouldActivate || key !== previousThemeKey)
       );
       if (shouldActivate && previousThemeKey && previousThemeKey !== this.localStorageKey) storage.delete(previousThemeKey);
       storage.set(this.localStorageKey, record);
@@ -419,30 +419,34 @@ export class Card extends React.Component<
     const themeKey = defaultThemeKey || marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
     const themeValue = themeKey && marketplaceStorage.getItem(themeKey);
+    // Only clear the active theme state when removing the theme that is actually active.
+    const removingActive = !defaultThemeKey || themeKey === marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
 
     if (themeKey && themeValue) {
       console.debug(`Removing theme ${themeKey}`);
       await marketplaceStorage.mutateAsync((storage) => {
         storage.delete(themeKey);
-        storage.delete(LOCALSTORAGE_KEYS.themeInstalled);
+        if (removingActive) storage.delete(LOCALSTORAGE_KEYS.themeInstalled);
         const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes));
         storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes.filter((key) => key !== themeKey)));
       });
 
       console.debug("Removed");
 
-      // Removes the current theme CSS
-      injectUserCSS();
-      // Update the active theme in Grid state
-      this.props.updateActiveTheme(null);
-      // Removes the current colour scheme
-      this.props.updateColourSchemes(null, null);
+      if (removingActive) {
+        // Removes the current theme CSS
+        injectUserCSS();
+        // Update the active theme in Grid state
+        this.props.updateActiveTheme(null);
+        // Removes the current colour scheme
+        this.props.updateColourSchemes(null, null);
 
-      // Restore Spicetify.Config
-      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
-      Spicetify.Config.current_theme = "marketplace";
-      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
-      Spicetify.Config.color_scheme = "marketplace";
+        // Restore Spicetify.Config
+        // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
+        Spicetify.Config.current_theme = "marketplace";
+        // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
+        Spicetify.Config.color_scheme = "marketplace";
+      }
 
       this.setState({ installed: false });
     }
