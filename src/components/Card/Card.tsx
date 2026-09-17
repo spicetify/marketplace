@@ -334,21 +334,28 @@ export class Card extends React.Component<
     return { activeScheme, item, parsedSchemes, record, userCSS };
   }
 
-  async installPreparedTheme({ activeScheme, item, parsedSchemes, record, userCSS }: PreparedTheme, previousThemeKey?: string | null) {
+  async installPreparedTheme(
+    { activeScheme, item, parsedSchemes, record, userCSS }: PreparedTheme,
+    previousThemeKey?: string | null,
+    update = false
+  ) {
+    // Updating a non-active theme must not steal the active slot.
+    const shouldActivate = !update || previousThemeKey === this.localStorageKey;
+
     console.debug(`Installing theme ${this.localStorageKey}`);
     await marketplaceStorage.mutateAsync((storage) => {
       const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes)).filter(
         (key) => key !== previousThemeKey && key !== this.localStorageKey
       );
-      if (previousThemeKey && previousThemeKey !== this.localStorageKey) storage.delete(previousThemeKey);
+      if (shouldActivate && previousThemeKey && previousThemeKey !== this.localStorageKey) storage.delete(previousThemeKey);
       storage.set(this.localStorageKey, record);
       storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify([...installedThemes, this.localStorageKey]));
-      storage.set(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+      if (shouldActivate) storage.set(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
     });
 
     console.debug("Installed");
 
-    if (!item.include) {
+    if (shouldActivate && !item.include) {
       injectUserCSS(userCSS);
       // Update the active theme in Grid state, triggers state change and re-render
       this.props.updateActiveTheme(this.localStorageKey);
@@ -361,7 +368,7 @@ export class Card extends React.Component<
       if (name) Spicetify.Config.current_theme = name;
       // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
       if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
-    } else if (previousThemeKey && previousThemeKey !== this.localStorageKey) {
+    } else if (shouldActivate && previousThemeKey && previousThemeKey !== this.localStorageKey) {
       injectUserCSS();
       this.props.updateActiveTheme(null);
       this.props.updateColourSchemes(null, null);
@@ -378,7 +385,7 @@ export class Card extends React.Component<
     await queueThemeOperation(async () => {
       const preparedTheme = await this.prepareTheme(update);
       const activeThemeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
-      if (preparedTheme) await this.installPreparedTheme(preparedTheme, activeThemeKey);
+      if (preparedTheme) await this.installPreparedTheme(preparedTheme, activeThemeKey, update);
     });
   }
 
