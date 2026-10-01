@@ -585,6 +585,9 @@ class Grid extends React.Component<
 
     return (
       <section className="contentSpacing">
+        <div className="marketplace-tabBar-container">
+          <TopBarContent switchCallback={this.switchTo.bind(this)} links={this.CONFIG.tabs} activeLink={this.CONFIG.activeTab} />
+        </div>
         <div className="marketplace-header">
           <div className="marketplace-header__left">
             {this.state.newUpdate ? (
@@ -679,7 +682,6 @@ class Grid extends React.Component<
             <div style={{ height: "64px" }} />
           )}
         </footer>
-        <TopBarContent switchCallback={this.switchTo.bind(this)} links={this.CONFIG.tabs} activeLink={this.CONFIG.activeTab} />
       </section>
     );
   }

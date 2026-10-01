@@ -59,19 +59,21 @@ export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: strin
   const tabBar = useRef<HTMLElement | null>(null);
 
   const contextHandler = useCallback(() => {
-    // Move the marketplace-tabBar item to the main-topBar-topbarContent div
+    // If legacy topBar wrapper exists, move the marketplace-tabBar item there
     const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
-    if (!tabBar?.current || !topBarContent) {
-      setTimeout(contextHandler, 100);
-      return;
+    if (topBarContent && tabBar?.current) {
+      topBarContent.appendChild(tabBar.current);
     }
-
-    topBarContent.appendChild(tabBar.current);
   }, [tabBar.current]);
 
   useEffect(() => {
     contextHandler();
-    return () => (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
+    return () => {
+      const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
+      if (topBarContent && tabBar.current && topBarContent.contains(tabBar.current)) {
+        tabBar.current.remove();
+      }
+    };
   });
 
   return <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;

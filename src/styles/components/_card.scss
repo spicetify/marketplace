@@ -6,6 +6,11 @@
 }
 
 .marketplace-grid {
+  .main-card-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .main-card-draggable {
     display: flex;
     flex-direction: column;
