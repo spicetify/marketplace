@@ -50,6 +50,20 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
   return filteredResults;
 }
 
+/**
+ * Work out which page of search results to request next.
+ * Page 0 omits the `page` param, so GitHub returns page 1, and the next page is 2.
+ * @param page The page just requested
+ * @param pageOfRepos That page's results from getTaggedRepos
+ * @returns The next page number, or null once every result has been loaded
+ */
+export function getNextPage(page: number, pageOfRepos: { page_count: number; total_count: number }) {
+  const currentPage = page > 0 ? page : 1;
+  // Count the unfiltered items, since the blacklist filter shrinks `items`
+  const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
+  return soFarResults < pageOfRepos.total_count ? currentPage + 1 : null;
+}
+
 // Workaround for not spamming console with 404s
 const script = `
   self.addEventListener('message', async (event) => {

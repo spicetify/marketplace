@@ -5,7 +5,7 @@
 import { t } from "i18next";
 
 import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist } from "../logic/FetchRemotes";
+import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getNextPage } from "../logic/FetchRemotes";
 import { hydrateMarketplaceStorage, marketplaceStorage } from "../logic/Storage";
 import {
   addExtensionToSpicetifyConfig,
@@ -243,17 +243,11 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   const pageOfRepos = await queryRepos(type, pageNum);
   appendInformationToLocalStorage(pageOfRepos, type);
 
-  // Page 0 omits the `page` param, so GitHub returns page 1. Count it as page 1 and
-  // continue from page 2, the same pages (and cache keys) the Grid requests.
-  const currentPage = pageNum || 1;
-  // Sets the amount of items that have thus been fetched
-  const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
   console.debug({ pageOfRepos });
-  const remainingResults = pageOfRepos.total_count - soFarResults;
 
-  // If still have more results, recursively fetch next page
-  console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} ${type}s`);
-  if (remainingResults > 0) return await loadPageRecursive(type, currentPage + 1);
+  // Shares getNextPage with the Grid, so the preload requests the same pages (and cache keys)
+  const nextPage = getNextPage(pageNum, pageOfRepos);
+  if (nextPage) return await loadPageRecursive(type, nextPage);
   console.debug(`No more ${type} results`);
 }
 
