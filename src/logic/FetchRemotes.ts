@@ -392,8 +392,15 @@ export const fetchCssSnippets = async (hideInstalled = false) => {
     .catch(() => [])) as Snippet[];
   if (!snippetsJSON.length) return [];
 
+  const fetchedAt = new Date().toISOString();
+
   const snippets = snippetsJSON.reduce<Snippet[]>((accum, snippet) => {
     const snip = { ...snippet } as Snippet;
+
+    // Every snippet is dated from git history (scripts/snippet-dates.mjs), so one without a date
+    // was added since that last ran and is the newest. Date it now so it sorts that way.
+    // Cards only display `lastUpdated`, so this never shows a made-up date.
+    snip.created ??= fetchedAt;
 
     // Because the card component looks for an imageURL prop
     if (snip.preview) {

@@ -14,6 +14,7 @@
     "copy:docs": "copyfiles README.md dist/",
     "lint": "biome check --write ./src",
     "lint:ci": "biome check *",
+    "snippet-dates": "node scripts/snippet-dates.mjs",
     "type-check": "tsc --noEmit",
     "watch": "spicetify-creator --watch",
     "prepare": "husky",

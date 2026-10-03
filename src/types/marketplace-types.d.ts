@@ -77,8 +77,11 @@ export type Snippet = {
   cssURL: undefined;
   schemesURL: undefined;
   include: undefined;
-  lastUpdated: undefined;
-  created: undefined;
+
+  // ISO dates from git history, written into snippets.json by scripts/snippet-dates.mjs.
+  // A snippet added since that last ran has neither until it's run again.
+  lastUpdated?: string;
+  created?: string;
 };
 
 // From `fetchExtensionManifest()` and `fetchThemeManifest()`

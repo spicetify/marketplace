@@ -708,7 +708,7 @@ const compareNames = (a: CardItem | Snippet, b: CardItem | Snippet) => {
 
 /**
  * Compare two card items/snippets by created.
- * This is skipped for snippets, since they don't have a created property.
+ * Snippets get their dates from git history (see scripts/snippet-dates.mjs).
  */
 const compareCreated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
   // Abort compare if items are missing created
@@ -721,14 +721,18 @@ const compareCreated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
 
 /**
  * Compare two card items/snippets by lastUpdated.
- * This is skipped for snippets, since they don't have a lastUpdated property.
+ * Falls back to created, so a snippet added since the dates were last generated
+ * (and so given only a created date by fetchCssSnippets) still sorts as recent.
  */
 const compareUpdated = (a: CardItem | Snippet, b: CardItem | Snippet) => {
-  // Abort compare if items are missing lastUpdated
-  if (a.lastUpdated === undefined || b.lastUpdated === undefined) return 0;
+  const aUpdated = a.lastUpdated ?? a.created;
+  const bUpdated = b.lastUpdated ?? b.created;
 
-  const aDate = new Date(a.lastUpdated);
-  const bDate = new Date(b.lastUpdated);
+  // Abort compare if items are missing both dates
+  if (aUpdated === undefined || bUpdated === undefined) return 0;
+
+  const aDate = new Date(aUpdated);
+  const bDate = new Date(bUpdated);
   return bDate.getTime() - aDate.getTime();
 };
 
