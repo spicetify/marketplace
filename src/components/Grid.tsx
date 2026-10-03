@@ -58,11 +58,6 @@ class Grid extends React.Component<
     Object.assign(this, props);
     this.updateAppConfig = props.updateAppConfig.bind(this);
 
-    // Fetches the sorting options, fetched from SortBox.js
-    this.sortConfig = {
-      by: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sort, "top")
-    };
-
     this.state = {
       version: MARKETPLACE_VERSION,
       newUpdate: false,
@@ -83,7 +78,6 @@ class Grid extends React.Component<
   requestQueue: never[][] = [];
   requestPage = 0;
   cardList: CardElement[] = [];
-  sortConfig: { by: string };
   // TODO: why are these set up funny
   // To get to the other side
   gridUpdateTabs: (() => void) | null;
@@ -139,10 +133,8 @@ class Grid extends React.Component<
     this.cardList.push(card);
   }
 
-  // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
   updateSort(sortByValue) {
     if (sortByValue) {
-      this.sortConfig.by = sortByValue;
       this.CONFIG.sort = sortByValue;
       marketplaceStorage.setItem(LOCALSTORAGE_KEYS.sort, sortByValue);
     }
@@ -202,7 +194,7 @@ class Grid extends React.Component<
           this.requestPage,
           this.BLACKLIST,
           this.CONFIG.visual.showArchived,
-          marketplaceStorage.getItem(LOCALSTORAGE_KEYS.sort) || "stars"
+          this.CONFIG.sort
         );
         const extensions: CardItem[] = [];
         for (const repo of pageOfRepos.items) {
@@ -237,7 +229,7 @@ class Grid extends React.Component<
 
         // Sort every card loaded so far, not just this page's, so later pages
         // can still take their place at the top of the list.
-        sortCardElements(this.cardList, marketplaceStorage.getItem("marketplace:sort") || "stars");
+        sortCardElements(this.cardList, this.CONFIG.sort);
         this.setState({ cards: this.cardList });
 
         // First result is null or -1 so it coerces to 1
@@ -277,7 +269,7 @@ class Grid extends React.Component<
               installedOfType.push(installedItem.data as CardItem);
             }
 
-            sortCardItems(installedOfType, marketplaceStorage.getItem("marketplace:sort") || "stars");
+            sortCardItems(installedOfType, this.CONFIG.sort);
 
             for (const item of installedOfType) {
               this.appendCard(item, type as CardType, activeTab);
@@ -296,7 +288,7 @@ class Grid extends React.Component<
           this.requestPage,
           this.BLACKLIST,
           this.CONFIG.visual.showArchived,
-          marketplaceStorage.getItem(LOCALSTORAGE_KEYS.sort) || "stars"
+          this.CONFIG.sort
         );
         const themes: CardItem[] = [];
         for (const repo of pageOfRepos.items) {
@@ -327,7 +319,7 @@ class Grid extends React.Component<
 
         // Sort every card loaded so far, not just this page's, so later pages
         // can still take their place at the top of the list.
-        sortCardElements(this.cardList, marketplaceStorage.getItem("marketplace:sort") || "stars");
+        sortCardElements(this.cardList, this.CONFIG.sort);
 
         // First request is null, so coerces to 1
         const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -346,7 +338,7 @@ class Grid extends React.Component<
           this.requestPage,
           this.BLACKLIST,
           this.CONFIG.visual.showArchived,
-          marketplaceStorage.getItem(LOCALSTORAGE_KEYS.sort) || "stars"
+          this.CONFIG.sort
         );
         const apps: CardItem[] = [];
 
@@ -377,7 +369,7 @@ class Grid extends React.Component<
 
         // Sort every card loaded so far, not just this page's, so later pages
         // can still take their place at the top of the list.
-        sortCardElements(this.cardList, marketplaceStorage.getItem("marketplace:sort") || "stars");
+        sortCardElements(this.cardList, this.CONFIG.sort);
 
         // First request is null, so coerces to 1
         const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
@@ -399,7 +391,7 @@ class Grid extends React.Component<
         }
 
         if (snippets?.length) {
-          sortCardItems(snippets, marketplaceStorage.getItem("marketplace:sort") || "stars");
+          sortCardItems(snippets, this.CONFIG.sort);
           for (const snippet of snippets) {
             this.appendCard(snippet, "snippet", activeTab);
           }
