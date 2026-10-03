@@ -6,7 +6,15 @@ import semver from "semver";
 const Spicetify = window.Spicetify;
 
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
+import {
+  fetchAppManifest,
+  fetchCssSnippets,
+  fetchExtensionManifest,
+  fetchThemeManifest,
+  getBlacklist,
+  getNextPage,
+  getTaggedRepos
+} from "../logic/FetchRemotes";
 import { openModal } from "../logic/LaunchModals";
 import { storedCardItemSchema } from "../logic/Schemas";
 import { marketplaceStorage } from "../logic/Storage";
@@ -232,15 +240,9 @@ class Grid extends React.Component<
         sortCardElements(this.cardList, this.CONFIG.sort);
         this.setState({ cards: this.cardList });
 
-        // First result is null or -1 so it coerces to 1
-        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-        // Sets the amount of items that have thus been fetched
-        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-        const remainingResults = pageOfRepos.total_count - soFarResults;
-
-        // If still have more results, return next page number to fetch
-        console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
-        if (remainingResults > 0) return currentPage + 1;
+        // If there are more results, return the next page number to fetch
+        const nextPage = getNextPage(this.requestPage, pageOfRepos);
+        if (nextPage) return nextPage;
         console.debug("No more extension results");
         break;
       }
@@ -321,14 +323,9 @@ class Grid extends React.Component<
         // can still take their place at the top of the list.
         sortCardElements(this.cardList, this.CONFIG.sort);
 
-        // First request is null, so coerces to 1
-        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-        // -1 because the page number is 1-indexed
-        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-        const remainingResults = pageOfRepos.total_count - soFarResults;
-
-        console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
-        if (remainingResults > 0) return currentPage + 1;
+        // If there are more results, return the next page number to fetch
+        const nextPage = getNextPage(this.requestPage, pageOfRepos);
+        if (nextPage) return nextPage;
         console.debug("No more theme results");
         break;
       }
@@ -371,14 +368,9 @@ class Grid extends React.Component<
         // can still take their place at the top of the list.
         sortCardElements(this.cardList, this.CONFIG.sort);
 
-        // First request is null, so coerces to 1
-        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-        // -1 because the page number is 1-indexed
-        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-        const remainingResults = pageOfRepos.total_count - soFarResults;
-
-        console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
-        if (remainingResults > 0) return currentPage + 1;
+        // If there are more results, return the next page number to fetch
+        const nextPage = getNextPage(this.requestPage, pageOfRepos);
+        if (nextPage) return nextPage;
         console.debug("No more app results");
         break;
       }
