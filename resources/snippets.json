@@ -62,7 +62,7 @@
   {
     "title": "Remove connect bar",
     "description": "Remove connect bar that causes progress bar displacement when listening on different devices",
-    "code": ".main-connectBar-connectBar {\n  display: none !important;}",
+    "code": ".main-nowPlayingBar-nowPlayingBar + div {\n  display: none !important;\n }",
     "preview": "resources/assets/snippets/remove-connect-bar.png"
   },
   {
