@@ -4,7 +4,7 @@ import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
 import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
 import { manifestSchema } from "./Schemas";
 import { marketplaceStorage } from "./Storage";
-import { addToSessionStorage, isBlacklisted, processAuthors } from "./Utils";
+import { addToSessionStorage, cacheInSessionStorage, isBlacklisted, processAuthors } from "./Utils";
 
 // https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-topic
 // https://docs.github.com/en/rest/reference/search#search-repositories
@@ -57,7 +57,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
     return { items: [] };
   }
 
-  window.sessionStorage.setItem(url, JSON.stringify(allRepos));
+  cacheInSessionStorage(url, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,
@@ -141,7 +141,7 @@ async function getRepoManifest(user: string, repo: string, branch: string) {
     return [];
   });
 
-  if (!loadedFromCache) window.sessionStorage.setItem(key, JSON.stringify(parsedManifests));
+  if (!loadedFromCache) cacheInSessionStorage(key, JSON.stringify(parsedManifests));
   return parsedManifests;
 }
 
