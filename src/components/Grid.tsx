@@ -116,7 +116,11 @@ class Grid extends React.Component<
     this.loadAmount(this.requestId, amount);
   }
 
-  /** Has a newer request replaced the one with this ID? */
+  /**
+   * Has a newer request (tab switch, sort change) replaced the one with this ID?
+   * Loads check this after every await and return -1 if so, so a replaced load
+   * never touches cardList, requestPage or endOfList.
+   */
   isStaleRequest(requestId: number) {
     return requestId !== this.requestId;
   }
@@ -211,8 +215,8 @@ class Grid extends React.Component<
           this.CONFIG.sort
         );
         const extensions: CardItem[] = [];
-        // Checked here too, so an empty page can't end a newer request's list
         if (this.isStaleRequest(requestId)) return -1;
+
         for (const repo of pageOfRepos.items) {
           const repoExtensions = await fetchExtensionManifest(
             repo.contents_url,
@@ -221,10 +225,7 @@ class Grid extends React.Component<
             this.CONFIG.visual.hideInstalled
           );
 
-          if (this.isStaleRequest(requestId)) {
-            // A newer request has replaced this one: stop fetching and appending cards
-            return -1;
-          }
+          if (this.isStaleRequest(requestId)) return -1;
 
           if (repoExtensions?.length) {
             extensions.push(
@@ -265,10 +266,7 @@ class Grid extends React.Component<
             const installedOfType: CardItem[] = [];
             for (const itemKey of installedStuff[type]) {
               const installedItem = storedCardItemSchema.safeParse(getLocalStorageDataFromKey(itemKey));
-              if (this.isStaleRequest(requestId)) {
-                // A newer request has replaced this one: stop fetching and appending cards
-                return -1;
-              }
+              if (this.isStaleRequest(requestId)) return -1;
 
               if (!installedItem.success) {
                 console.warn(`Skipping invalid installed item ${itemKey}`, installedItem.error);
@@ -300,15 +298,12 @@ class Grid extends React.Component<
           this.CONFIG.sort
         );
         const themes: CardItem[] = [];
-        // Checked here too, so an empty page can't end a newer request's list
         if (this.isStaleRequest(requestId)) return -1;
+
         for (const repo of pageOfRepos.items) {
           const repoThemes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
-          if (this.isStaleRequest(requestId)) {
-            // A newer request has replaced this one: stop fetching and appending cards
-            return -1;
-          }
+          if (this.isStaleRequest(requestId)) return -1;
 
           if (repoThemes?.length) {
             themes.push(
@@ -346,15 +341,11 @@ class Grid extends React.Component<
           this.CONFIG.sort
         );
         const apps: CardItem[] = [];
-        // Checked here too, so an empty page can't end a newer request's list
         if (this.isStaleRequest(requestId)) return -1;
 
         for (const repo of pageOfRepos.items) {
           const repoApps = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-          if (this.isStaleRequest(requestId)) {
-            // A newer request has replaced this one: stop fetching and appending cards
-            return -1;
-          }
+          if (this.isStaleRequest(requestId)) return -1;
 
           if (repoApps?.length) {
             apps.push(
@@ -386,10 +377,7 @@ class Grid extends React.Component<
       case "Snippets": {
         const snippets = this.SNIPPETS;
 
-        if (this.isStaleRequest(requestId)) {
-          // A newer request has replaced this one: stop fetching and appending cards
-          return -1;
-        }
+        if (this.isStaleRequest(requestId)) return -1;
 
         if (snippets?.length) {
           sortCardItems(snippets, this.CONFIG.sort);
