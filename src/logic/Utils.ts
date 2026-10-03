@@ -580,6 +580,19 @@ export const getParamsFromGithubRaw = (url: string) => {
   return obj;
 };
 
+/**
+ * Write to sessionStorage, which Marketplace only uses as a cache.
+ * Once it's full, setItem throws QuotaExceededError; that should cost a refetch
+ * later, not break whatever is loading now.
+ */
+export function cacheInSessionStorage(key: string, value: string) {
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch (error) {
+    console.warn(`Could not cache ${key} in sessionStorage`, error);
+  }
+}
+
 export function addToSessionStorage(items, key?) {
   if (!items) return;
   for (const item of items) {
@@ -589,7 +602,7 @@ export function addToSessionStorage(items, key?) {
     const existing = window.sessionStorage.getItem(itemKey);
     const parsed = existing ? JSON.parse(existing) : [];
     parsed.push(item);
-    window.sessionStorage.setItem(itemKey, JSON.stringify(parsed));
+    cacheInSessionStorage(itemKey, JSON.stringify(parsed));
   }
 }
 export function getInvalidCSS(): string[] {
@@ -743,6 +756,22 @@ export const sortCardItems = (cardItems: CardItem[] | Snippet[], sortMode: strin
       cardItems.sort((a, b) => b.stars - a.stars);
       break;
   }
+};
+
+/**
+ * Sort already-rendered cards by the item each one wraps.
+ *
+ * Remote tabs are fetched a page at a time. Sorting each page on its own and
+ * appending it leaves the list globally unsorted, so an item on page 2 can
+ * never rise above the items on page 1 however new or popular it is. Sorting
+ * the accumulated cards instead keeps the whole list in order.
+ */
+export const sortCardElements = <T extends { props: { item: CardItem | Snippet } }>(cards: T[], sortMode: string) => {
+  const items = cards.map((card) => card.props.item);
+  sortCardItems(items as CardItem[], sortMode);
+
+  const sortedIndex = new Map(items.map((item, index) => [item, index]));
+  cards.sort((a, b) => (sortedIndex.get(a.props.item) ?? 0) - (sortedIndex.get(b.props.item) ?? 0));
 };
 
 // Make a ping to the jsdelivr CDN to check if the user has an internet connection

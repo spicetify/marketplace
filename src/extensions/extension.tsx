@@ -5,7 +5,7 @@
 import { t } from "i18next";
 
 import { ITEMS_PER_REQUEST, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist } from "../logic/FetchRemotes";
+import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
 import { hydrateMarketplaceStorage, marketplaceStorage } from "../logic/Storage";
 import {
   addExtensionToSpicetifyConfig,
@@ -19,7 +19,6 @@ import {
   injectColourScheme,
   // TODO: there's a slightly different copy of this function in Card.ts?
   injectUserCSS,
-  isBlacklisted,
   isGithubRawUrl,
   parseCSS,
   resetMarketplace
@@ -207,30 +206,11 @@ import type { RepoType } from "../types/marketplace-types";
  */
 async function queryRepos(type: RepoType, pageNum = 1) {
   const BLACKLIST: string[] = JSON.parse(window.sessionStorage.getItem("marketplace:blacklist") || "[]");
+  const sortMode = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.sort) || "stars";
 
-  let url = `https://api.github.com/search/repositories?per_page=${ITEMS_PER_REQUEST}&q=${encodeURIComponent(`topic:spicetify-${type}s`)}`;
-  if (pageNum) url += `&page=${pageNum}`;
-
-  const allRepos =
-    JSON.parse(window.sessionStorage.getItem(`spicetify-${type}s-page-${pageNum}`) || "null") ||
-    (await fetch(url)
-      .then((res) => res.json())
-      .catch(() => null));
-
-  if (!allRepos?.items) {
-    Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
-    return { items: [] };
-  }
-
-  window.sessionStorage.setItem(`spicetify-${type}s-page-${pageNum}`, JSON.stringify(allRepos));
-
-  const filteredResults = {
-    ...allRepos,
-    page_count: allRepos.items.length,
-    items: allRepos.items.filter((item) => !isBlacklisted(item.html_url, BLACKLIST))
-  };
-
-  return filteredResults;
+  // Go through getTaggedRepos so the request and its sessionStorage cache key match
+  // what the Grid asks for, and opening Marketplace reuses these pages.
+  return getTaggedRepos(`spicetify-${type}s`, pageNum, BLACKLIST, true, sortMode);
 }
 
 /**
@@ -259,6 +239,9 @@ async function loadPageRecursive(type: RepoType, pageNum: number) {
   window.sessionStorage.clear();
   const BLACKLIST = await getBlacklist();
   window.sessionStorage.setItem("marketplace:blacklist", JSON.stringify(BLACKLIST));
+  // queryRepos reads the saved sort mode, so wait for storage to load first.
+  // init() already reports a failure to the user.
+  await hydrateMarketplaceStorage().catch(() => undefined);
 
   // TODO: does this work?
   // The recursion isn't super clean...
