@@ -6,11 +6,26 @@ import semver from "semver";
 const Spicetify = window.Spicetify;
 
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MARKETPLACE_VERSION } from "../constants";
-import { fetchAppManifest, fetchCssSnippets, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getTaggedRepos } from "../logic/FetchRemotes";
+import {
+  fetchAppManifest,
+  fetchCssSnippets,
+  fetchExtensionManifest,
+  fetchThemeManifest,
+  getBlacklist,
+  getNextPage,
+  getTaggedRepos
+} from "../logic/FetchRemotes";
 import { openModal } from "../logic/LaunchModals";
 import { storedCardItemSchema } from "../logic/Schemas";
 import { marketplaceStorage } from "../logic/Storage";
-import { generateSchemesOptions, generateSortOptions, getLocalStorageDataFromKey, injectColourScheme, sortCardItems } from "../logic/Utils";
+import {
+  generateSchemesOptions,
+  generateSortOptions,
+  getLocalStorageDataFromKey,
+  injectColourScheme,
+  sortCardElements,
+  sortCardItems
+} from "../logic/Utils";
 import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
 import Button from "./Button";
 import Card, { type CardProps } from "./Card/Card";
@@ -51,11 +66,6 @@ class Grid extends React.Component<
     Object.assign(this, props);
     this.updateAppConfig = props.updateAppConfig.bind(this);
 
-    // Fetches the sorting options, fetched from SortBox.js
-    this.sortConfig = {
-      by: getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.sort, "top")
-    };
-
     this.state = {
       version: MARKETPLACE_VERSION,
       newUpdate: false,
@@ -78,7 +88,6 @@ class Grid extends React.Component<
   requestId = 0;
   requestPage = 0;
   cardList: CardElement[] = [];
-  sortConfig: { by: string };
   // TODO: why are these set up funny
   // To get to the other side
   gridUpdateTabs: (() => void) | null;
@@ -138,10 +147,9 @@ class Grid extends React.Component<
     this.cardList.push(card);
   }
 
-  // TODO: this isn't currently used, but it will be used for sorting (based on the SortBox component)
   updateSort(sortByValue) {
     if (sortByValue) {
-      this.sortConfig.by = sortByValue;
+      this.CONFIG.sort = sortByValue;
       marketplaceStorage.setItem(LOCALSTORAGE_KEYS.sort, sortByValue);
     }
 
@@ -195,7 +203,13 @@ class Grid extends React.Component<
     const activeTab = this.CONFIG.activeTab;
     switch (activeTab) {
       case "Extensions": {
-        const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const pageOfRepos = await getTaggedRepos(
+          "spicetify-extensions",
+          this.requestPage,
+          this.BLACKLIST,
+          this.CONFIG.visual.showArchived,
+          this.CONFIG.sort
+        );
         const extensions: CardItem[] = [];
         // Checked here too, so an empty page can't end a newer request's list
         if (this.isStaleRequest(requestId)) return -1;
@@ -224,22 +238,18 @@ class Grid extends React.Component<
           }
         }
 
-        sortCardItems(extensions, marketplaceStorage.getItem("marketplace:sort") || "stars");
-
         for (const extension of extensions) {
           this.appendCard(extension, "extension", activeTab);
         }
+
+        // Sort every card loaded so far, not just this page's, so later pages
+        // can still take their place at the top of the list.
+        sortCardElements(this.cardList, this.CONFIG.sort);
         this.setState({ cards: this.cardList });
 
-        // First result is null or -1 so it coerces to 1
-        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-        // Sets the amount of items that have thus been fetched
-        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-        const remainingResults = pageOfRepos.total_count - soFarResults;
-
-        // If still have more results, return next page number to fetch
-        console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} extensions`);
-        if (remainingResults > 0) return currentPage + 1;
+        // If there are more results, return the next page number to fetch
+        const nextPage = getNextPage(this.requestPage, pageOfRepos);
+        if (nextPage) return nextPage;
         console.debug("No more extension results");
         break;
       }
@@ -268,7 +278,7 @@ class Grid extends React.Component<
               installedOfType.push(installedItem.data as CardItem);
             }
 
-            sortCardItems(installedOfType, marketplaceStorage.getItem("marketplace:sort") || "stars");
+            sortCardItems(installedOfType, this.CONFIG.sort);
 
             for (const item of installedOfType) {
               this.appendCard(item, type as CardType, activeTab);
@@ -282,7 +292,13 @@ class Grid extends React.Component<
         // installed extension do them all in one go, since it's local
       }
       case "Themes": {
-        const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const pageOfRepos = await getTaggedRepos(
+          "spicetify-themes",
+          this.requestPage,
+          this.BLACKLIST,
+          this.CONFIG.visual.showArchived,
+          this.CONFIG.sort
+        );
         const themes: CardItem[] = [];
         // Checked here too, so an empty page can't end a newer request's list
         if (this.isStaleRequest(requestId)) return -1;
@@ -307,25 +323,28 @@ class Grid extends React.Component<
         }
         this.setState({ cards: this.cardList });
 
-        sortCardItems(themes, marketplaceStorage.getItem("marketplace:sort") || "stars");
-
         for (const theme of themes) {
           this.appendCard(theme, "theme", activeTab);
         }
 
-        // First request is null, so coerces to 1
-        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-        // -1 because the page number is 1-indexed
-        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-        const remainingResults = pageOfRepos.total_count - soFarResults;
+        // Sort every card loaded so far, not just this page's, so later pages
+        // can still take their place at the top of the list.
+        sortCardElements(this.cardList, this.CONFIG.sort);
 
-        console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} themes`);
-        if (remainingResults > 0) return currentPage + 1;
+        // If there are more results, return the next page number to fetch
+        const nextPage = getNextPage(this.requestPage, pageOfRepos);
+        if (nextPage) return nextPage;
         console.debug("No more theme results");
         break;
       }
       case "Apps": {
-        const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
+        const pageOfRepos = await getTaggedRepos(
+          "spicetify-apps",
+          this.requestPage,
+          this.BLACKLIST,
+          this.CONFIG.visual.showArchived,
+          this.CONFIG.sort
+        );
         const apps: CardItem[] = [];
         // Checked here too, so an empty page can't end a newer request's list
         if (this.isStaleRequest(requestId)) return -1;
@@ -350,20 +369,17 @@ class Grid extends React.Component<
         }
         this.setState({ cards: this.cardList });
 
-        sortCardItems(apps, marketplaceStorage.getItem("marketplace:sort") || "stars");
-
         for (const app of apps) {
           this.appendCard(app, "app", activeTab);
         }
 
-        // First request is null, so coerces to 1
-        const currentPage = this.requestPage > -1 && this.requestPage ? this.requestPage : 1;
-        // -1 because the page number is 1-indexed
-        const soFarResults = ITEMS_PER_REQUEST * (currentPage - 1) + pageOfRepos.page_count;
-        const remainingResults = pageOfRepos.total_count - soFarResults;
+        // Sort every card loaded so far, not just this page's, so later pages
+        // can still take their place at the top of the list.
+        sortCardElements(this.cardList, this.CONFIG.sort);
 
-        console.debug(`Parsed ${soFarResults}/${pageOfRepos.total_count} apps`);
-        if (remainingResults > 0) return currentPage + 1;
+        // If there are more results, return the next page number to fetch
+        const nextPage = getNextPage(this.requestPage, pageOfRepos);
+        if (nextPage) return nextPage;
         console.debug("No more app results");
         break;
       }
@@ -376,7 +392,7 @@ class Grid extends React.Component<
         }
 
         if (snippets?.length) {
-          sortCardItems(snippets, marketplaceStorage.getItem("marketplace:sort") || "stars");
+          sortCardItems(snippets, this.CONFIG.sort);
           for (const snippet of snippets) {
             this.appendCard(snippet, "snippet", activeTab);
           }
