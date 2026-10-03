@@ -17,6 +17,25 @@ export type SortBoxOption = {
 
 export type RepoTopic = "spicetify-extensions" | "spicetify-themes" | "spicetify-apps";
 
+/** The fields Marketplace keeps from each GitHub repository search result */
+export type RepoSearchItem = {
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  contents_url: string;
+  default_branch: string;
+  stargazers_count: number;
+  archived: boolean;
+  created_at: string;
+  pushed_at: string;
+  updated_at: string;
+};
+
+export type RepoSearchPage = {
+  total_count: number;
+  items: RepoSearchItem[];
+};
+
 export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
 
 export type ResetCategory = "extensions" | "snippets" | "theme";
