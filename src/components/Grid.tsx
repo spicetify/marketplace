@@ -73,7 +73,9 @@ class Grid extends React.Component<
   searchRequested: boolean;
   endOfList = false;
   lastScroll = 0;
-  requestQueue: never[][] = [];
+  // Identifies the current load. Each new request (tab switch, sort change) bumps it,
+  // so a load that resolves after being replaced can tell, and stop.
+  requestId = 0;
   requestPage = 0;
   cardList: CardElement[] = [];
   sortConfig: { by: string };
@@ -101,9 +103,13 @@ class Grid extends React.Component<
 
   newRequest(amount: number | undefined) {
     this.cardList = [];
-    const queue = [];
-    this.requestQueue.unshift(queue);
-    this.loadAmount(queue, amount);
+    this.requestId += 1;
+    this.loadAmount(this.requestId, amount);
+  }
+
+  /** Has a newer request replaced the one with this ID? */
+  isStaleRequest(requestId: number) {
+    return requestId !== this.requestId;
   }
 
   /**
@@ -184,13 +190,15 @@ class Grid extends React.Component<
   // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
   // Returns the next page number to fetch, or null if at end
   // TODO: maybe we should rename `loadPage()`, since it's slightly confusing when we have github pages as well
-  async loadPage(queue: never[]) {
+  async loadPage(requestId: number) {
     // Store value for comparison later
     const activeTab = this.CONFIG.activeTab;
     switch (activeTab) {
       case "Extensions": {
         const pageOfRepos = await getTaggedRepos("spicetify-extensions", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
         const extensions: CardItem[] = [];
+        // Checked here too, so an empty page can't end a newer request's list
+        if (this.isStaleRequest(requestId)) return -1;
         for (const repo of pageOfRepos.items) {
           const repoExtensions = await fetchExtensionManifest(
             repo.contents_url,
@@ -199,9 +207,8 @@ class Grid extends React.Component<
             this.CONFIG.visual.hideInstalled
           );
 
-          // I believe this stops the requests when switching tabs?
-          if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-            // Stop this queue from continuing to fetch and append to cards list
+          if (this.isStaleRequest(requestId)) {
+            // A newer request has replaced this one: stop fetching and appending cards
             return -1;
           }
 
@@ -248,8 +255,8 @@ class Grid extends React.Component<
             const installedOfType: CardItem[] = [];
             for (const itemKey of installedStuff[type]) {
               const installedItem = storedCardItemSchema.safeParse(getLocalStorageDataFromKey(itemKey));
-              if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-                // Stop this queue from continuing to fetch and append to cards list
+              if (this.isStaleRequest(requestId)) {
+                // A newer request has replaced this one: stop fetching and appending cards
                 return -1;
               }
 
@@ -277,12 +284,13 @@ class Grid extends React.Component<
       case "Themes": {
         const pageOfRepos = await getTaggedRepos("spicetify-themes", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
         const themes: CardItem[] = [];
+        // Checked here too, so an empty page can't end a newer request's list
+        if (this.isStaleRequest(requestId)) return -1;
         for (const repo of pageOfRepos.items) {
           const repoThemes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
-          // I believe this stops the requests when switching tabs?
-          if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-            // Stop this queue from continuing to fetch and append to cards list
+          if (this.isStaleRequest(requestId)) {
+            // A newer request has replaced this one: stop fetching and appending cards
             return -1;
           }
 
@@ -319,12 +327,13 @@ class Grid extends React.Component<
       case "Apps": {
         const pageOfRepos = await getTaggedRepos("spicetify-apps", this.requestPage, this.BLACKLIST, this.CONFIG.visual.showArchived);
         const apps: CardItem[] = [];
+        // Checked here too, so an empty page can't end a newer request's list
+        if (this.isStaleRequest(requestId)) return -1;
 
         for (const repo of pageOfRepos.items) {
           const repoApps = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-          // I believe this stops the requests when switching tabs?
-          if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-            // Stop this queue from continuing to fetch and append to cards list
+          if (this.isStaleRequest(requestId)) {
+            // A newer request has replaced this one: stop fetching and appending cards
             return -1;
           }
 
@@ -361,8 +370,8 @@ class Grid extends React.Component<
       case "Snippets": {
         const snippets = this.SNIPPETS;
 
-        if (this.requestQueue.length > 1 && queue !== this.requestQueue[0]) {
-          // Stop this queue from continuing to fetch and append to cards list
+        if (this.isStaleRequest(requestId)) {
+          // A newer request has replaced this one: stop fetching and appending cards
           return -1;
         }
 
@@ -383,26 +392,24 @@ class Grid extends React.Component<
   }
   /**
    * Load a new set of extensions
-   * @param {any} queue An array of the extensions to be loaded
+   * @param {number} requestId The request this load belongs to (see newRequest)
    * @param {number} [quantity] Amount of extensions to be loaded per page. (Defaults to ITEMS_PER_REQUEST constant)
    */
-  async loadAmount(queue: never[], quantity: number = ITEMS_PER_REQUEST) {
+  async loadAmount(requestId: number, quantity: number = ITEMS_PER_REQUEST) {
     this.setState({ rest: false });
     const maxCardQuantity = this.cardList.length + quantity;
 
-    this.requestPage = await this.loadPage(queue);
+    let nextPage = await this.loadPage(requestId);
 
-    while (this.requestPage && this.requestPage !== -1 && this.cardList.length < maxCardQuantity && !this.state.endOfList) {
-      this.requestPage = await this.loadPage(queue);
+    while (!this.isStaleRequest(requestId) && nextPage && this.cardList.length < maxCardQuantity && !this.state.endOfList) {
+      this.requestPage = nextPage;
+      nextPage = await this.loadPage(requestId);
     }
 
-    if (this.requestPage === -1) {
-      this.requestQueue = this.requestQueue.filter((a) => a !== queue);
-      return;
-    }
+    // A newer request owns the page counter and loading state now, so leave them alone
+    if (this.isStaleRequest(requestId)) return;
 
-    // Remove this queue from queue list
-    this.requestQueue.shift();
+    this.requestPage = nextPage;
     this.setState({ rest: true });
   }
 
@@ -412,7 +419,7 @@ class Grid extends React.Component<
    */
   loadMore() {
     if (this.state.rest && !this.endOfList) {
-      this.loadAmount(this.requestQueue[0], ITEMS_PER_REQUEST);
+      this.loadAmount(this.requestId, ITEMS_PER_REQUEST);
     }
   }
 
