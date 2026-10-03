@@ -44,12 +44,10 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
   // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;
   if (page) url += `&page=${page}`;
 
-  // Cache per sort mode as well as per page, or switching the sort would replay
-  // the previous mode's results out of sessionStorage.
-  const cacheKey = `${tag}-${sortMode}-page-${page}`;
-
+  // Cache by the exact request, so sort modes that send the same GitHub query
+  // (e.g. Newest and Last Updated) share results instead of fetching them twice.
   const allRepos =
-    JSON.parse(window.sessionStorage.getItem(cacheKey) || "null") ||
+    JSON.parse(window.sessionStorage.getItem(url) || "null") ||
     (await fetch(url)
       .then((res) => res.json())
       .catch(() => null));
@@ -59,7 +57,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
     return { items: [] };
   }
 
-  window.sessionStorage.setItem(cacheKey, JSON.stringify(allRepos));
+  window.sessionStorage.setItem(url, JSON.stringify(allRepos));
 
   const filteredResults = {
     ...allRepos,
