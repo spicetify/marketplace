@@ -1,7 +1,7 @@
 import { t } from "i18next";
 
 import { BLACKLIST_URL, ITEMS_PER_REQUEST, SNIPPETS_URL } from "../constants";
-import type { CardItem, RepoTopic, Snippet } from "../types/marketplace-types";
+import type { CardItem, RepoSearchItem, RepoSearchPage, RepoTopic, Snippet } from "../types/marketplace-types";
 import { manifestSchema } from "./Schemas";
 import { marketplaceStorage } from "./Storage";
 import { addToSessionStorage, cacheInSessionStorage, isBlacklisted, processAuthors } from "./Utils";
@@ -31,6 +31,26 @@ function githubSortParams(sortMode: string) {
 }
 
 /**
+ * Keep only the fields Marketplace uses (plus a few for debugging) from a search result.
+ * The full object has ~80 fields and makes each cached page about 1MB, which
+ * fills the sessionStorage quota after a handful of pages.
+ */
+function trimRepoSearchItem(repo: RepoSearchItem): RepoSearchItem {
+  return {
+    full_name: repo.full_name,
+    description: repo.description,
+    html_url: repo.html_url,
+    contents_url: repo.contents_url,
+    default_branch: repo.default_branch,
+    stargazers_count: repo.stargazers_count,
+    archived: repo.archived,
+    created_at: repo.created_at,
+    pushed_at: repo.pushed_at,
+    updated_at: repo.updated_at
+  };
+}
+
+/**
  * Query GitHub for all repos with the requested topic
  * @param tag The tag ("topic") to search for
  * @param page The query page number
@@ -46,15 +66,16 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
 
   // Cache by the exact request, so sort modes that send the same GitHub query
   // (e.g. Newest and Last Updated) share results instead of fetching them twice.
-  const allRepos =
+  const allRepos: RepoSearchPage | null =
     JSON.parse(window.sessionStorage.getItem(url) || "null") ||
     (await fetch(url)
       .then((res) => res.json())
+      .then((res) => (res?.items ? { total_count: res.total_count, items: res.items.map(trimRepoSearchItem) } : null))
       .catch(() => null));
 
   if (!allRepos?.items) {
     Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
-    return { items: [] };
+    return { total_count: 0, page_count: 0, items: [] };
   }
 
   cacheInSessionStorage(url, JSON.stringify(allRepos));
