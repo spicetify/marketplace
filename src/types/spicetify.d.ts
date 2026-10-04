@@ -260,7 +260,7 @@ declare namespace Spicetify {
     album_disc_count: string;
     track_player: string;
     album_title: string;
-    "canvas.artist.avatar": string;
+    "canvas.artist.avatar"?: string;
     "canvas.artist.name": string;
     "canvas.artist.uri": string;
     "canvas.canvasUri": string;
