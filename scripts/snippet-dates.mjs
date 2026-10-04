@@ -148,10 +148,11 @@ const parseLiteral = (source) => {
 const parse = (file, text) => (file.endsWith(".json") ? JSON.parse(text) : parseLiteral(text.replace(/^\s*export default/, "")));
 
 // Ignore whitespace wherever CSS does: around braces, semicolons, commas and combinators, and after
-// colons. Spaces between selectors are kept, since `.a .b` and `.a.b` mean different things.
+// colons. Spaces between selectors are kept, since `.a .b` and `.a.b` mean different things. Only
+// CSS whitespace counts, so a non-breaking space stays a distinct character.
 const squash = (css) =>
   String(css ?? "")
-    .replace(/\s+/g, " ")
+    .replace(/[ \t\n\f\r]+/g, " ")
     .replace(/ ?([{};,>~]) ?/g, "$1")
     .replace(/: /g, ":")
     .trim();
