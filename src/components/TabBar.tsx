@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dropdown, { type Option } from "react-dropdown";
 import { withTranslation } from "react-i18next";
 import type { TabItemConfig } from "../types/marketplace-types";
@@ -58,20 +58,19 @@ const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({ items, swit
 export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: string; switchCallback: (option: Option) => void }) => {
   const tabBar = useRef<HTMLElement | null>(null);
 
-  const contextHandler = useCallback(() => {
-    // Move the marketplace-tabBar item to the main-topBar-topbarContent div
-    const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
-    if (!tabBar?.current || !topBarContent) {
-      setTimeout(contextHandler, 100);
-      return;
-    }
-
-    topBarContent.appendChild(tabBar.current);
-  }, [tabBar.current]);
-
   useEffect(() => {
-    contextHandler();
-    return () => (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
+    const nav = tabBar.current;
+    // Legacy layouts render the marketplace tabs inside the top bar. Modern
+    // layouts (GlobalNav) no longer provide `.main-topBar-topbarContentWrapper`,
+    // so the tab bar stays where React renders it, in the
+    // `.marketplace-tabBar-container` above the header. Retrying forever for a
+    // wrapper that never appears would leave the tabs unreachable.
+    const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
+    if (nav && topBarContent) topBarContent.appendChild(nav);
+
+    return () => {
+      if (nav && topBarContent?.contains(nav)) nav.remove();
+    };
   });
 
   return <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;

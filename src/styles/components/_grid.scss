@@ -40,6 +40,13 @@
   align-self: center;
 }
 
+.marketplace-tabBar-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  pointer-events: auto;
+}
+
 .marketplace-grid {
   --minimumColumnWidth: 180px;
   --column-width: minmax(var(--minimumColumnWidth), 1fr);
@@ -83,9 +90,14 @@
 }
 
 .marketplace-tabBar-nav {
+  pointer-events: auto;
+  width: 100%;
+}
+
+// Only the tab bar hosted in the legacy top bar should drag the window
+.main-topBar-topbarContentWrapper .marketplace-tabBar-nav {
   -webkit-app-region: drag;
   pointer-events: none;
-  width: 100%;
 }
 
 .marketplace-tabBar-headerItem .optionsMenu-dropBox {
