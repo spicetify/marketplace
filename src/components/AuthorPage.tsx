@@ -40,8 +40,27 @@ const SECTIONS: AuthorSection[] = [
   }
 ];
 
-// GitHub search returns at most 1000 results, so at most 10 pages of 100
-const MAX_SEARCH_PAGES = 10;
+// Far more than any real creator publishes, while bounding the work one page can trigger
+const MAX_REPOS_PER_SECTION = 200;
+// Each manifest fetch starts a Web Worker, so only run a few at once
+const MANIFEST_FETCH_CONCURRENCY = 6;
+
+/**
+ * Map over a list with at most `limit` calls in flight, stopping early once `stop()` is true.
+ * @returns The results in list order (with holes for any items skipped after stopping)
+ */
+async function mapWithLimit<T, R>(list: T[], limit: number, fn: (item: T) => Promise<R>, stop: () => boolean) {
+  const results: R[] = [];
+  let next = 0;
+  const worker = async () => {
+    while (next < list.length && !stop()) {
+      const index = next++;
+      results[index] = await fn(list[index]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, list.length) }, worker));
+  return results;
+}
 
 class AuthorPage extends React.Component<
   {
@@ -55,13 +74,15 @@ class AuthorPage extends React.Component<
     t: (key: string, options?: Record<string, unknown>) => string;
   },
   {
-    // One list per section, or null while loading
-    items: CardItem[][] | null;
+    // One list per section, filled in as each section loads
+    items: CardItem[][];
+    loading: boolean;
     failed: boolean;
   }
 > {
   state = {
-    items: null as CardItem[][] | null,
+    items: SECTIONS.map((): CardItem[] => []),
+    loading: true,
     failed: false
   };
 
@@ -77,57 +98,70 @@ class AuthorPage extends React.Component<
   }
 
   async loadItems() {
+    try {
+      await this.loadSections();
+    } catch (error) {
+      console.error("Failed to load the creator's items", error);
+      if (!this.unmounted) this.setState({ failed: true });
+    } finally {
+      if (!this.unmounted) this.setState({ loading: false });
+    }
+  }
+
+  async loadSections() {
     const { author, CONFIG } = this.props;
+    const stopped = () => this.unmounted;
 
     // Blacklisted repos must never be listed, so show nothing if the blacklist can't be loaded
     const blacklist = await getBlacklist();
-    if (this.unmounted) return;
+    if (stopped()) return;
     if (!blacklist) {
-      this.setState({ items: [], failed: true });
+      this.setState({ failed: true });
       return;
     }
 
-    let failed = false;
-    const items = await Promise.all(
-      SECTIONS.map(async (section) => {
-        const repos: RepoSearchItem[] = [];
-        let page: number | null = 0;
-        for (let count = 0; page !== null && count < MAX_SEARCH_PAGES; count++) {
-          const pageOfRepos = await getTaggedRepos(section.topic, page, blacklist, CONFIG.visual.showArchived, CONFIG.sort, author.login);
-          if (pageOfRepos.failed) {
-            failed = true;
-            break;
-          }
-          repos.push(...pageOfRepos.items);
-          page = getNextPage(page, pageOfRepos);
+    // One section at a time, which spreads out the search requests
+    for (const [index, section] of SECTIONS.entries()) {
+      const repos: RepoSearchItem[] = [];
+      let page: number | null = 0;
+      while (page !== null && repos.length < MAX_REPOS_PER_SECTION) {
+        const pageOfRepos = await getTaggedRepos(section.topic, page, blacklist, CONFIG.visual.showArchived, CONFIG.sort, author.login);
+        if (stopped()) return;
+        // Stop at the first failure (e.g. rate limited) instead of repeating it for every section
+        if (pageOfRepos.failed) {
+          this.setState({ failed: true });
+          return;
         }
+        repos.push(...pageOfRepos.items);
+        page = getNextPage(page, pageOfRepos);
+      }
 
-        const repoItems = await Promise.all(
-          repos.map(async (repo) => {
-            const itemsInRepo = await section.fetchItems(repo);
-            return (itemsInRepo ?? []).map((item) => ({
-              ...item,
-              archived: repo.archived,
-              lastUpdated: repo.pushed_at,
-              created: repo.created_at
-            }));
-          })
-        );
+      const repoItems = await mapWithLimit(
+        repos.slice(0, MAX_REPOS_PER_SECTION),
+        MANIFEST_FETCH_CONCURRENCY,
+        async (repo) => {
+          const itemsInRepo = await section.fetchItems(repo);
+          return (itemsInRepo ?? []).map((item) => ({
+            ...item,
+            archived: repo.archived,
+            lastUpdated: repo.pushed_at,
+            created: repo.created_at
+          }));
+        },
+        stopped
+      );
+      if (stopped()) return;
 
-        const sectionItems = repoItems.flat();
-        sortCardItems(sectionItems, CONFIG.sort);
-        return sectionItems;
-      })
-    );
-
-    if (this.unmounted) return;
-    this.setState({ items, failed });
+      const sectionItems = repoItems.flat();
+      sortCardItems(sectionItems, CONFIG.sort);
+      this.setState(({ items }) => ({ items: items.map((current, i) => (i === index ? sectionItems : current)) }));
+    }
   }
 
   render() {
     const { t, author, CONFIG } = this.props;
-    const { items, failed } = this.state;
-    const itemCount = items?.reduce((total, sectionItems) => total + sectionItems.length, 0) ?? 0;
+    const { items, loading, failed } = this.state;
+    const itemCount = items.reduce((total, sectionItems) => total + sectionItems.length, 0);
 
     // Cards hide uninstalled items and re-download installed ones on the Installed tab,
     // so they must not think they're on it when the page was opened from there
@@ -154,7 +188,7 @@ class AuthorPage extends React.Component<
         <div className="marketplace-author">
           <img
             className="marketplace-author__avatar"
-            src={`https://github.com/${author.login}.png?size=256`}
+            src={`https://avatars.githubusercontent.com/${author.login}?s=256`}
             alt=""
             draggable="false"
             onError={(e) => {
@@ -162,14 +196,19 @@ class AuthorPage extends React.Component<
             }}
           />
           <div className="marketplace-author__info">
-            <h1 className="marketplace-author__name" title={author.name} dir="auto">
-              {author.name}
+            {/* The heading is the GitHub username, which GitHub verifies. The name is from a manifest, so anyone can set it. */}
+            <h1 className="marketplace-author__name" title={author.login}>
+              {author.login}
             </h1>
-            {author.name !== author.login ? <span className="marketplace-author__detail">@{author.login}</span> : null}
-            {items && !failed ? <span className="marketplace-author__detail">{t("authorPage.itemCount", { count: itemCount })}</span> : null}
+            {author.name !== author.login ? (
+              <span className="marketplace-author__detail" dir="auto">
+                {author.name}
+              </span>
+            ) : null}
+            {!loading && !failed ? <span className="marketplace-author__detail">{t("authorPage.itemCount", { count: itemCount })}</span> : null}
           </div>
         </div>
-        {items?.map((sectionItems, index) => {
+        {items.map((sectionItems, index) => {
           const section = SECTIONS[index];
           if (!sectionItems.length) return null;
 
@@ -193,12 +232,12 @@ class AuthorPage extends React.Component<
             </div>
           );
         })}
-        {items && (failed || !itemCount) ? (
+        {!loading && (failed || !itemCount) ? (
           <div className="marketplace-author__message">
-            {failed ? t("authorPage.loadError", { name: author.name }) : t("authorPage.empty", { name: author.name })}
+            {failed ? t("authorPage.loadError", { name: author.login }) : t("authorPage.empty", { name: author.login })}
           </div>
         ) : null}
-        <footer className="marketplace-footer">{items ? <div style={{ height: "64px" }} /> : <LoadingIcon />}</footer>
+        <footer className="marketplace-footer">{loading ? <LoadingIcon /> : <div style={{ height: "64px" }} />}</footer>
       </section>
     );
   }
