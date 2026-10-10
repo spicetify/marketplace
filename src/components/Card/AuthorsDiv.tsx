@@ -1,21 +1,22 @@
 import { t } from "i18next";
 import React from "react";
 import { CUSTOM_APP_PATH } from "../../constants";
-import { getGitHubLogin } from "../../logic/Utils";
+import { getAuthorLogin } from "../../logic/Utils";
 import type { Author } from "../../types/marketplace-types";
 
-const AuthorsDiv = (props: { authors: Author[] }) => {
+// `owner` is the owner of the item's repo, used when an author has no usable GitHub link
+const AuthorsDiv = (props: { authors: Author[]; owner?: string }) => {
   // Add a div with author links inside
   const authorsDiv = (
     <div className="marketplace-card__authors">
       {props.authors.map((author) => {
-        // Authors linked to a GitHub profile open their creator page; other links open externally
-        const login = getGitHubLogin(author.url);
+        // Authors linked to GitHub open their creator page; links to other sites open externally
+        const login = getAuthorLogin(author.url, props.owner);
         return (
           <a
             title={login ? t("authorPage.viewAll", { name: author.name }) : author.name}
             className="marketplace-card__author"
-            href={author.url}
+            href={login ? `https://github.com/${login}` : author.url}
             draggable="false"
             dir="auto"
             target="_blank"

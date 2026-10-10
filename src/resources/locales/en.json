@@ -122,7 +122,8 @@
       "itemCount_one": "{{count}} item on Marketplace",
       "itemCount_other": "{{count}} items on Marketplace",
       "empty": "Nothing on Marketplace is published from {{name}}'s GitHub account.",
-      "loadError": "Couldn't load everything {{name}} has published. Try again in a minute."
+      "loadError": "Couldn't load everything {{name}} has published. Try again in a minute.",
+      "missingAccount": "GitHub has no account named {{name}}. It may have been renamed or deleted."
     },
     "github": "GitHub",
     "install": "Install",

@@ -689,18 +689,26 @@ export const sanitizeUrl = (url: string) => {
 // GitHub usernames are letters, digits and single hyphens (not at either end), at most 39 characters.
 // Anything else is rejected, so a username can't add qualifiers to a search query or change a URL path.
 const GITHUB_LOGIN_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
-const GITHUB_PROFILE_URL_REGEX = /^https?:\/\/(?:www\.)?github\.com\/([^/?#\s]+)\/?$/i;
+// A github.com link, capturing the user or org it belongs to: github.com/<login>[/repo...],
+// github.com/orgs/<login> or github.com/sponsors/<login>
+const GITHUB_URL_REGEX = /^https?:\/\/(?:www\.)?github\.com(?:\/(?:orgs\/|sponsors\/)?([^/?#]*))?(?:[/?#]|$)/i;
 
 export const isGitHubLogin = (login: unknown): login is string => typeof login === "string" && GITHUB_LOGIN_REGEX.test(login);
 
 /**
- * Get the GitHub username from an author's link.
+ * Pick the GitHub account whose creator page an author's name opens.
+ * Manifests without an author link get "github.com/<name>" (see Schemas.ts), which breaks for
+ * display names like "Modern Gamer", so GitHub links without a usable username fall back to the
+ * owner of the repo the item came from, which always exists.
  * @param url The author URL from a manifest
- * @returns The username, or null if the link isn't a GitHub profile
+ * @param repoOwner The owner of the item's repo
+ * @returns The username, or null for links to other sites (which keep opening externally)
  */
-export const getGitHubLogin = (url: string) => {
-  const login = url.trim().match(GITHUB_PROFILE_URL_REGEX)?.[1];
-  return isGitHubLogin(login) ? login : null;
+export const getAuthorLogin = (url: string, repoOwner?: string) => {
+  const match = url.trim().match(GITHUB_URL_REGEX);
+  if (!match) return null;
+  if (isGitHubLogin(match[1])) return match[1];
+  return isGitHubLogin(repoOwner) ? repoOwner : null;
 };
 
 /**

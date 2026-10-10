@@ -59,7 +59,7 @@ function trimRepoSearchItem(repo: RepoSearchItem): RepoSearchItem {
  */
 export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string[] = [], showArchived = false, sortMode = "stars", owner?: string) {
   // The owner goes into the search query, so it has to be a plain username
-  if (owner !== undefined && !isGitHubLogin(owner)) return { total_count: 0, page_count: 0, items: [], failed: true };
+  if (owner !== undefined && !isGitHubLogin(owner)) return { total_count: 0, page_count: 0, items: [], failed: true, ownerNotFound: true };
   const query = owner ? `topic:${tag} user:${owner}` : `topic:${tag}`;
 
   // www is needed or it will block with "cross-origin" error.
@@ -71,16 +71,21 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
 
   // Cache by the exact request, so sort modes that send the same GitHub query
   // (e.g. Newest and Last Updated) share results instead of fetching them twice.
+  let ownerNotFound = false;
   const allRepos: RepoSearchPage | null =
     JSON.parse(window.sessionStorage.getItem(url) || "null") ||
     (await fetch(url)
-      .then((res) => res.json())
+      .then((res) => {
+        // GitHub can't search a `user:` that doesn't exist (renamed or deleted accounts)
+        if (owner && res.status === 422) ownerNotFound = true;
+        return res.json();
+      })
       .then((res) => (res?.items ? { total_count: res.total_count, items: res.items.map(trimRepoSearchItem) } : null))
       .catch(() => null));
 
   if (!allRepos?.items) {
-    Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
-    return { total_count: 0, page_count: 0, items: [], failed: true };
+    if (!ownerNotFound) Spicetify.showNotification(t("notifications.tooManyRequests"), true, 5000);
+    return { total_count: 0, page_count: 0, items: [], failed: true, ownerNotFound };
   }
 
   cacheInSessionStorage(url, JSON.stringify(allRepos));
@@ -88,6 +93,7 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
   const filteredResults = {
     ...allRepos,
     failed: false,
+    ownerNotFound: false,
     // Include count of all items on the page, since we're filtering the blacklist below,
     // which can mess up the paging logic
     page_count: allRepos.items.length,

@@ -81,12 +81,15 @@ class AuthorPage extends React.Component<
     items: CardItem[][];
     loading: boolean;
     failed: boolean;
+    // GitHub has no account with this username (renamed or deleted)
+    missingAccount: boolean;
   }
 > {
   state = {
     items: SECTIONS.map((): CardItem[] => []),
     loading: true,
-    failed: false
+    failed: false,
+    missingAccount: false
   };
 
   unmounted = false;
@@ -132,7 +135,7 @@ class AuthorPage extends React.Component<
         if (stopped()) return;
         // Stop at the first failure (e.g. rate limited) instead of repeating it for every section
         if (pageOfRepos.failed) {
-          this.setState({ failed: true });
+          this.setState({ failed: true, missingAccount: pageOfRepos.ownerNotFound });
           return;
         }
         repos.push(...pageOfRepos.items);
@@ -163,7 +166,7 @@ class AuthorPage extends React.Component<
 
   render() {
     const { t, author, CONFIG } = this.props;
-    const { items, loading, failed } = this.state;
+    const { items, loading, failed, missingAccount } = this.state;
     const itemCount = items.reduce((total, sectionItems) => total + sectionItems.length, 0);
 
     // Cards hide uninstalled items and re-download installed ones on the Installed tab,
@@ -179,13 +182,15 @@ class AuthorPage extends React.Component<
             </Button>
           </div>
           <div className="marketplace-header__right">
-            <Button
-              classes={["marketplace-header__button"]}
-              label={t("github")}
-              onClick={() => window.open(`https://github.com/${author.login}`, "_blank")}
-            >
-              <GitHubIcon /> {t("github")}
-            </Button>
+            {missingAccount ? null : (
+              <Button
+                classes={["marketplace-header__button"]}
+                label={t("github")}
+                onClick={() => window.open(`https://github.com/${author.login}`, "_blank")}
+              >
+                <GitHubIcon /> {t("github")}
+              </Button>
+            )}
           </div>
         </div>
         <div className="marketplace-author">
@@ -237,7 +242,11 @@ class AuthorPage extends React.Component<
         })}
         {!loading && (failed || !itemCount) ? (
           <div className="marketplace-author__message">
-            {failed ? t("authorPage.loadError", { name: author.login }) : t("authorPage.empty", { name: author.login })}
+            {missingAccount
+              ? t("authorPage.missingAccount", { name: author.login })
+              : failed
+                ? t("authorPage.loadError", { name: author.login })
+                : t("authorPage.empty", { name: author.login })}
           </div>
         ) : null}
         <footer className="marketplace-footer">{loading ? <LoadingIcon /> : <div style={{ height: "64px" }} />}</footer>

@@ -575,7 +575,7 @@ export class Card extends React.Component<
             </a>
             <div className="main-cardSubHeader-root main-type-mestoBold marketplace-cardSubHeader">
               {/* Add authors if they exist */}
-              {this.props.item.authors && <AuthorsDiv authors={this.props.item.authors} />}
+              {this.props.item.authors && <AuthorsDiv authors={this.props.item.authors} owner={this.props.item.user} />}
               <span>{detail.join(" ‒ ")}</span>
             </div>
             <p className="marketplace-card-desc">
