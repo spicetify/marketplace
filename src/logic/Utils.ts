@@ -201,7 +201,8 @@ export const processAuthors = (authors: Author[], user: string) => {
   if (authors && authors.length > 0) {
     parsedAuthors = authors.map((author) => ({
       name: author.name,
-      url: sanitizeUrl(author.url)
+      url: sanitizeUrl(author.url),
+      ...(author.inferredUrl && { inferredUrl: author.inferredUrl })
     }));
   } else {
     parsedAuthors.push({
@@ -696,13 +697,21 @@ const GITHUB_URL_REGEX = /^https?:\/\/(?:www\.)?github\.com(?:\/(?:orgs\/|users\
 const GITHUB_RESERVED_PATHS = new Set([
   "about",
   "apps",
+  "codespaces",
   "collections",
+  "dashboard",
   "enterprises",
   "explore",
   "features",
+  "issues",
+  "join",
   "login",
   "marketplace",
+  "new",
+  "notifications",
   "orgs",
+  "pricing",
+  "pulls",
   "search",
   "settings",
   "sponsors",
@@ -715,19 +724,20 @@ export const isGitHubLogin = (login: unknown): login is string => typeof login =
 
 /**
  * Pick the GitHub account whose creator page an author's name opens.
- * Manifests without an author link get "github.com/<name>" (see Schemas.ts), which breaks for
- * display names like "Modern Gamer", so GitHub links without a usable username fall back to the
- * owner of the repo the item came from, which always exists.
- * @param url The author URL from a manifest
+ * Authors without a link in the manifest get a "github.com/<name>" guess (see Schemas.ts), which
+ * is dead for display names like "Modern Gamer" and can be a stranger's account for names like
+ * "Alice". So guessed links, and GitHub links without a usable username, use the owner of the
+ * repo the item came from, which always exists.
+ * @param author The author from a manifest
  * @param repoOwner The owner of the item's repo
- * @returns The username and whether it's the repo owner fallback, or null for links to other sites
+ * @returns The username and whether it's the repo owner, or null for links to other sites
  *   (which keep opening externally)
  */
-export const getAuthorLogin = (url: string, repoOwner?: string) => {
+export const getAuthorLogin = ({ url, inferredUrl }: Author, repoOwner?: string) => {
   const match = url.trim().match(GITHUB_URL_REGEX);
   if (!match) return null;
   const login = match[1];
-  if (isGitHubLogin(login) && !GITHUB_RESERVED_PATHS.has(login.toLowerCase())) return { login, isRepoOwner: false };
+  if (!inferredUrl && isGitHubLogin(login) && !GITHUB_RESERVED_PATHS.has(login.toLowerCase())) return { login, isRepoOwner: false };
   return isGitHubLogin(repoOwner) ? { login: repoOwner, isRepoOwner: true } : null;
 };
 

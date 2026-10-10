@@ -5,9 +5,14 @@ const authorsSchema = z
     z
       .object({
         name: z.string().trim().min(1),
-        url: z.url().optional().catch(undefined)
+        url: z.url().optional().catch(undefined),
+        // Set below, and read back from installed items
+        inferredUrl: z.literal(true).optional().catch(undefined)
       })
-      .transform(({ name, url }) => ({ name, url: url || `https://github.com/${name}` }))
+      // Without a url, guess the GitHub profile from the name, and mark it as a guess
+      .transform(({ name, url, inferredUrl }) =>
+        url && !inferredUrl ? { name, url } : { name, url: url || `https://github.com/${name}`, inferredUrl: true as const }
+      )
       .nullable()
       .catch(null)
   )

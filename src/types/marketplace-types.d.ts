@@ -47,6 +47,8 @@ export type RepoType = "extension" | "theme" | "app";
 export type Author = {
   name: string;
   url: string;
+  // The manifest gave no url, so `url` is a guess from the name
+  inferredUrl?: true;
 };
 
 // The creator whose page is open (from the /author/<login> route)

@@ -75,9 +75,13 @@ export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string
   const allRepos: RepoSearchPage | null =
     JSON.parse(window.sessionStorage.getItem(url) || "null") ||
     (await fetch(url)
-      .then((res) => {
-        // GitHub can't search a `user:` that doesn't exist (renamed or deleted accounts)
-        if (owner && res.status === 422) ownerNotFound = true;
+      .then(async (res) => {
+        // GitHub can't search a `user:` that doesn't exist (renamed or deleted accounts). A 422 can
+        // also mean validation or spam limits, so check that the account itself is gone.
+        if (owner && res.status === 422) {
+          const account = await fetch(`https://api.github.com/users/${owner}`).catch(() => null);
+          ownerNotFound = account?.status === 404;
+        }
         return res.json();
       })
       .then((res) => (res?.items ? { total_count: res.total_count, items: res.items.map(trimRepoSearchItem) } : null))
