@@ -1,6 +1,7 @@
 import React from "react";
 import { withTranslation } from "react-i18next";
 
+import { ITEMS_PER_REQUEST } from "../constants";
 import { fetchAppManifest, fetchExtensionManifest, fetchThemeManifest, getBlacklist, getNextPage, getTaggedRepos } from "../logic/FetchRemotes";
 import { getScrollViewport, sortCardItems } from "../logic/Utils";
 import type { AuthorPageData, CardItem, CardType, Config, RepoSearchItem, RepoTopic, SchemeIni } from "../types/marketplace-types";
@@ -42,6 +43,8 @@ const SECTIONS: AuthorSection[] = [
 
 // Far more than any real creator publishes, while bounding the work one page can trigger
 const MAX_REPOS_PER_SECTION = 200;
+// Also cap the pages, in case the blacklist or archived filter drops most results
+const MAX_SEARCH_PAGES = Math.ceil(MAX_REPOS_PER_SECTION / ITEMS_PER_REQUEST);
 // Each manifest fetch starts a Web Worker, so only run a few at once
 const MANIFEST_FETCH_CONCURRENCY = 6;
 
@@ -124,7 +127,7 @@ class AuthorPage extends React.Component<
     for (const [index, section] of SECTIONS.entries()) {
       const repos: RepoSearchItem[] = [];
       let page: number | null = 0;
-      while (page !== null && repos.length < MAX_REPOS_PER_SECTION) {
+      for (let pages = 0; page !== null && pages < MAX_SEARCH_PAGES && repos.length < MAX_REPOS_PER_SECTION; pages++) {
         const pageOfRepos = await getTaggedRepos(section.topic, page, blacklist, CONFIG.visual.showArchived, CONFIG.sort, author.login);
         if (stopped()) return;
         // Stop at the first failure (e.g. rate limited) instead of repeating it for every section
