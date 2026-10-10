@@ -22,11 +22,13 @@ import {
   generateSchemesOptions,
   generateSortOptions,
   getLocalStorageDataFromKey,
+  getScrollViewport,
   injectColourScheme,
   sortCardElements,
   sortCardItems
 } from "../logic/Utils";
-import type { CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
+import type { AuthorPageData, CardItem, CardType, Config, SchemeIni, Snippet, TabItemConfig } from "../types/marketplace-types";
+import AuthorPage from "./AuthorPage";
 import Button from "./Button";
 import Card, { type CardProps } from "./Card/Card";
 import DownloadIcon from "./Icons/DownloadIcon";
@@ -45,6 +47,9 @@ class Grid extends React.Component<
     title: string;
     CONFIG: Config;
     updateAppConfig: (CONFIG: Config) => void;
+    // The creator whose page is open. The tabs stay mounted underneath it, so going back
+    // returns to the same tab and scroll position without reloading.
+    author?: AuthorPageData | null;
     // TODO: there's probably a better way to make TS not complain about the withTranslation HOC
     t: (key: string) => string;
   },
@@ -494,7 +499,7 @@ class Grid extends React.Component<
     this.gridUpdateTabs = this.updateTabs.bind(this);
     this.gridUpdatePostsVisual = this.updatePostsVisual.bind(this);
 
-    const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
+    const viewPort = getScrollViewport();
     this.checkScroll = this.isScrolledBottom.bind(this);
     if (viewPort) {
       viewPort.addEventListener("scroll", this.checkScroll);
@@ -519,10 +524,29 @@ class Grid extends React.Component<
    */
   componentWillUnmount(): void {
     this.gridUpdateTabs = this.gridUpdatePostsVisual = null;
-    const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
+    const viewPort = getScrollViewport();
     if (viewPort) {
       this.lastScroll = viewPort.scrollTop;
       viewPort.removeEventListener("scroll", this.checkScroll);
+    }
+  }
+
+  /**
+   * Remember the scroll position before a creator page covers the tabs.
+   * (By componentDidUpdate the tabs are hidden, and the viewport has already scrolled up.)
+   */
+  getSnapshotBeforeUpdate(prevProps: Readonly<{ author?: AuthorPageData | null }>) {
+    if (!prevProps.author && this.props.author) return getScrollViewport()?.scrollTop ?? null;
+    return null;
+  }
+
+  componentDidUpdate(prevProps: Readonly<{ author?: AuthorPageData | null }>, _prevState: unknown, scrollBeforeAuthorPage: number | null) {
+    if (scrollBeforeAuthorPage !== null) this.lastScroll = scrollBeforeAuthorPage;
+    // Back from a creator page: return to where the user was. Wait a frame, because Spotify's own
+    // scroll restore runs after this and resets to the top for the first page of the session.
+    if (prevProps.author && !this.props.author) {
+      const scrollTop = this.lastScroll;
+      requestAnimationFrame(() => getScrollViewport()?.scrollTo(0, scrollTop));
     }
   }
 
@@ -532,6 +556,9 @@ class Grid extends React.Component<
    */
   // Add scroll event listener with type
   isScrolledBottom(event: Event): void {
+    // A creator page scrolls the same viewport, but its scrolling shouldn't load more of the hidden tab
+    if (this.props.author) return;
+
     const viewPort = event.target as HTMLElement;
     if (viewPort.scrollTop + viewPort.clientHeight >= viewPort.scrollHeight) {
       // At bottom, load more posts
@@ -594,8 +621,11 @@ class Grid extends React.Component<
 
     const installedTabIsEmpty = this.CONFIG.activeTab === "Installed" && this.state.endOfList && cardSections.every((section) => section === null);
 
-    return (
-      <section className="contentSpacing">
+    const { author } = this.props;
+
+    // Hidden rather than unmounted while a creator page is open, so going back keeps the loaded cards
+    const tabsSection = (
+      <section className="contentSpacing" style={author ? { display: "none" } : undefined}>
         <div className="marketplace-header">
           <div className="marketplace-header__left">
             {this.state.newUpdate ? (
@@ -692,6 +722,22 @@ class Grid extends React.Component<
         </footer>
         <TopBarContent switchCallback={this.switchTo.bind(this)} links={this.CONFIG.tabs} activeLink={this.CONFIG.activeTab} />
       </section>
+    );
+
+    return (
+      <>
+        {tabsSection}
+        {author ? (
+          <AuthorPage
+            key={author.login}
+            author={author}
+            CONFIG={this.CONFIG}
+            activeThemeKey={this.state.activeThemeKey}
+            updateColourSchemes={this.updateColourSchemes.bind(this)}
+            updateActiveTheme={this.setActiveTheme.bind(this)}
+          />
+        ) : null}
+      </>
     );
   }
 }

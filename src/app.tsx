@@ -7,9 +7,9 @@ import Grid from "./components/Grid";
 import ReadmePage from "./components/ReadmePage";
 import { ALL_TABS, CUSTOM_APP_PATH, LOCALSTORAGE_KEYS } from "./constants";
 import { hydrateMarketplaceStorage, marketplaceStorage } from "./logic/Storage";
-import { getLocalStorageDataFromKey } from "./logic/Utils";
+import { getLocalStorageDataFromKey, parseAuthorPageData } from "./logic/Utils";
 import locales from "./resources/locales";
-import type { Config, TabItemConfig } from "./types/marketplace-types";
+import type { AuthorPageData, Config, TabItemConfig } from "./types/marketplace-types";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -163,7 +163,20 @@ class App extends React.Component<
       return <ReadmePage title={t("readmePage.title")} data={location.state.data} />;
     }
 
-    return <Grid title={t("grid.spicetifyMarketplace")} CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} />;
+    // Creator page: /marketplace/author/<GitHub username> (opened from AuthorsDiv)
+    // The username is in the path because Spotify only re-renders the app when the path changes.
+    let author: AuthorPageData | null = null;
+    const authorPath = `${CUSTOM_APP_PATH}/author`;
+    if (location.pathname === authorPath || location.pathname.startsWith(`${authorPath}/`)) {
+      author = parseAuthorPageData(location.pathname.slice(authorPath.length + 1), location.state);
+      // If no valid creator, redirect to main page
+      if (!author) {
+        replace(CUSTOM_APP_PATH);
+        return null;
+      }
+    }
+
+    return <Grid title={t("grid.spicetifyMarketplace")} CONFIG={this.CONFIG} updateAppConfig={this.updateConfig} author={author} />;
   }
 }
 

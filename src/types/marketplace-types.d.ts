@@ -49,6 +49,14 @@ export type Author = {
   url: string;
 };
 
+// The creator whose page is open (from the /author/<login> route)
+export type AuthorPageData = {
+  // A validated GitHub username
+  login: string;
+  // Display name from the manifest the creator page was opened from
+  name: string;
+};
+
 // From snippets.json
 export type Snippet = {
   title: string;

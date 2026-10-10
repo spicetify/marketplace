@@ -3,7 +3,7 @@ import { t } from "i18next";
 
 import type { CardProps } from "../components/Card/Card";
 import { LOCALSTORAGE_KEYS } from "../constants";
-import type { Author, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
+import type { Author, AuthorPageData, CardItem, ColourScheme, ResetCategory, SchemeIni, Snippet, SortBoxOption } from "../types/marketplace-types";
 import { marketplaceStorage } from "./Storage";
 
 /**
@@ -685,6 +685,44 @@ export const sanitizeUrl = (url: string) => {
   if (u.startsWith("javascript:") || u.startsWith("data:") || u.startsWith("vbscript:")) return "about:blank";
   return url;
 };
+
+// GitHub usernames are letters, digits and single hyphens (not at either end), at most 39 characters.
+// Anything else is rejected, so a username can't add qualifiers to a search query or change a URL path.
+const GITHUB_LOGIN_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+const GITHUB_PROFILE_URL_REGEX = /^https?:\/\/(?:www\.)?github\.com\/([^/?#\s]+)\/?$/i;
+
+export const isGitHubLogin = (login: unknown): login is string => typeof login === "string" && GITHUB_LOGIN_REGEX.test(login);
+
+/**
+ * Get the GitHub username from an author's link.
+ * @param url The author URL from a manifest
+ * @returns The username, or null if the link isn't a GitHub profile
+ */
+export const getGitHubLogin = (url: string) => {
+  const login = url.trim().match(GITHUB_PROFILE_URL_REGEX)?.[1];
+  return isGitHubLogin(login) ? login : null;
+};
+
+/**
+ * Validate the location of a creator page.
+ * @param login The GitHub username from the path
+ * @param state The state passed to History.push(), which can hold a display name
+ * @returns The creator to show, or null if the username isn't valid
+ */
+export const parseAuthorPageData = (login: unknown, state: unknown): AuthorPageData | null => {
+  if (!isGitHubLogin(login)) return null;
+  const { name } = (state ?? {}) as { name?: unknown };
+  return { login, name: typeof name === "string" && name.trim() ? name.trim() : login };
+};
+
+/**
+ * Get the element the main view scrolls in (it changed between Spotify versions)
+ */
+export const getScrollViewport = () =>
+  document.querySelector(".os-viewport") ??
+  // Newer clients: the scroll node has overflow hidden, and an OverlayScrollbars viewport inside it scrolls
+  document.querySelector("#main .main-view-container__scroll-node [data-overlayscrollbars-viewport]") ??
+  document.querySelector("#main .main-view-container__scroll-node");
 
 export const addExtensionToSpicetifyConfig = (main?: string) => {
   if (!main) return;

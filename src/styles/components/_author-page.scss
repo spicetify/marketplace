@@ -1,0 +1,54 @@
+/* Creator page (everything one GitHub account has published) */
+
+.marketplace-author {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  // The header sticks 64px down (below Spotify's top bar), so it covers the top of whatever follows it
+  margin-top: 64px;
+  padding: 16px 0 8px;
+}
+
+.marketplace-author__avatar {
+  background-color: var(--spice-card);
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 128px;
+  object-fit: cover;
+  width: 128px;
+}
+
+.marketplace-author__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.marketplace-author__name {
+  color: var(--spice-text);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.marketplace-author__detail {
+  color: var(--spice-subtext);
+}
+
+.marketplace-author__message {
+  color: var(--spice-subtext);
+  margin: 0 auto;
+  max-width: 420px;
+  padding: 64px 0;
+}
+
+// The tab bar is moved into Spotify's top bar, outside the hidden tabs section.
+// (It can't be unmounted instead: React would try to remove it from its original parent.)
+body:has(.marketplace-author-page) .marketplace-tabBar {
+  display: none;
+}
