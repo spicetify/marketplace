@@ -556,5 +556,11 @@
     "description": "Removes the browse button from the search bar.",
     "code": ".main-globalNav-browseButtonWrapper { display: none !important }",
     "preview": "resources/assets/snippets/remove-browse.png"
+  },
+  {
+    "title": "Hide Now Playing Cover Art",
+    "description": "Hides the cover art in the now playing bar",
+    "code": ".main-nowPlayingWidget-coverArtContainer { display: none !important; }",
+    "preview": "resources/assets/snippets/hide-now-playing-cover-art.png"
   }
 ]
