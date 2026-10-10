@@ -690,8 +690,26 @@ export const sanitizeUrl = (url: string) => {
 // Anything else is rejected, so a username can't add qualifiers to a search query or change a URL path.
 const GITHUB_LOGIN_REGEX = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
 // A github.com link, capturing the user or org it belongs to: github.com/<login>[/repo...],
-// github.com/orgs/<login> or github.com/sponsors/<login>
-const GITHUB_URL_REGEX = /^https?:\/\/(?:www\.)?github\.com(?:\/(?:orgs\/|sponsors\/)?([^/?#]*))?(?:[/?#]|$)/i;
+// github.com/orgs/<login>, github.com/users/<login> or github.com/sponsors/<login>
+const GITHUB_URL_REGEX = /^https?:\/\/(?:www\.)?github\.com(?:\/(?:orgs\/|users\/|sponsors\/)?([^/?#]*))?(?:[/?#]|$)/i;
+// GitHub's own pages, which look like usernames in a link (github.com/topics/...) but are reserved
+const GITHUB_RESERVED_PATHS = new Set([
+  "about",
+  "apps",
+  "collections",
+  "enterprises",
+  "explore",
+  "features",
+  "login",
+  "marketplace",
+  "orgs",
+  "search",
+  "settings",
+  "sponsors",
+  "topics",
+  "trending",
+  "users"
+]);
 
 export const isGitHubLogin = (login: unknown): login is string => typeof login === "string" && GITHUB_LOGIN_REGEX.test(login);
 
@@ -702,13 +720,15 @@ export const isGitHubLogin = (login: unknown): login is string => typeof login =
  * owner of the repo the item came from, which always exists.
  * @param url The author URL from a manifest
  * @param repoOwner The owner of the item's repo
- * @returns The username, or null for links to other sites (which keep opening externally)
+ * @returns The username and whether it's the repo owner fallback, or null for links to other sites
+ *   (which keep opening externally)
  */
 export const getAuthorLogin = (url: string, repoOwner?: string) => {
   const match = url.trim().match(GITHUB_URL_REGEX);
   if (!match) return null;
-  if (isGitHubLogin(match[1])) return match[1];
-  return isGitHubLogin(repoOwner) ? repoOwner : null;
+  const login = match[1];
+  if (isGitHubLogin(login) && !GITHUB_RESERVED_PATHS.has(login.toLowerCase())) return { login, isRepoOwner: false };
+  return isGitHubLogin(repoOwner) ? { login: repoOwner, isRepoOwner: true } : null;
 };
 
 /**
