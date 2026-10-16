@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dropdown, { type Option } from "react-dropdown";
 import { withTranslation } from "react-i18next";
 import type { TabItemConfig } from "../types/marketplace-types";
@@ -55,24 +55,50 @@ const TabBarMore = React.memo<TabBarMoreProps>(function TabBarMore({ items, swit
   );
 });
 
+// Where Spotify hosts the top bar's content. Tried in order.
+// Spotify's newer clients use hashed class names, so prefer the stable data-testid.
+const TOP_BAR_SELECTORS = ['[data-testid="topbar-content-wrapper"]', ".main-topBar-topbarContentWrapper", ".main-topBar-topbarContent"];
+const TOP_BAR_POLL_MS = 100;
+// Stop waiting for the top bar after ~5s so a renamed/removed Spotify class
+// can't leave the tabs missing (and a timer polling) forever.
+const TOP_BAR_MAX_ATTEMPTS = 50;
+
 export const TopBarContent = (props: { links: TabItemConfig[]; activeLink: string; switchCallback: (option: Option) => void }) => {
   const tabBar = useRef<HTMLElement | null>(null);
 
-  const contextHandler = useCallback(() => {
-    // Move the marketplace-tabBar item to the main-topBar-topbarContent div
-    const topBarContent = document.querySelector(".main-topBar-topbarContentWrapper");
-    if (!tabBar?.current || !topBarContent) {
-      setTimeout(contextHandler, 100);
-      return;
-    }
-
-    topBarContent.appendChild(tabBar.current);
-  }, [tabBar.current]);
-
   useEffect(() => {
-    contextHandler();
-    return () => (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
-  });
+    let attempts = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const attach = () => {
+      const node = tabBar.current;
+      if (!node) return;
+
+      const topBarContent = TOP_BAR_SELECTORS.map((selector) => document.querySelector(selector)).find(Boolean);
+      if (topBarContent) {
+        node.classList.remove("marketplace-tabBar-inline");
+        if (node.parentElement !== topBarContent) topBarContent.appendChild(node);
+        return;
+      }
+
+      if (++attempts < TOP_BAR_MAX_ATTEMPTS) {
+        timer = setTimeout(attach, TOP_BAR_POLL_MS);
+        return;
+      }
+
+      // Fallback: the top bar wasn't found, so show the tabs at the top of the page instead
+      console.warn("Marketplace: Spotify top bar not found, rendering tabs inline");
+      node.classList.add("marketplace-tabBar-inline");
+      const host = node.parentElement;
+      if (host && host.firstElementChild !== node) host.prepend(node);
+    };
+
+    attach();
+    return () => {
+      if (timer) clearTimeout(timer);
+      (tabBar.current || document.querySelector(".marketplace-tabBar"))?.remove();
+    };
+  }, []);
 
   return <TabBar ref={tabBar} links={props.links} activeLink={props.activeLink} switchCallback={props.switchCallback} />;
 };

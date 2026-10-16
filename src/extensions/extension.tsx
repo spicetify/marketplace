@@ -57,6 +57,12 @@ import type { RepoType } from "../types/marketplace-types";
     version: MARKETPLACE_VERSION
   };
 
+  // Snippets are plain local CSS, so inject them before any network probing
+  // so a slow or unreachable CDN can't delay or block them.
+  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
+  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
+  initializeSnippets(installedSnippets);
+
   const tld = await getAvailableTLD();
 
   const initializeExtension = (extensionKey: string) => {
@@ -162,10 +168,6 @@ import type { RepoType } from "../types/marketplace-types";
   };
 
   console.log("Loaded Marketplace extension");
-
-  const installedSnippetKeys = getLocalStorageDataFromKey(LOCALSTORAGE_KEYS.installedSnippets, []);
-  const installedSnippets = installedSnippetKeys.map((key) => getLocalStorageDataFromKey(key));
-  initializeSnippets(installedSnippets);
 
   if (!tld) {
     if (window.navigator.onLine) {

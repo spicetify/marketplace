@@ -1,6 +1,7 @@
 @use "../constants.scss";
 
-.main-topBar-container:has(.marketplace-tabBar) {
+.main-topBar-container:has(.marketplace-tabBar),
+header[data-testid="topbar"]:has(.marketplace-tabBar) {
   contain: unset;
 }
 
@@ -86,6 +87,17 @@
   -webkit-app-region: drag;
   pointer-events: none;
   width: 100%;
+}
+
+// Fallback when Spotify's top bar can't be found: show the tabs at the top of the page
+.marketplace-tabBar-inline {
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 8px 0;
+  background-color: var(--spice-main);
 }
 
 .marketplace-tabBar-headerItem .optionsMenu-dropBox {

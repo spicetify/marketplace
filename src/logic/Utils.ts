@@ -775,18 +775,36 @@ export const sortCardElements = <T extends { props: { item: CardItem | Snippet }
 };
 
 // Make a ping to the jsdelivr CDN to check if the user has an internet connection
+const TLD_PROBE_TIMEOUT_MS = 4000;
+
+/**
+ * Check whether a jsDelivr TLD is reachable.
+ * Bounded by a timeout so a blocked or stalled CDN can't hang Marketplace startup,
+ * and any successful response counts (not just an opaque redirect), since the
+ * redirect behaviour can differ between Spotify/Chromium versions.
+ */
+async function probeTLD(tld: string): Promise<string | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TLD_PROBE_TIMEOUT_MS);
+  try {
+    const response = await fetch(`https://cdn.jsdelivr.${tld}`, {
+      redirect: "manual",
+      cache: "no-cache",
+      signal: controller.signal
+    });
+    if (response.type === "opaqueredirect" || response.ok) return tld;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    clearTimeout(timer);
+  }
+  return null;
+}
+
 export async function getAvailableTLD() {
   const tlds = ["net", "xyz"];
 
-  for (const tld of tlds) {
-    try {
-      const response = await fetch(`https://cdn.jsdelivr.${tld}`, {
-        redirect: "manual",
-        cache: "no-cache"
-      });
-      if (response.type === "opaqueredirect") return tld;
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  // Probe in parallel (worst case is one timeout, not one per TLD), but keep the preference order
+  const results = await Promise.all(tlds.map(probeTLD));
+  return results.find((tld): tld is string => tld !== null);
 }
