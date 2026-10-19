@@ -94,6 +94,8 @@
       "installed": "Installed",
       "nothingInstalled": "You have not installed anything yet. Browse the Extensions, Themes, Snippets, and Apps tabs to get started.",
       "noInstalledMatches": "None of your installed items match that search.",
+      "noMatches": "No items match that search.",
+      "searching": "Searching on GitHub...",
       "storageUnreadable": "Marketplace could not read its saved data. Reload Spotify to try again.",
       "lastUpdated": "Last updated {{val, datetime}}",
       "externalJS": "external JS",

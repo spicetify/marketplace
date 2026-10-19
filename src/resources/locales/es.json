@@ -91,6 +91,8 @@
       "addCSS": "Añadir CSS",
       "search": "Buscar",
       "installed": "Instalado",
+      "noMatches": "Ningún elemento coincide con esa búsqueda.",
+      "searching": "Buscando en GitHub...",
       "lastUpdated": "Última actualización {{val, datetime}}",
       "externalJS": "JS externo",
       "archived": "archivado",

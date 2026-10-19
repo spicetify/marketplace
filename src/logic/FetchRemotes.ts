@@ -56,9 +56,10 @@ function trimRepoSearchItem(repo: RepoSearchItem): RepoSearchItem {
  * @param page The query page number
  * @returns Array of search results (filtered through the blacklist)
  */
-export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string[] = [], showArchived = false, sortMode = "stars") {
+export async function getTaggedRepos(tag: RepoTopic, page = 1, BLACKLIST: string[] = [], showArchived = false, sortMode = "stars", query = "") {
+  const searchQuery = query.trim() ? `${query.trim()} topic:${tag}` : `topic:${tag}`;
   // www is needed or it will block with "cross-origin" error.
-  let url = `https://api.github.com/search/repositories?q=${encodeURIComponent(`topic:${tag}`)}&per_page=${ITEMS_PER_REQUEST}${githubSortParams(sortMode)}`;
+  let url = `https://api.github.com/search/repositories?q=${encodeURIComponent(searchQuery)}&per_page=${ITEMS_PER_REQUEST}${githubSortParams(sortMode)}`;
 
   // We can test multiple pages with this URL (58 results), as well as broken iamges etc.
   // let url = `https://api.github.com/search/repositories?q=${encodeURIComponent("topic:spicetify")}`;

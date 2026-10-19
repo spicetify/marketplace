@@ -52,6 +52,7 @@ class Grid extends React.Component<
     version: string;
     newUpdate: boolean;
     searchValue: string;
+    searchQuery: string;
     cards: CardElement[];
     tabs: TabItemConfig[];
     rest: boolean;
@@ -70,6 +71,7 @@ class Grid extends React.Component<
       version: MARKETPLACE_VERSION,
       newUpdate: false,
       searchValue: "",
+      searchQuery: "",
       cards: [],
       tabs: props.CONFIG.tabs,
       rest: true,
@@ -88,6 +90,7 @@ class Grid extends React.Component<
   requestId = 0;
   requestPage = 0;
   cardList: CardElement[] = [];
+  searchDebounce: ReturnType<typeof setTimeout> | null = null;
   // TODO: why are these set up funny
   // To get to the other side
   gridUpdateTabs: (() => void) | null;
@@ -111,8 +114,15 @@ class Grid extends React.Component<
   }
 
   newRequest(amount: number | undefined) {
+    this.requestPage = 0;
+    this.endOfList = false;
     this.cardList = [];
     this.requestId += 1;
+    this.setState({
+      cards: [],
+      rest: false,
+      endOfList: false
+    });
     this.loadAmount(this.requestId, amount);
   }
 
@@ -192,7 +202,9 @@ class Grid extends React.Component<
     this.setState({
       cards: [],
       rest: false,
-      endOfList: false
+      endOfList: false,
+      searchQuery: "",
+      searchValue: ""
     });
     this.endOfList = false;
 
@@ -212,7 +224,8 @@ class Grid extends React.Component<
           this.requestPage,
           this.BLACKLIST,
           this.CONFIG.visual.showArchived,
-          this.CONFIG.sort
+          this.CONFIG.sort,
+          this.state.searchQuery
         );
         const extensions: CardItem[] = [];
         if (this.isStaleRequest(requestId)) return -1;
@@ -295,7 +308,8 @@ class Grid extends React.Component<
           this.requestPage,
           this.BLACKLIST,
           this.CONFIG.visual.showArchived,
-          this.CONFIG.sort
+          this.CONFIG.sort,
+          this.state.searchQuery
         );
         const themes: CardItem[] = [];
         if (this.isStaleRequest(requestId)) return -1;
@@ -338,7 +352,8 @@ class Grid extends React.Component<
           this.requestPage,
           this.BLACKLIST,
           this.CONFIG.visual.showArchived,
-          this.CONFIG.sort
+          this.CONFIG.sort,
+          this.state.searchQuery
         );
         const apps: CardItem[] = [];
         if (this.isStaleRequest(requestId)) return -1;
@@ -650,7 +665,32 @@ class Grid extends React.Component<
                 placeholder={`${t("grid.search")} ${t(`tabs.${this.CONFIG.activeTab}`)}...`}
                 value={this.state.searchValue}
                 onChange={(event) => {
-                  this.setState({ searchValue: event.target.value });
+                  const val = event.target.value;
+                  this.setState({ searchValue: val });
+                  if (this.searchDebounce) clearTimeout(this.searchDebounce);
+                  if (!val.trim()) {
+                    if (this.state.searchQuery) {
+                      this.setState({ searchQuery: "" }, () => this.newRequest(ITEMS_PER_REQUEST));
+                    }
+                    return;
+                  }
+                  if (this.CONFIG.activeTab !== "Installed" && this.CONFIG.activeTab !== "Snippets") {
+                    this.searchDebounce = setTimeout(() => {
+                      const q = val.trim();
+                      if (q && q !== this.state.searchQuery) {
+                        this.setState({ searchQuery: q }, () => this.newRequest(ITEMS_PER_REQUEST));
+                      }
+                    }, 500);
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    if (this.searchDebounce) clearTimeout(this.searchDebounce);
+                    const q = this.state.searchValue.trim();
+                    if (q !== this.state.searchQuery && this.CONFIG.activeTab !== "Installed" && this.CONFIG.activeTab !== "Snippets") {
+                      this.setState({ searchQuery: q }, () => this.newRequest(ITEMS_PER_REQUEST));
+                    }
+                  }
                 }}
               />
             </div>
@@ -671,6 +711,20 @@ class Grid extends React.Component<
         {installedTabIsEmpty ? (
           <div className="marketplace-empty-installed">
             {this.state.searchValue.trim() ? t("grid.noInstalledMatches") : t("grid.nothingInstalled")}
+          </div>
+        ) : null}
+        {!this.state.rest && this.state.searchQuery ? (
+          <div className="marketplace-empty-installed" style={{ textAlign: "center" }}>
+            <LoadingIcon />
+            <p style={{ marginTop: "16px" }}>{t("grid.searching")}</p>
+          </div>
+        ) : null}
+        {this.state.rest &&
+        this.state.searchValue.trim() &&
+        cardSections.every((section) => section === null) &&
+        this.CONFIG.activeTab !== "Installed" ? (
+          <div className="marketplace-empty-installed" style={{ textAlign: "center" }}>
+            <p>{t("grid.noMatches")}</p>
           </div>
         ) : null}
         {/* Add snippets button if on snippets tab */}
