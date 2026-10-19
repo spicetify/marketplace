@@ -194,21 +194,25 @@ class Grid extends React.Component<
   }
 
   switchTo(option: Option) {
+    if (this.searchDebounce) clearTimeout(this.searchDebounce);
     this.CONFIG.activeTab = option.value;
     marketplaceStorage.setItem(LOCALSTORAGE_KEYS.activeTab, option.value);
     this.cardList = [];
     // this.requestPage = null;
     this.requestPage = 0;
-    this.setState({
-      cards: [],
-      rest: false,
-      endOfList: false,
-      searchQuery: "",
-      searchValue: ""
-    });
     this.endOfList = false;
-
-    this.newRequest(ITEMS_PER_REQUEST);
+    this.setState(
+      {
+        cards: [],
+        rest: false,
+        endOfList: false,
+        searchQuery: "",
+        searchValue: ""
+      },
+      () => {
+        this.newRequest(ITEMS_PER_REQUEST);
+      }
+    );
   }
 
   // This is called from loadAmount in a loop until it has the requested amount of cards or runs out of results
@@ -533,6 +537,7 @@ class Grid extends React.Component<
    * @returns {void}
    */
   componentWillUnmount(): void {
+    if (this.searchDebounce) clearTimeout(this.searchDebounce);
     this.gridUpdateTabs = this.gridUpdatePostsVisual = null;
     const viewPort = document.querySelector(".os-viewport") ?? document.querySelector("#main .main-view-container__scroll-node");
     if (viewPort) {
@@ -578,11 +583,16 @@ class Grid extends React.Component<
         .filter((card) => {
           const searchValue = this.state.searchValue.trim().toLowerCase();
           const { title, user, authors, tags } = card.props.item;
+          const description =
+            card.props.item.manifest?.description ||
+            ("subtitle" in card.props.item ? card.props.item.subtitle : "") ||
+            ("description" in card.props.item ? (card.props.item as Snippet).description : "");
 
           return (
             !searchValue ||
             title.toLowerCase().includes(searchValue) ||
             user?.toLowerCase().includes(searchValue) ||
+            description.toLowerCase().includes(searchValue) ||
             authors?.some((author) => author.name.toLowerCase().includes(searchValue)) ||
             [...(tags ?? [])]?.some((tag) => tag.toLowerCase().includes(searchValue))
           );
