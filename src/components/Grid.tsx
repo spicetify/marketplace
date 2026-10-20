@@ -72,7 +72,7 @@ class Grid extends React.Component<
       searchValue: "",
       cards: [],
       tabs: props.CONFIG.tabs,
-      rest: true,
+      rest: false,
       endOfList: false,
       schemes: props.CONFIG.theme.schemes,
       activeScheme: props.CONFIG.theme.activeScheme,
@@ -217,26 +217,29 @@ class Grid extends React.Component<
         const extensions: CardItem[] = [];
         if (this.isStaleRequest(requestId)) return -1;
 
-        for (const repo of pageOfRepos.items) {
-          const repoExtensions = await fetchExtensionManifest(
-            repo.contents_url,
-            repo.default_branch,
-            repo.stargazers_count,
-            this.CONFIG.visual.hideInstalled
-          );
-
-          if (this.isStaleRequest(requestId)) return -1;
-
-          if (repoExtensions?.length) {
-            extensions.push(
-              ...repoExtensions.map((extension) => ({
-                ...extension,
-                archived: repo.archived,
-                lastUpdated: repo.pushed_at,
-                created: repo.created_at
-              }))
+        const repoResults = await Promise.all(
+          pageOfRepos.items.map(async (repo) => {
+            const repoExtensions = await fetchExtensionManifest(
+              repo.contents_url,
+              repo.default_branch,
+              repo.stargazers_count,
+              this.CONFIG.visual.hideInstalled
             );
-          }
+
+            if (!repoExtensions?.length) return [];
+            return repoExtensions.map((extension) => ({
+              ...extension,
+              archived: repo.archived,
+              lastUpdated: repo.pushed_at,
+              created: repo.created_at
+            }));
+          })
+        );
+
+        if (this.isStaleRequest(requestId)) return -1;
+
+        for (const list of repoResults) {
+          extensions.push(...list);
         }
 
         for (const extension of extensions) {
@@ -300,23 +303,25 @@ class Grid extends React.Component<
         const themes: CardItem[] = [];
         if (this.isStaleRequest(requestId)) return -1;
 
-        for (const repo of pageOfRepos.items) {
-          const repoThemes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
+        const repoResults = await Promise.all(
+          pageOfRepos.items.map(async (repo) => {
+            const repoThemes = await fetchThemeManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
-          if (this.isStaleRequest(requestId)) return -1;
+            if (!repoThemes?.length) return [];
+            return repoThemes.map((theme) => ({
+              ...theme,
+              archived: repo.archived,
+              lastUpdated: repo.pushed_at,
+              created: repo.created_at
+            }));
+          })
+        );
 
-          if (repoThemes?.length) {
-            themes.push(
-              ...repoThemes.map((theme) => ({
-                ...theme,
-                archived: repo.archived,
-                lastUpdated: repo.pushed_at,
-                created: repo.created_at
-              }))
-            );
-          }
+        if (this.isStaleRequest(requestId)) return -1;
+
+        for (const list of repoResults) {
+          themes.push(...list);
         }
-        this.setState({ cards: this.cardList });
 
         for (const theme of themes) {
           this.appendCard(theme, "theme", activeTab);
@@ -325,6 +330,7 @@ class Grid extends React.Component<
         // Sort every card loaded so far, not just this page's, so later pages
         // can still take their place at the top of the list.
         sortCardElements(this.cardList, this.CONFIG.sort);
+        this.setState({ cards: this.cardList });
 
         // If there are more results, return the next page number to fetch
         const nextPage = getNextPage(this.requestPage, pageOfRepos);
@@ -343,22 +349,25 @@ class Grid extends React.Component<
         const apps: CardItem[] = [];
         if (this.isStaleRequest(requestId)) return -1;
 
-        for (const repo of pageOfRepos.items) {
-          const repoApps = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
-          if (this.isStaleRequest(requestId)) return -1;
+        const repoResults = await Promise.all(
+          pageOfRepos.items.map(async (repo) => {
+            const repoApps = await fetchAppManifest(repo.contents_url, repo.default_branch, repo.stargazers_count);
 
-          if (repoApps?.length) {
-            apps.push(
-              ...repoApps.map((app) => ({
-                ...app,
-                archived: repo.archived,
-                lastUpdated: repo.pushed_at,
-                created: repo.created_at
-              }))
-            );
-          }
+            if (!repoApps?.length) return [];
+            return repoApps.map((app) => ({
+              ...app,
+              archived: repo.archived,
+              lastUpdated: repo.pushed_at,
+              created: repo.created_at
+            }));
+          })
+        );
+
+        if (this.isStaleRequest(requestId)) return -1;
+
+        for (const list of repoResults) {
+          apps.push(...list);
         }
-        this.setState({ cards: this.cardList });
 
         for (const app of apps) {
           this.appendCard(app, "app", activeTab);
@@ -367,6 +376,7 @@ class Grid extends React.Component<
         // Sort every card loaded so far, not just this page's, so later pages
         // can still take their place at the top of the list.
         sortCardElements(this.cardList, this.CONFIG.sort);
+        this.setState({ cards: this.cardList });
 
         // If there are more results, return the next page number to fetch
         const nextPage = getNextPage(this.requestPage, pageOfRepos);
@@ -673,6 +683,28 @@ class Grid extends React.Component<
             {this.state.searchValue.trim() ? t("grid.noInstalledMatches") : t("grid.nothingInstalled")}
           </div>
         ) : null}
+        {!this.state.rest && this.cardList.length === 0 && this.CONFIG.activeTab !== "Installed" ? (
+          <div className="marketplace-content" role="status">
+            <span className="marketplace-visually-hidden">Loading items...</span>
+            <div className="marketplace-grid main-gridContainer-gridContainer main-gridContainer-fixedWidth" data-tab={this.CONFIG.activeTab}>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="main-card-card marketplace-card--skeleton" aria-hidden="true">
+                  <div className="main-card-draggable">
+                    <div className="main-card-imageContainer">
+                      <div className="main-cardImage-imageWrapper marketplace-skeleton-image" />
+                    </div>
+                    <div className="main-card-cardMetadata">
+                      <div className="marketplace-skeleton-title" />
+                      <div className="marketplace-skeleton-subtitle" />
+                      <div className="marketplace-skeleton-desc" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {/* Add snippets button if on snippets tab */}
         {this.CONFIG.activeTab === "Snippets" ? (
           <Button classes={["marketplace-add-snippet-btn"]} onClick={() => openModal("ADD_SNIPPET")}>
