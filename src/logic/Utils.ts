@@ -658,6 +658,22 @@ export function sleep(ms: number | undefined) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Once `shouldStop` returns true no new calls start, and their result slots stay empty
+export async function mapWithConcurrency<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>, shouldStop?: () => boolean) {
+  const results = Array.from<R | undefined>({ length: items.length });
+  let nextIndex = 0;
+
+  const runNext = async () => {
+    while (nextIndex < items.length && !shouldStop?.()) {
+      const index = nextIndex++;
+      results[index] = await fn(items[index]);
+    }
+  };
+
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, runNext));
+  return results;
+}
+
 export function generateKey(props: CardProps) {
   const prefix = props.type === "snippet" ? "snippet:" : `${props.item.user}/${props.item.repo}/`;
 

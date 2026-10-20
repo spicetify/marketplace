@@ -131,8 +131,8 @@ async function fetchRepoManifest(url: string) {
   });
 }
 
-// TODO: add try/catch here?
-// TODO: can we add a return type here?
+const pendingManifests = new Map<string, ReturnType<typeof loadRepoManifest>>();
+
 /**
  * Get the manifest object for a repo
  * @param user Owner username
@@ -140,11 +140,21 @@ async function fetchRepoManifest(url: string) {
  * @param branch Default branch name (e.g. main or master)
  * @returns The manifest object
  */
-async function getRepoManifest(user: string, repo: string, branch: string) {
+function getRepoManifest(user: string, repo: string, branch: string) {
+  const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
+  const pending = pendingManifests.get(url);
+  if (pending) return pending;
+
+  const request = loadRepoManifest(user, repo, url).finally(() => pendingManifests.delete(url));
+  pendingManifests.set(url, request);
+  return request;
+}
+
+// TODO: add try/catch here?
+async function loadRepoManifest(user: string, repo: string, url: string) {
   const key = `${user}-${repo}`;
   const sessionStorageItem = window.sessionStorage.getItem(key);
   const failedSessionStorageItems = JSON.parse(window.sessionStorage.getItem("noManifests") || "[]");
-  const url = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/manifest.json`;
   if (!sessionStorageItem && failedSessionStorageItems.includes(url)) return [];
 
   let manifests: ReturnType<typeof JSON.parse>;
