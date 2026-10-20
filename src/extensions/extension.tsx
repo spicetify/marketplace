@@ -98,12 +98,13 @@ import type { RepoType } from "../types/marketplace-types";
 
     // Inject colour scheme if found
     if (themeManifest.schemes) {
-      const activeScheme = themeManifest.schemes[themeManifest.activeScheme];
+      const activeSchemeName = themeManifest.activeScheme ?? Object.keys(themeManifest.schemes)[0];
+      const activeScheme = themeManifest.schemes[activeSchemeName];
       injectColourScheme(activeScheme);
 
       // Add to Spicetify.Config
       // @ts-expect-error: `color_scheme` is read-only type in types
-      Spicetify.Config.color_scheme = themeManifest.activeScheme;
+      Spicetify.Config.color_scheme = activeSchemeName;
       if (marketplaceStorage.getItem(LOCALSTORAGE_KEYS.albumArtBasedColor) === "true") {
         initAlbumArtBasedColor(activeScheme);
       } else if (marketplaceStorage.getItem(LOCALSTORAGE_KEYS.colorShift) === "true") {

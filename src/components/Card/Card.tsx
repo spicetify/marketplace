@@ -35,6 +35,11 @@ type PreparedTheme = {
   userCSS?: string;
 };
 
+type RecordMeta = {
+  stars: number;
+  lastUpdated: string | undefined;
+};
+
 let themeOperationQueue: Promise<void> = Promise.resolve();
 
 function queueThemeOperation<T>(operation: () => Promise<T>) {
@@ -143,25 +148,25 @@ export class Card extends React.Component<
       const url = `https://api.github.com/repos/${this.props.item.user}/${this.props.item.repo}`;
       // TODO: This implementation could probably be improved.
       // It might have issues when quickly switching between tabs.
-      const repoData = await fetch(url).then((res) => res.json());
-      const { stargazers_count, pushed_at } = repoData;
+      const response = await fetch(url);
+      if (!response.ok) return;
+      const { stargazers_count, pushed_at } = await response.json();
+      if (!this.isInstalled()) return;
 
-      const stateUpdate = { stars: 0, lastUpdated: undefined };
-      if (this.state.stars !== stargazers_count && this.props.CONFIG.visual.stars) {
-        stateUpdate.stars = stargazers_count;
-        console.debug(`Stars updated to: ${stargazers_count}`);
-      }
-      if (this.state.lastUpdated !== pushed_at) {
-        stateUpdate.lastUpdated = pushed_at;
-        console.debug(`New update pushed at: ${pushed_at}`);
-        switch (this.props.type) {
-          case "extension":
-            await this.installExtension();
-            break;
-          case "theme":
-            await this.installTheme(true);
-            break;
-        }
+      const stars = this.props.CONFIG.visual.stars ? stargazers_count : this.state.stars;
+      const hasUpdate = this.state.lastUpdated !== pushed_at;
+      this.setState({ stars, lastUpdated: pushed_at });
+      if (!hasUpdate) return;
+
+      console.debug(`New update pushed at: ${pushed_at}`);
+      const recordMeta = { stars, lastUpdated: pushed_at };
+      switch (this.props.type) {
+        case "extension":
+          await this.installExtension(recordMeta);
+          break;
+        case "theme":
+          await this.installTheme(true, recordMeta);
+          break;
       }
     }
   }
@@ -202,7 +207,7 @@ export class Card extends React.Component<
     }
   }
 
-  async installExtension() {
+  async installExtension({ stars, lastUpdated }: RecordMeta = this.state) {
     console.debug(`Installing extension ${this.localStorageKey}`);
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: can I clean this up so it's less repetition?
@@ -210,7 +215,7 @@ export class Card extends React.Component<
       Spicetify.showNotification(t("notifications.extensionInstallationError"), true);
       return;
     }
-    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, lastUpdated, created } = this.props.item;
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, created } = this.props.item;
     const record = JSON.stringify({
       manifest,
       type: this.props.type,
@@ -223,7 +228,7 @@ export class Card extends React.Component<
       imageURL,
       extensionURL,
       readmeURL,
-      stars: this.state.stars,
+      stars,
       lastUpdated,
       created
     });
@@ -254,7 +259,7 @@ export class Card extends React.Component<
     }
   }
 
-  async prepareTheme(update = false): Promise<PreparedTheme | null> {
+  async prepareTheme(update = false, activate = true, { stars, lastUpdated }: RecordMeta = this.state): Promise<PreparedTheme | null> {
     const item = this.props.item as CardItem;
     if (!item) {
       Spicetify.showNotification(t("notifications.themeInstallationError"), true);
@@ -282,23 +287,7 @@ export class Card extends React.Component<
     // Add to localstorage (this stores a copy of all the card props in the localstorage)
     // TODO: refactor/clean this up
 
-    const {
-      manifest,
-      title,
-      subtitle,
-      authors,
-      user,
-      repo,
-      branch,
-      imageURL,
-      extensionURL,
-      readmeURL,
-      cssURL,
-      schemesURL,
-      include,
-      lastUpdated,
-      created
-    } = item;
+    const { manifest, title, subtitle, authors, user, repo, branch, imageURL, extensionURL, readmeURL, cssURL, schemesURL, include, created } = item;
 
     const record = JSON.stringify({
       manifest,
@@ -312,7 +301,7 @@ export class Card extends React.Component<
       imageURL,
       extensionURL,
       readmeURL,
-      stars: this.state.stars,
+      stars,
       tags: this.tags,
       // Theme stuff
       cssURL,
@@ -326,7 +315,7 @@ export class Card extends React.Component<
     });
 
     let userCSS: string | undefined;
-    if (!item.include) {
+    if (activate && !item.include) {
       const tld = window.sessionStorage.getItem("marketplace-request-tld") || undefined;
       userCSS = await parseCSS(item, tld);
     }
@@ -334,51 +323,64 @@ export class Card extends React.Component<
     return { activeScheme, item, parsedSchemes, record, userCSS };
   }
 
-  async installPreparedTheme({ activeScheme, item, parsedSchemes, record, userCSS }: PreparedTheme, previousThemeKey?: string | null) {
+  async installPreparedTheme(
+    { activeScheme, item, parsedSchemes, record, userCSS }: PreparedTheme,
+    activeThemeKey: string | null,
+    shouldActivate = true
+  ) {
+    const replacedThemeKey = shouldActivate && activeThemeKey !== this.localStorageKey ? activeThemeKey : null;
+
+    // Must run before themeInstalled switches, or updateColourSchemes saves the null scheme into the new theme's record
+    if (item.include && replacedThemeKey) this.resetActiveTheme();
+
     console.debug(`Installing theme ${this.localStorageKey}`);
     await marketplaceStorage.mutateAsync((storage) => {
       const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes)).filter(
-        (key) => key !== previousThemeKey && key !== this.localStorageKey
+        (key) => key !== replacedThemeKey && key !== this.localStorageKey
       );
-      if (previousThemeKey && previousThemeKey !== this.localStorageKey) storage.delete(previousThemeKey);
+      if (replacedThemeKey) storage.delete(replacedThemeKey);
       storage.set(this.localStorageKey, record);
       storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify([...installedThemes, this.localStorageKey]));
-      storage.set(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
+      if (shouldActivate) storage.set(LOCALSTORAGE_KEYS.themeInstalled, this.localStorageKey);
     });
 
     console.debug("Installed");
-
-    if (!item.include) {
-      injectUserCSS(userCSS);
-      // Update the active theme in Grid state, triggers state change and re-render
-      this.props.updateActiveTheme(this.localStorageKey);
-      // Update schemes in Grid, triggers state change and re-render
-      this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
-
-      // Add to Spicetify.Config
-      const name = this.props.item.manifest?.name;
-      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
-      if (name) Spicetify.Config.current_theme = name;
-      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
-      if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
-    } else if (previousThemeKey && previousThemeKey !== this.localStorageKey) {
-      injectUserCSS();
-      this.props.updateActiveTheme(null);
-      this.props.updateColourSchemes(null, null);
-      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
-      Spicetify.Config.current_theme = "marketplace";
-      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
-      Spicetify.Config.color_scheme = "marketplace";
-    }
-
     this.setState({ installed: true });
+
+    if (!shouldActivate || item.include) return;
+
+    injectUserCSS(userCSS);
+    // Update the active theme in Grid state, triggers state change and re-render
+    this.props.updateActiveTheme(this.localStorageKey);
+    // Update schemes in Grid, triggers state change and re-render
+    this.props.updateColourSchemes(parsedSchemes, activeScheme as string);
+
+    const name = this.props.item.manifest?.name;
+    // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
+    if (name) Spicetify.Config.current_theme = name;
+    // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
+    if (activeScheme) Spicetify.Config.color_scheme = activeScheme;
   }
 
-  async installTheme(update = false) {
+  resetActiveTheme() {
+    // Removes the current theme CSS
+    injectUserCSS();
+    this.props.updateActiveTheme(null);
+    this.props.updateColourSchemes(null, null);
+
+    // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
+    Spicetify.Config.current_theme = "marketplace";
+    // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
+    Spicetify.Config.color_scheme = "marketplace";
+  }
+
+  async installTheme(update = false, recordMeta?: RecordMeta) {
     await queueThemeOperation(async () => {
-      const preparedTheme = await this.prepareTheme(update);
+      if (update && !this.isInstalled()) return;
       const activeThemeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
-      if (preparedTheme) await this.installPreparedTheme(preparedTheme, activeThemeKey);
+      const shouldActivate = !update || activeThemeKey === this.localStorageKey;
+      const preparedTheme = await this.prepareTheme(update, shouldActivate, recordMeta);
+      if (preparedTheme) await this.installPreparedTheme(preparedTheme, activeThemeKey, shouldActivate);
     });
   }
 
@@ -389,7 +391,8 @@ export class Card extends React.Component<
 
       if (this.isInstalled()) {
         console.debug("Theme already installed, removing");
-        await this.removeThemeNow(this.localStorageKey);
+        const removedActive = await this.removeThemeNow(this.localStorageKey);
+        if (!removedActive) return false;
       } else {
         const localTheme = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.localTheme);
         if (localTheme !== null && localTheme.toLowerCase() !== "marketplace") {
@@ -408,37 +411,29 @@ export class Card extends React.Component<
   }
 
   async removeThemeNow(defaultThemeKey?: string | null) {
-    // If don't specify theme, remove the currently installed theme
-    const themeKey = defaultThemeKey || marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    const activeThemeKey = marketplaceStorage.getItem(LOCALSTORAGE_KEYS.themeInstalled);
+    const themeKey = defaultThemeKey || activeThemeKey;
+    const removingActive = themeKey === activeThemeKey;
 
     const themeValue = themeKey && marketplaceStorage.getItem(themeKey);
 
-    if (themeKey && themeValue) {
-      console.debug(`Removing theme ${themeKey}`);
-      await marketplaceStorage.mutateAsync((storage) => {
-        storage.delete(themeKey);
-        storage.delete(LOCALSTORAGE_KEYS.themeInstalled);
-        const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes));
-        storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes.filter((key) => key !== themeKey)));
-      });
+    if (!themeKey || !themeValue) return false;
 
-      console.debug("Removed");
+    console.debug(`Removing theme ${themeKey}`);
+    await marketplaceStorage.mutateAsync((storage) => {
+      storage.delete(themeKey);
+      if (removingActive) storage.delete(LOCALSTORAGE_KEYS.themeInstalled);
+      const installedThemes = readStoredStringArray(storage.get(LOCALSTORAGE_KEYS.installedThemes));
+      storage.set(LOCALSTORAGE_KEYS.installedThemes, JSON.stringify(installedThemes.filter((key) => key !== themeKey)));
+    });
 
-      // Removes the current theme CSS
-      injectUserCSS();
-      // Update the active theme in Grid state
-      this.props.updateActiveTheme(null);
-      // Removes the current colour scheme
-      this.props.updateColourSchemes(null, null);
+    console.debug("Removed");
+    this.setState({ installed: false });
 
-      // Restore Spicetify.Config
-      // @ts-expect-error: Cannot assign to 'current_theme' because it is a read-only property
-      Spicetify.Config.current_theme = "marketplace";
-      // @ts-expect-error: Cannot assign to 'color_scheme' because it is a read-only property
-      Spicetify.Config.color_scheme = "marketplace";
+    if (!removingActive) return false;
 
-      this.setState({ installed: false });
-    }
+    this.resetActiveTheme();
+    return true;
   }
 
   async installSnippet() {
