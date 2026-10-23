@@ -62,7 +62,7 @@
   {
     "title": "Remove connect bar",
     "description": "Remove connect bar that causes progress bar displacement when listening on different devices",
-    "code": ".main-connectBar-connectBar {\n  display: none !important;}",
+    "code": ".main-connectBar-connectBar { display: none !important;} [data-testid=\"now-playing-bar\"] > div:has(> button[data-encore-id=\"textLink\"]) { display: none !important; }",
     "preview": "resources/assets/snippets/remove-connect-bar.png"
   },
   {
@@ -350,7 +350,7 @@
   {
     "title": "Smaller right sidebar cover art",
     "description": "Makes the right sidebar cover art smaller and move the track info to the right.",
-    "code": ":root { --right-sidebar-cover-art-size: 85px; } \n.main-nowPlayingView-coverArt { width: var(--right-sidebar-cover-art-size); } \n.main-nowPlayingView-coverArtContainer { min-height: unset !important; width: var(--right-sidebar-cover-art-size) !important; } \n.main-nowPlayingView-nowPlayingGrid { flex-direction: row !important;  align-items: center; } \n.main-nowPlayingView-contextItemInfo { flex: 1; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-name { font-size: 1.25rem; } \n.main-nowPlayingView-contextItemInfo .main-trackInfo-artists { font-size: 0.85rem; } \n.main-nowPlayingView-contextItemInfo:before { display: none !important; } ",
+    "code": ":root { --right-sidebar-cover-art-size: 85px; } .main-nowPlayingView-coverArt { width: var(--right-sidebar-cover-art-size); } .main-nowPlayingView-coverArtContainer { min-height: unset !important; width: var(--right-sidebar-cover-art-size) !important; } .main-nowPlayingView-nowPlayingGrid { flex-direction: row !important; align-items: center; } .main-nowPlayingView-contextItemInfo { flex: 1; } .main-nowPlayingView-contextItemInfo .main-trackInfo-name { font-size: 1.25rem; } .main-nowPlayingView-contextItemInfo .main-trackInfo-artists { font-size: 0.85rem; } .main-nowPlayingView-contextItemInfo:before { display: none !important; } :root { --right-sidebar-cover-art-size: 85px; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child { display: grid !important; grid-template-columns: var(--right-sidebar-cover-art-size) 1fr; grid-template-rows: 1fr auto; align-items: center; column-gap: 12px; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :last-child { grid-column: 2; grid-row: 1; min-width: 0; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :last-child:nth-child(2) { grid-row: 1 / span 2; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :nth-child(2):not(:last-child) { grid-column: 2; grid-row: 2; justify-self: start; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :first-child { grid-column: 1; grid-row: 1 / span 2; width: var(--right-sidebar-cover-art-size) !important; min-width: var(--right-sidebar-cover-art-size) !important; height: var(--right-sidebar-cover-art-size) !important; position: relative; overflow: hidden; border-radius: 4px; } .NowPlayingView [data-testid=\"track-visual-enhancement\"] { inset: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; } .NowPlayingView [data-testid=\"track-visual-enhancement\"] * { max-width: 100%; } .NowPlayingView [data-testid=\"minimized-track-visual-enhancement\"] { display: none !important; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :last-child > :nth-child(2) > :nth-child(1) a { font-size: 1.25rem !important; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :last-child > :nth-child(2) > :nth-child(3) a { font-size: 0.85rem !important; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :last-child::before { display: none !important; } .NowPlayingView > div > :first-child, .NowPlayingView .main-nowPlayingView-headerWrapper { position: relative !important; inset: auto !important; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child > :first-child > :first-child { margin: 0 !important; }",
     "preview": "resources/assets/snippets/smaller-right-sidebar-cover.png"
   },
   {
@@ -428,7 +428,7 @@
   {
     "title": "Queue Top Side Panel",
     "description": "Moves the \"Next in queue\" section to the top of the Now Playing view",
-    "code": ".main-nowPlayingView-section:not(.main-nowPlayingView-queue) { order: 99; }",
+    "code": ".main-nowPlayingView-section:not(.main-nowPlayingView-queue) { order: 99; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > :first-child { order: -2; } .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > div:has(> ul):not(:has(a[href*=\"shop.spotify.com\"])), .NowPlayingView [data-testid=\"NPV_Panel_OpenDiv\"] > div:has(h2):not(:has(a, ul, button, img, [data-encore-id=\"listRow\"])) { order: -1; }",
     "preview": "resources/assets/snippets/Queue-Top-Side-Panel.png"
   },
   {
