@@ -41,7 +41,7 @@
     "copyfiles": "2.4.1",
     "husky": "9.1.7",
     "spicetify-creator": "1.0.17",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   },
   "engines": {
     "node": ">=24",
