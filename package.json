@@ -1,6 +1,6 @@
 {
   "name": "marketplace",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "homepage": "https://github.com/spicetify/marketplace",
   "bugs": {
@@ -23,7 +23,7 @@
     "@biomejs/biome": "2.5.11",
     "@hello-pangea/dnd": "18.0.1",
     "chroma-js": "3.2.0",
-    "dexie": "4.4.5",
+    "dexie": "4.4.2",
     "i18next": "26.4.0",
     "prismjs": "1.30.0",
     "react-dropdown": "1.11.0",
