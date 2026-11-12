@@ -3,6 +3,7 @@ import React, { type Key } from "react";
 import { withTranslation } from "react-i18next";
 
 import { CUSTOM_APP_PATH, LOCALSTORAGE_KEYS, SNIPPETS_PAGE_URL } from "../../constants";
+import { isFavourite, setFavourite } from "../../logic/Favourites";
 import { openModal } from "../../logic/LaunchModals";
 import { marketplaceStorage } from "../../logic/Storage";
 import { generateKey, getLocalStorageDataFromKey, initializeSnippets, injectUserCSS, parseCSS, parseIni } from "../../logic/Utils";
@@ -10,6 +11,7 @@ import type { CardItem, CardType, Config, SchemeIni, Snippet, VisualConfig } fro
 import Button from "../Button";
 import DownloadIcon from "../Icons/DownloadIcon";
 import GitHubIcon from "../Icons/GitHubIcon";
+import HeartIcon from "../Icons/HeartIcon";
 import TrashIcon from "../Icons/TrashIcon";
 import Tooltip from "../Tooltip";
 import AuthorsDiv from "./AuthorsDiv";
@@ -67,6 +69,7 @@ export class Card extends React.Component<
   CardProps,
   {
     installed: boolean;
+    favourited: boolean;
     // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
     stars: number;
     tagsExpanded: boolean;
@@ -102,7 +105,8 @@ export class Card extends React.Component<
     Object.assign(this, props);
 
     // Needs to be after Object.assign so an undefined 'tags' field doesn't overwrite the default []
-    this.tags = props.item.tags || [];
+    // Copy it so the tags we add below don't leak into the item (it gets saved when favourited)
+    this.tags = [...(props.item.tags || [])];
     if (props.item.include) this.tags.push(t("grid.externalJS"));
     if (props.item.archived) this.tags.push(t("grid.archived"));
 
@@ -110,6 +114,7 @@ export class Card extends React.Component<
       // Initial value. Used to trigger a re-render.
       // isInstalled() is used for all other intents and purposes
       installed: marketplaceStorage.getItem(this.localStorageKey) !== null,
+      favourited: isFavourite(this.localStorageKey),
 
       // TODO: Can I remove `stars` from `this`? Or maybe just put everything in `state`?
       stars: this.props.item.stars || 0,
@@ -126,6 +131,18 @@ export class Card extends React.Component<
   // Using this because it gets the live value ('installed' is stuck after a re-render)
   isInstalled() {
     return marketplaceStorage.getItem(this.localStorageKey) !== null;
+  }
+
+  async toggleFavourite() {
+    const favourited = !this.state.favourited;
+    // Update the heart straight away, then roll back if the write fails
+    this.setState({ favourited });
+    try {
+      await setFavourite({ key: this.localStorageKey, type: this.props.type, item: this.props.item }, favourited);
+    } catch (error) {
+      this.setState({ favourited: !favourited });
+      this.handleOperationError(error);
+    }
   }
 
   handleOperationError(error: unknown) {
@@ -505,8 +522,13 @@ export class Card extends React.Component<
       return null;
     }
 
+    // Kill the card if it has been unfavourited on the "Favourites" tab
+    if (this.props.CONFIG.activeTab === "Favourites" && !this.state.favourited) return null;
+
     const cardClasses = ["main-card-card", `marketplace-card--${this.props.type}`];
     if (IS_INSTALLED) cardClasses.push("marketplace-card--installed");
+
+    const favouriteLabel = this.state.favourited ? t("grid.removeFavourite") : t("grid.addFavourite");
 
     const detail: string[] = [];
     // this.visual.type && detail.push(this.type);
@@ -554,6 +576,20 @@ export class Card extends React.Component<
                 />
               </div>
             </div>
+            <Tooltip label={favouriteLabel} renderInline={true}>
+              <button
+                type="button"
+                className={`marketplace-favouriteButton${this.state.favourited ? " marketplace-favouriteButton--active" : ""}`}
+                aria-label={favouriteLabel}
+                aria-pressed={this.state.favourited}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  void this.toggleFavourite();
+                }}
+              >
+                <HeartIcon filled={this.state.favourited} />
+              </button>
+            </Tooltip>
           </div>
           <div className="main-card-cardMetadata">
             <a

@@ -69,6 +69,15 @@ class App extends React.Component<
       marketplaceStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
     }
 
+    // Tabs added in newer versions are missing from the saved list. Add them back,
+    // keeping them just before "Installed" like they are in the defaults.
+    const missingTabs = ALL_TABS.filter((defaultTab) => !tabs.some((tab) => tab.name === defaultTab.name));
+    if (missingTabs.length > 0) {
+      const installedIndex = tabs.findIndex((tab) => tab.name === "Installed");
+      tabs = installedIndex === -1 ? [...tabs, ...missingTabs] : [...tabs.slice(0, installedIndex), ...missingTabs, ...tabs.slice(installedIndex)];
+      marketplaceStorage.setItem(LOCALSTORAGE_KEYS.tabs, JSON.stringify(tabs));
+    }
+
     // Get active theme
     let schemes = {};
     let activeScheme = null;

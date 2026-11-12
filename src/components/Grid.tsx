@@ -6,6 +6,7 @@ import semver from "semver";
 const Spicetify = window.Spicetify;
 
 import { ITEMS_PER_REQUEST, LATEST_RELEASE_URL, LOCALSTORAGE_KEYS, MANIFEST_FETCH_CONCURRENCY, MARKETPLACE_VERSION } from "../constants";
+import { getFavourites } from "../logic/Favourites";
 import {
   fetchAppManifest,
   fetchCssSnippets,
@@ -284,6 +285,21 @@ class Grid extends React.Component<
 
         // Don't need to return a page number because
         // installed extension do them all in one go, since it's local
+      }
+      case "Favourites": {
+        const favourites = getFavourites();
+        for (const type of ["extension", "theme", "snippet", "app"] as const) {
+          const favouritesOfType = favourites.filter((favourite) => favourite.type === type).map(({ item }) => item) as CardItem[];
+          sortCardItems(favouritesOfType, this.CONFIG.sort);
+
+          for (const item of favouritesOfType) {
+            this.appendCard(item, type, activeTab);
+          }
+        }
+        this.setState({ cards: this.cardList });
+        break;
+
+        // Favourites are stored locally, so they all load in one go like the installed ones
       }
       case "Themes": {
         const pageOfRepos = await getTaggedRepos(
@@ -564,6 +580,7 @@ class Grid extends React.Component<
     });
 
     const installedTabIsEmpty = this.CONFIG.activeTab === "Installed" && this.state.endOfList && cardSections.every((section) => section === null);
+    const favouritesTabIsEmpty = this.CONFIG.activeTab === "Favourites" && this.state.endOfList && cardSections.every((section) => section === null);
 
     return (
       <section className="contentSpacing">
@@ -642,6 +659,11 @@ class Grid extends React.Component<
         {installedTabIsEmpty ? (
           <div className="marketplace-empty-installed">
             {this.state.searchValue.trim() ? t("grid.noInstalledMatches") : t("grid.nothingInstalled")}
+          </div>
+        ) : null}
+        {favouritesTabIsEmpty ? (
+          <div className="marketplace-empty-installed">
+            {this.state.searchValue.trim() ? t("grid.noFavouritesMatches") : t("grid.nothingFavourited")}
           </div>
         ) : null}
         {/* Add snippets button if on snippets tab */}

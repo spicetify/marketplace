@@ -153,3 +153,34 @@
   cursor: pointer;
   --size: 40px;
 }
+
+// Heart button in the top right of the card image
+.marketplace-grid .main-card-imageContainer {
+  position: relative;
+}
+
+.marketplace-favouriteButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+
+  &:hover, &:focus-visible {
+    transform: scale(1.1);
+  }
+}
+
+.marketplace-favouriteButton--active {
+  color: var(--spice-button, #1ed760);
+}
