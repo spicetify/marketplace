@@ -8,6 +8,8 @@ export const LOCALSTORAGE_KEYS = {
   installedExtensions: `${STORAGE_KEY_PREFIX}:installed-extensions`,
   installedSnippets: `${STORAGE_KEY_PREFIX}:installed-snippets`,
   installedThemes: `${STORAGE_KEY_PREFIX}:installed-themes`,
+  // Items the user bookmarked without installing them: [{ key, type, item }]
+  favourites: `${STORAGE_KEY_PREFIX}:favourites`,
   activeTab: `${STORAGE_KEY_PREFIX}:active-tab`,
   tabs: `${STORAGE_KEY_PREFIX}:tabs`,
   sort: `${STORAGE_KEY_PREFIX}:sort`,
@@ -27,6 +29,7 @@ export const ALL_TABS: TabItemConfig[] = [
   { name: "Themes", enabled: true },
   { name: "Snippets", enabled: true },
   { name: "Apps", enabled: true },
+  { name: "Favourites", enabled: true },
   { name: "Installed", enabled: true }
 ];
 

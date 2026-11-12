@@ -36,7 +36,7 @@ export type RepoSearchPage = {
   items: RepoSearchItem[];
 };
 
-export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Installed";
+export type TabType = "Extensions" | "Themes" | "Snippets" | "Apps" | "Favourites" | "Installed";
 
 export type ResetCategory = "extensions" | "snippets" | "theme";
 

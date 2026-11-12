@@ -31,6 +31,7 @@
       "Themes": "Themes",
       "Snippets": "Snippets",
       "Apps": "Apps",
+      "Favourites": "Favourites",
       "Installed": "Installed"
     },
     "snippets": {
@@ -93,6 +94,10 @@
       "search": "Search",
       "installed": "Installed",
       "nothingInstalled": "You have not installed anything yet. Browse the Extensions, Themes, Snippets, and Apps tabs to get started.",
+      "nothingFavourited": "You have not favourited anything yet. Select the heart on any card to save it here.",
+      "noFavouritesMatches": "None of your favourites match that search.",
+      "addFavourite": "Add to favourites",
+      "removeFavourite": "Remove from favourites",
       "noInstalledMatches": "None of your installed items match that search.",
       "storageUnreadable": "Marketplace could not read its saved data. Reload Spotify to try again.",
       "lastUpdated": "Last updated {{val, datetime}}",

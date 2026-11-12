@@ -41,3 +41,9 @@ export const storedCardItemSchema = z.looseObject({
   authors: authorsSchema.optional().catch(undefined),
   tags: tagsSchema.optional().catch(undefined)
 });
+
+export const favouriteEntrySchema = z.object({
+  key: z.string().min(1),
+  type: z.enum(["extension", "theme", "snippet", "app"]),
+  item: storedCardItemSchema
+});
