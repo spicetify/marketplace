@@ -14,6 +14,9 @@
     "https://github.com/yanlvl99/memory-sentry",
     "https://github.com/mayl0o/drift-for-spotify",
     "https://github.com/stefaceriani/chromashift",
+    "https://github.com/NMWplays/Liquid-Lyrics",
+    "https://github.com/NMWplays/Glowify",
+    "https://github.com/NMWplays/Liquify",
     "// for new bl syntax:",
     "https://github.com/FoxRefire/*",
     "https://github.com/*/spiceDL",
@@ -32,6 +35,7 @@
     "https://github.com/*/memory-sentry",
     "https://github.com/*/drift-for-spotify",
     "https://github.com/mayl0o/*",
-    "https://github.com/*/chromashift"
+    "https://github.com/*/chromashift",
+    "https://github.com/NMWplays/*"
   ]
 }
