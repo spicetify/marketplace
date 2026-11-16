@@ -18,8 +18,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       dexie:
-        specifier: 4.4.5
-        version: 4.4.5
+        specifier: 4.4.2
+        version: 4.4.2
       i18next:
         specifier: 26.4.0
         version: 26.4.0(typescript@6.0.3)
@@ -379,8 +379,8 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  dexie@4.4.5:
-    resolution: {integrity: sha512-wWCHdihT3dmlUSuNhn5mMZDWSpG0suxjAni7YjjiZdzabZcKmy3uNZGZ7AeYYXBoLbpSXX35fikPLkPC44Osiw==}
+  dexie@4.4.2:
+    resolution: {integrity: sha512-zMtV8q79EFE5U8FKZvt0Y/77PCU/Hr/RDxv1EDeo228L+m/HTbeN2AjoQm674rhQCX8n3ljK87lajt7UQuZfvw==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -1413,7 +1413,7 @@ snapshots:
   detect-libc@2.1.2:
     optional: true
 
-  dexie@4.4.5: {}
+  dexie@4.4.2: {}
 
   eastasianwidth@0.2.0: {}
 
