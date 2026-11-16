@@ -492,9 +492,9 @@
     "preview": "resources/assets/snippets/declutter-now-playing-bar.png"
   },
   {
-    "title": "Remove the Artists and Credits sections from the Sidebar",
-    "description": "It will only show the album cover and the next song",
-    "code": ".nw2W4ZMdICuBo08Tzxg9 { justify-content: center; height: 100%; width: 100%; } .main-nowPlayingView-section:not(.main-nowPlayingView-queue):not(.lyrics-npv-card) {display: none !important}",
+    "title": "Remove Sidebar clutter",
+    "description": "It will only show the album cover and the next song. Everything between, like Artists or Credits, will be removed",
+    "code": ".main-nowPlayingView-panel > .main-nowPlayingView-section:not(:last-child) {\n  display: none !important;\n}",
     "preview": "resources/assets/snippets/remove-the-artists-and-credits-sections-from-the-sidebar.png"
   },
   {
