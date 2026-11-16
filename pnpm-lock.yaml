@@ -27,8 +27,8 @@ importers:
         specifier: 1.30.0
         version: 1.30.0
       react-dropdown:
-        specifier: 1.11.0
-        version: 1.11.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: 2.0.0
+        version: 2.0.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react-i18next:
         specifier: 17.0.12
         version: 17.0.12(i18next@26.4.0(typescript@6.0.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@6.0.3)
@@ -316,9 +316,6 @@ packages:
 
   chroma-js@3.2.0:
     resolution: {integrity: sha512-os/OippSlX1RlWWr+QDPcGUZs0uoqr32urfxESG9U93lhUfbnlyckte84Q8P1UQY/qth983AS1JONKmLS4T0nw==}
-
-  classnames@2.3.2:
-    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
 
   clean-css@5.3.2:
     resolution: {integrity: sha512-JVJbM+f3d3Q704rF4bqQ5UUyTtuJ0JRKNbTKVEeujCCBoMdkEi+V+e8oktO9qGQNSvHrFTM6JZRXrUvGR1czww==}
@@ -888,11 +885,11 @@ packages:
     peerDependencies:
       react: ^19.2.3
 
-  react-dropdown@1.11.0:
-    resolution: {integrity: sha512-E2UWetRPxNdIhQahXw6b984ME7WmcgDj9AEAjrtS/oyLCFVo+2qkCfcS06C22JR0Zj+YLnygwv0Ozf6VKKDq7g==}
+  react-dropdown@2.0.0:
+    resolution: {integrity: sha512-KjT/zrlFaoj5EO1CJN4d36PgMsaMTkNxkwu4CAY0v0A1ddThlxQp3YBtiiJCTFWo6Mt95htJ+IKUiz09pHYXDw==}
     peerDependencies:
-      react: ^0.14.7 || ^15.0.0-0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^0.14.7 || ^15.0.0-0 || ^16.0.0 || ^17.0.0|| ^18.0.0
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
 
   react-i18next@17.0.12:
     resolution: {integrity: sha512-lFWPEGkxQ6RhusdUkysFBD58VHfSSzvHBzqMgN0SvfVpdQGfwtNkStTqdy08/sJd7s807qqutgx93fRpD0DJ3Q==}
@@ -1350,8 +1347,6 @@ snapshots:
       readdirp: 4.1.2
 
   chroma-js@3.2.0: {}
-
-  classnames@2.3.2: {}
 
   clean-css@5.3.2:
     dependencies:
@@ -1852,9 +1847,8 @@ snapshots:
       react: 19.2.3
       scheduler: 0.27.0
 
-  react-dropdown@1.11.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  react-dropdown@2.0.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
-      classnames: 2.3.2
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
