@@ -495,7 +495,7 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
         colorMap.set(value, [key]);
       }
     }
-    // Order the color map by how similar the colors are to eachother
+    // Order the color map by how similar the colors are to each other
     const orderedColorMap = new Map(
       [...colorMap.entries()].sort((a, b) => {
         const aColor = Chroma(a[0]);
