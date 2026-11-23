@@ -473,14 +473,32 @@ const ensureContrast = (fgHex: string, bgHexes: string[], minRatio: number): str
   const whiteContrast = minContrast("ffffff");
   const blackContrast = minContrast("000000");
   const preferLight = whiteContrast >= blackContrast;
-  let adjusted = Chroma(fgHex);
-  for (let i = 0; i < 12; i++) {
-    adjusted = preferLight ? adjusted.brighten(0.4) : adjusted.darken(0.4);
-    if (minContrast(adjusted) >= minRatio) {
-      return adjusted.hex().substring(1);
+  let bestHex = preferLight ? "ffffff" : "000000";
+  let bestScore = Math.max(whiteContrast, blackContrast);
+
+  if (bestScore >= minRatio) {
+    let adjusted = Chroma(fgHex);
+    for (let i = 0; i < 12; i++) {
+      adjusted = preferLight ? adjusted.brighten(0.4) : adjusted.darken(0.4);
+      if (minContrast(adjusted) >= minRatio) {
+        return adjusted.hex().substring(1);
+      }
+    }
+    return bestHex;
+  }
+
+  for (let i = 1; i < 16; i++) {
+    const candidate = Chroma.mix("000000", "ffffff", i / 16, "lab");
+    const score = minContrast(candidate);
+    if (score >= minRatio) {
+      return candidate.hex().substring(1);
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestHex = candidate.hex().substring(1);
     }
   }
-  return preferLight ? "ffffff" : "000000";
+  return bestHex;
 };
 
 export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
