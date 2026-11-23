@@ -464,17 +464,19 @@ async function waitForPlayerItem(): Promise<Spicetify.PlayerTrack | undefined> {
   });
 }
 
-const ensureContrast = (fgHex: string, bgHex: string, minRatio: number): string => {
-  if (Chroma.contrast(fgHex, bgHex) >= minRatio) {
+const ensureContrast = (fgHex: string, bgHexes: string[], minRatio: number): string => {
+  const minContrast = (fg: string | Chroma.Color) => Math.min(...bgHexes.map((bg) => Chroma.contrast(fg, bg)));
+
+  if (minContrast(fgHex) >= minRatio) {
     return fgHex.replace(/^#/, "");
   }
-  const whiteContrast = Chroma.contrast("ffffff", bgHex);
-  const blackContrast = Chroma.contrast("000000", bgHex);
+  const whiteContrast = minContrast("ffffff");
+  const blackContrast = minContrast("000000");
   const preferLight = whiteContrast >= blackContrast;
   let adjusted = Chroma(fgHex);
   for (let i = 0; i < 12; i++) {
     adjusted = preferLight ? adjusted.brighten(0.4) : adjusted.darken(0.4);
-    if (Chroma.contrast(adjusted, bgHex) >= minRatio) {
+    if (minContrast(adjusted) >= minRatio) {
       return adjusted.hex().substring(1);
     }
   }
@@ -534,16 +536,17 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
       }
     }
 
-    const bgHex = newScheme.main || newScheme.player || newScheme.card;
+    const textSurfaces = [newScheme.main, newScheme.player, newScheme.card].filter(Boolean);
+    const bgHex = textSurfaces[0];
     if (bgHex) {
       if (newScheme.text) {
-        newScheme.text = ensureContrast(newScheme.text, bgHex, 4.5);
+        newScheme.text = ensureContrast(newScheme.text, textSurfaces, 4.5);
       }
       if (newScheme.subtext) {
-        newScheme.subtext = ensureContrast(newScheme.subtext, bgHex, 3.0);
+        newScheme.subtext = ensureContrast(newScheme.subtext, textSurfaces, 3.0);
       }
       if (newScheme.button) {
-        newScheme.button = ensureContrast(newScheme.button, bgHex, 3.0);
+        newScheme.button = ensureContrast(newScheme.button, textSurfaces, 3.0);
       }
       if (newScheme["button-disabled"] && newScheme.button) {
         newScheme["button-disabled"] = Chroma.mix(bgHex, newScheme.button, 0.35).hex().substring(1);
