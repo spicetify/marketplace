@@ -464,6 +464,21 @@ async function waitForPlayerItem(): Promise<Spicetify.PlayerTrack | undefined> {
   });
 }
 
+const ensureContrast = (fgHex: string, bgHex: string, minRatio: number): string => {
+  if (Chroma.contrast(fgHex, bgHex) >= minRatio) {
+    return fgHex.replace(/^#/, "");
+  }
+  const darkBg = Chroma(bgHex).luminance() < 0.5;
+  let adjusted = Chroma(fgHex);
+  for (let i = 0; i < 12; i++) {
+    adjusted = darkBg ? adjusted.brighten(0.4) : adjusted.darken(0.4);
+    if (Chroma.contrast(adjusted, bgHex) >= minRatio) {
+      return adjusted.hex().substring(1);
+    }
+  }
+  return darkBg ? "ffffff" : "000000";
+};
+
 export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // Add a listener for the album art changing
   // and update the color scheme accordingly
@@ -504,17 +519,35 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
       })
     );
     colorMap = orderedColorMap;
+    // Sort fetched palette in the same lightness order (dark -> light) as orderedColorMap
+    const sortedNewColors = [...newColors].sort((a, b) => Chroma(a).get("lab.l") - Chroma(b).get("lab.l"));
     // replace the keys in the color map with the new colors
-    const newScheme = {};
+    const newScheme: Record<string, string> = {};
     for (const [, value] of colorMap.entries()) {
-      const newColor = newColors.shift();
+      const newColor = sortedNewColors.shift();
       if (newColor) {
         for (const key of value) {
           newScheme[key] = newColor;
         }
       }
     }
-    injectColourScheme(newScheme);
+
+    const bgHex = newScheme.main || newScheme.player || newScheme.card;
+    if (bgHex) {
+      if (newScheme.text) {
+        newScheme.text = ensureContrast(newScheme.text, bgHex, 4.5);
+      }
+      if (newScheme.subtext) {
+        newScheme.subtext = ensureContrast(newScheme.subtext, bgHex, 3.0);
+      }
+      if (newScheme.button) {
+        newScheme.button = ensureContrast(newScheme.button, bgHex, 3.0);
+      }
+      if (newScheme["button-disabled"] && newScheme.button) {
+        newScheme["button-disabled"] = Chroma.mix(bgHex, newScheme.button, 0.35).hex().substring(1);
+      }
+    }
+    injectColourScheme(newScheme as ColourScheme);
   });
 };
 
