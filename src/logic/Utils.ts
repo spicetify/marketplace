@@ -468,15 +468,17 @@ const ensureContrast = (fgHex: string, bgHex: string, minRatio: number): string 
   if (Chroma.contrast(fgHex, bgHex) >= minRatio) {
     return fgHex.replace(/^#/, "");
   }
-  const darkBg = Chroma(bgHex).luminance() < 0.5;
+  const whiteContrast = Chroma.contrast("ffffff", bgHex);
+  const blackContrast = Chroma.contrast("000000", bgHex);
+  const preferLight = whiteContrast >= blackContrast;
   let adjusted = Chroma(fgHex);
   for (let i = 0; i < 12; i++) {
-    adjusted = darkBg ? adjusted.brighten(0.4) : adjusted.darken(0.4);
+    adjusted = preferLight ? adjusted.brighten(0.4) : adjusted.darken(0.4);
     if (Chroma.contrast(adjusted, bgHex) >= minRatio) {
       return adjusted.hex().substring(1);
     }
   }
-  return darkBg ? "ffffff" : "000000";
+  return preferLight ? "ffffff" : "000000";
 };
 
 export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
