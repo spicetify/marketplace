@@ -464,6 +464,45 @@ async function waitForPlayerItem(): Promise<Spicetify.PlayerTrack | undefined> {
   });
 }
 
+const ensureContrast = (fgHex: string, bgHexes: string[], minRatio: number): string => {
+  const minContrast = (fg: string | Chroma.Color) => Math.min(...bgHexes.map((bg) => Chroma.contrast(fg, bg)));
+
+  if (minContrast(fgHex) >= minRatio) {
+    return fgHex.replace(/^#/, "");
+  }
+  const whiteContrast = minContrast("ffffff");
+  const blackContrast = minContrast("000000");
+  const preferLight = whiteContrast >= blackContrast;
+  let bestHex = preferLight ? "ffffff" : "000000";
+  let bestScore = Math.max(whiteContrast, blackContrast);
+
+  if (bestScore >= minRatio) {
+    let adjusted = Chroma(fgHex);
+    for (let i = 0; i < 12; i++) {
+      adjusted = preferLight ? adjusted.brighten(0.4) : adjusted.darken(0.4);
+      if (minContrast(adjusted) >= minRatio) {
+        return adjusted.hex().substring(1);
+      }
+    }
+    return bestHex;
+  }
+
+  const startDark = Chroma(fgHex).luminance() < 0.5;
+  for (let step = 1; step < 255; step++) {
+    const channel = startDark ? step : 255 - step;
+    const candidate = Chroma.rgb(channel, channel, channel);
+    const score = minContrast(candidate);
+    if (score >= minRatio) {
+      return candidate.hex().substring(1);
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestHex = candidate.hex().substring(1);
+    }
+  }
+  return bestHex;
+};
+
 export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
   // Add a listener for the album art changing
   // and update the color scheme accordingly
@@ -504,17 +543,36 @@ export const initAlbumArtBasedColor = (scheme: ColourScheme) => {
       })
     );
     colorMap = orderedColorMap;
+    // Sort fetched palette in the same lightness order (dark -> light) as orderedColorMap
+    const sortedNewColors = [...newColors].sort((a, b) => Chroma(a).get("lab.l") - Chroma(b).get("lab.l"));
     // replace the keys in the color map with the new colors
-    const newScheme = {};
+    const newScheme: Record<string, string> = {};
     for (const [, value] of colorMap.entries()) {
-      const newColor = newColors.shift();
+      const newColor = sortedNewColors.shift();
       if (newColor) {
         for (const key of value) {
           newScheme[key] = newColor;
         }
       }
     }
-    injectColourScheme(newScheme);
+
+    const textSurfaces = [newScheme.main, newScheme.player, newScheme.card].filter(Boolean);
+    const bgHex = textSurfaces[0];
+    if (bgHex) {
+      if (newScheme.text) {
+        newScheme.text = ensureContrast(newScheme.text, textSurfaces, 4.5);
+      }
+      if (newScheme.subtext) {
+        newScheme.subtext = ensureContrast(newScheme.subtext, textSurfaces, 3.0);
+      }
+      if (newScheme.button) {
+        newScheme.button = ensureContrast(newScheme.button, textSurfaces, 3.0);
+      }
+      if (newScheme["button-disabled"] && newScheme.button) {
+        newScheme["button-disabled"] = Chroma.mix(bgHex, newScheme.button, 0.35).hex().substring(1);
+      }
+    }
+    injectColourScheme(newScheme as ColourScheme);
   });
 };
 
