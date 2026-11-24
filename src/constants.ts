@@ -20,8 +20,8 @@ export const LOCALSTORAGE_KEYS = {
   colorShift: `${STORAGE_KEY_PREFIX}:colorShift`
 };
 
-// Initalize topbar tabs
-// Data initalized in TabBar.js
+// Initialize topbar tabs
+// Data initialized in TabBar.js
 export const ALL_TABS: TabItemConfig[] = [
   { name: "Extensions", enabled: true },
   { name: "Themes", enabled: true },
