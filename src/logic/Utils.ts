@@ -487,8 +487,10 @@ const ensureContrast = (fgHex: string, bgHexes: string[], minRatio: number): str
     return bestHex;
   }
 
-  for (let i = 1; i < 16; i++) {
-    const candidate = Chroma.mix("000000", "ffffff", i / 16, "lab");
+  const startDark = Chroma(fgHex).luminance() < 0.5;
+  for (let step = 1; step < 255; step++) {
+    const channel = startDark ? step : 255 - step;
+    const candidate = Chroma.rgb(channel, channel, channel);
     const score = minContrast(candidate);
     if (score >= minRatio) {
       return candidate.hex().substring(1);
