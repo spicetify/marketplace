@@ -168,10 +168,10 @@
     "preview": "resources/assets/snippets/pointer.png"
   },
   {
-    "title": "Remove Top gradient",
+    "title": "Remove top gradients",
     "description": "Removes gradient from home page and playlist page",
-    "code": ".main-entityHeader-backgroundColor { display: none !important; } .main-actionBarBackground-background { display: none !important; } .main-home-homeHeader { display: none !important; } .playlist-playlist-actionBarBackground-background { display: none !important; }",
-    "preview": "resources/assets/snippets/remove-gradient.png"
+    "code": "main div[style*='background-color']:empty,\nmain div[data-testid='entity-header'] > div:empty,\nmain div[style*='--background-base']:empty {\n  display: none !important;\n}",
+    "preview": "resources/assets/snippets/remove-top-gradient.png"
   },
   {
     "title": "Fix Liked Button",
